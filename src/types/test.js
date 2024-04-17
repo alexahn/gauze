@@ -9,8 +9,19 @@ import {
     GraphQLInterfaceType
 } from 'graphql';
 
-import { Entity1Query } from './entity1.js'
-import { Entity2Query } from './entity2.js'
+import {
+	ENTITY1_RELATIONSHIPS_FIELDS
+} from './../types/entity1.js'
+
+import {
+	ENTITY2_RELATIONSHIPS_FIELDS
+} from './../types/entity2.js'
+
+import { Entity1Query } from './../queries/entity1.js'
+import { Entity2Query } from './../queries/entity2.js'
+
+ENTITY1_RELATIONSHIPS_FIELDS.entity2 = Entity2Query
+ENTITY2_RELATIONSHIPS_FIELDS.entity1 = Entity1Query
 
 const queryType = new GraphQLObjectType({
     name: 'Query',
@@ -31,10 +42,26 @@ const query = `
             	text
 			}
             relationships {
-				entity2(id: "2") {
+				entity2(id: "1") {
 					attributes {
                 		id
                 		text
+					}
+					relationships {
+						entity1(id: "2") {
+							attributes {
+								id
+								text
+							}
+							relationships {
+								entity2(id: "2") {
+									attributes {
+										id
+										text
+									}
+								}
+							}
+						}
 					}
             	}
 			}
