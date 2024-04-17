@@ -28,8 +28,10 @@ const ENTITY2_METADATA = new GraphQLObjectType({
 })
 
 const ENTITY2_ATTRIBUTES_FIELDS = {
-	id: {
-		type: new GraphQLNonNull(GraphQLString),
+	id: {	
+		// loosen the non null constraint (maybe reintroduce this later by splitting the field types?)
+		//type: new GraphQLNonNull(GraphQLString),
+		type: GraphQLString,
 		description: 'id'
 	},
 	text: {

@@ -36,25 +36,25 @@ const schema = new GraphQLSchema({
 
 const query = `
     query MyTestQuery {
-        entity1(id: "1") {
+        entity1(where: { id: "1"}) {
             attributes {
 				id
             	text
 			}
             relationships {
-				entity2(id: "1") {
+				entity2(where: { id: "1" }) {
 					attributes {
                 		id
                 		text
 					}
 					relationships {
-						entity1(id: "2") {
+						entity1(where: { id: "2" }) {
 							attributes {
 								id
 								text
 							}
 							relationships {
-								entity2(id: "2") {
+								entity2(where: { id: "2" }) {
 									attributes {
 										id
 										text
