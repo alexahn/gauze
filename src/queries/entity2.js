@@ -22,7 +22,7 @@ import {
 function ReadEntity2(where, limit, skip, sort) {
 	if (!where.id) return []
     const record = Entity2Index[where.id]
-    console.log('ReadEntity2', record)
+    //console.log('ReadEntity2', record)
     const model = {
         attributes: record,
         relationships: {

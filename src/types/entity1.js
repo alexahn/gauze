@@ -6,7 +6,7 @@ import {
     GraphQLInterfaceType
 } from 'graphql';
 
-import { Entity2Query } from './../queries/entity2.js'
+//import { Entity2Query } from './../queries/entity2.js'
 
 const ENTITY1_TYPE = 'ENTITY1'
 

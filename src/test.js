@@ -9,6 +9,7 @@ import {
     GraphQLInterfaceType
 } from 'graphql';
 
+/*
 import {
 	ENTITY1_RELATIONSHIPS_FIELDS
 } from './types/entity1.js'
@@ -34,6 +35,11 @@ const schema = new GraphQLSchema({
     query: queryType,
 	mutation: queryType
 })
+*/
+
+import {
+	SCHEMA as schema
+} from './schema.js'
 
 const query = `
     query MyTestQuery {
@@ -72,12 +78,30 @@ const query = `
 
 console.log('schema', printSchema(schema))
 
-graphql({
-    schema: schema,
-    source: query
-}).then(function (data) {
-    console.log('data', data)
-    console.log(JSON.stringify(data, null, 4))
-}).catch(function (err) {
-    console.log('err', err)
-})
+function execute () {
+	return graphql({
+		schema: schema,
+		source: query
+	}).then(function (data) {
+		console.log(JSON.stringify(data, null, 4))
+	}).catch(function (err) {
+		console.log('err', err)
+	})
+}
+
+var COUNT = 0
+function loop (f) {
+	return f().then(function (data) {
+		if (COUNT < 100000) {
+			//console.log('count', COUNT)
+			COUNT += 1 
+			return loop(f)
+		} else {
+			return Promise.resolve(true)
+		}
+	})
+}
+
+//loop(execute)
+execute()
+
