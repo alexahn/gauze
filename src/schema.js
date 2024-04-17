@@ -1,12 +1,6 @@
 import {
-    graphql,
-    printSchema,
     GraphQLSchema,
-    GraphQLNonNull,
-    GraphQLList,
-    GraphQLString,
     GraphQLObjectType,
-    GraphQLInterfaceType
 } from 'graphql';
 
 import {
