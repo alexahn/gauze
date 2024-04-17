@@ -31,7 +31,8 @@ const queryType = new GraphQLObjectType({
 })
 
 const schema = new GraphQLSchema({
-    query: queryType
+    query: queryType,
+	mutation: queryType
 })
 
 const query = `
