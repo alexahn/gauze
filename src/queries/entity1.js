@@ -23,13 +23,15 @@ function ReadEntity1(where, limit, skip, sort) {
 	if (!where.id) return []
     const record = Entity1Index[where.id]
     //console.log('ReadEntity1', record)
+	const metadata = {
+		id: record.id,
+		type: ENTITY1_TYPE
+	}
     const model = {
+		metadata: metadata,
         attributes: record,
         relationships: {
-            _metadata: {
-                id: record.id,
-                type: ENTITY1_TYPE
-            }
+            _metadata: metadata
         }
     }
     return [model]

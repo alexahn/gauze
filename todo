@@ -2,3 +2,5 @@
 [ ] configure query and mutations to interact with a query builder (like knex)
 [x] expose schema to http
 [ ] build a react app to test out the architecture
+[ ] setup context with db connection and authentication
+[ ] logging

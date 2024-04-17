@@ -64,6 +64,10 @@ const ENTITY1 = new GraphQLObjectType({
     name: 'Entity1',
     description: 'Entity 1',
     fields: () => ({
+		metadata: {
+			type: ENTITY1_METADATA,
+			description: 'metadata'
+		},
 		attributes: {
 			type: ENTITY1_ATTRIBUTES,
 			description: 'attributes'

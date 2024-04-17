@@ -23,13 +23,15 @@ function ReadEntity2(where, limit, skip, sort) {
 	if (!where.id) return []
     const record = Entity2Index[where.id]
     //console.log('ReadEntity2', record)
+	const metadata = {
+		id: record.id,
+		type: ENTITY2_TYPE
+	}
     const model = {
+		metadata: metadata,
         attributes: record,
         relationships: {
-            _metadata: {
-                id: record.id,
-                type: ENTITY2_TYPE
-            }
+            _metadata: metadata
         }
     }
     return [model]

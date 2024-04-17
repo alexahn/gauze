@@ -10,24 +10,36 @@ import {
 const query = `
     query MyTestQuery {
         entity1(where: { id: "1"}) {
+			metadata {
+				type
+			}
             attributes {
 				id
             	text
 			}
             relationships {
 				entity2(where: { id: "1" }) {
+					metadata {
+						type
+					}
 					attributes {
                 		id
                 		text
 					}
 					relationships {
 						entity1(where: { id: "2" }) {
+							metadata {
+								type
+							}
 							attributes {
 								id
 								text
 							}
 							relationships {
 								entity2(where: { id: "2" }) {
+									metadata {
+										type
+									}
 									attributes {
 										id
 										text
