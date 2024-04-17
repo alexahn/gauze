@@ -11,14 +11,14 @@ import {
 
 import {
 	ENTITY1_RELATIONSHIPS_FIELDS
-} from './../types/entity1.js'
+} from './types/entity1.js'
 
 import {
 	ENTITY2_RELATIONSHIPS_FIELDS
-} from './../types/entity2.js'
+} from './types/entity2.js'
 
-import { Entity1Query } from './../queries/entity1.js'
-import { Entity2Query } from './../queries/entity2.js'
+import { Entity1Query } from './queries/entity1.js'
+import { Entity2Query } from './queries/entity2.js'
 
 ENTITY1_RELATIONSHIPS_FIELDS.entity2 = Entity2Query
 ENTITY2_RELATIONSHIPS_FIELDS.entity1 = Entity1Query
