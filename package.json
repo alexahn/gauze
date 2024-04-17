@@ -1,0 +1,16 @@
+{
+  "name": "gauze",
+  "version": "0.0.1",
+  "description": "graphql experiments",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alex Ahn",
+  "devDependencies": {
+    "graphiql": "^3.2.0",
+    "graphql": "^16.8.1",
+    "typescript": "^5.4.5"
+  },
+  "type": "module"
+}
