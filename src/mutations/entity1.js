@@ -1,11 +1,11 @@
 import {
-    GraphQLNonNull,
-    GraphQLInt,
-    GraphQLList,
-    GraphQLString,
-    GraphQLObjectType,
-    GraphQLInputObjectType,
-    GraphQLInterfaceType
+	GraphQLNonNull,
+	GraphQLInt,
+	GraphQLList,
+	GraphQLString,
+	GraphQLObjectType,
+	GraphQLInputObjectType,
+	GraphQLInterfaceType
 } from 'graphql';
 
 import {
@@ -14,9 +14,9 @@ import {
 } from './../types/entity1.js'
 
 const ENTITY1_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
-    name: 'Entity1_Mutation_Attributes',
-    description: 'Entity1 Mutation Attributes',
-    fields: ENTITY1_ATTRIBUTES_FIELDS
+	name: 'Entity1_Mutation_Attributes',
+	description: 'Entity1 Mutation Attributes',
+	fields: ENTITY1_ATTRIBUTES_FIELDS
 })
 
 function CreateEntity1 (attributes) {
@@ -39,7 +39,9 @@ const ENTITY1_CREATE = {
 			type: ENTITY1_MUTATION_ATTRIBUTES
 		}
 	},
-	resolve: (_source, { attributes }) => {
+	resolve: (_source, {
+		attributes
+	}) => {
 		return CreateEntity1(attributes)
 	}
 }
@@ -56,7 +58,10 @@ const ENTITY1_UPDATE = {
 			type: ENTITY1_MUTATION_ATTRIBUTES
 		}
 	},
-	resolve: (_source, { where, attributes }) => {
+	resolve: (_source, {
+		where,
+		attributes
+	}) => {
 		return UpdateEntity1(where, attributes)
 	}
 }
@@ -69,7 +74,9 @@ const ENTITY1_DELETE = {
 			type: ENTITY1_MUTATION_ATTRIBUTES
 		}
 	},
-	resolve: (_source, { where }) => {
+	resolve: (_source, {
+		where
+	}) => {
 		return DeleteEntity1(where)
 	}
 }

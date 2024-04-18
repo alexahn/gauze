@@ -1,6 +1,6 @@
 import {
-    graphql,
-    printSchema,
+	graphql,
+	printSchema,
 } from 'graphql';
 
 import {
@@ -68,11 +68,12 @@ function execute () {
 }
 
 var COUNT = 0
+
 function loop (f) {
 	return f().then(function (data) {
 		if (COUNT < 100000) {
 			//console.log('count', COUNT)
-			COUNT += 1 
+			COUNT += 1
 			return loop(f)
 		} else {
 			return Promise.resolve(true)
@@ -82,4 +83,3 @@ function loop (f) {
 
 //loop(execute)
 execute()
-

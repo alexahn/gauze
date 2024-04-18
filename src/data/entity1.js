@@ -1,4 +1,6 @@
-import { create_index } from './helper.js'
+import {
+	create_index
+} from './helper.js'
 
 const Records = [{
 	id: '1',

@@ -1,9 +1,9 @@
 import {
-    GraphQLNonNull,
-    GraphQLList,
-    GraphQLString,
-    GraphQLObjectType,
-    GraphQLInterfaceType
+	GraphQLNonNull,
+	GraphQLList,
+	GraphQLString,
+	GraphQLObjectType,
+	GraphQLInterfaceType
 } from 'graphql';
 
 //import { Entity2Query } from './../queries/entity2.js'
@@ -61,9 +61,9 @@ const ENTITY1_RELATIONSHIPS = new GraphQLObjectType({
 })
 
 const ENTITY1 = new GraphQLObjectType({
-    name: 'Entity1',
-    description: 'Entity 1',
-    fields: () => ({
+	name: 'Entity1',
+	description: 'Entity 1',
+	fields: () => ({
 		metadata: {
 			type: ENTITY1_METADATA,
 			description: 'metadata'
@@ -76,7 +76,7 @@ const ENTITY1 = new GraphQLObjectType({
 			type: ENTITY1_RELATIONSHIPS,
 			description: 'relationships'
 		}
-    })
+	})
 })
 
 export {

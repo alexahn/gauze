@@ -1,9 +1,9 @@
 import {
-    GraphQLNonNull,
-    GraphQLList,
-    GraphQLString,
-    GraphQLObjectType,
-    GraphQLInterfaceType
+	GraphQLNonNull,
+	GraphQLList,
+	GraphQLString,
+	GraphQLObjectType,
+	GraphQLInterfaceType
 } from 'graphql';
 
 //import { Entity1Query } from './../queries/entity1.js'
@@ -28,7 +28,7 @@ const ENTITY2_METADATA = new GraphQLObjectType({
 })
 
 const ENTITY2_ATTRIBUTES_FIELDS = {
-	id: {	
+	id: {
 		// loosen the non null constraint (maybe reintroduce this later by splitting the field types?)
 		//type: new GraphQLNonNull(GraphQLString),
 		type: GraphQLString,
@@ -61,9 +61,9 @@ const ENTITY2_RELATIONSHIPS = new GraphQLObjectType({
 })
 
 const ENTITY2 = new GraphQLObjectType({
-    name: 'Entity2',
-    description: 'Entity 1',
-    fields: () => ({
+	name: 'Entity2',
+	description: 'Entity 1',
+	fields: () => ({
 		metadata: {
 			type: ENTITY2_METADATA,
 			description: 'metadata'
@@ -76,7 +76,7 @@ const ENTITY2 = new GraphQLObjectType({
 			type: ENTITY2_RELATIONSHIPS,
 			description: 'relationships'
 		}
-    })
+	})
 })
 
 export {

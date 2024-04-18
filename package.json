@@ -10,10 +10,13 @@
   },
   "author": "Alex Ahn",
   "devDependencies": {
-    "graphql": "^16.8.1",
-    "graphql-http": "^1.22.1",
-    "ruru": "^2.0.0-beta.11",
+    "js-beautify": "^1.15.1",
     "typescript": "^5.4.5"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "graphql": "^16.8.1",
+    "graphql-http": "^1.22.1",
+    "ruru": "^2.0.0-beta.11"
+  }
 }
