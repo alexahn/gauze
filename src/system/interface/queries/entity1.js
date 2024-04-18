@@ -75,6 +75,9 @@ const ENTITY1_QUERY = {
 	}
 }
 
+const ENTITY1_QUERY_ROOT = {}
+
 export {
-	ENTITY1_QUERY
+	ENTITY1_QUERY,
+	ENTITY1_QUERY_ROOT
 }

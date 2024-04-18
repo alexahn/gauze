@@ -1,3 +1,5 @@
+.env
 *.swp
 node_modules
 tmp
+dev.sqlite3

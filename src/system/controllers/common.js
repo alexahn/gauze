@@ -14,6 +14,59 @@ class SystemModelSystemController extends Controller {
 	}
 	Create ({
 		user,
+		connection,
+		transaction
+	}, input) {
+		const context = {
+			connection,
+			transaction
+		}
+		return this.model.Create(context, input)
+	}
+	Read ({
+		user,
+		connection,
+		transaction
+	}, input) {
+		const context = {
+			connection,
+			transaction
+		}
+		return this.model.Read(context, input)
+	}
+	TrxUpdate ({
+		user,
+		connection,
+		transaction
+	}, input) {
+		const context = {
+			connection,
+			transaction
+		}
+		return this.model.Update(context, input)
+	}
+	Delete ({
+		user,
+		connection,
+		transaction
+	}, input) {
+		const context = {
+			connection,
+			transaction
+		}
+		return this.model.Delete(context, input)
+	}
+}
+
+// todo: authorization, rate limiting, etc
+// input model is a system model
+class RootSystemModelSystemController extends Controller {
+	constructor (config, model) {
+		this.model = model
+		super(config)
+	}
+	TransactionCreate ({
+		user,
 		connection
 	}, input) {
 		return connection.transaction(function (transaction) {
@@ -24,7 +77,7 @@ class SystemModelSystemController extends Controller {
 			return this.model.Create(context, input).then(trx.commit).catch(trx.rollback)
 		})
 	}
-	Read ({
+	TransactionRead ({
 		user,
 		connection
 	}, input) {
@@ -36,7 +89,7 @@ class SystemModelSystemController extends Controller {
 			return this.model.Read(context, input).then(trx.commit).catch(trx.rollback)
 		})
 	}
-	Update ({
+	TransactionUpdate ({
 		user,
 		connection
 	}, input) {
@@ -48,7 +101,7 @@ class SystemModelSystemController extends Controller {
 			return this.model.Update(context, input).then(trx.commit).catch(trx.rollback)
 		})
 	}
-	Delete ({
+	TransactionDelete ({
 		user,
 		connection
 	}, input) {
@@ -64,5 +117,6 @@ class SystemModelSystemController extends Controller {
 
 export {
 	SystemController,
-	SystemModelSystemController
+	SystemModelSystemController,
+	RootSystemModelSystemController
 }
