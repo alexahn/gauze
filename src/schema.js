@@ -12,30 +12,30 @@ import {
 } from './types/entity2.js'
 
 import {
-	Entity1Query
+	ENTITY1_QUERY
 } from './queries/entity1.js'
 import {
-	Entity2Query
+	ENTITY2_QUERY
 } from './queries/entity2.js'
 import {
-	Entity1Mutation
+	ENTITY1_MUTATION
 } from './mutations/entity1.js'
 
-ENTITY1_RELATIONSHIPS_FIELDS.entity2 = Entity2Query
-ENTITY2_RELATIONSHIPS_FIELDS.entity1 = Entity1Query
+ENTITY1_RELATIONSHIPS_FIELDS.entity2 = ENTITY2_QUERY
+ENTITY2_RELATIONSHIPS_FIELDS.entity1 = ENTITY1_QUERY
 
 const queryType = new GraphQLObjectType({
 	name: 'Query',
 	fields: () => ({
-		entity1: Entity1Query,
-		entity2: Entity2Query
+		entity1: ENTITY1_QUERY,
+		entity2: ENTITY2_QUERY
 	})
 })
 
 const mutationType = new GraphQLObjectType({
 	name: 'Mutation',
 	fields: () => ({
-		entity1: Entity1Mutation
+		entity1: ENTITY1_MUTATION
 	})
 })
 

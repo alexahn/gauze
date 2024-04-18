@@ -44,7 +44,7 @@ const ENTITY2_QUERY_WHERE = new GraphQLInputObjectType({
 	fields: ENTITY2_ATTRIBUTES_FIELDS
 })
 
-const Entity2Query = {
+const ENTITY2_QUERY = {
 	type: new GraphQLList(ENTITY2),
 	args: {
 		where: {
@@ -77,5 +77,5 @@ const Entity2Query = {
 }
 
 export {
-	Entity2Query
+	ENTITY2_QUERY
 }

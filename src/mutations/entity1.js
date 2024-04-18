@@ -81,7 +81,7 @@ const ENTITY1_DELETE = {
 	}
 }
 
-const ENTITY1_MUTATION = new GraphQLObjectType({
+const ENTITY1_MUTATION_ROOT = new GraphQLObjectType({
 	name: 'Entity1_Mutation',
 	description: 'Entity1 Mutation',
 	fields: {
@@ -91,13 +91,13 @@ const ENTITY1_MUTATION = new GraphQLObjectType({
 	}
 })
 
-const Entity1Mutation = {
-	type: ENTITY1_MUTATION,
+const ENTITY1_MUTATION = {
+	type: ENTITY1_MUTATION_ROOT,
 	resolve: (_source, {}) => {
 		return {}
 	}
 }
 
 export {
-	Entity1Mutation
+	ENTITY1_MUTATION
 }
