@@ -10,8 +10,13 @@ import {
 
 import {
 	ENTITY1,
+	ENTITY1_TYPE,
 	ENTITY1_ATTRIBUTES_FIELDS
 } from './../../../structure/graphql/entity1.js'
+
+import {
+	ENTITY1_SYSTEM_CONTROLLER
+} from './../../controllers/entity1.js'
 
 const ENTITY1_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
 	name: 'Entity1_Mutation_Attributes',
@@ -19,16 +24,19 @@ const ENTITY1_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
 	fields: ENTITY1_ATTRIBUTES_FIELDS
 })
 
-function CreateEntity1 (attributes) {
-	console.log('CreateEntity1', attributes)
-}
-
-function UpdateEntity1 (where, attributes) {
-	console.log('UpdateEntity1', where, attributes)
-}
-
-function DeleteEntity1 (where) {
-	console.log('DeleteEntity1', where)
+function format (record) {
+	const metadata = {
+		id: record.id,
+		type: ENTITY1_TYPE
+	}
+	const model = {
+		metadata: metadata,
+		attributes: record,
+		relationships: {
+			_metadata: metadata
+		}
+	}
+	return model
 }
 
 const ENTITY1_CREATE = {
@@ -39,10 +47,11 @@ const ENTITY1_CREATE = {
 			type: ENTITY1_MUTATION_ATTRIBUTES
 		}
 	},
-	resolve: (_source, {
-		attributes
-	}) => {
-		return CreateEntity1(attributes)
+	resolve: (_source, mutation_arguments, context) => {
+		console.log('entity1 create controller')
+		return ENTITY1_SYSTEM_CONTROLLER.Create(context, mutation_arguments).then(function (data) {
+			return data.map(format)
+		})
 	}
 }
 
@@ -58,11 +67,10 @@ const ENTITY1_UPDATE = {
 			type: ENTITY1_MUTATION_ATTRIBUTES
 		}
 	},
-	resolve: (_source, {
-		where,
-		attributes
-	}) => {
-		return UpdateEntity1(where, attributes)
+	resolve: (_source, mutation_arguments, context) => {
+		return ENTITY1_SYSTEM_CONTROLLER.Update(context, mutation_arguments).then(function (data) {
+			return data.map(format)
+		})
 	}
 }
 
@@ -74,10 +82,10 @@ const ENTITY1_DELETE = {
 			type: ENTITY1_MUTATION_ATTRIBUTES
 		}
 	},
-	resolve: (_source, {
-		where
-	}) => {
-		return DeleteEntity1(where)
+	resolve: (_source, mutation_arguments, context) => {
+		return ENTITY1_SYSTEM_CONTROLLER.Delete(context, mutation_arguments).then(function (data) {
+			return data.map(format)
+		})
 	}
 }
 

@@ -9,11 +9,6 @@ import {
 } from 'graphql';
 
 import {
-	Records as Entity1Records,
-	Index as Entity1Index
-} from './../../../data/entity1.js'
-
-import {
 	ENTITY1,
 	ENTITY1_TYPE,
 	ENTITY1_ATTRIBUTES_FIELDS
@@ -23,24 +18,6 @@ import {
 	ENTITY1_SYSTEM_CONTROLLER,
 	ROOT_ENTITY1_SYSTEM_CONTROLLER
 } from './../../controllers/entity1.js'
-
-function ReadEntity1 (where, limit, skip, sort) {
-	if (!where.id) return []
-	const record = Entity1Index[where.id]
-	//console.log('ReadEntity1', record)
-	const metadata = {
-		id: record.id,
-		type: ENTITY1_TYPE
-	}
-	const model = {
-		metadata: metadata,
-		attributes: record,
-		relationships: {
-			_metadata: metadata
-		}
-	}
-	return [model]
-}
 
 function format (record) {
 	const metadata = {
@@ -97,6 +74,7 @@ const ENTITY1_QUERY = {
 	}
 }
 
+/*
 const ENTITY1_QUERY_ROOT = {
 	type: new GraphQLList(ENTITY1),
 	args: {
@@ -130,8 +108,9 @@ const ENTITY1_QUERY_ROOT = {
 		return ReadEntity1(where, limit, skip, sort)
 	}
 }
+*/
 
 export {
 	ENTITY1_QUERY,
-	ENTITY1_QUERY_ROOT
+	//ENTITY1_QUERY_ROOT
 }

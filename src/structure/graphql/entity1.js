@@ -1,10 +1,13 @@
 import {
 	GraphQLNonNull,
+	GraphQLInt,
 	GraphQLList,
 	GraphQLString,
 	GraphQLObjectType,
 	GraphQLInterfaceType
 } from 'graphql';
+
+import GraphQLDate from 'graphql-date'
 
 //import { Entity2Query } from './../queries/entity2.js'
 
@@ -33,6 +36,14 @@ const ENTITY1_ATTRIBUTES_FIELDS = {
 		//type: new GraphQLNonNull(GraphQLString),
 		type: GraphQLString,
 		description: 'id'
+	},
+	created_at: {
+		type: GraphQLDate,
+		description: 'created_at'
+	},
+	updated_at: {
+		type: GraphQLDate,
+		description: 'updated_at'
 	},
 	text: {
 		type: GraphQLString,

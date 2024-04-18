@@ -21,6 +21,7 @@ class KnexDatabaseModel extends DatabaseModel {
 	}) {
 		const self = this
 		return database(this.table).insert(attributes, ['id']).transacting(transaction).then(function (data) {
+			console.log('database row created', data)
 			return self.Read({
 				database,
 				transaction
@@ -34,6 +35,9 @@ class KnexDatabaseModel extends DatabaseModel {
 				order_direction: 'asc',
 				order_nulls: 'first'
 			})
+		}).catch(function (err) {
+			console.log('database row not created', err)
+			throw err
 		})
 	}
 	// read a row
@@ -95,6 +99,7 @@ class KnexDatabaseModel extends DatabaseModel {
 		order_nulls = 'first'
 	}) {
 		var self = this
+		console.log('delete', where)
 		return database(this.table).where(where).del().transacting(transaction).then(function () {
 			return self.Read({
 				database,

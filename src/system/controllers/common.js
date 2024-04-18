@@ -34,7 +34,7 @@ class SystemModelSystemController extends SystemController {
 		}
 		return this.model.Read(context, input)
 	}
-	TrxUpdate ({
+	Update ({
 		user,
 		database,
 		transaction
