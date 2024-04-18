@@ -5,11 +5,11 @@ import {
 
 import {
 	ENTITY1_RELATIONSHIPS_FIELDS
-} from './types/entity1.js'
+} from './../../structure/graphql/entity1.js'
 
 import {
 	ENTITY2_RELATIONSHIPS_FIELDS
-} from './types/entity2.js'
+} from './../../structure/graphql/entity2.js'
 
 import {
 	ENTITY1_QUERY

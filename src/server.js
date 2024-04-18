@@ -4,7 +4,7 @@ import {
 } from 'graphql-http/lib/use/http';
 import {
 	SCHEMA as schema
-} from './schema.js';
+} from './system/interface/schema.js';
 
 // Create the GraphQL over HTTP Node request handler
 const handler = createHandler({

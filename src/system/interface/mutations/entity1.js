@@ -11,7 +11,7 @@ import {
 import {
 	ENTITY1,
 	ENTITY1_ATTRIBUTES_FIELDS
-} from './../types/entity1.js'
+} from './../../../structure/graphql/entity1.js'
 
 const ENTITY1_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
 	name: 'Entity1_Mutation_Attributes',

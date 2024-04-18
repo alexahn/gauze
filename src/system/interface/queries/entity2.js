@@ -11,13 +11,13 @@ import {
 import {
 	Records as Entity2Records,
 	Index as Entity2Index
-} from './../data/entity2.js'
+} from './../../../data/entity2.js'
 
 import {
 	ENTITY2,
 	ENTITY2_TYPE,
 	ENTITY2_ATTRIBUTES_FIELDS
-} from './../types/entity2.js'
+} from './../../../structure/graphql/entity2.js'
 
 function ReadEntity2 (where, limit, skip, sort) {
 	if (!where.id) return []
