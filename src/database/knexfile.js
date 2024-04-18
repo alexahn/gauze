@@ -1,8 +1,16 @@
-import 'dotenv/config'
 import path from 'path'
 import {
 	fileURLToPath
 } from 'url'
+
+import {
+	config
+} from 'dotenv'
+import findConfig from 'find-config'
+
+config({
+	path: findConfig('.env')
+})
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -11,7 +19,7 @@ const KNEX_CONFIG = {
 	development: {
 		client: process.env.KNEX_CLIENT,
 		connection: {
-			filename: process.env.KNEX_CONNECTION_FILENAME
+			filename: path.join(__dirname, process.env.KNEX_CONNECTION_FILENAME)
 		},
 		migrations: {
 			tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -23,7 +31,7 @@ const KNEX_CONFIG = {
 	staging: {
 		client: process.env.KNEX_CLIENT,
 		connection: {
-			filename: process.env.KNEX_CONNECTION_FILENAME
+			filename: path.join(__dirname, process.env.KNEX_CONNECTION_FILENAME)
 		},
 		migrations: {
 			tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -35,7 +43,7 @@ const KNEX_CONFIG = {
 	production: {
 		client: 'better-sqlite3',
 		connection: {
-			filename: process.env.KNEX_CONNECTION_FILENAME
+			filename: path.join(__dirname, process.env.KNEX_CONNECTION_FILENAME)
 		},
 		migrations: {
 			tableName: process.env.KNEX_MIGRATIONS_TABLENAME,

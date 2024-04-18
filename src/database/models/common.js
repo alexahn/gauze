@@ -6,10 +6,10 @@ class DatabaseModel {
 
 // constructor (config, input)
 // method (context, input)
-class KnexDatabaseModel {
+class KnexDatabaseModel extends DatabaseModel {
 	constructor (config, table) {
-		this.table = table
 		super(config)
+		this.table = table
 	}
 	// create a row
 	Create ({
@@ -19,7 +19,22 @@ class KnexDatabaseModel {
 	}, {
 		attributes
 	}) {
-		return connection(this.table).insert(attributes).transacting(transaction)
+		const self = this
+		return connection(this.table).insert(attributes, ['id']).transacting(transaction).then(function (data) {
+			return self.Read({
+				connection,
+				transaction
+			}, {
+				where: {
+					id: data[0].id
+				},
+				limit: 1,
+				offset: 0,
+				order_column: 'id',
+				order_direction: 'asc',
+				order_nulls: 'first'
+			})
+		})
 	}
 	// read a row
 	Read ({
