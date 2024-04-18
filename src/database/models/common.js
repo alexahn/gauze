@@ -13,16 +13,16 @@ class KnexDatabaseModel extends DatabaseModel {
 	}
 	// create a row
 	Create ({
-		connection,
+		database,
 		transaction,
 		source
 	}, {
 		attributes
 	}) {
 		const self = this
-		return connection(this.table).insert(attributes, ['id']).transacting(transaction).then(function (data) {
+		return database(this.table).insert(attributes, ['id']).transacting(transaction).then(function (data) {
 			return self.Read({
-				connection,
+				database,
 				transaction
 			}, {
 				where: {
@@ -38,7 +38,7 @@ class KnexDatabaseModel extends DatabaseModel {
 	}
 	// read a row
 	Read ({
-		connection,
+		database,
 		transaction,
 		source
 	}, {
@@ -49,11 +49,12 @@ class KnexDatabaseModel extends DatabaseModel {
 		order_direction = 'asc',
 		order_nulls = 'first'
 	}) {
-		return connection(this.table).where(where).limit(limit).offset(offset).orderBy(order_column, order_direction, order_nulls).transacting(transaction)
+		console.log('read', where)
+		return database(this.table).where(where).limit(limit).offset(offset).orderBy(order_column, order_direction, order_nulls).transacting(transaction)
 	}
 	// update a row
 	Update ({
-		connection,
+		database,
 		transaction,
 		source
 	}, {
@@ -66,9 +67,9 @@ class KnexDatabaseModel extends DatabaseModel {
 		order_nulls = 'first'
 	}) {
 		var self = this
-		return connection(this.table).where(where).update(attributes).transacting(transaction).then(function () {
+		return database(this.table).where(where).update(attributes).transacting(transaction).then(function () {
 			return self.Read({
-				connection,
+				database,
 				transaction
 			}, {
 				where,
@@ -82,7 +83,7 @@ class KnexDatabaseModel extends DatabaseModel {
 	}
 	// delete a row
 	Delete ({
-		connection,
+		database,
 		transaction,
 		source
 	}, {
@@ -94,9 +95,9 @@ class KnexDatabaseModel extends DatabaseModel {
 		order_nulls = 'first'
 	}) {
 		var self = this
-		return connection(this.table).where(where).del().transacting(transaction).then(function () {
+		return database(this.table).where(where).del().transacting(transaction).then(function () {
 			return self.Read({
-				connection,
+				database,
 				transaction
 			}, {
 				where,

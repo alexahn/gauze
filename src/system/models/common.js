@@ -6,10 +6,10 @@ class SystemModel {
 }
 
 // input model is a database model
-class DatabaseModelSystemModel {
+class DatabaseModelSystemModel extends SystemModel {
 	constructor (config, model) {
-		this.model = model
 		super(config)
+		this.model = model
 	}
 	Create (context, input) {
 		return this.model.Create(context, input)

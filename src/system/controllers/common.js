@@ -7,51 +7,51 @@ class SystemController {
 
 // todo: authorization, rate limiting, etc
 // input model is a system model
-class SystemModelSystemController extends Controller {
+class SystemModelSystemController extends SystemController {
 	constructor (config, model) {
-		this.model = model
 		super(config)
+		this.model = model
 	}
 	Create ({
 		user,
-		connection,
+		database,
 		transaction
 	}, input) {
 		const context = {
-			connection,
+			database,
 			transaction
 		}
 		return this.model.Create(context, input)
 	}
 	Read ({
 		user,
-		connection,
+		database,
 		transaction
 	}, input) {
 		const context = {
-			connection,
+			database,
 			transaction
 		}
 		return this.model.Read(context, input)
 	}
 	TrxUpdate ({
 		user,
-		connection,
+		database,
 		transaction
 	}, input) {
 		const context = {
-			connection,
+			database,
 			transaction
 		}
 		return this.model.Update(context, input)
 	}
 	Delete ({
 		user,
-		connection,
+		database,
 		transaction
 	}, input) {
 		const context = {
-			connection,
+			database,
 			transaction
 		}
 		return this.model.Delete(context, input)
@@ -60,18 +60,18 @@ class SystemModelSystemController extends Controller {
 
 // todo: authorization, rate limiting, etc
 // input model is a system model
-class RootSystemModelSystemController extends Controller {
+class RootSystemModelSystemController extends SystemController {
 	constructor (config, model) {
-		this.model = model
 		super(config)
+		this.model = model
 	}
 	TransactionCreate ({
 		user,
-		connection
+		database
 	}, input) {
-		return connection.transaction(function (transaction) {
+		return database.transaction(function (transaction) {
 			const context = {
-				connection,
+				database,
 				transaction
 			}
 			return this.model.Create(context, input).then(trx.commit).catch(trx.rollback)
@@ -79,11 +79,11 @@ class RootSystemModelSystemController extends Controller {
 	}
 	TransactionRead ({
 		user,
-		connection
+		database
 	}, input) {
-		return connection.transaction(function (transaction) {
+		return database.transaction(function (transaction) {
 			const context = {
-				connection,
+				database,
 				transaction
 			}
 			return this.model.Read(context, input).then(trx.commit).catch(trx.rollback)
@@ -91,11 +91,11 @@ class RootSystemModelSystemController extends Controller {
 	}
 	TransactionUpdate ({
 		user,
-		connection
+		database
 	}, input) {
-		return connection.transaction(function (transaction) {
+		return database.transaction(function (transaction) {
 			const context = {
-				connection,
+				database,
 				transaction
 			}
 			return this.model.Update(context, input).then(trx.commit).catch(trx.rollback)
@@ -103,11 +103,11 @@ class RootSystemModelSystemController extends Controller {
 	}
 	TransactionDelete ({
 		user,
-		connection
+		database
 	}, input) {
-		return connection.transaction(function (transaction) {
+		return database.transaction(function (transaction) {
 			const context = {
-				connection,
+				database,
 				transaction
 			}
 			return this.model.Delete(context, input).then(trx.commit).catch(trx.rollback)

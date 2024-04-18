@@ -1,18 +1,13 @@
-import knex from 'knex'
-import KNEX_FILE from './../knexfile.js'
-
 import {
 	ENTITY1_DATABASE_MODEL
 } from './entity1.js'
 
-const KNEX_CONFIG = KNEX_FILE[process.env.NODE_ENV || 'development']
-
-const db = knex(KNEX_CONFIG)
+import db from './../database.js'
 
 function create_model () {
 	return db.transaction(function (transaction) {
 		return ENTITY1_DATABASE_MODEL.Create({
-			connection: db,
+			database: db,
 			transaction
 		}, {
 			attributes: {
@@ -30,7 +25,7 @@ function create_model () {
 function read_model (created) {
 	return db.transaction(function (transaction) {
 		return ENTITY1_DATABASE_MODEL.Read({
-			connection: db,
+			database: db,
 			transaction
 		}, {
 			where: {
@@ -46,7 +41,7 @@ function read_model (created) {
 function update_model (read) {
 	return db.transaction(function (transaction) {
 		return ENTITY1_DATABASE_MODEL.Update({
-			connection: db,
+			database: db,
 			transaction
 		}, {
 			where: {
@@ -65,7 +60,7 @@ function update_model (read) {
 function delete_model (updated) {
 	return db.transaction(function (transaction) {
 		return ENTITY1_DATABASE_MODEL.Delete({
-			connection: db,
+			database: db,
 			transaction
 		}, {
 			where: {

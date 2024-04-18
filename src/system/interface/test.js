@@ -7,6 +7,8 @@ import {
 	SCHEMA as schema
 } from './schema.js'
 
+import database from './../../database/database.js'
+
 const query = `
     query MyTestQuery {
         entity1(where: { id: "1"}) {
@@ -57,13 +59,24 @@ const query = `
 console.log('schema', printSchema(schema))
 
 function execute () {
-	return graphql({
-		schema: schema,
-		source: query
-	}).then(function (data) {
-		console.log(JSON.stringify(data, null, 4))
-	}).catch(function (err) {
-		console.log('err', err)
+	// todo: see if we can construct a context here and use it at the end
+	const context = {}
+	context.database = database
+	return database.transaction(function (transaction) {
+		context.transaction = transaction
+		return graphql({
+			schema: schema,
+			source: query,
+			contextValue: context
+		}).then(function (data) {
+			console.log(JSON.stringify(data, null, 4))
+			return transaction.commit(data)
+		}).catch(function (err) {
+			console.log('err', err)
+			return transaction.rollback(err)
+		})
+	}).then(function () {
+		database.destroy()
 	})
 }
 
