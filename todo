@@ -4,3 +4,5 @@
 [ ] build a react app to test out the architecture
 [ ] setup context with db connection and authentication
 [ ] logging
+[ ] dependency injection
+	[ ] refactor everything later if we want the ability to thoroughly test every module
