@@ -24,3 +24,13 @@ A GraphQL server architecture.
 	- two-words
 - Code invariant files are upper Kebab Case (Screaming Kebab Case). Code invariant files usually contain documentation or static variables that rarely change, if ever.
 	- TWO-WORDS
+
+### JavaScript
+
+#### Modules
+- Directories are modules, and module exports get aggregated under `index.js`.
+- Non-aggregating modules (e.g. any file that is not `index.js`) should typically have named exports, and should rarely have a default export.
+- Named instance exports should typically be named with the reverse order of the module path.
+	- `/src/system/models/entity1.js` should export `ENTITY1_MODEL_SYSTEM`.
+	- The root module can access it via `gauze.system.models.entity1.ENTITY1_MODEL_SYSTEM`.
+- Named class exports should typically be named according to the abstract hierarchy.

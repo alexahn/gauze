@@ -1,12 +1,12 @@
 import {
-	ENTITY1_DATABASE_MODEL
+	ENTITY1_MODEL_DATABASE
 } from './entity1.js'
 
 import db from './../knex.js'
 
 function create_model () {
 	return db.transaction(function (transaction) {
-		return ENTITY1_DATABASE_MODEL.Create({
+		return ENTITY1_MODEL_DATABASE.Create({
 			database: db,
 			transaction
 		}, {
@@ -24,7 +24,7 @@ function create_model () {
 
 function read_model (created) {
 	return db.transaction(function (transaction) {
-		return ENTITY1_DATABASE_MODEL.Read({
+		return ENTITY1_MODEL_DATABASE.Read({
 			database: db,
 			transaction
 		}, {
@@ -40,7 +40,7 @@ function read_model (created) {
 
 function update_model (read) {
 	return db.transaction(function (transaction) {
-		return ENTITY1_DATABASE_MODEL.Update({
+		return ENTITY1_MODEL_DATABASE.Update({
 			database: db,
 			transaction
 		}, {
@@ -59,7 +59,7 @@ function update_model (read) {
 
 function delete_model (updated) {
 	return db.transaction(function (transaction) {
-		return ENTITY1_DATABASE_MODEL.Delete({
+		return ENTITY1_MODEL_DATABASE.Delete({
 			database: db,
 			transaction
 		}, {

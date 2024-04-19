@@ -15,7 +15,7 @@ import {
 } from './../../../structure/graphql/entity1.js'
 
 import {
-	ENTITY1_SYSTEM_CONTROLLER
+	ENTITY1_CONTROLLER_SYSTEM
 } from './../../controllers/entity1.js'
 
 const ENTITY1_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
@@ -49,7 +49,7 @@ const ENTITY1_CREATE = {
 	},
 	resolve: (_source, mutation_arguments, context) => {
 		console.log('entity1 create controller')
-		return ENTITY1_SYSTEM_CONTROLLER.Create(context, mutation_arguments).then(function (data) {
+		return ENTITY1_CONTROLLER_SYSTEM.Create(context, mutation_arguments).then(function (data) {
 			return data.map(format)
 		})
 	}
@@ -68,7 +68,7 @@ const ENTITY1_UPDATE = {
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		return ENTITY1_SYSTEM_CONTROLLER.Update(context, mutation_arguments).then(function (data) {
+		return ENTITY1_CONTROLLER_SYSTEM.Update(context, mutation_arguments).then(function (data) {
 			return data.map(format)
 		})
 	}
@@ -83,13 +83,13 @@ const ENTITY1_DELETE = {
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		return ENTITY1_SYSTEM_CONTROLLER.Delete(context, mutation_arguments).then(function (data) {
+		return ENTITY1_CONTROLLER_SYSTEM.Delete(context, mutation_arguments).then(function (data) {
 			return data.map(format)
 		})
 	}
 }
 
-const ENTITY1_MUTATION_ROOT = new GraphQLObjectType({
+const ENTITY1_MUTATION = new GraphQLObjectType({
 	name: 'Entity1_Mutation',
 	description: 'Entity1 Mutation',
 	fields: {
@@ -99,13 +99,13 @@ const ENTITY1_MUTATION_ROOT = new GraphQLObjectType({
 	}
 })
 
-const ENTITY1_MUTATION = {
-	type: ENTITY1_MUTATION_ROOT,
+const ENTITY1_MUTATION_INTERFACE_SYSTEM = {
+	type: ENTITY1_MUTATION,
 	resolve: (_source, {}) => {
 		return {}
 	}
 }
 
 export {
-	ENTITY1_MUTATION
+	ENTITY1_MUTATION_INTERFACE_SYSTEM
 }

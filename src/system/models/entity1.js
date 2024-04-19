@@ -1,13 +1,13 @@
 import {
 	DatabaseModelSystemModel
-} from './common.js'
+} from './class.js'
 import {
-	ENTITY1_DATABASE_MODEL
+	ENTITY1_MODEL_DATABASE
 } from './../../database/models/entity1.js'
 
-const ENTITY1_SYSTEM_MODEL_CONFIG = {}
-const ENTITY1_SYSTEM_MODEL = new DatabaseModelSystemModel(ENTITY1_SYSTEM_MODEL_CONFIG, ENTITY1_DATABASE_MODEL)
+const ENTITY1_MODEL_SYSTEM_CONFIG = {}
+const ENTITY1_MODEL_SYSTEM = new DatabaseModelSystemModel(ENTITY1_MODEL_SYSTEM_CONFIG, ENTITY1_MODEL_DATABASE)
 
 export {
-	ENTITY1_SYSTEM_MODEL
+	ENTITY1_MODEL_SYSTEM
 }

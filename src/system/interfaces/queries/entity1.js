@@ -15,8 +15,7 @@ import {
 } from './../../../structure/graphql/entity1.js'
 
 import {
-	ENTITY1_SYSTEM_CONTROLLER,
-	ROOT_ENTITY1_SYSTEM_CONTROLLER
+	ENTITY1_CONTROLLER_SYSTEM,
 } from './../../controllers/entity1.js'
 
 function format (record) {
@@ -35,12 +34,12 @@ function format (record) {
 }
 
 const ENTITY1_QUERY_WHERE = new GraphQLInputObjectType({
-	name: 'Entity1_Query_where',
+	name: 'Entity1_Query_Where',
 	description: 'Entity1 Query where',
 	fields: ENTITY1_ATTRIBUTES_FIELDS
 })
 
-const ENTITY1_QUERY = {
+const ENTITY1_QUERY_INTERFACE_SYSTEM = {
 	type: new GraphQLList(ENTITY1),
 	args: {
 		where: {
@@ -65,7 +64,7 @@ const ENTITY1_QUERY = {
 		console.log('entity1 args', query_arguments)
 		console.log('context', context)
 		//return ReadEntity1(where, limit, skip, sort)
-		return ENTITY1_SYSTEM_CONTROLLER.Read({
+		return ENTITY1_CONTROLLER_SYSTEM.Read({
 			database: context.database,
 			transaction: context.transaction
 		}, query_arguments).then(function (data) {
@@ -74,43 +73,6 @@ const ENTITY1_QUERY = {
 	}
 }
 
-/*
-const ENTITY1_QUERY_ROOT = {
-	type: new GraphQLList(ENTITY1),
-	args: {
-		where: {
-			description: 'where',
-			type: ENTITY1_QUERY_WHERE,
-		},
-		limit: {
-			description: 'limit',
-			type: GraphQLInt
-		},
-		skip: {
-			description: 'skip',
-			type: GraphQLInt
-		},
-		sort: {
-			description: 'sort',
-			type: GraphQLString
-		}
-	},
-	resolve: (_source, {
-		where,
-		limit,
-		skip,
-		sort
-	}, context) => {
-		console.log('entity1 query _source', _source)
-		//return connection.transaction(function (transaction) {
-		//	context.transaction = transaction
-		//	return 
-		return ReadEntity1(where, limit, skip, sort)
-	}
-}
-*/
-
 export {
-	ENTITY1_QUERY,
-	//ENTITY1_QUERY_ROOT
+	ENTITY1_QUERY_INTERFACE_SYSTEM
 }

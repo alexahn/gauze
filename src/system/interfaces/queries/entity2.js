@@ -15,7 +15,7 @@ import {
 } from './../../../structure/graphql/entity2.js'
 
 import {
-	ENTITY2_SYSTEM_CONTROLLER,
+	ENTITY2_CONTROLLER_SYSTEM,
 } from './../../controllers/entity2.js'
 
 function format (record) {
@@ -34,12 +34,12 @@ function format (record) {
 }
 
 const ENTITY2_QUERY_WHERE = new GraphQLInputObjectType({
-	name: 'Entity2_Query_where',
-	description: 'Entity2 Query where',
+	name: 'Entity2_Query_Where',
+	description: 'Entity2 Query Where',
 	fields: ENTITY2_ATTRIBUTES_FIELDS
 })
 
-const ENTITY2_QUERY = {
+const ENTITY2_QUERY_INTERFACE_SYSTEM = {
 	type: new GraphQLList(ENTITY2),
 	args: {
 		where: {
@@ -64,7 +64,7 @@ const ENTITY2_QUERY = {
 		console.log('entity2 args', query_arguments)
 		console.log('context', context)
 		//return ReadEntity2(where, limit, skip, sort)
-		return ENTITY2_SYSTEM_CONTROLLER.Read({
+		return ENTITY2_CONTROLLER_SYSTEM.Read({
 			database: context.database,
 			transaction: context.transaction
 		}, query_arguments).then(function (data) {
@@ -74,5 +74,5 @@ const ENTITY2_QUERY = {
 }
 
 export {
-	ENTITY2_QUERY
+	ENTITY2_QUERY_INTERFACE_SYSTEM
 }
