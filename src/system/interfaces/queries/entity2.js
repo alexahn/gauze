@@ -9,11 +9,6 @@ import {
 } from 'graphql';
 
 import {
-	Records as Entity2Records,
-	Index as Entity2Index
-} from './../../../data/entity2.js'
-
-import {
 	ENTITY2,
 	ENTITY2_TYPE,
 	ENTITY2_ATTRIBUTES_FIELDS
@@ -22,24 +17,6 @@ import {
 import {
 	ENTITY2_SYSTEM_CONTROLLER,
 } from './../../controllers/entity2.js'
-
-function ReadEntity2 (where, limit, skip, sort) {
-	if (!where.id) return []
-	const record = Entity2Index[where.id]
-	//console.log('ReadEntity2', record)
-	const metadata = {
-		id: record.id,
-		type: ENTITY2_TYPE
-	}
-	const model = {
-		metadata: metadata,
-		attributes: record,
-		relationships: {
-			_metadata: metadata
-		}
-	}
-	return [model]
-}
 
 function format (record) {
 	const metadata = {

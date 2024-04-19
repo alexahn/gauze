@@ -10,3 +10,7 @@
 [x] might need to make our own rest handler because we need to know when queries/mutations are finished
 [x] rename connection to database
 [ ] add relationships to mutations so we can create in batch
+[ ] module naming and organizing conventions
+	[ ] barrel modules
+[ ] rename database/database.js to database/knex.js
+[x] rename interface directories to interfaces

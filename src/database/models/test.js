@@ -2,7 +2,7 @@ import {
 	ENTITY1_DATABASE_MODEL
 } from './entity1.js'
 
-import db from './../database.js'
+import db from './../knex.js'
 
 function create_model () {
 	return db.transaction(function (transaction) {

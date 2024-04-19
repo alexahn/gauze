@@ -1,18 +1,18 @@
 # gauze
 
-A GraphQL server architecture
+A GraphQL server architecture.
 
 ## Coding Conventions
-- Based on definitions from [Naming Convention (programming)](https://en.wikipedia.org/wiki/Naming_convention_(programming)#Examples_of_multiple-word_identifier_formats)
+- Based on definitions from [Naming Convention (programming)](https://en.wikipedia.org/wiki/Naming_convention_(programming)#Examples_of_multiple-word_identifier_formats).
 
 ### Internal Code
-- Module names are lower Snake Case (all lower case) prefixed with a $
+- Module names are lower Snake Case (all lower case) prefixed with a $.
 	- $two_words
-- Class names are Pascal Case (Upper Camel Case)
+- Class names are Pascal Case (Upper Camel Case).
 	- TwoWords
-- Function, variable, and method names are lower Snake Case (all lower case)
+- Function, variable, and method names are lower Snake Case (all lower case).
 	- two_words
-- Globals and constants are upper Snake Case (all upper case)
+- Globals and constants are upper Snake Case (all upper case).
 	- TWO_WORDS
 
 ### External Code

@@ -13,9 +13,9 @@ import {
 
 import {
 	SCHEMA as schema
-} from './system/interface/schema.js';
+} from './system/interfaces/schema.js';
 
-import database from './database/database.js'
+import database from './database/knex.js'
 
 // Create the GraphQL over HTTP Node request handler
 /*
