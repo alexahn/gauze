@@ -13,7 +13,7 @@
 [x] rename database/database.js to database/knex.js
 [x] rename interface directories to interfaces
 [ ] relationships modelling
-	[ ] create a table to track relationships
+	[x] create a table to track relationships
 		[ ] look into constraints to manage one to one, one to many, and many to one relationships
 	[ ] implement relationship traversal via queries
 	[ ] implement relationship creation and deletion via mutations
@@ -33,5 +33,5 @@
 	[ ] cap graphql type name to 255 characters
 [ ] rename constants and variables in interfaces/mutations
 [ ] use constants defined in structures for table names for database models
-[ ] formalize query and mutations to look the same
+[x] formalize query and mutations to look the same
 	[x] split relationship type for query and mutation

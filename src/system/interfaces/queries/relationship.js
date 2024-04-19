@@ -36,7 +36,7 @@ const RELATIONSHIP_QUERY_WHERE = new GraphQLInputObjectType({
 	fields: GRAPHQL_SYSTEM_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE
 })
 
-const RELATIONSHIP_QUERY_INTERFACE_SYSTEM = {
+const RELATIONSHIP_READ_QUERY_INTERFACE_SYSTEM = {
 	type: new GraphQLList(GRAPHQL_SYSTEM_RELATIONSHIP_STRUCTURE),
 	args: {
 		where: {
@@ -59,7 +59,6 @@ const RELATIONSHIP_QUERY_INTERFACE_SYSTEM = {
 	resolve: (_source, query_arguments, context) => {
 		console.log('relationship query _source', _source)
 		console.log('relationship args', query_arguments)
-		console.log('context', context)
 		return RELATIONSHIP_CONTROLLER_SYSTEM.Read({
 			database: context.database,
 			transaction: context.transaction
@@ -70,5 +69,5 @@ const RELATIONSHIP_QUERY_INTERFACE_SYSTEM = {
 }
 
 export {
-	RELATIONSHIP_QUERY_INTERFACE_SYSTEM
+	RELATIONSHIP_READ_QUERY_INTERFACE_SYSTEM
 }

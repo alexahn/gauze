@@ -11,8 +11,8 @@ import database from './../../database/knex.js'
 
 const query = `
     query MyTestQuery {
-        entity1(where: { id: "1"}) {
-			metadata {
+        read_entity1(where: { id: "1"}) {
+			_metadata {
 				type
 			}
             attributes {
@@ -20,8 +20,8 @@ const query = `
             	text
 			}
             relationships {
-				entity2(where: { id: "1" }) {
-					metadata {
+				read_entity2(where: { id: "1" }) {
+					_metadata {
 						type
 					}
 					attributes {
@@ -29,8 +29,8 @@ const query = `
                 		text
 					}
 					relationships {
-						entity1(where: { id: "2" }) {
-							metadata {
+						read_entity1(where: { id: "2" }) {
+							_metadata {
 								type
 							}
 							attributes {
@@ -38,8 +38,8 @@ const query = `
 								text
 							}
 							relationships {
-								entity2(where: { id: "2" }) {
-									metadata {
+								read_entity2(where: { id: "2" }) {
+									_metadata {
 										type
 									}
 									attributes {

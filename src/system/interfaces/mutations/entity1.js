@@ -42,7 +42,7 @@ function format (record) {
 	return model
 }
 
-const ENTITY1_CREATE = {
+const ENTITY1_CREATE_MUTATION_INTERFACE_SYSTEM = {
 	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_MUTATION_STRUCTURE),
 	args: {
 		attributes: {
@@ -58,7 +58,7 @@ const ENTITY1_CREATE = {
 	}
 }
 
-const ENTITY1_UPDATE = {
+const ENTITY1_UPDATE_MUTATION_INTERFACE_SYSTEM = {
 	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_MUTATION_STRUCTURE),
 	args: {
 		where: {
@@ -77,7 +77,7 @@ const ENTITY1_UPDATE = {
 	}
 }
 
-const ENTITY1_DELETE = {
+const ENTITY1_DELETE_MUTATION_INTERFACE_SYSTEM = {
 	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_MUTATION_STRUCTURE),
 	args: {
 		where: {
@@ -92,13 +92,14 @@ const ENTITY1_DELETE = {
 	}
 }
 
+/*
 const ENTITY1_MUTATION = new GraphQLObjectType({
 	name: 'Entity1_Mutation',
 	description: 'Entity1 Mutation',
 	fields: {
-		create: ENTITY1_CREATE,
-		update: ENTITY1_UPDATE,
-		delete: ENTITY1_DELETE
+		create: ENTITY1_CREATE_MUTATION_INTERFACE_SYSTEM,
+		update: ENTITY1_UPDATE_MUTATION_INTERFACE_SYSTEM,
+		delete: ENTITY1_DELETE_MUTATION_INTERFACE_SYSTEM
 	}
 })
 
@@ -108,7 +109,10 @@ const ENTITY1_MUTATION_INTERFACE_SYSTEM = {
 		return {}
 	}
 }
+*/
 
 export {
-	ENTITY1_MUTATION_INTERFACE_SYSTEM
+	ENTITY1_CREATE_MUTATION_INTERFACE_SYSTEM,
+	ENTITY1_UPDATE_MUTATION_INTERFACE_SYSTEM,
+	ENTITY1_DELETE_MUTATION_INTERFACE_SYSTEM
 }
