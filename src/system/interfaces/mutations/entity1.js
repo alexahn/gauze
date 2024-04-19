@@ -9,7 +9,7 @@ import {
 } from 'graphql';
 
 import {
-	GRAPHQL_SYSTEM_ENTITY1_STRUCTURE,
+	GRAPHQL_SYSTEM_ENTITY1_MUTATION_STRUCTURE,
 	GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE,
 	GRAPHQL_SYSTEM_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
 } from './../../../structure/entity1/system/graphql.js'
@@ -33,14 +33,17 @@ function format (record) {
 		metadata: metadata,
 		attributes: record,
 		relationships: {
-			_metadata: metadata
+			_metadata: metadata,
+			entity2: {
+				_metadata: metadata
+			}
 		}
 	}
 	return model
 }
 
 const ENTITY1_CREATE = {
-	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_STRUCTURE),
+	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_MUTATION_STRUCTURE),
 	args: {
 		attributes: {
 			description: 'attributes',
@@ -56,7 +59,7 @@ const ENTITY1_CREATE = {
 }
 
 const ENTITY1_UPDATE = {
-	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_STRUCTURE),
+	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_MUTATION_STRUCTURE),
 	args: {
 		where: {
 			description: 'where',
@@ -75,7 +78,7 @@ const ENTITY1_UPDATE = {
 }
 
 const ENTITY1_DELETE = {
-	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_STRUCTURE),
+	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_MUTATION_STRUCTURE),
 	args: {
 		where: {
 			description: 'where',

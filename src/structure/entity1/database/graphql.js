@@ -3,8 +3,7 @@ import {
 	GraphQLInt,
 	GraphQLList,
 	GraphQLString,
-	GraphQLObjectType,
-	GraphQLInterfaceType
+	GraphQLObjectType
 } from 'graphql';
 
 import GraphQLDate from 'graphql-date'
@@ -30,8 +29,6 @@ const GRAPHQL_DATABASE_ENTITY1_METADATA_STRUCTURE = new GraphQLObjectType({
 
 const GRAPHQL_DATABASE_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE = {
 	id: {
-		// loosen the non null constraint (maybe reintroduce this later by splitting the field types?)
-		//type: new GraphQLNonNull(GraphQLString),
 		type: GraphQLString,
 		description: 'id'
 	},
@@ -55,46 +52,81 @@ const GRAPHQL_DATABASE_ENTITY1_ATTRIBUTES_STRUCTURE = new GraphQLObjectType({
 	fields: () => (GRAPHQL_DATABASE_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE)
 })
 
-const GRAPHQL_DATABASE_ENTITY1_RELATIONSHIPS_FIELDS_STRUCTURE = {
+const GRAPHQL_DATABASE_ENTITY1_QUERY_RELATIONSHIPS_FIELDS_STRUCTURE = {
 	_metadata: {
 		type: GRAPHQL_DATABASE_ENTITY1_METADATA_STRUCTURE,
-		description: 'Entity1 Metadata'
+		description: 'Entity1 Query Metadata'
 	},
-	//entity2: ENTITY2_QUERY
+	//read_entity2: ENTITY2_READ_QUERY
 }
 
-const GRAPHQL_DATABASE_ENTITY1_RELATIONSHIPS_STRUCTURE = new GraphQLObjectType({
-	name: 'Entity1_Relationships',
-	description: 'Entity1 Relationships',
-	fields: () => (GRAPHQL_DATABASE_ENTITY1_RELATIONSHIPS_FIELDS_STRUCTURE)
+const GRAPHQL_DATABASE_ENTITY1_QUERY_RELATIONSHIPS_STRUCTURE = new GraphQLObjectType({
+	name: 'Entity1_Query_Relationships',
+	description: 'Entity1 Query Relationships',
+	fields: () => (GRAPHQL_DATABASE_ENTITY1_QUERY_RELATIONSHIPS_FIELDS_STRUCTURE)
 })
 
-const GRAPHQL_DATABASE_ENTITY1_STRUCTURE = new GraphQLObjectType({
-	name: 'Entity1',
+const GRAPHQL_DATABASE_ENTITY1_MUTATION_RELATIONSHIPS_FIELDS_STRUCTURE = {
+	_metadata: {
+		type: GRAPHQL_DATABASE_ENTITY1_METADATA_STRUCTURE,
+		description: 'Entity1 Mutation Metadata'
+	},
+	//create_entity2: ENTITY2_CREATE_MUTATION
+}
+
+const GRAPHQL_DATABASE_ENTITY1_MUTATION_RELATIONSHIPS_STRUCTURE = new GraphQLObjectType({
+	name: 'Entity1_Mutation_Relationships',
+	description: 'Entity1 Mutation Relationships',
+	fields: () => (GRAPHQL_DATABASE_ENTITY1_MUTATION_RELATIONSHIPS_FIELDS_STRUCTURE)
+})
+
+const GRAPHQL_DATABASE_ENTITY1_FIELDS_STRUCTURE = {
+	_metadata: {
+		type: GRAPHQL_DATABASE_ENTITY1_METADATA_STRUCTURE,
+		description: '_metadata'
+	},
+	attributes: {
+		type: GRAPHQL_DATABASE_ENTITY1_ATTRIBUTES_STRUCTURE,
+		description: 'attributes'
+	}
+}
+
+const GRAPHQL_DATABASE_ENTITY1_QUERY_STRUCTURE = new GraphQLObjectType({
+	name: 'Query_Entity1',
 	description: 'Entity 1',
 	fields: () => ({
-		metadata: {
-			type: GRAPHQL_DATABASE_ENTITY1_METADATA_STRUCTURE,
-			description: 'metadata'
-		},
-		attributes: {
-			type: GRAPHQL_DATABASE_ENTITY1_ATTRIBUTES_STRUCTURE,
-			description: 'attributes'
-		},
+		_metadata: GRAPHQL_DATABASE_ENTITY1_FIELDS_STRUCTURE._metadata,
+		attributes: GRAPHQL_DATABASE_ENTITY1_FIELDS_STRUCTURE.attributes,
 		relationships: {
-			type: GRAPHQL_DATABASE_ENTITY1_RELATIONSHIPS_STRUCTURE,
+			type: GRAPHQL_DATABASE_ENTITY1_QUERY_RELATIONSHIPS_STRUCTURE,
+			description: 'relationships'
+		}
+	})
+})
+
+const GRAPHQL_DATABASE_ENTITY1_MUTATION_STRUCTURE = new GraphQLObjectType({
+	name: 'Mutation_Entity1',
+	description: 'Entity 1',
+	fields: () => ({
+		_metadata: GRAPHQL_DATABASE_ENTITY1_FIELDS_STRUCTURE._metadata,
+		attributes: GRAPHQL_DATABASE_ENTITY1_FIELDS_STRUCTURE.attributes,
+		relationships: {
+			type: GRAPHQL_DATABASE_ENTITY1_MUTATION_RELATIONSHIPS_STRUCTURE,
 			description: 'relationships'
 		}
 	})
 })
 
 export {
-	GRAPHQL_DATABASE_ENTITY1_STRUCTURE,
+	GRAPHQL_DATABASE_ENTITY1_QUERY_STRUCTURE,
+	GRAPHQL_DATABASE_ENTITY1_MUTATION_STRUCTURE,
 	GRAPHQL_DATABASE_ENTITY1_TYPE_STRUCTURE,
 	GRAPHQL_DATABASE_ENTITY1_METADATA_STRUCTURE,
 	GRAPHQL_DATABASE_ENTITY1_METADATA_FIELDS_STRUCTURE,
 	GRAPHQL_DATABASE_ENTITY1_ATTRIBUTES_STRUCTURE,
 	GRAPHQL_DATABASE_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE,
-	GRAPHQL_DATABASE_ENTITY1_RELATIONSHIPS_STRUCTURE,
-	GRAPHQL_DATABASE_ENTITY1_RELATIONSHIPS_FIELDS_STRUCTURE
+	GRAPHQL_DATABASE_ENTITY1_QUERY_RELATIONSHIPS_STRUCTURE,
+	GRAPHQL_DATABASE_ENTITY1_QUERY_RELATIONSHIPS_FIELDS_STRUCTURE,
+	GRAPHQL_DATABASE_ENTITY1_MUTATION_RELATIONSHIPS_STRUCTURE,
+	GRAPHQL_DATABASE_ENTITY1_MUTATION_RELATIONSHIPS_FIELDS_STRUCTURE
 }
