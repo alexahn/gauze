@@ -4,7 +4,7 @@ import {
 } from 'graphql';
 
 import {
-	SCHEMA as schema
+	SCHEMA_INTERFACE_SYSTEM as schema
 } from './schema.js'
 
 import database from './../../database/knex.js'

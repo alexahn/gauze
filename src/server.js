@@ -12,7 +12,7 @@ import {
 } from 'graphql-http';
 
 import {
-	SCHEMA as schema
+	SCHEMA_INTERFACE_SYSTEM as schema
 } from './system/interfaces/schema.js';
 
 import database from './database/knex.js'
