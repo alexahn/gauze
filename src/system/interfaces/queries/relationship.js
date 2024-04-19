@@ -6,7 +6,11 @@ import {
 } from 'graphql';
 
 import {
-	GRAPHQL_SYSTEM_RELATIONSHIP_STRUCTURE,
+	Serializer
+} from './../../../structure/serializer.js'
+
+import {
+	GRAPHQL_SYSTEM_RELATIONSHIP_QUERY_STRUCTURE,
 	GRAPHQL_SYSTEM_RELATIONSHIP_TYPE_STRUCTURE,
 	GRAPHQL_SYSTEM_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE
 } from './../../../structure/relationship/system/graphql.js'
@@ -15,20 +19,9 @@ import {
 	RELATIONSHIP_CONTROLLER_SYSTEM,
 } from './../../controllers/relationship.js'
 
-function format (record) {
-	const metadata = {
-		id: record.id,
-		type: GRAPHQL_SYSTEM_RELATIONSHIP_TYPE_STRUCTURE
-	}
-	const model = {
-		metadata: metadata,
-		attributes: record,
-		relationships: {
-			_metadata: metadata
-		}
-	}
-	return model
-}
+const RELATIONSHIP_SERIALIZER = new Serializer({
+	graphql_type: GRAPHQL_SYSTEM_RELATIONSHIP_TYPE_STRUCTURE
+})
 
 const RELATIONSHIP_QUERY_WHERE = new GraphQLInputObjectType({
 	name: 'Relationship_Query_Where',
@@ -37,7 +30,7 @@ const RELATIONSHIP_QUERY_WHERE = new GraphQLInputObjectType({
 })
 
 const RELATIONSHIP_READ_QUERY_INTERFACE_SYSTEM = {
-	type: new GraphQLList(GRAPHQL_SYSTEM_RELATIONSHIP_STRUCTURE),
+	type: new GraphQLList(GRAPHQL_SYSTEM_RELATIONSHIP_QUERY_STRUCTURE),
 	args: {
 		where: {
 			description: 'where',
@@ -63,7 +56,7 @@ const RELATIONSHIP_READ_QUERY_INTERFACE_SYSTEM = {
 			database: context.database,
 			transaction: context.transaction
 		}, query_arguments).then(function (data) {
-			return data.map(format)
+			return data.map(RELATIONSHIP_SERIALIZER.serialize)
 		})
 	}
 }

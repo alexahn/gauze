@@ -109,7 +109,7 @@ const GRAPHQL_DATABASE_ENTITY1_FIELDS_STRUCTURE = {
 }
 
 const GRAPHQL_DATABASE_ENTITY1_QUERY_STRUCTURE = new GraphQLObjectType({
-	name: 'Query_Entity1',
+	name: 'Entity1_Query',
 	description: 'Entity 1',
 	fields: () => ({
 		_metadata: GRAPHQL_DATABASE_ENTITY1_FIELDS_STRUCTURE._metadata,
@@ -126,7 +126,7 @@ const GRAPHQL_DATABASE_ENTITY1_QUERY_STRUCTURE = new GraphQLObjectType({
 })
 
 const GRAPHQL_DATABASE_ENTITY1_MUTATION_STRUCTURE = new GraphQLObjectType({
-	name: 'Mutation_Entity1',
+	name: 'Entity1_Mutation',
 	description: 'Entity 1',
 	fields: () => ({
 		_metadata: GRAPHQL_DATABASE_ENTITY1_FIELDS_STRUCTURE._metadata,

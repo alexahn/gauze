@@ -9,6 +9,10 @@ import {
 } from 'graphql';
 
 import {
+	Serializer
+} from './../../../structure/serializer.js'
+
+import {
 	GRAPHQL_SYSTEM_ENTITY1_MUTATION_STRUCTURE,
 	GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE,
 	GRAPHQL_SYSTEM_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
@@ -24,20 +28,9 @@ const ENTITY1_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
 	fields: GRAPHQL_SYSTEM_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
 })
 
-function format (record) {
-	const metadata = {
-		id: record.id,
-		type: GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE
-	}
-	const model = {
-		metadata: metadata,
-		attributes: record,
-		relationships: {
-			_metadata: metadata
-		}
-	}
-	return model
-}
+const ENTITY1_SERIALIZER = new Serializer({
+	graphql_type: GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE
+})
 
 const ENTITY1_CREATE_MUTATION_INTERFACE_SYSTEM = {
 	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_MUTATION_STRUCTURE),
@@ -50,7 +43,7 @@ const ENTITY1_CREATE_MUTATION_INTERFACE_SYSTEM = {
 	resolve: (_source, mutation_arguments, context) => {
 		console.log('entity1 create controller')
 		return ENTITY1_CONTROLLER_SYSTEM.Create(context, mutation_arguments).then(function (data) {
-			return data.map(format)
+			return data.map(ENTITY1_SERIALIZER.serialize)
 		})
 	}
 }
@@ -69,7 +62,7 @@ const ENTITY1_UPDATE_MUTATION_INTERFACE_SYSTEM = {
 	},
 	resolve: (_source, mutation_arguments, context) => {
 		return ENTITY1_CONTROLLER_SYSTEM.Update(context, mutation_arguments).then(function (data) {
-			return data.map(format)
+			return data.map(ENTITY1_SERIALIZER.serialize)
 		})
 	}
 }
@@ -84,7 +77,7 @@ const ENTITY1_DELETE_MUTATION_INTERFACE_SYSTEM = {
 	},
 	resolve: (_source, mutation_arguments, context) => {
 		return ENTITY1_CONTROLLER_SYSTEM.Delete(context, mutation_arguments).then(function (data) {
-			return data.map(format)
+			return data.map(ENTITY1_SERIALIZER.serialize)
 		})
 	}
 }

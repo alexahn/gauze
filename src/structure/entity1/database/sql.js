@@ -1,4 +1,4 @@
-const SQL_DATABASE_ENTITY1_TABLE_NAME = 'gauze__entity2'
+const SQL_DATABASE_ENTITY1_TABLE_NAME = 'gauze__entity1'
 
 export {
 	SQL_DATABASE_ENTITY1_TABLE_NAME

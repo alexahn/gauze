@@ -7,6 +7,10 @@ import {
 } from 'graphql';
 
 import {
+	Serializer
+} from './../../../structure/serializer.js'
+
+import {
 	GRAPHQL_SYSTEM_ENTITY1_QUERY_STRUCTURE,
 	GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE,
 	GRAPHQL_SYSTEM_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
@@ -16,21 +20,9 @@ import {
 	ENTITY1_CONTROLLER_SYSTEM,
 } from './../../controllers/entity1.js'
 
-function format (record) {
-	const metadata = {
-		id: record.id,
-		type: GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE
-	}
-	const model = {
-		_metadata: metadata,
-		attributes: record,
-		relationships: {
-			_metadata: metadata
-		},
-		query: {}
-	}
-	return model
-}
+const ENTITY1_SERIALIZER = new Serializer({
+	graphql_type: GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE
+})
 
 const ENTITY1_WHERE_QUERY_INTERFACE_SYSYTEM = new GraphQLInputObjectType({
 	name: 'Entity1_Query_Where',
@@ -65,7 +57,7 @@ const ENTITY1_READ_QUERY_INTERFACE_SYSTEM = {
 			database: context.database,
 			transaction: context.transaction
 		}, query_arguments).then(function (data) {
-			return data.map(format)
+			return data.map(ENTITY1_SERIALIZER.serialize)
 		})
 	}
 }

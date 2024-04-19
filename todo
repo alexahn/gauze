@@ -37,4 +37,4 @@
 [x] formalize query and mutations to look the same
 	[x] split relationship type for query and mutation
 	[x] re-expose query and mutation at entity level for nested queries and mutations
-	[ ] dynamically configure relationships, sub-queries, and sub-mutations by creating an abstraction
+	[x] dynamically configure relationships, sub-queries, and sub-mutations by creating an abstraction
