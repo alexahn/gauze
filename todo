@@ -32,8 +32,8 @@
 [ ] type naming constraints
 	[ ] cap table name to 255 characters
 	[ ] cap graphql type name to 255 characters
-[ ] rename constants and variables in interfaces/mutations
-[ ] use constants defined in structures for table names for database models
+[x] rename constants and variables in interfaces/mutations
+[x] use constants defined in structures for table names for database models
 [x] formalize query and mutations to look the same
 	[x] split relationship type for query and mutation
 	[x] re-expose query and mutation at entity level for nested queries and mutations

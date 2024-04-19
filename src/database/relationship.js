@@ -19,6 +19,10 @@ const up = function (knex) {
 			table.index('from');
 			table.index('to_id');
 			table.index('to');
+
+			table.unique(['from', 'from_id', 'to', 'to_id'], {
+				useConstraint: true
+			})
 		})
 	]);
 };
