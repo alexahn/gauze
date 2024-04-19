@@ -3,12 +3,12 @@ import {
 } from './class.js'
 
 import {
-    config
+	config
 } from 'dotenv'
 import findConfig from 'find-config'
 
 config({
-    path: findConfig('.env')
+	path: findConfig('.env')
 })
 
 const IO_LOGGER_KERNEL = new IOLogger({

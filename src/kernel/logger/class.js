@@ -28,7 +28,8 @@ class IOLogger extends Logger {
 	constructor (config) {
 		super(config)
 	}
-	write (level, topic, message) {
+	write (level, topic, ...messages) {
+		const self = this
 		if (this.LOG_LEVEL_MINIMUM <= level && level <= this.LOG_LEVEL_MAXIMUM) {
 			if (this.LOG_LEVEL_REGEX) {
 				// return if regex doesn't match
@@ -46,25 +47,38 @@ class IOLogger extends Logger {
 				const VALID_MESSAGE = MESSAGE_REGEX.test(message)
 				if (!VALID_MESSAGE) return false
 			}
-			// split the message by new lines
-			const MESSAGE_STRING = util.inspect(message, { colors: false })
-			const MESSAGE_LINES = MESSAGE_STRING.split('\\n')
-			const OUTPUT_LINES = MESSAGE_LINES.map(function (line, idx) {
-				var parsed_line
-				if (idx === 0) {
-					parsed_line = line.slice(1)
-				} else if (idx === MESSAGE_LINES.length - 1) {
-					parsed_line = line.slice(0, line.length - 1)
-				} else {
-					parsed_line = line
-				}
-				const format = `level:${level} topic:${topic} message: ${parsed_line}`
-				return format
-				//return `level:' + level + ' topic:' + topic + ' message: ' + line
+			const stack = []
+			messages.forEach(function (message) {
+				self.process_input(level, topic, stack, message)
 			})
-			this.write_lines(level, OUTPUT_LINES)
 			return true
 		}
+	}
+	process_input (level, topic, stack, input) {
+		// split the message by new lines
+		var last_line
+		const MESSAGE_STRING = util.inspect(input, {
+			colors: false
+		})
+		const MESSAGE_LINES = MESSAGE_STRING.split('\\n')
+		const OUTPUT_LINES = MESSAGE_LINES.map(function (line, idx) {
+			var parsed_line
+			if (idx === 0 && idx === MESSAGE_LINES.length - 1) {
+				parsed_line = line.slice(1, line.length - 1)
+				last_line = parsed_line
+			} else if (idx === 0) {
+				parsed_line = line.slice(1)
+			} else if (idx === MESSAGE_LINES.length - 1) {
+				parsed_line = line.slice(0, line.length - 1)
+				last_line = parsed_line
+			} else {
+				parsed_line = line
+			}
+			const formatted = `level:${level} topic:${topic} message: ${stack.length ? stack.join(' ') + ' ' : ''}${parsed_line}`
+			return formatted
+		})
+		stack.push(last_line)
+		this.write_lines(level, OUTPUT_LINES)
 	}
 	write_lines (level, lines) {
 		if (this.STDOUT_LEVEL_MINIMUM < level && level < this.STDOUT_LEVEL_MAXIMUM) {
