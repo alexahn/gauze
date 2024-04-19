@@ -53,13 +53,18 @@ const server = http.createServer((req, res) => {
 					if (data.errors && data.errors.length) {
 						return transaction.rollback().then(function () {
 							console.log('transaction reverted')
-							res.end(JSON.stringify(data))
+							// figure out when to send 500 / 'Internal Server Error' versus 400
+							res.writeHead(400, 'Bad Request', {
+								'content-type': 'application/json; charset=utf-8'
+							}).end(JSON.stringify(data))
 						})
 					} else {
 						return transaction.commit(data).then(function () {
 							// write to body
 							console.log('transaction committed')
-							res.end(JSON.stringify(data))
+							res.writeHead(200, 'OK', {
+								'content-type': 'application/json; charset=utf-8'
+							}).end(JSON.stringify(data))
 						})
 					}
 				}).catch(function (err) {

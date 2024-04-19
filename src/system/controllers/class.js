@@ -1,4 +1,3 @@
-// common methods here
 class SystemController {
 	constructor (config) {
 		this.config = config

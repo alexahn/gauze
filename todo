@@ -23,6 +23,7 @@
 		[x] stack based prefixing based on variable inputs to write
 	[ ] look into using console.group and console.groupEnd as an alternative to manually managing a stack prefix
 	[ ] use the logger in all the modules
+	[ ] clean up console.log usage
 [x] reorganize the structure module
 	[x] entities should be the highest directory level
 [ ] look into programmatically generating graphql and sql structures from an abstract structure
@@ -35,3 +36,5 @@
 [ ] use constants defined in structures for table names for database models
 [x] formalize query and mutations to look the same
 	[x] split relationship type for query and mutation
+	[x] re-expose query and mutation at entity level for nested queries and mutations
+	[ ] dynamically configure relationships, sub-queries, and sub-mutations by creating an abstraction

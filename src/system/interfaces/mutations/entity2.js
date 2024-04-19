@@ -33,10 +33,7 @@ function format (record) {
 		metadata: metadata,
 		attributes: record,
 		relationships: {
-			_metadata: metadata,
-			entity2: {
-				_metadata: metadata
-			}
+			_metadata: metadata
 		}
 	}
 	return model
@@ -91,25 +88,6 @@ const ENTITY2_DELETE_MUTATION_INTERFACE_SYSTEM = {
 		})
 	}
 }
-
-/*
-const ENTITY2_MUTATION = new GraphQLObjectType({
-	name: 'Entity2_Mutation',
-	description: 'Entity2 Mutation',
-	fields: {
-		create: ENTITY2_CREATE_MUTATION_INTERFACE_SYSTEM,
-		update: ENTITY2_UPDATE_MUTATION_INTERFACE_SYSTEM,
-		delete: ENTITY2_DELETE_MUTATION_INTERFACE_SYSTEM
-	}
-})
-
-const ENTITY2_MUTATION_INTERFACE_SYSTEM = {
-	type: ENTITY2_MUTATION,
-	resolve: (_source, {}) => {
-		return {}
-	}
-}
-*/
 
 export {
 	ENTITY2_CREATE_MUTATION_INTERFACE_SYSTEM,
