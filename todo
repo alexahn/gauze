@@ -28,3 +28,6 @@
 [ ] look into programmatically generating graphql and sql structures from an abstract structure
 [ ] look into deepcopy for graphql schema and type extension
 	[ ] update graphql type names and descriptions with database, system, or user
+[ ] type naming constraints
+	[ ] cap table name to 255 characters
+	[ ] cap graphql type name to 255 characters
