@@ -9,10 +9,10 @@ import {
 } from 'graphql';
 
 import {
-	ENTITY1,
-	ENTITY1_TYPE,
-	ENTITY1_ATTRIBUTES_FIELDS
-} from './../../../structure/graphql/entity1.js'
+	GRAPHQL_SYSTEM_ENTITY1_STRUCTURE,
+	GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE,
+	GRAPHQL_SYSTEM_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
+} from './../../../structure/entity1/system/graphql.js'
 
 import {
 	ENTITY1_CONTROLLER_SYSTEM
@@ -21,13 +21,13 @@ import {
 const ENTITY1_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
 	name: 'Entity1_Mutation_Attributes',
 	description: 'Entity1 Mutation Attributes',
-	fields: ENTITY1_ATTRIBUTES_FIELDS
+	fields: GRAPHQL_SYSTEM_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
 })
 
 function format (record) {
 	const metadata = {
 		id: record.id,
-		type: ENTITY1_TYPE
+		type: GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE
 	}
 	const model = {
 		metadata: metadata,
@@ -40,7 +40,7 @@ function format (record) {
 }
 
 const ENTITY1_CREATE = {
-	type: new GraphQLList(ENTITY1),
+	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_STRUCTURE),
 	args: {
 		attributes: {
 			description: 'attributes',
@@ -56,7 +56,7 @@ const ENTITY1_CREATE = {
 }
 
 const ENTITY1_UPDATE = {
-	type: new GraphQLList(ENTITY1),
+	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_STRUCTURE),
 	args: {
 		where: {
 			description: 'where',
@@ -75,7 +75,7 @@ const ENTITY1_UPDATE = {
 }
 
 const ENTITY1_DELETE = {
-	type: new GraphQLList(ENTITY1),
+	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_STRUCTURE),
 	args: {
 		where: {
 			description: 'where',

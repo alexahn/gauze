@@ -9,10 +9,10 @@ import {
 } from 'graphql';
 
 import {
-	ENTITY2,
-	ENTITY2_TYPE,
-	ENTITY2_ATTRIBUTES_FIELDS
-} from './../../../structure/graphql/entity2.js'
+	GRAPHQL_SYSTEM_ENTITY2_STRUCTURE,
+	GRAPHQL_SYSTEM_ENTITY2_TYPE_STRUCTURE,
+	GRAPHQL_SYSTEM_ENTITY2_ATTRIBUTES_FIELDS_STRUCTURE
+} from './../../../structure/entity2/system/graphql.js'
 
 import {
 	ENTITY2_CONTROLLER_SYSTEM,
@@ -21,7 +21,7 @@ import {
 function format (record) {
 	const metadata = {
 		id: record.id,
-		type: ENTITY2_TYPE
+		type: GRAPHQL_SYSTEM_ENTITY2_TYPE_STRUCTURE
 	}
 	const model = {
 		metadata: metadata,
@@ -36,11 +36,11 @@ function format (record) {
 const ENTITY2_QUERY_WHERE = new GraphQLInputObjectType({
 	name: 'Entity2_Query_Where',
 	description: 'Entity2 Query Where',
-	fields: ENTITY2_ATTRIBUTES_FIELDS
+	fields: GRAPHQL_SYSTEM_ENTITY2_ATTRIBUTES_FIELDS_STRUCTURE
 })
 
 const ENTITY2_QUERY_INTERFACE_SYSTEM = {
-	type: new GraphQLList(ENTITY2),
+	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY2_STRUCTURE),
 	args: {
 		where: {
 			description: 'where',
@@ -63,7 +63,6 @@ const ENTITY2_QUERY_INTERFACE_SYSTEM = {
 		console.log('entity2 query _source', _source)
 		console.log('entity2 args', query_arguments)
 		console.log('context', context)
-		//return ReadEntity2(where, limit, skip, sort)
 		return ENTITY2_CONTROLLER_SYSTEM.Read({
 			database: context.database,
 			transaction: context.transaction

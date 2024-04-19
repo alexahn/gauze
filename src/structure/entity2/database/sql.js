@@ -1,0 +1,5 @@
+const SQL_DATABASE_ENTITY2_TABLE_NAME = 'gauze__entity2'
+
+export {
+	SQL_DATABASE_ENTITY2_TABLE_NAME
+}

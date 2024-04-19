@@ -17,4 +17,14 @@
 		[ ] look into constraints to manage one to one, one to many, and many to one relationships
 	[ ] implement relationship traversal via queries
 	[ ] implement relationship creation and deletion via mutations
-[ ] logging
+	[ ] see if there a way to not forfeit foreign key constraints without having to create different tables for every type of relationship
+[x] logging
+	[x] visually simple logging based on level, topic, and message
+		[x] stack based prefixing based on variable inputs to write
+	[ ] look into using console.group and console.groupEnd as an alternative to manually managing a stack prefix
+	[ ] use the logger in all the modules
+[x] reorganize the structure module
+	[x] entities should be the highest directory level
+[ ] look into programmatically generating graphql and sql structures from an abstract structure
+[ ] look into deepcopy for graphql schema and type extension
+	[ ] update graphql type names and descriptions with database, system, or user
