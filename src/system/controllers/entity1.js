@@ -1,6 +1,5 @@
 import {
-	SystemModelSystemController,
-	RootSystemModelSystemController
+	SystemModelSystemController
 } from './class.js'
 import {
 	ENTITY1_MODEL_SYSTEM
