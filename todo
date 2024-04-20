@@ -12,7 +12,7 @@
 	[x] barrel modules
 [x] rename database/database.js to database/knex.js
 [x] rename interface directories to interfaces
-[ ] relationships modelling
+[ ] relationships modeling
 	[x] create a table to track relationships
 		[ ] look into constraints to manage one to one, one to many, and many to one relationships
 	[ ] implement relationship traversal via queries
@@ -38,3 +38,11 @@
 	[x] split relationship type for query and mutation
 	[x] re-expose query and mutation at entity level for nested queries and mutations
 	[x] dynamically configure relationships, sub-queries, and sub-mutations by creating an abstraction
+[ ] shell / repl
+[ ] command directory
+	[ ] terminal
+	[ ] server
+[ ] permissions and authorization
+	[ ] row based security (postgresql)?
+	[ ] maybe some kind of bit field if we want to be efficient? bloom filter if false positives aren't catastrophic?
+[ ] url and routes
