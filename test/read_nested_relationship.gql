@@ -1,0 +1,16 @@
+query ReadNestedRelationship {
+  read_entity1(where: {id: "1"}) {
+    attributes {
+      id
+      text
+    }
+    relationships {
+      read_entity2(where: {id: "2"}) {
+        attributes {
+          id
+          text
+        }
+      }
+    }
+  }
+}

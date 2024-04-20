@@ -1,0 +1,8 @@
+query ReadRelationship {
+  read_relationship(where: {id: "1"}) {
+    attributes {
+      id
+      from_id
+    }
+  }
+}
