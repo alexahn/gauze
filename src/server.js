@@ -29,11 +29,11 @@ const server = http.createServer((req, res) => {
 	if (req.url.startsWith('/graphql')) {
 		var body = ''
 		req.on('data', function (chunk) {
-			console.log('chunk', chunk)
+			//console.log('chunk', chunk)
 			body += chunk
 		})
 		req.on('end', function () {
-			console.log('body', body.toString('utf8'))
+			//console.log('body', body.toString('utf8'))
 			try {
 				var parsed = JSON.parse(body)
 
@@ -49,7 +49,7 @@ const server = http.createServer((req, res) => {
 					source: parsed.query,
 					contextValue: context
 				}).then(function (data) {
-					console.log('result', JSON.stringify(data, null, 4))
+					//console.log('result', JSON.stringify(data, null, 4))
 					if (data.errors && data.errors.length) {
 						return transaction.rollback().then(function () {
 							console.log('transaction reverted')

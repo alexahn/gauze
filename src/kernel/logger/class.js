@@ -3,6 +3,11 @@
 // LOG_LEVEL_REGEX, LOG_TOPIC_REGEX, LOG_MESSAGE_REGEX
 
 import util from 'util'
+import path from 'path'
+import url from 'url'
+import {
+	fileURLToPath
+} from 'url';
 
 class Logger {
 	constructor ({
@@ -60,7 +65,17 @@ class IOLogger extends Logger {
 		const MESSAGE_STRING = util.inspect(input, {
 			colors: false
 		})
-		const MESSAGE_LINES = MESSAGE_STRING.split('\\n')
+		const MESSAGE_LINES = []
+		// note: seems like console.log does some nice thing around logging output from JSON.stringify
+		// note: we need to escape \\n instead of \n for output from JSON.stringify
+		// note: just brute force this by first splitting by \\n and then splitting by \n
+		const FIRST_SPLIT = MESSAGE_STRING.split('\\n')
+		FIRST_SPLIT.forEach(function (line_first) {
+			const SECOND_SPLIT = line_first.split('\n')
+			SECOND_SPLIT.forEach(function (line_second) {
+				MESSAGE_LINES.push(line_second)
+			})
+		})
 		const OUTPUT_LINES = MESSAGE_LINES.map(function (line, idx) {
 			var parsed_line
 			if (idx === 0 && idx === MESSAGE_LINES.length - 1) {

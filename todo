@@ -42,7 +42,12 @@
 [ ] command directory
 	[ ] terminal
 	[ ] server
+	[ ] manage?
 [ ] permissions and authorization
 	[ ] row based security (postgresql)?
-	[ ] maybe some kind of bit field if we want to be efficient? bloom filter if false positives aren't catastrophic?
+	[ ] maybe some kind of bit field if we want to be efficient?
+	[ ] bloom filter if false positives aren't catastrophic?
+	[ ] inverted bloom filter if false negatives aren't catastrophic?
 [ ] url and routes
+[ ] expose kernel as $kernel?
+	[ ] should system and database be written with full module access to some root?
