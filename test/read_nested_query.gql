@@ -1,4 +1,4 @@
-query ReadNestedRelationship {
+query ReadNestedQuery {
   read_entity1(where: {id: "1"}) {
     attributes {
       id

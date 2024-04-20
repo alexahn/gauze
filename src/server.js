@@ -36,7 +36,6 @@ const server = http.createServer((req, res) => {
 			//console.log('body', body.toString('utf8'))
 			try {
 				var parsed = JSON.parse(body)
-
 			} catch (err) {
 				red.end(JSON.stringify(err))
 			}
@@ -47,7 +46,9 @@ const server = http.createServer((req, res) => {
 				graphql({
 					schema: schema,
 					source: parsed.query,
-					contextValue: context
+					contextValue: context,
+					variableValues: parsed.variables,
+					operationName: parsed.operationName
 				}).then(function (data) {
 					//console.log('result', JSON.stringify(data, null, 4))
 					if (data.errors && data.errors.length) {

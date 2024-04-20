@@ -61,3 +61,5 @@
 	[ ] should have commands to create new entities
 [ ] update graphql type names to use two underscores as a separator
 [ ] change relationship column names (from to from_type, to to to_type)
+[x] enable variables for graphql server
+[ ] use a higher level http server (express, fastify, koa, etc)
