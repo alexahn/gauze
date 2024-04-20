@@ -1,3 +1,2 @@
-export * as mutations from './mutations/index.js'
-export * as queries from './queries/index.js'
-export * as schema from './schema.js'
+export * as http from './http/index.js'
+export * as graphql from './graphql/index.js'

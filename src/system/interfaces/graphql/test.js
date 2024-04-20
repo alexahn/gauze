@@ -7,7 +7,7 @@ import {
 	SCHEMA_INTERFACE_SYSTEM as schema
 } from './schema.js'
 
-import database from './../../database/knex.js'
+import database from './../../../database/knex.js'
 
 const query = `
     query MyTestQuery {

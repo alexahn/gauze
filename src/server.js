@@ -13,7 +13,7 @@ import {
 
 import {
 	SCHEMA_INTERFACE_SYSTEM as schema
-} from './system/interfaces/schema.js';
+} from './system/interfaces/graphql/schema.js';
 
 import database from './database/knex.js'
 

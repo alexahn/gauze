@@ -10,17 +10,17 @@ import {
 
 import {
 	Serializer
-} from './../../../structure/serializer.js'
+} from './../../../../structure/serializer.js'
 
 import {
 	GRAPHQL_SYSTEM_RELATIONSHIP_MUTATION_STRUCTURE,
 	GRAPHQL_SYSTEM_RELATIONSHIP_TYPE_STRUCTURE,
 	GRAPHQL_SYSTEM_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE
-} from './../../../structure/relationship/system/graphql.js'
+} from './../../../../structure/relationship/system/graphql.js'
 
 import {
 	RELATIONSHIP_CONTROLLER_SYSTEM
-} from './../../controllers/relationship.js'
+} from './../../../controllers/relationship.js'
 
 const RELATIONSHIP_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
 	name: 'Relationship_Mutation_Attributes',

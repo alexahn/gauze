@@ -1,3 +1,10 @@
+import url from 'url'
+import path from 'path'
+const __FILEPATH = url.fileURLToPath(import.meta.url)
+const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH)
+
+import * as $kernel from './../../../../kernel/index.js'
+
 import {
 	GraphQLInt,
 	GraphQLList,
@@ -8,17 +15,17 @@ import {
 
 import {
 	Serializer
-} from './../../../structure/serializer.js'
+} from './../../../../structure/serializer.js'
 
 import {
 	GRAPHQL_SYSTEM_ENTITY1_QUERY_STRUCTURE,
 	GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE,
 	GRAPHQL_SYSTEM_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
-} from './../../../structure/entity1/system/graphql.js'
+} from './../../../../structure/entity1/system/graphql.js'
 
 import {
 	ENTITY1_CONTROLLER_SYSTEM,
-} from './../../controllers/entity1.js'
+} from './../../../controllers/entity1.js'
 
 const ENTITY1_SERIALIZER = new Serializer({
 	graphql_type: GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE
@@ -51,12 +58,13 @@ const ENTITY1_READ_QUERY_INTERFACE_SYSTEM = {
 		}
 	},
 	resolve: (_source, query_arguments, context) => {
-		console.log('entity1 query _source', _source)
-		console.log('entity1 args', query_arguments)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY1_READ_QUERY_INTERFACE_SYSTEM.resolve:enter', '_source', _source)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY1_READ_QUERY_INTERFACE_SYSTEM.resolve:enter', 'query_arguments', query_arguments)
 		return ENTITY1_CONTROLLER_SYSTEM.Read({
 			database: context.database,
 			transaction: context.transaction
 		}, query_arguments).then(function (data) {
+			$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, 'ENTITY1_READ_QUERY_INTERFACE_SYSTEM.resolve:success', 'data', data)
 			return data.map(ENTITY1_SERIALIZER.serialize)
 		})
 	}

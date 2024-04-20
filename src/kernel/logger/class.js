@@ -79,12 +79,24 @@ class IOLogger extends Logger {
 		const OUTPUT_LINES = MESSAGE_LINES.map(function (line, idx) {
 			var parsed_line
 			if (idx === 0 && idx === MESSAGE_LINES.length - 1) {
-				parsed_line = line.slice(1, line.length - 1)
+				if (line[0] === "'" && line[line.length - 1] === "'") {
+					parsed_line = line.slice(1, line.length - 1)
+				} else {
+					parsed_line = line
+				}
 				last_line = parsed_line
 			} else if (idx === 0) {
-				parsed_line = line.slice(1)
+				if (line[0] === "'") {
+					parsed_line = line.slice(1)
+				} else {
+					parsed_line = line
+				}
 			} else if (idx === MESSAGE_LINES.length - 1) {
-				parsed_line = line.slice(0, line.length - 1)
+				if (line[line.length - 1] === "'") {
+					parsed_line = line.slice(0, line.length - 1)
+				} else {
+					parsed_line = line
+				}
 				last_line = parsed_line
 			} else {
 				parsed_line = line
@@ -96,11 +108,11 @@ class IOLogger extends Logger {
 		this.write_lines(level, OUTPUT_LINES)
 	}
 	write_lines (level, lines) {
-		if (this.STDOUT_LEVEL_MINIMUM < level && level < this.STDOUT_LEVEL_MAXIMUM) {
+		if (this.STDOUT_LEVEL_MINIMUM <= level && level <= this.STDOUT_LEVEL_MAXIMUM) {
 			lines.forEach(function (line, idx) {
 				console.log(line)
 			})
-		} else if (this.STDERR_LEVEL_MINIMUM < level && level < this.STDERR_LEVEL_MAXIMUM) {
+		} else if (this.STDERR_LEVEL_MINIMUM <= level && level <= this.STDERR_LEVEL_MAXIMUM) {
 			lines.forEach(function (line) {
 				console.err(line)
 			})

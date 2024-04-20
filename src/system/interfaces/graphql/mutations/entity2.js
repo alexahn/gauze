@@ -10,17 +10,17 @@ import {
 
 import {
 	Serializer
-} from './../../../structure/serializer.js'
+} from './../../../../structure/serializer.js'
 
 import {
 	GRAPHQL_SYSTEM_ENTITY2_MUTATION_STRUCTURE,
 	GRAPHQL_SYSTEM_ENTITY2_TYPE_STRUCTURE,
 	GRAPHQL_SYSTEM_ENTITY2_ATTRIBUTES_FIELDS_STRUCTURE
-} from './../../../structure/entity2/system/graphql.js'
+} from './../../../../structure/entity2/system/graphql.js'
 
 import {
 	ENTITY2_CONTROLLER_SYSTEM
-} from './../../controllers/entity2.js'
+} from './../../../controllers/entity2.js'
 
 const ENTITY2_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
 	name: 'Entity2_Mutation_Attributes',
