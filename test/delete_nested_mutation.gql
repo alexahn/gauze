@@ -1,10 +1,10 @@
-mutation DeleteNestedRelationship {
+mutation DeleteNestedMutation {
   update_entity1(where: {id: "1"}, attributes: {text: "123"}) {
     attributes {
       id
       text
     }
-    relationships {
+    mutation {
       delete_entity2(where: {id: "2"}) {
         attributes {
           id

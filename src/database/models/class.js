@@ -81,7 +81,7 @@ class KnexDatabaseModel extends DatabaseModel {
 		const self = this
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Read:enter`, 'source', source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Read:enter`, 'where', where)
-		if (source) {
+		if (source && source._metadata) {
 			// do join here based on source metadata
 			// use structure resolvers to convert graphql type to table name
 			// relationships are one directional, so use from as the parent
@@ -147,7 +147,7 @@ class KnexDatabaseModel extends DatabaseModel {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Update:enter`, 'source', source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Update:enter`, 'where', where)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Update:enter`, 'attributes', attributes)
-		if (source) {
+		if (source && source._metadata) {
 			// todo: currently might only work in postgresql
 			const PARENT_SQL_ID = source._metadata.id
 			const PARENT_GRAPHQL_TYPE = source._metadata.type
@@ -237,7 +237,7 @@ class KnexDatabaseModel extends DatabaseModel {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'source', source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'where', where)
 
-		if (source) {
+		if (source && source._metadata) {
 			const PARENT_SQL_ID = source._metadata.id
 			const PARENT_GRAPHQL_TYPE = source._metadata.type
 			const PARENT_SQL_TABLE = $structure.resolvers.DATABASE_GRAPHQL_TYPE_TO_SQL_TABLE[PARENT_GRAPHQL_TYPE]
