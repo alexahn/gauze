@@ -34,3 +34,10 @@ A GraphQL server architecture.
 	- `/src/system/models/entity1.js` should export `ENTITY1_MODEL_SYSTEM`.
 	- The root module can access it via `gauze.system.models.entity1.ENTITY1_MODEL_SYSTEM`.
 - Named class exports should typically be named according to the abstract hierarchy.
+
+## Dependency Hierarchy
+- kernel
+- database
+- system
+- user
+- command

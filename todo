@@ -38,16 +38,23 @@
 	[x] split relationship type for query and mutation
 	[x] re-expose query and mutation at entity level for nested queries and mutations
 	[x] dynamically configure relationships, sub-queries, and sub-mutations by creating an abstraction
-[ ] shell / repl
+[x] shell / repl
 [ ] command directory
-	[ ] terminal
+	[ ] yargs?
+	[x] terminal
 	[ ] server
 	[ ] manage?
 [ ] permissions and authorization
 	[ ] row based security (postgresql)?
 	[ ] maybe some kind of bit field if we want to be efficient?
 	[ ] bloom filter if false positives aren't catastrophic?
+		[ ] probabilistic authorization sounds awful, but interesting to think about
 	[ ] inverted bloom filter if false negatives aren't catastrophic?
+		[ ] probabilistic authorization sounds awful, but interesting to think about
 [ ] url and routes
-[ ] expose kernel as $kernel?
-	[ ] should system and database be written with full module access to some root?
+[ ] should realms (database, system, user) be written by using the exposed interface for the layer below?
+	[ ] forces any circular dependencies to be made apparent, so maybe a good idea
+[x] use kernel as $kernel
+[ ] use database as $database?
+[ ] bootstrap new project by using commands
+	[ ] should have commands to create new entities

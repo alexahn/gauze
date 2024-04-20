@@ -1,8 +1,8 @@
 import path from 'path'
-import {
-	fileURLToPath
-} from 'url'
+import url from 'url'
 
+// note: we need dotenv here so that these environment variables are populated while using the knex cli
+// note: es6 imports also seem to resolve before the body of a module is interpreted
 import {
 	config
 } from 'dotenv'
@@ -12,14 +12,14 @@ config({
 	path: findConfig('.env')
 })
 
-const __filename = fileURLToPath(import.meta.url)
+const __filename = url.fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const KNEX_CONFIG = {
 	development: {
 		client: process.env.KNEX_CLIENT,
 		connection: {
-			filename: path.join(__dirname, process.env.KNEX_CONNECTION_FILENAME)
+			filename: path.join(__dirname, process.env.KNEX_CONNECTION_FILENAME || '')
 		},
 		migrations: {
 			tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -31,7 +31,7 @@ const KNEX_CONFIG = {
 	staging: {
 		client: process.env.KNEX_CLIENT,
 		connection: {
-			filename: path.join(__dirname, process.env.KNEX_CONNECTION_FILENAME)
+			filename: path.join(__dirname, process.env.KNEX_CONNECTION_FILENAME || '')
 		},
 		migrations: {
 			tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -43,7 +43,7 @@ const KNEX_CONFIG = {
 	production: {
 		client: 'better-sqlite3',
 		connection: {
-			filename: path.join(__dirname, process.env.KNEX_CONNECTION_FILENAME)
+			filename: path.join(__dirname, process.env.KNEX_CONNECTION_FILENAME || '')
 		},
 		migrations: {
 			tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
