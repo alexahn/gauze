@@ -17,6 +17,18 @@ const seed = async function (knex) {
 			updated_at: new Date(),
 			text: 'end'
 		},
+		{
+			id: 3,
+			created_at: new Date(),
+			updated_at: new Date(),
+			text: 'new'
+		},
+		{
+			id: 4,
+			created_at: new Date(),
+			updated_at: new Date(),
+			text: 'old'
+		},
 	]);
 };
 

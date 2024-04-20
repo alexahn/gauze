@@ -5,22 +5,22 @@
 const up = function (knex) {
 	return Promise.all([
 		knex.schema.createTable('gauze__relationship', function (table) {
-			table.increments('id').primary();
-			table.date('created_at').notNullable();
-			table.date('updated_at').notNullable();
-			table.date('deleted_at');
+			table.increments('_id').primary();
+			table.date('_created_at').notNullable();
+			table.date('_updated_at').notNullable();
+			table.date('_deleted_at');
 			// change to uuid later
-			table.bigint('from_id').notNullable();
-			table.string('from').notNullable();
+			table.bigint('_from_id').notNullable();
+			table.string('_from_type').notNullable();
 			// change to uuid later
-			table.bigint('to_id').notNullable();
-			table.string('to').notNullable();
-			table.index('from_id');
-			table.index('from');
-			table.index('to_id');
-			table.index('to');
+			table.bigint('_to_id').notNullable();
+			table.string('_to_type').notNullable();
+			table.index('_from_id');
+			table.index('_from_type');
+			table.index('_to_id');
+			table.index('_to_type');
 
-			table.unique(['from', 'from_id', 'to', 'to_id'], {
+			table.unique(['_from_type', '_from_id', '_to_type', '_to_id'], {
 				useConstraint: true
 			})
 		})

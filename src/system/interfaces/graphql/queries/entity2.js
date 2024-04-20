@@ -61,12 +61,14 @@ const ENTITY2_READ_QUERY_INTERFACE_SYSTEM = {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY2_READ_QUERY_INTERFACE_SYSTEM.resolve:enter', '_source', _source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY2_READ_QUERY_INTERFACE_SYSTEM.resolve:enter', 'query_arguments', query_arguments)
 		return ENTITY2_CONTROLLER_SYSTEM.Read({
-			database: context.database,
-			transaction: context.transaction
-		}, query_arguments).then(function (data) {
-			$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, 'ENTITY2_READ_QUERY_INTERFACE_SYSTEM.resolve:success', 'data', data)
-			return data.map(ENTITY2_SERIALIZER.serialize)
-		})
+				source: _source,
+				database: context.database,
+				transaction: context.transaction
+			}, query_arguments)
+			.then(function (data) {
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, 'ENTITY2_READ_QUERY_INTERFACE_SYSTEM.resolve:success', 'data', data)
+				return data.map(ENTITY2_SERIALIZER.serialize)
+			})
 	}
 }
 
