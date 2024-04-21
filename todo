@@ -18,6 +18,7 @@
 	[x] implement relationship traversal via queries
 	[-] implement relationship creation and deletion via mutations
 		[ ] doesn't seem to work in sqlite3, maybe try postgresql
+		[ ] brute force this by re-using read method and using where in
 	[ ] see if there a way to not forfeit foreign key constraints without having to create different tables for every type of relationship
 [x] logging
 	[x] visually simple logging based on level, topic, and message
