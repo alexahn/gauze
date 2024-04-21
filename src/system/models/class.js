@@ -26,21 +26,21 @@ class DatabaseModelSystemModel extends SystemModel {
 	_name () {
 		return `[${this.model.name}]${this.constructor.name}`
 	}
-	Create (context, input) {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.Create:enter`, 'input', input)
-		return this.model.Create(context, input)
+	create (context, input) {
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.create:enter`, 'input', input)
+		return this.model.create(context, input)
 	}
-	Read (context, input) {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.Read:enter`, 'input', input)
-		return this.model.Read(context, input)
+	read (context, input) {
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.read:enter`, 'input', input)
+		return this.model.read(context, input)
 	}
-	Update (context, input) {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.Update:enter`, 'input', input)
-		return this.model.Update(context, input)
+	update (context, input) {
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.update:enter`, 'input', input)
+		return this.model.update(context, input)
 	}
-	Delete (context, input) {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.Delete:enter`, 'input', input)
-		return this.model.Delete(context, input)
+	delete (context, input) {
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.delete:enter`, 'input', input)
+		return this.model.delete(context, input)
 	}
 }
 

@@ -23,12 +23,12 @@ class SystemModelSystemController extends SystemController {
 		super(config)
 		this.model = model
 		this.name = this._name()
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor.exit`)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
 	}
 	_name () {
 		return `[${this.model.name}]${this.constructor.name}`
 	}
-	Create ({
+	create ({
 		user,
 		source,
 		database,
@@ -39,10 +39,10 @@ class SystemModelSystemController extends SystemController {
 			database,
 			transaction
 		}
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.Create.enter`, 'input', input)
-		return this.model.Create(context, input)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.create:enter`, 'input', input)
+		return this.model.create(context, input)
 	}
-	Read ({
+	read ({
 		user,
 		source,
 		database,
@@ -53,10 +53,11 @@ class SystemModelSystemController extends SystemController {
 			database,
 			transaction
 		}
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.Read.enter`, 'input', input)
-		return this.model.Read(context, input)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.read:enter`, 'input', input)
+		console.log('model', this.model.read, this.model.Read)
+		return this.model.read(context, input)
 	}
-	Update ({
+	update ({
 		user,
 		source,
 		database,
@@ -67,10 +68,10 @@ class SystemModelSystemController extends SystemController {
 			database,
 			transaction
 		}
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.Update.enter`, 'input', input)
-		return this.model.Update(context, input)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.update:enter`, 'input', input)
+		return this.model.update(context, input)
 	}
-	Delete ({
+	delete ({
 		user,
 		source,
 		database,
@@ -81,8 +82,8 @@ class SystemModelSystemController extends SystemController {
 			database,
 			transaction
 		}
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.Delete.enter`, 'input', input)
-		return this.model.Delete(context, input)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.delete:enter`, 'input', input)
+		return this.model.delete(context, input)
 	}
 }
 

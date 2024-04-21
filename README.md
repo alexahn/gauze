@@ -36,6 +36,7 @@ A GraphQL server architecture.
 - Named class exports should typically be named according to the abstract hierarchy.
 
 ## Dependency Hierarchy
+- structure
 - kernel
 - database
 - system

@@ -1,11 +1,11 @@
 mutation UpdateRelationship {
   update_relationship(
-    where: {id : "1"},
-    attributes: {from_id: "3"}
+    where: {_id : "1"},
+    attributes: {_from_id: "3"}
   ) {
     attributes{
-      id
-      from_id
+      _id
+      _from_id
     }
   }
 }

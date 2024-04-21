@@ -56,13 +56,25 @@
 		[ ] system permissions
 		[ ] user permissions
 [ ] url and routes
-[ ] should realms (database, system, user) be written by using the exposed interface for the layer below?
-	[ ] forces any circular dependencies to be made apparent, so maybe a good idea
-[x] use kernel as $kernel
-[ ] use database as $database?
+[ ] realms (database, system, user) should be written by using the exposed interface for the layer below
+	[ ] forces any circular dependencies to be made apparent
+	[ ] use structure as $structure
+	[x] use kernel as $kernel
+	[x] use database as $database
 [ ] bootstrap new project by using commands
 	[ ] should have commands to create new entities
 [x] update graphql type names to use two underscores as a separator
 [x] change relationship column names (from to from_type, to to to_type)
 [x] enable variables for graphql server
 [ ] use a higher level http server (express, fastify, koa, etc)
+[x] investigate why orderBy is not working in knex with sqlite3
+	[x] order_nulls breaks the query
+	[x] remove order_nulls for now until we find a solution
+[x] figure out a way to enable debugging of queries easily
+	[x] toString method allows every query to be printed
+	[x] put all sql queries into constants so they can be re-used
+	[x] add new environment variables: GAUZE_DEBUG_SQL, GAUZE_DEBUG_GRAPHQL
+[x] add primary key to database models and use them for the default order
+	[x] add primary key to sql structures
+[ ] refactor logger to make it functional (e.g. stop mutating arrays and have functions return fully transformed items)
+	[ ] remove the magic string by fully implementing the correct stack marking algorithm

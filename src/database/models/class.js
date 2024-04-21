@@ -21,9 +21,10 @@ class DatabaseModel {
 // constructor (config, input)
 // method (context, input)
 class KnexDatabaseModel extends DatabaseModel {
-	constructor (config, table) {
+	constructor (config, table, primary_key) {
 		super(config)
 		this.table = table
+		this.primary_key = primary_key
 		this.name = this._name()
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
 	}
@@ -31,7 +32,7 @@ class KnexDatabaseModel extends DatabaseModel {
 		return `[${this.table}]${this.constructor.name}`
 	}
 	// create a row
-	Create ({
+	create ({
 		source,
 		database,
 		transaction
@@ -39,34 +40,37 @@ class KnexDatabaseModel extends DatabaseModel {
 		attributes
 	}) {
 		const self = this
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Create.enter`, 'source', source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Create.enter`, 'attributes', attributes)
-		return database(self.table)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'source', source)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'attributes', attributes)
+		const sql = database(self.table)
 			.insert(attributes, ['id'])
 			.transacting(transaction)
-			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.Create:success`, 'data', data)
-				return self.Read({
-					source,
-					database,
-					transaction
-				}, {
-					where: {
-						id: data[0].id
-					},
-					limit: 1,
-					offset: 0,
-					order_column: 'id',
-					order_direction: 'asc',
-					order_nulls: 'first'
-				})
-			}).catch(function (err) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Create:failure`, 'err', err)
-				throw err
+		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.create:debug_sql`, sql.toString())
+		}
+		return sql.then(function (data) {
+			$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.create:success`, 'data', data)
+			return self.read({
+				source,
+				database,
+				transaction
+			}, {
+				where: {
+					[self.primary_key]: data[0][self.primary_key]
+				},
+				limit: 1,
+				offset: 0,
+				order: self.primary_key,
+				order_direction: 'asc',
+				order_nulls: 'first'
 			})
+		}).catch(function (err) {
+			$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.create:failure`, 'err', err)
+			throw err
+		})
 	}
 	// read a row
-	Read ({
+	read ({
 		source,
 		database,
 		transaction
@@ -74,13 +78,13 @@ class KnexDatabaseModel extends DatabaseModel {
 		where,
 		limit = 128,
 		offset = 0,
-		order_column = 'id',
+		order = this.primary_key,
 		order_direction = 'asc',
 		order_nulls = 'first'
 	}) {
 		const self = this
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Read:enter`, 'source', source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Read:enter`, 'where', where)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.read:enter`, 'source', source)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.read:enter`, 'where', where)
 		if (source && source._metadata) {
 			// do join here based on source metadata
 			// use structure resolvers to convert graphql type to table name
@@ -94,43 +98,51 @@ class KnexDatabaseModel extends DatabaseModel {
 				var joined_key = self.table + '.' + k
 				joined_where[joined_key] = where[k]
 			})
-			var joined_order_column = self.table + '.' + order_column
-			return database(self.table)
+			var joined_order = self.table + '.' + order
+			const sql = database(self.table)
 				.join(self.relationship_table, `${self.relationship_table}._to_id`, '=', `${self.table}.id`)
 				.where(`${self.relationship_table}._from_id`, PARENT_SQL_ID)
 				.where(`${self.relationship_table}._from_type`, PARENT_SQL_TABLE)
 				.where(joined_where)
 				.limit(limit)
 				.offset(offset)
-				.orderBy(joined_order_column, order_direction, order_nulls)
+				.orderBy(joined_order, order_direction, order_nulls)
 				.transacting(transaction)
-				.then(function (data) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.Read:success`, 'data', data)
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString())
+			}
+			return sql.then(function (data) {
+					$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.read:success`, 'data', data)
 					return Promise.resolve(data)
 				})
 				.catch(function (err) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Read:failure`, 'err', err)
+					$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.read:failure`, 'err', err)
 					throw err
 				})
 		} else {
-			return database(self.table)
+			const sql = database(self.table)
 				.where(where)
 				.limit(limit)
 				.offset(offset)
-				.orderBy(order_column, order_direction, order_nulls)
+				// todo: figure out how to get order_nulls working without breaking the query
+				//.orderBy(order, order_direction, order_nulls)
+				.orderBy(order, order_direction)
 				.transacting(transaction)
-				.then(function (data) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.Read:success`, 'data', data)
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString())
+			}
+			return sql.then(function (data) {
+					$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.read:success`, 'data', data)
 					return Promise.resolve(data)
 				})
 				.catch(function (err) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Read:failure`, 'err', err)
+					$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.read:failure`, 'err', err)
 					throw err
 				})
 		}
 	}
 	// update a row
-	Update ({
+	update ({
 		source,
 		database,
 		transaction
@@ -139,14 +151,14 @@ class KnexDatabaseModel extends DatabaseModel {
 		attributes,
 		limit = 128,
 		offset = 0,
-		order_column = 'id',
+		order = this.primary_key,
 		order_direction = 'asc',
 		order_nulls = 'first'
 	}) {
 		var self = this
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Update:enter`, 'source', source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Update:enter`, 'where', where)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Update:enter`, 'attributes', attributes)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'source', source)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'where', where)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'attributes', attributes)
 		if (source && source._metadata) {
 			// todo: currently might only work in postgresql
 			const PARENT_SQL_ID = source._metadata.id
@@ -163,7 +175,7 @@ class KnexDatabaseModel extends DatabaseModel {
 				var joined_key = self.table + '.' + k
 				joined_attributes[joined_key] = attributes[k]
 			})
-			return database(self.table)
+			const sql = database(self.table)
 				.where(joined_where)
 				//.update(joined_attributes)
 				.join(self.relationship_table, `${self.relationship_table}._to_id`, '=', `${self.table}.id`)
@@ -174,9 +186,12 @@ class KnexDatabaseModel extends DatabaseModel {
 				//.where(`${self.relationship_table}._to_id`, '=', `${self.table}.id`)
 				//.where(joined_where)
 				.transacting(transaction)
-				.then(function (data) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Update:success`, 'data', data)
-					return self.Read({
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString())
+			}
+			return sql.then(function (data) {
+					$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:success`, 'data', data)
+					return self.read({
 						source,
 						database,
 						transaction
@@ -184,24 +199,27 @@ class KnexDatabaseModel extends DatabaseModel {
 						where,
 						limit,
 						offset,
-						order_column,
+						order,
 						order_direction,
 						order_nulls
 					})
 				})
 				.catch(function (err) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Update:failure`, 'err', err)
+					$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
 					console.log(err)
 					throw err
 				})
 		} else {
-			return database(self.table)
+			const sql = database(self.table)
 				.where(where)
 				.update(attributes)
 				.transacting(transaction)
-				.then(function (data) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Update:success`, 'data', data)
-					return self.Read({
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString())
+			}
+			return sql.then(function (data) {
+					$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:success`, 'data', data)
+					return self.read({
 						source,
 						database,
 						transaction
@@ -209,19 +227,19 @@ class KnexDatabaseModel extends DatabaseModel {
 						where,
 						limit,
 						offset,
-						order_column,
+						order,
 						order_direction,
 						order_nulls
 					})
 				})
 				.catch(function (err) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Update:failure`, 'err', err)
+					$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
 					throw err
 				})
 		}
 	}
 	// delete a row
-	Delete ({
+	delete ({
 		source,
 		database,
 		transaction
@@ -229,14 +247,13 @@ class KnexDatabaseModel extends DatabaseModel {
 		where,
 		limit = 128,
 		offset = 0,
-		order_column = 'id',
+		order = this.primary_key,
 		order_direction = 'asc',
 		order_nulls = 'first'
 	}) {
 		var self = this
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'source', source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'where', where)
-
 		if (source && source._metadata) {
 			const PARENT_SQL_ID = source._metadata.id
 			const PARENT_GRAPHQL_TYPE = source._metadata.type
@@ -247,16 +264,19 @@ class KnexDatabaseModel extends DatabaseModel {
 				var joined_key = self.table + '.' + k
 				joined_where[joined_key] = where[k]
 			})
-			return database(self.table)
+			const sql = database(self.table)
 				.where(joined_where)
 				.join(self.relationship_table, `${self.relationship_table}._to_id`, '=', `${self.table}.id`)
 				.where(`${self.relationship_table}._from_id`, PARENT_SQL_ID)
 				.where(`${self.relationship_table}._from_type`, PARENT_SQL_TABLE)
 				.del()
 				.transacting(transaction)
-				.then(function (data) {
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString())
+			}
+			return sql.then(function (data) {
 					$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:success`, 'data', data)
-					return self.Read({
+					return self.read({
 						source,
 						database,
 						transaction
@@ -264,7 +284,7 @@ class KnexDatabaseModel extends DatabaseModel {
 						where,
 						limit,
 						offset,
-						order_column,
+						order,
 						order_direction,
 						order_nulls
 					})
@@ -275,13 +295,16 @@ class KnexDatabaseModel extends DatabaseModel {
 					throw err
 				})
 		} else {
-			return database(self.table)
+			const sql = database(self.table)
 				.where(where)
 				.del()
 				.transacting(transaction)
-				.then(function (data) {
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString())
+			}
+			return sql.then(function (data) {
 					$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:success`, 'data', data)
-					return self.Read({
+					return self.read({
 						source,
 						database,
 						transaction
@@ -289,7 +312,7 @@ class KnexDatabaseModel extends DatabaseModel {
 						where,
 						limit,
 						offset,
-						order_column,
+						order,
 						order_direction,
 						order_nulls
 					})

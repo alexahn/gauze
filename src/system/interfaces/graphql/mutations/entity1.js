@@ -50,7 +50,7 @@ const ENTITY1_CREATE_MUTATION_INTERFACE_SYSTEM = {
 	resolve: (_source, mutation_arguments, context) => {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY1_CREATE_MUTATION_INTERFACE_SYSTEM.resolve:enter', '_source', _source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY1_CREATE_MUTATION_INTERFACE_SYSTEM.resolve:enter', 'mutation_arguments', mutation_arguments)
-		return ENTITY1_CONTROLLER_SYSTEM.Create({
+		return ENTITY1_CONTROLLER_SYSTEM.create({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction
@@ -77,7 +77,7 @@ const ENTITY1_UPDATE_MUTATION_INTERFACE_SYSTEM = {
 	resolve: (_source, mutation_arguments, context) => {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY1_UPDATE_MUTATION_INTERFACE_SYSTEM.resolve:enter', '_source', _source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY1_UPDATE_MUTATION_INTERFACE_SYSTEM.resolve:enter', 'mutation_arguments', mutation_arguments)
-		return ENTITY1_CONTROLLER_SYSTEM.Update({
+		return ENTITY1_CONTROLLER_SYSTEM.update({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction
@@ -100,7 +100,7 @@ const ENTITY1_DELETE_MUTATION_INTERFACE_SYSTEM = {
 	resolve: (_source, mutation_arguments, context) => {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY1_DELETE_MUTATION_INTERFACE_SYSTEM.resolve:enter', '_source', _source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY1_DELETE_MUTATION_INTERFACE_SYSTEM.resolve:enter', 'mutation_arguments', mutation_arguments)
-		return ENTITY1_CONTROLLER_SYSTEM.Delete({
+		return ENTITY1_CONTROLLER_SYSTEM.delete({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction

@@ -9,6 +9,7 @@ import {
 	GraphQLInt,
 	GraphQLList,
 	GraphQLString,
+	GraphQLObjectType,
 	GraphQLInputObjectType
 } from 'graphql';
 
@@ -30,7 +31,7 @@ const RELATIONSHIP_SERIALIZER = new Serializer({
 	graphql_type: GRAPHQL_SYSTEM_RELATIONSHIP_TYPE_STRUCTURE
 })
 
-const RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new GraphQLInputObjectType({
+const RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_SYSYTEM = new GraphQLInputObjectType({
 	name: 'Relationship_Query__Attributes',
 	description: 'Relationship Query Attributes',
 	fields: GRAPHQL_SYSTEM_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE
@@ -41,25 +42,33 @@ const RELATIONSHIP_READ_QUERY_INTERFACE_SYSTEM = {
 	args: {
 		where: {
 			description: 'where',
-			type: RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_SYSTEM,
+			type: RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_SYSYTEM,
 		},
 		limit: {
 			description: 'limit',
 			type: GraphQLInt
 		},
-		skip: {
-			description: 'skip',
+		offset: {
+			description: 'offset',
 			type: GraphQLInt
 		},
-		sort: {
-			description: 'sort',
+		order: {
+			description: 'order',
+			type: GraphQLString
+		},
+		order_direction: {
+			description: 'order direction',
+			type: GraphQLString
+		},
+		order_nulls: {
+			description: 'order nulls',
 			type: GraphQLString
 		}
 	},
 	resolve: (_source, query_arguments, context) => {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'RELATIONSHIP_READ_QUERY_INTERFACE_SYSTEM.resolve:enter', '_source', _source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'RELATIONSHIP_READ_QUERY_INTERFACE_SYSTEM.resolve:enter', 'query_arguments', query_arguments)
-		return RELATIONSHIP_CONTROLLER_SYSTEM.Read({
+		return RELATIONSHIP_CONTROLLER_SYSTEM.read({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction

@@ -29,31 +29,31 @@ const GRAPHQL_DATABASE_RELATIONSHIP_METADATA_STRUCTURE = new GraphQLObjectType({
 })
 
 const GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE = {
-	id: {
+	_id: {
 		type: GraphQLString,
-		description: 'id'
+		description: '_id'
 	},
-	created_at: {
+	_created_at: {
 		type: GraphQLDate,
 		description: 'created_at'
 	},
-	updated_at: {
+	_updated_at: {
 		type: GraphQLDate,
 		description: 'updated_at'
 	},
-	from: {
+	_from_type: {
 		type: GraphQLString,
 		description: 'from'
 	},
-	from_id: {
+	_from_id: {
 		type: GraphQLString,
 		description: 'from_id'
 	},
-	to: {
+	_to_type: {
 		type: GraphQLString,
 		description: 'to'
 	},
-	to_id: {
+	_to_id: {
 		type: GraphQLString,
 		description: 'to_id'
 	}

@@ -47,11 +47,6 @@ class IOLogger extends Logger {
 				const VALID_TOPIC = TOPIC_REGEX.test(topic)
 				if (!VALID_TOPIC) return false
 			}
-			if (this.LOG_MESSAGE_REGEX) {
-				const MESSAGE_REGEX = new RegExp(this.LOG_MESSAGE_REGEX)
-				const VALID_MESSAGE = MESSAGE_REGEX.test(message)
-				if (!VALID_MESSAGE) return false
-			}
 			const stack = []
 			messages.forEach(function (message) {
 				self.process_input(level, topic, stack, message)
@@ -61,6 +56,7 @@ class IOLogger extends Logger {
 	}
 	process_input (level, topic, stack, input) {
 		// split the message by new lines
+		const self = this
 		var last_line
 		const MESSAGE_STRING = util.inspect(input, {
 			colors: false
@@ -101,7 +97,13 @@ class IOLogger extends Logger {
 			} else {
 				parsed_line = line
 			}
-			const formatted = `level:${level} topic:${topic} message: ${stack.length ? stack.join(' ') + ' ' : ''}${parsed_line}`
+			const message = `${stack.length ? stack.join(' ') + ' ' : ''}${parsed_line}`
+			if (self.LOG_MESSAGE_REGEX) {
+				const MESSAGE_REGEX = new RegExp(self.LOG_MESSAGE_REGEX)
+				const VALID_MESSAGE = MESSAGE_REGEX.test(message)
+				if (!VALID_MESSAGE) return "f9e0d79e-6c27-41c2-99c2-44bdab277166"
+			}
+			const formatted = `level:${level} topic:${topic} message: ${message}`
 			return formatted
 		})
 		stack.push(last_line)
@@ -110,10 +112,12 @@ class IOLogger extends Logger {
 	write_lines (level, lines) {
 		if (this.STDOUT_LEVEL_MINIMUM <= level && level <= this.STDOUT_LEVEL_MAXIMUM) {
 			lines.forEach(function (line, idx) {
+				if (line === "f9e0d79e-6c27-41c2-99c2-44bdab277166") return
 				console.log(line)
 			})
 		} else if (this.STDERR_LEVEL_MINIMUM <= level && level <= this.STDERR_LEVEL_MAXIMUM) {
 			lines.forEach(function (line) {
+				if (line === "f9e0d79e-6c27-41c2-99c2-44bdab277166") return
 				console.err(line)
 			})
 		}
