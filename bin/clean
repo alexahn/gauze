@@ -1,1 +1,4 @@
 rm src/database/development.sqlite3
+rm src/database/test.sqlite3
+rm ./development.sqlite3
+rm ./test.sqlite3

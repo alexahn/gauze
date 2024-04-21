@@ -19,7 +19,7 @@ const KNEX_CONFIG = {
 	test: {
 		client: process.env.KNEX_CLIENT,
 		connection: {
-			filename: path.join(__dirname, 'test.sqlite3')
+			filename: path.join(__dirname, '../../', 'test.sqlite3')
 		},
 		migrations: {
 			tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -33,7 +33,7 @@ const KNEX_CONFIG = {
 	development: {
 		client: process.env.KNEX_CLIENT,
 		connection: {
-			filename: path.join(__dirname, process.env.KNEX_CONNECTION_FILENAME || '')
+			filename: path.join(__dirname, '../../', process.env.KNEX_CONNECTION_FILENAME || '')
 		},
 		migrations: {
 			tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -47,7 +47,7 @@ const KNEX_CONFIG = {
 	staging: {
 		client: process.env.KNEX_CLIENT,
 		connection: {
-			filename: path.join(__dirname, process.env.KNEX_CONNECTION_FILENAME || '')
+			filename: path.join(__dirname, '../../', process.env.KNEX_CONNECTION_FILENAME || '')
 		},
 		migrations: {
 			tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -61,7 +61,7 @@ const KNEX_CONFIG = {
 	production: {
 		client: 'better-sqlite3',
 		connection: {
-			filename: path.join(__dirname, process.env.KNEX_CONNECTION_FILENAME || '')
+			filename: path.join(__dirname, '../../', process.env.KNEX_CONNECTION_FILENAME || '')
 		},
 		migrations: {
 			tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
