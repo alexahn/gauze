@@ -30,7 +30,7 @@ import {
 } from './../../../controllers/relationship.js'
 
 const RELATIONSHIP_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
-	name: 'Relationship_Mutation_Attributes',
+	name: 'Relationship_Mutation__Attributes',
 	description: 'Relationship Mutation Attributes',
 	fields: GRAPHQL_SYSTEM_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE
 })

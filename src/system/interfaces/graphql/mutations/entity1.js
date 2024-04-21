@@ -30,7 +30,7 @@ import {
 } from './../../../controllers/entity1.js'
 
 const ENTITY1_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
-	name: 'Entity1_Mutation_Attributes',
+	name: 'Entity1_Mutation__Attributes',
 	description: 'Entity1 Mutation Attributes',
 	fields: GRAPHQL_SYSTEM_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
 })

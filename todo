@@ -46,12 +46,14 @@
 	[ ] server
 	[ ] manage?
 [ ] permissions and authorization
-	[ ] row based security (postgresql)?
+	[-] row based security (postgresql)?
+		[-] seems like it is technically complex because we'd need to authenticate every user to postgresql
+		[-] the application code isn't complex, but the database tuning and management would be
+		[-] the example policies i could find also don't seem to be that flexible, and it might be hard to set them up without duplicating relationship data across entities
 	[ ] maybe some kind of bit field if we want to be efficient?
-	[ ] bloom filter if false positives aren't catastrophic?
-		[ ] probabilistic authorization sounds awful, but interesting to think about
-	[ ] inverted bloom filter if false negatives aren't catastrophic?
-		[ ] probabilistic authorization sounds awful, but interesting to think about
+	[ ] simple white and black list permissions
+		[ ] system permissions
+		[ ] user permissions
 [ ] url and routes
 [ ] should realms (database, system, user) be written by using the exposed interface for the layer below?
 	[ ] forces any circular dependencies to be made apparent, so maybe a good idea
@@ -59,7 +61,7 @@
 [ ] use database as $database?
 [ ] bootstrap new project by using commands
 	[ ] should have commands to create new entities
-[ ] update graphql type names to use two underscores as a separator
-[ ] change relationship column names (from to from_type, to to to_type)
+[x] update graphql type names to use two underscores as a separator
+[x] change relationship column names (from to from_type, to to to_type)
 [x] enable variables for graphql server
 [ ] use a higher level http server (express, fastify, koa, etc)

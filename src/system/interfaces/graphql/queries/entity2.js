@@ -31,9 +31,9 @@ const ENTITY2_SERIALIZER = new Serializer({
 	graphql_type: GRAPHQL_SYSTEM_ENTITY2_TYPE_STRUCTURE
 })
 
-const ENTITY2_WHERE_QUERY_INTERFACE_SYSYTEM = new GraphQLInputObjectType({
-	name: 'Entity2_Query_Where',
-	description: 'Entity2 Query Where',
+const ENTITY2_ATTRIBUTES_QUERY_INTERFACE_SYSYTEM = new GraphQLInputObjectType({
+	name: 'Entity2_Query__Attributes',
+	description: 'Entity2 Query Attributes',
 	fields: GRAPHQL_SYSTEM_ENTITY2_ATTRIBUTES_FIELDS_STRUCTURE
 })
 
@@ -42,7 +42,7 @@ const ENTITY2_READ_QUERY_INTERFACE_SYSTEM = {
 	args: {
 		where: {
 			description: 'where',
-			type: ENTITY2_WHERE_QUERY_INTERFACE_SYSYTEM,
+			type: ENTITY2_ATTRIBUTES_QUERY_INTERFACE_SYSYTEM,
 		},
 		limit: {
 			description: 'limit',

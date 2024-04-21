@@ -30,7 +30,7 @@ import {
 } from './../../../controllers/entity2.js'
 
 const ENTITY2_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
-	name: 'Entity2_Mutation_Attributes',
+	name: 'Entity2_Mutation__Attributes',
 	description: 'Entity2 Mutation Attributes',
 	fields: GRAPHQL_SYSTEM_ENTITY2_ATTRIBUTES_FIELDS_STRUCTURE
 })

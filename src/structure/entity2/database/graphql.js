@@ -22,7 +22,7 @@ const GRAPHQL_DATABASE_ENTITY2_METADATA_FIELDS_STRUCTURE = {
 }
 
 const GRAPHQL_DATABASE_ENTITY2_METADATA_STRUCTURE = new GraphQLObjectType({
-	name: 'Entity2_Metadata',
+	name: 'Entity2__Metadata',
 	description: 'Entity2 Metadata',
 	fields: () => (GRAPHQL_DATABASE_ENTITY2_METADATA_FIELDS_STRUCTURE)
 })
@@ -47,7 +47,7 @@ const GRAPHQL_DATABASE_ENTITY2_ATTRIBUTES_FIELDS_STRUCTURE = {
 }
 
 const GRAPHQL_DATABASE_ENTITY2_ATTRIBUTES_STRUCTURE = new GraphQLObjectType({
-	name: 'Entity2_Attributes',
+	name: 'Entity2__Attributes',
 	description: 'Entity2 Attributes',
 	fields: () => (GRAPHQL_DATABASE_ENTITY2_ATTRIBUTES_FIELDS_STRUCTURE)
 })
@@ -62,7 +62,7 @@ const GRAPHQL_DATABASE_ENTITY2_QUERY_RELATIONSHIPS_FIELDS_STRUCTURE = {
 }
 
 const GRAPHQL_DATABASE_ENTITY2_QUERY_RELATIONSHIPS_STRUCTURE = new GraphQLObjectType({
-	name: 'Entity2_Query_Relationships',
+	name: 'Entity2_Query__Relationships',
 	description: 'Entity2 Query Relationships',
 	fields: () => (GRAPHQL_DATABASE_ENTITY2_QUERY_RELATIONSHIPS_FIELDS_STRUCTURE)
 })
@@ -70,7 +70,7 @@ const GRAPHQL_DATABASE_ENTITY2_QUERY_RELATIONSHIPS_STRUCTURE = new GraphQLObject
 const GRAPHQL_DATABASE_ENTITY2_QUERY_QUERY_FIELDS_STRUCTURE = {}
 
 const GRAPHQL_DATABASE_ENTITY2_QUERY_QUERY_STRUCTURE = new GraphQLObjectType({
-	name: 'Entity2_Query_Query',
+	name: 'Entity2_Query__Query',
 	description: 'Entity2 Query Query',
 	fields: () => (GRAPHQL_DATABASE_ENTITY2_QUERY_QUERY_FIELDS_STRUCTURE)
 })
@@ -84,7 +84,7 @@ const GRAPHQL_DATABASE_ENTITY2_MUTATION_RELATIONSHIPS_FIELDS_STRUCTURE = {
 }
 
 const GRAPHQL_DATABASE_ENTITY2_MUTATION_RELATIONSHIPS_STRUCTURE = new GraphQLObjectType({
-	name: 'Entity2_Mutation_Relationships',
+	name: 'Entity2_Mutation__Relationships',
 	description: 'Entity2 Mutation Relationships',
 	fields: () => (GRAPHQL_DATABASE_ENTITY2_MUTATION_RELATIONSHIPS_FIELDS_STRUCTURE)
 })
@@ -92,7 +92,7 @@ const GRAPHQL_DATABASE_ENTITY2_MUTATION_RELATIONSHIPS_STRUCTURE = new GraphQLObj
 const GRAPHQL_DATABASE_ENTITY2_MUTATION_MUTATION_FIELDS_STRUCTURE = {}
 
 const GRAPHQL_DATABASE_ENTITY2_MUTATION_MUTATION_STRUCTURE = new GraphQLObjectType({
-	name: 'Entity2_Mutation_Mutation',
+	name: 'Entity2_Mutation__Mutation',
 	description: 'Entity2 Mutation Mutation',
 	fields: () => (GRAPHQL_DATABASE_ENTITY2_MUTATION_MUTATION_FIELDS_STRUCTURE)
 })

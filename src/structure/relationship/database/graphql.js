@@ -23,7 +23,7 @@ const GRAPHQL_DATABASE_RELATIONSHIP_METADATA_FIELDS_STRUCTURE = {
 }
 
 const GRAPHQL_DATABASE_RELATIONSHIP_METADATA_STRUCTURE = new GraphQLObjectType({
-	name: 'Relationship_Metadata',
+	name: 'Relationship__Metadata',
 	description: 'Relationship Metadata',
 	fields: () => (GRAPHQL_DATABASE_RELATIONSHIP_METADATA_FIELDS_STRUCTURE)
 })
@@ -60,7 +60,7 @@ const GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE = {
 }
 
 const GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_STRUCTURE = new GraphQLObjectType({
-	name: 'Relationship_Attributes',
+	name: 'Relationship__Attributes',
 	description: 'Relationship Attributes',
 	fields: () => (GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE)
 })
@@ -68,7 +68,7 @@ const GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_STRUCTURE = new GraphQLObjectType
 const GRAPHQL_DATABASE_RELATIONSHIP_QUERY_QUERY_FIELDS_STRUCTURE = {}
 
 const GRAPHQL_DATABASE_RELATIONSHIP_QUERY_QUERY_STRUCTURE = new GraphQLObjectType({
-	name: 'Relationship_Query_Query',
+	name: 'Relationship_Query__Query',
 	description: 'Relationship Query Query',
 	fields: () => (GRAPHQL_DATABASE_RELATIONSHIP_QUERY_QUERY_FIELDS_STRUCTURE)
 })
@@ -76,7 +76,7 @@ const GRAPHQL_DATABASE_RELATIONSHIP_QUERY_QUERY_STRUCTURE = new GraphQLObjectTyp
 const GRAPHQL_DATABASE_RELATIONSHIP_MUTATION_MUTATION_FIELDS_STRUCTURE = {}
 
 const GRAPHQL_DATABASE_RELATIONSHIP_MUTATION_MUTATION_STRUCTURE = new GraphQLObjectType({
-	name: 'Relationship_Mutation_Mutation',
+	name: 'Relationship_Mutation__Mutation',
 	description: 'Relationship Mutation Mutation',
 	fields: () => (GRAPHQL_DATABASE_RELATIONSHIP_MUTATION_MUTATION_FIELDS_STRUCTURE)
 })

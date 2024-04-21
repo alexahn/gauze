@@ -26,17 +26,17 @@ const handler = createHandler({
 });
 */
 
+const database = create_connection()
+
 // Create a HTTP server using the listener on `/graphql`
 const server = http.createServer((req, res) => {
 	if (req.url.startsWith('/graphql')) {
-		const database = create_connection()
+		//const database = create_connection()
 		var body = ''
 		req.on('data', function (chunk) {
-			//console.log('chunk', chunk)
 			body += chunk
 		})
 		req.on('end', function () {
-			//console.log('body', body.toString('utf8'))
 			try {
 				var parsed = JSON.parse(body)
 			} catch (err) {
@@ -57,9 +57,13 @@ const server = http.createServer((req, res) => {
 					if (data.errors && data.errors.length) {
 						return transaction.rollback().then(function () {
 							console.log('transaction reverted')
-							database.destroy()
-							// figure out when to send 500 / 'Internal Server Error' versus 400
+							// database.destroy()
 							res.writeHead(400, 'Bad Request', {
+								'content-type': 'application/json; charset=utf-8'
+							}).end(JSON.stringify(data))
+						}).catch(function (err) {
+							console.log('transaction failed to revert', err)
+							res.writeHead(500, 'Internal Server Error', {
 								'content-type': 'application/json; charset=utf-8'
 							}).end(JSON.stringify(data))
 						})
@@ -67,17 +71,28 @@ const server = http.createServer((req, res) => {
 						return transaction.commit(data).then(function () {
 							// write to body
 							console.log('transaction committed')
-							database.destroy()
+							//database.destroy()
 							res.writeHead(200, 'OK', {
+								'content-type': 'application/json; charset=utf-8'
+							}).end(JSON.stringify(data))
+						}).catch(function (err) {
+							console.log('transaction failed to commit', err)
+							res.writeHead(500, 'Internal Server Error', {
 								'content-type': 'application/json; charset=utf-8'
 							}).end(JSON.stringify(data))
 						})
 					}
 				}).catch(function (err) {
 					console.log('err', err)
-					database.destroy()
+					//database.destroy()
 					return transaction.rollback(err).then(function () {
-						res.end(JSON.stringify(err))
+						res.writeHead(500, 'Internal Server Error', {
+							'content-type': 'application/json; charset=utf-8'
+						}).end(JSON.stringify(err))
+					}).catch(function (err) {
+						res.writeHead(500, 'Internal Server Error', {
+							'content-type': 'application/json; charset=utf-8'
+						}).end(JSON.stringify(err))
 					})
 				})
 			})

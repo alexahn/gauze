@@ -30,9 +30,9 @@ const RELATIONSHIP_SERIALIZER = new Serializer({
 	graphql_type: GRAPHQL_SYSTEM_RELATIONSHIP_TYPE_STRUCTURE
 })
 
-const RELATIONSHIP_QUERY_WHERE = new GraphQLInputObjectType({
-	name: 'Relationship_Query_Where',
-	description: 'Relationship Query Where',
+const RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new GraphQLInputObjectType({
+	name: 'Relationship_Query__Attributes',
+	description: 'Relationship Query Attributes',
 	fields: GRAPHQL_SYSTEM_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE
 })
 
@@ -41,7 +41,7 @@ const RELATIONSHIP_READ_QUERY_INTERFACE_SYSTEM = {
 	args: {
 		where: {
 			description: 'where',
-			type: RELATIONSHIP_QUERY_WHERE,
+			type: RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_SYSTEM,
 		},
 		limit: {
 			description: 'limit',
