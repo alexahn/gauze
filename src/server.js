@@ -12,7 +12,7 @@ import {
 } from 'graphql-http';
 
 import {
-	SCHEMA_INTERFACE_SYSTEM as schema
+	SCHEMA_GRAPHQL_INTERFACE_SYSTEM as schema
 } from './system/interfaces/graphql/schema.js';
 
 import {

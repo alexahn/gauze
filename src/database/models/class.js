@@ -51,7 +51,7 @@ class KnexDatabaseModel extends DatabaseModel {
 		return sql.then(function (data) {
 			$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.create:success`, 'data', data)
 			return self.read({
-				source,
+				source: undefined,
 				database,
 				transaction
 			}, {

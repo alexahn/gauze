@@ -4,10 +4,14 @@ import {
 } from 'graphql';
 
 import {
-	SCHEMA_INTERFACE_SYSTEM as schema
+	SCHEMA_GRAPHQL_INTERFACE_SYSTEM as schema
 } from './schema.js'
 
-import database from './../../../database/knex.js'
+import {
+	create_connection
+} from './../../../database/knex.js'
+
+const database = create_connection()
 
 const query = `
     query MyTestQuery {

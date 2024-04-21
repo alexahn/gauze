@@ -16,6 +16,20 @@ const __filename = url.fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const KNEX_CONFIG = {
+	test: {
+		client: process.env.KNEX_CLIENT,
+		connection: {
+			filename: path.join(__dirname, 'test.sqlite3')
+		},
+		migrations: {
+			tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
+			directory: path.join(__dirname, 'migrations')
+		},
+		seeds: {
+			directory: path.join(__dirname, 'seeds')
+		},
+		useNullAsDefault: true
+	},
 	development: {
 		client: process.env.KNEX_CLIENT,
 		connection: {
@@ -25,9 +39,11 @@ const KNEX_CONFIG = {
 			tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 			directory: path.join(__dirname, 'migrations')
 		},
+		seeds: {
+			directory: path.join(__dirname, 'seeds')
+		},
 		useNullAsDefault: true
 	},
-
 	staging: {
 		client: process.env.KNEX_CLIENT,
 		connection: {
@@ -37,9 +53,11 @@ const KNEX_CONFIG = {
 			tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 			directory: path.join(__dirname, 'migrations')
 		},
+		seeds: {
+			directory: path.join(__dirname, 'seeds')
+		},
 		useNullAsDefault: true
 	},
-
 	production: {
 		client: 'better-sqlite3',
 		connection: {
@@ -49,9 +67,11 @@ const KNEX_CONFIG = {
 			tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 			directory: path.join(__dirname, 'migrations')
 		},
+		seeds: {
+			directory: path.join(__dirname, 'seeds')
+		},
 		useNullAsDefault: true
 	}
-
 };
 
 export default KNEX_CONFIG

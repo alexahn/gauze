@@ -24,7 +24,7 @@
 [x] logging
 	[x] visually simple logging based on level, topic, and message
 		[x] stack based prefixing based on variable inputs to write
-	[ ] look into using console.group and console.groupEnd as an alternative to manually managing a stack prefix
+	[-] look into using console.group and console.groupEnd as an alternative to manually managing a stack prefix
 	[x] use the logger in all the modules
 	[x] clean up console.log usage
 [x] reorganize the structure module
@@ -79,3 +79,9 @@
 	[x] add primary key to sql structures
 [ ] refactor logger to make it functional (e.g. stop mutating arrays and have functions return fully transformed items)
 	[ ] remove the magic string by fully implementing the correct stack marking algorithm
+[ ] testing
+	[x] set up example queries that line up with the seeded data
+	[x] test create, read, update, delete
+	[x] test relationships
+	[ ] test nested mutation and queries
+[ ] force sqlite file to be made at the root directory

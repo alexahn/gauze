@@ -2,6 +2,7 @@
 *.swp
 node_modules
 tmp
+test.sqlite3
 development.sqlite3
 staging.sqlite3
 production.sqlite3

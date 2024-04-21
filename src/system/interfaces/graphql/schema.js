@@ -251,11 +251,11 @@ const MUTATION_TYPE = new GraphQLObjectType({
 })
 */
 
-const SCHEMA_INTERFACE_SYSTEM = new GraphQLSchema({
+const SCHEMA_GRAPHQL_INTERFACE_SYSTEM = new GraphQLSchema({
 	query: QUERY_TYPE,
 	mutation: MUTATION_TYPE
 })
 
 export {
-	SCHEMA_INTERFACE_SYSTEM
+	SCHEMA_GRAPHQL_INTERFACE_SYSTEM
 }

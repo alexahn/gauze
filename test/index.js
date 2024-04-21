@@ -1,0 +1,1 @@
+export * as entity1 from './entity1/index.js'
