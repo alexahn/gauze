@@ -1,4 +1,4 @@
-class Serializer {
+class GraphQLSerializer {
 	constructor ({
 		graphql_type
 	}) {
@@ -29,5 +29,5 @@ class Serializer {
 }
 
 export {
-	Serializer
+	GraphQLSerializer
 }

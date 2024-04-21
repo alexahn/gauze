@@ -4,6 +4,7 @@ const __FILEPATH = url.fileURLToPath(import.meta.url)
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH)
 
 import * as $kernel from './../../../../kernel/index.js'
+import * as $structure from './../../../../structure/index.js'
 
 import {
 	GraphQLInt,
@@ -14,31 +15,21 @@ import {
 } from 'graphql';
 
 import {
-	Serializer
-} from './../../../../structure/serializer.js'
-
-import {
-	GRAPHQL_SYSTEM_ENTITY1_QUERY_STRUCTURE,
-	GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE,
-	GRAPHQL_SYSTEM_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
-} from './../../../../structure/entity1/system/graphql.js'
-
-import {
 	ENTITY1_CONTROLLER_SYSTEM,
 } from './../../../controllers/entity1.js'
 
-const ENTITY1_SERIALIZER = new Serializer({
-	graphql_type: GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE
+const ENTITY1_SERIALIZER = new $structure.serializers.GraphQLSerializer({
+	graphql_type: $structure.entity1.system.graphql.GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE
 })
 
 const ENTITY1_ATTRIBUTES_QUERY_INTERFACE_SYSYTEM = new GraphQLInputObjectType({
 	name: 'Entity1_Query__Attributes',
 	description: 'Entity1 Query Attributes',
-	fields: GRAPHQL_SYSTEM_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
+	fields: $structure.entity1.system.graphql.GRAPHQL_SYSTEM_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
 })
 
 const ENTITY1_READ_QUERY_INTERFACE_SYSTEM = {
-	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_QUERY_STRUCTURE),
+	type: new GraphQLList($structure.entity1.system.graphql.GRAPHQL_SYSTEM_ENTITY1_QUERY_STRUCTURE),
 	args: {
 		where: {
 			description: 'where',

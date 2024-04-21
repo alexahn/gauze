@@ -57,9 +57,9 @@
 		[ ] system permissions
 		[ ] user permissions
 [ ] url and routes
-[ ] realms (database, system, user) should be written by using the exposed interface for the layer below
-	[ ] forces any circular dependencies to be made apparent
-	[ ] use structure as $structure
+[x] realms (database, system, user) should be written by using the exposed interface for the layer below
+	[x] forces any circular dependencies to be made apparent
+	[x] use structure as $structure
 	[x] use kernel as $kernel
 	[x] use database as $database
 [ ] bootstrap new project by using commands

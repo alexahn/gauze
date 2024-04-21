@@ -1,14 +1,15 @@
+import * as $structure from './../../structure/index.js'
+
 import {
 	KnexDatabaseModel
 } from './class.js'
 
-import {
-	SQL_DATABASE_ENTITY2_TABLE_NAME,
-	SQL_DATABASE_ENTITY2_PRIMARY_KEY
-} from './../../structure/entity2/database/sql.js'
-
 const ENTITY2_MODEL_DATABASE_CONFIG = {}
-const ENTITY2_MODEL_DATABASE = new KnexDatabaseModel(ENTITY2_MODEL_DATABASE_CONFIG, SQL_DATABASE_ENTITY2_TABLE_NAME, SQL_DATABASE_ENTITY2_PRIMARY_KEY)
+const ENTITY2_MODEL_DATABASE = new KnexDatabaseModel(
+	ENTITY2_MODEL_DATABASE_CONFIG,
+	$structure.entity2.database.sql.SQL_DATABASE_ENTITY2_TABLE_NAME,
+	$structure.entity2.database.sql.SQL_DATABASE_ENTITY2_PRIMARY_KEY
+)
 
 export {
 	ENTITY2_MODEL_DATABASE

@@ -4,6 +4,7 @@ const __FILEPATH = url.fileURLToPath(import.meta.url)
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH)
 
 import * as $kernel from './../../../../kernel/index.js'
+import * as $structure from './../../../../structure/index.js'
 
 import {
 	GraphQLNonNull,
@@ -16,31 +17,21 @@ import {
 } from 'graphql';
 
 import {
-	Serializer
-} from './../../../../structure/serializer.js'
-
-import {
-	GRAPHQL_SYSTEM_ENTITY1_MUTATION_STRUCTURE,
-	GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE,
-	GRAPHQL_SYSTEM_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
-} from './../../../../structure/entity1/system/graphql.js'
-
-import {
 	ENTITY1_CONTROLLER_SYSTEM
 } from './../../../controllers/entity1.js'
+
+const ENTITY1_SERIALIZER = new $structure.serializers.GraphQLSerializer({
+	graphql_type: $structure.entity1.system.graphql.GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE
+})
 
 const ENTITY1_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
 	name: 'Entity1_Mutation__Attributes',
 	description: 'Entity1 Mutation Attributes',
-	fields: GRAPHQL_SYSTEM_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
-})
-
-const ENTITY1_SERIALIZER = new Serializer({
-	graphql_type: GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE
+	fields: $structure.entity1.system.graphql.GRAPHQL_SYSTEM_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
 })
 
 const ENTITY1_CREATE_MUTATION_INTERFACE_SYSTEM = {
-	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_MUTATION_STRUCTURE),
+	type: new GraphQLList($structure.entity1.system.graphql.GRAPHQL_SYSTEM_ENTITY1_MUTATION_STRUCTURE),
 	args: {
 		attributes: {
 			description: 'attributes',
@@ -63,7 +54,7 @@ const ENTITY1_CREATE_MUTATION_INTERFACE_SYSTEM = {
 }
 
 const ENTITY1_UPDATE_MUTATION_INTERFACE_SYSTEM = {
-	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_MUTATION_STRUCTURE),
+	type: new GraphQLList($structure.entity1.system.graphql.GRAPHQL_SYSTEM_ENTITY1_MUTATION_STRUCTURE),
 	args: {
 		where: {
 			description: 'where',
@@ -90,7 +81,7 @@ const ENTITY1_UPDATE_MUTATION_INTERFACE_SYSTEM = {
 }
 
 const ENTITY1_DELETE_MUTATION_INTERFACE_SYSTEM = {
-	type: new GraphQLList(GRAPHQL_SYSTEM_ENTITY1_MUTATION_STRUCTURE),
+	type: new GraphQLList($structure.entity1.system.graphql.GRAPHQL_SYSTEM_ENTITY1_MUTATION_STRUCTURE),
 	args: {
 		where: {
 			description: 'where',

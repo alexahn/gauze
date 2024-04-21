@@ -54,7 +54,6 @@ class SystemModelSystemController extends SystemController {
 			transaction
 		}
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.read:enter`, 'input', input)
-		console.log('model', this.model.read, this.model.Read)
 		return this.model.read(context, input)
 	}
 	update ({
