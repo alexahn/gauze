@@ -1,5 +1,5 @@
-mutation DeleteEntity2($id: String) {
-	delete_entity2(where: { id: $id }) {
+mutation DeleteEntity2($where: Entity2_Mutation__Attributes) {
+	delete_entity2(where: $where) {
 		attributes {
 			id
 			text

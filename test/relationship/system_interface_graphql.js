@@ -24,7 +24,7 @@ function execute ({
 	})
 }
 
-test.describe('entity2 graphql interface system', function (suite_ctx) {
+test.describe('relationship graphql interface system', function (suite_ctx) {
 	test.before(function (ctx) {
 		suite_ctx.database = $gauze.database.knex.create_connection('test')
 		return suite_ctx.database.migrate.latest().then(function () {
@@ -47,12 +47,15 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const create_query_file = path.resolve(import.meta.dirname, './graphql/create.graphql')
 			const create_query = fs.readFileSync(create_query_file).toString('utf8')
 			const source = create_query
-			const operationName = "CreateEntity2"
+			const operationName = 'CreateRelationship'
 			const variableValues = {
 				attributes: {
-					created_at: new Date(),
-					updated_at: new Date(),
-					text: "asdf"
+					_created_at: new Date(),
+					_updated_at: new Date(),
+					_from_type: 'gauze__entity1',
+					_from_id: '1',
+					_to_type: 'gauze__entity2',
+					_to_id: '4'
 				}
 			}
 			const contextValue = {
@@ -67,8 +70,11 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.create_entity2.length, 1)
-					assert.strictEqual(data.data.create_entity2[0].attributes.text, variableValues.attributes.text)
+					assert.strictEqual(data.data.create_relationship.length, 1)
+					assert.strictEqual(data.data.create_relationship[0].attributes._from_type, variableValues.attributes._from_type)
+					assert.strictEqual(data.data.create_relationship[0].attributes._from_id, variableValues.attributes._from_id)
+					assert.strictEqual(data.data.create_relationship[0].attributes._to_type, variableValues.attributes._to_type)
+					assert.strictEqual(data.data.create_relationship[0].attributes._to_id, variableValues.attributes._to_id)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -88,10 +94,10 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const read_query_file = path.resolve(import.meta.dirname, './graphql/read.graphql')
 			const read_query = fs.readFileSync(read_query_file).toString('utf8')
 			const source = read_query
-			const operationName = "ReadEntity2"
+			const operationName = 'ReadRelationship'
 			const variableValues = {
 				where: {
-					id: "1"
+					_id: '1'
 				}
 			}
 			const contextValue = {
@@ -106,8 +112,8 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.read_entity2.length, 1)
-					assert.strictEqual(data.data.read_entity2[0].attributes.id, variableValues.where.id)
+					assert.strictEqual(data.data.read_relationship.length, 1)
+					assert.strictEqual(data.data.read_relationship[0].attributes._id, variableValues.where._id)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -123,15 +129,15 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 		})
 	})
 	test.it('update', function (test_ctx) {
-		const target_text = "qwer"
+		const target_from_id = '5'
 		return suite_ctx.database.transaction(function (transaction) {
 			const read_query_file = path.resolve(import.meta.dirname, './graphql/read.graphql')
 			const read_query = fs.readFileSync(read_query_file).toString('utf8')
 			const source = read_query
-			const operationName = "ReadEntity2"
+			const operationName = 'ReadRelationship'
 			const variableValues = {
 				where: {
-					id: "1"
+					_id: '1'
 				}
 			}
 			const contextValue = {
@@ -146,20 +152,20 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.notStrictEqual(data.data.read_entity2[0].attributes.text, target_text)
+					assert.notStrictEqual(data.data.read_relationship[0].attributes._from_id, target_from_id)
 					return Promise.resolve(data)
 				})
 				.then(function () {
 					const update_query_file = path.resolve(import.meta.dirname, './graphql/update.graphql')
 					const update_query = fs.readFileSync(update_query_file).toString('utf8')
 					const source = update_query
-					const operationName = "UpdateEntity2"
+					const operationName = 'UpdateRelationship'
 					const variableValues = {
 						where: {
-							id: "1"
+							_id: '1'
 						},
 						attributes: {
-							text: target_text
+							_from_id: target_from_id
 						}
 					}
 					const contextValue = {
@@ -174,8 +180,8 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 						})
 						.then(function (data) {
 							assert.strictEqual(data.errors, undefined)
-							assert.strictEqual(data.data.update_entity2.length, 1)
-							assert.strictEqual(data.data.update_entity2[0].attributes.text, variableValues.attributes.text)
+							assert.strictEqual(data.data.update_relationship.length, 1)
+							assert.strictEqual(data.data.update_relationship[0].attributes._from_id, variableValues.attributes._from_id)
 							return Promise.resolve(data)
 						})
 				})
@@ -198,10 +204,10 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const delete_query_file = path.resolve(import.meta.dirname, './graphql/delete.graphql')
 			const delete_query = fs.readFileSync(delete_query_file).toString('utf8')
 			const source = delete_query
-			const operationName = "DeleteEntity2"
+			const operationName = 'DeleteRelationship'
 			const variableValues = {
 				where: {
-					id: "1"
+					_id: '1'
 				}
 			}
 			const contextValue = {
@@ -219,17 +225,17 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 						console.log(data.errors)
 					}
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.delete_entity2.length, 0)
+					assert.strictEqual(data.data.delete_relationship.length, 0)
 					return Promise.resolve(data)
 				})
 				.then(function () {
 					const read_query_file = path.resolve(import.meta.dirname, './graphql/read.graphql')
 					const read_query = fs.readFileSync(read_query_file).toString('utf8')
 					const source = read_query
-					const operationName = "ReadEntity2"
+					const operationName = 'ReadRelationship'
 					const variableValues = {
 						where: {
-							id: "1"
+							_id: '1'
 						}
 					}
 					const contextValue = {
@@ -244,196 +250,9 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 						})
 						.then(function (data) {
 							assert.strictEqual(data.errors, undefined)
-							assert.notStrictEqual(data.data.read_entity2.length, 1)
+							assert.notStrictEqual(data.data.read_relationship.length, 1)
 							return Promise.resolve(data)
 						})
-				})
-				.then(function () {
-					return transaction.rollback()
-				})
-				.catch(function (err) {
-					return transaction.rollback(err).then(function () {
-						throw err
-					}).catch(function (err) {
-						throw err
-					})
-				})
-		})
-	})
-	test.it('create nested relationships', function (test_ctx) {
-		return suite_ctx.database.transaction(function (transaction) {
-			const create_query_file = path.resolve(import.meta.dirname, './graphql/create_nested_relationships.graphql')
-			const create_query = fs.readFileSync(create_query_file).toString('utf8')
-			const source = create_query
-			const operationName = "CreateEntity2NestedRelationships"
-			const variableValues = {
-				attributes1: {
-					created_at: new Date(),
-					updated_at: new Date(),
-					text: "asdf"
-				},
-				attributes2: {
-					created_at: new Date(),
-					updated_at: new Date(),
-					text: "qwer"
-				}
-			}
-			const contextValue = {
-				database: suite_ctx.database,
-				transaction: transaction
-			}
-			return execute({
-					source,
-					contextValue,
-					variableValues,
-					operationName
-				})
-				.then(function (data) {
-					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.create_entity2.length, 1)
-					assert.strictEqual(data.data.create_entity2[0].attributes.text, variableValues.attributes1.text)
-					assert.strictEqual(data.data.create_entity2[0].relationships.create_entity1.length, 1)
-					assert.strictEqual(data.data.create_entity2[0].relationships.create_entity1[0].attributes.text, variableValues.attributes2.text)
-					return Promise.resolve(data)
-				})
-				.then(function () {
-					return transaction.rollback()
-				})
-				.catch(function (err) {
-					return transaction.rollback(err).then(function () {
-						throw err
-					}).catch(function (err) {
-						throw err
-					})
-				})
-		})
-	})
-	test.it('read nested relationships', function (test_ctx) {
-		return suite_ctx.database.transaction(function (transaction) {
-			const read_query_file = path.resolve(import.meta.dirname, './graphql/read_nested_relationships.graphql')
-			const read_query = fs.readFileSync(read_query_file).toString('utf8')
-			const source = read_query
-			const operationName = "ReadEntity2NestedRelationships"
-			const variableValues = {
-				where1: {
-					id: "1"
-				},
-				where2: {
-					id: "1"
-				}
-			}
-			const contextValue = {
-				database: suite_ctx.database,
-				transaction: transaction
-			}
-			return execute({
-					source,
-					contextValue,
-					variableValues,
-					operationName
-				})
-				.then(function (data) {
-					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.read_entity2.length, 1)
-					assert.strictEqual(data.data.read_entity2[0].attributes.id, variableValues.where1.id)
-					assert.strictEqual(data.data.read_entity2[0].relationships.read_entity1.length, 1)
-					assert.strictEqual(data.data.read_entity2[0].relationships.read_entity1[0].attributes.id, variableValues.where2.id)
-					return Promise.resolve(data)
-				})
-				.then(function () {
-					return transaction.rollback()
-				})
-				.catch(function (err) {
-					return transaction.rollback(err).then(function () {
-						throw err
-					}).catch(function (err) {
-						throw err
-					})
-				})
-		})
-	})
-	test.it('update nested relationships', function (test_ctx) {
-		// todo: do a nested read before to ensure the target text is not different
-		return suite_ctx.database.transaction(function (transaction) {
-			const update_query_file = path.resolve(import.meta.dirname, './graphql/update_nested_relationships.graphql')
-			const update_query = fs.readFileSync(update_query_file).toString('utf8')
-			const source = update_query
-			const operationName = "UpdateEntity2NestedRelationships"
-			const variableValues = {
-				where1: {
-					id: "1"
-				},
-				attributes1: {
-					text: "1234"
-				},
-				where2: {
-					id: "1"
-				},
-				attributes2: {
-					text: "zxcv"
-				}
-			}
-			const contextValue = {
-				database: suite_ctx.database,
-				transaction: transaction
-			}
-			return execute({
-					source,
-					contextValue,
-					variableValues,
-					operationName
-				})
-				.then(function (data) {
-					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.update_entity2.length, 1)
-					assert.strictEqual(data.data.update_entity2[0].attributes.id, variableValues.where1.id)
-					assert.strictEqual(data.data.update_entity2[0].attributes.text, variableValues.attributes1.text)
-					assert.strictEqual(data.data.update_entity2[0].relationships.update_entity1.length, 1)
-					assert.strictEqual(data.data.update_entity2[0].relationships.update_entity1[0].attributes.id, variableValues.where2.id)
-					assert.strictEqual(data.data.update_entity2[0].relationships.update_entity1[0].attributes.text, variableValues.attributes2.text)
-					return Promise.resolve(data)
-				})
-				.then(function () {
-					return transaction.rollback()
-				})
-				.catch(function (err) {
-					return transaction.rollback(err).then(function () {
-						throw err
-					}).catch(function (err) {
-						throw err
-					})
-				})
-		})
-	})
-	test.it('delete nested relationships', function (test_ctx) {
-		// todo: do two root query reads after to make sure the entities no longer exist
-		return suite_ctx.database.transaction(function (transaction) {
-			const delete_query_file = path.resolve(import.meta.dirname, './graphql/delete_nested_relationships.graphql')
-			const delete_query = fs.readFileSync(delete_query_file).toString('utf8')
-			const source = delete_query
-			const operationName = "DeleteEntity2NestedRelationships"
-			const variableValues = {
-				where1: {
-					id: "1"
-				},
-				where2: {
-					id: "1"
-				}
-			}
-			const contextValue = {
-				database: suite_ctx.database,
-				transaction: transaction
-			}
-			return execute({
-					source,
-					contextValue,
-					variableValues,
-					operationName
-				})
-				.then(function (data) {
-					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.delete_entity2.length, 0)
-					return Promise.resolve(data)
 				})
 				.then(function () {
 					return transaction.rollback()
@@ -452,17 +271,23 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const create_query_file = path.resolve(import.meta.dirname, './graphql/create_nested_mutation.graphql')
 			const create_query = fs.readFileSync(create_query_file).toString('utf8')
 			const source = create_query
-			const operationName = "CreateEntity2NestedMutation"
+			const operationName = 'CreateRelationshipNestedMutation'
 			const variableValues = {
 				attributes1: {
-					created_at: new Date(),
-					updated_at: new Date(),
-					text: "asdf",
+					_created_at: new Date(),
+					_updated_at: new Date(),
+					_from_type: 'gauze__entity1',
+					_from_id: '3',
+					_to_type: 'gauze__entity2',
+					_to_id: '3'
 				},
 				attributes2: {
-					created_at: new Date(),
-					updated_at: new Date(),
-					text: "qwer"
+					_created_at: new Date(),
+					_updated_at: new Date(),
+					_from_type: 'gauze__entity2',
+					_from_id: '3',
+					_to_type: 'gauze__entity1',
+					_to_id: '3'
 				}
 			}
 			const contextValue = {
@@ -477,10 +302,16 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.create_entity2.length, 1)
-					assert.strictEqual(data.data.create_entity2[0].attributes.text, variableValues.attributes1.text)
-					assert.strictEqual(data.data.create_entity2[0].mutation.create_entity2.length, 1)
-					assert.strictEqual(data.data.create_entity2[0].mutation.create_entity2[0].attributes.text, variableValues.attributes2.text)
+					assert.strictEqual(data.data.create_relationship.length, 1)
+					assert.strictEqual(data.data.create_relationship[0].attributes._from_id, variableValues.attributes1._from_id)
+					assert.strictEqual(data.data.create_relationship[0].attributes._from_type, variableValues.attributes1._from_type)
+					assert.strictEqual(data.data.create_relationship[0].attributes._to_id, variableValues.attributes1._to_id)
+					assert.strictEqual(data.data.create_relationship[0].attributes._to_type, variableValues.attributes1._to_type)
+					assert.strictEqual(data.data.create_relationship[0].mutation.create_relationship.length, 1)
+					assert.strictEqual(data.data.create_relationship[0].mutation.create_relationship[0].attributes._from_id, variableValues.attributes2._from_id)
+					assert.strictEqual(data.data.create_relationship[0].mutation.create_relationship[0].attributes._from_type, variableValues.attributes2._from_type)
+					assert.strictEqual(data.data.create_relationship[0].mutation.create_relationship[0].attributes._to_id, variableValues.attributes2._to_id)
+					assert.strictEqual(data.data.create_relationship[0].mutation.create_relationship[0].attributes._to_type, variableValues.attributes2._to_type)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -500,13 +331,13 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const read_query_file = path.resolve(import.meta.dirname, './graphql/read_nested_query.graphql')
 			const read_query = fs.readFileSync(read_query_file).toString('utf8')
 			const source = read_query
-			const operationName = "ReadEntity2NestedQuery"
+			const operationName = 'ReadRelationshipNestedQuery'
 			const variableValues = {
 				where1: {
-					id: "1"
+					_id: '1'
 				},
 				where2: {
-					id: "2"
+					_id: '2'
 				}
 			}
 			const contextValue = {
@@ -521,10 +352,10 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.read_entity2.length, 1)
-					assert.strictEqual(data.data.read_entity2[0].attributes.id, variableValues.where1.id)
-					assert.strictEqual(data.data.read_entity2[0].query.read_entity2.length, 1)
-					assert.strictEqual(data.data.read_entity2[0].query.read_entity2[0].attributes.id, variableValues.where2.id)
+					assert.strictEqual(data.data.read_relationship.length, 1)
+					assert.strictEqual(data.data.read_relationship[0].attributes._id, variableValues.where1._id)
+					assert.strictEqual(data.data.read_relationship[0].query.read_relationship.length, 1)
+					assert.strictEqual(data.data.read_relationship[0].query.read_relationship[0].attributes._id, variableValues.where2._id)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -545,19 +376,25 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const update_query_file = path.resolve(import.meta.dirname, './graphql/update_nested_mutation.graphql')
 			const update_query = fs.readFileSync(update_query_file).toString('utf8')
 			const source = update_query
-			const operationName = "UpdateEntity2NestedMutation"
+			const operationName = 'UpdateRelationshipNestedMutation'
 			const variableValues = {
 				where1: {
-					id: "1"
-				},
-				attributes1: {
-					text: "1234"
+					_id: '1'
 				},
 				where2: {
-					id: "1"
+					_id: '2'
+				},
+				attributes1: {
+					_from_type: 'gauze__entity1',
+					_from_id: '3',
+					_to_type: 'gauze__entity2',
+					_to_id: '3'
 				},
 				attributes2: {
-					text: "zxcv"
+					_from_type: 'gauze__entity2',
+					_from_id: '3',
+					_to_type: 'gauze__entity1',
+					_to_id: '3'
 				}
 			}
 			const contextValue = {
@@ -572,12 +409,18 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.update_entity2.length, 1)
-					assert.strictEqual(data.data.update_entity2[0].attributes.id, variableValues.where1.id)
-					assert.strictEqual(data.data.update_entity2[0].attributes.text, variableValues.attributes1.text)
-					assert.strictEqual(data.data.update_entity2[0].mutation.update_entity2.length, 1)
-					assert.strictEqual(data.data.update_entity2[0].mutation.update_entity2[0].attributes.id, variableValues.where2.id)
-					assert.strictEqual(data.data.update_entity2[0].mutation.update_entity2[0].attributes.text, variableValues.attributes2.text)
+					assert.strictEqual(data.data.update_relationship.length, 1)
+					assert.strictEqual(data.data.update_relationship[0].attributes._id, variableValues.where1._id)
+					assert.strictEqual(data.data.update_relationship[0].attributes._from_id, variableValues.attributes1._from_id)
+					assert.strictEqual(data.data.update_relationship[0].attributes._from_type, variableValues.attributes1._from_type)
+					assert.strictEqual(data.data.update_relationship[0].attributes._to_id, variableValues.attributes1._to_id)
+					assert.strictEqual(data.data.update_relationship[0].attributes._to_type, variableValues.attributes1._to_type)
+					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship.length, 1)
+					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship[0].attributes._id, variableValues.where2._id)
+					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship[0].attributes._from_id, variableValues.attributes2._from_id)
+					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship[0].attributes._from_type, variableValues.attributes2._from_type)
+					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship[0].attributes._to_id, variableValues.attributes2._to_id)
+					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship[0].attributes._to_type, variableValues.attributes2._to_type)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -598,13 +441,13 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const delete_query_file = path.resolve(import.meta.dirname, './graphql/delete_nested_mutation.graphql')
 			const delete_query = fs.readFileSync(delete_query_file).toString('utf8')
 			const source = delete_query
-			const operationName = "DeleteEntity2NestedMutation"
+			const operationName = 'DeleteRelationshipNestedMutation'
 			const variableValues = {
 				where1: {
-					id: "1"
+					_id: '1'
 				},
 				where2: {
-					id: "2"
+					_id: '2'
 				}
 			}
 			const contextValue = {
@@ -619,7 +462,7 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.delete_entity2.length, 0)
+					assert.strictEqual(data.data.delete_relationship.length, 0)
 					return Promise.resolve(data)
 				})
 				.then(function () {

@@ -49,9 +49,11 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 			const source = create_query
 			const operationName = "CreateEntity1"
 			const variableValues = {
-				created_at: new Date(),
-				updated_at: new Date(),
-				text: "asdf"
+				attributes: {
+					created_at: new Date(),
+					updated_at: new Date(),
+					text: "asdf"
+				}
 			}
 			const contextValue = {
 				database: suite_ctx.database,
@@ -66,7 +68,7 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
 					assert.strictEqual(data.data.create_entity1.length, 1)
-					assert.strictEqual(data.data.create_entity1[0].attributes.text, variableValues.text)
+					assert.strictEqual(data.data.create_entity1[0].attributes.text, variableValues.attributes.text)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -88,7 +90,9 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 			const source = read_query
 			const operationName = "ReadEntity1"
 			const variableValues = {
-				id: "1"
+				where: {
+					id: "1"
+				}
 			}
 			const contextValue = {
 				database: suite_ctx.database,
@@ -103,7 +107,7 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
 					assert.strictEqual(data.data.read_entity1.length, 1)
-					assert.strictEqual(data.data.read_entity1[0].attributes.id, variableValues.id)
+					assert.strictEqual(data.data.read_entity1[0].attributes.id, variableValues.where.id)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -126,7 +130,9 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 			const source = read_query
 			const operationName = "ReadEntity1"
 			const variableValues = {
-				id: "1"
+				where: {
+					id: "1"
+				}
 			}
 			const contextValue = {
 				database: suite_ctx.database,
@@ -149,8 +155,12 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 					const source = update_query
 					const operationName = "UpdateEntity1"
 					const variableValues = {
-						id: "1",
-						text: target_text
+						where: {
+							id: "1"
+						},
+						attributes: {
+							text: target_text
+						}
 					}
 					const contextValue = {
 						database: suite_ctx.database,
@@ -165,7 +175,7 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 						.then(function (data) {
 							assert.strictEqual(data.errors, undefined)
 							assert.strictEqual(data.data.update_entity1.length, 1)
-							assert.strictEqual(data.data.update_entity1[0].attributes.text, variableValues.text)
+							assert.strictEqual(data.data.update_entity1[0].attributes.text, variableValues.attributes.text)
 							return Promise.resolve(data)
 						})
 				})
@@ -190,7 +200,9 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 			const source = delete_query
 			const operationName = "DeleteEntity1"
 			const variableValues = {
-				id: "1"
+				where: {
+					id: "1"
+				}
 			}
 			const contextValue = {
 				database: suite_ctx.database,
@@ -216,7 +228,9 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 					const source = read_query
 					const operationName = "ReadEntity1"
 					const variableValues = {
-						id: "1"
+						where: {
+							id: "1"
+						}
 					}
 					const contextValue = {
 						database: suite_ctx.database,
@@ -253,10 +267,16 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 			const source = create_query
 			const operationName = "CreateEntity1NestedRelationships"
 			const variableValues = {
-				created_at: new Date(),
-				updated_at: new Date(),
-				text1: "asdf",
-				text2: "qwer"
+				attributes1: {
+					created_at: new Date(),
+					updated_at: new Date(),
+					text: "asdf"
+				},
+				attributes2: {
+					created_at: new Date(),
+					updated_at: new Date(),
+					text: "qwer"
+				}
 			}
 			const contextValue = {
 				database: suite_ctx.database,
@@ -271,9 +291,9 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
 					assert.strictEqual(data.data.create_entity1.length, 1)
-					assert.strictEqual(data.data.create_entity1[0].attributes.text, variableValues.text1)
+					assert.strictEqual(data.data.create_entity1[0].attributes.text, variableValues.attributes1.text)
 					assert.strictEqual(data.data.create_entity1[0].relationships.create_entity2.length, 1)
-					assert.strictEqual(data.data.create_entity1[0].relationships.create_entity2[0].attributes.text, variableValues.text2)
+					assert.strictEqual(data.data.create_entity1[0].relationships.create_entity2[0].attributes.text, variableValues.attributes2.text)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -295,8 +315,12 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 			const source = read_query
 			const operationName = "ReadEntity1NestedRelationships"
 			const variableValues = {
-				id1: "1",
-				id2: "1"
+				where1: {
+					id: "1"
+				},
+				where2: {
+					id: "1"
+				}
 			}
 			const contextValue = {
 				database: suite_ctx.database,
@@ -311,9 +335,9 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
 					assert.strictEqual(data.data.read_entity1.length, 1)
-					assert.strictEqual(data.data.read_entity1[0].attributes.id, variableValues.id1)
+					assert.strictEqual(data.data.read_entity1[0].attributes.id, variableValues.where1.id)
 					assert.strictEqual(data.data.read_entity1[0].relationships.read_entity2.length, 1)
-					assert.strictEqual(data.data.read_entity1[0].relationships.read_entity2[0].attributes.id, variableValues.id2)
+					assert.strictEqual(data.data.read_entity1[0].relationships.read_entity2[0].attributes.id, variableValues.where2.id)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -336,9 +360,18 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 			const source = update_query
 			const operationName = "UpdateEntity1NestedRelationships"
 			const variableValues = {
-				id1: "1",
-				id2: "1",
-				text: "zxcv"
+				where1: {
+					id: "1"
+				},
+				attributes1: {
+					text: "1234"
+				},
+				where2: {
+					id: "1"
+				},
+				attributes2: {
+					text: "zxcv"
+				}
 			}
 			const contextValue = {
 				database: suite_ctx.database,
@@ -353,11 +386,11 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
 					assert.strictEqual(data.data.update_entity1.length, 1)
-					assert.strictEqual(data.data.update_entity1[0].attributes.id, variableValues.id1)
-					assert.strictEqual(data.data.update_entity1[0].attributes.text, variableValues.text)
+					assert.strictEqual(data.data.update_entity1[0].attributes.id, variableValues.where1.id)
+					assert.strictEqual(data.data.update_entity1[0].attributes.text, variableValues.attributes1.text)
 					assert.strictEqual(data.data.update_entity1[0].relationships.update_entity2.length, 1)
-					assert.strictEqual(data.data.update_entity1[0].relationships.update_entity2[0].attributes.id, variableValues.id2)
-					assert.strictEqual(data.data.update_entity1[0].relationships.update_entity2[0].attributes.text, variableValues.text)
+					assert.strictEqual(data.data.update_entity1[0].relationships.update_entity2[0].attributes.id, variableValues.where2.id)
+					assert.strictEqual(data.data.update_entity1[0].relationships.update_entity2[0].attributes.text, variableValues.attributes2.text)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -380,8 +413,12 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 			const source = delete_query
 			const operationName = "DeleteEntity1NestedRelationships"
 			const variableValues = {
-				id1: "1",
-				id2: "1"
+				where1: {
+					id: "1"
+				},
+				where2: {
+					id: "1"
+				}
 			}
 			const contextValue = {
 				database: suite_ctx.database,
@@ -410,7 +447,6 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 				})
 		})
 	})
-
 	test.it('create nested mutation', function (test_ctx) {
 		return suite_ctx.database.transaction(function (transaction) {
 			const create_query_file = path.resolve(import.meta.dirname, './graphql/create_nested_mutation.graphql')
@@ -418,10 +454,16 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 			const source = create_query
 			const operationName = "CreateEntity1NestedMutation"
 			const variableValues = {
-				created_at: new Date(),
-				updated_at: new Date(),
-				text1: "asdf",
-				text2: "qwer"
+				attributes1: {
+					created_at: new Date(),
+					updated_at: new Date(),
+					text: "asdf",
+				},
+				attributes2: {
+					created_at: new Date(),
+					updated_at: new Date(),
+					text: "qwer"
+				}
 			}
 			const contextValue = {
 				database: suite_ctx.database,
@@ -436,9 +478,9 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
 					assert.strictEqual(data.data.create_entity1.length, 1)
-					assert.strictEqual(data.data.create_entity1[0].attributes.text, variableValues.text1)
+					assert.strictEqual(data.data.create_entity1[0].attributes.text, variableValues.attributes1.text)
 					assert.strictEqual(data.data.create_entity1[0].mutation.create_entity1.length, 1)
-					assert.strictEqual(data.data.create_entity1[0].mutation.create_entity1[0].attributes.text, variableValues.text2)
+					assert.strictEqual(data.data.create_entity1[0].mutation.create_entity1[0].attributes.text, variableValues.attributes2.text)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -460,8 +502,12 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 			const source = read_query
 			const operationName = "ReadEntity1NestedQuery"
 			const variableValues = {
-				id1: "1",
-				id2: "2"
+				where1: {
+					id: "1"
+				},
+				where2: {
+					id: "2"
+				}
 			}
 			const contextValue = {
 				database: suite_ctx.database,
@@ -476,9 +522,9 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
 					assert.strictEqual(data.data.read_entity1.length, 1)
-					assert.strictEqual(data.data.read_entity1[0].attributes.id, variableValues.id1)
+					assert.strictEqual(data.data.read_entity1[0].attributes.id, variableValues.where1.id)
 					assert.strictEqual(data.data.read_entity1[0].query.read_entity1.length, 1)
-					assert.strictEqual(data.data.read_entity1[0].query.read_entity1[0].attributes.id, variableValues.id2)
+					assert.strictEqual(data.data.read_entity1[0].query.read_entity1[0].attributes.id, variableValues.where2.id)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -501,9 +547,18 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 			const source = update_query
 			const operationName = "UpdateEntity1NestedMutation"
 			const variableValues = {
-				id1: "1",
-				id2: "1",
-				text: "zxcv"
+				where1: {
+					id: "1"
+				},
+				attributes1: {
+					text: "1234"
+				},
+				where2: {
+					id: "1"
+				},
+				attributes2: {
+					text: "zxcv"
+				}
 			}
 			const contextValue = {
 				database: suite_ctx.database,
@@ -518,11 +573,11 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
 					assert.strictEqual(data.data.update_entity1.length, 1)
-					assert.strictEqual(data.data.update_entity1[0].attributes.id, variableValues.id1)
-					assert.strictEqual(data.data.update_entity1[0].attributes.text, variableValues.text)
+					assert.strictEqual(data.data.update_entity1[0].attributes.id, variableValues.where1.id)
+					assert.strictEqual(data.data.update_entity1[0].attributes.text, variableValues.attributes1.text)
 					assert.strictEqual(data.data.update_entity1[0].mutation.update_entity1.length, 1)
-					assert.strictEqual(data.data.update_entity1[0].mutation.update_entity1[0].attributes.id, variableValues.id2)
-					assert.strictEqual(data.data.update_entity1[0].mutation.update_entity1[0].attributes.text, variableValues.text)
+					assert.strictEqual(data.data.update_entity1[0].mutation.update_entity1[0].attributes.id, variableValues.where2.id)
+					assert.strictEqual(data.data.update_entity1[0].mutation.update_entity1[0].attributes.text, variableValues.attributes2.text)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -545,8 +600,12 @@ test.describe('entity1 graphql interface system', function (suite_ctx) {
 			const source = delete_query
 			const operationName = "DeleteEntity1NestedMutation"
 			const variableValues = {
-				id1: "1",
-				id2: "2"
+				where1: {
+					id: "1"
+				},
+				where2: {
+					id: "2"
+				}
 			}
 			const contextValue = {
 				database: suite_ctx.database,

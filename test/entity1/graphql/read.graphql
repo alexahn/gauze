@@ -1,5 +1,5 @@
-query ReadEntity1($id: String) {
-	read_entity1(where: {id: $id}) {
+query ReadEntity1($where: Entity1_Query__Attributes) {
+	read_entity1(where: $where) {
 		attributes {
 			id
 			text

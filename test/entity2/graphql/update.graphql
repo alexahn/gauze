@@ -1,7 +1,8 @@
-mutation UpdateEntity2($id: String, $text: String) {
-	update_entity2(where: { id: $id }, attributes: {
-		text: $text
-	}) {
+mutation UpdateEntity2(
+	$where: Entity2_Mutation__Attributes,
+	$attributes: Entity2_Mutation__Attributes
+) {
+	update_entity2(where: $where, attributes: $attributes) {
 		attributes {
 			id
 			text

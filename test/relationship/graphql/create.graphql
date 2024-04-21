@@ -1,0 +1,13 @@
+mutation CreateRelationship(
+	$attributes: Relationship_Mutation__Attributes
+) {
+	create_relationship(attributes: $attributes) {
+		attributes {
+			_id
+			_from_type
+			_from_id
+			_to_type
+			_to_id
+		}
+	}
+}

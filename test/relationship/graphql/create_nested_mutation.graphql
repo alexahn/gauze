@@ -1,0 +1,22 @@
+mutation CreateRelationshipNestedMutation($attributes1: Relationship_Mutation__Attributes, $attributes2: Relationship_Mutation__Attributes) {
+	create_relationship(attributes: $attributes1) {
+		attributes {
+			_id
+			_from_type
+			_from_id
+			_to_type
+			_to_id
+		}
+		mutation {
+			create_relationship(attributes: $attributes2) {
+				attributes {
+					_id
+					_from_type
+					_from_id
+					_to_type
+					_to_id
+				}
+			}
+		}
+	}
+}

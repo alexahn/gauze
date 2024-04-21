@@ -1,0 +1,25 @@
+query ReadRelationshipNestedQuery(
+	$where1: Relationship_Query__Attributes,
+	$where2: Relationship_Query__Attributes
+) {
+	read_relationship(where: $where1) {
+		attributes {
+			_id
+			_from_type
+			_from_id
+			_to_type
+			_to_id
+		}
+		query {
+			read_relationship(where: $where2) {
+				attributes {
+					_id
+					_from_type
+					_from_id
+					_to_type
+					_to_id
+				}
+			}
+		}
+	}
+}

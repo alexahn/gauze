@@ -1,11 +1,16 @@
-mutation UpdateEntity2NestedMutation($id1: String, $id2: String, $text: String) {
-	update_entity2(where: { id: $id1 }, attributes: { text: $text }) {
+mutation UpdateEntity2NestedMutation(
+	$where1: Entity2_Mutation__Attributes,
+	$attributes1: Entity2_Mutation__Attributes,
+	$where2: Entity2_Mutation__Attributes,
+	$attributes2: Entity2_Mutation__Attributes
+) {
+	update_entity2(where: $where1, attributes: $attributes1) {
 		attributes {
 			id
 			text
 		}
 		mutation {
-			update_entity2(where: { id: $id2 }, attributes: { text: $text }) {
+			update_entity2(where: $where2, attributes: $attributes2) {
 				attributes {
 					id
 					text

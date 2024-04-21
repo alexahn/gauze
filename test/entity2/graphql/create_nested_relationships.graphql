@@ -1,19 +1,14 @@
-mutation CreateEntity2NestedRelationships($created_at: Date, $updated_at: Date, $text1: String, $text2: String) {
-	create_entity2(attributes: {
-		created_at: $created_at,
-		updated_at: $updated_at,
-		text: $text1
-	}) {
+mutation CreateEntity2NestedRelationships(
+	$attributes1: Entity2_Mutation__Attributes,
+	$attributes2: Entity1_Mutation__Attributes
+) {
+	create_entity2(attributes: $attributes1) {
 		attributes {
 			id
 			text
 		}
 		relationships {
-			create_entity1(attributes: {
-				created_at: $created_at,
-				updated_at: $updated_at,
-				text: $text2
-			}) {
+			create_entity1(attributes: $attributes2) {
 				attributes {
 					id
 					text

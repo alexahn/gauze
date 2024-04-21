@@ -43,7 +43,7 @@ class KnexDatabaseModel extends DatabaseModel {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'source', source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'attributes', attributes)
 		const sql = database(self.table)
-			.insert(attributes, ['id'])
+			.insert(attributes, [self.primary_key])
 			.transacting(transaction)
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.create:debug_sql`, sql.toString())

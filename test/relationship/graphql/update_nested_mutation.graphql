@@ -1,0 +1,27 @@
+mutation UpdateRelationshipNestedMutation(
+	$where1: Relationship_Mutation__Attributes,
+	$attributes1: Relationship_Mutation__Attributes,
+	$where2: Relationship_Mutation__Attributes,
+	$attributes2: Relationship_Mutation__Attributes
+) {
+	update_relationship(where: $where1, attributes: $attributes1) {
+		attributes {
+			_id
+			_from_type
+			_from_id
+			_to_type
+			_to_id
+		}
+		mutation {
+			update_relationship(where: $where2, attributes: $attributes2) {
+				attributes {
+					_id
+					_from_type
+					_from_id
+					_to_type
+					_to_id
+				}
+			}
+		}
+	}
+}

@@ -1,11 +1,14 @@
-mutation DeleteEntity2NestedRelationships($id1: String, $id2: String) {
-	delete_entity2(where: { id: $id1 }) {
+mutation DeleteEntity2NestedRelationships(
+	$where1: Entity2_Mutation__Attributes,
+	$where2: Entity1_Mutation__Attributes
+) {
+	delete_entity2(where: $where1) {
 		attributes {
 			id
 			text
 		}
 		relationships {
-			delete_entity1(where: { id: $id2 }) {
+			delete_entity1(where: $where2) {
 				attributes {
 					id
 					text

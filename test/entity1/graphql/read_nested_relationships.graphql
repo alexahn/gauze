@@ -1,11 +1,14 @@
-query ReadEntity1NestedRelationships($id1: String, $id2: String) {
-	read_entity1(where: {id: $id1}) {
+query ReadEntity1NestedRelationships(
+	$where1: Entity1_Query__Attributes,
+	$where2: Entity2_Query__Attributes
+) {
+	read_entity1(where: $where1) {
 		attributes {
 			id
 			text
 		}
 		relationships {
-			read_entity2(where: {id: $id2}) {
+			read_entity2(where: $where2) {
 				attributes {
 					id
 					text

@@ -1,9 +1,5 @@
-mutation CreateEntity1($created_at: Date, $updated_at: Date, $text: String) {
-	create_entity1(attributes: {
-		created_at: $created_at,
-		updated_at: $updated_at,
-		text: $text
-	}) {
+mutation CreateEntity1($attributes: Entity1_Mutation__Attributes) {
+	create_entity1(attributes: $attributes) {
 		attributes {
 			id
 			text

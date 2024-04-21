@@ -85,3 +85,6 @@
 	[x] test relationships
 	[ ] test nested mutation and queries
 [ ] force sqlite file to be made at the root directory
+[ ] change created_at, updated_at, deleted_at to _created_at, _updated_at, _deleted_at
+	[ ] prevent fields from being changed via the user and programatically set them via the database models
+		[ ] delete the fields prior to constructing a sql query
