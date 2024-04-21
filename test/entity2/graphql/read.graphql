@@ -1,0 +1,8 @@
+query ReadEntity2($id: String) {
+	read_entity2(where: {id: $id}) {
+		attributes {
+			id
+			text
+		}
+	}
+}

@@ -1,0 +1,16 @@
+mutation DeleteEntity1NestedMutation($id1: String, $id2: String) {
+	delete_entity1(where: { id: $id1 }) {
+		attributes {
+			id
+			text
+		}
+		mutation {
+			delete_entity1(where: { id: $id2 }) {
+				attributes {
+					id
+					text
+				}
+			}
+		}
+	}
+}

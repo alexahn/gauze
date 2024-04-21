@@ -1,0 +1,8 @@
+mutation DeleteEntity2($id: String) {
+	delete_entity2(where: { id: $id }) {
+		attributes {
+			id
+			text
+		}
+	}
+}

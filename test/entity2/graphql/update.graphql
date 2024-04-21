@@ -1,0 +1,10 @@
+mutation UpdateEntity2($id: String, $text: String) {
+	update_entity2(where: { id: $id }, attributes: {
+		text: $text
+	}) {
+		attributes {
+			id
+			text
+		}
+	}
+}
