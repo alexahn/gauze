@@ -160,6 +160,57 @@ class KnexDatabaseModel extends DatabaseModel {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'where', where)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'attributes', attributes)
 		if (source && source._metadata) {
+			// note: manual approach: do a query to get a set of ids and pass those into a where in clause
+			// note: there might be a way to do this in one shot by doing a join query, but this approach is not terrible because we can handle 1 million ids in memory fine
+			// todo: hook up lru cache when dealing with id arrays
+			return self.read({
+				source,
+				database,
+				transaction
+			}, {
+				where,
+				limit,
+				offset,
+				order,
+				order_direction,
+				order_nulls
+			}).then(function (data) {
+				const valid_ids = data.map(function (item) {
+					return item[self.primary_key]
+				})
+				// use valid_ids to do a where in query
+				const sql = database(self.table)
+					.where(where)
+					.whereIn(self.primary_key, valid_ids)
+					.update(attributes)
+					.transacting(transaction)
+				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+					$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString())
+				}
+				return sql.then(function (data) {
+						$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:success`, 'data', data)
+						return self.read({
+							source,
+							database,
+							transaction
+						}, {
+							where,
+							limit,
+							offset,
+							order,
+							order_direction,
+							order_nulls
+						})
+					})
+					.catch(function (err) {
+						$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
+						throw err
+					})
+			}).catch(function (err) {
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
+				throw err
+			})
+			/*
 			// todo: currently might only work in postgresql
 			const PARENT_SQL_ID = source._metadata.id
 			const PARENT_GRAPHQL_TYPE = source._metadata.type
@@ -206,9 +257,9 @@ class KnexDatabaseModel extends DatabaseModel {
 				})
 				.catch(function (err) {
 					$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
-					console.log(err)
 					throw err
 				})
+			*/
 		} else {
 			const sql = database(self.table)
 				.where(where)
@@ -255,6 +306,57 @@ class KnexDatabaseModel extends DatabaseModel {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'source', source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'where', where)
 		if (source && source._metadata) {
+			// note: manual approach: do a query to get a set of ids and pass those into a where in clause
+			// note: there might be a way to do this in one shot by doing a join query, but this approach is not terrible because we can handle 1 million ids in memory fine
+			// todo: hook up lru cache when dealing with id arrays
+			return self.read({
+				source,
+				database,
+				transaction
+			}, {
+				where,
+				limit,
+				offset,
+				order,
+				order_direction,
+				order_nulls
+			}).then(function (data) {
+				const valid_ids = data.map(function (item) {
+					return item[self.primary_key]
+				})
+				// use valid_ids to do a where in query
+				const sql = database(self.table)
+					.where(where)
+					.whereIn(self.primary_key, valid_ids)
+					.del()
+					.transacting(transaction)
+				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+					$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString())
+				}
+				return sql.then(function (data) {
+						$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:success`, 'data', data)
+						return self.read({
+							source,
+							database,
+							transaction
+						}, {
+							where,
+							limit,
+							offset,
+							order,
+							order_direction,
+							order_nulls
+						})
+					})
+					.catch(function (err) {
+						$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, 'err', err)
+						throw err
+					})
+			}).catch(function (err) {
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, 'err', err)
+				throw err
+			})
+			/*
 			const PARENT_SQL_ID = source._metadata.id
 			const PARENT_GRAPHQL_TYPE = source._metadata.type
 			const PARENT_SQL_TABLE = $structure.resolvers.DATABASE_GRAPHQL_TYPE_TO_SQL_TABLE[PARENT_GRAPHQL_TYPE]
@@ -291,9 +393,9 @@ class KnexDatabaseModel extends DatabaseModel {
 				})
 				.catch(function (err) {
 					$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, 'err', err)
-					console.log(err)
 					throw err
 				})
+			*/
 		} else {
 			const sql = database(self.table)
 				.where(where)

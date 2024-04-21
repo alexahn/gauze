@@ -14,12 +14,13 @@
 [x] rename interface directories to interfaces
 [ ] relationships modeling
 	[x] create a table to track relationships
-		[ ] look into constraints to manage one to one, one to many, and many to one relationships
 	[x] implement relationship traversal via queries
-	[-] implement relationship creation and deletion via mutations
-		[ ] doesn't seem to work in sqlite3, maybe try postgresql
-		[ ] brute force this by re-using read method and using where in
+	[x] implement relationship creation and deletion via mutations
+		[-] join update and join delete doesn't seem to work in sqlite3, maybe try postgresql
+		[x] brute force this by re-using read method and using where in (works in sqlite and postgresql)
 	[ ] see if there a way to not forfeit foreign key constraints without having to create different tables for every type of relationship
+		[ ] look into constraints to manage one to one, one to many, and many to one relationships
+	[ ] have an admin method to track objects that have no relationships
 [x] logging
 	[x] visually simple logging based on level, topic, and message
 		[x] stack based prefixing based on variable inputs to write
