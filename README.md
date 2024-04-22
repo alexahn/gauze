@@ -35,10 +35,51 @@ A GraphQL server architecture.
 	- The root module can access it via `gauze.system.models.entity1.ENTITY1_MODEL_SYSTEM`.
 - Named class exports should typically be named according to the abstract hierarchy.
 
-## Dependency Hierarchy
+## Dependency Hierarchy / Realm Hierarchy
 - structure
 - kernel
 - database
 - system
 - user
 - command
+
+## Architecture
+
+### Realms
+
+#### Structure
+The structure realm contains structural information for the entities in the realm.
+- `f(kernel, database, system, user)` (interaction dependency)
+- `g()` (code dependency)
+
+### Kernel f(database, system, user)
+The kernel realm contains base classes and common utilities, like logging and caching.
+- `f(database, system, user)` (interaction dependency)
+- `g(structure)` (code dependency)
+
+### Database f(system, user)
+The database realm manages state for entities.
+- `f(system, user)` (interaction dependency)
+- `g(structure, kernel)` (code dependency)
+
+### System f(user)
+The system realm manages user interaction.
+- `f(user)` (interaction dependency)
+- `g(database, kernel, structure)` (code dependency).
+
+### User f()
+The user realm manages authentication and the unauthenticated interface.
+- `f()` (interaction dependency)
+- `g(system, database, kernel, structure)` (code dependency)
+
+### Control
+
+#### Models
+Models either resolve to a hard value or they interact with an interface for a realm that is lower in the dependency hierarchy.
+
+#### Controllers
+Controllers can use an arbitrary number of models to satisfy a method. Controllers should only use models from their realm.
+
+#### Interfaces
+Interfaces can use an arbitrary number of controllers to satisfy a request. Interfaces should only use controllers from their realm.
+
