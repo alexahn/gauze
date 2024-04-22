@@ -40,7 +40,6 @@ class DatabaseModel {
 		const self = this
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_output:enter`, 'row', row)
 		Object.keys(this.field_serializers).forEach(function (field) {
-			console.log('field', field)
 			row = self.field_serializers[field].output(row)
 		})
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_output:exit`, 'row', row)

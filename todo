@@ -95,4 +95,7 @@
 [ ] rename columns in relationship table
 	[ ] example: _id to gauze__relationship__id
 	[ ] example: _from_id to gauze__relationship__from_id
-	[ ] we want to avoid naming conflicts on joins with mandatory tables
+	[ ] we want to avoid naming conflicts on joins with builtin tables
+[ ] refactor system controllers to use graphql queries/mutations against the database interface
+	[ ] might as well set it up now
+	[ ] will help with serializer logic as well since the serializers will all run at the database level
