@@ -99,3 +99,4 @@
 [ ] refactor system controllers to use graphql queries/mutations against the database interface
 	[ ] might as well set it up now
 	[ ] will help with serializer logic as well since the serializers will all run at the database level
+[x] move server.js into command

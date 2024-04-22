@@ -13,11 +13,11 @@ import {
 
 import {
 	SCHEMA_GRAPHQL_INTERFACE_SYSTEM as schema
-} from './system/interfaces/graphql/schema.js';
+} from './../system/interfaces/graphql/schema.js';
 
 import {
 	create_connection
-} from './database/knex.js'
+} from './../database/knex.js'
 
 // Create the GraphQL over HTTP Node request handler
 /*
