@@ -5,17 +5,57 @@ const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH)
 
 import * as $kernel from './../../kernel/index.js'
 
-class SystemModel {
-	constructor (config) {
-		this.config = config
+import {
+	graphql
+} from 'graphql'
+
+class SystemModel extends $kernel.models._class.Model {
+	constructor(config) {
+		super(config)
 		this.name = this.__name()
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
 	}
-	__name () {
+	__name() {
 		return this.constructor.name
 	}
 }
 
+class GraphQLOperationSystemModel extends SystemModel {
+	constructor (config, {
+		schema,
+		schema_name
+	}) {
+		super(config)
+		this.schema = schema
+		this.name = this._name()
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
+	}
+	_name () {
+		return this.constructor.name
+	}
+	execute (contextValue, {
+		source,
+		operationName
+	}, variableValues) {
+		return graphql({
+			schema: this.schema,
+			source,
+			contextValue,
+			operationName,
+			variableValues
+		}).then(function (data) {
+			if (data.errors && data.errors.length) {
+				// should we make a new error here?
+				console.log(data.errors)
+				throw data.errors
+			} else {
+				return Promise.resolve(data)
+			}
+		})
+	}
+}
+
+/*
 class DatabaseModelSystemModel extends SystemModel {
 	constructor (config, model) {
 		super(config)
@@ -25,15 +65,6 @@ class DatabaseModelSystemModel extends SystemModel {
 	}
 	_name () {
 		return `[${this.model.name}]${this.constructor.name}`
-	}
-	serialize_input (attributes, method) {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_input:enter`, 'attributes', attributes)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_input:enter`, 'method', method)
-		return this.model.serialize_input(attributes, method)
-	}
-	serialize_output (row) {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_output:enter`, 'row', row)
-		return this.model.serialize_output(row)
 	}
 	create (context, input) {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.create:enter`, 'input', input)
@@ -52,8 +83,10 @@ class DatabaseModelSystemModel extends SystemModel {
 		return this.model.delete(context, input)
 	}
 }
+*/
 
 export {
 	SystemModel,
-	DatabaseModelSystemModel
+	//DatabaseModelSystemModel,
+	GraphQLOperationSystemModel
 }

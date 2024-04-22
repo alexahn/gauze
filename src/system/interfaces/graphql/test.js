@@ -61,6 +61,7 @@ const query = `
 `;
 
 console.log('schema', printSchema(schema))
+console.log(schema)
 
 function execute () {
 	// todo: see if we can construct a context here and use it at the end

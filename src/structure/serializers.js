@@ -1,45 +1,51 @@
-const SERIALIZER_CREATED_AT_STRUCTURE = {
-	input: {
-		create: function (attributes) {
-			attributes.created_at = new Date()
-			return attributes
-		}
-	},
-	output: function (row) {
-		row.created_at = new Date(row.created_at)
-		return row
-	}
-}
-
-const SERIALIZER_UPDATED_AT_STRUCTURE = {
-	input: {
-		create: function (attributes) {
-			attributes.updated_at = new Date()
-			return attributes
+const SERIALIZER_CREATED_AT_STRUCTURE = function (field) {
+	return {
+		input: {
+			create: function (attributes) {
+				attributes[field] = new Date()
+				return attributes
+			}
 		},
-		update: function (attributes) {
-			attributes.updated_at = new Date()
-			return attributes
+		output: function (row) {
+			row[field] = new Date(row[field])
+			return row
 		}
-	},
-	output: function (row) {
-		row.updated_at = new Date(row.updated_at)
-		return row
 	}
 }
 
-const SERIALIZER_DELETED_AT_STRUCTURE = {
-	input: {
-		delete: function (attributes) {
-			attributes.deleted_at = new Date()
-			return attributes
+const SERIALIZER_UPDATED_AT_STRUCTURE = function (field) {
+	return {
+		input: {
+			create: function (attributes) {
+				attributes[field] = new Date()
+				return attributes
+			},
+			update: function (attributes) {
+				attributes[field] = new Date()
+				return attributes
+			}
+		},
+		output: function (row) {
+			row[field] = new Date(row[field])
+			return row
 		}
-	},
-	output: function (row) {
-		if (row.deleted_at) {
-			row.deleted_at = new Date(row.deleted_at)
+	}
+}
+
+const SERIALIZER_DELETED_AT_STRUCTURE = function (field) {
+	return {
+		input: {
+			delete: function (attributes) {
+				attributes[field] = new Date()
+				return attributes
+			}
+		},
+		output: function (row) {
+			if (row[field]) {
+				row[field] = new Date(row[field])
+			}
+			return row
 		}
-		return row
 	}
 }
 

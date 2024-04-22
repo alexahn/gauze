@@ -5,8 +5,10 @@ mutation UpdateEntity1(
     update_entity1(where: $where, attributes: $attributes) {
         attributes {
             id
+			created_at
+			updated_at
+			deleted_at
             text
         }
     }
 }
-~ 

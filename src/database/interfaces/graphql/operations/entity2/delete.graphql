@@ -2,6 +2,9 @@ mutation DeleteEntity2($where: Entity2_Mutation__Attributes) {
     delete_entity2(where: $where) {
         attributes {
             id
+			created_at
+			updated_at
+			deleted_at
             text
         }
     }

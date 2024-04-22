@@ -7,7 +7,7 @@
     "test": "node test",
     "start": "node ./src/command/server.js",
     "start-graphiql-database": "npx ruru -SP -p 4001 -e http://localhost:4000/database/graphql",
-	"start-graphiql-system": "npx ruru -SP -p 4001 -e http://localhost:4000/system/graphql"
+    "start-graphiql-system": "npx ruru -SP -p 4001 -e http://localhost:4000/system/graphql"
   },
   "author": "Alex Ahn",
   "devDependencies": {
@@ -17,7 +17,6 @@
   "type": "module",
   "dependencies": {
     "better-sqlite3": "^9.5.0",
-    "deepcopy": "^2.1.0",
     "dotenv": "^16.4.5",
     "find-config": "^1.0.0",
     "graphql": "^16.8.1",

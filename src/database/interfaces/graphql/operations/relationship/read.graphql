@@ -1,8 +1,28 @@
-query ReadRelationship($where: Relationship_Query__Attributes) {
-    read_relationship(where: $where) {
+query ReadRelationship(
+	$where: Relationship_Query__Attributes,
+	$limit: Int,
+	$offset: Int,
+	$order: String,
+	$order_direction: String,
+	$order_nulls: String
+) {
+    read_relationship(
+		where: $where,
+		limit: $limit,
+		offset: $offset,
+		order: $order,
+		order_direction: $order_direction,
+		order_nulls: $order_nulls
+	) {
         attributes {
-            id
-            text
+			_id
+			_created_at
+			_updated_at
+			_deleted_at
+			_from_type
+			_from_id
+			_to_type
+			_to_id
         }
     }
 }

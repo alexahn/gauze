@@ -15,9 +15,9 @@ const SQL_DATABASE_ENTITY1_FIELDS = {
 }
 const SQL_DATABASE_ENTITY1_PROTECTED_FIELDS = ['id', 'created_at', 'updated_at', 'deleted_at']
 const SQL_DATABASE_ENTITY1_FIELD_SERIALIZERS = {
-	created_at: SERIALIZER_CREATED_AT_STRUCTURE,
-	updated_at: SERIALIZER_UPDATED_AT_STRUCTURE,
-	deleted_at: SERIALIZER_DELETED_AT_STRUCTURE
+	created_at: SERIALIZER_CREATED_AT_STRUCTURE('created_at'),
+	updated_at: SERIALIZER_UPDATED_AT_STRUCTURE('updated_at'),
+	deleted_at: SERIALIZER_DELETED_AT_STRUCTURE('deleted_at')
 }
 
 export {

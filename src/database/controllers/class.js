@@ -5,22 +5,7 @@ const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH)
 
 import * as $kernel from './../../kernel/index.js'
 
-/*
-class DatabaseController {
-	constructor (config, model) {
-		this.config = config
-		this.name = this.__name()
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor.exit`)
-	}
-	__name () {
-		return this.constructor.name
-	}
-}
-*/
-
-// todo: authorization, rate limiting, etc
-// input model is a system model
-//class DatabaseModelDatabaseController extends DatabaseController {
+// input model is a database model
 class DatabaseController {
 	constructor (config, model) {
 		//super(config)
@@ -44,9 +29,10 @@ class DatabaseController {
 			transaction
 		}
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.create:enter`, 'input', input)
-		return this.model.create(context, input).then(function (rows) {
+		input.attributes = self.model.serialize(input.attributes, 'create')
+		return self.model.create(context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.serialize_output(row)
+				return self.model.deserialize(row)
 			})
 		})
 	}
@@ -65,7 +51,7 @@ class DatabaseController {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.read:enter`, 'input', input)
 		return this.model.read(context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.serialize_output(row)
+				return self.model.deserialize(row)
 			})
 		})
 	}
@@ -82,9 +68,10 @@ class DatabaseController {
 			transaction
 		}
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.update:enter`, 'input', input)
-		return this.model.update(context, input).then(function (rows) {
+		input.attributes = self.model.serialize(input.attributes, 'update')
+		return self.model.update(context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.serialize_output(row)
+				return self.model.deserialize(row)
 			})
 		})
 	}
@@ -103,13 +90,12 @@ class DatabaseController {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.delete:enter`, 'input', input)
 		return this.model.delete(context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.serialize_output(row)
+				return self.model.deserialize(row)
 			})
 		})
 	}
 }
 
 export {
-	DatabaseController,
-	//DatabaseModelDatabaseController
+	DatabaseController
 }

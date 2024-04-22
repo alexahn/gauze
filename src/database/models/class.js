@@ -6,72 +6,26 @@ const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH)
 import * as $kernel from './../../kernel/index.js'
 import * as $structure from './../../structure/index.js'
 
-class DatabaseModel {
-	constructor (config) {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:enter`)
-		this.config = config
-		this.name = this.__name()
-		this.relationship_table = $structure.relationship.database.sql.SQL_DATABASE_RELATIONSHIP_TABLE_NAME
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
-	}
-	__name () {
-		return this.constructor.name
-	}
-	serialize_input (attributes, method) {
-		const self = this
-		// clear attributes for protected fields
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_input:enter`, 'attributes', attributes)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_input:enter`, 'method', method)
-		if (this.protected_fields && this.protected_fields.length) {
-			this.protected_fields.forEach(function (field) {
-				delete attributes[field]
-			})
-		}
-		// input serializers
-		Object.keys(this.field_serializers).forEach(function (field) {
-			if (self.field_serializers[field].input[method]) {
-				attributes = self.field_serializers[field].input[method](attributes)
-			}
-		})
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_input:exit`, 'attributes', attributes)
-		return attributes
-	}
-	serialize_output (row) {
-		const self = this
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_output:enter`, 'row', row)
-		Object.keys(this.field_serializers).forEach(function (field) {
-			row = self.field_serializers[field].output(row)
-		})
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_output:exit`, 'row', row)
-		return row
-	}
-}
-
 // constructor (config, input)
 // method (context, input)
-class KnexDatabaseModel extends DatabaseModel {
-	constructor ({
+class DatabaseModel extends $kernel.models._class.Model {
+	constructor(config, {
 		table,
-		primary_key,
-		fields,
-		protected_fields,
-		field_serializers
+		primary_key
 	}) {
-		super({})
+		super(config)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:enter`)
 		this.table = table
 		this.primary_key = primary_key
-		this.fields = fields
-		this.protected_fields = protected_fields
-		this.field_serializers = field_serializers
+		//this.fields = fields
 		this.name = this._name()
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
 	}
-	_name () {
+	_name() {
 		return `[${this.table}]${this.constructor.name}`
 	}
 	// create a row
-	create ({
+	create({
 		source,
 		database,
 		transaction
@@ -81,7 +35,6 @@ class KnexDatabaseModel extends DatabaseModel {
 		const self = this
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'source', source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'attributes', attributes)
-		attributes = self.serialize_input(attributes, 'create')
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'serialized attributes', attributes)
 		const sql = database(self.table)
 			.insert(attributes, [self.primary_key])
@@ -111,7 +64,7 @@ class KnexDatabaseModel extends DatabaseModel {
 		})
 	}
 	// read a row
-	read ({
+	read({
 		source,
 		database,
 		transaction
@@ -183,7 +136,7 @@ class KnexDatabaseModel extends DatabaseModel {
 		}
 	}
 	// update a row
-	update ({
+	update({
 		source,
 		database,
 		transaction
@@ -200,7 +153,6 @@ class KnexDatabaseModel extends DatabaseModel {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'source', source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'where', where)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'attributes', attributes)
-		attributes = self.serialize_input(attributes, 'update')
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'serialized attributes', attributes)
 		if (source && source._metadata) {
 			// note: manual approach: do a query to get a set of ids and pass those into a where in clause
@@ -333,7 +285,7 @@ class KnexDatabaseModel extends DatabaseModel {
 		}
 	}
 	// delete a row
-	delete ({
+	delete({
 		source,
 		database,
 		transaction
@@ -349,7 +301,7 @@ class KnexDatabaseModel extends DatabaseModel {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'source', source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'where', where)
 		// todo: use attributes and update deleted_at instead of deleting the row
-		//attributes = self.serialize_input(attributes, 'delete')
+		//attributes = self.serialize(attributes, 'delete')
 		if (source && source._metadata) {
 			// note: manual approach: do a query to get a set of ids and pass those into a where in clause
 			// note: there might be a way to do this in one shot by doing a join query, but this approach is not terrible because we can handle 1 million ids in memory fine
@@ -473,6 +425,5 @@ class KnexDatabaseModel extends DatabaseModel {
 }
 
 export {
-	DatabaseModel,
-	KnexDatabaseModel
+	DatabaseModel
 }

@@ -65,6 +65,7 @@ function create_graphql_handler (schema, req, res) {
 			}).then(function (data) {
 				//console.log('result', JSON.stringify(data, null, 4))
 				if (data.errors && data.errors.length) {
+					console.log(data.errors)
 					return transaction.rollback().then(function () {
 						console.log('transaction reverted')
 						// database.destroy()

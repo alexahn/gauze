@@ -18,48 +18,9 @@ const SQL_DATABASE_RELATIONSHIP_FIELDS = {
 }
 const SQL_DATABASE_RELATIONSHIP_PROTECTED_FIELDS = ['_id', '_created_at', '_updated_at', '_deleted_at']
 const SQL_DATABASE_RELATIONSHIP_FIELD_SERIALIZERS = {
-	_created_at: {
-		input: {
-			create: function (attributes) {
-				attributes._created_at = new Date()
-				return attributes
-			}
-		},
-		output: function (row) {
-			row._created_at = new Date(row._created_at)
-			return row
-		}
-	},
-	_updated_at: {
-		input: {
-			create: function (attributes) {
-				attributes._updated_at = new Date()
-				return attributes
-			},
-			update: function (attributes) {
-				attributes._updated_at = new Date()
-				return attributes
-			}
-		},
-		output: function (row) {
-			row._updated_at = new Date(row._updated_at)
-			return row
-		}
-	},
-	_deleted_at: {
-		input: {
-			delete: function (attributes) {
-				attributes._deleted_at = new Date()
-				return attributes
-			}
-		},
-		output: function (row) {
-			if (row._deleted_at) {
-				row._deleted_at = new Date(row._deleted_at)
-			}
-			return row
-		}
-	}
+	_created_at: SERIALIZER_CREATED_AT_STRUCTURE('_created_at'),
+	_updated_at: SERIALIZER_UPDATED_AT_STRUCTURE('_updated_at'),
+	_deleted_at: SERIALIZER_DELETED_AT_STRUCTURE('_deleted_at')
 }
 
 export {

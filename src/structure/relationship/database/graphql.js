@@ -41,6 +41,10 @@ const GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE = {
 		type: GraphQLDate,
 		description: 'updated_at'
 	},
+	_deleted_at: {
+		type: GraphQLDate,
+		description: 'deleted_at'
+	},
 	_from_type: {
 		type: GraphQLString,
 		description: 'from'

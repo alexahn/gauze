@@ -1,7 +1,24 @@
-query ReadEntity1($where: Entity1_Query__Attributes) {
-    read_entity1(where: $where) {
+query ReadEntity1(
+	$where: Entity1_Query__Attributes,
+	$limit: Int,
+	$offset: Int,
+	$order: String,
+	$order_direction: String,
+	$order_nulls: String
+) {
+    read_entity1(
+		where: $where,
+		limit: $limit,
+		offset: $offset,
+		order: $order,
+		order_direction: $order_direction,
+		order_nulls: $order_nulls
+	) {
         attributes {
             id
+			created_at
+			updated_at
+			deleted_at
             text
         }
     }

@@ -96,14 +96,23 @@
 	[ ] example: _id to gauze__relationship__id
 	[ ] example: _from_id to gauze__relationship__from_id
 	[ ] we want to avoid naming conflicts on joins with builtin tables
-[ ] refactor system controllers to use graphql queries/mutations against the database interface
-	[ ] might as well set it up now
+[x] refactor system controllers to use graphql queries/mutations against the database interface
+	[x] might as well set it up now
 	[x] copy existing system controllers and interface to database
 	[ ] will help with serializer logic as well since the serializers will all run at the database level
 	[ ] where in and where not in exposed to graphql
 		[ ] value is a string key that is a key to a value in cache
+	[ ] implement error visibility (right now it's a little rough if something goes wrong)
 [x] move server.js into command
-[ ] kernel/controller.js
-[ ] kernel/model.js
+[ ] turn kernel into a proper stack
+	[x] kernel/controllers/class.js
+	[x] kernel/models/class.js
 [ ] serialize / deserialize
 	[ ] call serialize and deserialize from controllers, but defined on models
+[ ] update constants in interface to use the subdirectory (e.g. add GRAPHQL)
+[ ] convert operations from strings to source objectdebugging purposes
+	[ ] https://github.com/graphql/graphql-js/blob/main/src/language/source.ts
+[ ] update update and delete mutations to accept limit, offset, and order arguments 
+[ ] grep -r \~ .
+	[ ] vim shows ~ at the end of a file so sometimes it can blend in
+[ ] change serializers to be generators that accept a field name

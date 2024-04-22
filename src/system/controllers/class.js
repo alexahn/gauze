@@ -43,7 +43,7 @@ class SystemModelSystemController extends SystemController {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.create:enter`, 'input', input)
 		return this.model.create(context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.serialize_output(row)
+				return self.model.deserialize(row)
 			})
 		})
 	}
@@ -62,7 +62,7 @@ class SystemModelSystemController extends SystemController {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.read:enter`, 'input', input)
 		return this.model.read(context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.serialize_output(row)
+				return self.model.deserialize(row)
 			})
 		})
 	}
@@ -81,7 +81,7 @@ class SystemModelSystemController extends SystemController {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.update:enter`, 'input', input)
 		return this.model.update(context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.serialize_output(row)
+				return self.model.deserialize(row)
 			})
 		})
 	}
@@ -100,7 +100,7 @@ class SystemModelSystemController extends SystemController {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.delete:enter`, 'input', input)
 		return this.model.delete(context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.serialize_output(row)
+				return self.model.deserialize(row)
 			})
 		})
 	}
