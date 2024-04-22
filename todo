@@ -67,7 +67,6 @@
 [x] update graphql type names to use two underscores as a separator
 [x] change relationship column names (from to from_type, to to to_type)
 [x] enable variables for graphql server
-[ ] use a higher level http server (express, fastify, koa, etc)
 [x] investigate why orderBy is not working in knex with sqlite3
 	[x] order_nulls breaks the query
 	[x] remove order_nulls for now until we find a solution
@@ -107,12 +106,17 @@
 [ ] turn kernel into a proper stack
 	[x] kernel/controllers/class.js
 	[x] kernel/models/class.js
-[ ] serialize / deserialize
-	[ ] call serialize and deserialize from controllers, but defined on models
+	[ ] kernel/interfaces
+[x] serialize / deserialize
+	[x] call serialize and deserialize from controllers, but defined on models
 [ ] update constants in interface to use the subdirectory (e.g. add GRAPHQL)
-[ ] convert operations from strings to source objectdebugging purposes
+[ ] convert operations from strings to source object for debugging purposes
 	[ ] https://github.com/graphql/graphql-js/blob/main/src/language/source.ts
 [ ] update update and delete mutations to accept limit, offset, and order arguments 
-[ ] grep -r \~ .
-	[ ] vim shows ~ at the end of a file so sometimes it can blend in
-[ ] change serializers to be generators that accept a field name
+[x] grep -r \~ .
+	[x] vim shows ~ at the end of a file so sometimes it can blend in
+[x] change serializers to be generators that accept a field name
+[ ] basic authentication and session management so we have the concept of a user
+	[ ] account table (look at how passport and nextjs auth create their tables)
+	[ ] proxy graphiql via server
+	[ ] use a higher level http server (express, fastify, koa, etc) ?
