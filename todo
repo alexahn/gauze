@@ -100,3 +100,9 @@
 	[ ] might as well set it up now
 	[ ] will help with serializer logic as well since the serializers will all run at the database level
 [x] move server.js into command
+[ ] kernel/controller.js
+[ ] kernel/model.js
+[ ] serialize / deserialize
+	[ ] call serialize and deserialize from controllers, but defined on models
+[ ] where in exposed to graphql
+	[ ] value is a string key that is a key to a value in cache
