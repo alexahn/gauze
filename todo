@@ -79,12 +79,20 @@
 	[x] add primary key to sql structures
 [ ] refactor logger to make it functional (e.g. stop mutating arrays and have functions return fully transformed items)
 	[ ] remove the magic string by fully implementing the correct stack marking algorithm
-[ ] testing
+[x] testing
 	[x] set up example queries that line up with the seeded data
 	[x] test create, read, update, delete
 	[x] test relationships
-	[ ] test nested mutation and queries
+	[x] test nested mutation and queries
 [x] force sqlite file to be made at the root directory
-[ ] programmatically manage created_at, updated_at, deleted_at
-	[ ] delete the fields prior to constructing a sql query
-	[ ] have the model handle them
+[x] programmatically manage created_at, updated_at, deleted_at, id
+	[x] add protected fields to sql structures
+	[x] delete the fields prior to constructing a sql query
+	[x] have the model handle them
+	[x] add serializers to fields
+[ ] add graphql shell
+[ ] soft delete
+[ ] rename columns in relationship table
+	[ ] example: _id to gauze__relationship__id
+	[ ] example: _from_id to gauze__relationship__from_id
+	[ ] we want to avoid naming conflicts on joins with mandatory tables

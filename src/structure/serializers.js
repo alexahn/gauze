@@ -1,3 +1,48 @@
+const SERIALIZER_CREATED_AT_STRUCTURE = {
+	input: {
+		create: function (attributes) {
+			attributes.created_at = new Date()
+			return attributes
+		}
+	},
+	output: function (row) {
+		row.created_at = new Date(row.created_at)
+		return row
+	}
+}
+
+const SERIALIZER_UPDATED_AT_STRUCTURE = {
+	input: {
+		create: function (attributes) {
+			attributes.updated_at = new Date()
+			return attributes
+		},
+		update: function (attributes) {
+			attributes.updated_at = new Date()
+			return attributes
+		}
+	},
+	output: function (row) {
+		row.updated_at = new Date(row.updated_at)
+		return row
+	}
+}
+
+const SERIALIZER_DELETED_AT_STRUCTURE = {
+	input: {
+		delete: function (attributes) {
+			attributes.deleted_at = new Date()
+			return attributes
+		}
+	},
+	output: function (row) {
+		if (row.deleted_at) {
+			row.deleted_at = new Date(row.deleted_at)
+		}
+		return row
+	}
+}
+
 class GraphQLSerializer {
 	constructor ({
 		graphql_type
@@ -29,5 +74,8 @@ class GraphQLSerializer {
 }
 
 export {
+	SERIALIZER_CREATED_AT_STRUCTURE,
+	SERIALIZER_UPDATED_AT_STRUCTURE,
+	SERIALIZER_DELETED_AT_STRUCTURE,
 	GraphQLSerializer
 }

@@ -8,6 +8,7 @@ import * as $structure from './../../structure/index.js'
 
 class DatabaseModel {
 	constructor (config) {
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:enter`)
 		this.config = config
 		this.name = this.__name()
 		this.relationship_table = $structure.relationship.database.sql.SQL_DATABASE_RELATIONSHIP_TABLE_NAME
@@ -16,15 +17,54 @@ class DatabaseModel {
 	__name () {
 		return this.constructor.name
 	}
+	serialize_input (attributes, method) {
+		const self = this
+		// clear attributes for protected fields
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_input:enter`, 'attributes', attributes)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_input:enter`, 'method', method)
+		if (this.protected_fields && this.protected_fields.length) {
+			this.protected_fields.forEach(function (field) {
+				delete attributes[field]
+			})
+		}
+		// input serializers
+		Object.keys(this.field_serializers).forEach(function (field) {
+			if (self.field_serializers[field].input[method]) {
+				attributes = self.field_serializers[field].input[method](attributes)
+			}
+		})
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_input:exit`, 'attributes', attributes)
+		return attributes
+	}
+	serialize_output (row) {
+		const self = this
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_output:enter`, 'row', row)
+		Object.keys(this.field_serializers).forEach(function (field) {
+			console.log('field', field)
+			row = self.field_serializers[field].output(row)
+		})
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_output:exit`, 'row', row)
+		return row
+	}
 }
 
 // constructor (config, input)
 // method (context, input)
 class KnexDatabaseModel extends DatabaseModel {
-	constructor (config, table, primary_key) {
-		super(config)
+	constructor ({
+		table,
+		primary_key,
+		fields,
+		protected_fields,
+		field_serializers
+	}) {
+		super({})
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:enter`)
 		this.table = table
 		this.primary_key = primary_key
+		this.fields = fields
+		this.protected_fields = protected_fields
+		this.field_serializers = field_serializers
 		this.name = this._name()
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
 	}
@@ -42,10 +82,12 @@ class KnexDatabaseModel extends DatabaseModel {
 		const self = this
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'source', source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'attributes', attributes)
+		attributes = self.serialize_input(attributes, 'create')
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'serialized attributes', attributes)
 		const sql = database(self.table)
 			.insert(attributes, [self.primary_key])
 			.transacting(transaction)
-		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+		if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
 			$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.create:debug_sql`, sql.toString())
 		}
 		return sql.then(function (data) {
@@ -108,7 +150,7 @@ class KnexDatabaseModel extends DatabaseModel {
 				.offset(offset)
 				.orderBy(joined_order, order_direction, order_nulls)
 				.transacting(transaction)
-			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
 				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString())
 			}
 			return sql.then(function (data) {
@@ -128,7 +170,7 @@ class KnexDatabaseModel extends DatabaseModel {
 				//.orderBy(order, order_direction, order_nulls)
 				.orderBy(order, order_direction)
 				.transacting(transaction)
-			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
 				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString())
 			}
 			return sql.then(function (data) {
@@ -159,6 +201,8 @@ class KnexDatabaseModel extends DatabaseModel {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'source', source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'where', where)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'attributes', attributes)
+		attributes = self.serialize_input(attributes, 'update')
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'serialized attributes', attributes)
 		if (source && source._metadata) {
 			// note: manual approach: do a query to get a set of ids and pass those into a where in clause
 			// note: there might be a way to do this in one shot by doing a join query, but this approach is not terrible because we can handle 1 million ids in memory fine
@@ -184,7 +228,7 @@ class KnexDatabaseModel extends DatabaseModel {
 					.whereIn(self.primary_key, valid_ids)
 					.update(attributes)
 					.transacting(transaction)
-				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
 					$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString())
 				}
 				return sql.then(function (data) {
@@ -237,7 +281,7 @@ class KnexDatabaseModel extends DatabaseModel {
 				//.where(`${self.relationship_table}._to_id`, '=', `${self.table}.id`)
 				//.where(joined_where)
 				.transacting(transaction)
-			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
 				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString())
 			}
 			return sql.then(function (data) {
@@ -265,7 +309,7 @@ class KnexDatabaseModel extends DatabaseModel {
 				.where(where)
 				.update(attributes)
 				.transacting(transaction)
-			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
 				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString())
 			}
 			return sql.then(function (data) {
@@ -305,6 +349,8 @@ class KnexDatabaseModel extends DatabaseModel {
 		var self = this
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'source', source)
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'where', where)
+		// todo: use attributes and update deleted_at instead of deleting the row
+		//attributes = self.serialize_input(attributes, 'delete')
 		if (source && source._metadata) {
 			// note: manual approach: do a query to get a set of ids and pass those into a where in clause
 			// note: there might be a way to do this in one shot by doing a join query, but this approach is not terrible because we can handle 1 million ids in memory fine
@@ -330,7 +376,7 @@ class KnexDatabaseModel extends DatabaseModel {
 					.whereIn(self.primary_key, valid_ids)
 					.del()
 					.transacting(transaction)
-				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
 					$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString())
 				}
 				return sql.then(function (data) {
@@ -373,7 +419,7 @@ class KnexDatabaseModel extends DatabaseModel {
 				.where(`${self.relationship_table}._from_type`, PARENT_SQL_TABLE)
 				.del()
 				.transacting(transaction)
-			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
 				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString())
 			}
 			return sql.then(function (data) {
@@ -401,7 +447,7 @@ class KnexDatabaseModel extends DatabaseModel {
 				.where(where)
 				.del()
 				.transacting(transaction)
-			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
 				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString())
 			}
 			return sql.then(function (data) {

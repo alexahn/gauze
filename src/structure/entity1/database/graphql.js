@@ -40,6 +40,10 @@ const GRAPHQL_DATABASE_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE = {
 		type: GraphQLDate,
 		description: 'updated_at'
 	},
+	deleted_at: {
+		type: GraphQLDate,
+		description: 'updated_at'
+	},
 	text: {
 		type: GraphQLString,
 		description: 'text'

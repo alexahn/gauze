@@ -34,13 +34,18 @@ class SystemModelSystemController extends SystemController {
 		database,
 		transaction
 	}, input) {
+		const self = this
 		const context = {
 			source,
 			database,
 			transaction
 		}
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.create:enter`, 'input', input)
-		return this.model.create(context, input)
+		return this.model.create(context, input).then(function (rows) {
+			return rows.map(function (row) {
+				return self.model.serialize_output(row)
+			})
+		})
 	}
 	read ({
 		user,
@@ -48,13 +53,18 @@ class SystemModelSystemController extends SystemController {
 		database,
 		transaction
 	}, input) {
+		const self = this
 		const context = {
 			source,
 			database,
 			transaction
 		}
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.read:enter`, 'input', input)
-		return this.model.read(context, input)
+		return this.model.read(context, input).then(function (rows) {
+			return rows.map(function (row) {
+				return self.model.serialize_output(row)
+			})
+		})
 	}
 	update ({
 		user,
@@ -62,13 +72,18 @@ class SystemModelSystemController extends SystemController {
 		database,
 		transaction
 	}, input) {
+		const self = this
 		const context = {
 			source,
 			database,
 			transaction
 		}
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.update:enter`, 'input', input)
-		return this.model.update(context, input)
+		return this.model.update(context, input).then(function (rows) {
+			return rows.map(function (row) {
+				return self.model.serialize_output(row)
+			})
+		})
 	}
 	delete ({
 		user,
@@ -76,13 +91,18 @@ class SystemModelSystemController extends SystemController {
 		database,
 		transaction
 	}, input) {
+		const self = this
 		const context = {
 			source,
 			database,
 			transaction
 		}
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.delete:enter`, 'input', input)
-		return this.model.delete(context, input)
+		return this.model.delete(context, input).then(function (rows) {
+			return rows.map(function (row) {
+				return self.model.serialize_output(row)
+			})
+		})
 	}
 }
 

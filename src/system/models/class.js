@@ -26,6 +26,15 @@ class DatabaseModelSystemModel extends SystemModel {
 	_name () {
 		return `[${this.model.name}]${this.constructor.name}`
 	}
+	serialize_input (attributes, method) {
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_input:enter`, 'attributes', attributes)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_input:enter`, 'method', method)
+		return this.model.serialize_input(attributes, method)
+	}
+	serialize_output (row) {
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.serialize_output:enter`, 'row', row)
+		return this.model.serialize_output(row)
+	}
 	create (context, input) {
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.create:enter`, 'input', input)
 		return this.model.create(context, input)
