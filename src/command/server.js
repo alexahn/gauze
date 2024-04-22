@@ -12,8 +12,16 @@ import {
 } from 'graphql-http';
 
 import {
-	SCHEMA_GRAPHQL_INTERFACE_SYSTEM as schema
+	//link as link_system_schema,
+	//root as root_system_schema,
+	SCHEMA_GRAPHQL_INTERFACE_SYSTEM
+	//build as build_system_schema
 } from './../system/interfaces/graphql/schema.js';
+
+import {
+	//build as build_database_schema
+	SCHEMA_GRAPHQL_INTERFACE_DATABASE
+} from './../database/interfaces/graphql/schema.js'
 
 import {
 	create_connection
@@ -26,121 +34,87 @@ const handler = createHandler({
 });
 */
 
+// seems we need to link the system before we link the database?
+// why aren't these mutually exclusive?
+//const SCHEMA_GRAPHQL_INTERFACE_DATABASE = build_database_schema()
+//const SCHEMA_GRAPHQL_INTERFACE_SYSTEM = build_system_schema()
+
 const database = create_connection()
+
+function create_graphql_handler (schema, req, res) {
+	var body = ''
+	req.on('data', function (chunk) {
+		body += chunk
+	})
+	req.on('end', function () {
+		try {
+			var parsed = JSON.parse(body)
+		} catch (err) {
+			red.end(JSON.stringify(err))
+		}
+		return database.transaction(function (transaction) {
+			const context = {}
+			context.database = database
+			context.transaction = transaction
+			return graphql({
+				schema: schema,
+				source: parsed.query,
+				contextValue: context,
+				variableValues: parsed.variables,
+				operationName: parsed.operationName
+			}).then(function (data) {
+				//console.log('result', JSON.stringify(data, null, 4))
+				if (data.errors && data.errors.length) {
+					return transaction.rollback().then(function () {
+						console.log('transaction reverted')
+						// database.destroy()
+						res.writeHead(400, 'Bad Request', {
+							'content-type': 'application/json; charset=utf-8'
+						}).end(JSON.stringify(data))
+					}).catch(function (err) {
+						console.log('transaction failed to revert', err)
+						res.writeHead(500, 'Internal Server Error', {
+							'content-type': 'application/json; charset=utf-8'
+						}).end(JSON.stringify(data))
+					})
+				} else {
+					return transaction.commit(data).then(function () {
+						// write to body
+						console.log('transaction committed')
+						//database.destroy()
+						res.writeHead(200, 'OK', {
+							'content-type': 'application/json; charset=utf-8'
+						}).end(JSON.stringify(data))
+					}).catch(function (err) {
+						console.log('transaction failed to commit', err)
+						res.writeHead(500, 'Internal Server Error', {
+							'content-type': 'application/json; charset=utf-8'
+						}).end(JSON.stringify(data))
+					})
+				}
+			}).catch(function (err) {
+				console.log('err', err)
+				//database.destroy()
+				return transaction.rollback(err).then(function () {
+					res.writeHead(500, 'Internal Server Error', {
+						'content-type': 'application/json; charset=utf-8'
+					}).end(JSON.stringify(err))
+				}).catch(function (err) {
+					res.writeHead(500, 'Internal Server Error', {
+						'content-type': 'application/json; charset=utf-8'
+					}).end(JSON.stringify(err))
+				})
+			})
+		})
+	})
+}
 
 // Create a HTTP server using the listener on `/graphql`
 const server = http.createServer((req, res) => {
-	if (req.url.startsWith('/graphql')) {
-		//const database = create_connection()
-		var body = ''
-		req.on('data', function (chunk) {
-			body += chunk
-		})
-		req.on('end', function () {
-			try {
-				var parsed = JSON.parse(body)
-			} catch (err) {
-				red.end(JSON.stringify(err))
-			}
-			database.transaction(function (transaction) {
-				const context = {}
-				context.database = database
-				context.transaction = transaction
-				graphql({
-					schema: schema,
-					source: parsed.query,
-					contextValue: context,
-					variableValues: parsed.variables,
-					operationName: parsed.operationName
-				}).then(function (data) {
-					//console.log('result', JSON.stringify(data, null, 4))
-					if (data.errors && data.errors.length) {
-						return transaction.rollback().then(function () {
-							console.log('transaction reverted')
-							// database.destroy()
-							res.writeHead(400, 'Bad Request', {
-								'content-type': 'application/json; charset=utf-8'
-							}).end(JSON.stringify(data))
-						}).catch(function (err) {
-							console.log('transaction failed to revert', err)
-							res.writeHead(500, 'Internal Server Error', {
-								'content-type': 'application/json; charset=utf-8'
-							}).end(JSON.stringify(data))
-						})
-					} else {
-						return transaction.commit(data).then(function () {
-							// write to body
-							console.log('transaction committed')
-							//database.destroy()
-							res.writeHead(200, 'OK', {
-								'content-type': 'application/json; charset=utf-8'
-							}).end(JSON.stringify(data))
-						}).catch(function (err) {
-							console.log('transaction failed to commit', err)
-							res.writeHead(500, 'Internal Server Error', {
-								'content-type': 'application/json; charset=utf-8'
-							}).end(JSON.stringify(data))
-						})
-					}
-				}).catch(function (err) {
-					console.log('err', err)
-					//database.destroy()
-					return transaction.rollback(err).then(function () {
-						res.writeHead(500, 'Internal Server Error', {
-							'content-type': 'application/json; charset=utf-8'
-						}).end(JSON.stringify(err))
-					}).catch(function (err) {
-						res.writeHead(500, 'Internal Server Error', {
-							'content-type': 'application/json; charset=utf-8'
-						}).end(JSON.stringify(err))
-					})
-				})
-			})
-
-			/*
-			const handle = createHandler({
-				schema,
-				context
-			});
-
-			try {
-				if (!req.url) {
-					throw new Error('Missing request URL');
-				}
-				if (!req.method) {
-					throw new Error('Missing request method');
-				}
-				handle(toRequest(req, res)).then(function ([body, init]) {
-
-					if (body.errors && body.errors.length) {
-						transaction.rollback().then(function () {
-							console.log('reverting transaction')
-							res.writeHead(init.status, init.statusText, init.headers).end(body);
-						})
-					} else {
-						transaction.commit().then(function () {
-							console.log('committing transaction')
-							res.writeHead(init.status, init.statusText, init.headers).end(body);
-						})
-					}
-					//res.writeHead(init.status, init.statusText, init.headers).end(body);
-
-				}).catch(function (err) {
-					
-				})
-			} catch (err) {
-				// The handler shouldnt throw errors.
-				// If you wish to handle them differently, consider implementing your own request handler.
-				console.error(
-					'Internal error occurred during request handling. ' +
-					'Please check your implementation.',
-					err,
-				);
-				res.writeHead(500).end();
-			}
-			//handler(req, res);
-			*/
-		})
+	if (req.url.startsWith('/database/graphql')) {
+		return create_graphql_handler(SCHEMA_GRAPHQL_INTERFACE_DATABASE, req, res)
+	} else if (req.url.startsWith('/system/graphql')) {
+		return create_graphql_handler(SCHEMA_GRAPHQL_INTERFACE_SYSTEM, req, res)
 	} else {
 		res.writeHead(404).end();
 	}

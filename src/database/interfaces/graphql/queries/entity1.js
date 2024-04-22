@@ -15,25 +15,25 @@ import {
 } from 'graphql';
 
 import {
-	ENTITY1_CONTROLLER_SYSTEM,
+	ENTITY1_CONTROLLER_DATABASE,
 } from './../../../controllers/entity1.js'
 
 const ENTITY1_SERIALIZER = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.entity1.system.graphql.GRAPHQL_SYSTEM_ENTITY1_TYPE_STRUCTURE
+	graphql_type: $structure.entity1.database.graphql.GRAPHQL_DATABASE_ENTITY1_TYPE_STRUCTURE
 })
 
-const ENTITY1_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new GraphQLInputObjectType({
+const ENTITY1_ATTRIBUTES_QUERY_INTERFACE_DATABASE = new GraphQLInputObjectType({
 	name: 'Entity1_Query__Attributes',
 	description: 'Entity1 Query Attributes',
-	fields: $structure.entity1.system.graphql.GRAPHQL_SYSTEM_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
+	fields: $structure.entity1.database.graphql.GRAPHQL_DATABASE_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
 })
 
-const ENTITY1_READ_QUERY_INTERFACE_SYSTEM = {
-	type: new GraphQLList($structure.entity1.system.graphql.GRAPHQL_SYSTEM_ENTITY1_QUERY_STRUCTURE),
+const ENTITY1_READ_QUERY_INTERFACE_DATABASE = {
+	type: new GraphQLList($structure.entity1.database.graphql.GRAPHQL_DATABASE_ENTITY1_QUERY_STRUCTURE),
 	args: {
 		where: {
 			description: 'where',
-			type: ENTITY1_ATTRIBUTES_QUERY_INTERFACE_SYSTEM,
+			type: ENTITY1_ATTRIBUTES_QUERY_INTERFACE_DATABASE,
 		},
 		limit: {
 			description: 'limit',
@@ -57,20 +57,20 @@ const ENTITY1_READ_QUERY_INTERFACE_SYSTEM = {
 		}
 	},
 	resolve: (_source, query_arguments, context) => {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY1_READ_QUERY_INTERFACE_SYSTEM.resolve:enter', '_source', _source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY1_READ_QUERY_INTERFACE_SYSTEM.resolve:enter', 'query_arguments', query_arguments)
-		return ENTITY1_CONTROLLER_SYSTEM.read({
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY1_READ_QUERY_INTERFACE_DATABASE.resolve:enter', '_source', _source)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY1_READ_QUERY_INTERFACE_DATABASE.resolve:enter', 'query_arguments', query_arguments)
+		return ENTITY1_CONTROLLER_DATABASE.read({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction
 			}, query_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, 'ENTITY1_READ_QUERY_INTERFACE_SYSTEM.resolve:success', 'data', data)
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, 'ENTITY1_READ_QUERY_INTERFACE_DATABASE.resolve:success', 'data', data)
 				return data.map(ENTITY1_SERIALIZER.serialize)
 			})
 	}
 }
 
 export {
-	ENTITY1_READ_QUERY_INTERFACE_SYSTEM
+	ENTITY1_READ_QUERY_INTERFACE_DATABASE
 }

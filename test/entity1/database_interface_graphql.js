@@ -16,7 +16,7 @@ function execute ({
 	operationName
 }) {
 	return graphql({
-		schema: $gauze.system.interfaces.graphql.schema.SCHEMA_GRAPHQL_INTERFACE_SYSTEM,
+		schema: $gauze.database.interfaces.graphql.schema.SCHEMA_GRAPHQL_INTERFACE_DATABASE,
 		source,
 		contextValue,
 		variableValues,
@@ -24,7 +24,7 @@ function execute ({
 	})
 }
 
-test.describe('entity2 graphql interface system', function (suite_ctx) {
+test.describe('entity1 graphql interface database', function (suite_ctx) {
 	test.before(function (ctx) {
 		suite_ctx.database = $gauze.database.knex.create_connection('test')
 		return suite_ctx.database.migrate.latest().then(function () {
@@ -47,7 +47,7 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const create_query_file = path.resolve(import.meta.dirname, './graphql/create.graphql')
 			const create_query = fs.readFileSync(create_query_file).toString('utf8')
 			const source = create_query
-			const operationName = "CreateEntity2"
+			const operationName = "CreateEntity1"
 			const variableValues = {
 				attributes: {
 					created_at: new Date(),
@@ -67,8 +67,8 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.create_entity2.length, 1)
-					assert.strictEqual(data.data.create_entity2[0].attributes.text, variableValues.attributes.text)
+					assert.strictEqual(data.data.create_entity1.length, 1)
+					assert.strictEqual(data.data.create_entity1[0].attributes.text, variableValues.attributes.text)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -88,7 +88,7 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const read_query_file = path.resolve(import.meta.dirname, './graphql/read.graphql')
 			const read_query = fs.readFileSync(read_query_file).toString('utf8')
 			const source = read_query
-			const operationName = "ReadEntity2"
+			const operationName = "ReadEntity1"
 			const variableValues = {
 				where: {
 					id: "1"
@@ -106,8 +106,8 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.read_entity2.length, 1)
-					assert.strictEqual(data.data.read_entity2[0].attributes.id, variableValues.where.id)
+					assert.strictEqual(data.data.read_entity1.length, 1)
+					assert.strictEqual(data.data.read_entity1[0].attributes.id, variableValues.where.id)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -128,7 +128,7 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const read_query_file = path.resolve(import.meta.dirname, './graphql/read.graphql')
 			const read_query = fs.readFileSync(read_query_file).toString('utf8')
 			const source = read_query
-			const operationName = "ReadEntity2"
+			const operationName = "ReadEntity1"
 			const variableValues = {
 				where: {
 					id: "1"
@@ -146,14 +146,14 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.notStrictEqual(data.data.read_entity2[0].attributes.text, target_text)
+					assert.notStrictEqual(data.data.read_entity1[0].attributes.text, target_text)
 					return Promise.resolve(data)
 				})
 				.then(function () {
 					const update_query_file = path.resolve(import.meta.dirname, './graphql/update.graphql')
 					const update_query = fs.readFileSync(update_query_file).toString('utf8')
 					const source = update_query
-					const operationName = "UpdateEntity2"
+					const operationName = "UpdateEntity1"
 					const variableValues = {
 						where: {
 							id: "1"
@@ -174,8 +174,8 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 						})
 						.then(function (data) {
 							assert.strictEqual(data.errors, undefined)
-							assert.strictEqual(data.data.update_entity2.length, 1)
-							assert.strictEqual(data.data.update_entity2[0].attributes.text, variableValues.attributes.text)
+							assert.strictEqual(data.data.update_entity1.length, 1)
+							assert.strictEqual(data.data.update_entity1[0].attributes.text, variableValues.attributes.text)
 							return Promise.resolve(data)
 						})
 				})
@@ -198,7 +198,7 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const delete_query_file = path.resolve(import.meta.dirname, './graphql/delete.graphql')
 			const delete_query = fs.readFileSync(delete_query_file).toString('utf8')
 			const source = delete_query
-			const operationName = "DeleteEntity2"
+			const operationName = "DeleteEntity1"
 			const variableValues = {
 				where: {
 					id: "1"
@@ -219,14 +219,14 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 						console.log(data.errors)
 					}
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.delete_entity2.length, 0)
+					assert.strictEqual(data.data.delete_entity1.length, 0)
 					return Promise.resolve(data)
 				})
 				.then(function () {
 					const read_query_file = path.resolve(import.meta.dirname, './graphql/read.graphql')
 					const read_query = fs.readFileSync(read_query_file).toString('utf8')
 					const source = read_query
-					const operationName = "ReadEntity2"
+					const operationName = "ReadEntity1"
 					const variableValues = {
 						where: {
 							id: "1"
@@ -244,7 +244,7 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 						})
 						.then(function (data) {
 							assert.strictEqual(data.errors, undefined)
-							assert.notStrictEqual(data.data.read_entity2.length, 1)
+							assert.notStrictEqual(data.data.read_entity1.length, 1)
 							return Promise.resolve(data)
 						})
 				})
@@ -265,7 +265,7 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const create_query_file = path.resolve(import.meta.dirname, './graphql/create_nested_relationships.graphql')
 			const create_query = fs.readFileSync(create_query_file).toString('utf8')
 			const source = create_query
-			const operationName = "CreateEntity2NestedRelationships"
+			const operationName = "CreateEntity1NestedRelationships"
 			const variableValues = {
 				attributes1: {
 					created_at: new Date(),
@@ -290,10 +290,10 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.create_entity2.length, 1)
-					assert.strictEqual(data.data.create_entity2[0].attributes.text, variableValues.attributes1.text)
-					assert.strictEqual(data.data.create_entity2[0].relationships.create_entity1.length, 1)
-					assert.strictEqual(data.data.create_entity2[0].relationships.create_entity1[0].attributes.text, variableValues.attributes2.text)
+					assert.strictEqual(data.data.create_entity1.length, 1)
+					assert.strictEqual(data.data.create_entity1[0].attributes.text, variableValues.attributes1.text)
+					assert.strictEqual(data.data.create_entity1[0].relationships.create_entity2.length, 1)
+					assert.strictEqual(data.data.create_entity1[0].relationships.create_entity2[0].attributes.text, variableValues.attributes2.text)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -313,7 +313,7 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const read_query_file = path.resolve(import.meta.dirname, './graphql/read_nested_relationships.graphql')
 			const read_query = fs.readFileSync(read_query_file).toString('utf8')
 			const source = read_query
-			const operationName = "ReadEntity2NestedRelationships"
+			const operationName = "ReadEntity1NestedRelationships"
 			const variableValues = {
 				where1: {
 					id: "1"
@@ -334,10 +334,10 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.read_entity2.length, 1)
-					assert.strictEqual(data.data.read_entity2[0].attributes.id, variableValues.where1.id)
-					assert.strictEqual(data.data.read_entity2[0].relationships.read_entity1.length, 1)
-					assert.strictEqual(data.data.read_entity2[0].relationships.read_entity1[0].attributes.id, variableValues.where2.id)
+					assert.strictEqual(data.data.read_entity1.length, 1)
+					assert.strictEqual(data.data.read_entity1[0].attributes.id, variableValues.where1.id)
+					assert.strictEqual(data.data.read_entity1[0].relationships.read_entity2.length, 1)
+					assert.strictEqual(data.data.read_entity1[0].relationships.read_entity2[0].attributes.id, variableValues.where2.id)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -358,7 +358,7 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const update_query_file = path.resolve(import.meta.dirname, './graphql/update_nested_relationships.graphql')
 			const update_query = fs.readFileSync(update_query_file).toString('utf8')
 			const source = update_query
-			const operationName = "UpdateEntity2NestedRelationships"
+			const operationName = "UpdateEntity1NestedRelationships"
 			const variableValues = {
 				where1: {
 					id: "1"
@@ -385,12 +385,12 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.update_entity2.length, 1)
-					assert.strictEqual(data.data.update_entity2[0].attributes.id, variableValues.where1.id)
-					assert.strictEqual(data.data.update_entity2[0].attributes.text, variableValues.attributes1.text)
-					assert.strictEqual(data.data.update_entity2[0].relationships.update_entity1.length, 1)
-					assert.strictEqual(data.data.update_entity2[0].relationships.update_entity1[0].attributes.id, variableValues.where2.id)
-					assert.strictEqual(data.data.update_entity2[0].relationships.update_entity1[0].attributes.text, variableValues.attributes2.text)
+					assert.strictEqual(data.data.update_entity1.length, 1)
+					assert.strictEqual(data.data.update_entity1[0].attributes.id, variableValues.where1.id)
+					assert.strictEqual(data.data.update_entity1[0].attributes.text, variableValues.attributes1.text)
+					assert.strictEqual(data.data.update_entity1[0].relationships.update_entity2.length, 1)
+					assert.strictEqual(data.data.update_entity1[0].relationships.update_entity2[0].attributes.id, variableValues.where2.id)
+					assert.strictEqual(data.data.update_entity1[0].relationships.update_entity2[0].attributes.text, variableValues.attributes2.text)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -411,7 +411,7 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const delete_query_file = path.resolve(import.meta.dirname, './graphql/delete_nested_relationships.graphql')
 			const delete_query = fs.readFileSync(delete_query_file).toString('utf8')
 			const source = delete_query
-			const operationName = "DeleteEntity2NestedRelationships"
+			const operationName = "DeleteEntity1NestedRelationships"
 			const variableValues = {
 				where1: {
 					id: "1"
@@ -432,7 +432,7 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.delete_entity2.length, 0)
+					assert.strictEqual(data.data.delete_entity1.length, 0)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -452,7 +452,7 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const create_query_file = path.resolve(import.meta.dirname, './graphql/create_nested_mutation.graphql')
 			const create_query = fs.readFileSync(create_query_file).toString('utf8')
 			const source = create_query
-			const operationName = "CreateEntity2NestedMutation"
+			const operationName = "CreateEntity1NestedMutation"
 			const variableValues = {
 				attributes1: {
 					created_at: new Date(),
@@ -477,10 +477,10 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.create_entity2.length, 1)
-					assert.strictEqual(data.data.create_entity2[0].attributes.text, variableValues.attributes1.text)
-					assert.strictEqual(data.data.create_entity2[0].mutation.create_entity2.length, 1)
-					assert.strictEqual(data.data.create_entity2[0].mutation.create_entity2[0].attributes.text, variableValues.attributes2.text)
+					assert.strictEqual(data.data.create_entity1.length, 1)
+					assert.strictEqual(data.data.create_entity1[0].attributes.text, variableValues.attributes1.text)
+					assert.strictEqual(data.data.create_entity1[0].mutation.create_entity1.length, 1)
+					assert.strictEqual(data.data.create_entity1[0].mutation.create_entity1[0].attributes.text, variableValues.attributes2.text)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -500,7 +500,7 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const read_query_file = path.resolve(import.meta.dirname, './graphql/read_nested_query.graphql')
 			const read_query = fs.readFileSync(read_query_file).toString('utf8')
 			const source = read_query
-			const operationName = "ReadEntity2NestedQuery"
+			const operationName = "ReadEntity1NestedQuery"
 			const variableValues = {
 				where1: {
 					id: "1"
@@ -521,10 +521,10 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.read_entity2.length, 1)
-					assert.strictEqual(data.data.read_entity2[0].attributes.id, variableValues.where1.id)
-					assert.strictEqual(data.data.read_entity2[0].query.read_entity2.length, 1)
-					assert.strictEqual(data.data.read_entity2[0].query.read_entity2[0].attributes.id, variableValues.where2.id)
+					assert.strictEqual(data.data.read_entity1.length, 1)
+					assert.strictEqual(data.data.read_entity1[0].attributes.id, variableValues.where1.id)
+					assert.strictEqual(data.data.read_entity1[0].query.read_entity1.length, 1)
+					assert.strictEqual(data.data.read_entity1[0].query.read_entity1[0].attributes.id, variableValues.where2.id)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -545,7 +545,7 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const update_query_file = path.resolve(import.meta.dirname, './graphql/update_nested_mutation.graphql')
 			const update_query = fs.readFileSync(update_query_file).toString('utf8')
 			const source = update_query
-			const operationName = "UpdateEntity2NestedMutation"
+			const operationName = "UpdateEntity1NestedMutation"
 			const variableValues = {
 				where1: {
 					id: "1"
@@ -572,12 +572,12 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.update_entity2.length, 1)
-					assert.strictEqual(data.data.update_entity2[0].attributes.id, variableValues.where1.id)
-					assert.strictEqual(data.data.update_entity2[0].attributes.text, variableValues.attributes1.text)
-					assert.strictEqual(data.data.update_entity2[0].mutation.update_entity2.length, 1)
-					assert.strictEqual(data.data.update_entity2[0].mutation.update_entity2[0].attributes.id, variableValues.where2.id)
-					assert.strictEqual(data.data.update_entity2[0].mutation.update_entity2[0].attributes.text, variableValues.attributes2.text)
+					assert.strictEqual(data.data.update_entity1.length, 1)
+					assert.strictEqual(data.data.update_entity1[0].attributes.id, variableValues.where1.id)
+					assert.strictEqual(data.data.update_entity1[0].attributes.text, variableValues.attributes1.text)
+					assert.strictEqual(data.data.update_entity1[0].mutation.update_entity1.length, 1)
+					assert.strictEqual(data.data.update_entity1[0].mutation.update_entity1[0].attributes.id, variableValues.where2.id)
+					assert.strictEqual(data.data.update_entity1[0].mutation.update_entity1[0].attributes.text, variableValues.attributes2.text)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -598,7 +598,7 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 			const delete_query_file = path.resolve(import.meta.dirname, './graphql/delete_nested_mutation.graphql')
 			const delete_query = fs.readFileSync(delete_query_file).toString('utf8')
 			const source = delete_query
-			const operationName = "DeleteEntity2NestedMutation"
+			const operationName = "DeleteEntity1NestedMutation"
 			const variableValues = {
 				where1: {
 					id: "1"
@@ -619,7 +619,7 @@ test.describe('entity2 graphql interface system', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.strictEqual(data.data.delete_entity2.length, 0)
+					assert.strictEqual(data.data.delete_entity1.length, 0)
 					return Promise.resolve(data)
 				})
 				.then(function () {

@@ -98,11 +98,12 @@
 	[ ] we want to avoid naming conflicts on joins with builtin tables
 [ ] refactor system controllers to use graphql queries/mutations against the database interface
 	[ ] might as well set it up now
+	[x] copy existing system controllers and interface to database
 	[ ] will help with serializer logic as well since the serializers will all run at the database level
+	[ ] where in and where not in exposed to graphql
+		[ ] value is a string key that is a key to a value in cache
 [x] move server.js into command
 [ ] kernel/controller.js
 [ ] kernel/model.js
 [ ] serialize / deserialize
 	[ ] call serialize and deserialize from controllers, but defined on models
-[ ] where in exposed to graphql
-	[ ] value is a string key that is a key to a value in cache

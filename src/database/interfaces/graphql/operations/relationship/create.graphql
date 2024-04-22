@@ -1,0 +1,8 @@
+mutation CreateRelationship($attributes: Relationship_Mutation__Attributes) {
+    create_relationship(attributes: $attributes) {
+        attributes {
+            id
+            text
+        }
+    }
+}

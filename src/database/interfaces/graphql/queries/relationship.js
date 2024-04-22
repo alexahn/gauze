@@ -15,25 +15,25 @@ import {
 } from 'graphql';
 
 import {
-	RELATIONSHIP_CONTROLLER_SYSTEM,
+	RELATIONSHIP_CONTROLLER_DATABASE,
 } from './../../../controllers/relationship.js'
 
 const RELATIONSHIP_SERIALIZER = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.relationship.system.graphql.GRAPHQL_SYSTEM_RELATIONSHIP_TYPE_STRUCTURE
+	graphql_type: $structure.relationship.database.graphql.GRAPHQL_DATABASE_RELATIONSHIP_TYPE_STRUCTURE
 })
 
-const RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new GraphQLInputObjectType({
+const RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_DATABASE = new GraphQLInputObjectType({
 	name: 'Relationship_Query__Attributes',
 	description: 'Relationship Query Attributes',
-	fields: $structure.relationship.system.graphql.GRAPHQL_SYSTEM_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE
+	fields: $structure.relationship.database.graphql.GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE
 })
 
-const RELATIONSHIP_READ_QUERY_INTERFACE_SYSTEM = {
-	type: new GraphQLList($structure.relationship.system.graphql.GRAPHQL_SYSTEM_RELATIONSHIP_QUERY_STRUCTURE),
+const RELATIONSHIP_READ_QUERY_INTERFACE_DATABASE = {
+	type: new GraphQLList($structure.relationship.database.graphql.GRAPHQL_DATABASE_RELATIONSHIP_QUERY_STRUCTURE),
 	args: {
 		where: {
 			description: 'where',
-			type: RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_SYSTEM,
+			type: RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_DATABASE,
 		},
 		limit: {
 			description: 'limit',
@@ -57,20 +57,20 @@ const RELATIONSHIP_READ_QUERY_INTERFACE_SYSTEM = {
 		}
 	},
 	resolve: (_source, query_arguments, context) => {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'RELATIONSHIP_READ_QUERY_INTERFACE_SYSTEM.resolve:enter', '_source', _source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'RELATIONSHIP_READ_QUERY_INTERFACE_SYSTEM.resolve:enter', 'query_arguments', query_arguments)
-		return RELATIONSHIP_CONTROLLER_SYSTEM.read({
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'RELATIONSHIP_READ_QUERY_INTERFACE_DATABASE.resolve:enter', '_source', _source)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'RELATIONSHIP_READ_QUERY_INTERFACE_DATABASE.resolve:enter', 'query_arguments', query_arguments)
+		return RELATIONSHIP_CONTROLLER_DATABASE.read({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction
 			}, query_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, 'RELATIONSHIP_READ_QUERY_INTERFACE_SYSTEM.resolve:success', 'data', data)
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, 'RELATIONSHIP_READ_QUERY_INTERFACE_DATABASE.resolve:success', 'data', data)
 				return data.map(RELATIONSHIP_SERIALIZER.serialize)
 			})
 	}
 }
 
 export {
-	RELATIONSHIP_READ_QUERY_INTERFACE_SYSTEM
+	RELATIONSHIP_READ_QUERY_INTERFACE_DATABASE
 }

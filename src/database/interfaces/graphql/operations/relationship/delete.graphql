@@ -1,0 +1,8 @@
+mutation DeleteRelationship($where: Relationship_Mutation__Attributes) {
+    delete_relationship(where: $where) {
+        attributes {
+            id
+            text
+        }
+    }
+}

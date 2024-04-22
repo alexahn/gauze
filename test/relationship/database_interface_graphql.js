@@ -16,7 +16,7 @@ function execute ({
 	operationName
 }) {
 	return graphql({
-		schema: $gauze.system.interfaces.graphql.schema.SCHEMA_GRAPHQL_INTERFACE_SYSTEM,
+		schema: $gauze.database.interfaces.graphql.schema.SCHEMA_GRAPHQL_INTERFACE_DATABASE,
 		source,
 		contextValue,
 		variableValues,
@@ -24,7 +24,7 @@ function execute ({
 	})
 }
 
-test.describe('relationship graphql interface system', function (suite_ctx) {
+test.describe('relationship graphql interface database', function (suite_ctx) {
 	test.before(function (ctx) {
 		suite_ctx.database = $gauze.database.knex.create_connection('test')
 		return suite_ctx.database.migrate.latest().then(function () {

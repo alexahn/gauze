@@ -1,0 +1,8 @@
+mutation DeleteEntity1($where: Entity1_Mutation__Attributes) {
+    delete_entity1(where: $where) {
+        attributes {
+            id
+            text
+        }
+    }
+}

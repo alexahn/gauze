@@ -1,0 +1,12 @@
+mutation UpdateRelationship(
+    $where: Relationship_Mutation__Attributes,
+    $attributes: Relationship_Mutation__Attributes
+) {
+    update_relationship(where: $where, attributes: $attributes) {
+        attributes {
+            id
+            text
+        }
+    }
+}
+~ 

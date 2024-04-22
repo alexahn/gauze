@@ -1,0 +1,12 @@
+mutation UpdateEntity1(
+    $where: Entity1_Mutation__Attributes,
+    $attributes: Entity1_Mutation__Attributes
+) {
+    update_entity1(where: $where, attributes: $attributes) {
+        attributes {
+            id
+            text
+        }
+    }
+}
+~ 

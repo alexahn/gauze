@@ -1,0 +1,8 @@
+query ReadRelationship($where: Relationship_Query__Attributes) {
+    read_relationship(where: $where) {
+        attributes {
+            id
+            text
+        }
+    }
+}
