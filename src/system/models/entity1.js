@@ -5,7 +5,7 @@ import {
 	GraphQLOperationSystemModel
 } from './class.js'
 
-class Entity1SystemModel extends GraphQLOperationSystemModel {
+class Entity2SystemModel extends GraphQLOperationSystemModel {
 	constructor (root_config, parent_config, config) {
 		super(root_config, parent_config)
 	}
@@ -64,7 +64,7 @@ const ENTITY1_MODEL_SYSTEM_PARENT_CONFIG = {
 	schema: $database.interfaces.graphql.schema.SCHEMA_GRAPHQL_INTERFACE_DATABASE
 }
 const ENTITY1_MODEL_SYSTEM_CONFIG = {}
-const ENTITY1_MODEL_SYSTEM = new Entity1SystemModel(ENTITY1_MODEL_SYSTEM_ROOT_CONFIG, ENTITY1_MODEL_SYSTEM_PARENT_CONFIG, ENTITY1_MODEL_SYSTEM_CONFIG)
+const ENTITY1_MODEL_SYSTEM = new Entity2SystemModel(ENTITY1_MODEL_SYSTEM_ROOT_CONFIG, ENTITY1_MODEL_SYSTEM_PARENT_CONFIG, ENTITY1_MODEL_SYSTEM_CONFIG)
 
 
 export {

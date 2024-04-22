@@ -1,8 +1,21 @@
 mutation UpdateEntity2(
     $where: Entity2_Mutation__Attributes,
-    $attributes: Entity2_Mutation__Attributes
+    $attributes: Entity2_Mutation__Attributes,
+	$limit: Int,
+	$offset: Int,
+	$order: String,
+	$order_direction: String,
+	$order_nulls: String
 ) {
-    update_entity2(where: $where, attributes: $attributes) {
+    update_entity2(
+		where: $where,
+		attributes: $attributes,
+		limit: $limit,
+		offset: $offset,
+		order: $order,
+		order_direction: $order_direction,
+		order_nulls: $order_nulls
+	) {
         attributes {
             id
 			created_at

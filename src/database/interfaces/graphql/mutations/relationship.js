@@ -63,6 +63,26 @@ const RELATIONSHIP_UPDATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
 		attributes: {
 			description: 'attributes',
 			type: RELATIONSHIP_MUTATION_ATTRIBUTES
+		},
+		limit: {
+			description: 'limit',
+			type: GraphQLInt
+		},
+		offset: {
+			description: 'offset',
+			type: GraphQLInt
+		},
+		order: {
+			description: 'order',
+			type: GraphQLString
+		},
+		order_direction: {
+			description: 'order direction',
+			type: GraphQLString
+		},
+		order_nulls: {
+			description: 'order nulls',
+			type: GraphQLString
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
@@ -86,6 +106,26 @@ const RELATIONSHIP_DELETE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
 		where: {
 			description: 'where',
 			type: RELATIONSHIP_MUTATION_ATTRIBUTES
+		},
+		limit: {
+			description: 'limit',
+			type: GraphQLInt
+		},
+		offset: {
+			description: 'offset',
+			type: GraphQLInt
+		},
+		order: {
+			description: 'order',
+			type: GraphQLString
+		},
+		order_direction: {
+			description: 'order direction',
+			type: GraphQLString
+		},
+		order_nulls: {
+			description: 'order nulls',
+			type: GraphQLString
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {

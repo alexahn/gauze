@@ -47,7 +47,7 @@ const ENTITY1_CREATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
 				transaction: context.transaction
 			}, mutation_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, 'ENTITY1_CREATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM.resolve:success', 'data', data)
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'ENTITY1_CREATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM.resolve:success', 'data', data)
 				return data.map(ENTITY1_SERIALIZER.serialize)
 			})
 	}
@@ -63,6 +63,26 @@ const ENTITY1_UPDATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
 		attributes: {
 			description: 'attributes',
 			type: ENTITY1_MUTATION_ATTRIBUTES
+		},
+		limit: {
+			description: 'limit',
+			type: GraphQLInt
+		},
+		offset: {
+			description: 'offset',
+			type: GraphQLInt
+		},
+		order: {
+			description: 'order',
+			type: GraphQLString
+		},
+		order_direction: {
+			description: 'order direction',
+			type: GraphQLString
+		},
+		order_nulls: {
+			description: 'order nulls',
+			type: GraphQLString
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
@@ -74,7 +94,7 @@ const ENTITY1_UPDATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
 				transaction: context.transaction
 			}, mutation_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, 'ENTITY1_UPDATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM.resolve:success', 'data', data)
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'ENTITY1_UPDATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM.resolve:success', 'data', data)
 				return data.map(ENTITY1_SERIALIZER.serialize)
 			})
 	}
@@ -86,6 +106,26 @@ const ENTITY1_DELETE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
 		where: {
 			description: 'where',
 			type: ENTITY1_MUTATION_ATTRIBUTES
+		},
+		limit: {
+			description: 'limit',
+			type: GraphQLInt
+		},
+		offset: {
+			description: 'offset',
+			type: GraphQLInt
+		},
+		order: {
+			description: 'order',
+			type: GraphQLString
+		},
+		order_direction: {
+			description: 'order direction',
+			type: GraphQLString
+		},
+		order_nulls: {
+			description: 'order nulls',
+			type: GraphQLString
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
@@ -97,7 +137,7 @@ const ENTITY1_DELETE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
 				transaction: context.transaction
 			}, mutation_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, 'ENTITY1_DELETE_MUTATION_GRAPHQL_INTERFACE_SYSTEM.resolve:success', 'data', data)
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'ENTITY1_DELETE_MUTATION_GRAPHQL_INTERFACE_SYSTEM.resolve:success', 'data', data)
 				return data.map(ENTITY1_SERIALIZER.serialize)
 			})
 	}

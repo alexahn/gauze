@@ -1,5 +1,19 @@
-mutation DeleteEntity1($where: Entity1_Mutation__Attributes) {
-    delete_entity1(where: $where) {
+mutation DeleteEntity1(
+	$where: Entity1_Mutation__Attributes,
+	$limit: Int,
+	$offset: Int,
+	$order: String,
+	$order_direction: String,
+	$order_nulls: String
+) {
+    delete_entity1(
+		where: $where,
+		limit: $limit,
+		offset: $offset,
+		order: $order,
+		order_direction: $order_direction,
+		order_nulls: $order_nulls
+	) {
         attributes {
             id
 			created_at

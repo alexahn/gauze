@@ -63,6 +63,26 @@ const ENTITY2_UPDATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
 		attributes: {
 			description: 'attributes',
 			type: ENTITY2_MUTATION_ATTRIBUTES
+		},
+		limit: {
+			description: 'limit',
+			type: GraphQLInt
+		},
+		offset: {
+			description: 'offset',
+			type: GraphQLInt
+		},
+		order: {
+			description: 'order',
+			type: GraphQLString
+		},
+		order_direction: {
+			description: 'order direction',
+			type: GraphQLString
+		},
+		order_nulls: {
+			description: 'order nulls',
+			type: GraphQLString
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
@@ -86,6 +106,26 @@ const ENTITY2_DELETE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
 		where: {
 			description: 'where',
 			type: ENTITY2_MUTATION_ATTRIBUTES
+		},
+		limit: {
+			description: 'limit',
+			type: GraphQLInt
+		},
+		offset: {
+			description: 'offset',
+			type: GraphQLInt
+		},
+		order: {
+			description: 'order',
+			type: GraphQLString
+		},
+		order_direction: {
+			description: 'order direction',
+			type: GraphQLString
+		},
+		order_nulls: {
+			description: 'order nulls',
+			type: GraphQLString
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {

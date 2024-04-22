@@ -65,7 +65,7 @@ const ENTITY2_READ_QUERY_GRAPHQL_INTERFACE_DATABASE = {
 				transaction: context.transaction
 			}, query_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'ENTITY2_READ_QUERY_GRAPHQL_INTERFACE_DATABASE.resolve:success', 'data', data)
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, 'ENTITY2_READ_QUERY_GRAPHQL_INTERFACE_DATABASE.resolve:success', 'data', data)
 				return data.map(ENTITY2_SERIALIZER.serialize)
 			})
 	}

@@ -98,8 +98,10 @@
 [x] refactor system controllers to use graphql queries/mutations against the database interface
 	[x] might as well set it up now
 	[x] copy existing system controllers and interface to database
-	[ ] will help with serializer logic as well since the serializers will all run at the database level
-	[ ] where in and where not in exposed to graphql
+	[x] will help with serializer logic as well since the serializers will all run at the database level
+	[ ] where in and where not in exposed to database graphql
+	[ ] where in and where not in exposed to system graphql
+	[ ] cache where in and cache where not exposed to database graphql
 		[ ] value is a string key that is a key to a value in cache
 	[ ] implement error visibility (right now it's a little rough if something goes wrong)
 [x] move server.js into command
@@ -112,7 +114,7 @@
 [x] update constants in interface to use the subdirectory (e.g. add GRAPHQL)
 [ ] convert operations from strings to source object for debugging purposes
 	[ ] https://github.com/graphql/graphql-js/blob/main/src/language/source.ts
-[ ] update update and delete mutations to accept limit, offset, and order arguments 
+[x] update update and delete mutations to accept limit, offset, and order arguments 
 [x] grep -r \~ .
 	[x] vim shows ~ at the end of a file so sometimes it can blend in
 [x] change serializers to be generators that accept a field name
