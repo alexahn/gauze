@@ -109,7 +109,7 @@
 	[ ] kernel/interfaces
 [x] serialize / deserialize
 	[x] call serialize and deserialize from controllers, but defined on models
-[ ] update constants in interface to use the subdirectory (e.g. add GRAPHQL)
+[x] update constants in interface to use the subdirectory (e.g. add GRAPHQL)
 [ ] convert operations from strings to source object for debugging purposes
 	[ ] https://github.com/graphql/graphql-js/blob/main/src/language/source.ts
 [ ] update update and delete mutations to accept limit, offset, and order arguments 
@@ -120,3 +120,5 @@
 	[ ] account table (look at how passport and nextjs auth create their tables)
 	[ ] proxy graphiql via server
 	[ ] use a higher level http server (express, fastify, koa, etc) ?
+[ ] accept a query parameter to simulate user id
+	[ ] allows us to work on permission/authorization layer without having a user table

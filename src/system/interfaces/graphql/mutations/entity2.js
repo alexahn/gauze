@@ -30,7 +30,7 @@ const ENTITY2_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
 	fields: $structure.entity2.system.graphql.GRAPHQL_SYSTEM_ENTITY2_ATTRIBUTES_FIELDS_STRUCTURE
 })
 
-const ENTITY2_CREATE_MUTATION_INTERFACE_SYSTEM = {
+const ENTITY2_CREATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
 	type: new GraphQLList($structure.entity2.system.graphql.GRAPHQL_SYSTEM_ENTITY2_MUTATION_STRUCTURE),
 	args: {
 		attributes: {
@@ -39,21 +39,21 @@ const ENTITY2_CREATE_MUTATION_INTERFACE_SYSTEM = {
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY2_CREATE_MUTATION_INTERFACE_SYSTEM.resolve:enter', '_source', _source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY2_CREATE_MUTATION_INTERFACE_SYSTEM.resolve:enter', 'mutation_arguments', mutation_arguments)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY2_CREATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM.resolve:enter', '_source', _source)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY2_CREATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM.resolve:enter', 'mutation_arguments', mutation_arguments)
 		return ENTITY2_CONTROLLER_SYSTEM.create({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction
 			}, mutation_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'ENTITY2_CREATE_MUTATION_INTERFACE_SYSTEM.resolve:success', 'data', data)
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'ENTITY2_CREATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM.resolve:success', 'data', data)
 				return data.map(ENTITY2_SERIALIZER.serialize)
 			})
 	}
 }
 
-const ENTITY2_UPDATE_MUTATION_INTERFACE_SYSTEM = {
+const ENTITY2_UPDATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
 	type: new GraphQLList($structure.entity2.system.graphql.GRAPHQL_SYSTEM_ENTITY2_MUTATION_STRUCTURE),
 	args: {
 		where: {
@@ -66,21 +66,21 @@ const ENTITY2_UPDATE_MUTATION_INTERFACE_SYSTEM = {
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY2_UPDATE_MUTATION_INTERFACE_SYSTEM.resolve:enter', '_source', _source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY2_UPDATE_MUTATION_INTERFACE_SYSTEM.resolve:enter', 'mutation_arguments', mutation_arguments)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY2_UPDATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM.resolve:enter', '_source', _source)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY2_UPDATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM.resolve:enter', 'mutation_arguments', mutation_arguments)
 		return ENTITY2_CONTROLLER_SYSTEM.update({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction
 			}, mutation_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'ENTITY2_UPDATE_MUTATION_INTERFACE_SYSTEM.resolve:success', 'data', data)
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'ENTITY2_UPDATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM.resolve:success', 'data', data)
 				return data.map(ENTITY2_SERIALIZER.serialize)
 			})
 	}
 }
 
-const ENTITY2_DELETE_MUTATION_INTERFACE_SYSTEM = {
+const ENTITY2_DELETE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
 	type: new GraphQLList($structure.entity2.system.graphql.GRAPHQL_SYSTEM_ENTITY2_MUTATION_STRUCTURE),
 	args: {
 		where: {
@@ -89,22 +89,22 @@ const ENTITY2_DELETE_MUTATION_INTERFACE_SYSTEM = {
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY2_DELETE_MUTATION_INTERFACE_SYSTEM.resolve:enter', '_source', _source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY2_DELETE_MUTATION_INTERFACE_SYSTEM.resolve:enter', 'mutation_arguments', mutation_arguments)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY2_DELETE_MUTATION_GRAPHQL_INTERFACE_SYSTEM.resolve:enter', '_source', _source)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY2_DELETE_MUTATION_GRAPHQL_INTERFACE_SYSTEM.resolve:enter', 'mutation_arguments', mutation_arguments)
 		return ENTITY2_CONTROLLER_SYSTEM.delete({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction
 			}, mutation_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'ENTITY2_DELETE_MUTATION_INTERFACE_SYSTEM.resolve:success', 'data', data)
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'ENTITY2_DELETE_MUTATION_GRAPHQL_INTERFACE_SYSTEM.resolve:success', 'data', data)
 				return data.map(ENTITY2_SERIALIZER.serialize)
 			})
 	}
 }
 
 export {
-	ENTITY2_CREATE_MUTATION_INTERFACE_SYSTEM,
-	ENTITY2_UPDATE_MUTATION_INTERFACE_SYSTEM,
-	ENTITY2_DELETE_MUTATION_INTERFACE_SYSTEM
+	ENTITY2_CREATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM,
+	ENTITY2_UPDATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM,
+	ENTITY2_DELETE_MUTATION_GRAPHQL_INTERFACE_SYSTEM
 }
