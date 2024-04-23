@@ -18,7 +18,7 @@ class Model {
 		this.protected_fields = protected_fields
 		this.field_serializers = field_serializers
 		this.name = this.__name()
-		this.relationship_table = $structure.relationship.database.sql.SQL_DATABASE_RELATIONSHIP_TABLE_NAME
+		this.relationship_table = $structure.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
 	}
 	__name () {

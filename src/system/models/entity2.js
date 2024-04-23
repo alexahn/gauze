@@ -56,9 +56,9 @@ class Entity2SystemModel extends GraphQLOperationSystemModel {
 }
 
 const ENTITY2_MODEL_SYSTEM_ROOT_CONFIG = {
-	fields: $structure.entity2.database.sql.SQL_DATABASE_ENTITY2_FIELDS,
-	protected_fields: $structure.entity2.database.sql.SQL_DATABASE_ENTITY2_PROTECTED_FIELDS,
-	field_serializers: $structure.entity2.database.sql.SQL_DATABASE_ENTITY2_FIELD_SERIALIZERS
+	fields: $structure.entity2.database.sql.FIELDS__SQL__DATABASE__ENTITY2__STRUCTURE,
+	protected_fields: $structure.entity2.database.sql.PROTECTED_FIELDS__SQL__DATABASE__ENTITY2__STRUCTURE,
+	field_serializers: $structure.entity2.database.sql.FIELD_SERIALIZERS__SQL__DATABASE__ENTITY2__STRUCTURE
 }
 const ENTITY2_MODEL_SYSTEM_PARENT_CONFIG = {
 	schema: $database.interfaces.graphql.schema.SCHEMA_GRAPHQL_INTERFACE_DATABASE

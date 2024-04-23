@@ -56,9 +56,9 @@ class RelationshipSystemModel extends GraphQLOperationSystemModel {
 }
 
 const RELATIONSHIP_MODEL_SYSTEM_ROOT_CONFIG = {
-	fields: $structure.relationship.database.sql.SQL_DATABASE_RELATIONSHIP_FIELDS,
-	protected_fields: $structure.relationship.database.sql.SQL_DATABASE_RELATIONSHIP_PROTECTED_FIELDS,
-	field_serializers: $structure.relationship.database.sql.SQL_DATABASE_RELATIONSHIP_FIELD_SERIALIZERS
+	fields: $structure.relationship.database.sql.FIELDS__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
+	protected_fields: $structure.relationship.database.sql.PROTECTED_FIELDS__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
+	field_serializers: $structure.relationship.database.sql.FIELD_SERIALIZERS__SQL__DATABASE__RELATIONSHIP__STRUCTURE
 }
 const RELATIONSHIP_MODEL_SYSTEM_PARENT_CONFIG = {
 	schema: $database.interfaces.graphql.schema.SCHEMA_GRAPHQL_INTERFACE_DATABASE
