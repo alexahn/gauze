@@ -52,22 +52,22 @@ The structure realm contains structural information for the entities in the real
 - `f(kernel, database, system, user)` (interaction dependency)
 - `g()` (code dependency)
 
-### Kernel
+#### Kernel
 The kernel realm contains base classes and common utilities, like logging and caching.
 - `f(database, system, user)` (interaction dependency)
 - `g(structure)` (code dependency)
 
-### Database
+#### Database
 The database realm manages state for entities.
 - `f(system, user)` (interaction dependency)
 - `g(structure, kernel)` (code dependency)
 
-### System
+#### System
 The system realm manages user interaction.
 - `f(user)` (interaction dependency)
 - `g(database, kernel, structure)` (code dependency).
 
-### User
+#### User
 The user realm manages authentication and the unauthenticated interface.
 - `f()` (interaction dependency)
 - `g(system, database, kernel, structure)` (code dependency)
