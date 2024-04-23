@@ -125,3 +125,6 @@
 	[ ] simple white and black list permissions
 		[ ] system permissions
 		[ ] user permissions
+[ ] move execute from terminal to kernel/shell
+[ ] start thinking about kernel/src or kernel/source
+	[ ] base everything off structures
