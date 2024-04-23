@@ -24,10 +24,16 @@ const ENTITY1_SERIALIZER = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.entity1.database.graphql.GRAPHQL_DATABASE_ENTITY1_TYPE_STRUCTURE
 })
 
-const ENTITY1_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
+const ENTITY1_ATTRIBUTES_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({
 	name: 'Entity1_Mutation__Attributes',
 	description: 'Entity1 Mutation Attributes',
 	fields: $structure.entity1.database.graphql.GRAPHQL_DATABASE_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
+})
+
+const ENTITY1_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({
+	name: 'Entity1_Mutation__Attributes_Array',
+	description: 'Entity1 Mutation Attributes Array',
+	fields: $structure.entity1.database.graphql.GRAPHQL_DATABASE_ENTITY1_ATTRIBUTES_FIELDS_ARRAY_STRUCTURE
 })
 
 const ENTITY1_CREATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
@@ -35,7 +41,7 @@ const ENTITY1_CREATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
 	args: {
 		attributes: {
 			description: 'attributes',
-			type: ENTITY1_MUTATION_ATTRIBUTES
+			type: ENTITY1_ATTRIBUTES_MUTATION_INTERFACE_DATABASE
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
@@ -58,11 +64,19 @@ const ENTITY1_UPDATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
 	args: {
 		where: {
 			description: 'where',
-			type: ENTITY1_MUTATION_ATTRIBUTES
+			type: ENTITY1_ATTRIBUTES_MUTATION_INTERFACE_DATABASE
+		},
+		where_in: {
+			description: 'where in',
+			type: ENTITY1_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE
+		},
+		where_not_in: {
+			description: 'where not in',
+			type: ENTITY1_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE
 		},
 		attributes: {
 			description: 'attributes',
-			type: ENTITY1_MUTATION_ATTRIBUTES
+			type: ENTITY1_ATTRIBUTES_MUTATION_INTERFACE_DATABASE
 		},
 		limit: {
 			description: 'limit',
@@ -105,7 +119,7 @@ const ENTITY1_DELETE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
 	args: {
 		where: {
 			description: 'where',
-			type: ENTITY1_MUTATION_ATTRIBUTES
+			type: ENTITY1_ATTRIBUTES_MUTATION_INTERFACE_DATABASE
 		},
 		limit: {
 			description: 'limit',

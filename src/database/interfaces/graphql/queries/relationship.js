@@ -45,6 +45,10 @@ const RELATIONSHIP_READ_QUERY_GRAPHQL_INTERFACE_DATABASE = {
 			description: 'where in',
 			type: RELATIONSHIP_ATTRIBUTES_ARRAY_QUERY_INTERFACE_DATABASE
 		},
+		where_not_in: {
+			description: 'where not in',
+			type: RELATIONSHIP_ATTRIBUTES_ARRAY_QUERY_INTERFACE_DATABASE
+		},
 		limit: {
 			description: 'limit',
 			type: GraphQLInt

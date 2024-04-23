@@ -137,3 +137,8 @@
 [ ] move object destructuring for database model inputs into the function itself (for debugging purposes when we want to log the entire input)
 	[x] database models
 [ ] add logging to system models
+[ ] fix structure names in graphql.js files (the order doesn't seem to be right)
+	[ ] GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_FIELDS_ARRAY_STRUCTURE shoudl be ATTRIBUTES_FIELDS_ARRAY_GRAPHQL_DATABASE_RELATIONSHIP_STRUCTURE
+		[ ] maybe introduce a double underscore convention to seperate the namespace from the item?
+			[ ] ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE ?
+				[ ] does seem more clear

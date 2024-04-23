@@ -24,10 +24,16 @@ const RELATIONSHIP_SERIALIZER = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.relationship.database.graphql.GRAPHQL_DATABASE_RELATIONSHIP_TYPE_STRUCTURE
 })
 
-const RELATIONSHIP_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
+const RELATIONSHIP_ATTRIBUTES_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({
 	name: 'Relationship_Mutation__Attributes',
 	description: 'Relationship Mutation Attributes',
 	fields: $structure.relationship.database.graphql.GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE
+})
+
+const RELATIONSHIP_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({
+	name: 'Relationship_Mutation__Attributes_Array',
+	description: 'Relationship Mutation Attributes Array',
+	fields: $structure.relationship.database.graphql.GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_FIELDS_ARRAY_STRUCTURE
 })
 
 const RELATIONSHIP_CREATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
@@ -35,7 +41,7 @@ const RELATIONSHIP_CREATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
 	args: {
 		attributes: {
 			description: 'attributes',
-			type: RELATIONSHIP_MUTATION_ATTRIBUTES
+			type: RELATIONSHIP_ATTRIBUTES_MUTATION_INTERFACE_DATABASE
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
@@ -58,11 +64,19 @@ const RELATIONSHIP_UPDATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
 	args: {
 		where: {
 			description: 'where',
-			type: RELATIONSHIP_MUTATION_ATTRIBUTES
+			type: RELATIONSHIP_ATTRIBUTES_MUTATION_INTERFACE_DATABASE
+		},
+		where_in: {
+			description: 'where in',
+			type: RELATIONSHIP_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE
+		},
+		where_not_in: {
+			description: 'where not in',
+			type: RELATIONSHIP_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE
 		},
 		attributes: {
 			description: 'attributes',
-			type: RELATIONSHIP_MUTATION_ATTRIBUTES
+			type: RELATIONSHIP_ATTRIBUTES_MUTATION_INTERFACE_DATABASE
 		},
 		limit: {
 			description: 'limit',
@@ -105,7 +119,7 @@ const RELATIONSHIP_DELETE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
 	args: {
 		where: {
 			description: 'where',
-			type: RELATIONSHIP_MUTATION_ATTRIBUTES
+			type: RELATIONSHIP_ATTRIBUTES_MUTATION_INTERFACE_DATABASE
 		},
 		limit: {
 			description: 'limit',
