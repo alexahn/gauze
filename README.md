@@ -68,7 +68,7 @@ The system realm manages user interaction.
 - `g(database, kernel, structure)` (code dependency).
 
 #### User
-The user realm manages authentication and the unauthenticated interface.
+The user realm manages authentication and unauthenticated user interaction.
 - `f()` (interaction dependency)
 - `g(system, database, kernel, structure)` (code dependency)
 
