@@ -21,23 +21,23 @@ import {
 } from './../../../controllers/relationship.js'
 
 const RELATIONSHIP_SERIALIZER = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.relationship.database.graphql.GRAPHQL_DATABASE_RELATIONSHIP_TYPE_STRUCTURE
+	graphql_type: $structure.relationship.database.graphql.TYPE__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE
 })
 
 const RELATIONSHIP_ATTRIBUTES_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({
 	name: 'Relationship_Mutation__Attributes',
 	description: 'Relationship Mutation Attributes',
-	fields: $structure.relationship.database.graphql.GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE
+	fields: $structure.relationship.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE
 })
 
 const RELATIONSHIP_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({
 	name: 'Relationship_Mutation__Attributes_Array',
 	description: 'Relationship Mutation Attributes Array',
-	fields: $structure.relationship.database.graphql.GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_FIELDS_ARRAY_STRUCTURE
+	fields: $structure.relationship.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE
 })
 
 const RELATIONSHIP_CREATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
-	type: new GraphQLList($structure.relationship.database.graphql.GRAPHQL_DATABASE_RELATIONSHIP_MUTATION_STRUCTURE),
+	type: new GraphQLList($structure.relationship.database.graphql.MUTATION__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE),
 	args: {
 		attributes: {
 			description: 'attributes',
@@ -60,7 +60,7 @@ const RELATIONSHIP_CREATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
 }
 
 const RELATIONSHIP_UPDATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
-	type: new GraphQLList($structure.relationship.database.graphql.GRAPHQL_DATABASE_RELATIONSHIP_MUTATION_STRUCTURE),
+	type: new GraphQLList($structure.relationship.database.graphql.MUTATION__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE),
 	args: {
 		where: {
 			description: 'where',
@@ -115,7 +115,7 @@ const RELATIONSHIP_UPDATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
 }
 
 const RELATIONSHIP_DELETE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
-	type: new GraphQLList($structure.relationship.database.graphql.GRAPHQL_DATABASE_RELATIONSHIP_MUTATION_STRUCTURE),
+	type: new GraphQLList($structure.relationship.database.graphql.MUTATION__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE),
 	args: {
 		where: {
 			description: 'where',

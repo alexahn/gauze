@@ -21,17 +21,17 @@ import {
 } from './../../../controllers/entity2.js'
 
 const ENTITY2_SERIALIZER = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.entity2.system.graphql.GRAPHQL_SYSTEM_ENTITY2_TYPE_STRUCTURE
+	graphql_type: $structure.entity2.system.graphql.TYPE__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE
 })
 
 const ENTITY2_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
 	name: 'Entity2_Mutation__Attributes',
 	description: 'Entity2 Mutation Attributes',
-	fields: $structure.entity2.system.graphql.GRAPHQL_SYSTEM_ENTITY2_ATTRIBUTES_FIELDS_STRUCTURE
+	fields: $structure.entity2.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE
 })
 
 const ENTITY2_CREATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
-	type: new GraphQLList($structure.entity2.system.graphql.GRAPHQL_SYSTEM_ENTITY2_MUTATION_STRUCTURE),
+	type: new GraphQLList($structure.entity2.system.graphql.MUTATION__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE),
 	args: {
 		attributes: {
 			description: 'attributes',
@@ -54,7 +54,7 @@ const ENTITY2_CREATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
 }
 
 const ENTITY2_UPDATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
-	type: new GraphQLList($structure.entity2.system.graphql.GRAPHQL_SYSTEM_ENTITY2_MUTATION_STRUCTURE),
+	type: new GraphQLList($structure.entity2.system.graphql.MUTATION__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE),
 	args: {
 		where: {
 			description: 'where',
@@ -101,7 +101,7 @@ const ENTITY2_UPDATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
 }
 
 const ENTITY2_DELETE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
-	type: new GraphQLList($structure.entity2.system.graphql.GRAPHQL_SYSTEM_ENTITY2_MUTATION_STRUCTURE),
+	type: new GraphQLList($structure.entity2.system.graphql.MUTATION__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE),
 	args: {
 		where: {
 			description: 'where',

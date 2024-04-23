@@ -143,4 +143,4 @@
 			[ ] ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE ?
 				[ ] does seem more clear
 	[x] sql.js
-	[ ] graphql.js
+	[x] graphql.js

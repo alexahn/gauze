@@ -19,17 +19,17 @@ import {
 } from './../../../controllers/relationship.js'
 
 const RELATIONSHIP_SERIALIZER = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.relationship.system.graphql.GRAPHQL_SYSTEM_RELATIONSHIP_TYPE_STRUCTURE
+	graphql_type: $structure.relationship.system.graphql.TYPE__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE
 })
 
 const RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new GraphQLInputObjectType({
 	name: 'Relationship_Query__Attributes',
 	description: 'Relationship Query Attributes',
-	fields: $structure.relationship.system.graphql.GRAPHQL_SYSTEM_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE
+	fields: $structure.relationship.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE
 })
 
 const RELATIONSHIP_READ_QUERY_GRAPHQL_INTERFACE_SYSTEM = {
-	type: new GraphQLList($structure.relationship.system.graphql.GRAPHQL_SYSTEM_RELATIONSHIP_QUERY_STRUCTURE),
+	type: new GraphQLList($structure.relationship.system.graphql.QUERY__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE),
 	args: {
 		where: {
 			description: 'where',

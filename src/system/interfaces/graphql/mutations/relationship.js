@@ -21,17 +21,17 @@ import {
 } from './../../../controllers/relationship.js'
 
 const RELATIONSHIP_SERIALIZER = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.relationship.system.graphql.GRAPHQL_SYSTEM_RELATIONSHIP_TYPE_STRUCTURE
+	graphql_type: $structure.relationship.system.graphql.TYPE__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE
 })
 
 const RELATIONSHIP_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
 	name: 'Relationship_Mutation__Attributes',
 	description: 'Relationship Mutation Attributes',
-	fields: $structure.relationship.system.graphql.GRAPHQL_SYSTEM_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE
+	fields: $structure.relationship.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE
 })
 
 const RELATIONSHIP_CREATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
-	type: new GraphQLList($structure.relationship.system.graphql.GRAPHQL_SYSTEM_RELATIONSHIP_MUTATION_STRUCTURE),
+	type: new GraphQLList($structure.relationship.system.graphql.MUTATION__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE),
 	args: {
 		attributes: {
 			description: 'attributes',
@@ -54,7 +54,7 @@ const RELATIONSHIP_CREATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
 }
 
 const RELATIONSHIP_UPDATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
-	type: new GraphQLList($structure.relationship.system.graphql.GRAPHQL_SYSTEM_RELATIONSHIP_MUTATION_STRUCTURE),
+	type: new GraphQLList($structure.relationship.system.graphql.MUTATION__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE),
 	args: {
 		where: {
 			description: 'where',
@@ -101,7 +101,7 @@ const RELATIONSHIP_UPDATE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
 }
 
 const RELATIONSHIP_DELETE_MUTATION_GRAPHQL_INTERFACE_SYSTEM = {
-	type: new GraphQLList($structure.relationship.system.graphql.GRAPHQL_SYSTEM_RELATIONSHIP_MUTATION_STRUCTURE),
+	type: new GraphQLList($structure.relationship.system.graphql.MUTATION__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE),
 	args: {
 		where: {
 			description: 'where',

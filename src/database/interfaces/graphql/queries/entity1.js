@@ -19,23 +19,23 @@ import {
 } from './../../../controllers/entity1.js'
 
 const ENTITY1_SERIALIZER = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.entity1.database.graphql.GRAPHQL_DATABASE_ENTITY1_TYPE_STRUCTURE
+	graphql_type: $structure.entity1.database.graphql.TYPE__GRAPHQL__DATABASE__ENTITY1__STRUCTURE
 })
 
 const ENTITY1_ATTRIBUTES_QUERY_INTERFACE_DATABASE = new GraphQLInputObjectType({
 	name: 'Entity1_Query__Attributes',
 	description: 'Entity1 Query Attributes',
-	fields: $structure.entity1.database.graphql.GRAPHQL_DATABASE_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
+	fields: $structure.entity1.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__ENTITY1__STRUCTURE
 })
 
 const ENTITY1_ATTRIBUTES_ARRAY_QUERY_INTERFACE_DATABASE = new GraphQLInputObjectType({
 	name: 'Entity1_Query__Attributes_Array',
 	description: 'Entity1 Query Attributes Array',
-	fields: $structure.entity1.database.graphql.GRAPHQL_DATABASE_ENTITY1_ATTRIBUTES_FIELDS_ARRAY_STRUCTURE
+	fields: $structure.entity1.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__ENTITY1__STRUCTURE
 })
 
 const ENTITY1_READ_QUERY_GRAPHQL_INTERFACE_DATABASE = {
-	type: new GraphQLList($structure.entity1.database.graphql.GRAPHQL_DATABASE_ENTITY1_QUERY_STRUCTURE),
+	type: new GraphQLList($structure.entity1.database.graphql.QUERY__GRAPHQL__DATABASE__ENTITY1__STRUCTURE),
 	args: {
 		where: {
 			description: 'where',

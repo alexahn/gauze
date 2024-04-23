@@ -21,23 +21,23 @@ import {
 } from './../../../controllers/entity1.js'
 
 const ENTITY1_SERIALIZER = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.entity1.database.graphql.GRAPHQL_DATABASE_ENTITY1_TYPE_STRUCTURE
+	graphql_type: $structure.entity1.database.graphql.TYPE__GRAPHQL__DATABASE__ENTITY1__STRUCTURE
 })
 
 const ENTITY1_ATTRIBUTES_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({
 	name: 'Entity1_Mutation__Attributes',
 	description: 'Entity1 Mutation Attributes',
-	fields: $structure.entity1.database.graphql.GRAPHQL_DATABASE_ENTITY1_ATTRIBUTES_FIELDS_STRUCTURE
+	fields: $structure.entity1.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__ENTITY1__STRUCTURE
 })
 
 const ENTITY1_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({
 	name: 'Entity1_Mutation__Attributes_Array',
 	description: 'Entity1 Mutation Attributes Array',
-	fields: $structure.entity1.database.graphql.GRAPHQL_DATABASE_ENTITY1_ATTRIBUTES_FIELDS_ARRAY_STRUCTURE
+	fields: $structure.entity1.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__ENTITY1__STRUCTURE
 })
 
 const ENTITY1_CREATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
-	type: new GraphQLList($structure.entity1.database.graphql.GRAPHQL_DATABASE_ENTITY1_MUTATION_STRUCTURE),
+	type: new GraphQLList($structure.entity1.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY1__STRUCTURE),
 	args: {
 		attributes: {
 			description: 'attributes',
@@ -60,7 +60,7 @@ const ENTITY1_CREATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
 }
 
 const ENTITY1_UPDATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
-	type: new GraphQLList($structure.entity1.database.graphql.GRAPHQL_DATABASE_ENTITY1_MUTATION_STRUCTURE),
+	type: new GraphQLList($structure.entity1.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY1__STRUCTURE),
 	args: {
 		where: {
 			description: 'where',
@@ -115,7 +115,7 @@ const ENTITY1_UPDATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
 }
 
 const ENTITY1_DELETE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
-	type: new GraphQLList($structure.entity1.database.graphql.GRAPHQL_DATABASE_ENTITY1_MUTATION_STRUCTURE),
+	type: new GraphQLList($structure.entity1.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY1__STRUCTURE),
 	args: {
 		where: {
 			description: 'where',

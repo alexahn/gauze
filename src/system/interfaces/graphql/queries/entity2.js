@@ -19,17 +19,17 @@ import {
 } from './../../../controllers/entity2.js'
 
 const ENTITY2_SERIALIZER = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.entity2.system.graphql.GRAPHQL_SYSTEM_ENTITY2_TYPE_STRUCTURE
+	graphql_type: $structure.entity2.system.graphql.TYPE__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE
 })
 
 const ENTITY2_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new GraphQLInputObjectType({
 	name: 'Entity2_Query__Attributes',
 	description: 'Entity2 Query Attributes',
-	fields: $structure.entity2.system.graphql.GRAPHQL_SYSTEM_ENTITY2_ATTRIBUTES_FIELDS_STRUCTURE
+	fields: $structure.entity2.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE
 })
 
 const ENTITY2_READ_QUERY_GRAPHQL_INTERFACE_SYSTEM = {
-	type: new GraphQLList($structure.entity2.system.graphql.GRAPHQL_SYSTEM_ENTITY2_QUERY_STRUCTURE),
+	type: new GraphQLList($structure.entity2.system.graphql.QUERY__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE),
 	args: {
 		where: {
 			description: 'where',
