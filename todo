@@ -67,7 +67,8 @@
 [x] add primary key to database models and use them for the default order
 	[x] add primary key to sql structures
 [ ] refactor logger to make it functional (e.g. stop mutating arrays and have functions return fully transformed items)
-	[ ] remove the magic string by fully implementing the correct stack marking algorithm
+	[x] remove the magic string by fully implementing the correct stack marking algorithm
+		[x] turns out we don't need to change the code, we can just do a null checkl
 [x] testing
 	[x] set up example queries that line up with the seeded data
 	[x] test create, read, update, delete
@@ -125,6 +126,10 @@
 	[ ] simple white and black list permissions
 		[ ] system permissions
 		[ ] user permissions
-[ ] move execute from terminal to kernel/shell
+[x] move execute from terminal to kernel/shell
+	[ ] import execute from kernel and use in other places
+		[x] refactor inputs to execute to make it pretty (e.g. context instead of contextValue, variables insead of variableValues)
 [ ] start thinking about kernel/src or kernel/source
 	[ ] base everything off structures
+[ ] add a _description attribute to every module so that the codebase can be explored via the repl
+	[ ] always add the field at the end of every module definition so it shows up at the bottom in the repl

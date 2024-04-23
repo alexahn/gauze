@@ -19,9 +19,9 @@ class Logger {
 	}) {
 		this.LOG_LEVEL_MINIMUM = LOG_LEVEL_MINIMUM
 		this.LOG_LEVEL_MAXIMUM = LOG_LEVEL_MAXIMUM
-		this.LOG_LEVEL_REGEX = LOG_LEVEL_REGEX
-		this.LOG_TOPIC_REGEX = LOG_TOPIC_REGEX
-		this.LOG_MESSAGE_REGEX = LOG_MESSAGE_REGEX
+		this.LOG_LEVEL_REGEX = LOG_LEVEL_REGEX || ''
+		this.LOG_TOPIC_REGEX = LOG_TOPIC_REGEX || ''
+		this.LOG_MESSAGE_REGEX = LOG_MESSAGE_REGEX || ''
 		this.STDOUT_LEVEL_MINIMUM = '0'
 		this.STDOUT_LEVEL_MAXIMUM = '4'
 		this.STDERR_LEVEL_MINIMUM = '4'
@@ -48,13 +48,15 @@ class IOLogger extends Logger {
 				if (!VALID_TOPIC) return false
 			}
 			const stack = []
+			// mark item in stack here if it passes message regex
+			var marked = false
 			messages.forEach(function (message) {
-				self.process_input(level, topic, stack, message)
+				marked = self.process_input(level, topic, stack, message, marked)
 			})
 			return true
 		}
 	}
-	process_input (level, topic, stack, input) {
+	process_input (level, topic, stack, input, render) {
 		// split the message by new lines
 		const self = this
 		var last_line
@@ -101,7 +103,7 @@ class IOLogger extends Logger {
 			if (self.LOG_MESSAGE_REGEX) {
 				const MESSAGE_REGEX = new RegExp(self.LOG_MESSAGE_REGEX)
 				const VALID_MESSAGE = MESSAGE_REGEX.test(message)
-				if (!VALID_MESSAGE) return "f9e0d79e-6c27-41c2-99c2-44bdab277166"
+				if (!VALID_MESSAGE) return null
 			}
 			const formatted = `level:${level} topic:${topic} message: ${message}`
 			return formatted
@@ -112,12 +114,12 @@ class IOLogger extends Logger {
 	write_lines (level, lines) {
 		if (this.STDOUT_LEVEL_MINIMUM <= level && level <= this.STDOUT_LEVEL_MAXIMUM) {
 			lines.forEach(function (line, idx) {
-				if (line === "f9e0d79e-6c27-41c2-99c2-44bdab277166") return
+				if (line === null) return
 				console.log(line)
 			})
 		} else if (this.STDERR_LEVEL_MINIMUM <= level && level <= this.STDERR_LEVEL_MAXIMUM) {
 			lines.forEach(function (line) {
-				if (line === "f9e0d79e-6c27-41c2-99c2-44bdab277166") return
+				if (line === null) return
 				console.err(line)
 			})
 		}
