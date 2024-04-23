@@ -5,10 +5,6 @@ const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH)
 
 import * as $kernel from './../../kernel/index.js'
 
-import {
-	graphql
-} from 'graphql'
-
 class SystemModel extends $kernel.models._class.Model {
 	constructor(config) {
 		super(config)
@@ -33,19 +29,20 @@ class GraphQLOperationSystemModel extends SystemModel {
 	_name () {
 		return this.constructor.name
 	}
-	execute (contextValue, {
-		source,
-		operationName
-	}, variableValues) {
-		return graphql({
+	execute (context, {
+		operation,
+		operation_name
+	}, operation_variables) {
+		return $kernel.shell.graphql.GRAPHQL_EXECUTE_SHELL_KERNEL({
 			schema: this.schema,
-			source,
-			contextValue,
-			operationName,
-			variableValues
+			context,
+			operation,
+			operation_name,
+			operation_variables
 		}).then(function (data) {
 			if (data.errors && data.errors.length) {
 				// should we make a new error here?
+				// todo: figure out if we need to log here or not
 				console.log(data.errors)
 				throw data.errors
 			} else {

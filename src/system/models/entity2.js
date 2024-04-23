@@ -11,8 +11,8 @@ class Entity2SystemModel extends GraphQLOperationSystemModel {
 	}
 	create (context, input) {
 		const operation = {
-			source: $database.interfaces.graphql.operations.entity2.ENTITY2_CREATE_OPERATION_GRAPHQL_INTERFACE_DATABASE,
-			operationName: $database.interfaces.graphql.operations.entity2.ENTITY2_CREATE_OPERATION_NAME_GRAPHQL_INTERFACE_DATABASE
+			operation: $database.interfaces.graphql.operations.entity2.ENTITY2_CREATE_OPERATION_GRAPHQL_INTERFACE_DATABASE,
+			operation_name: $database.interfaces.graphql.operations.entity2.ENTITY2_CREATE_OPERATION_NAME_GRAPHQL_INTERFACE_DATABASE
 		}
 		return this.execute(context, operation, input).then(function (data) {
 			return data.data.create_entity2.map(function (row) {
@@ -22,8 +22,8 @@ class Entity2SystemModel extends GraphQLOperationSystemModel {
 	}
 	read (context, input) {
 		const operation = {
-			source: $database.interfaces.graphql.operations.entity2.ENTITY2_READ_OPERATION_GRAPHQL_INTERFACE_DATABASE,
-			operationName: $database.interfaces.graphql.operations.entity2.ENTITY2_READ_OPERATION_NAME_GRAPHQL_INTERFACE_DATABASE
+			operation: $database.interfaces.graphql.operations.entity2.ENTITY2_READ_OPERATION_GRAPHQL_INTERFACE_DATABASE,
+			operation_name: $database.interfaces.graphql.operations.entity2.ENTITY2_READ_OPERATION_NAME_GRAPHQL_INTERFACE_DATABASE
 		}
 		return this.execute(context, operation, input).then(function (data) {
 			return data.data.read_entity2.map(function (row) {
@@ -33,8 +33,8 @@ class Entity2SystemModel extends GraphQLOperationSystemModel {
 	}
 	update (context, input) {
 		const operation = {
-			source: $database.interfaces.graphql.operations.entity2.ENTITY2_UPDATE_OPERATION_GRAPHQL_INTERFACE_DATABASE,
-			operationName: $database.interfaces.graphql.operations.entity2.ENTITY2_UPDATE_OPERATION_NAME_GRAPHQL_INTERFACE_DATABASE
+			operation: $database.interfaces.graphql.operations.entity2.ENTITY2_UPDATE_OPERATION_GRAPHQL_INTERFACE_DATABASE,
+			operation_name: $database.interfaces.graphql.operations.entity2.ENTITY2_UPDATE_OPERATION_NAME_GRAPHQL_INTERFACE_DATABASE
 		}
 		return this.execute(context, operation, input).then(function (data) {
 			return data.data.update_entity2.map(function (row) {
@@ -44,8 +44,8 @@ class Entity2SystemModel extends GraphQLOperationSystemModel {
 	}
 	delete (context, input) {
 		const operation = {
-			source: $database.interfaces.graphql.operations.entity2.ENTITY2_DELETE_OPERATION_GRAPHQL_INTERFACE_DATABASE,
-			operationName: $database.interfaces.graphql.operations.entity2.ENTITY2_DELETE_OPERATION_NAME_GRAPHQL_INTERFACE_DATABASE
+			operation: $database.interfaces.graphql.operations.entity2.ENTITY2_DELETE_OPERATION_GRAPHQL_INTERFACE_DATABASE,
+			operation_name: $database.interfaces.graphql.operations.entity2.ENTITY2_DELETE_OPERATION_NAME_GRAPHQL_INTERFACE_DATABASE
 		}
 		return this.execute(context, operation, input).then(function (data) {
 			return data.data.delete_entity2.map(function (row) {

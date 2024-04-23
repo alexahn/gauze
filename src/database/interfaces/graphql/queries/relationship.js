@@ -28,12 +28,22 @@ const RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_DATABASE = new GraphQLInputObjectT
 	fields: $structure.relationship.database.graphql.GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_FIELDS_STRUCTURE
 })
 
+const RELATIONSHIP_ATTRIBUTES_ARRAY_QUERY_INTERFACE_DATABASE = new GraphQLInputObjectType({
+	name: 'Relationship_Query__Attributes_Array',
+	description: 'Relationship Query Attributes Array',
+	fields: $structure.relationship.database.graphql.GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_FIELDS_ARRAY_STRUCTURE
+})
+
 const RELATIONSHIP_READ_QUERY_GRAPHQL_INTERFACE_DATABASE = {
 	type: new GraphQLList($structure.relationship.database.graphql.GRAPHQL_DATABASE_RELATIONSHIP_QUERY_STRUCTURE),
 	args: {
 		where: {
 			description: 'where',
 			type: RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_DATABASE,
+		},
+		where_in: {
+			description: 'where in',
+			type: RELATIONSHIP_ATTRIBUTES_ARRAY_QUERY_INTERFACE_DATABASE
 		},
 		limit: {
 			description: 'limit',

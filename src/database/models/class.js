@@ -29,13 +29,13 @@ class DatabaseModel extends $kernel.models._class.Model {
 		source,
 		database,
 		transaction
-	}, {
-		attributes
-	}) {
+	}, input) {
 		const self = this
+		const {
+			attributes
+		} = input
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'source', source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'attributes', attributes)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'serialized attributes', attributes)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'input', input)
 		const sql = database(self.table)
 			.insert(attributes, [self.primary_key])
 			.transacting(transaction)
@@ -68,17 +68,19 @@ class DatabaseModel extends $kernel.models._class.Model {
 		source,
 		database,
 		transaction
-	}, {
-		where,
-		limit = 128,
-		offset = 0,
-		order = this.primary_key,
-		order_direction = 'asc',
-		order_nulls = 'first'
-	}) {
+	}, input) {
 		const self = this
+		const {
+			where,
+			where_in,
+			limit = 128,
+			offset = 0,
+			order = this.primary_key,
+			order_direction = 'asc',
+			order_nulls = 'first'
+		} = input
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.read:enter`, 'source', source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.read:enter`, 'where', where)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.read:enter`, 'input', input)
 		if (source && source._metadata) {
 			// do join here based on source metadata
 			// use structure resolvers to convert graphql type to table name
@@ -140,20 +142,19 @@ class DatabaseModel extends $kernel.models._class.Model {
 		source,
 		database,
 		transaction
-	}, {
-		where,
-		attributes,
-		limit = 128,
-		offset = 0,
-		order = this.primary_key,
-		order_direction = 'asc',
-		order_nulls = 'first'
-	}) {
+	}, input) {
 		var self = this
+		const {
+			where,
+			attributes,
+			limit = 128,
+			offset = 0,
+			order = this.primary_key,
+			order_direction = 'asc',
+			order_nulls = 'first'
+		} = input
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'source', source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'where', where)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'attributes', attributes)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'serialized attributes', attributes)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'input', input)
 		if (source && source._metadata) {
 			// note: manual approach: do a query to get a set of ids and pass those into a where in clause
 			// note: there might be a way to do this in one shot by doing a join query, but this approach is not terrible because we can handle 1 million ids in memory fine
@@ -289,17 +290,18 @@ class DatabaseModel extends $kernel.models._class.Model {
 		source,
 		database,
 		transaction
-	}, {
-		where,
-		limit = 128,
-		offset = 0,
-		order = this.primary_key,
-		order_direction = 'asc',
-		order_nulls = 'first'
-	}) {
+	}, input) {
 		var self = this
+		const {
+			where,
+			limit = 128,
+			offset = 0,
+			order = this.primary_key,
+			order_direction = 'asc',
+			order_nulls = 'first'
+		} = input
 		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'source', source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'where', where)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'input', input)
 		// todo: use attributes and update deleted_at instead of deleting the row
 		//attributes = self.serialize(attributes, 'delete')
 		if (source && source._metadata) {

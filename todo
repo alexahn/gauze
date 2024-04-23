@@ -127,9 +127,13 @@
 		[ ] system permissions
 		[ ] user permissions
 [x] move execute from terminal to kernel/shell
-	[ ] import execute from kernel and use in other places
-		[x] refactor inputs to execute to make it pretty (e.g. context instead of contextValue, variables insead of variableValues)
+	[x] import execute from kernel and use in system models
+	[x] refactor inputs to execute to make it pretty (e.g. context instead of contextValue, variables insead of variableValues)
+	[ ] import execute from kernel and use in tests
 [ ] start thinking about kernel/src or kernel/source
 	[ ] base everything off structures
 [ ] add a _description attribute to every module so that the codebase can be explored via the repl
 	[ ] always add the field at the end of every module definition so it shows up at the bottom in the repl
+[ ] move object destructuring for database model inputs into the function itself (for debugging purposes when we want to log the entire input)
+	[x] database models
+[ ] add logging to system models
