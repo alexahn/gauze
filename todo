@@ -45,18 +45,8 @@
 [ ] command directory
 	[ ] yargs?
 	[x] terminal
-	[ ] server
+	[x] server
 	[ ] manage?
-[ ] permissions and authorization
-	[-] row based security (postgresql)?
-		[-] seems like it is technically complex because we'd need to authenticate every user to postgresql
-		[-] the application code isn't complex, but the database tuning and management would be
-		[-] the example policies i could find also don't seem to be that flexible, and it might be hard to set them up without duplicating relationship data across entities
-	[ ] maybe some kind of bit field if we want to be efficient?
-	[ ] simple white and black list permissions
-		[ ] system permissions
-		[ ] user permissions
-[ ] url and routes
 [x] realms (database, system, user) should be written by using the exposed interface for the layer below
 	[x] forces any circular dependencies to be made apparent
 	[x] use structure as $structure
@@ -89,7 +79,8 @@
 	[x] delete the fields prior to constructing a sql query
 	[x] have the model handle them
 	[x] add serializers to fields
-[ ] add graphql shell
+[x] add graphql shell
+	[x] add an execute function for database and system realms in the terminal
 [ ] soft delete
 [ ] rename columns in relationship table
 	[ ] example: _id to gauze__relationship__id
@@ -122,5 +113,15 @@
 	[ ] account table (look at how passport and nextjs auth create their tables)
 	[ ] proxy graphiql via server
 	[ ] use a higher level http server (express, fastify, koa, etc) ?
+		[ ] url and routes
 [ ] accept a query parameter to simulate user id
 	[ ] allows us to work on permission/authorization layer without having a user table
+[ ] permissions and authorization
+	[-] row based security (postgresql)?
+		[-] seems like it is technically complex because we'd need to authenticate every user to postgresql
+		[-] the application code isn't complex, but the database tuning and management would be
+		[-] the example policies i could find also don't seem to be that flexible, and it might be hard to set them up without duplicating relationship data across entities
+	[ ] maybe some kind of bit field if we want to be efficient?
+	[ ] simple white and black list permissions
+		[ ] system permissions
+		[ ] user permissions
