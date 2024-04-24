@@ -138,11 +138,15 @@
 	[x] database models
 [ ] add logging to system models
 [ ] fix structure names in graphql.js and sql.js files
-	[ ] GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_FIELDS_ARRAY_STRUCTURE shoudl be ATTRIBUTES_FIELDS_ARRAY_GRAPHQL_DATABASE_RELATIONSHIP_STRUCTURE
-		[ ] maybe introduce a double underscore convention to seperate the namespace from the item?
-			[ ] ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE ?
-				[ ] does seem more clear
+	[x] GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_FIELDS_ARRAY_STRUCTURE shoudl be ATTRIBUTES_FIELDS_ARRAY_GRAPHQL_DATABASE_RELATIONSHIP_STRUCTURE
+		[x] maybe introduce a double underscore convention to seperate the namespace from the item?
+			[x] ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE ?
+				[x] does seem more clear
 	[x] sql.js
 	[x] graphql.js
 	[x] database/interfaces/operations
 	[x] schemas
+	[x] queries and mutations
+	[x] kernel/shell
+	[ ] kernel/logger
+	[ ] kernel/cache

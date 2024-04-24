@@ -34,7 +34,7 @@ const ENTITY2_ATTRIBUTES_ARRAY_QUERY_INTERFACE_DATABASE = new GraphQLInputObject
 	fields: $structure.entity2.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__ENTITY2__STRUCTURE
 })
 
-const ENTITY2_READ_QUERY_GRAPHQL_INTERFACE_DATABASE = {
+const READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new GraphQLList($structure.entity2.database.graphql.QUERY__GRAPHQL__DATABASE__ENTITY2__STRUCTURE),
 	args: {
 		where: {
@@ -71,20 +71,20 @@ const ENTITY2_READ_QUERY_GRAPHQL_INTERFACE_DATABASE = {
 		}
 	},
 	resolve: (_source, query_arguments, context) => {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY2_READ_QUERY_GRAPHQL_INTERFACE_DATABASE.resolve:enter', '_source', _source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'ENTITY2_READ_QUERY_GRAPHQL_INTERFACE_DATABASE.resolve:enter', 'query_arguments', query_arguments)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter', '_source', _source)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter', 'query_arguments', query_arguments)
 		return ENTITY2_CONTROLLER_DATABASE.read({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction
 			}, query_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, 'ENTITY2_READ_QUERY_GRAPHQL_INTERFACE_DATABASE.resolve:success', 'data', data)
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, 'READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success', 'data', data)
 				return data.map(ENTITY2_SERIALIZER.serialize)
 			})
 	}
 }
 
 export {
-	ENTITY2_READ_QUERY_GRAPHQL_INTERFACE_DATABASE
+	READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__DATABASE
 }

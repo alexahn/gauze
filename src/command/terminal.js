@@ -13,7 +13,7 @@ import {
 	graphql
 } from 'graphql';
 
-const SHELL = $gauze.kernel.shell.node.NODE_SHELL_KERNEL.start()
+const SHELL = $gauze.kernel.shell.node.SHELL__NODE__SHELL__KERNEL.start()
 
 function create_graphql_shell (schema, database) {
 	return function (operation, operation_name, operation_variables) {

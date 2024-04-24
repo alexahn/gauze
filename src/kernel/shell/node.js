@@ -8,8 +8,8 @@ class NodeShell {
 	}
 }
 
-const NODE_SHELL_KERNEL = new NodeShell()
+const SHELL__NODE__SHELL__KERNEL = new NodeShell()
 
 export {
-	NODE_SHELL_KERNEL
+	SHELL__NODE__SHELL__KERNEL
 }

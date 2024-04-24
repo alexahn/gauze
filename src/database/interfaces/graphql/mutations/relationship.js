@@ -36,7 +36,7 @@ const RELATIONSHIP_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE = new GraphQLInp
 	fields: $structure.relationship.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE
 })
 
-const RELATIONSHIP_CREATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
+const CREATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new GraphQLList($structure.relationship.database.graphql.MUTATION__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE),
 	args: {
 		attributes: {
@@ -45,21 +45,21 @@ const RELATIONSHIP_CREATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'RELATIONSHIP_CREATE_MUTATION_GRAPHQL_INTERFACE_DATABASE.resolve:enter', '_source', _source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'RELATIONSHIP_CREATE_MUTATION_GRAPHQL_INTERFACE_DATABASE.resolve:enter', 'mutation_arguments', mutation_arguments)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'CREATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter', '_source', _source)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'CREATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter', 'mutation_arguments', mutation_arguments)
 		return RELATIONSHIP_CONTROLLER_DATABASE.create({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction
 			}, mutation_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'RELATIONSHIP_CREATE_MUTATION_GRAPHQL_INTERFACE_DATABASE.resolve:success', 'data', data)
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'CREATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success', 'data', data)
 				return data.map(RELATIONSHIP_SERIALIZER.serialize)
 			})
 	}
 }
 
-const RELATIONSHIP_UPDATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
+const UPDATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new GraphQLList($structure.relationship.database.graphql.MUTATION__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE),
 	args: {
 		where: {
@@ -100,21 +100,21 @@ const RELATIONSHIP_UPDATE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'RELATIONSHIP_UPDATE_MUTATION_GRAPHQL_INTERFACE_DATABASE.resolve:enter', '_source', _source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'RELATIONSHIP_UPDATE_MUTATION_GRAPHQL_INTERFACE_DATABASE.resolve:enter', 'mutation_arguments', mutation_arguments)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'UPDATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter', '_source', _source)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'UPDATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter', 'mutation_arguments', mutation_arguments)
 		return RELATIONSHIP_CONTROLLER_DATABASE.update({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction
 			}, mutation_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'RELATIONSHIP_UPDATE_MUTATION_GRAPHQL_INTERFACE_DATABASE.resolve:success', 'data', data)
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'UPDATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success', 'data', data)
 				return data.map(RELATIONSHIP_SERIALIZER.serialize)
 			})
 	}
 }
 
-const RELATIONSHIP_DELETE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
+const DELETE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new GraphQLList($structure.relationship.database.graphql.MUTATION__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE),
 	args: {
 		where: {
@@ -143,22 +143,22 @@ const RELATIONSHIP_DELETE_MUTATION_GRAPHQL_INTERFACE_DATABASE = {
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'RELATIONSHIP_DELETE_MUTATION_GRAPHQL_INTERFACE_DATABASE.resolve:enter', '_source', _source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'RELATIONSHIP_DELETE_MUTATION_GRAPHQL_INTERFACE_DATABASE.resolve:enter', 'mutation_arguments', mutation_arguments)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'DELETE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter', '_source', _source)
+		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'DELETE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter', 'mutation_arguments', mutation_arguments)
 		return RELATIONSHIP_CONTROLLER_DATABASE.delete({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction
 			}, mutation_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'RELATIONSHIP_DELETE_MUTATION_GRAPHQL_INTERFACE_DATABASE.resolve:success', 'data', data)
+				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'DELETE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success', 'data', data)
 				return data.map(RELATIONSHIP_SERIALIZER.serialize)
 			})
 	}
 }
 
 export {
-	RELATIONSHIP_CREATE_MUTATION_GRAPHQL_INTERFACE_DATABASE,
-	RELATIONSHIP_UPDATE_MUTATION_GRAPHQL_INTERFACE_DATABASE,
-	RELATIONSHIP_DELETE_MUTATION_GRAPHQL_INTERFACE_DATABASE
+	CREATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+	UPDATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+	DELETE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE
 }
