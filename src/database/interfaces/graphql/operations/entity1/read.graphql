@@ -8,7 +8,7 @@ query ReadEntity1(
 	$order_direction: String,
 	$order_nulls: String
 ) {
-    read_entity1(
+	read_entity1(
 		where: $where,
 		where_in: $where_in,
 		where_not_in: $where_not_in,
@@ -18,12 +18,12 @@ query ReadEntity1(
 		order_direction: $order_direction,
 		order_nulls: $order_nulls
 	) {
-        attributes {
-            id
+		attributes {
+			id
 			created_at
 			updated_at
 			deleted_at
-            text
-        }
-    }
+			text
+		}
+	}
 }

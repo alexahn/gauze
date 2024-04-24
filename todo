@@ -165,5 +165,7 @@
 	[ ] file handler entity
 		[ ] manages an io entity that can read and write
 	[ ] streaming interface for files
-[ ] rename reality to application
-	[ ] have application stack be right below system stack so we have a total ordering
+[ ] think about realm organization
+	[ ] might make more sense if system had an account, and application had a user
+	[ ] might make more sense if reality had a person, and story had a character
+	[ ] system can host applications and reality can host stories?
