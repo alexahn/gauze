@@ -11,8 +11,8 @@ class RelationshipSystemModel extends GraphQLOperationSystemModel {
 	}
 	create (context, input) {
 		const operation = {
-			operation: $database.interfaces.graphql.operations.relationship.RELATIONSHIP_CREATE_OPERATION_GRAPHQL_INTERFACE_DATABASE,
-			operation_name: $database.interfaces.graphql.operations.relationship.RELATIONSHIP_CREATE_OPERATION_NAME_GRAPHQL_INTERFACE_DATABASE
+			operation: $database.interfaces.graphql.operations.relationship.CREATE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			operation_name: $database.interfaces.graphql.operations.relationship.CREATE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE
 		}
 		return this.execute(context, operation, input).then(function (data) {
 			return data.data.create_relationship.map(function (row) {
@@ -22,8 +22,8 @@ class RelationshipSystemModel extends GraphQLOperationSystemModel {
 	}
 	read (context, input) {
 		const operation = {
-			operation: $database.interfaces.graphql.operations.relationship.RELATIONSHIP_READ_OPERATION_GRAPHQL_INTERFACE_DATABASE,
-			operation_name: $database.interfaces.graphql.operations.relationship.RELATIONSHIP_READ_OPERATION_NAME_GRAPHQL_INTERFACE_DATABASE
+			operation: $database.interfaces.graphql.operations.relationship.READ__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			operation_name: $database.interfaces.graphql.operations.relationship.READ_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE
 		}
 		return this.execute(context, operation, input).then(function (data) {
 			return data.data.read_relationship.map(function (row) {
@@ -33,8 +33,8 @@ class RelationshipSystemModel extends GraphQLOperationSystemModel {
 	}
 	update (context, input) {
 		const operation = {
-			operation: $database.interfaces.graphql.operations.relationship.RELATIONSHIP_UPDATE_OPERATION_GRAPHQL_INTERFACE_DATABASE,
-			operation_name: $database.interfaces.graphql.operations.relationship.RELATIONSHIP_UPDATE_OPERATION_NAME_GRAPHQL_INTERFACE_DATABASE
+			operation: $database.interfaces.graphql.operations.relationship.UPDATE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			operation_name: $database.interfaces.graphql.operations.relationship.UPDATE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE
 		}
 		return this.execute(context, operation, input).then(function (data) {
 			return data.data.update_relationship.map(function (row) {
@@ -44,8 +44,8 @@ class RelationshipSystemModel extends GraphQLOperationSystemModel {
 	}
 	delete (context, input) {
 		const operation = {
-			operation: $database.interfaces.graphql.operations.relationship.RELATIONSHIP_DELETE_OPERATION_GRAPHQL_INTERFACE_DATABASE,
-			operation_name: $database.interfaces.graphql.operations.relationship.RELATIONSHIP_DELETE_OPERATION_NAME_GRAPHQL_INTERFACE_DATABASE
+			operation: $database.interfaces.graphql.operations.relationship.DELETE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			operation_name: $database.interfaces.graphql.operations.relationship.DELETE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE
 		}
 		return this.execute(context, operation, input).then(function (data) {
 			return data.data.delete_relationship.map(function (row) {
@@ -61,7 +61,7 @@ const RELATIONSHIP_MODEL_SYSTEM_ROOT_CONFIG = {
 	field_serializers: $structure.relationship.database.sql.FIELD_SERIALIZERS__SQL__DATABASE__RELATIONSHIP__STRUCTURE
 }
 const RELATIONSHIP_MODEL_SYSTEM_PARENT_CONFIG = {
-	schema: $database.interfaces.graphql.schema.SCHEMA_GRAPHQL_INTERFACE_DATABASE
+	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE
 }
 const RELATIONSHIP_MODEL_SYSTEM_CONFIG = {}
 const RELATIONSHIP_MODEL_SYSTEM = new RelationshipSystemModel(RELATIONSHIP_MODEL_SYSTEM_ROOT_CONFIG, RELATIONSHIP_MODEL_SYSTEM_PARENT_CONFIG, RELATIONSHIP_MODEL_SYSTEM_CONFIG)

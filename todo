@@ -144,3 +144,5 @@
 				[ ] does seem more clear
 	[x] sql.js
 	[x] graphql.js
+	[x] database/interfaces/operations
+	[x] schemas

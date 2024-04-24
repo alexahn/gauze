@@ -17,7 +17,7 @@ const SHELL = $gauze.kernel.shell.node.NODE_SHELL_KERNEL.start()
 
 function create_graphql_shell (schema, database) {
 	return function (operation, operation_name, operation_variables) {
-		return $gauze.kernel.shell.graphql.GRAPHQL_TRANSACTION_EXECUTE_SHELL_KERNEL(database, {
+		return $gauze.kernel.shell.graphql.TRANSACTION_EXECUTE__GRAPHQL__SHELL__KERNEL(database, {
 			schema,
 			operation,
 			operation_name,
@@ -34,8 +34,8 @@ SHELL.context.$gauze = $gauze
 SHELL.context.gauze = {}
 SHELL.context.gauze.database = $gauze.database.knex.create_connection()
 SHELL.context.gauze.modules = $gauze
-SHELL.context.gauze.execute_database_graphql = create_graphql_shell($gauze.database.interfaces.graphql.schema.SCHEMA_GRAPHQL_INTERFACE_DATABASE, SHELL.context.gauze.database)
-SHELL.context.gauze.execute_system_graphql = create_graphql_shell($gauze.system.interfaces.graphql.schema.SCHEMA_GRAPHQL_INTERFACE_SYSTEM, SHELL.context.gauze.database)
+SHELL.context.gauze.execute_database_graphql = create_graphql_shell($gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE, SHELL.context.gauze.database)
+SHELL.context.gauze.execute_system_graphql = create_graphql_shell($gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE, SHELL.context.gauze.database)
 SHELL.context.gauze._description = {
 	database: "A Knex database connection",
 	modules: "The gauze root module (src/index.js)",

@@ -33,7 +33,7 @@ class GraphQLOperationSystemModel extends SystemModel {
 		operation,
 		operation_name
 	}, operation_variables) {
-		return $kernel.shell.graphql.GRAPHQL_EXECUTE_SHELL_KERNEL({
+		return $kernel.shell.graphql.EXECUTE__GRAPHQL__SHELL__KERNEL({
 			schema: this.schema,
 			context,
 			operation,

@@ -16,7 +16,7 @@ function execute ({
 	operationName
 }) {
 	return graphql({
-		schema: $gauze.database.interfaces.graphql.schema.SCHEMA_GRAPHQL_INTERFACE_DATABASE,
+		schema: $gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 		source,
 		contextValue,
 		variableValues,

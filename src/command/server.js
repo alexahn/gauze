@@ -12,15 +12,13 @@ import {
 } from 'graphql-http';
 
 import {
-	//link as link_system_schema,
-	//root as root_system_schema,
-	SCHEMA_GRAPHQL_INTERFACE_SYSTEM
-	//build as build_system_schema
+	//SCHEMA_GRAPHQL_INTERFACE_SYSTEM
+	SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM
 } from './../system/interfaces/graphql/schema.js';
 
 import {
-	//build as build_database_schema
-	SCHEMA_GRAPHQL_INTERFACE_DATABASE
+	//SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE
+	SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE
 } from './../database/interfaces/graphql/schema.js'
 
 import {
@@ -36,7 +34,7 @@ const handler = createHandler({
 
 // seems we need to link the system before we link the database?
 // why aren't these mutually exclusive?
-//const SCHEMA_GRAPHQL_INTERFACE_DATABASE = build_database_schema()
+//const SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE = build_database_schema()
 //const SCHEMA_GRAPHQL_INTERFACE_SYSTEM = build_system_schema()
 
 const database = create_connection()
@@ -113,9 +111,9 @@ function create_graphql_handler (schema, req, res) {
 // Create a HTTP server using the listener on `/graphql`
 const server = http.createServer((req, res) => {
 	if (req.url.startsWith('/database/graphql')) {
-		return create_graphql_handler(SCHEMA_GRAPHQL_INTERFACE_DATABASE, req, res)
+		return create_graphql_handler(SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE, req, res)
 	} else if (req.url.startsWith('/system/graphql')) {
-		return create_graphql_handler(SCHEMA_GRAPHQL_INTERFACE_SYSTEM, req, res)
+		return create_graphql_handler(SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM, req, res)
 	} else {
 		res.writeHead(404).end();
 	}
