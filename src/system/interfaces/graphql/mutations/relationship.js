@@ -22,7 +22,7 @@ import {
 
 const RELATIONSHIP_SERIALIZER = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.relationship.system.graphql.TYPE__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
-	sql_primary_key: $structure.relationship.database.sql.PRIMARY_KEY__SQL__DATABASE__RELATIONSHIP__STRUCTURE
+	sql_primary_key: $structure.relationship.abstract.PRIMARY_KEY__ABSTRACT__RELATIONSHIP__STRUCTURE
 })
 
 const RELATIONSHIP_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({

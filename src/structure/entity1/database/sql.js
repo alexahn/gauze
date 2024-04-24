@@ -4,8 +4,12 @@ import {
 	SERIALIZER_DELETED_AT_STRUCTURE
 } from './../../serializers.js'
 
+import {
+	PRIMARY_KEY__ABSTRACT__ENTITY1__STRUCTURE
+} from './../abstract.js'
+
 const TABLE_NAME__SQL__DATABASE__ENTITY1__STRUCTURE = 'gauze__entity1'
-const PRIMARY_KEY__SQL__DATABASE__ENTITY1__STRUCTURE = 'id'
+const PRIMARY_KEY__SQL__DATABASE__ENTITY1__STRUCTURE = PRIMARY_KEY__ABSTRACT__ENTITY1__STRUCTURE
 const FIELDS__SQL__DATABASE__ENTITY1__STRUCTURE = {
 	id: true,
 	created_at: true,

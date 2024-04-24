@@ -4,8 +4,12 @@ import {
 	SERIALIZER_DELETED_AT_STRUCTURE
 } from './../../serializers.js'
 
+import {
+	PRIMARY_KEY__ABSTRACT__RELATIONSHIP__STRUCTURE
+} from './../abstract.js'
+
 const TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE = 'gauze__relationship'
-const PRIMARY_KEY__SQL__DATABASE__RELATIONSHIP__STRUCTURE = 'gauze__relationship__id'
+const PRIMARY_KEY__SQL__DATABASE__RELATIONSHIP__STRUCTURE = PRIMARY_KEY__ABSTRACT__RELATIONSHIP__STRUCTURE
 const FIELDS__SQL__DATABASE__RELATIONSHIP__STRUCTURE = {
 	gauze__relationship__id: true,
 	gauze__relationship__created_at: true,
