@@ -32,7 +32,7 @@ class DatabaseModel extends $kernel.models._class.Model {
 	}, input) {
 		const self = this
 		const {
-			attributes
+			attributes = {}
 		} = input
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'source', source)
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'input', input)
@@ -71,14 +71,14 @@ class DatabaseModel extends $kernel.models._class.Model {
 	}, input) {
 		const self = this
 		const {
-			where,
-			where_in,
-			where_not_in,
-			limit = 128,
-			offset = 0,
-			order = this.primary_key,
-			order_direction = 'asc',
-			order_nulls = 'first'
+			where = {},
+				where_in = {},
+				where_not_in = {},
+				limit = 128,
+				offset = 0,
+				order = this.primary_key,
+				order_direction = 'asc',
+				order_nulls = 'first'
 		} = input
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.read:enter`, 'source', source)
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.read:enter`, 'input', input)
@@ -95,12 +95,31 @@ class DatabaseModel extends $kernel.models._class.Model {
 				var joined_key = self.table + '.' + k
 				joined_where[joined_key] = where[k]
 			})
+			var joined_where_in = {}
+			Object.keys(where_in).forEach(function (k) {
+				var joined_key = self.table + '.' + k
+				joined_where_in[joined_key] = where_in[k]
+			})
+			var joined_where_not_in = {}
+			Object.keys(where_not_in).forEach(function (k) {
+				var joined_key = self.table + '.' + k
+				joined_where_not_in[joined_key] = where_not_in[k]
+			})
 			var joined_order = self.table + '.' + order
 			const sql = database(self.table)
 				.join(self.relationship_table, `${self.relationship_table}._to_id`, '=', `${self.table}.id`)
 				.where(`${self.relationship_table}._from_id`, PARENT_SQL_ID)
 				.where(`${self.relationship_table}._from_type`, PARENT_SQL_TABLE)
-				.where(joined_where)
+				.where(function (builder) {
+					builder.where(joined_where)
+					Object.keys(joined_where_in).forEach(function (key) {
+						builder.whereIn(key, joined_where_in[key])
+					})
+					Object.keys(joined_where_not_in).forEach(function (key) {
+						builder.whereNotIn(key, joined_where_not_in[key])
+					})
+					return builder
+				})
 				.limit(limit)
 				.offset(offset)
 				.orderBy(joined_order, order_direction, order_nulls)
@@ -119,19 +138,13 @@ class DatabaseModel extends $kernel.models._class.Model {
 		} else {
 			const sql = database(self.table)
 				.where(function (builder) {
-					if (where) {
-						builder.where(where)
-					}
-					if (where_not_in) {
-						Object.keys(where_not_in).forEach(function (key) {
-							builder.whereNotIn(key, where_not_in[key])
-						})
-					}
-					if (where_in) {
-						Object.keys(where_in).forEach(function (key) {
-							builder.whereIn(key, where_in[key])
-						})
-					}
+					builder.where(where)
+					Object.keys(where_in).forEach(function (key) {
+						builder.whereIn(key, where_in[key])
+					})
+					Object.keys(where_not_in).forEach(function (key) {
+						builder.whereNotIn(key, where_not_in[key])
+					})
 					return builder
 				})
 				.limit(limit)
@@ -161,38 +174,29 @@ class DatabaseModel extends $kernel.models._class.Model {
 	}, input) {
 		var self = this
 		const {
-			where,
-			attributes,
-			limit = 128,
-			offset = 0,
-			order = this.primary_key,
-			order_direction = 'asc',
-			order_nulls = 'first'
+			attributes = {},
+				where = {},
+				where_in = {},
+				where_not_in = {}
 		} = input
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'source', source)
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'input', input)
+		const MAXIMUM_ROWS = 4294967296
 		if (source && source._metadata) {
-			// note: manual approach: do a query to get a set of ids and pass those into a where in clause
-			// note: there might be a way to do this in one shot by doing a join query, but this approach is not terrible because we can handle 1 million ids in memory fine
 			// todo: hook up lru cache when dealing with id arrays
 			return self.read({
 				source,
 				database,
 				transaction
 			}, {
-				where,
-				limit,
-				offset,
-				order,
-				order_direction,
-				order_nulls
+				...input,
+				limit: MAXIMUM_ROWS
 			}).then(function (data) {
 				const valid_ids = data.map(function (item) {
 					return item[self.primary_key]
 				})
 				// use valid_ids to do a where in query
 				const sql = database(self.table)
-					.where(where)
 					.whereIn(self.primary_key, valid_ids)
 					.update(attributes)
 					.transacting(transaction)
@@ -205,14 +209,7 @@ class DatabaseModel extends $kernel.models._class.Model {
 							source,
 							database,
 							transaction
-						}, {
-							where,
-							limit,
-							offset,
-							order,
-							order_direction,
-							order_nulls
-						})
+						}, input)
 					})
 					.catch(function (err) {
 						$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
@@ -222,56 +219,6 @@ class DatabaseModel extends $kernel.models._class.Model {
 				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
 				throw err
 			})
-			/*
-			// todo: currently might only work in postgresql
-			const PARENT_SQL_ID = source._metadata.id
-			const PARENT_GRAPHQL_TYPE = source._metadata.type
-			const PARENT_SQL_TABLE = $structure.resolvers.DATABASE_GRAPHQL_TYPE_TO_SQL_TABLE[PARENT_GRAPHQL_TYPE]
-			// mutate where by prefixing with table name
-			var joined_where = {}
-			Object.keys(where).forEach(function (k) {
-				var joined_key = self.table + '.' + k
-				joined_where[joined_key] = where[k]
-			})
-			var joined_attributes = {}
-			Object.keys(attributes).forEach(function (k) {
-				var joined_key = self.table + '.' + k
-				joined_attributes[joined_key] = attributes[k]
-			})
-			const sql = database(self.table)
-				.where(joined_where)
-				//.update(joined_attributes)
-				.join(self.relationship_table, `${self.relationship_table}._to_id`, '=', `${self.table}.id`)
-				.where(`${self.relationship_table}._from_id`, PARENT_SQL_ID)
-				.where(`${self.relationship_table}._from_type`, PARENT_SQL_TABLE)
-				.update(joined_attributes)
-				//.updateFrom(self.relationship_table)
-				//.where(`${self.relationship_table}._to_id`, '=', `${self.table}.id`)
-				//.where(joined_where)
-				.transacting(transaction)
-			if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
-				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString())
-			}
-			return sql.then(function (data) {
-					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:success`, 'data', data)
-					return self.read({
-						source,
-						database,
-						transaction
-					}, {
-						where,
-						limit,
-						offset,
-						order,
-						order_direction,
-						order_nulls
-					})
-				})
-				.catch(function (err) {
-					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
-					throw err
-				})
-			*/
 		} else {
 			const sql = database(self.table)
 				.where(where)
@@ -286,14 +233,7 @@ class DatabaseModel extends $kernel.models._class.Model {
 						source,
 						database,
 						transaction
-					}, {
-						where,
-						limit,
-						offset,
-						order,
-						order_direction,
-						order_nulls
-					})
+					}, input)
 				})
 				.catch(function (err) {
 					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
@@ -309,39 +249,29 @@ class DatabaseModel extends $kernel.models._class.Model {
 	}, input) {
 		var self = this
 		const {
-			where,
-			limit = 128,
-			offset = 0,
-			order = this.primary_key,
-			order_direction = 'asc',
-			order_nulls = 'first'
+			where = {},
+				where_in = {},
+				where_not_in = {}
 		} = input
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'source', source)
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'input', input)
+		const MAXIMUM_ROWS = 4294967296
 		// todo: use attributes and update deleted_at instead of deleting the row
-		//attributes = self.serialize(attributes, 'delete')
 		if (source && source._metadata) {
-			// note: manual approach: do a query to get a set of ids and pass those into a where in clause
-			// note: there might be a way to do this in one shot by doing a join query, but this approach is not terrible because we can handle 1 million ids in memory fine
 			// todo: hook up lru cache when dealing with id arrays
 			return self.read({
 				source,
 				database,
 				transaction
 			}, {
-				where,
-				limit,
-				offset,
-				order,
-				order_direction,
-				order_nulls
+				...input,
+				limit: MAXIMUM_ROWS
 			}).then(function (data) {
 				const valid_ids = data.map(function (item) {
 					return item[self.primary_key]
 				})
 				// use valid_ids to do a where in query
 				const sql = database(self.table)
-					.where(where)
 					.whereIn(self.primary_key, valid_ids)
 					.del()
 					.transacting(transaction)
@@ -354,14 +284,7 @@ class DatabaseModel extends $kernel.models._class.Model {
 							source,
 							database,
 							transaction
-						}, {
-							where,
-							limit,
-							offset,
-							order,
-							order_direction,
-							order_nulls
-						})
+						}, input)
 					})
 					.catch(function (err) {
 						$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, 'err', err)
@@ -371,46 +294,6 @@ class DatabaseModel extends $kernel.models._class.Model {
 				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, 'err', err)
 				throw err
 			})
-			/*
-			const PARENT_SQL_ID = source._metadata.id
-			const PARENT_GRAPHQL_TYPE = source._metadata.type
-			const PARENT_SQL_TABLE = $structure.resolvers.DATABASE_GRAPHQL_TYPE_TO_SQL_TABLE[PARENT_GRAPHQL_TYPE]
-			// mutate where by prefixing with table name
-			var joined_where = {}
-			Object.keys(where).forEach(function (k) {
-				var joined_key = self.table + '.' + k
-				joined_where[joined_key] = where[k]
-			})
-			const sql = database(self.table)
-				.where(joined_where)
-				.join(self.relationship_table, `${self.relationship_table}._to_id`, '=', `${self.table}.id`)
-				.where(`${self.relationship_table}._from_id`, PARENT_SQL_ID)
-				.where(`${self.relationship_table}._from_type`, PARENT_SQL_TABLE)
-				.del()
-				.transacting(transaction)
-			if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
-				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString())
-			}
-			return sql.then(function (data) {
-					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:success`, 'data', data)
-					return self.read({
-						source,
-						database,
-						transaction
-					}, {
-						where,
-						limit,
-						offset,
-						order,
-						order_direction,
-						order_nulls
-					})
-				})
-				.catch(function (err) {
-					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, 'err', err)
-					throw err
-				})
-			*/
 		} else {
 			const sql = database(self.table)
 				.where(where)
@@ -425,14 +308,7 @@ class DatabaseModel extends $kernel.models._class.Model {
 						source,
 						database,
 						transaction
-					}, {
-						where,
-						limit,
-						offset,
-						order,
-						order_direction,
-						order_nulls
-					})
+					}, input)
 				})
 				.catch(function (err) {
 					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, 'err', err)

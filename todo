@@ -155,3 +155,6 @@
 	[ ] hook up lru cache to system and database
 [ ] accept a query parameter to simulate user id
 	[ ] allows us to work on permission/authorization layer without having a user table
+[ ] add parent argument to database graphql queries and mutations
+	[ ] it should have a structure like:  { _metadata: { id, type } }
+	[ ] we need this to pass in the source (e.g. parent) from the system to honor relationships
