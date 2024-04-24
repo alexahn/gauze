@@ -1,7 +1,7 @@
 mutation UpdateEntity1NestedRelationships(
-	$where1: Entity1_Mutation__Attributes,
-	$attributes1: Entity1_Mutation__Attributes,
-	$where2: Entity2_Mutation__Attributes,
+	$where1: Entity1_Mutation__Attributes
+	$attributes1: Entity1_Mutation__Attributes
+	$where2: Entity2_Mutation__Attributes
 	$attributes2: Entity2_Mutation__Attributes
 ) {
 	update_entity1(where: $where1, attributes: $attributes1) {

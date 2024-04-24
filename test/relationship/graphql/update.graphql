@@ -1,7 +1,4 @@
-mutation UpdateRelationship(
-	$where: Relationship_Mutation__Attributes,
-	$attributes: Relationship_Mutation__Attributes
-) {
+mutation UpdateRelationship($where: Relationship_Mutation__Attributes, $attributes: Relationship_Mutation__Attributes) {
 	update_relationship(where: $where, attributes: $attributes) {
 		attributes {
 			gauze__relationship__id

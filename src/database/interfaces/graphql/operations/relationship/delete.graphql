@@ -1,24 +1,24 @@
 mutation DeleteRelationship(
-	$where: Relationship_Mutation__Attributes,
-	$where_in: Relationship_Mutation__Attributes_Array,
-	$where_not_in: Relationship_Mutation__Attributes_Array,
-	$limit: Int,
-	$offset: Int,
-	$order: String,
-	$order_direction: String,
+	$where: Relationship_Mutation__Attributes
+	$where_in: Relationship_Mutation__Attributes_Array
+	$where_not_in: Relationship_Mutation__Attributes_Array
+	$limit: Int
+	$offset: Int
+	$order: String
+	$order_direction: String
 	$order_nulls: String
 ) {
-    delete_relationship(
-		where: $where,
-		where_in: $where_in,
-		where_not_in: $where_not_in,
-		limit: $limit,
-		offset: $offset,
-		order: $order,
-		order_direction: $order_direction,
+	delete_relationship(
+		where: $where
+		where_in: $where_in
+		where_not_in: $where_not_in
+		limit: $limit
+		offset: $offset
+		order: $order
+		order_direction: $order_direction
 		order_nulls: $order_nulls
 	) {
-        attributes {
+		attributes {
 			_id
 			_created_at
 			_updated_at
@@ -27,6 +27,6 @@ mutation DeleteRelationship(
 			_from_id
 			_to_type
 			_to_id
-        }
-    }
+		}
+	}
 }

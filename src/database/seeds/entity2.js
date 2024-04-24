@@ -1,37 +1,36 @@
 /**
-	* @param { import("knex").Knex } knex
-	* @returns { Promise<void> } 
-	*/
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<void> }
+ */
 const seed = async function (knex) {
 	// Deletes ALL existing entries
-	await knex('gauze__entity2').del()
-	await knex('gauze__entity2').insert([{
+	await knex("gauze__entity2").del();
+	await knex("gauze__entity2").insert([
+		{
 			id: 1,
 			created_at: new Date(),
 			updated_at: new Date(),
-			text: 'begin'
+			text: "begin",
 		},
 		{
 			id: 2,
 			created_at: new Date(),
 			updated_at: new Date(),
-			text: 'end'
+			text: "end",
 		},
 		{
 			id: 3,
 			created_at: new Date(),
 			updated_at: new Date(),
-			text: 'new'
+			text: "new",
 		},
 		{
 			id: 4,
 			created_at: new Date(),
 			updated_at: new Date(),
-			text: 'old'
+			text: "old",
 		},
 	]);
 };
 
-export {
-	seed
-}
+export { seed };

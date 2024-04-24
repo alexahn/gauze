@@ -1,7 +1,4 @@
-query ReadEntity1NestedQuery(
-	$where1: Entity1_Query__Attributes,
-	$where2: Entity1_Query__Attributes
-) {
+query ReadEntity1NestedQuery($where1: Entity1_Query__Attributes, $where2: Entity1_Query__Attributes) {
 	read_entity1(where: $where1) {
 		attributes {
 			id

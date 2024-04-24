@@ -1,3 +1,3 @@
-import * as cache from './index.js'
+import * as cache from "./index.js";
 
-console.log('cache', cache)
+console.log("cache", cache);

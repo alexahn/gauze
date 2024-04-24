@@ -1,7 +1,7 @@
 mutation UpdateRelationshipNestedMutation(
-	$where1: Relationship_Mutation__Attributes,
-	$attributes1: Relationship_Mutation__Attributes,
-	$where2: Relationship_Mutation__Attributes,
+	$where1: Relationship_Mutation__Attributes
+	$attributes1: Relationship_Mutation__Attributes
+	$where2: Relationship_Mutation__Attributes
 	$attributes2: Relationship_Mutation__Attributes
 ) {
 	update_relationship(where: $where1, attributes: $attributes1) {

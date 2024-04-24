@@ -1,17 +1,10 @@
-import {
-	graphql,
-	printSchema,
-} from 'graphql';
+import { graphql, printSchema } from "graphql";
 
-import {
-	SCHEMA_GRAPHQL_INTERFACE_SYSTEM as schema
-} from './schema.js'
+import { SCHEMA_GRAPHQL_INTERFACE_SYSTEM as schema } from "./schema.js";
 
-import {
-	create_connection
-} from './../../../database/knex.js'
+import { create_connection } from "./../../../database/knex.js";
 
-const database = create_connection()
+const database = create_connection();
 
 const query = `
     query MyTestQuery {
@@ -60,43 +53,47 @@ const query = `
     }
 `;
 
-console.log('schema', printSchema(schema))
+console.log("schema", printSchema(schema));
 
-function execute () {
+function execute() {
 	// todo: see if we can construct a context here and use it at the end
-	const context = {}
-	context.database = database
-	return database.transaction(function (transaction) {
-		context.transaction = transaction
-		return graphql({
-			schema: schema,
-			source: query,
-			contextValue: context
-		}).then(function (data) {
-			console.log(JSON.stringify(data, null, 4))
-			return transaction.commit(data)
-		}).catch(function (err) {
-			console.log('err', err)
-			return transaction.rollback(err)
+	const context = {};
+	context.database = database;
+	return database
+		.transaction(function (transaction) {
+			context.transaction = transaction;
+			return graphql({
+				schema: schema,
+				source: query,
+				contextValue: context,
+			})
+				.then(function (data) {
+					console.log(JSON.stringify(data, null, 4));
+					return transaction.commit(data);
+				})
+				.catch(function (err) {
+					console.log("err", err);
+					return transaction.rollback(err);
+				});
 		})
-	}).then(function () {
-		database.destroy()
-	})
+		.then(function () {
+			database.destroy();
+		});
 }
 
-var COUNT = 0
+var COUNT = 0;
 
-function loop (f) {
+function loop(f) {
 	return f().then(function (data) {
 		if (COUNT < 100000) {
 			//console.log('count', COUNT)
-			COUNT += 1
-			return loop(f)
+			COUNT += 1;
+			return loop(f);
 		} else {
-			return Promise.resolve(true)
+			return Promise.resolve(true);
 		}
-	})
+	});
 }
 
 //loop(execute)
-execute()
+execute();

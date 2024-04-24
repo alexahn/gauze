@@ -1,26 +1,26 @@
 mutation UpdateRelationship(
-    $attributes: Relationship_Mutation__Attributes,
-    $where: Relationship_Mutation__Attributes,
-    $where_in: Relationship_Mutation__Attributes_Array,
-    $where_not_in: Relationship_Mutation__Attributes_Array,
-    $limit: Int,
-    $offset: Int,
-    $order: String,
-    $order_direction: String,
-    $order_nulls: String
+	$attributes: Relationship_Mutation__Attributes
+	$where: Relationship_Mutation__Attributes
+	$where_in: Relationship_Mutation__Attributes_Array
+	$where_not_in: Relationship_Mutation__Attributes_Array
+	$limit: Int
+	$offset: Int
+	$order: String
+	$order_direction: String
+	$order_nulls: String
 ) {
-    update_relationship(
-		attributes: $attributes,
-		where_in: $where_in,
-		where_not_in: $where_not_in,
-		where: $where,
-		limit: $limit,
-		offset: $offset,
-		order: $order,
-		order_direction: $order_direction,
+	update_relationship(
+		attributes: $attributes
+		where_in: $where_in
+		where_not_in: $where_not_in
+		where: $where
+		limit: $limit
+		offset: $offset
+		order: $order
+		order_direction: $order_direction
 		order_nulls: $order_nulls
 	) {
-        attributes {
+		attributes {
 			_id
 			_created_at
 			_updated_at
@@ -29,6 +29,6 @@ mutation UpdateRelationship(
 			_from_id
 			_to_type
 			_to_id
-        }
-    }
+		}
+	}
 }

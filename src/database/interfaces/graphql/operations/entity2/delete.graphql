@@ -1,29 +1,29 @@
 mutation DeleteEntity2(
-	$where: Entity2_Mutation__Attributes,
-	$where_in: Entity2_Mutation__Attributes_Array,
-	$where_not_in: Entity2_Mutation__Attributes_Array,
-	$limit: Int,
-	$offset: Int,
-	$order: String,
-	$order_direction: String,
+	$where: Entity2_Mutation__Attributes
+	$where_in: Entity2_Mutation__Attributes_Array
+	$where_not_in: Entity2_Mutation__Attributes_Array
+	$limit: Int
+	$offset: Int
+	$order: String
+	$order_direction: String
 	$order_nulls: String
 ) {
-    delete_entity2(
-		where: $where,
-		where_in: $where_in,
-		where_not_in: $where_not_in,
-		limit: $limit,
-		offset: $offset,
-		order: $order,
-		order_direction: $order_direction,
+	delete_entity2(
+		where: $where
+		where_in: $where_in
+		where_not_in: $where_not_in
+		limit: $limit
+		offset: $offset
+		order: $order
+		order_direction: $order_direction
 		order_nulls: $order_nulls
 	) {
-        attributes {
-            id
+		attributes {
+			id
 			created_at
 			updated_at
 			deleted_at
-            text
-        }
-    }
+			text
+		}
+	}
 }

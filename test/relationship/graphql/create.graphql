@@ -1,6 +1,4 @@
-mutation CreateRelationship(
-	$attributes: Relationship_Mutation__Attributes
-) {
+mutation CreateRelationship($attributes: Relationship_Mutation__Attributes) {
 	create_relationship(attributes: $attributes) {
 		attributes {
 			gauze__relationship__id

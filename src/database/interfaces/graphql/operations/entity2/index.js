@@ -1,22 +1,22 @@
-import fs from 'fs'
-import path from 'path'
+import fs from "fs";
+import path from "path";
 
-const CREATE_NAME__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE = 'CreateEntity2'
-const CREATE__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE = fs.readFileSync(path.resolve(import.meta.dirname, './create.graphql'), {
-	encoding: 'utf8'
-})
-const READ_NAME__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE = 'ReadEntity2'
-const READ__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE = fs.readFileSync(path.resolve(import.meta.dirname, './read.graphql'), {
-	encoding: 'utf8'
-})
-const UPDATE_NAME__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE = 'UpdateEntity2'
-const UPDATE__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE = fs.readFileSync(path.resolve(import.meta.dirname, './update.graphql'), {
-	encoding: 'utf8'
-})
-const DELETE_NAME__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE = 'DeleteEntity2'
-const DELETE__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE = fs.readFileSync(path.resolve(import.meta.dirname, './delete.graphql'), {
-	encoding: 'utf8'
-})
+const CREATE_NAME__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE = "CreateEntity2";
+const CREATE__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE = fs.readFileSync(path.resolve(import.meta.dirname, "./create.graphql"), {
+	encoding: "utf8",
+});
+const READ_NAME__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE = "ReadEntity2";
+const READ__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE = fs.readFileSync(path.resolve(import.meta.dirname, "./read.graphql"), {
+	encoding: "utf8",
+});
+const UPDATE_NAME__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE = "UpdateEntity2";
+const UPDATE__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE = fs.readFileSync(path.resolve(import.meta.dirname, "./update.graphql"), {
+	encoding: "utf8",
+});
+const DELETE_NAME__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE = "DeleteEntity2";
+const DELETE__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE = fs.readFileSync(path.resolve(import.meta.dirname, "./delete.graphql"), {
+	encoding: "utf8",
+});
 
 export {
 	CREATE_NAME__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE,
@@ -26,5 +26,5 @@ export {
 	UPDATE_NAME__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 	UPDATE__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 	DELETE_NAME__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-	DELETE__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE
-}
+	DELETE__ENTITY2__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+};

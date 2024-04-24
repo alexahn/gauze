@@ -1,24 +1,24 @@
 query ReadRelationship(
-	$where: Relationship_Query__Attributes,
-    $where_in: Relationship_Mutation__Attributes_Array,
-    $where_not_in: Relationship_Mutation__Attributes_Array,
-	$limit: Int,
-	$offset: Int,
-	$order: String,
-	$order_direction: String,
+	$where: Relationship_Query__Attributes
+	$where_in: Relationship_Mutation__Attributes_Array
+	$where_not_in: Relationship_Mutation__Attributes_Array
+	$limit: Int
+	$offset: Int
+	$order: String
+	$order_direction: String
 	$order_nulls: String
 ) {
-    read_relationship(
-		where: $where,
-		where_in: $where_in,
-		where_not_in: $where_not_in,
-		limit: $limit,
-		offset: $offset,
-		order: $order,
-		order_direction: $order_direction,
+	read_relationship(
+		where: $where
+		where_in: $where_in
+		where_not_in: $where_not_in
+		limit: $limit
+		offset: $offset
+		order: $order
+		order_direction: $order_direction
 		order_nulls: $order_nulls
 	) {
-        attributes {
+		attributes {
 			_id
 			_created_at
 			_updated_at
@@ -27,6 +27,6 @@ query ReadRelationship(
 			_from_id
 			_to_type
 			_to_id
-        }
-    }
+		}
+	}
 }

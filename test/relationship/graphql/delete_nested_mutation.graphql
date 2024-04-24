@@ -1,7 +1,4 @@
-mutation DeleteRelationshipNestedMutation(
-	$where1: Relationship_Mutation__Attributes,
-	$where2: Relationship_Mutation__Attributes
-) {
+mutation DeleteRelationshipNestedMutation($where1: Relationship_Mutation__Attributes, $where2: Relationship_Mutation__Attributes) {
 	delete_relationship(where: $where1) {
 		attributes {
 			gauze__relationship__id

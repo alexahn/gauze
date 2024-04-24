@@ -1,22 +1,22 @@
-import fs from 'fs'
-import path from 'path'
+import fs from "fs";
+import path from "path";
 
-const CREATE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE = 'CreateRelationship'
-const CREATE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE = fs.readFileSync(path.resolve(import.meta.dirname, './create.graphql'), {
-	encoding: 'utf8'
-})
-const READ_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE = 'ReadRelationship'
-const READ__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE = fs.readFileSync(path.resolve(import.meta.dirname, './read.graphql'), {
-	encoding: 'utf8'
-})
-const UPDATE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE = 'UpdateRelationship'
-const UPDATE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE = fs.readFileSync(path.resolve(import.meta.dirname, './update.graphql'), {
-	encoding: 'utf8'
-})
-const DELETE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE = 'DeleteRelationship'
-const DELETE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE = fs.readFileSync(path.resolve(import.meta.dirname, './delete.graphql'), {
-	encoding: 'utf8'
-})
+const CREATE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE = "CreateRelationship";
+const CREATE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE = fs.readFileSync(path.resolve(import.meta.dirname, "./create.graphql"), {
+	encoding: "utf8",
+});
+const READ_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE = "ReadRelationship";
+const READ__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE = fs.readFileSync(path.resolve(import.meta.dirname, "./read.graphql"), {
+	encoding: "utf8",
+});
+const UPDATE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE = "UpdateRelationship";
+const UPDATE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE = fs.readFileSync(path.resolve(import.meta.dirname, "./update.graphql"), {
+	encoding: "utf8",
+});
+const DELETE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE = "DeleteRelationship";
+const DELETE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE = fs.readFileSync(path.resolve(import.meta.dirname, "./delete.graphql"), {
+	encoding: "utf8",
+});
 
 export {
 	CREATE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
@@ -26,5 +26,5 @@ export {
 	UPDATE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 	UPDATE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 	DELETE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-	DELETE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE
-}
+	DELETE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+};

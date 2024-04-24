@@ -1,15 +1,13 @@
-import repl from 'repl'
+import repl from "repl";
 
 class NodeShell {
-	start () {
-		const REPL = repl.start('> ')
+	start() {
+		const REPL = repl.start("> ");
 		// augment REPL.context here
-		return REPL
+		return REPL;
 	}
 }
 
-const SHELL__NODE__SHELL__KERNEL = new NodeShell()
+const SHELL__NODE__SHELL__KERNEL = new NodeShell();
 
-export {
-	SHELL__NODE__SHELL__KERNEL
-}
+export { SHELL__NODE__SHELL__KERNEL };

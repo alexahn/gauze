@@ -1,7 +1,4 @@
-mutation CreateEntity1NestedMutation(
-	$attributes1: Entity1_Mutation__Attributes,
-	$attributes2: Entity1_Mutation__Attributes
-) {
+mutation CreateEntity1NestedMutation($attributes1: Entity1_Mutation__Attributes, $attributes2: Entity1_Mutation__Attributes) {
 	create_entity1(attributes: $attributes1) {
 		attributes {
 			id

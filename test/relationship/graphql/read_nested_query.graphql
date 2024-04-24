@@ -1,7 +1,4 @@
-query ReadRelationshipNestedQuery(
-	$where1: Relationship_Query__Attributes,
-	$where2: Relationship_Query__Attributes
-) {
+query ReadRelationshipNestedQuery($where1: Relationship_Query__Attributes, $where2: Relationship_Query__Attributes) {
 	read_relationship(where: $where1) {
 		attributes {
 			gauze__relationship__id

@@ -1,1 +1,1 @@
-export * as graphql from './graphql.js'
+export * as graphql from "./graphql.js";
