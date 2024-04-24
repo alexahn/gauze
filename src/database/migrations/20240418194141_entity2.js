@@ -5,7 +5,7 @@
 const up = function (knex) {
 	return Promise.all([
 		knex.schema.createTable("gauze__entity2", function (table) {
-			table.increments("id").primary();
+			table.uuid("id", { useBinaryUuid: true, primaryKey: true }).primary().defaultTo(knex.fn.uuid());
 			table.date("created_at").notNullable();
 			table.date("updated_at").notNullable();
 			table.date("deleted_at");

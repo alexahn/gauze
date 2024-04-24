@@ -178,3 +178,4 @@
 	[x] system realm now interacts with account
 	[x] add environment realm
 	[x] for now system will represent the initial application (we can rename it later)
+[x] update tables to use uuids so we can one shot bindings
