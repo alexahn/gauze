@@ -141,8 +141,8 @@
 	[x] example: _from_id to gauze__relationship__from_id
 	[x] we want to avoid naming conflicts on joins with builtin tables
 	[x] use as precedent for new builtin tables (e.g. whitelist and blacklist tables)
-[ ] format graphql to make it consisten
-	[ ] time to switch to prettier? (https://prettier.io/docs/en/index.html)
+[x] format graphql to make it consisten
+	[x] time to switch to prettier? (https://prettier.io/docs/en/index.html)
 [ ] permissions and authorization
 	[-] row based security (postgresql)?
 		[-] seems like it is technically complex because we'd need to authenticate every user to postgresql
@@ -169,7 +169,7 @@
 	[ ] streaming interface for files
 [ ] process entity
 	[ ] input and output architecture
-[ ] think about realm organization
+[x] think about realm organization
 	[x] might make more sense if system had an account, and application had a user
 	[x] might make more sense if reality had a person, and story had a character
 	[x] system can host applications and reality can host stories?
@@ -177,3 +177,4 @@
 		[x] application realm interacts with user
 	[x] system realm now interacts with account
 	[x] add environment realm
+	[x] for now system will represent the initial application (we can rename it later)
