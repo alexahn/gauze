@@ -21,7 +21,8 @@ import {
 } from './../../../controllers/entity1.js'
 
 const ENTITY1_SERIALIZER = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.entity1.system.graphql.TYPE__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE
+	graphql_type: $structure.entity1.system.graphql.TYPE__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
+	sql_primary_key: $structure.entity1.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY1__STRUCTURE
 })
 
 const ENTITY1_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({

@@ -33,35 +33,35 @@ const METADATA__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE = new GraphQLObjectTy
 })
 
 const ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE = {
-	_id: {
+	gauze__relationship__id: {
 		type: GraphQLString,
 		description: '_id'
 	},
-	_created_at: {
+	gauze__relationship__created_at: {
 		type: GraphQLDate,
 		description: 'created_at'
 	},
-	_updated_at: {
+	gauze__relationship__updated_at: {
 		type: GraphQLDate,
 		description: 'updated_at'
 	},
-	_deleted_at: {
+	gauze__relationship__deleted_at: {
 		type: GraphQLDate,
 		description: 'deleted_at'
 	},
-	_from_type: {
+	gauze__relationship__from_type: {
 		type: GraphQLString,
 		description: 'from'
 	},
-	_from_id: {
+	gauze__relationship__from_id: {
 		type: GraphQLString,
 		description: 'from_id'
 	},
-	_to_type: {
+	gauze__relationship__to_type: {
 		type: GraphQLString,
 		description: 'to'
 	},
-	_to_id: {
+	gauze__relationship__to_id: {
 		type: GraphQLString,
 		description: 'to_id'
 	}

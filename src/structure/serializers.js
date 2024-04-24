@@ -51,15 +51,17 @@ const SERIALIZER_DELETED_AT_STRUCTURE = function (field) {
 
 class GraphQLSerializer {
 	constructor ({
-		graphql_type
+		graphql_type,
+		sql_primary_key
 	}) {
 		this.graphql_type = graphql_type
+		this.sql_primary_key = sql_primary_key
 		this.serialize = this.serialize.bind(this)
 	}
 	// sql record to graphql fragment
 	serialize (sql_record) {
 		const metadata = {
-			id: sql_record.id,
+			id: sql_record[this.sql_primary_key],
 			type: this.graphql_type
 		}
 		const model = {

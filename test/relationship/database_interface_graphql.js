@@ -50,12 +50,12 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 			const operationName = 'CreateRelationship'
 			const variableValues = {
 				attributes: {
-					_created_at: new Date(),
-					_updated_at: new Date(),
-					_from_type: 'gauze__entity1',
-					_from_id: '1',
-					_to_type: 'gauze__entity2',
-					_to_id: '4'
+					gauze__relationship__created_at: new Date(),
+					gauze__relationship__updated_at: new Date(),
+					gauze__relationship__from_type: 'gauze__entity1',
+					gauze__relationship__from_id: '1',
+					gauze__relationship__to_type: 'gauze__entity2',
+					gauze__relationship__to_id: '4'
 				}
 			}
 			const contextValue = {
@@ -71,10 +71,10 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
 					assert.strictEqual(data.data.create_relationship.length, 1)
-					assert.strictEqual(data.data.create_relationship[0].attributes._from_type, variableValues.attributes._from_type)
-					assert.strictEqual(data.data.create_relationship[0].attributes._from_id, variableValues.attributes._from_id)
-					assert.strictEqual(data.data.create_relationship[0].attributes._to_type, variableValues.attributes._to_type)
-					assert.strictEqual(data.data.create_relationship[0].attributes._to_id, variableValues.attributes._to_id)
+					assert.strictEqual(data.data.create_relationship[0].attributes.gauze__relationship__from_type, variableValues.attributes.gauze__relationship__from_type)
+					assert.strictEqual(data.data.create_relationship[0].attributes.gauze__relationship__from_id, variableValues.attributes.gauze__relationship__from_id)
+					assert.strictEqual(data.data.create_relationship[0].attributes.gauze__relationship__to_type, variableValues.attributes.gauze__relationship__to_type)
+					assert.strictEqual(data.data.create_relationship[0].attributes.gauze__relationship__to_id, variableValues.attributes.gauze__relationship__to_id)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -97,7 +97,7 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 			const operationName = 'ReadRelationship'
 			const variableValues = {
 				where: {
-					_id: '1'
+					gauze__relationship__id: '1'
 				}
 			}
 			const contextValue = {
@@ -113,7 +113,7 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
 					assert.strictEqual(data.data.read_relationship.length, 1)
-					assert.strictEqual(data.data.read_relationship[0].attributes._id, variableValues.where._id)
+					assert.strictEqual(data.data.read_relationship[0].attributes.gauze__relationship__id, variableValues.where.gauze__relationship__id)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -129,7 +129,7 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 		})
 	})
 	test.it('update', function (test_ctx) {
-		const target_from_id = '5'
+		const target_gauze__relationship__from_id = '5'
 		return suite_ctx.database.transaction(function (transaction) {
 			const read_query_file = path.resolve(import.meta.dirname, './graphql/read.graphql')
 			const read_query = fs.readFileSync(read_query_file).toString('utf8')
@@ -137,7 +137,7 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 			const operationName = 'ReadRelationship'
 			const variableValues = {
 				where: {
-					_id: '1'
+					gauze__relationship__id: '1'
 				}
 			}
 			const contextValue = {
@@ -152,7 +152,7 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 				})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
-					assert.notStrictEqual(data.data.read_relationship[0].attributes._from_id, target_from_id)
+					assert.notStrictEqual(data.data.read_relationship[0].attributes.gauze__relationship__from_id, target_gauze__relationship__from_id)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -162,10 +162,10 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 					const operationName = 'UpdateRelationship'
 					const variableValues = {
 						where: {
-							_id: '1'
+							gauze__relationship__id: '1'
 						},
 						attributes: {
-							_from_id: target_from_id
+							gauze__relationship__from_id: target_gauze__relationship__from_id
 						}
 					}
 					const contextValue = {
@@ -181,7 +181,7 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 						.then(function (data) {
 							assert.strictEqual(data.errors, undefined)
 							assert.strictEqual(data.data.update_relationship.length, 1)
-							assert.strictEqual(data.data.update_relationship[0].attributes._from_id, variableValues.attributes._from_id)
+							assert.strictEqual(data.data.update_relationship[0].attributes.gauze__relationship__from_id, variableValues.attributes.gauze__relationship__from_id)
 							return Promise.resolve(data)
 						})
 				})
@@ -207,7 +207,7 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 			const operationName = 'DeleteRelationship'
 			const variableValues = {
 				where: {
-					_id: '1'
+					gauze__relationship__id: '1'
 				}
 			}
 			const contextValue = {
@@ -235,7 +235,7 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 					const operationName = 'ReadRelationship'
 					const variableValues = {
 						where: {
-							_id: '1'
+							gauze__relationship__id: '1'
 						}
 					}
 					const contextValue = {
@@ -274,20 +274,20 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 			const operationName = 'CreateRelationshipNestedMutation'
 			const variableValues = {
 				attributes1: {
-					_created_at: new Date(),
-					_updated_at: new Date(),
-					_from_type: 'gauze__entity1',
-					_from_id: '3',
-					_to_type: 'gauze__entity2',
-					_to_id: '3'
+					gauze__relationship__created_at: new Date(),
+					gauze__relationship__updated_at: new Date(),
+					gauze__relationship__from_type: 'gauze__entity1',
+					gauze__relationship__from_id: '3',
+					gauze__relationship__to_type: 'gauze__entity2',
+					gauze__relationship__to_id: '3'
 				},
 				attributes2: {
-					_created_at: new Date(),
-					_updated_at: new Date(),
-					_from_type: 'gauze__entity2',
-					_from_id: '3',
-					_to_type: 'gauze__entity1',
-					_to_id: '3'
+					gauze__relationship__created_at: new Date(),
+					gauze__relationship__updated_at: new Date(),
+					gauze__relationship__from_type: 'gauze__entity2',
+					gauze__relationship__from_id: '3',
+					gauze__relationship__to_type: 'gauze__entity1',
+					gauze__relationship__to_id: '3'
 				}
 			}
 			const contextValue = {
@@ -303,15 +303,15 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
 					assert.strictEqual(data.data.create_relationship.length, 1)
-					assert.strictEqual(data.data.create_relationship[0].attributes._from_id, variableValues.attributes1._from_id)
-					assert.strictEqual(data.data.create_relationship[0].attributes._from_type, variableValues.attributes1._from_type)
-					assert.strictEqual(data.data.create_relationship[0].attributes._to_id, variableValues.attributes1._to_id)
-					assert.strictEqual(data.data.create_relationship[0].attributes._to_type, variableValues.attributes1._to_type)
+					assert.strictEqual(data.data.create_relationship[0].attributes.gauze__relationship__from_id, variableValues.attributes1.gauze__relationship__from_id)
+					assert.strictEqual(data.data.create_relationship[0].attributes.gauze__relationship__from_type, variableValues.attributes1.gauze__relationship__from_type)
+					assert.strictEqual(data.data.create_relationship[0].attributes.gauze__relationship__to_id, variableValues.attributes1.gauze__relationship__to_id)
+					assert.strictEqual(data.data.create_relationship[0].attributes.gauze__relationship__to_type, variableValues.attributes1.gauze__relationship__to_type)
 					assert.strictEqual(data.data.create_relationship[0].mutation.create_relationship.length, 1)
-					assert.strictEqual(data.data.create_relationship[0].mutation.create_relationship[0].attributes._from_id, variableValues.attributes2._from_id)
-					assert.strictEqual(data.data.create_relationship[0].mutation.create_relationship[0].attributes._from_type, variableValues.attributes2._from_type)
-					assert.strictEqual(data.data.create_relationship[0].mutation.create_relationship[0].attributes._to_id, variableValues.attributes2._to_id)
-					assert.strictEqual(data.data.create_relationship[0].mutation.create_relationship[0].attributes._to_type, variableValues.attributes2._to_type)
+					assert.strictEqual(data.data.create_relationship[0].mutation.create_relationship[0].attributes.gauze__relationship__from_id, variableValues.attributes2.gauze__relationship__from_id)
+					assert.strictEqual(data.data.create_relationship[0].mutation.create_relationship[0].attributes.gauze__relationship__from_type, variableValues.attributes2.gauze__relationship__from_type)
+					assert.strictEqual(data.data.create_relationship[0].mutation.create_relationship[0].attributes.gauze__relationship__to_id, variableValues.attributes2.gauze__relationship__to_id)
+					assert.strictEqual(data.data.create_relationship[0].mutation.create_relationship[0].attributes.gauze__relationship__to_type, variableValues.attributes2.gauze__relationship__to_type)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -334,10 +334,10 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 			const operationName = 'ReadRelationshipNestedQuery'
 			const variableValues = {
 				where1: {
-					_id: '1'
+					gauze__relationship__id: '1'
 				},
 				where2: {
-					_id: '2'
+					gauze__relationship__id: '2'
 				}
 			}
 			const contextValue = {
@@ -355,7 +355,7 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 					assert.strictEqual(data.data.read_relationship.length, 1)
 					assert.strictEqual(data.data.read_relationship[0].attributes._id, variableValues.where1._id)
 					assert.strictEqual(data.data.read_relationship[0].query.read_relationship.length, 1)
-					assert.strictEqual(data.data.read_relationship[0].query.read_relationship[0].attributes._id, variableValues.where2._id)
+					assert.strictEqual(data.data.read_relationship[0].query.read_relationship[0].attributes.gauze__relationship__id, variableValues.where2.gauze__relationship__id)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -379,22 +379,22 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 			const operationName = 'UpdateRelationshipNestedMutation'
 			const variableValues = {
 				where1: {
-					_id: '1'
+					gauze__relationship__id: '1'
 				},
 				where2: {
-					_id: '2'
+					gauze__relationship__id: '2'
 				},
 				attributes1: {
-					_from_type: 'gauze__entity1',
-					_from_id: '3',
-					_to_type: 'gauze__entity2',
-					_to_id: '3'
+					gauze__relationship__from_type: 'gauze__entity1',
+					gauze__relationship__from_id: '3',
+					gauze__relationship__to_type: 'gauze__entity2',
+					gauze__relationship__to_id: '3'
 				},
 				attributes2: {
-					_from_type: 'gauze__entity2',
-					_from_id: '3',
-					_to_type: 'gauze__entity1',
-					_to_id: '3'
+					gauze__relationship__from_type: 'gauze__entity2',
+					gauze__relationship__from_id: '3',
+					gauze__relationship__to_type: 'gauze__entity1',
+					gauze__relationship__to_id: '3'
 				}
 			}
 			const contextValue = {
@@ -410,17 +410,17 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined)
 					assert.strictEqual(data.data.update_relationship.length, 1)
-					assert.strictEqual(data.data.update_relationship[0].attributes._id, variableValues.where1._id)
-					assert.strictEqual(data.data.update_relationship[0].attributes._from_id, variableValues.attributes1._from_id)
-					assert.strictEqual(data.data.update_relationship[0].attributes._from_type, variableValues.attributes1._from_type)
-					assert.strictEqual(data.data.update_relationship[0].attributes._to_id, variableValues.attributes1._to_id)
-					assert.strictEqual(data.data.update_relationship[0].attributes._to_type, variableValues.attributes1._to_type)
+					assert.strictEqual(data.data.update_relationship[0].attributes.gauze__relationship__id, variableValues.where1.gauze__relationship__id)
+					assert.strictEqual(data.data.update_relationship[0].attributes.gauze__relationship__from_id, variableValues.attributes1.gauze__relationship__from_id)
+					assert.strictEqual(data.data.update_relationship[0].attributes.gauze__relationship__from_type, variableValues.attributes1.gauze__relationship__from_type)
+					assert.strictEqual(data.data.update_relationship[0].attributes.gauze__relationship__to_id, variableValues.attributes1.gauze__relationship__to_id)
+					assert.strictEqual(data.data.update_relationship[0].attributes.gauze__relationship__to_type, variableValues.attributes1.gauze__relationship__to_type)
 					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship.length, 1)
-					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship[0].attributes._id, variableValues.where2._id)
-					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship[0].attributes._from_id, variableValues.attributes2._from_id)
-					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship[0].attributes._from_type, variableValues.attributes2._from_type)
-					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship[0].attributes._to_id, variableValues.attributes2._to_id)
-					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship[0].attributes._to_type, variableValues.attributes2._to_type)
+					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship[0].attributes.gauze__relationship__id, variableValues.where2.gauze__relationship__id)
+					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship[0].attributes.gauze__relationship__from_id, variableValues.attributes2.gauze__relationship__from_id)
+					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship[0].attributes.gauze__relationship__from_type, variableValues.attributes2.gauze__relationship__from_type)
+					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship[0].attributes.gauze__relationship__to_id, variableValues.attributes2.gauze__relationship__to_id)
+					assert.strictEqual(data.data.update_relationship[0].mutation.update_relationship[0].attributes.gauze__relationship__to_type, variableValues.attributes2.gauze__relationship__to_type)
 					return Promise.resolve(data)
 				})
 				.then(function () {
@@ -444,10 +444,10 @@ test.describe('relationship graphql interface database', function (suite_ctx) {
 			const operationName = 'DeleteRelationshipNestedMutation'
 			const variableValues = {
 				where1: {
-					_id: '1'
+					gauze__relationship__id: '1'
 				},
 				where2: {
-					_id: '2'
+					gauze__relationship__id: '2'
 				}
 			}
 			const contextValue = {

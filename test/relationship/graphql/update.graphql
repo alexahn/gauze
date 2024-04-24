@@ -4,11 +4,11 @@ mutation UpdateRelationship(
 ) {
 	update_relationship(where: $where, attributes: $attributes) {
 		attributes {
-			_id
-			_from_type
-			_from_id
-			_to_type
-			_to_id
+			gauze__relationship__id
+			gauze__relationship__from_type
+			gauze__relationship__from_id
+			gauze__relationship__to_type
+			gauze__relationship__to_id
 		}
 	}
 }

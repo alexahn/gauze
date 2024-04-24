@@ -4,20 +4,20 @@ mutation DeleteRelationshipNestedMutation(
 ) {
 	delete_relationship(where: $where1) {
 		attributes {
-			_id
-			_from_type
-			_from_id
-			_to_type
-			_to_id
+			gauze__relationship__id
+			gauze__relationship__from_type
+			gauze__relationship__from_id
+			gauze__relationship__to_type
+			gauze__relationship__to_id
 		}
 		mutation {
 			delete_relationship(where: $where2) {
 				attributes {
-					_id
-					_from_type
-					_from_id
-					_to_type
-					_to_id
+					gauze__relationship__id
+					gauze__relationship__from_type
+					gauze__relationship__from_id
+					gauze__relationship__to_type
+					gauze__relationship__to_id
 				}
 			}
 		}

@@ -107,9 +107,9 @@ class DatabaseModel extends $kernel.models._class.Model {
 			})
 			var joined_order = self.table + '.' + order
 			const sql = database(self.table)
-				.join(self.relationship_table, `${self.relationship_table}._to_id`, '=', `${self.table}.id`)
-				.where(`${self.relationship_table}._from_id`, PARENT_SQL_ID)
-				.where(`${self.relationship_table}._from_type`, PARENT_SQL_TABLE)
+				.join(self.relationship_table, `${self.relationship_table}.gauze__relationship__to_id`, '=', `${self.table}.id`)
+				.where(`${self.relationship_table}.gauze__relationship__from_id`, PARENT_SQL_ID)
+				.where(`${self.relationship_table}.gauze__relationship__from_type`, PARENT_SQL_TABLE)
 				.where(function (builder) {
 					builder.where(joined_where)
 					Object.keys(joined_where_in).forEach(function (key) {

@@ -5,22 +5,27 @@ import {
 } from './../../serializers.js'
 
 const TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE = 'gauze__relationship'
-const PRIMARY_KEY__SQL__DATABASE__RELATIONSHIP__STRUCTURE = '_id'
+const PRIMARY_KEY__SQL__DATABASE__RELATIONSHIP__STRUCTURE = 'gauze__relationship__id'
 const FIELDS__SQL__DATABASE__RELATIONSHIP__STRUCTURE = {
-	_id: true,
-	_created_at: true,
-	_updated_at: true,
-	_deleted_at: true,
-	_from_type: true,
-	_from_id: true,
-	_to_type: true,
-	_to_id: true
+	gauze__relationship__id: true,
+	gauze__relationship__created_at: true,
+	gauze__relationship__updated_at: true,
+	gauze__relationship__deleted_at: true,
+	gauze__relationship__from_type: true,
+	gauze__relationship__from_id: true,
+	gauze__relationship__to_type: true,
+	gauze__relationship__to_id: true
 }
-const PROTECTED_FIELDS__SQL__DATABASE__RELATIONSHIP__STRUCTURE = ['_id', '_created_at', '_updated_at', '_deleted_at']
+const PROTECTED_FIELDS__SQL__DATABASE__RELATIONSHIP__STRUCTURE = [
+	'gauze__relationship__id',
+	'gauze__relationship__created_at',
+	'gauze__relationship__updated_at',
+	'gauze__relationship__deleted_at'
+]
 const FIELD_SERIALIZERS__SQL__DATABASE__RELATIONSHIP__STRUCTURE = {
-	_created_at: SERIALIZER_CREATED_AT_STRUCTURE('_created_at'),
-	_updated_at: SERIALIZER_UPDATED_AT_STRUCTURE('_updated_at'),
-	_deleted_at: SERIALIZER_DELETED_AT_STRUCTURE('_deleted_at')
+	gauze__relationship__created_at: SERIALIZER_CREATED_AT_STRUCTURE('gauze__relationship__created_at'),
+	gauze__relationship__updated_at: SERIALIZER_UPDATED_AT_STRUCTURE('gauze__relationship__updated_at'),
+	gauze__relationship__deleted_at: SERIALIZER_DELETED_AT_STRUCTURE('gauze__relationship__deleted_at')
 }
 
 export {
