@@ -12,6 +12,8 @@
   "author": "Alex Ahn",
   "devDependencies": {
     "js-beautify": "^1.15.1",
+    "prettier": "3.2.5",
+    "ruru": "^2.0.0-beta.11",
     "typescript": "^5.4.5"
   },
   "type": "module",
@@ -22,7 +24,6 @@
     "graphql": "^16.8.1",
     "graphql-date": "^1.0.3",
     "graphql-http": "^1.22.1",
-    "knex": "^3.1.0",
-    "ruru": "^2.0.0-beta.11"
+    "knex": "^3.1.0"
   }
 }
