@@ -67,7 +67,7 @@ The system realm manages user interaction. The system realm cannot interact with
 - `f(user)` (interaction dependency)
 - `g(database, kernel, structure)` (code dependency).
 
-### Reality
+#### Reality
 The reality realm manages account interaction. The reality realm cannot interact with the system realm.
 - `f(account)` (interaction dependency)
 - `g(database, kernel, structure)` (code dependency)
