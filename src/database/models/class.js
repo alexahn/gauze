@@ -73,6 +73,7 @@ class DatabaseModel extends $kernel.models._class.Model {
 		const {
 			where,
 			where_in,
+			where_not_in,
 			limit = 128,
 			offset = 0,
 			order = this.primary_key,
@@ -117,7 +118,22 @@ class DatabaseModel extends $kernel.models._class.Model {
 				})
 		} else {
 			const sql = database(self.table)
-				.where(where)
+				.where(function (builder) {
+					if (where) {
+						builder.where(where)
+					}
+					if (where_not_in) {
+						Object.keys(where_not_in).forEach(function (key) {
+							builder.whereNotIn(key, where_not_in[key])
+						})
+					}
+					if (where_in) {
+						Object.keys(where_in).forEach(function (key) {
+							builder.whereIn(key, where_in[key])
+						})
+					}
+					return builder
+				})
 				.limit(limit)
 				.offset(offset)
 				// todo: figure out how to get order_nulls working without breaking the query

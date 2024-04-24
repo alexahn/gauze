@@ -52,8 +52,6 @@
 	[x] use structure as $structure
 	[x] use kernel as $kernel
 	[x] use database as $database
-[ ] bootstrap new project by using commands
-	[ ] should have commands to create new entities
 [x] update graphql type names to use two underscores as a separator
 [x] change relationship column names (from to from_type, to to to_type)
 [x] enable variables for graphql server
@@ -91,10 +89,9 @@
 	[x] might as well set it up now
 	[x] copy existing system controllers and interface to database
 	[x] will help with serializer logic as well since the serializers will all run at the database level
-	[ ] where in and where not in exposed to database graphql
-	[ ] where in and where not in exposed to system graphql
-	[ ] cache where in and cache where not exposed to database graphql
-		[ ] value is a string key that is a key to a value in cache
+	[x] where in and where not in exposed to database graphql
+		[x] where not in takes precedence over where in
+	[x] where in and where not in exposed to system graphql
 	[ ] implement error visibility (right now it's a little rough if something goes wrong)
 [x] move server.js into command
 [ ] turn kernel into a proper stack
@@ -115,23 +112,10 @@
 	[ ] proxy graphiql via server
 	[ ] use a higher level http server (express, fastify, koa, etc) ?
 		[ ] url and routes
-[ ] accept a query parameter to simulate user id
-	[ ] allows us to work on permission/authorization layer without having a user table
-[ ] permissions and authorization
-	[-] row based security (postgresql)?
-		[-] seems like it is technically complex because we'd need to authenticate every user to postgresql
-		[-] the application code isn't complex, but the database tuning and management would be
-		[-] the example policies i could find also don't seem to be that flexible, and it might be hard to set them up without duplicating relationship data across entities
-	[ ] maybe some kind of bit field if we want to be efficient?
-	[ ] simple white and black list permissions
-		[ ] system permissions
-		[ ] user permissions
 [x] move execute from terminal to kernel/shell
 	[x] import execute from kernel and use in system models
 	[x] refactor inputs to execute to make it pretty (e.g. context instead of contextValue, variables insead of variableValues)
 	[ ] import execute from kernel and use in tests
-[ ] start thinking about kernel/src or kernel/source
-	[ ] base everything off structures
 [ ] add a _description attribute to every module so that the codebase can be explored via the repl
 	[ ] always add the field at the end of every module definition so it shows up at the bottom in the repl
 [ ] move object destructuring for database model inputs into the function itself (for debugging purposes when we want to log the entire input)
@@ -150,3 +134,24 @@
 	[x] kernel/shell
 	[x] kernel/logger
 	[x] kernel/cache
+[ ] start thinking about kernel/src or kernel/source
+	[ ] bootstrap new project by using commands that use the source code
+		[ ] should have commands to create new entities
+			[ ] base everything off structures
+[ ] permissions and authorization
+	[-] row based security (postgresql)?
+		[-] seems like it is technically complex because we'd need to authenticate every user to postgresql
+		[-] the application code isn't complex, but the database tuning and management would be
+		[-] the example policies i could find also don't seem to be that flexible, and it might be hard to set them up without duplicating relationship data across entities
+	[ ] maybe some kind of bit field if we want to be efficient?
+	[ ] simple white and black list permissions
+		[ ] system permissions
+		[ ] user permissions
+	[ ] system whitelist and blacklist tables
+	[ ] user whitelist and blacklist tables
+	[ ] structure information for default mode for table
+[ ] cached where in and cached where not in exposed to database graphql
+	[ ] value is a string key that is a key to a value in cache
+	[ ] hook up lru cache to system and database
+[ ] accept a query parameter to simulate user id
+	[ ] allows us to work on permission/authorization layer without having a user table

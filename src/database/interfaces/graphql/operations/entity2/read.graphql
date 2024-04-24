@@ -1,5 +1,7 @@
 query ReadEntity2(
 	$where: Entity2_Query__Attributes,
+	$where_in: Entity2_Query__Attributes_Array,
+	$where_not_in: Entity2_Query__Attributes_Array,
 	$limit: Int,
 	$offset: Int,
 	$order: String,
@@ -8,6 +10,8 @@ query ReadEntity2(
 ) {
     read_entity2(
 		where: $where,
+		where_in: $where_in,
+		where_not_in: $where_not_in,
 		limit: $limit,
 		offset: $offset,
 		order: $order,

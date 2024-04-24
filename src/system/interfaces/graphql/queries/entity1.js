@@ -28,12 +28,26 @@ const ENTITY1_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new GraphQLInputObjectType({
 	fields: $structure.entity1.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE
 })
 
+const ENTITY1_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM = new GraphQLInputObjectType({
+	name: 'Entity1_Query__Attributes_Array',
+	description: 'Entity1 Query Attributes Array',
+	fields: $structure.entity1.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE
+})
+
 const READ__ENTITY1__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new GraphQLList($structure.entity1.system.graphql.QUERY__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE),
 	args: {
 		where: {
 			description: 'where',
 			type: ENTITY1_ATTRIBUTES_QUERY_INTERFACE_SYSTEM,
+		},
+		where_in: {
+			description: 'where in',
+			type: ENTITY1_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM
+		},
+		where_not_in: {
+			description: 'where not in',
+			type: ENTITY1_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM
 		},
 		limit: {
 			description: 'limit',
