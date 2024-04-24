@@ -46,9 +46,9 @@ test.describe("relationship graphql interface database", function (suite_ctx) {
 					gauze__relationship__created_at: new Date(),
 					gauze__relationship__updated_at: new Date(),
 					gauze__relationship__from_type: "gauze__entity1",
-					gauze__relationship__from_id: "1",
+					gauze__relationship__from_id: "00000000-0000-0000-0000-000000000001",
 					gauze__relationship__to_type: "gauze__entity2",
-					gauze__relationship__to_id: "4",
+					gauze__relationship__to_id: "00000000-0000-0000-0000-000000000004",
 				},
 			};
 			const contextValue = {
@@ -93,7 +93,7 @@ test.describe("relationship graphql interface database", function (suite_ctx) {
 			const operationName = "ReadRelationship";
 			const variableValues = {
 				where: {
-					gauze__relationship__id: "1",
+					gauze__relationship__id: "00000000-0000-0000-0000-000000000001",
 				},
 			};
 			const contextValue = {
@@ -136,7 +136,7 @@ test.describe("relationship graphql interface database", function (suite_ctx) {
 			const operationName = "ReadRelationship";
 			const variableValues = {
 				where: {
-					gauze__relationship__id: "1",
+					gauze__relationship__id: "00000000-0000-0000-0000-000000000001",
 				},
 			};
 			const contextValue = {
@@ -161,7 +161,7 @@ test.describe("relationship graphql interface database", function (suite_ctx) {
 					const operationName = "UpdateRelationship";
 					const variableValues = {
 						where: {
-							gauze__relationship__id: "1",
+							gauze__relationship__id: "00000000-0000-0000-0000-000000000001",
 						},
 						attributes: {
 							gauze__relationship__from_id: target_gauze__relationship__from_id,
@@ -208,7 +208,7 @@ test.describe("relationship graphql interface database", function (suite_ctx) {
 			const operationName = "DeleteRelationship";
 			const variableValues = {
 				where: {
-					gauze__relationship__id: "1",
+					gauze__relationship__id: "00000000-0000-0000-0000-000000000001",
 				},
 			};
 			const contextValue = {
@@ -236,7 +236,7 @@ test.describe("relationship graphql interface database", function (suite_ctx) {
 					const operationName = "ReadRelationship";
 					const variableValues = {
 						where: {
-							gauze__relationship__id: "1",
+							gauze__relationship__id: "00000000-0000-0000-0000-000000000001",
 						},
 					};
 					const contextValue = {
@@ -280,17 +280,17 @@ test.describe("relationship graphql interface database", function (suite_ctx) {
 					gauze__relationship__created_at: new Date(),
 					gauze__relationship__updated_at: new Date(),
 					gauze__relationship__from_type: "gauze__entity1",
-					gauze__relationship__from_id: "3",
+					gauze__relationship__from_id: "00000000-0000-0000-0000-000000000003",
 					gauze__relationship__to_type: "gauze__entity2",
-					gauze__relationship__to_id: "3",
+					gauze__relationship__to_id: "00000000-0000-0000-0000-000000000003",
 				},
 				attributes2: {
 					gauze__relationship__created_at: new Date(),
 					gauze__relationship__updated_at: new Date(),
 					gauze__relationship__from_type: "gauze__entity2",
-					gauze__relationship__from_id: "3",
+					gauze__relationship__from_id: "00000000-0000-0000-0000-000000000003",
 					gauze__relationship__to_type: "gauze__entity1",
-					gauze__relationship__to_id: "3",
+					gauze__relationship__to_id: "00000000-0000-0000-0000-000000000003",
 				},
 			};
 			const contextValue = {
@@ -352,10 +352,10 @@ test.describe("relationship graphql interface database", function (suite_ctx) {
 			const operationName = "ReadRelationshipNestedQuery";
 			const variableValues = {
 				where1: {
-					gauze__relationship__id: "1",
+					gauze__relationship__id: "00000000-0000-0000-0000-000000000001",
 				},
 				where2: {
-					gauze__relationship__id: "2",
+					gauze__relationship__id: "00000000-0000-0000-0000-000000000002",
 				},
 			};
 			const contextValue = {
@@ -400,22 +400,22 @@ test.describe("relationship graphql interface database", function (suite_ctx) {
 			const operationName = "UpdateRelationshipNestedMutation";
 			const variableValues = {
 				where1: {
-					gauze__relationship__id: "1",
+					gauze__relationship__id: "00000000-0000-0000-0000-000000000001",
 				},
 				where2: {
-					gauze__relationship__id: "2",
+					gauze__relationship__id: "00000000-0000-0000-0000-000000000002",
 				},
 				attributes1: {
 					gauze__relationship__from_type: "gauze__entity1",
-					gauze__relationship__from_id: "3",
+					gauze__relationship__from_id: "00000000-0000-0000-0000-000000000003",
 					gauze__relationship__to_type: "gauze__entity2",
-					gauze__relationship__to_id: "3",
+					gauze__relationship__to_id: "00000000-0000-0000-0000-000000000003",
 				},
 				attributes2: {
 					gauze__relationship__from_type: "gauze__entity2",
-					gauze__relationship__from_id: "3",
+					gauze__relationship__from_id: "00000000-0000-0000-0000-000000000003",
 					gauze__relationship__to_type: "gauze__entity1",
-					gauze__relationship__to_id: "3",
+					gauze__relationship__to_id: "00000000-0000-0000-0000-000000000003",
 				},
 			};
 			const contextValue = {
@@ -480,10 +480,10 @@ test.describe("relationship graphql interface database", function (suite_ctx) {
 			const operationName = "DeleteRelationshipNestedMutation";
 			const variableValues = {
 				where1: {
-					gauze__relationship__id: "1",
+					gauze__relationship__id: "00000000-0000-0000-0000-000000000001",
 				},
 				where2: {
-					gauze__relationship__id: "2",
+					gauze__relationship__id: "00000000-0000-0000-0000-000000000002",
 				},
 			};
 			const contextValue = {

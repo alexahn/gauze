@@ -179,3 +179,4 @@
 	[x] add environment realm
 	[x] for now system will represent the initial application (we can rename it later)
 [x] update tables to use uuids so we can one shot bindings
+	[x] 00000000-0000-0000-0000-000000000001 format for seed data

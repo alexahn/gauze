@@ -87,7 +87,7 @@ test.describe("entity1 graphql interface database", function (suite_ctx) {
 			const operationName = "ReadEntity1";
 			const variableValues = {
 				where: {
-					id: "1",
+					id: "00000000-0000-0000-0000-000000000001",
 				},
 			};
 			const contextValue = {
@@ -130,7 +130,7 @@ test.describe("entity1 graphql interface database", function (suite_ctx) {
 			const operationName = "ReadEntity1";
 			const variableValues = {
 				where: {
-					id: "1",
+					id: "00000000-0000-0000-0000-000000000001",
 				},
 			};
 			const contextValue = {
@@ -155,7 +155,7 @@ test.describe("entity1 graphql interface database", function (suite_ctx) {
 					const operationName = "UpdateEntity1";
 					const variableValues = {
 						where: {
-							id: "1",
+							id: "00000000-0000-0000-0000-000000000001",
 						},
 						attributes: {
 							text: target_text,
@@ -202,7 +202,7 @@ test.describe("entity1 graphql interface database", function (suite_ctx) {
 			const operationName = "DeleteEntity1";
 			const variableValues = {
 				where: {
-					id: "1",
+					id: "00000000-0000-0000-0000-000000000001",
 				},
 			};
 			const contextValue = {
@@ -322,10 +322,10 @@ test.describe("entity1 graphql interface database", function (suite_ctx) {
 			const operationName = "ReadEntity1NestedRelationships";
 			const variableValues = {
 				where1: {
-					id: "1",
+					id: "00000000-0000-0000-0000-000000000001",
 				},
 				where2: {
-					id: "1",
+					id: "00000000-0000-0000-0000-000000000001",
 				},
 			};
 			const contextValue = {
@@ -370,13 +370,13 @@ test.describe("entity1 graphql interface database", function (suite_ctx) {
 			const operationName = "UpdateEntity1NestedRelationships";
 			const variableValues = {
 				where1: {
-					id: "1",
+					id: "00000000-0000-0000-0000-000000000001",
 				},
 				attributes1: {
 					text: "1234",
 				},
 				where2: {
-					id: "1",
+					id: "00000000-0000-0000-0000-000000000001",
 				},
 				attributes2: {
 					text: "zxcv",
@@ -426,10 +426,10 @@ test.describe("entity1 graphql interface database", function (suite_ctx) {
 			const operationName = "DeleteEntity1NestedRelationships";
 			const variableValues = {
 				where1: {
-					id: "1",
+					id: "00000000-0000-0000-0000-000000000001",
 				},
 				where2: {
-					id: "1",
+					id: "00000000-0000-0000-0000-000000000001",
 				},
 			};
 			const contextValue = {
@@ -521,10 +521,10 @@ test.describe("entity1 graphql interface database", function (suite_ctx) {
 			const operationName = "ReadEntity1NestedQuery";
 			const variableValues = {
 				where1: {
-					id: "1",
+					id: "00000000-0000-0000-0000-000000000001",
 				},
 				where2: {
-					id: "2",
+					id: "00000000-0000-0000-0000-000000000001",
 				},
 			};
 			const contextValue = {
@@ -569,13 +569,13 @@ test.describe("entity1 graphql interface database", function (suite_ctx) {
 			const operationName = "UpdateEntity1NestedMutation";
 			const variableValues = {
 				where1: {
-					id: "1",
+					id: "00000000-0000-0000-0000-000000000001",
 				},
 				attributes1: {
 					text: "1234",
 				},
 				where2: {
-					id: "1",
+					id: "00000000-0000-0000-0000-000000000001",
 				},
 				attributes2: {
 					text: "zxcv",
@@ -625,10 +625,10 @@ test.describe("entity1 graphql interface database", function (suite_ctx) {
 			const operationName = "DeleteEntity1NestedMutation";
 			const variableValues = {
 				where1: {
-					id: "1",
+					id: "00000000-0000-0000-0000-000000000001",
 				},
 				where2: {
-					id: "2",
+					id: "00000000-0000-0000-0000-000000000001",
 				},
 			};
 			const contextValue = {
