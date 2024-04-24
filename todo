@@ -170,6 +170,10 @@
 [ ] process entity
 	[ ] input and output architecture
 [ ] think about realm organization
-	[ ] might make more sense if system had an account, and application had a user
-	[ ] might make more sense if reality had a person, and story had a character
-	[ ] system can host applications and reality can host stories?
+	[x] might make more sense if system had an account, and application had a user
+	[x] might make more sense if reality had a person, and story had a character
+	[x] system can host applications and reality can host stories?
+	[x] introduce concept of application
+		[x] application realm interacts with user
+	[x] system realm now interacts with account
+	[x] add environment realm

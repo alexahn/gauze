@@ -35,12 +35,13 @@ A GraphQL server architecture.
 	- The root module can access it via `gauze.system.models.entity1.ENTITY1_MODEL_SYSTEM`.
 - Named class exports should typically be named according to the abstract hierarchy.
 
-## Dependency Hierarchy / Realm Hierarchy
+## Dependency Hierarchy (Realm Hierarchy)
 - structure
 - kernel
 - database
+- application / story
 - system / reality
-- user / account
+- environment
 - command
 
 ## Architecture
@@ -54,33 +55,39 @@ The structure realm contains structural information for the entities in the real
 
 #### Kernel
 The kernel realm contains base classes and common utilities, like logging and caching.
-- `f(database, system, user)` (interaction dependency)
+- `f(database, application, system, user)` (interaction dependency)
 - `g(structure)` (code dependency)
 
 #### Database
 The database realm manages state for entities.
-- `f(system, user)` (interaction dependency)
+- `f(system, application, user)` (interaction dependency)
 - `g(structure, kernel)` (code dependency)
 
-#### System
-The system realm manages user interaction. The system realm cannot interact with the reality realm.
-- `f(user)` (interaction dependency)
-- `g(database, kernel, structure)` (code dependency).
-
-#### Reality
-The reality realm manages account interaction. The reality realm cannot interact with the system realm.
-- `f(account)` (interaction dependency)
+#### Application
+The application realm manages user interaction.
+- `f(agent.user)` (interaction dependency)
 - `g(database, kernel, structure)` (code dependency)
 
-#### User
-The user realm manages the concept of an agent that can interact with the system.
-- `f()` (interaction dependency)
-- `g(system, database, kernel, structure)` (code dependency)
+#### System
+The system realm manages account interaction.
+- `f(agent.account)` (interaction dependency)
+- `g(application, database, kernel, structure)` (code dependency)
 
-#### Account
-The account realm manages the concept of an agent that can interact with the reality.
-- `f()` (interaction dependency)
-- `g(system, database, kernel, structure)` (code dependency)
+#### Story
+The story realm manages character interaction.
+- `f(agent.character)` (interaction dependency)
+- `g(database, kernel, structure)` (code dependency)
+
+#### Reality
+The reality realm manages person interaction.
+- `f(agent.person)` (interaction dependency)
+- `g(application, database, kernel, structure)` (code dependency)
+
+#### Environment
+The environment realm manages external interaction. The environment allows agents to be created and authenticated.
+
+### Agent
+An agent is a combination of (account, [user], person, [character]). All of these must be uniquely associated with one agent. Initially it is possible that multiple agents can represent the same identity, but as the system grows, it should be able to reduce duplication.
 
 ### Control
 
