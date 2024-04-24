@@ -39,8 +39,8 @@ A GraphQL server architecture.
 - structure
 - kernel
 - database
-- system
-- user
+- system / reality
+- user / account
 - command
 
 ## Architecture
@@ -63,12 +63,22 @@ The database realm manages state for entities.
 - `g(structure, kernel)` (code dependency)
 
 #### System
-The system realm manages user interaction.
+The system realm manages user interaction. The system realm cannot interact with the reality realm.
 - `f(user)` (interaction dependency)
 - `g(database, kernel, structure)` (code dependency).
 
+### Reality
+The reality realm manages account interaction. The reality realm cannot interact with the system realm.
+- `f(account)` (interaction dependency)
+- `g(database, kernel, structure)` (code dependency)
+
 #### User
-The user realm manages authentication and unauthenticated user interaction.
+The user realm manages the concept of an agent that can interact with the system.
+- `f()` (interaction dependency)
+- `g(system, database, kernel, structure)` (code dependency)
+
+#### Account
+The account realm manages the concept of an agent that can interact with the reality.
 - `f()` (interaction dependency)
 - `g(system, database, kernel, structure)` (code dependency)
 
