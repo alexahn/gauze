@@ -161,3 +161,7 @@
 [ ] add parent argument to database graphql queries and mutations
 	[ ] it should have a structure like:  { _metadata: { id, type } }
 	[ ] we need this to pass in the source (e.g. parent) from the system to honor relationships
+[ ] file entity
+	[ ] file handler entity
+		[ ] manages an io entity that can read and write
+	[ ] streaming interface for files
