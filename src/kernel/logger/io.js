@@ -11,7 +11,7 @@ config({
 	path: findConfig('.env')
 })
 
-const IO_LOGGER_KERNEL = new IOLogger({
+const LOGGER__IO__LOGGER__KERNEL = new IOLogger({
 	LOG_LEVEL_MINIMUM: process.env.LOG_LEVEL_MINIMUM,
 	LOG_LEVEL_MAXIMUM: process.env.LOG_LEVEL_MAXIMUM,
 	LOG_LEVEL_REGEX: process.env.LOG_LEVEL_REGEX,
@@ -20,5 +20,5 @@ const IO_LOGGER_KERNEL = new IOLogger({
 })
 
 export {
-	IO_LOGGER_KERNEL
+	LOGGER__IO__LOGGER__KERNEL
 }

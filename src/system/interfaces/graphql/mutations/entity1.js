@@ -39,15 +39,15 @@ const CREATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'CREATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter', '_source', _source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'CREATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter', 'mutation_arguments', mutation_arguments)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, 'CREATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter', '_source', _source)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, 'CREATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter', 'mutation_arguments', mutation_arguments)
 		return ENTITY1_CONTROLLER_SYSTEM.create({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction
 			}, mutation_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'CREATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success', 'data', data)
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('2', __RELATIVE_FILEPATH, 'CREATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success', 'data', data)
 				return data.map(ENTITY1_SERIALIZER.serialize)
 			})
 	}
@@ -86,15 +86,15 @@ const UPDATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'UPDATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter', '_source', _source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'UPDATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter', 'mutation_arguments', mutation_arguments)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, 'UPDATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter', '_source', _source)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, 'UPDATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter', 'mutation_arguments', mutation_arguments)
 		return ENTITY1_CONTROLLER_SYSTEM.update({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction
 			}, mutation_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'UPDATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success', 'data', data)
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('2', __RELATIVE_FILEPATH, 'UPDATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success', 'data', data)
 				return data.map(ENTITY1_SERIALIZER.serialize)
 			})
 	}
@@ -129,15 +129,15 @@ const DELETE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		}
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'DELETE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter', '_source', _source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'DELETE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter', 'mutation_arguments', mutation_arguments)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, 'DELETE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter', '_source', _source)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, 'DELETE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter', 'mutation_arguments', mutation_arguments)
 		return ENTITY1_CONTROLLER_SYSTEM.delete({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction
 			}, mutation_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('2', __RELATIVE_FILEPATH, 'DELETE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success', 'data', data)
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('2', __RELATIVE_FILEPATH, 'DELETE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success', 'data', data)
 				return data.map(ENTITY1_SERIALIZER.serialize)
 			})
 	}

@@ -14,12 +14,12 @@ class DatabaseModel extends $kernel.models._class.Model {
 		primary_key
 	}) {
 		super(config)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:enter`)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:enter`)
 		this.table = table
 		this.primary_key = primary_key
 		//this.fields = fields
 		this.name = this._name()
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
 	}
 	_name() {
 		return `[${this.table}]${this.constructor.name}`
@@ -34,16 +34,16 @@ class DatabaseModel extends $kernel.models._class.Model {
 		const {
 			attributes
 		} = input
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'source', source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'input', input)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'source', source)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.create.enter`, 'input', input)
 		const sql = database(self.table)
 			.insert(attributes, [self.primary_key])
 			.transacting(transaction)
 		if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
-			$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.create:debug_sql`, sql.toString())
+			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.create:debug_sql`, sql.toString())
 		}
 		return sql.then(function (data) {
-			$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.create:success`, 'data', data)
+			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.create:success`, 'data', data)
 			return self.read({
 				source: undefined,
 				database,
@@ -59,7 +59,7 @@ class DatabaseModel extends $kernel.models._class.Model {
 				order_nulls: 'first'
 			})
 		}).catch(function (err) {
-			$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.create:failure`, 'err', err)
+			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.create:failure`, 'err', err)
 			throw err
 		})
 	}
@@ -79,8 +79,8 @@ class DatabaseModel extends $kernel.models._class.Model {
 			order_direction = 'asc',
 			order_nulls = 'first'
 		} = input
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.read:enter`, 'source', source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.read:enter`, 'input', input)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.read:enter`, 'source', source)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.read:enter`, 'input', input)
 		if (source && source._metadata) {
 			// do join here based on source metadata
 			// use structure resolvers to convert graphql type to table name
@@ -105,14 +105,14 @@ class DatabaseModel extends $kernel.models._class.Model {
 				.orderBy(joined_order, order_direction, order_nulls)
 				.transacting(transaction)
 			if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString())
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString())
 			}
 			return sql.then(function (data) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.read:success`, 'data', data)
+					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.read:success`, 'data', data)
 					return Promise.resolve(data)
 				})
 				.catch(function (err) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.read:failure`, 'err', err)
+					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.read:failure`, 'err', err)
 					throw err
 				})
 		} else {
@@ -125,14 +125,14 @@ class DatabaseModel extends $kernel.models._class.Model {
 				.orderBy(order, order_direction)
 				.transacting(transaction)
 			if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString())
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString())
 			}
 			return sql.then(function (data) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.read:success`, 'data', data)
+					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.read:success`, 'data', data)
 					return Promise.resolve(data)
 				})
 				.catch(function (err) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.read:failure`, 'err', err)
+					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.read:failure`, 'err', err)
 					throw err
 				})
 		}
@@ -153,8 +153,8 @@ class DatabaseModel extends $kernel.models._class.Model {
 			order_direction = 'asc',
 			order_nulls = 'first'
 		} = input
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'source', source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'input', input)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'source', source)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:enter`, 'input', input)
 		if (source && source._metadata) {
 			// note: manual approach: do a query to get a set of ids and pass those into a where in clause
 			// note: there might be a way to do this in one shot by doing a join query, but this approach is not terrible because we can handle 1 million ids in memory fine
@@ -181,10 +181,10 @@ class DatabaseModel extends $kernel.models._class.Model {
 					.update(attributes)
 					.transacting(transaction)
 				if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString())
+					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString())
 				}
 				return sql.then(function (data) {
-						$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:success`, 'data', data)
+						$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:success`, 'data', data)
 						return self.read({
 							source,
 							database,
@@ -199,11 +199,11 @@ class DatabaseModel extends $kernel.models._class.Model {
 						})
 					})
 					.catch(function (err) {
-						$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
+						$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
 						throw err
 					})
 			}).catch(function (err) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
 				throw err
 			})
 			/*
@@ -234,10 +234,10 @@ class DatabaseModel extends $kernel.models._class.Model {
 				//.where(joined_where)
 				.transacting(transaction)
 			if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString())
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString())
 			}
 			return sql.then(function (data) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:success`, 'data', data)
+					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:success`, 'data', data)
 					return self.read({
 						source,
 						database,
@@ -252,7 +252,7 @@ class DatabaseModel extends $kernel.models._class.Model {
 					})
 				})
 				.catch(function (err) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
+					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
 					throw err
 				})
 			*/
@@ -262,10 +262,10 @@ class DatabaseModel extends $kernel.models._class.Model {
 				.update(attributes)
 				.transacting(transaction)
 			if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString())
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString())
 			}
 			return sql.then(function (data) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:success`, 'data', data)
+					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.update:success`, 'data', data)
 					return self.read({
 						source,
 						database,
@@ -280,7 +280,7 @@ class DatabaseModel extends $kernel.models._class.Model {
 					})
 				})
 				.catch(function (err) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
+					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.update:failure`, 'err', err)
 					throw err
 				})
 		}
@@ -300,8 +300,8 @@ class DatabaseModel extends $kernel.models._class.Model {
 			order_direction = 'asc',
 			order_nulls = 'first'
 		} = input
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'source', source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'input', input)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'source', source)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, 'input', input)
 		// todo: use attributes and update deleted_at instead of deleting the row
 		//attributes = self.serialize(attributes, 'delete')
 		if (source && source._metadata) {
@@ -330,10 +330,10 @@ class DatabaseModel extends $kernel.models._class.Model {
 					.del()
 					.transacting(transaction)
 				if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString())
+					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString())
 				}
 				return sql.then(function (data) {
-						$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:success`, 'data', data)
+						$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:success`, 'data', data)
 						return self.read({
 							source,
 							database,
@@ -348,11 +348,11 @@ class DatabaseModel extends $kernel.models._class.Model {
 						})
 					})
 					.catch(function (err) {
-						$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, 'err', err)
+						$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, 'err', err)
 						throw err
 					})
 			}).catch(function (err) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, 'err', err)
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, 'err', err)
 				throw err
 			})
 			/*
@@ -373,10 +373,10 @@ class DatabaseModel extends $kernel.models._class.Model {
 				.del()
 				.transacting(transaction)
 			if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString())
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString())
 			}
 			return sql.then(function (data) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:success`, 'data', data)
+					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:success`, 'data', data)
 					return self.read({
 						source,
 						database,
@@ -391,7 +391,7 @@ class DatabaseModel extends $kernel.models._class.Model {
 					})
 				})
 				.catch(function (err) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, 'err', err)
+					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, 'err', err)
 					throw err
 				})
 			*/
@@ -401,10 +401,10 @@ class DatabaseModel extends $kernel.models._class.Model {
 				.del()
 				.transacting(transaction)
 			if (process.env.GAUZE_DEBUG_SQL === 'TRUE') {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString())
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('1', __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString())
 			}
 			return sql.then(function (data) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:success`, 'data', data)
+					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${self.name}.Delete:success`, 'data', data)
 					return self.read({
 						source,
 						database,
@@ -419,7 +419,7 @@ class DatabaseModel extends $kernel.models._class.Model {
 					})
 				})
 				.catch(function (err) {
-					$kernel.logger.io.IO_LOGGER_KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, 'err', err)
+					$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('4', __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, 'err', err)
 					throw err
 				})
 		}

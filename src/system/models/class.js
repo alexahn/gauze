@@ -9,7 +9,7 @@ class SystemModel extends $kernel.models._class.Model {
 	constructor(config) {
 		super(config)
 		this.name = this.__name()
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
 	}
 	__name() {
 		return this.constructor.name
@@ -24,7 +24,7 @@ class GraphQLOperationSystemModel extends SystemModel {
 		super(config)
 		this.schema = schema
 		this.name = this._name()
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
 	}
 	_name () {
 		return this.constructor.name
@@ -58,25 +58,25 @@ class DatabaseModelSystemModel extends SystemModel {
 		super(config)
 		this.model = model
 		this.name = this._name()
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
 	}
 	_name () {
 		return `[${this.model.name}]${this.constructor.name}`
 	}
 	create (context, input) {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.create:enter`, 'input', input)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.create:enter`, 'input', input)
 		return this.model.create(context, input)
 	}
 	read (context, input) {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.read:enter`, 'input', input)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.read:enter`, 'input', input)
 		return this.model.read(context, input)
 	}
 	update (context, input) {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.update:enter`, 'input', input)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.update:enter`, 'input', input)
 		return this.model.update(context, input)
 	}
 	delete (context, input) {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.delete:enter`, 'input', input)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.delete:enter`, 'input', input)
 		return this.model.delete(context, input)
 	}
 }

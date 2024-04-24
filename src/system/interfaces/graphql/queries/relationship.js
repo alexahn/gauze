@@ -57,15 +57,15 @@ const READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 		}
 	},
 	resolve: (_source, query_arguments, context) => {
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter', '_source', _source)
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, 'READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter', 'query_arguments', query_arguments)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, 'READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter', '_source', _source)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, 'READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter', 'query_arguments', query_arguments)
 		return RELATIONSHIP_CONTROLLER_SYSTEM.read({
 				source: _source,
 				database: context.database,
 				transaction: context.transaction
 			}, query_arguments)
 			.then(function (data) {
-				$kernel.logger.io.IO_LOGGER_KERNEL.write('1', __RELATIVE_FILEPATH, 'READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:success', 'data', data)
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('1', __RELATIVE_FILEPATH, 'READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:success', 'data', data)
 				return data.map(RELATIONSHIP_SERIALIZER.serialize)
 			})
 	}

@@ -9,7 +9,7 @@ class SystemController {
 	constructor (config) {
 		this.config = config
 		this.name = this.__name()
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor.exit`)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor.exit`)
 	}
 	__name () {
 		return this.constructor.name
@@ -23,7 +23,7 @@ class SystemModelSystemController extends SystemController {
 		super(config)
 		this.model = model
 		this.name = this._name()
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.constructor:exit`)
 	}
 	_name () {
 		return `[${this.model.name}]${this.constructor.name}`
@@ -40,7 +40,7 @@ class SystemModelSystemController extends SystemController {
 			database,
 			transaction
 		}
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.create:enter`, 'input', input)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.create:enter`, 'input', input)
 		return this.model.create(context, input).then(function (rows) {
 			return rows.map(function (row) {
 				return self.model.deserialize(row)
@@ -59,7 +59,7 @@ class SystemModelSystemController extends SystemController {
 			database,
 			transaction
 		}
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.read:enter`, 'input', input)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.read:enter`, 'input', input)
 		return this.model.read(context, input).then(function (rows) {
 			return rows.map(function (row) {
 				return self.model.deserialize(row)
@@ -78,7 +78,7 @@ class SystemModelSystemController extends SystemController {
 			database,
 			transaction
 		}
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.update:enter`, 'input', input)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.update:enter`, 'input', input)
 		return this.model.update(context, input).then(function (rows) {
 			return rows.map(function (row) {
 				return self.model.deserialize(row)
@@ -97,7 +97,7 @@ class SystemModelSystemController extends SystemController {
 			database,
 			transaction
 		}
-		$kernel.logger.io.IO_LOGGER_KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.delete:enter`, 'input', input)
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write('0', __RELATIVE_FILEPATH, `${this.name}.delete:enter`, 'input', input)
 		return this.model.delete(context, input).then(function (rows) {
 			return rows.map(function (row) {
 				return self.model.deserialize(row)
