@@ -165,3 +165,5 @@
 	[ ] file handler entity
 		[ ] manages an io entity that can read and write
 	[ ] streaming interface for files
+[ ] rename reality to application
+	[ ] have application stack be right below system stack so we have a total ordering
