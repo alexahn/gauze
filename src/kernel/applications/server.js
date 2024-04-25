@@ -1,4 +1,10 @@
+import url from "url";
+import path from "path";
+const __FILEPATH = url.fileURLToPath(import.meta.url);
+const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
+
 import http from "http";
+import { graphql } from "graphql";
 
 class GauzeServer {
 	// note: config takes the command argv structure (src/command/commands/run/server.js)
@@ -6,13 +12,13 @@ class GauzeServer {
 		this.$gauze = $gauze;
 		this.config = config;
 
-		process.on("SIGINT", (val) => {
-			console.log("SIGINT", val);
+		process.on("SIGINT", function (val) {
+			$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGINT: ${val}`);
 			process.exit(130);
 		});
 
-		process.on("SIGTERM", (val) => {
-			console.log("SIGTERM", val);
+		process.on("SIGTERM", function (val) {
+			$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGTERM: ${val}`);
 			// https://tldp.org/LDP/abs/html/exitcodes.html
 			// 128 + signal_constants from https://nodejs.org/dist/latest-v18.x/docs/api/os.html#signal-constants
 			// in this case SIGTERM is 15 so we have 128 + 15
@@ -20,8 +26,8 @@ class GauzeServer {
 		});
 
 		// this is called once the exit trajectory has been set
-		process.on("exit", function (v) {
-			console.log("terminating", v);
+		process.on("exit", function (val) {
+			$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.exit: ${val}`);
 		});
 
 		this.database = $gauze.database.knex.create_connection();
@@ -39,6 +45,7 @@ class GauzeServer {
 	}
 	create_graphql_handler(schema, req, res) {
 		var body = "";
+		var self = this
 		req.on("data", function (chunk) {
 			body += chunk;
 		});
@@ -48,9 +55,9 @@ class GauzeServer {
 			} catch (err) {
 				red.end(JSON.stringify(err));
 			}
-			return database.transaction(function (transaction) {
+			return self.database.transaction(function (transaction) {
 				const context = {};
-				context.database = database;
+				context.database = self.database;
 				context.transaction = transaction;
 				return graphql({
 					schema: schema,

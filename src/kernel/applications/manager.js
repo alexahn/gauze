@@ -14,12 +14,12 @@ class GauzeManager {
 		this.$gauze = $gauze;
 		this.config = config;
 
-		process.on("SIGINT", (val) => {
+		process.on("SIGINT", function (val) {
 			$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGINT: ${val}`);
 			process.exit(130);
 		});
 
-		process.on("SIGTERM", (val) => {
+		process.on("SIGTERM", function (val) {
 			$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGTERM: ${val}`);
 			// https://tldp.org/LDP/abs/html/exitcodes.html
 			// 128 + signal_constants from https://nodejs.org/dist/latest-v18.x/docs/api/os.html#signal-constants
@@ -58,6 +58,27 @@ class GauzeManager {
 		this.execute(`${GAUZE_CREATE_PROJECT_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR}`).catch(function (err) {
 			// do something here
 		});
+	}
+	migrate_run() {
+        const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./bin/migrate_run");
+        this.execute(`${GAUZE_SHELL_COMMAND}`).catch(function (err) {
+            // do something here
+        });
+	}
+	migrate_make(name) {
+        const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, `./bin/migrate_make ${name}`);
+        this.execute(`${GAUZE_SHELL_COMMAND}`).catch(function (err) {
+            // do something here
+        });
+	}
+	migrate_rollback(){ 
+
+	}
+	seed_run() {
+
+	}
+	seed_make(name) {
+
 	}
 }
 

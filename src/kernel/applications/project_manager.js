@@ -14,12 +14,12 @@ class GauzeProjectManager {
 		this.$gauze = $gauze;
 		this.config = config;
 
-		process.on("SIGINT", (val) => {
+		process.on("SIGINT", function (val) {
 			$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGINT: ${val}`);
 			process.exit(130);
 		});
 
-		process.on("SIGTERM", (val) => {
+		process.on("SIGTERM", function (val) {
 			$gauzekernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGTEM: ${val}`);
 			// https://tldp.org/LDP/abs/html/exitcodes.html
 			// 128 + signal_constants from https://nodejs.org/dist/latest-v18.x/docs/api/os.html#signal-constants
