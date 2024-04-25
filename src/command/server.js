@@ -7,29 +7,11 @@ import {
 */
 import { createHandler } from "graphql-http";
 
-import {
-	//SCHEMA_GRAPHQL_INTERFACE_SYSTEM
-	SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM,
-} from "./../system/interfaces/graphql/schema.js";
+import { SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM } from "./../system/interfaces/graphql/schema.js";
 
-import {
-	//SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE
-	SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
-} from "./../database/interfaces/graphql/schema.js";
+import { SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE } from "./../database/interfaces/graphql/schema.js";
 
 import { create_connection } from "./../database/knex.js";
-
-// Create the GraphQL over HTTP Node request handler
-/*
-const handler = createHandler({
-	schema
-});
-*/
-
-// seems we need to link the system before we link the database?
-// why aren't these mutually exclusive?
-//const SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE = build_database_schema()
-//const SCHEMA_GRAPHQL_INTERFACE_SYSTEM = build_system_schema()
 
 const database = create_connection();
 
@@ -123,31 +105,6 @@ const server = http.createServer((req, res) => {
 		res.writeHead(404).end();
 	}
 });
-
-function toRequest(req, res) {
-	if (!req.url) {
-		throw new Error("Missing request URL");
-	}
-	if (!req.method) {
-		throw new Error("Missing request method");
-	}
-	return {
-		url: req.url,
-		method: req.method,
-		headers: req.headers,
-		body: () =>
-			new Promise((resolve) => {
-				let body = "";
-				req.setEncoding("utf-8");
-				req.on("data", (chunk) => (body += chunk));
-				req.on("end", () => resolve(body));
-			}),
-		raw: req,
-		context: {
-			res,
-		},
-	};
-}
 
 server.listen(4000);
 console.log("Listening to port 4000");
