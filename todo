@@ -42,11 +42,6 @@
 	[x] re-expose query and mutation at entity level for nested queries and mutations
 	[x] dynamically configure relationships, sub-queries, and sub-mutations by creating an abstraction
 [x] shell / repl
-[ ] command directory
-	[ ] yargs?
-	[x] terminal
-	[x] server
-	[ ] manage?
 [x] realms (database, system, user) should be written by using the exposed interface for the layer below
 	[x] forces any circular dependencies to be made apparent
 	[x] use structure as $structure
@@ -130,18 +125,6 @@
 	[x] kernel/shell
 	[x] kernel/logger
 	[x] kernel/cache
-[ ] start thinking about kernel/src or kernel/source
-	[ ] bootstrap new project by using commands that use the source code
-		[ ] should have commands to create new entities
-			[ ] base everything off structures
-			[ ] look into programmatically generating graphql and sql structures from an abstract structure
-	[ ] create abstract structures
-	[x] move entity1 and entity2 into kernel/src/migrations to make it easier for development
-		[ ] remove later once we can generate entities
-		[ ] move these migrations to structure?
-	[x] base structure in kernel
-	[x] base database model, controller, and interface
-	[x] base system model, controller, and interface
 [x] rename columns in relationship table
 	[x] example: _id to gauze__relationship__id
 	[x] example: _from_id to gauze__relationship__from_id
@@ -192,3 +175,30 @@
 [ ] create protected fields and update protected fields?
 	[ ] do we need to enforce not being able to change some fields after they are set?
 [ ] proper names for entities and gauze files generates from kernel
+[ ] update schema files to use $structure instead of directly importing
+[ ] start thinking about kernel/src or kernel/source
+	[ ] bootstrap new project by using commands that use the source code
+		[ ] should have commands to create new entities
+			[ ] base everything off structures
+			[ ] look into programmatically generating graphql and sql structures from an abstract structure
+	[ ] create abstract structures
+	[x] move entity1 and entity2 into kernel/src/migrations to make it easier for development
+		[ ] remove later once we can generate entities
+		[ ] move these migrations to structure?
+	[x] base structure in kernel
+	[x] base database model, controller, and interface
+	[x] base system model, controller, and interface
+	[ ] fuse base_entity and base_gauze as base
+	[ ] add gauze.json as a config file for the gauze cli (which will keep track of gauze base models and developer entities)
+	[x] yargs cli for project
+		[x] run server to use kernel server application
+		[x] run terminal to use kernel terminal application
+		[ ] create, read, update, and delete to use kernel manager application
+		[x] command directory
+			[x] yargs?
+			[x] terminal
+			[x] server
+			[ ] create
+			[ ] read
+			[ ] update
+			[ ] delete
