@@ -202,3 +202,7 @@
 			[ ] read
 			[ ] update
 			[ ] delete
+	[ ] centralize all zsh/bash scripts under the root bin directory?
+		[-] or maybe have src/kernel/bin?
+			[x] better to have a root level directory that is the interface with the outer operating system
+	[ ] gauze cli (from node_modules), gauze-project cli (from bootstrapped project)

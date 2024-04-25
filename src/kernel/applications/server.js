@@ -121,8 +121,8 @@ class GauzeServer {
 	}
 }
 
-const GAUZE__SERVER__APPLICATION__KERNEL = function (modules, options) {
-	return new GauzeServer(modules, options);
+const GAUZE__SERVER__APPLICATION__KERNEL = function (modules, argv) {
+	return new GauzeServer(modules, argv);
 };
 
 export { GAUZE__SERVER__APPLICATION__KERNEL };

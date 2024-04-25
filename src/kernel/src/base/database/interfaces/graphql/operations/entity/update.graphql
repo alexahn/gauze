@@ -1,0 +1,31 @@
+mutation Updateba381b0cc764c4c9a187b716ae94ed96(
+	$attributes: ba381b0cc764c4c9a187b716ae94ed96_Mutation__Attributes
+	$where: ba381b0cc764c4c9a187b716ae94ed96_Mutation__Attributes
+	$where_in: ba381b0cc764c4c9a187b716ae94ed96_Mutation__Attributes_Array
+	$where_not_in: ba381b0cc764c4c9a187b716ae94ed96_Mutation__Attributes_Array
+	$limit: Int
+	$offset: Int
+	$order: String
+	$order_direction: String
+	$order_nulls: String
+) {
+	update_a2b8dbc3427b41a9899e11671c2422c7(
+		attributes: $attributes
+		where: $where
+		where_in: $where_in
+		where_not_in: $where_not_in
+		limit: $limit
+		offset: $offset
+		order: $order
+		order_direction: $order_direction
+		order_nulls: $order_nulls
+	) {
+		attributes {
+			id
+			created_at
+			updated_at
+			deleted_at
+			text
+		}
+	}
+}

@@ -70,8 +70,8 @@ class GauzeTerminal {
 	}
 }
 
-const GAUZE__TERMINAL__APPLICATION__KERNEL = function (modules, options) {
-	return new GauzeTerminal(modules, options);
+const GAUZE__TERMINAL__APPLICATION__KERNEL = function (modules, argv) {
+	return new GauzeTerminal(modules, argv);
 };
 
 export { GAUZE__TERMINAL__APPLICATION__KERNEL };
