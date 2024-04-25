@@ -49,7 +49,7 @@ class GauzeManager {
 	}
 	create_project(dir) {
 		const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), dir);
-		const GAUZE_CREATE_PROJECT_COMMAND = path.resolve(GAUZE_BASE_DIR, "./bin/manager-create-project");
+		const GAUZE_CREATE_PROJECT_COMMAND = path.resolve(GAUZE_BASE_DIR, "./bin/manager_create_project");
 		this.execute(`${GAUZE_CREATE_PROJECT_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR}`);
 	}
 }

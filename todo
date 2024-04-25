@@ -205,4 +205,5 @@
 	[ ] centralize all zsh/bash scripts under the root bin directory?
 		[-] or maybe have src/kernel/bin?
 			[x] better to have a root level directory that is the interface with the outer operating system
+		[ ] maybe src/kernel/bin is better because the copied code will be self-contained
 	[ ] gauze cli (from node_modules), gauze-project cli (from bootstrapped project)

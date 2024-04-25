@@ -3,7 +3,10 @@
 	"version": "0.0.1",
 	"description": "graphql server framework",
 	"main": "src/index.js",
-	"bin": "./src/command/gauze.js",
+	"bin": {
+		"gauze": "./src/command/gauze.js",
+		"gauze-project": "./index.js"
+	},
 	"scripts": {
 		"test": "node test",
 		"gauze": "./src/command/gauze.js",

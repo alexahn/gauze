@@ -20,10 +20,10 @@ A GraphQL server architecture.
 	- twoWords
 
 ### Files
-- Code variant files are Kebab Case. Code variant files usually contain code or other data that can change program execution behavior.
-	- two-words
-- Code invariant files are upper Kebab Case (Screaming Kebab Case). Code invariant files usually contain documentation or static variables that rarely change, if ever.
-	- TWO-WORDS
+- Code variant files are lower Snake Case. Code variant files usually contain code or other data that can change program execution behavior.
+	- two_words
+- Code invariant files are upper upper Snake Case (all upper case). Code invariant files usually contain documentation or static variables that rarely change, if ever.
+	- TWO_WORDS
 
 ### JavaScript
 
