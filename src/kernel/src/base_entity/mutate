@@ -1,0 +1,8 @@
+find . -type f -name '*.js' -exec sed -i '' 's/entity1/62b8dbc3427b41a9899e11671c2422c7/g' {} +
+find . -type f -name '*.js' -exec sed -i '' 's/Entity1/ca381b0cc764c4c9a187b716ae94ed9/g' {} +
+find . -type f -name '*.js' -exec sed -i '' 's/ENTITY1/6d637bc32c364580be5cc28396d3dee8/g' {} +
+
+find . -type f -name '*.graphql' -exec sed -i '' 's/entity1/62b8dbc3427b41a9899e11671c2422c7/g' {} +
+find . -type f -name '*.graphql' -exec sed -i '' 's/Entity1/ca381b0cc764c4c9a187b716ae94ed9/g' {} +
+find . -type f -name '*.graphql' -exec sed -i '' 's/ENTITY1/6d637bc32c364580be5cc28396d3dee8/g' {} +
+
