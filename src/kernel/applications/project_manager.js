@@ -8,7 +8,7 @@ import child_process from "child_process";
 const __FILEDIR = import.meta.dirname;
 const GAUZE_BASE_DIR = path.resolve(__FILEDIR, "../../../");
 
-class GauzeManager {
+class GauzeProjectManager {
 	// note: config takes the command argv structure (src/command/commands/create/project.js)
 	constructor({ $gauze }, config) {
 		this.$gauze = $gauze;
@@ -20,7 +20,7 @@ class GauzeManager {
 		});
 
 		process.on("SIGTERM", (val) => {
-			$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGTERM: ${val}`);
+			$gauzekernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGTEM: ${val}`);
 			// https://tldp.org/LDP/abs/html/exitcodes.html
 			// 128 + signal_constants from https://nodejs.org/dist/latest-v18.x/docs/api/os.html#signal-constants
 			// in this case SIGTERM is 15 so we have 128 + 15
@@ -43,7 +43,7 @@ class GauzeManager {
 				process.stderr.write(data);
 			});
 			child.on("close", function (code) {
-				self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `child.close: ${command}`);
+				self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `child.exit: ${command}`);
 				if (code === 0) {
 					return resolve(code);
 				} else {
@@ -52,17 +52,24 @@ class GauzeManager {
 			});
 		});
 	}
-	create_project(dir) {
+	proxy(dir) {
 		const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), dir);
-		const GAUZE_CREATE_PROJECT_COMMAND = path.resolve(GAUZE_BASE_DIR, "./bin/manager_create_project");
-		this.execute(`${GAUZE_CREATE_PROJECT_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR}`).catch(function (err) {
-			// do something here
+		//const GAUZE_CREATE_PROJECT_COMMAND = path.resolve(GAUZE_BASE_DIR, "./bin/project-manager-proxy");
+		// slice argv here
+		var sub_command_argv = [];
+		process.argv.forEach((val, index) => {
+			if (3 < index) {
+				sub_command_argv.push(val);
+			}
 		});
+		var GAUZE_SUB_COMMAND = sub_command_argv.join(" ");
+		console.log(`node ${GAUZE_PROJECT_DIR}/command/gauze.js ${GAUZE_SUB_COMMAND}`);
+		this.execute(`node ${GAUZE_PROJECT_DIR}/command/gauze.js ${GAUZE_SUB_COMMAND}`).catch(function (err) {});
 	}
 }
 
-const GAUZE__MANAGER__APPLICATION__KERNEL = function (modules, argv) {
-	return new GauzeManager(modules, argv);
+const GAUZE__PROJECT_MANAGER__APPLICATION__KERNEL = function (modules, argv) {
+	return new GauzeProjectManager(modules, argv);
 };
 
-export { GAUZE__MANAGER__APPLICATION__KERNEL };
+export { GAUZE__PROJECT_MANAGER__APPLICATION__KERNEL };
