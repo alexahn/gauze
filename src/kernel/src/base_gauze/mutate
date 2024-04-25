@@ -1,0 +1,8 @@
+find . -type f -name '*.js' -exec sed -i '' 's/relationship/1543731262804f64adcc0eae1a225acc/g' {} +
+find . -type f -name '*.js' -exec sed -i '' 's/Relationship/6b95d174a16f4ddd935ff3a802f7c7bc/g' {} +
+find . -type f -name '*.js' -exec sed -i '' 's/RELATIONSHIP/aaf5342ac38d41a6a02bb81d2d2b21a4/g' {} +
+
+find . -type f -name '*.graphql' -exec sed -i '' 's/relationship/1543731262804f64adcc0eae1a225acc/g' {} +
+find . -type f -name '*.graphql' -exec sed -i '' 's/Relationship/6b95d174a16f4ddd935ff3a802f7c7bc/g' {} +
+find . -type f -name '*.graphql' -exec sed -i '' 's/RELATIONSHIP/aaf5342ac38d41a6a02bb81d2d2b21a4/g' {} +
+

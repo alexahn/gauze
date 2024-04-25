@@ -140,9 +140,8 @@
 		[ ] remove later once we can generate entities
 		[ ] move these migrations to structure?
 	[x] base structure in kernel
-	[ ] base database model, controller, and interface
-	[ ] base system model, controller, and interface
-
+	[x] base database model, controller, and interface
+	[x] base system model, controller, and interface
 [x] rename columns in relationship table
 	[x] example: _id to gauze__relationship__id
 	[x] example: _from_id to gauze__relationship__from_id
@@ -192,3 +191,4 @@
 		[ ] table names are limited to 4 characters in the database
 [ ] create protected fields and update protected fields?
 	[ ] do we need to enforce not being able to change some fields after they are set?
+[ ] proper names for entities and gauze files generates from kernel

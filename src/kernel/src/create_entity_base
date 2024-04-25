@@ -23,10 +23,10 @@ cp -r ./base_entity/structure/* ./$1/structure/
 cp -r ./base_entity/database/* ./$1/database/
 cp -r ./base_entity/system/* ./$1/system/
 
-find $1 -type f -name '*.js' -exec sed -i '' 's/62b8dbc3427b41a9899e11671c2422c7/'$arg1'/g' {} +
-find $1 -type f -name '*.js' -exec sed -i '' 's/ca381b0cc764c4c9a187b716ae94ed9/'$arg2'/g' {} +
-find $1 -type f -name '*.js' -exec sed -i '' 's/6d637bc32c364580be5cc28396d3dee8/'$arg3'/g' {} +
+find $1 -type f -name '*.js' -exec sed -i '' 's/a2b8dbc3427b41a9899e11671c2422c7/'$arg1'/g' {} +
+find $1 -type f -name '*.js' -exec sed -i '' 's/ba381b0cc764c4c9a187b716ae94ed96/'$arg2'/g' {} +
+find $1 -type f -name '*.js' -exec sed -i '' 's/cd637bc32c364580be5cc28396d3dee8/'$arg3'/g' {} +
 
-find $1 -type f -name '*.graphql' -exec sed -i '' 's/62b8dbc3427b41a9899e11671c2422c7/'$arg1'/g' {} +
-find $1 -type f -name '*.graphql' -exec sed -i '' 's/ca381b0cc764c4c9a187b716ae94ed9/'$arg2'/g' {} +
-find $1 -type f -name '*.graphql' -exec sed -i '' 's/6d637bc32c364580be5cc28396d3dee8/'$arg3'/g' {} +
+find $1 -type f -name '*.graphql' -exec sed -i '' 's/a2b8dbc3427b41a9899e11671c2422c7/'$arg1'/g' {} +
+find $1 -type f -name '*.graphql' -exec sed -i '' 's/ba381b0cc764c4c9a187b716ae94ed96/'$arg2'/g' {} +
+find $1 -type f -name '*.graphql' -exec sed -i '' 's/cd637bc32c364580be5cc28396d3dee8/'$arg3'/g' {} +

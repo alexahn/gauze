@@ -14,10 +14,20 @@ arg3=${arg1:u}
 echo "arg3: $arg3"
 
 mkdir -p ./$1
+
 mkdir -p ./$1/structure
 mkdir -p ./$1/database
 mkdir -p ./$1/system
+
 cp -r ./base_gauze/structure/* ./$1/structure/
-find $1 -type f -name '*.js' -exec sed -i '' 's/1543731262804f64adcc0eae1a225acc/'$arg1'/g' {} +
-find $1 -type f -name '*.js' -exec sed -i '' 's/6b95d174a16f4ddd935ff3a802f7c7bc/'$arg2'/g' {} +
-find $1 -type f -name '*.js' -exec sed -i '' 's/aaf5342ac38d41a6a02bb81d2d2b21a4/'$arg3'/g' {} +
+cp -r ./base_gauze/database/* ./$1/database/
+cp -r ./base_gauze/system/* ./$1/system/
+
+find $1 -type f -name '*.js' -exec sed -i '' 's/a543731262804f64adcc0eae1a225acc/'$arg1'/g' {} +
+find $1 -type f -name '*.js' -exec sed -i '' 's/bb95d174a16f4ddd935ff3a802f7c7bc/'$arg2'/g' {} +
+find $1 -type f -name '*.js' -exec sed -i '' 's/caf5342ac38d41a6a02bb81d2d2b21a4/'$arg3'/g' {} +
+
+find $1 -type f -name '*.graphql' -exec sed -i '' 's/a543731262804f64adcc0eae1a225acc/'$arg1'/g' {} +
+find $1 -type f -name '*.graphql' -exec sed -i '' 's/bb95d174a16f4ddd935ff3a802f7c7bc/'$arg2'/g' {} +
+find $1 -type f -name '*.graphql' -exec sed -i '' 's/caf5342ac38d41a6a02bb81d2d2b21a4/'$arg3'/g' {} +
+
