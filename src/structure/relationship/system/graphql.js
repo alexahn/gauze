@@ -26,7 +26,7 @@ const METADATA__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE = new GraphQLObjectType
 const ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE = {
 	gauze__relationship__id: {
 		type: GraphQLString,
-		description: "_id",
+		description: "id",
 	},
 	gauze__relationship__created_at: {
 		type: GraphQLDate,

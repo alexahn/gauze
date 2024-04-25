@@ -4,16 +4,13 @@
  */
 const up = function (knex) {
 	return Promise.all([
-		knex.schema.createTable("gauze__entity2", function (table) {
+		knex.schema.createTable("gauze__entity1", function (table) {
 			table.uuid("id", { useBinaryUuid: true, primaryKey: true }).primary().defaultTo(knex.fn.uuid());
 			table.date("created_at").notNullable();
 			table.date("updated_at").notNullable();
 			table.date("deleted_at");
-			// the number of requests this program has made
-			table.string("text");
 
-			//table.index('reset', 'github_api__reset');
-			//table.unique('reset'); // easy way to make sure we atomically add
+			table.string("text");
 		}),
 	]);
 };

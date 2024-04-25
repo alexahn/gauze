@@ -1,0 +1,20 @@
+#!/bin/zsh
+
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied"
+	exit 1
+fi
+
+arg1="$1"
+echo "arg1: $arg1"
+arg2=$(echo "$arg1" | node to_upper.js)
+echo "arg2: $arg2"
+arg3=${arg1:u}
+echo "arg3: $arg3"
+
+mkdir -p ./$1
+cp -r ./entity_base/* ./$1
+find $1 -type f -name '*.js' -exec sed -i '' 's/62b8dbc3427b41a9899e11671c2422c7/'$arg1'/g' {} +
+find $1 -type f -name '*.js' -exec sed -i '' 's/ca381b0cc764c4c9a187b716ae94ed9/'$arg2'/g' {} +
+find $1 -type f -name '*.js' -exec sed -i '' 's/6d637bc32c364580be5cc28396d3dee8/'$arg3'/g' {} +

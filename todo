@@ -136,6 +136,13 @@
 			[ ] base everything off structures
 			[ ] look into programmatically generating graphql and sql structures from an abstract structure
 	[ ] create abstract structures
+	[x] move entity1 and entity2 into kernel/src/migrations to make it easier for development
+		[ ] remove later once we can generate entities
+		[ ] move these migrations to structure?
+	[x] base structure in kernel
+	[ ] base database model, controller, and interface
+	[ ] base system model, controller, and interface
+
 [x] rename columns in relationship table
 	[x] example: _id to gauze__relationship__id
 	[x] example: _from_id to gauze__relationship__from_id
@@ -149,12 +156,12 @@
 		[-] the application code isn't complex, but the database tuning and management would be
 		[-] the example policies i could find also don't seem to be that flexible, and it might be hard to set them up without duplicating relationship data across entities
 	[ ] maybe some kind of bit field if we want to be efficient?
-	[ ] simple white and black list permissions
-		[ ] system permissions
-		[ ] user permissions
-	[ ] system whitelist and blacklist tables
-	[ ] user whitelist and blacklist tables
-	[ ] structure information for default mode for table
+	[x] simple white and black list permissions
+		[x] subcategorized by realm
+	[x] whitelist and blacklist tables
+	[x] structure information for default mode for methods (e.g. private or public)
+	[x] blacklist and whitelist structures
+	[ ] blacklist and whitelist database models, controllers, and interface
 [ ] cached where in and cached where not in exposed to database graphql
 	[ ] value is a string key that is a key to a value in cache
 	[ ] hook up lru cache to system and database
@@ -180,3 +187,8 @@
 	[x] for now system will represent the initial application (we can rename it later)
 [x] update tables to use uuids so we can one shot bindings
 	[x] 00000000-0000-0000-0000-000000000001 format for seed data
+[ ] optimizations for end scale
+	[ ] have a look up data structure that maps the data name in the database to a readable name
+		[ ] table names are limited to 4 characters in the database
+[ ] create protected fields and update protected fields?
+	[ ] do we need to enforce not being able to change some fields after they are set?

@@ -12,8 +12,7 @@ import { ENTITY2_CONTROLLER_SYSTEM } from "./../../../controllers/entity2.js";
 
 const ENTITY2_SERIALIZER = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.entity2.system.graphql.TYPE__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
-	// todo: make primary key an abstract definition: $structure.entity2.abstract.PRIMARY_KEY__ABSTRACT__ENTITY2__STRUCTURE
-	sql_primary_key: $structure.entity2.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY2__STRUCTURE,
+	sql_primary_key: $structure.entity2.abstract.PRIMARY_KEY__ABSTRACT__ENTITY2__STRUCTURE,
 });
 
 const ENTITY2_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new GraphQLInputObjectType({

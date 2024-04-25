@@ -12,7 +12,7 @@ import { ENTITY2_CONTROLLER_DATABASE } from "./../../../controllers/entity2.js";
 
 const ENTITY2_SERIALIZER = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.entity2.database.graphql.TYPE__GRAPHQL__DATABASE__ENTITY2__STRUCTURE,
-	sql_primary_key: $structure.entity2.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY2__STRUCTURE,
+	sql_primary_key: $structure.entity2.abstract.PRIMARY_KEY__ABSTRACT__ENTITY2__STRUCTURE,
 });
 
 const ENTITY2_ATTRIBUTES_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({
