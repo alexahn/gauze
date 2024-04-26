@@ -6,14 +6,12 @@ const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 import * as $kernel from "./../../kernel/index.js";
 import * as $structure from "./../../structure/index.js";
 
-// base model that is based off the organization of structure
+// base model handles middlewares, serializers, and deserializers based on the abstract entity definition
 class Model {
 	constructor(abstract_entity) {
 		const { name, fields } = abstract_entity;
 		this.entity_name = name;
 		this.fields = fields;
-		//this.protected_fields = protected_fields;
-		//this.field_serializers = field_serializers;
 		this.name = this.__name();
 		this.relationship_table = $structure.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE;
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
