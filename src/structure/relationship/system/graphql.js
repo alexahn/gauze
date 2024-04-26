@@ -1,5 +1,7 @@
 import { GraphQLNonNull, GraphQLInt, GraphQLList, GraphQLString, GraphQLObjectType, GraphQLInterfaceType } from "graphql";
 
+import * as $abstract from "./../../../abstract/index.js";
+
 import { create_fields_array } from "./../../utility.js";
 
 import GraphQLDate from "graphql-date";
@@ -23,6 +25,8 @@ const METADATA__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE = new GraphQLObjectType
 	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
 });
 
+const ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE = $abstract.entities.relationship.default($abstract).graphql_fields;
+/*
 const ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE = {
 	gauze__relationship__id: {
 		type: GraphQLString,
@@ -57,6 +61,7 @@ const ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE = {
 		description: "to_id",
 	},
 };
+*/
 
 const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE = create_fields_array(ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE);
 

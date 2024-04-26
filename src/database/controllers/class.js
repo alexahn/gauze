@@ -8,7 +8,6 @@ import * as $kernel from "./../../kernel/index.js";
 // input model is a database model
 class DatabaseController {
 	constructor(config, model) {
-		//super(config)
 		this.model = model;
 		this.name = this._name();
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
@@ -24,10 +23,15 @@ class DatabaseController {
 			transaction,
 		};
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.create:enter`, "input", input);
+		input.attributes = self.model.pre_serialize_middleware(input.attributes, "create");
 		input.attributes = self.model.serialize(input.attributes, "create");
+		input.attributes = self.model.post_serialize_middleware(input.attributes, "create");
 		return self.model.create(context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.deserialize(row);
+				row = self.model.pre_deserialize_middleware(row, "create");
+				row = self.model.deserialize(row, "create");
+				row = self.model.post_deserialize_middleware(row, "create");
+				return row;
 			});
 		});
 	}
@@ -41,7 +45,10 @@ class DatabaseController {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.read:enter`, "input", input);
 		return this.model.read(context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.deserialize(row);
+				row = self.model.pre_deserialize_middleware(row, "read");
+				row = self.model.deserialize(row, "read");
+				row = self.model.post_deserialize_middleware(row, "read");
+				return row;
 			});
 		});
 	}
@@ -53,10 +60,16 @@ class DatabaseController {
 			transaction,
 		};
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.update:enter`, "input", input);
+		//input.attributes = self.model.serialize(input.attributes, "update");
+		input.attributes = self.model.pre_serialize_middleware(input.attributes, "update");
 		input.attributes = self.model.serialize(input.attributes, "update");
+		input.attributes = self.model.post_serialize_middleware(input.attributes, "update");
 		return self.model.update(context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.deserialize(row);
+				row = self.model.pre_deserialize_middleware(row, "update");
+				row = self.model.deserialize(row, "update");
+				row = self.model.post_deserialize_middleware(row, "update");
+				return row;
 			});
 		});
 	}
@@ -70,7 +83,10 @@ class DatabaseController {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.delete:enter`, "input", input);
 		return this.model.delete(context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.deserialize(row);
+				row = self.model.pre_deserialize_middleware(row, "delete");
+				row = self.model.deserialize(row, "delete");
+				row = self.model.post_deserialize_middleware(row, "delete");
+				return row;
 			});
 		});
 	}

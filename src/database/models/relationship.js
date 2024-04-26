@@ -3,7 +3,7 @@ import * as $structure from "./../../structure/index.js";
 
 import { DatabaseModel } from "./class.js";
 
-const RELATIONSHIP_MODEL_DATABASE_ROOT_CONFIG = $abstract.entities.relationship.default($abstract)
+const RELATIONSHIP_MODEL_DATABASE_ROOT_CONFIG = $abstract.entities.relationship.default($abstract);
 /*
 const RELATIONSHIP_MODEL_DATABASE_ROOT_CONFIG = {
 	fields: $structure.relationship.database.sql.FIELDS__SQL__DATABASE__RELATIONSHIP__STRUCTURE,

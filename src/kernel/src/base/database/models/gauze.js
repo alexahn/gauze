@@ -3,7 +3,7 @@ import * as $structure from "./../../structure/index.js";
 
 import { DatabaseModel } from "./class.js";
 
-const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE_ROOT_CONFIG = $abstract.entities.a543731262804f64adcc0eae1a225acc.default($abstract)
+const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE_ROOT_CONFIG = $abstract.entities.a543731262804f64adcc0eae1a225acc.default($abstract);
 /*
 const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE_ROOT_CONFIG = {
 	fields: $structure.a543731262804f64adcc0eae1a225acc.database.sql.FIELDS__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,

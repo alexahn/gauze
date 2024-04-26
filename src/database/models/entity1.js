@@ -3,7 +3,7 @@ import * as $structure from "./../../structure/index.js";
 
 import { DatabaseModel } from "./class.js";
 
-const ENTITY1_MODEL_DATABASE_ROOT_CONFIG = $abstract.entities.entity1.default($abstract)
+const ENTITY1_MODEL_DATABASE_ROOT_CONFIG = $abstract.entities.entity1.default($abstract);
 /*
 const ENTITY1_MODEL_DATABASE_ROOT_CONFIG = {
 	fields: $structure.entity1.database.sql.FIELDS__SQL__DATABASE__ENTITY1__STRUCTURE,

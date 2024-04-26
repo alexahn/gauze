@@ -1,11 +1,11 @@
-import * as $abstract from "./../../../abstract/index.js"
+import * as $abstract from "./../../../abstract/index.js";
 
 //import { SERIALIZER_CREATED_AT_STRUCTURE, SERIALIZER_UPDATED_AT_STRUCTURE, SERIALIZER_DELETED_AT_STRUCTURE } from "./../../serializers.js";
 
 //import { PRIMARY_KEY__ABSTRACT__ENTITY1__STRUCTURE } from "./../abstract.js";
 
 const TABLE_NAME__SQL__DATABASE__ENTITY1__STRUCTURE = "gauze__entity1";
-const PRIMARY_KEY__SQL__DATABASE__ENTITY1__STRUCTURE = $abstract.entities.entity1.default($abstract).primary_key
+const PRIMARY_KEY__SQL__DATABASE__ENTITY1__STRUCTURE = $abstract.entities.entity1.default($abstract).primary_key;
 //const PRIMARY_KEY__SQL__DATABASE__ENTITY1__STRUCTURE = PRIMARY_KEY__ABSTRACT__ENTITY1__STRUCTURE;
 /*
 const FIELDS__SQL__DATABASE__ENTITY1__STRUCTURE = {
