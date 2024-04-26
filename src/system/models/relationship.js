@@ -1,9 +1,10 @@
 import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
+import * as $kernel from "./../../kernel/index.js";
 
-import { GraphQLOperationSystemModel } from "./class.js";
+//import { GraphQLOperationSystemModel } from "./class.js";
 
-class RelationshipSystemModel extends GraphQLOperationSystemModel {
+class RelationshipSystemModel extends $kernel.models.system.GraphQLOperationSystemModel {
 	constructor(root_config, parent_config, config) {
 		super(root_config, parent_config);
 	}
