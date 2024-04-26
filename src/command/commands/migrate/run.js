@@ -17,7 +17,7 @@ export const command = "run";
 export const describe = "Run gauze migrations";
 
 export const builder = function (yargs) {
-	return yargs.env("GAUZE_PROJECT")
+	return yargs.env("GAUZE_PROJECT");
 	//.wrap(128)
 };
 

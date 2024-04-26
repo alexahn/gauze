@@ -3,8 +3,6 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
-import child_process from "child_process";
-
 import { config } from "dotenv";
 import findConfig from "find-config";
 

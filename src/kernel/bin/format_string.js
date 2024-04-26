@@ -4,10 +4,6 @@ if (!process.argv[2]) {
 	throw new Error("missing format argument, must be lower_snake_case, lower_kebab_case, pascal_snake_case, or upper_snake_case");
 }
 
-process.argv.forEach((val, index) => {
-	console.log(`${index}: ${val}`);
-});
-
 // lower snake case
 // lower kebab case (file)
 // pascal snake case

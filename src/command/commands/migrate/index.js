@@ -6,7 +6,7 @@ export const command = "migrate <command>";
 export const describe = "Manage gauze migrations";
 
 export const builder = function (yargs) {
-	return yargs.command(project).command(entity).command(gauze).demandCommand();
+	return yargs.command(run).command(make).demandCommand();
 	//.wrap(128)
 };
 

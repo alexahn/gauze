@@ -9,7 +9,6 @@ const __FILEDIR = import.meta.dirname;
 const GAUZE_BASE_DIR = path.resolve(__FILEDIR, "../../../");
 
 class GauzeProjectManager {
-	// note: config takes the command argv structure (src/command/commands/create/project.js)
 	constructor({ $gauze }, config) {
 		this.$gauze = $gauze;
 		this.config = config;
@@ -54,7 +53,6 @@ class GauzeProjectManager {
 	}
 	proxy(dir) {
 		const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), dir);
-		//const GAUZE_CREATE_PROJECT_COMMAND = path.resolve(GAUZE_BASE_DIR, "./bin/project-manager-proxy");
 		// slice argv here
 		var sub_command_argv = [];
 		process.argv.forEach((val, index) => {

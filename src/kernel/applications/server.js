@@ -45,7 +45,7 @@ class GauzeServer {
 	}
 	create_graphql_handler(schema, req, res) {
 		var body = "";
-		var self = this
+		var self = this;
 		req.on("data", function (chunk) {
 			body += chunk;
 		});

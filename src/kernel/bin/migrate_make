@@ -1,0 +1,1 @@
+npx knex --knexfile=./src/database/knexfile.js migrate:make $1

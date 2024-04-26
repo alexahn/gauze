@@ -54,31 +54,54 @@ class GauzeManager {
 	}
 	create_project(dir) {
 		const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), dir);
-		const GAUZE_CREATE_PROJECT_COMMAND = path.resolve(GAUZE_BASE_DIR, "./bin/manager_create_project");
-		this.execute(`${GAUZE_CREATE_PROJECT_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR}`).catch(function (err) {
+		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./src/kernel/bin/manager_create_project");
+		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR}`;
+		this.execute(COMMAND).catch(function (err) {
+			// do something here
+		});
+	}
+	create_entity(dir, name) {
+		const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), dir);
+		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./src/kernel/bin/manager_create_entity");
+		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${name}`;
+		this.execute(COMMAND).catch(function (err) {
 			// do something here
 		});
 	}
 	migrate_run() {
-        const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./bin/migrate_run");
-        this.execute(`${GAUZE_SHELL_COMMAND}`).catch(function (err) {
-            // do something here
-        });
+		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./src/kernel/bin/migrate_run");
+		const COMMAND = `${GAUZE_SHELL_COMMAND}`;
+		this.execute(COMMAND).catch(function (err) {
+			// do something here
+		});
 	}
 	migrate_make(name) {
-        const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, `./bin/migrate_make ${name}`);
-        this.execute(`${GAUZE_SHELL_COMMAND}`).catch(function (err) {
-            // do something here
-        });
+		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./src/kernel/bin/migrate_make");
+		const COMMAND = `${GAUZE_SHELL_COMMAND} ${name}`;
+		this.execute(COMMAND).catch(function (err) {
+			// do something here
+		});
 	}
-	migrate_rollback(){ 
-
+	migrate_rollback() {
+		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./src/kernel/bin/migrate_rollback");
+		const COMMAND = `${GAUZE_SHELL_COMMAND}`;
+		this.execute(COMMAND).catch(function (err) {
+			// do something here
+		});
 	}
 	seed_run() {
-
+		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./src/kernel/bin/seed_run");
+		const COMMAND = `${GAUZE_SHELL_COMMAND}`;
+		this.execute(COMMAND).catch(function (err) {
+			// do something here
+		});
 	}
 	seed_make(name) {
-
+		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./src/kernel/bin/seed_make");
+		const COMMAND = `${GAUZE_SHELL_COMMAND} ${name}`;
+		this.execute(COMMAND).catch(function (err) {
+			// do something here
+		});
 	}
 }
 
