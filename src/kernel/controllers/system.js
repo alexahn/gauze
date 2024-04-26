@@ -44,7 +44,7 @@ class SystemModelSystemController extends SystemController {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.create:enter`, "input", input);
 		return this.model.create(context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.deserialize(row);
+				return self.model.deserialize(row, "create");
 			});
 		});
 	}
@@ -58,7 +58,7 @@ class SystemModelSystemController extends SystemController {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.read:enter`, "input", input);
 		return this.model.read(context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.deserialize(row);
+				return self.model.deserialize(row, "read");
 			});
 		});
 	}
@@ -72,7 +72,7 @@ class SystemModelSystemController extends SystemController {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.update:enter`, "input", input);
 		return this.model.update(context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.deserialize(row);
+				return self.model.deserialize(row, "update");
 			});
 		});
 	}
@@ -86,7 +86,7 @@ class SystemModelSystemController extends SystemController {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.delete:enter`, "input", input);
 		return this.model.delete(context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.deserialize(row);
+				return self.model.deserialize(row, "delete");
 			});
 		});
 	}

@@ -1,8 +1,7 @@
+import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
-
-//import { GraphQLOperationSystemModel } from "./class.js";
 
 class RelationshipSystemModel extends $kernel.models.system.GraphQLOperationSystemModel {
 	constructor(root_config, parent_config, config) {
@@ -54,11 +53,7 @@ class RelationshipSystemModel extends $kernel.models.system.GraphQLOperationSyst
 	}
 }
 
-const RELATIONSHIP_MODEL_SYSTEM_ROOT_CONFIG = {
-	fields: $structure.relationship.database.sql.FIELDS__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
-	protected_fields: $structure.relationship.database.sql.PROTECTED_FIELDS__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
-	field_serializers: $structure.relationship.database.sql.FIELD_SERIALIZERS__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
-};
+const RELATIONSHIP_MODEL_SYSTEM_ROOT_CONFIG = $abstract.entities.relationship.default($abstract)
 const RELATIONSHIP_MODEL_SYSTEM_PARENT_CONFIG = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 };

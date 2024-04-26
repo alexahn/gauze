@@ -1,6 +1,5 @@
 import * as $kernel from "./../../kernel/index.js"
 
-import { DatabaseController } from "./class.js";
 import { RELATIONSHIP_MODEL_DATABASE } from "./../models/relationship.js";
 
 const RELATIONSHIP_CONTROLLER_DATABASE_CONFIG = {};
