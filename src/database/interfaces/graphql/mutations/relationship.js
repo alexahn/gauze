@@ -3,8 +3,8 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
-import * as $kernel from "./../../../../kernel/index.js";
 import * as $structure from "./../../../../structure/index.js";
+import * as $kernel from "./../../../../kernel/index.js";
 
 import { GraphQLNonNull, GraphQLInt, GraphQLList, GraphQLString, GraphQLObjectType, GraphQLInputObjectType, GraphQLInterfaceType } from "graphql";
 
@@ -12,7 +12,7 @@ import { RELATIONSHIP_CONTROLLER_DATABASE } from "./../../../controllers/relatio
 
 const RELATIONSHIP_SERIALIZER = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.relationship.database.graphql.TYPE__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE,
-	sql_primary_key: $structure.relationship.abstract.PRIMARY_KEY__ABSTRACT__RELATIONSHIP__STRUCTURE,
+	sql_primary_key: $structure.relationship.database.sql.PRIMARY_KEY__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
 });
 
 const RELATIONSHIP_ATTRIBUTES_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({

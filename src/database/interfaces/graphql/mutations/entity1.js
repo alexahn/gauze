@@ -3,8 +3,8 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
-import * as $kernel from "./../../../../kernel/index.js";
 import * as $structure from "./../../../../structure/index.js";
+import * as $kernel from "./../../../../kernel/index.js";
 
 import { GraphQLNonNull, GraphQLInt, GraphQLList, GraphQLString, GraphQLObjectType, GraphQLInputObjectType, GraphQLInterfaceType } from "graphql";
 
@@ -12,7 +12,7 @@ import { ENTITY1_CONTROLLER_DATABASE } from "./../../../controllers/entity1.js";
 
 const ENTITY1_SERIALIZER = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.entity1.database.graphql.TYPE__GRAPHQL__DATABASE__ENTITY1__STRUCTURE,
-	sql_primary_key: $structure.entity1.abstract.PRIMARY_KEY__ABSTRACT__ENTITY1__STRUCTURE,
+	sql_primary_key: $structure.entity1.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY1__STRUCTURE,
 });
 
 const ENTITY1_ATTRIBUTES_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({
