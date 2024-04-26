@@ -1,0 +1,71 @@
+export default function ($abstract) {
+	const ENTITY = {
+		name: "entity2",
+		primary_key: "id",
+		fields: {
+			id: {
+				name: "id",
+				sql_type: "uuid",
+				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				description: "id",
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.ID_PROTECTED__MIDDLEWARES__GAUZE__ABSTRACT],
+				serializers: [],
+				post_serialize_middlewares: [],
+				pre_deserialize_middlewares: [],
+				deserializers: [],
+				post_deserialize_middlewares: [],
+			},
+			created_at: {
+				name: "created_at",
+				sql_type: "datetime",
+				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				description: "created_at",
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.CREATED_AT_PROTECTED__MIDDLEWARES__GAUZE__ABSTRACT],
+				serializers: [$abstract.gauze.serializers.CREATED_AT__SERIALIZERS__GAUZE__ABSTRACT],
+				post_serialize_middlewares: [],
+				pre_deserialize_middlewares: [],
+				deserializers: [$abstract.gauze.deserializers.CREATED_AT__DESERIALIZERS__GAUZE__ABSTRACT],
+				post_deserialize_middlewares: [],
+			},
+			updated_at: {
+				name: "updated_at",
+				sql_type: "datetime",
+				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				description: "updated_at",
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.UPDATED_AT_PROTECTED__MIDDLEWARES__GAUZE__ABSTRACT],
+				serializers: [$abstract.gauze.serializers.UPDATED_AT__SERIALIZERS__GAUZE__ABSTRACT],
+				post_serialize_middlewares: [],
+				pre_deserialize_middlewares: [],
+				deserializers: [$abstract.gauze.deserializers.UPDATED_AT__DESERIALIZERS__GAUZE__ABSTRACT],
+				post_deserialize_middlewares: [],
+			},
+			deleted_at: {
+				name: "deleted_at",
+				sql_type: "datetime",
+				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				description: "deleted_at",
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.DELETED_AT_PROTECTED__MIDDLEWARES__GAUZE__ABSTRACT],
+				serializers: [$abstract.gauze.serializers.DELETED_AT__SERIALIZERS__GAUZE__ABSTRACT],
+				post_serialize_middlewares: [],
+				pre_deserialize_middlewares: [],
+				deserializers: [$abstract.gauze.deserializers.DELETED_AT__DESERIALIZERS__GAUZE__ABSTRACT],
+				post_deserialize_middlewares: [],
+			},
+			text: {
+				name: "text",
+				sql_type: "string",
+				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				description: "text",
+				pre_serialize_middlewares: [],
+				serializers: [],
+				post_serialize_middlewares: [],
+				pre_deserialize_middlewares: [],
+				deserializers: [],
+				post_deserialize_middlewares: [],
+			},
+		},
+	};
+	ENTITY.graphql_fields = $abstract.helpers.create_graphql_fields(ENTITY);
+	ENTITY.graphql_attributes_string = $abstract.helpers.create_graphql_attributes_string(ENTITY);
+	return ENTITY;
+}

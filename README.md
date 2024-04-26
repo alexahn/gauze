@@ -36,6 +36,7 @@ A GraphQL server architecture.
 - Named class exports should typically be named according to the abstract hierarchy.
 
 ## Dependency Hierarchy (Realm Hierarchy)
+- abstract
 - structure
 - kernel
 - database
@@ -47,6 +48,9 @@ A GraphQL server architecture.
 ## Architecture
 
 ### Realms
+
+#### Abstract
+THe abstract realm contains the atomic defintions in the realm.
 
 #### Structure
 The structure realm contains structural information for the entities in the realm.
@@ -100,3 +104,10 @@ Controllers can use an arbitrary number of models to satisfy a method. Controlle
 #### Interfaces
 Interfaces can use an arbitrary number of controllers to satisfy a request. Interfaces should only use controllers from their realm.
 
+### Lifecyle
+- `pre_serialize_middleware`
+- `serialize`
+- `post_serialize_middleware`
+- `pre_deserialize_middleware`
+- `deserialize`
+- `post_deserialize_middleware`

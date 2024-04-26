@@ -204,6 +204,7 @@
 			[x] read entity (see todo below)
 			[x] update entity
 			[x] delete entity
+		[ ] align environment variables with cli commands
 	[-] centralize all zsh/bash scripts under the root bin directory?
 		[-] or maybe have src/kernel/bin?
 			[-] better to have a root level directory that is the interface with the outer operating system
@@ -219,3 +220,4 @@
 [ ] refactor server application to use kernel graphql shell execute
 [ ] update schema files to use $structure instead of directly importing
 [ ] group protected fields by method for sql structures
+[ ] add attribute flag to designate builtin entities
