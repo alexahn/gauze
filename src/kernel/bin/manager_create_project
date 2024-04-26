@@ -12,5 +12,8 @@ if [ -z "$2" ]
     exit 1
 fi
 
-mkdir -p $2
-cp -r $1/src/* $2/
+gauze_root=$1
+project_root=$2
+
+mkdir -p $project_root
+cp -r $gauze_root/src/* $project_root/

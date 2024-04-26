@@ -25,10 +25,10 @@ if [ -z "$3" ]
 fi
 
 gauze_root=$1
+project_root=$2
 base=$gauze_root/src/kernel/src/base
 staging=$gauze_root/src/kernel/src/staging
 
-#arg1="$3"
 arg1=$(echo "$3" | node $gauze_root/src/kernel/bin/format_string.js lower_snake_case)
 echo "arg1: $arg1"
 arg2=$(echo "$arg1" | node $gauze_root/src/kernel/bin/format_string.js pascal_snake_case)
@@ -36,56 +36,18 @@ echo "arg2: $arg2"
 arg3=$(echo "$arg1" | node $gauze_root/src/kernel/bin/format_string.js upper_snake_case)
 echo "arg3: $arg3"
 
-rm $2/database/models/$arg1.js
-rm $2/database/controllers/$arg1.js
-rm $2/database/interfaces/graphql/mutations/$arg1.js
-rm $2/database/interfaces/graphql/queries/$arg1.js
-rm -rf $2/database/interfaces/graphql/operations/$arg1
-#cp $staging/database/interfaces/graphql/operations/entity/read.graphql $2/database/interfaces/graphql/operations/$arg1/read.graphql
-#cp $staging/database/interfaces/graphql/operations/entity/index.js $2/database/interfaces/graphql/operations/$arg1/index.js
-#cp $staging/database/interfaces/graphql/operations/entity/create.graphql $2/database/interfaces/graphql/operations/$arg1/create.graphql
-#cp $staging/database/interfaces/graphql/operations/entity/update.graphql $2/database/interfaces/graphql/operations/$arg1/update.graphql
-#cp $staging/database/interfaces/graphql/operations/entity/delete.graphql $2/database/interfaces/graphql/operations/$arg1/delete.graphql
-rm $2/system/models/$arg1.js
-rm $2/system/controllers/$arg1.js
-rm $2/system/interfaces/graphql/mutations/$arg1.js
-rm $2/system/interfaces/graphql/queries/$arg1.js
-rm -rf $2/structure/$arg1
+# database
+rm $project_root/database/models/$arg1.js
+rm $project_root/database/controllers/$arg1.js
+rm $project_root/database/interfaces/graphql/mutations/$arg1.js
+rm $project_root/database/interfaces/graphql/queries/$arg1.js
+rm -rf $project_root/database/interfaces/graphql/operations/$arg1
 
-#mkdir -p $2/structure/$arg1
-#mkdir -p $2/structure/$arg1/database
-#mkdir -p $2/structure/$arg1/system
-#cp $staging/structure/entity/database/graphql.js $2/structure/$arg1/database/graphql.js
-#cp $staging/structure/entity/database/index.js $2/structure/$arg1/database/index.js
-#cp $staging/structure/entity/database/sql.js $2/structure/$arg1/database/sql.js
-#cp $staging/structure/entity/abstract.js $2/structure/$arg1/abstract.js
-#cp $staging/structure/entity/index.js $2/structure/$arg1/index.js
-#cp $staging/structure/entity/system/graphql.js $2/structure/$arg1/system/graphql.js
-#cp $staging/structure/entity/system/index.js $2/structure/$arg1/system/index.js
+# system
+rm $project_root/system/models/$arg1.js
+rm $project_root/system/controllers/$arg1.js
+rm $project_root/system/interfaces/graphql/mutations/$arg1.js
+rm $project_root/system/interfaces/graphql/queries/$arg1.js
 
-#./database/interfaces/graphql/mutations/entity.js
-#./database/interfaces/graphql/queries/entity.js
-#./database/interfaces/graphql/operations/entity/read.graphql
-#./database/interfaces/graphql/operations/entity/index.js
-#./database/interfaces/graphql/operations/entity/create.graphql
-#./database/interfaces/graphql/operations/entity/update.graphql
-#./database/interfaces/graphql/operations/entity/delete.graphql
-#./system/models/entity.js
-#./system/controllers/entity.js
-#./system/interfaces/graphql/mutations/entity.js
-#./system/interfaces/graphql/queries/entity.js
-#./structure/entity/database/graphql.js
-#./structure/entity/database/index.js
-#./structure/entity/database/sql.js
-#./structure/entity/abstract.js
-#./structure/entity/index.js
-#./structure/entity/system/graphql.js
-#./structure/entity/system/index.js
-
-#find $1 -type f -name '*.js' -exec sed -i '' "s/a2b8dbc3427b41a9899e11671c2422c7/$arg1/g" {} +
-#find $1 -type f -name '*.js' -exec sed -i '' "s/ba381b0cc764c4c9a187b716ae94ed96/$arg2/g" {} +
-#find $1 -type f -name '*.js' -exec sed -i '' "s/cd637bc32c364580be5cc28396d3dee8/$arg3/g" {} +
-
-#find $1 -type f -name '*.graphql' -exec sed -i '' "s/a2b8dbc3427b41a9899e11671c2422c7/$arg1/g" {} +
-#find $1 -type f -name '*.graphql' -exec sed -i '' "s/ba381b0cc764c4c9a187b716ae94ed96/$arg2/g" {} +
-#find $1 -type f -name '*.graphql' -exec sed -i '' "s/cd637bc32c364580be5cc28396d3dee8/$arg3/g" {} +
+# structure
+rm -rf $project_root/structure/$arg1
