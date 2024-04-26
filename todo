@@ -210,3 +210,6 @@
 	[x] gauze cli (from node_modules), gauze-project cli (from bootstrapped project)
 		[x] implemented as a subcommand for the gauze cli to proxy into the project cli
 [ ] refactor server application to use kernel graphql shell execute
+[ ] have read command manually construct a list of files and directories and intersect with the results from find
+	[ ] kind of problematic when we just use find because an entity might contain another entity's name inside it
+		[ ] e.g. hello_entity and hello_entity_world
