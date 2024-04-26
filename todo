@@ -174,8 +174,7 @@
 		[ ] table names are limited to 4 characters in the database
 [ ] create protected fields and update protected fields?
 	[ ] do we need to enforce not being able to change some fields after they are set?
-[ ] proper names for entities and gauze files generates from kernel
-[ ] update schema files to use $structure instead of directly importing
+[x] proper names for entities and gauze files generated from kernel
 [ ] start thinking about kernel/src or kernel/source
 	[ ] bootstrap new project by using commands that use the source code
 		[ ] should have commands to create new entities
@@ -188,20 +187,23 @@
 	[x] base structure in kernel
 	[x] base database model, controller, and interface
 	[x] base system model, controller, and interface
-	[ ] fuse base_entity and base_gauze as base
+	[x] fuse base_entity and base_gauze as base
 	[ ] add gauze.json as a config file for the gauze cli (which will keep track of gauze base models and developer entities)
 	[x] yargs cli for project
 		[x] run server to use kernel server application
 		[x] run terminal to use kernel terminal application
-		[ ] create, read, update, and delete to use kernel manager application
+		[x] create, read, update, and delete to use kernel manager application
 		[x] command directory
 			[x] yargs?
 			[x] terminal
 			[x] server
-			[ ] create
-			[ ] read
-			[ ] update
-			[ ] delete
+			[x] create project
+			[ ] read project
+			[ ] update project
+			[x] create entity
+			[x] read entity (see todo below)
+			[x] update entity
+			[x] delete entity
 	[-] centralize all zsh/bash scripts under the root bin directory?
 		[-] or maybe have src/kernel/bin?
 			[-] better to have a root level directory that is the interface with the outer operating system
@@ -209,7 +211,11 @@
 			[x] migrate root bin to kernel/bin
 	[x] gauze cli (from node_modules), gauze-project cli (from bootstrapped project)
 		[x] implemented as a subcommand for the gauze cli to proxy into the project cli
-[ ] refactor server application to use kernel graphql shell execute
+	[ ] reorder export order in module files so that internal files are first
+	[ ] move base classes to the kernel
 [ ] have read command manually construct a list of files and directories and intersect with the results from find
 	[ ] kind of problematic when we just use find because an entity might contain another entity's name inside it
 		[ ] e.g. hello_entity and hello_entity_world
+[ ] refactor server application to use kernel graphql shell execute
+[ ] update schema files to use $structure instead of directly importing
+[ ] group protected fields by method for sql structures

@@ -1,0 +1,80 @@
+#!/bin/zsh
+
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied"
+    exit 1
+fi
+
+if [ -z "$1" ]
+  then
+    echo "No gauze base path argument supplied"
+    exit 1
+fi
+
+if [ -z "$2" ]
+  then
+    echo "No gauze project path argument supplied"
+    exit 1
+fi
+
+if [ -z "$3" ]
+  then
+    echo "No gauze name argument supplied"
+    exit 1
+fi
+
+gauze_root=$1
+project_root=$2
+base=$gauze_root/src/kernel/src/base
+staging=$gauze_root/src/kernel/src/staging
+
+arg1=$(echo "$3" | node $gauze_root/src/kernel/bin/format_string.js lower_snake_case)
+#echo "arg1: $arg1"
+arg2=$(echo "$arg1" | node $gauze_root/src/kernel/bin/format_string.js pascal_snake_case)
+#echo "arg2: $arg2"
+arg3=$(echo "$arg1" | node $gauze_root/src/kernel/bin/format_string.js upper_snake_case)
+#echo "arg3: $arg3"
+
+# create staging directory
+cp -r $base $staging
+
+find $staging -type f -name '*.js' -exec sed -i '' "s/a543731262804f64adcc0eae1a225acc/$arg1/g" {} +
+find $staging -type f -name '*.js' -exec sed -i '' "s/bb95d174a16f4ddd935ff3a802f7c7bc/$arg2/g" {} +
+find $staging -type f -name '*.js' -exec sed -i '' "s/caf5342ac38d41a6a02bb81d2d2b21a4/$arg3/g" {} +
+
+find $staging -type f -name '*.graphql' -exec sed -i '' "s/a543731262804f64adcc0eae1a225acc/$arg1/g" {} +
+find $staging -type f -name '*.graphql' -exec sed -i '' "s/bb95d174a16f4ddd935ff3a802f7c7bc/$arg2/g" {} +
+find $staging -type f -name '*.graphql' -exec sed -i '' "s/caf5342ac38d41a6a02bb81d2d2b21a4/$arg3/g" {} +
+
+# database
+cp $staging/database/models/gauze.js $project_root/database/models/$arg1.js
+cp $staging/database/controllers/gauze.js $project_root/database/controllers/$arg1.js
+cp $staging/database/interfaces/graphql/mutations/gauze.js $project_root/database/interfaces/graphql/mutations/$arg1.js
+cp $staging/database/interfaces/graphql/queries/gauze.js $project_root/database/interfaces/graphql/queries/$arg1.js
+mkdir -p $project_root/database/interfaces/graphql/operations/$arg1
+cp $staging/database/interfaces/graphql/operations/gauze/read.graphql $project_root/database/interfaces/graphql/operations/$arg1/read.graphql
+cp $staging/database/interfaces/graphql/operations/gauze/index.js $project_root/database/interfaces/graphql/operations/$arg1/index.js
+cp $staging/database/interfaces/graphql/operations/gauze/create.graphql $project_root/database/interfaces/graphql/operations/$arg1/create.graphql
+cp $staging/database/interfaces/graphql/operations/gauze/update.graphql $project_root/database/interfaces/graphql/operations/$arg1/update.graphql
+cp $staging/database/interfaces/graphql/operations/gauze/delete.graphql $project_root/database/interfaces/graphql/operations/$arg1/delete.graphql
+
+# system
+cp $staging/system/models/gauze.js $project_root/system/models/$arg1.js
+cp $staging/system/controllers/gauze.js $project_root/system/controllers/$arg1.js
+cp $staging/system/interfaces/graphql/mutations/gauze.js $project_root/system/interfaces/graphql/mutations/$arg1.js
+cp $staging/system/interfaces/graphql/queries/gauze.js $project_root/system/interfaces/graphql/queries/$arg1.js
+
+# structure
+mkdir -p $project_root/structure/$arg1
+mkdir -p $project_root/structure/$arg1/database
+mkdir -p $project_root/structure/$arg1/system
+cp $staging/structure/gauze/database/graphql.js $project_root/structure/$arg1/database/graphql.js
+cp $staging/structure/gauze/database/index.js $project_root/structure/$arg1/database/index.js
+cp $staging/structure/gauze/database/sql.js $project_root/structure/$arg1/database/sql.js
+cp $staging/structure/gauze/abstract.js $project_root/structure/$arg1/abstract.js
+cp $staging/structure/gauze/index.js $project_root/structure/$arg1/index.js
+cp $staging/structure/gauze/system/graphql.js $project_root/structure/$arg1/system/graphql.js
+cp $staging/structure/gauze/system/index.js $project_root/structure/$arg1/system/index.js
+
+rm -rf $staging

@@ -113,7 +113,7 @@ const FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = {
 
 const QUERY__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new GraphQLObjectType({
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Query",
-	description: "Entity 1",
+	description: "ba381b0cc764c4c9a187b716ae94ed96 Query",
 	fields: () => ({
 		_metadata: FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE.attributes,
@@ -130,7 +130,7 @@ const QUERY__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = ne
 
 const MUTATION__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new GraphQLObjectType({
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Mutation",
-	description: "Entity 1",
+	description: "ba381b0cc764c4c9a187b716ae94ed96 Mutation",
 	fields: () => ({
 		_metadata: FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE.attributes,

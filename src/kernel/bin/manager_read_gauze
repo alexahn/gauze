@@ -1,0 +1,40 @@
+#!/bin/zsh
+
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied"
+    exit 1
+fi
+
+if [ -z "$1" ]
+  then
+    echo "No gauze base path argument supplied"
+    exit 1
+fi
+
+if [ -z "$2" ]
+  then
+    echo "No gauze project path argument supplied"
+    exit 1
+fi
+
+if [ -z "$3" ]
+  then
+    echo "No entity name argument supplied"
+    exit 1
+fi
+
+gauze_root=$1
+project_root=$2
+base=$gauze_root/src/kernel/src/base
+staging=$gauze_root/src/kernel/src/staging
+
+
+arg1=$(echo "$3" | node $gauze_root/src/kernel/bin/format_string.js lower_snake_case)
+#echo "arg1: $arg1"
+arg2=$(echo "$arg1" | node $gauze_root/src/kernel/bin/format_string.js pascal_snake_case)
+#echo "arg2: $arg2"
+arg3=$(echo "$arg1" | node $gauze_root/src/kernel/bin/format_string.js upper_snake_case)
+#echo "arg3: $arg3"
+
+find $project_root -name "*" | grep $arg1

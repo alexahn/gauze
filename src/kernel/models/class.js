@@ -9,7 +9,6 @@ import * as $structure from "./../../structure/index.js";
 // base model that is based off the organization of structure
 class Model {
 	constructor({ fields = {}, protected_fields = [], field_serializers = {} }) {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:enter`);
 		this.fields = fields;
 		this.protected_fields = protected_fields;
 		this.field_serializers = field_serializers;

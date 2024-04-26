@@ -1,0 +1,68 @@
+#!/bin/zsh
+
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied"
+    exit 1
+fi
+
+if [ -z "$1" ]
+  then
+    echo "No gauze base path argument supplied"
+    exit 1
+fi
+
+if [ -z "$2" ]
+  then
+    echo "No gauze project path argument supplied"
+    exit 1
+fi
+
+if [ -z "$3" ]
+  then
+    echo "No gauze name argument supplied"
+    exit 1
+fi
+
+gauze_root=$1
+project_root=$2
+base=$gauze_root/src/kernel/src/base
+staging=$gauze_root/src/kernel/src/staging
+
+arg1=$(echo "$3" | node $gauze_root/src/kernel/bin/format_string.js lower_snake_case)
+#echo "arg1: $arg1"
+arg2=$(echo "$arg1" | node $gauze_root/src/kernel/bin/format_string.js pascal_snake_case)
+#echo "arg2: $arg2"
+arg3=$(echo "$arg1" | node $gauze_root/src/kernel/bin/format_string.js upper_snake_case)
+#echo "arg3: $arg3"
+
+# database
+rm $project_root/database/models/$arg1.js
+rm $project_root/database/controllers/$arg1.js
+rm $project_root/database/interfaces/graphql/mutations/$arg1.js
+rm $project_root/database/interfaces/graphql/queries/$arg1.js
+rm -rf $project_root/database/interfaces/graphql/operations/$arg1
+
+# system
+rm $project_root/system/models/$arg1.js
+rm $project_root/system/controllers/$arg1.js
+rm $project_root/system/interfaces/graphql/mutations/$arg1.js
+rm $project_root/system/interfaces/graphql/queries/$arg1.js
+
+# structure
+rm -rf $project_root/structure/$arg1
+
+# UNJOIN
+node $gauze_root/src/kernel/bin/module.js $project_root/database/models/index.js unjoin $arg1 file
+node $gauze_root/src/kernel/bin/module.js $project_root/database/controllers/index.js unjoin $arg1 file
+node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/mutations/index.js unjoin $arg1 file
+node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/queries/index.js unjoin $arg1 file
+node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/operations/index.js unjoin $arg1 directory
+
+node $gauze_root/src/kernel/bin/module.js $project_root/system/models/index.js unjoin $arg1 file
+node $gauze_root/src/kernel/bin/module.js $project_root/system/controllers/index.js unjoin $arg1 file
+node $gauze_root/src/kernel/bin/module.js $project_root/system/interfaces/graphql/mutations/index.js unjoin $arg1 file
+node $gauze_root/src/kernel/bin/module.js $project_root/system/interfaces/graphql/queries/index.js unjoin $arg1 file
+
+node $gauze_root/src/kernel/bin/module.js $project_root/structure/index.js unjoin $arg1 directory
+

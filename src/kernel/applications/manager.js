@@ -60,6 +60,38 @@ class GauzeManager {
 			// do something here
 		});
 	}
+    create_gauze(dir, name) {
+        const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), dir);
+        const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./src/kernel/bin/manager_create_gauze");
+        const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${name}`;
+        this.execute(COMMAND).catch(function (err) {
+            // do something here
+        });
+    }
+    read_gauze(dir, name) {
+        const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), dir);
+        const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./src/kernel/bin/manager_read_gauze");
+        const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${name}`;
+        this.execute(COMMAND).catch(function (err) {
+            // do something here
+        });
+    }
+    update_gauze(dir, name) {
+        const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), dir);
+        const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./src/kernel/bin/manager_update_gauze");
+        const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${name}`;
+        this.execute(COMMAND).catch(function (err) {
+            // do something here
+        });
+    }
+    delete_gauze(dir, name) {
+        const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), dir);
+        const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./src/kernel/bin/manager_delete_gauze");
+        const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${name}`;
+        this.execute(COMMAND).catch(function (err) {
+            // do something here
+        });
+    }
 	create_entity(dir, name) {
 		const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), dir);
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./src/kernel/bin/manager_create_entity");
