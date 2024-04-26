@@ -25,8 +25,7 @@ const METADATA__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE =
 	fields: () => METADATA_FIELDS__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 });
 
-const ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE = $abstract.entities.a543731262804f64adcc0eae1a225acc.default($abstract).graphql_fields;
-
+const ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = $abstract.entities.a543731262804f64adcc0eae1a225acc.default($abstract).graphql_fields;
 /*
 const ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = {
 	gauze__a543731262804f64adcc0eae1a225acc__id: {
@@ -45,13 +44,26 @@ const ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__ST
 		type: GraphQLDate,
 		description: "deleted_at",
 	},
-	// FIELDS HERE
+	gauze__a543731262804f64adcc0eae1a225acc__from_type: {
+		type: GraphQLString,
+		description: "from",
+	},
+	gauze__a543731262804f64adcc0eae1a225acc__from_id: {
+		type: GraphQLString,
+		description: "from_id",
+	},
+	gauze__a543731262804f64adcc0eae1a225acc__to_type: {
+		type: GraphQLString,
+		description: "to",
+	},
+	gauze__a543731262804f64adcc0eae1a225acc__to_id: {
+		type: GraphQLString,
+		description: "to_id",
+	},
 };
 */
 
-const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = create_fields_array(
-	ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
-);
+const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = create_fields_array(ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE);
 
 const ATTRIBUTES__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = new GraphQLObjectType({
 	name: "bb95d174a16f4ddd935ff3a802f7c7bc__Attributes",

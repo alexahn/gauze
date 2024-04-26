@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+src=./src
+staging=./src/kernel/src/staging
+
+rm -rf $staging
+
+cp -r $src/kernel/src/initial $staging
+
+./bin/build_staging_gauze_from_src
+./bin/build_staging_entity_from_src

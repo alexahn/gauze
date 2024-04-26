@@ -1,9 +1,9 @@
+import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
+import * as $kernel from "./../../kernel/index.js";
 
-import { GraphQLOperationSystemModel } from "./class.js";
-
-class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends GraphQLOperationSystemModel {
+class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends $kernel.models.system.GraphQLOperationSystemModel {
 	constructor(root_config, parent_config, config) {
 		super(root_config, parent_config);
 	}
@@ -53,19 +53,11 @@ class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends GraphQLOperationSystem
 	}
 }
 
-const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_ROOT_CONFIG = {
-	fields: $structure.a543731262804f64adcc0eae1a225acc.database.sql.FIELDS__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
-	protected_fields: $structure.a543731262804f64adcc0eae1a225acc.database.sql.PROTECTED_FIELDS__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
-	field_serializers: $structure.a543731262804f64adcc0eae1a225acc.database.sql.FIELD_SERIALIZERS__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
-};
+const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_ROOT_CONFIG = $abstract.entities.a543731262804f64adcc0eae1a225acc.default($abstract)
 const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_PARENT_CONFIG = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 };
 const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_CONFIG = {};
-const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM = new bb95d174a16f4ddd935ff3a802f7c7bcSystemModel(
-	caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_ROOT_CONFIG,
-	caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_PARENT_CONFIG,
-	caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_CONFIG,
-);
+const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM = new bb95d174a16f4ddd935ff3a802f7c7bcSystemModel(caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_ROOT_CONFIG, caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_PARENT_CONFIG, caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_CONFIG);
 
 export { caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM };

@@ -1,5 +1,7 @@
 import { GraphQLNonNull, GraphQLInt, GraphQLList, GraphQLString, GraphQLObjectType, GraphQLInterfaceType } from "graphql";
 
+import * as $abstract from "./../../../abstract/index.js";
+
 import { create_fields_array } from "./../../utility.js";
 
 import GraphQLDate from "graphql-date";
@@ -23,6 +25,8 @@ const METADATA__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = n
 	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 });
 
+const ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = $abstract.entities.a543731262804f64adcc0eae1a225acc.default($abstract).graphql_fields;
+/*
 const ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = {
 	gauze__a543731262804f64adcc0eae1a225acc__id: {
 		type: GraphQLString,
@@ -57,10 +61,9 @@ const ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRU
 		description: "to_id",
 	},
 };
+*/
 
-const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = create_fields_array(
-	ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
-);
+const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = create_fields_array(ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE);
 
 const ATTRIBUTES__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = new GraphQLObjectType({
 	name: "bb95d174a16f4ddd935ff3a802f7c7bc__Attributes",

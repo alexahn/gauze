@@ -12,7 +12,7 @@ import { cd637bc32c364580be5cc28396d3dee8_CONTROLLER_SYSTEM } from "./../../../c
 
 const cd637bc32c364580be5cc28396d3dee8_SERIALIZER = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.a2b8dbc3427b41a9899e11671c2422c7.system.graphql.TYPE__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
-	sql_primary_key: $structure.a2b8dbc3427b41a9899e11671c2422c7.abstract.PRIMARY_KEY__ABSTRACT__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+	sql_primary_key: $structure.a2b8dbc3427b41a9899e11671c2422c7.database.sql.PRIMARY_KEY__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 });
 
 const cd637bc32c364580be5cc28396d3dee8_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new GraphQLInputObjectType({
@@ -64,13 +64,7 @@ const READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__SYSTEM 
 		},
 	},
 	resolve: (_source, query_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
-			"0",
-			__RELATIVE_FILEPATH,
-			"READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
-			"_source",
-			_source,
-		);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "_source", _source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -78,25 +72,17 @@ const READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__SYSTEM 
 			"query_arguments",
 			query_arguments,
 		);
-		return cd637bc32c364580be5cc28396d3dee8_CONTROLLER_SYSTEM
-			.read(
-				{
-					source: _source,
-					database: context.database,
-					transaction: context.transaction,
-				},
-				query_arguments,
-			)
-			.then(function (data) {
-				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
-					"1",
-					__RELATIVE_FILEPATH,
-					"READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:success",
-					"data",
-					data,
-				);
-				return data.map(cd637bc32c364580be5cc28396d3dee8_SERIALIZER.serialize);
-			});
+		return cd637bc32c364580be5cc28396d3dee8_CONTROLLER_SYSTEM.read(
+			{
+				source: _source,
+				database: context.database,
+				transaction: context.transaction,
+			},
+			query_arguments,
+		).then(function (data) {
+			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
+			return data.map(cd637bc32c364580be5cc28396d3dee8_SERIALIZER.serialize);
+		});
 	},
 };
 

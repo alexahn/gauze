@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+src=./src
+base=./src/kernel/src/base
+
+rm -rf $base
+
+cp -r $src/kernel/src/initial $base
+
+./bin/build_base_gauze_from_src
+./bin/build_base_entity_from_src

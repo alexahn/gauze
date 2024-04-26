@@ -1,0 +1,49 @@
+#!/bin/zsh
+
+from1="relationship"
+from2="Relationship"
+from3="RELATIONSHIP"
+
+arg1="gauze"
+arg2="Gauze"
+arg3="GAUZE"
+
+src=./src
+base=./src/kernel/src/base
+
+# database
+cp $src/database/models/$from1.js $base/database/models/$arg1.js
+cp $src/database/controllers/$from1.js $base/database/controllers/$arg1.js
+cp $src/database/interfaces/graphql/mutations/$from1.js $base/database/interfaces/graphql/mutations/$arg1.js
+cp $src/database/interfaces/graphql/queries/$from1.js $base/database/interfaces/graphql/queries/$arg1.js
+mkdir -p $base/database/interfaces/graphql/operations/$arg1
+cp $src/database/interfaces/graphql/operations/$from1/index.js $base/database/interfaces/graphql/operations/$arg1/index.js
+cp $src/database/interfaces/graphql/operations/$from1/read.graphql $base/database/interfaces/graphql/operations/$arg1/read.graphql
+cp $src/database/interfaces/graphql/operations/$from1/create.graphql $base/database/interfaces/graphql/operations/$arg1/create.graphql
+cp $src/database/interfaces/graphql/operations/$from1/update.graphql $base/database/interfaces/graphql/operations/$arg1/update.graphql
+cp $src/database/interfaces/graphql/operations/$from1/delete.graphql $base/database/interfaces/graphql/operations/$arg1/delete.graphql
+
+# system
+cp $src/system/models/$from1.js $base/system/models/$arg1.js
+cp $src/system/controllers/$from1.js $base/system/controllers/$arg1.js
+cp $src/system/interfaces/graphql/mutations/$from1.js $base/system/interfaces/graphql/mutations/$arg1.js
+cp $src/system/interfaces/graphql/queries/$from1.js $base/system/interfaces/graphql/queries/$arg1.js
+
+# structure
+mkdir -p $base/structure/$arg1
+mkdir -p $base/structure/$arg1/database
+mkdir -p $base/structure/$arg1/system
+cp $src/structure/$from1/index.js $base/structure/$arg1/index.js
+cp $src/structure/$from1/database/graphql.js $base/structure/$arg1/database/graphql.js
+cp $src/structure/$from1/database/index.js $base/structure/$arg1/database/index.js
+cp $src/structure/$from1/database/sql.js $base/structure/$arg1/database/sql.js
+cp $src/structure/$from1/system/graphql.js $base/structure/$arg1/system/graphql.js
+cp $src/structure/$from1/system/index.js $base/structure/$arg1/system/index.js
+
+find $base -type f -name '*.js' -exec sed -i '' "s/$from1/a543731262804f64adcc0eae1a225acc/g" {} +
+find $base -type f -name '*.js' -exec sed -i '' "s/$from2/bb95d174a16f4ddd935ff3a802f7c7bc/g" {} +
+find $base -type f -name '*.js' -exec sed -i '' "s/$from3/caf5342ac38d41a6a02bb81d2d2b21a4/g" {} +
+
+find $base -type f -name '*.graphql' -exec sed -i '' "s/$from1/a543731262804f64adcc0eae1a225acc/g" {} +
+find $base -type f -name '*.graphql' -exec sed -i '' "s/$from2/bb95d174a16f4ddd935ff3a802f7c7bc/g" {} +
+find $base -type f -name '*.graphql' -exec sed -i '' "s/$from3/caf5342ac38d41a6a02bb81d2d2b21a4/g" {} +

@@ -12,7 +12,7 @@ import { cd637bc32c364580be5cc28396d3dee8_CONTROLLER_SYSTEM } from "./../../../c
 
 const cd637bc32c364580be5cc28396d3dee8_SERIALIZER = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.a2b8dbc3427b41a9899e11671c2422c7.system.graphql.TYPE__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
-	sql_primary_key: $structure.a2b8dbc3427b41a9899e11671c2422c7.abstract.PRIMARY_KEY__ABSTRACT__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+	sql_primary_key: $structure.a2b8dbc3427b41a9899e11671c2422c7.database.sql.PRIMARY_KEY__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 });
 
 const cd637bc32c364580be5cc28396d3dee8_MUTATION_ATTRIBUTES = new GraphQLInputObjectType({
@@ -30,13 +30,7 @@ const CREATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SY
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
-			"0",
-			__RELATIVE_FILEPATH,
-			"CREATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
-			"_source",
-			_source,
-		);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "CREATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "_source", _source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -44,25 +38,17 @@ const CREATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SY
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return cd637bc32c364580be5cc28396d3dee8_CONTROLLER_SYSTEM
-			.create(
-				{
-					source: _source,
-					database: context.database,
-					transaction: context.transaction,
-				},
-				mutation_arguments,
-			)
-			.then(function (data) {
-				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
-					"2",
-					__RELATIVE_FILEPATH,
-					"CREATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success",
-					"data",
-					data,
-				);
-				return data.map(cd637bc32c364580be5cc28396d3dee8_SERIALIZER.serialize);
-			});
+		return cd637bc32c364580be5cc28396d3dee8_CONTROLLER_SYSTEM.create(
+			{
+				source: _source,
+				database: context.database,
+				transaction: context.transaction,
+			},
+			mutation_arguments,
+		).then(function (data) {
+			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "CREATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
+			return data.map(cd637bc32c364580be5cc28396d3dee8_SERIALIZER.serialize);
+		});
 	},
 };
 
@@ -99,13 +85,7 @@ const UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SY
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
-			"0",
-			__RELATIVE_FILEPATH,
-			"UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
-			"_source",
-			_source,
-		);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "_source", _source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -113,25 +93,17 @@ const UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SY
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return cd637bc32c364580be5cc28396d3dee8_CONTROLLER_SYSTEM
-			.update(
-				{
-					source: _source,
-					database: context.database,
-					transaction: context.transaction,
-				},
-				mutation_arguments,
-			)
-			.then(function (data) {
-				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
-					"2",
-					__RELATIVE_FILEPATH,
-					"UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success",
-					"data",
-					data,
-				);
-				return data.map(cd637bc32c364580be5cc28396d3dee8_SERIALIZER.serialize);
-			});
+		return cd637bc32c364580be5cc28396d3dee8_CONTROLLER_SYSTEM.update(
+			{
+				source: _source,
+				database: context.database,
+				transaction: context.transaction,
+			},
+			mutation_arguments,
+		).then(function (data) {
+			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
+			return data.map(cd637bc32c364580be5cc28396d3dee8_SERIALIZER.serialize);
+		});
 	},
 };
 
@@ -164,13 +136,7 @@ const DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SY
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
-			"0",
-			__RELATIVE_FILEPATH,
-			"DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
-			"_source",
-			_source,
-		);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "_source", _source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -178,30 +144,18 @@ const DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SY
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return cd637bc32c364580be5cc28396d3dee8_CONTROLLER_SYSTEM
-			.delete(
-				{
-					source: _source,
-					database: context.database,
-					transaction: context.transaction,
-				},
-				mutation_arguments,
-			)
-			.then(function (data) {
-				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
-					"2",
-					__RELATIVE_FILEPATH,
-					"DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success",
-					"data",
-					data,
-				);
-				return data.map(cd637bc32c364580be5cc28396d3dee8_SERIALIZER.serialize);
-			});
+		return cd637bc32c364580be5cc28396d3dee8_CONTROLLER_SYSTEM.delete(
+			{
+				source: _source,
+				database: context.database,
+				transaction: context.transaction,
+			},
+			mutation_arguments,
+		).then(function (data) {
+			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
+			return data.map(cd637bc32c364580be5cc28396d3dee8_SERIALIZER.serialize);
+		});
 	},
 };
 
-export {
-	CREATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
-	UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
-	DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
-};
+export { CREATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM, UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM, DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM };
