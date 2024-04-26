@@ -68,6 +68,22 @@ class GauzeManager {
 			// do something here
 		});
 	}
+	read_entity(dir, name) {
+		const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), dir);
+		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./src/kernel/bin/manager_read_entity");
+		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${name}`;
+		this.execute(COMMAND).catch(function (err) {
+			// do something here
+		});
+	}
+	update_entity(dir, name) {
+		const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), dir);
+		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./src/kernel/bin/manager_update_entity");
+		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${name}`;
+		this.execute(COMMAND).catch(function (err) {
+			// do something here
+		});
+	}
 	delete_entity(dir, name) {
 		const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), dir);
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./src/kernel/bin/manager_delete_entity");

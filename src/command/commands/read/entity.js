@@ -14,14 +14,14 @@ import * as $gauze from "./../../../index.js";
 
 export const command = "entity <directory> <name>";
 
-export const describe = "Delete an entity in a gauze project";
+export const describe = "Read an entity in a gauze project";
 
 export const builder = function (yargs) {
 	return yargs
 		.env("GAUZE_PROJECT")
 		.option("project", {
 			//alias: 'r',
-			describe: "The gauze project directory that the entity will be deleted in",
+			describe: "The gauze project directory that the entity will be read from",
 			type: "string",
 			requiresArg: true,
 		})
@@ -37,5 +37,5 @@ export const builder = function (yargs) {
 export const handler = function (argv) {
 	$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
 	const MANAGER = $gauze.kernel.applications.manager.GAUZE__MANAGER__APPLICATION__KERNEL({ $gauze });
-	MANAGER.delete_entity(argv.directory, argv.name);
+	MANAGER.read_entity(argv.directory, argv.name);
 };

@@ -78,5 +78,3 @@ cp $staging/structure/entity/system/graphql.js $project_root/structure/$arg1/sys
 cp $staging/structure/entity/system/index.js $project_root/structure/$arg1/system/index.js
 
 rm -rf $staging
-
-# JOIN
