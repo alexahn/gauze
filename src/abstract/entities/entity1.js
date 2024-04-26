@@ -77,7 +77,7 @@ export default function ($abstract) {
 			delete: {
 				privacy: "private",
 			},
-		}
+		},
 	};
 	ENTITY.graphql_fields = $abstract.helpers.create_graphql_fields(ENTITY);
 	ENTITY.graphql_attributes_string = $abstract.helpers.create_graphql_attributes_string(ENTITY);

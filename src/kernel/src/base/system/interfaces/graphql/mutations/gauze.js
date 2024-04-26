@@ -30,7 +30,13 @@ const CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SY
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "_source", _source);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"_source",
+			_source,
+		);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -38,17 +44,25 @@ const CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SY
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_SYSTEM.create(
-			{
-				source: _source,
-				database: context.database,
-				transaction: context.transaction,
-			},
-			mutation_arguments,
-		).then(function (data) {
-			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(caf5342ac38d41a6a02bb81d2d2b21a4_SERIALIZER.serialize);
-		});
+		return caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_SYSTEM
+			.create(
+				{
+					source: _source,
+					database: context.database,
+					transaction: context.transaction,
+				},
+				mutation_arguments,
+			)
+			.then(function (data) {
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+					"2",
+					__RELATIVE_FILEPATH,
+					"CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success",
+					"data",
+					data,
+				);
+				return data.map(caf5342ac38d41a6a02bb81d2d2b21a4_SERIALIZER.serialize);
+			});
 	},
 };
 
@@ -85,7 +99,13 @@ const UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SY
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "_source", _source);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"_source",
+			_source,
+		);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -93,17 +113,25 @@ const UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SY
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_SYSTEM.update(
-			{
-				source: _source,
-				database: context.database,
-				transaction: context.transaction,
-			},
-			mutation_arguments,
-		).then(function (data) {
-			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(caf5342ac38d41a6a02bb81d2d2b21a4_SERIALIZER.serialize);
-		});
+		return caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_SYSTEM
+			.update(
+				{
+					source: _source,
+					database: context.database,
+					transaction: context.transaction,
+				},
+				mutation_arguments,
+			)
+			.then(function (data) {
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+					"2",
+					__RELATIVE_FILEPATH,
+					"UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success",
+					"data",
+					data,
+				);
+				return data.map(caf5342ac38d41a6a02bb81d2d2b21a4_SERIALIZER.serialize);
+			});
 	},
 };
 
@@ -136,7 +164,13 @@ const DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SY
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "_source", _source);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"_source",
+			_source,
+		);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -144,18 +178,30 @@ const DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SY
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_SYSTEM.delete(
-			{
-				source: _source,
-				database: context.database,
-				transaction: context.transaction,
-			},
-			mutation_arguments,
-		).then(function (data) {
-			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(caf5342ac38d41a6a02bb81d2d2b21a4_SERIALIZER.serialize);
-		});
+		return caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_SYSTEM
+			.delete(
+				{
+					source: _source,
+					database: context.database,
+					transaction: context.transaction,
+				},
+				mutation_arguments,
+			)
+			.then(function (data) {
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+					"2",
+					__RELATIVE_FILEPATH,
+					"DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success",
+					"data",
+					data,
+				);
+				return data.map(caf5342ac38d41a6a02bb81d2d2b21a4_SERIALIZER.serialize);
+			});
 	},
 };
 
-export { CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM, UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM, DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM };
+export {
+	CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+	UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+	DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+};

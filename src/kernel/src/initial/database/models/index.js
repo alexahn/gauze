@@ -1,1 +1,1 @@
-console.error("CORRUPTED")
+console.error("CORRUPTED");

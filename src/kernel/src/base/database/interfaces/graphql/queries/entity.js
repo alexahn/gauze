@@ -64,7 +64,13 @@ const READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABAS
 		},
 	},
 	resolve: (_source, query_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
+			"_source",
+			_source,
+		);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -72,17 +78,25 @@ const READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABAS
 			"query_arguments",
 			query_arguments,
 		);
-		return cd637bc32c364580be5cc28396d3dee8_CONTROLLER_DATABASE.read(
-			{
-				source: _source,
-				database: context.database,
-				transaction: context.transaction,
-			},
-			query_arguments,
-		).then(function (data) {
-			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(cd637bc32c364580be5cc28396d3dee8_SERIALIZER.serialize);
-		});
+		return cd637bc32c364580be5cc28396d3dee8_CONTROLLER_DATABASE
+			.read(
+				{
+					source: _source,
+					database: context.database,
+					transaction: context.transaction,
+				},
+				query_arguments,
+			)
+			.then(function (data) {
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+					"1",
+					__RELATIVE_FILEPATH,
+					"READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success",
+					"data",
+					data,
+				);
+				return data.map(cd637bc32c364580be5cc28396d3dee8_SERIALIZER.serialize);
+			});
 	},
 };
 

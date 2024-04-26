@@ -53,7 +53,7 @@ class RelationshipSystemModel extends $kernel.models.system.GraphQLOperationSyst
 	}
 }
 
-const RELATIONSHIP_MODEL_SYSTEM_ROOT_CONFIG = $abstract.entities.relationship.default($abstract)
+const RELATIONSHIP_MODEL_SYSTEM_ROOT_CONFIG = $abstract.entities.relationship.default($abstract);
 const RELATIONSHIP_MODEL_SYSTEM_PARENT_CONFIG = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 };

@@ -64,20 +64,20 @@ export default function ($abstract) {
 				post_deserialize_middlewares: [],
 			},
 		},
-        methods: {
-            create: {
-                privacy: "public",
-            },
-            read: {
-                privacy: "private",
-            },
-            update: {
-                privacy: "private",
-            },
-            delete: {
-                privacy: "private",
-            },
-        }
+		methods: {
+			create: {
+				privacy: "public",
+			},
+			read: {
+				privacy: "private",
+			},
+			update: {
+				privacy: "private",
+			},
+			delete: {
+				privacy: "private",
+			},
+		},
 	};
 	ENTITY.graphql_fields = $abstract.helpers.create_graphql_fields(ENTITY);
 	ENTITY.graphql_attributes_string = $abstract.helpers.create_graphql_attributes_string(ENTITY);

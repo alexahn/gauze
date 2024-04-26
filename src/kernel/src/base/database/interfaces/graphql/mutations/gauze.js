@@ -36,7 +36,13 @@ const CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DA
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
+			"_source",
+			_source,
+		);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -44,17 +50,25 @@ const CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DA
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_DATABASE.create(
-			{
-				source: _source,
-				database: context.database,
-				transaction: context.transaction,
-			},
-			mutation_arguments,
-		).then(function (data) {
-			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(caf5342ac38d41a6a02bb81d2d2b21a4_SERIALIZER.serialize);
-		});
+		return caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_DATABASE
+			.create(
+				{
+					source: _source,
+					database: context.database,
+					transaction: context.transaction,
+				},
+				mutation_arguments,
+			)
+			.then(function (data) {
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+					"2",
+					__RELATIVE_FILEPATH,
+					"CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success",
+					"data",
+					data,
+				);
+				return data.map(caf5342ac38d41a6a02bb81d2d2b21a4_SERIALIZER.serialize);
+			});
 	},
 };
 
@@ -99,7 +113,13 @@ const UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DA
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
+			"_source",
+			_source,
+		);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -107,17 +127,25 @@ const UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DA
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_DATABASE.update(
-			{
-				source: _source,
-				database: context.database,
-				transaction: context.transaction,
-			},
-			mutation_arguments,
-		).then(function (data) {
-			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(caf5342ac38d41a6a02bb81d2d2b21a4_SERIALIZER.serialize);
-		});
+		return caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_DATABASE
+			.update(
+				{
+					source: _source,
+					database: context.database,
+					transaction: context.transaction,
+				},
+				mutation_arguments,
+			)
+			.then(function (data) {
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+					"2",
+					__RELATIVE_FILEPATH,
+					"UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success",
+					"data",
+					data,
+				);
+				return data.map(caf5342ac38d41a6a02bb81d2d2b21a4_SERIALIZER.serialize);
+			});
 	},
 };
 
@@ -150,7 +178,13 @@ const DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DA
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
+			"_source",
+			_source,
+		);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -158,17 +192,25 @@ const DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DA
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_DATABASE.delete(
-			{
-				source: _source,
-				database: context.database,
-				transaction: context.transaction,
-			},
-			mutation_arguments,
-		).then(function (data) {
-			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(caf5342ac38d41a6a02bb81d2d2b21a4_SERIALIZER.serialize);
-		});
+		return caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_DATABASE
+			.delete(
+				{
+					source: _source,
+					database: context.database,
+					transaction: context.transaction,
+				},
+				mutation_arguments,
+			)
+			.then(function (data) {
+				$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+					"2",
+					__RELATIVE_FILEPATH,
+					"DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success",
+					"data",
+					data,
+				);
+				return data.map(caf5342ac38d41a6a02bb81d2d2b21a4_SERIALIZER.serialize);
+			});
 	},
 };
 

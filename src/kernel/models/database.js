@@ -3,13 +3,9 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
-import {
-	Model
-} from "./class.js"
+import { Model } from "./class.js";
 
-import {
-	LOGGER__IO__LOGGER__KERNEL
-} from "./../logger/io.js"
+import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
 
 import * as $structure from "./../../structure/index.js";
 

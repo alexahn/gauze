@@ -53,7 +53,7 @@ class Entity1SystemModel extends $kernel.models.system.GraphQLOperationSystemMod
 	}
 }
 
-const ENTITY1_MODEL_SYSTEM_ROOT_CONFIG = $abstract.entities.entity1.default($abstract)
+const ENTITY1_MODEL_SYSTEM_ROOT_CONFIG = $abstract.entities.entity1.default($abstract);
 const ENTITY1_MODEL_SYSTEM_PARENT_CONFIG = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 };

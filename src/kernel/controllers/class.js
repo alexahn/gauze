@@ -1,9 +1,7 @@
 class Controller {
-	constructor (config) {
-		this.config = config
+	constructor(config) {
+		this.config = config;
 	}
 }
 
-export {
-	Controller
-}
+export { Controller };

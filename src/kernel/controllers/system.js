@@ -3,17 +3,13 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
-import {
-    Controller
-} from "./class.js"
+import { Controller } from "./class.js";
 
-import {
-    LOGGER__IO__LOGGER__KERNEL
-} from "./../logger/io.js"
+import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
 
 class SystemController extends Controller {
 	constructor(config) {
-		super(config)
+		super(config);
 		this.name = this.__name();
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor.exit`);
 	}

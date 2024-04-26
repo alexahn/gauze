@@ -65,13 +65,7 @@ const READ__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	},
 	resolve: (_source, query_arguments, context) => {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
-			"0",
-			__RELATIVE_FILEPATH,
-			"READ__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
-			"query_arguments",
-			query_arguments,
-		);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "query_arguments", query_arguments);
 		return ENTITY1_CONTROLLER_DATABASE.read(
 			{
 				source: _source,

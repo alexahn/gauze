@@ -1,4 +1,4 @@
-import * as $kernel from "./../../kernel/index.js"
+import * as $kernel from "./../../kernel/index.js";
 
 import { RELATIONSHIP_MODEL_DATABASE } from "./../models/relationship.js";
 

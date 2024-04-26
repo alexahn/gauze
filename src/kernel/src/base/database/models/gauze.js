@@ -16,6 +16,9 @@ const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE_CONFIG = {
 	table: $structure.a543731262804f64adcc0eae1a225acc.database.sql.TABLE_NAME__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 	primary_key: $structure.a543731262804f64adcc0eae1a225acc.database.sql.PRIMARY_KEY__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 };
-const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE = new $kernel.models.database.DatabaseModel(caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE_ROOT_CONFIG, caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE_CONFIG);
+const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE = new $kernel.models.database.DatabaseModel(
+	caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE_ROOT_CONFIG,
+	caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE_CONFIG,
+);
 
 export { caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE };

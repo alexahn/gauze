@@ -1,4 +1,4 @@
-import * as $kernel from "./../../kernel/index.js"
+import * as $kernel from "./../../kernel/index.js";
 
 import { ENTITY2_MODEL_DATABASE } from "./../models/entity2.js";
 

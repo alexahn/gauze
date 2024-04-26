@@ -3,18 +3,14 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
-import {
-	Controller
-} from "./class.js"
+import { Controller } from "./class.js";
 
-import {
-	LOGGER__IO__LOGGER__KERNEL
-} from "./../logger/io.js"
+import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
 
 // input model is a database model
 class DatabaseController extends Controller {
 	constructor(config, model) {
-		super(config)
+		super(config);
 		this.model = model;
 		this.name = this._name();
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
