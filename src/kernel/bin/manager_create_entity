@@ -30,11 +30,11 @@ base=$gauze_root/src/kernel/src/base
 staging=$gauze_root/src/kernel/src/staging
 
 arg1=$(echo "$3" | node $gauze_root/src/kernel/bin/format_string.js lower_snake_case)
-echo "arg1: $arg1"
+#echo "arg1: $arg1"
 arg2=$(echo "$arg1" | node $gauze_root/src/kernel/bin/format_string.js pascal_snake_case)
-echo "arg2: $arg2"
+#echo "arg2: $arg2"
 arg3=$(echo "$arg1" | node $gauze_root/src/kernel/bin/format_string.js upper_snake_case)
-echo "arg3: $arg3"
+#echo "arg3: $arg3"
 
 # create staging directory
 cp -r $base $staging
@@ -91,4 +91,4 @@ node $gauze_root/src/kernel/bin/module.js $project_root/system/controllers/index
 node $gauze_root/src/kernel/bin/module.js $project_root/system/interfaces/graphql/mutations/index.js join $arg1 file
 node $gauze_root/src/kernel/bin/module.js $project_root/system/interfaces/graphql/queries/index.js join $arg1 file
 
-node $gauze_root/src/kernel/bin/module.js $project_root/structure/index.js join $arg1 file
+node $gauze_root/src/kernel/bin/module.js $project_root/structure/index.js join $arg1 directory
