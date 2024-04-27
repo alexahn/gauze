@@ -62,7 +62,10 @@ class GauzeProjectManager {
 		});
 		const GAUZE_SUB_COMMAND = sub_command_argv.join(" ");
 		const COMMAND = `node ${GAUZE_PROJECT_DIR}/command/gauze.js ${GAUZE_SUB_COMMAND}`;
-		return this.execute(COMMAND).catch(function (err) {});
+		return this.execute(COMMAND).catch(function (err) {
+			console.error(err);
+			process.exit(1);
+		});
 	}
 }
 

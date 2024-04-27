@@ -5,6 +5,15 @@ import * as $structure from "./../../../structure/index.js";
 
 import { DATABASE_RELATIONSHIP_STRUCTURE } from "./../../../structure/relationships.js";
 
+// relationship
+import { CONNECTION__RELATIONSHIP__ENTITY__GRAPHQL__INTERFACE__DATABASE, METHODS__RELATIONSHIP__ENTITY__GRAPHQL__INTERFACE__DATABASE } from "./entities/relationship.js";
+
+// whitelist
+import { CONNECTION__WHITELIST__ENTITY__GRAPHQL__INTERFACE__DATABASE, METHODS__WHITELIST__ENTITY__GRAPHQL__INTERFACE__DATABASE } from "./entities/whitelist.js";
+
+// entity1
+import { CONNECTION__ENTITY1__ENTITY__GRAPHQL__INTERFACE__DATABASE, METHODS__ENTITY1__ENTITY__GRAPHQL__INTERFACE__DATABASE } from "./entities/entity1.js";
+
 const ENTITIES = {
 	[$structure.relationship.database.graphql.TYPE__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE]: CONNECTION__RELATIONSHIP__ENTITY__GRAPHQL__INTERFACE__DATABASE,
 	[$structure.whitelist.database.graphql.TYPE__GRAPHQL__DATABASE__WHITELIST__STRUCTURE]: CONNECTION__WHITELIST__ENTITY__GRAPHQL__INTERFACE__DATABASE,

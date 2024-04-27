@@ -1,6 +1,5 @@
 export default function ($abstract) {
 	const ENTITY = {
-		name: "entity2",
 		primary_key: "id",
 		fields: {
 			id: {
@@ -66,15 +65,19 @@ export default function ($abstract) {
 		},
 		methods: {
 			create: {
+				name: "create",
 				privacy: "public",
 			},
 			read: {
+				name: "read",
 				privacy: "private",
 			},
 			update: {
+				name: "update",
 				privacy: "private",
 			},
 			delete: {
+				name: "delete",
 				privacy: "private",
 			},
 		},

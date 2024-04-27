@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+set -e
+
 # delete entity2
 npx gauze delete entity ./src ./gauze/entity2.js
 # use stage3 schema

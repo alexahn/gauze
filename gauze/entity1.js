@@ -66,15 +66,19 @@ export default function ($abstract) {
 		},
 		methods: {
 			create: {
+				name: "create",
 				privacy: "public",
 			},
 			read: {
+				name: "read",
 				privacy: "private",
 			},
 			update: {
+				name: "update",
 				privacy: "private",
 			},
 			delete: {
+				name: "delete",
 				privacy: "private",
 			},
 		},

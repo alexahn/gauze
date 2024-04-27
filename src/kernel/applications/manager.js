@@ -146,7 +146,8 @@ class GauzeManager {
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/manager_create_project");
 		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_ROOT_DIR} ${GAUZE_PROJECT_DIR}`;
 		return this.execute(COMMAND).catch(function (err) {
-			// do something here
+			console.error(err);
+			process.exit(1);
 		});
 	}
 	create_gauze(project_dir, entity_file) {
@@ -166,6 +167,7 @@ class GauzeManager {
 			})
 			.catch(function (err) {
 				console.error(err);
+				process.exit(1);
 			});
 	}
 	read_gauze(project_dir, entity_file) {
@@ -180,6 +182,7 @@ class GauzeManager {
 			})
 			.catch(function (err) {
 				console.error(err);
+				process.exit(1);
 			});
 	}
 	update_gauze(project_dir, entity_file) {
@@ -194,6 +197,7 @@ class GauzeManager {
 			})
 			.catch(function (err) {
 				console.error(err);
+				process.exit(1);
 			});
 	}
 	delete_gauze(project_dir, entity_file) {
@@ -214,6 +218,7 @@ class GauzeManager {
 			})
 			.catch(function (err) {
 				console.error(err);
+				process.exit(1);
 			});
 	}
 	create_entity(project_dir, entity_file) {
@@ -234,6 +239,7 @@ class GauzeManager {
 			})
 			.catch(function (err) {
 				console.error(err);
+				process.exit(1);
 			});
 	}
 	read_entity(project_dir, entity_file) {
@@ -249,6 +255,7 @@ class GauzeManager {
 			})
 			.catch(function (err) {
 				console.error(err);
+				process.exit(1);
 			});
 	}
 	update_entity(project_dir, entity_file) {
@@ -264,6 +271,7 @@ class GauzeManager {
 			})
 			.catch(function (err) {
 				console.error(err);
+				process.exit(1);
 			});
 	}
 	delete_entity(project_dir, entity_file) {
@@ -284,41 +292,47 @@ class GauzeManager {
 			})
 			.catch(function (err) {
 				console.error(err);
+				process.exit(1);
 			});
 	}
 	migrate_run() {
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_run");
 		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR}`;
 		this.execute(COMMAND).catch(function (err) {
-			// do something here
+			console.error(err);
+			process.exit(1);
 		});
 	}
 	migrate_make(name) {
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_make");
 		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${name}`;
 		this.execute(COMMAND).catch(function (err) {
-			// do something here
+			console.error(err);
+			process.exit(1);
 		});
 	}
 	migrate_rollback() {
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_rollback");
 		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR}`;
 		this.execute(COMMAND).catch(function (err) {
-			// do something here
+			console.error(err);
+			process.exit(1);
 		});
 	}
 	seed_run() {
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/seed_run");
 		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR}`;
 		this.execute(COMMAND).catch(function (err) {
-			// do something here
+			console.error(err);
+			process.exit(1);
 		});
 	}
 	seed_make(name) {
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/seed_make");
 		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${name}`;
 		this.execute(COMMAND).catch(function (err) {
-			// do something here
+			console.error(err);
+			process.exit(1);
 		});
 	}
 }
