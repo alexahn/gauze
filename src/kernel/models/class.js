@@ -16,7 +16,8 @@ class Model {
 		if ($structure.relationship) {
 			this.relationship_table = $structure.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE;
 		} else {
-			throw new Error("relationship structure not found");
+			this.relationship_table = "";
+			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("6", __RELATIVE_FILEPATH, `${this.name}.constructor:FATAL`, new Error("Relationship structure not found"));
 		}
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
 	}
