@@ -11,3 +11,5 @@ const RELATIONSHIP = relationship(abstract);
 console.log(RELATIONSHIP);
 
 console.log(ENTITY1.fields.created_at);
+
+console.log("abstract", abstract);

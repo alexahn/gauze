@@ -3,10 +3,9 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
+import * as $abstract from "./../../../../abstract/index.js";
 import * as $structure from "./../../../../structure/index.js";
 import * as $kernel from "./../../../../kernel/index.js";
-
-import { GraphQLNonNull, GraphQLInt, GraphQLList, GraphQLString, GraphQLObjectType, GraphQLInputObjectType, GraphQLInterfaceType } from "graphql";
 
 import { WHITELIST_CONTROLLER_DATABASE } from "./../../../controllers/whitelist.js";
 
@@ -15,20 +14,20 @@ const WHITELIST_SERIALIZER = new $structure.serializers.GraphQLSerializer({
 	sql_primary_key: $structure.whitelist.database.sql.PRIMARY_KEY__SQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
-const WHITELIST_ATTRIBUTES_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({
+const WHITELIST_ATTRIBUTES_MUTATION_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Mutation__Attributes",
 	description: "Whitelist Mutation Attributes",
 	fields: $structure.whitelist.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
-const WHITELIST_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({
+const WHITELIST_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Mutation__Attributes_Array",
 	description: "Whitelist Mutation Attributes Array",
 	fields: $structure.whitelist.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
 const CREATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new GraphQLList($structure.whitelist.database.graphql.MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.whitelist.database.graphql.MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE),
 	args: {
 		attributes: {
 			description: "attributes",
@@ -59,7 +58,7 @@ const CREATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 };
 
 const UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new GraphQLList($structure.whitelist.database.graphql.MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.whitelist.database.graphql.MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE),
 	args: {
 		where: {
 			description: "where",
@@ -79,23 +78,23 @@ const UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		limit: {
 			description: "limit",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		offset: {
 			description: "offset",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order: {
 			description: "order",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_direction: {
 			description: "order direction",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_nulls: {
 			description: "order nulls",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {
@@ -122,7 +121,7 @@ const UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 };
 
 const DELETE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new GraphQLList($structure.whitelist.database.graphql.MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.whitelist.database.graphql.MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE),
 	args: {
 		where: {
 			description: "where",
@@ -130,23 +129,23 @@ const DELETE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		limit: {
 			description: "limit",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		offset: {
 			description: "offset",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order: {
 			description: "order",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_direction: {
 			description: "order direction",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_nulls: {
 			description: "order nulls",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {

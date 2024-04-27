@@ -3,10 +3,9 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
+import * as $abstract from "./../../../../abstract/index.js";
 import * as $structure from "./../../../../structure/index.js";
 import * as $kernel from "./../../../../kernel/index.js";
-
-import { GraphQLNonNull, GraphQLInt, GraphQLList, GraphQLString, GraphQLObjectType, GraphQLInputObjectType, GraphQLInterfaceType } from "graphql";
 
 import { ENTITY2_CONTROLLER_DATABASE } from "./../../../controllers/entity2.js";
 
@@ -15,20 +14,20 @@ const ENTITY2_SERIALIZER = new $structure.serializers.GraphQLSerializer({
 	sql_primary_key: $structure.entity2.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY2__STRUCTURE,
 });
 
-const ENTITY2_ATTRIBUTES_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({
+const ENTITY2_ATTRIBUTES_MUTATION_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity2_Mutation__Attributes",
 	description: "Entity2 Mutation Attributes",
 	fields: $structure.entity2.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__ENTITY2__STRUCTURE,
 });
 
-const ENTITY2_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({
+const ENTITY2_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity2_Mutation__Attributes_Array",
 	description: "Entity2 Mutation Attributes Array",
 	fields: $structure.entity2.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__ENTITY2__STRUCTURE,
 });
 
 const CREATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new GraphQLList($structure.entity2.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY2__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entity2.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY2__STRUCTURE),
 	args: {
 		attributes: {
 			description: "attributes",
@@ -59,7 +58,7 @@ const CREATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 };
 
 const UPDATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new GraphQLList($structure.entity2.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY2__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entity2.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY2__STRUCTURE),
 	args: {
 		where: {
 			description: "where",
@@ -79,23 +78,23 @@ const UPDATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		limit: {
 			description: "limit",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		offset: {
 			description: "offset",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order: {
 			description: "order",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_direction: {
 			description: "order direction",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_nulls: {
 			description: "order nulls",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {
@@ -122,7 +121,7 @@ const UPDATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 };
 
 const DELETE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new GraphQLList($structure.entity2.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY2__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entity2.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY2__STRUCTURE),
 	args: {
 		where: {
 			description: "where",
@@ -130,23 +129,23 @@ const DELETE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		limit: {
 			description: "limit",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		offset: {
 			description: "offset",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order: {
 			description: "order",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_direction: {
 			description: "order direction",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_nulls: {
 			description: "order nulls",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {

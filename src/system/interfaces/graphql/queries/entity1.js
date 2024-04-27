@@ -3,10 +3,9 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
+import * as $abstract from "./../../../../abstract/index.js";
 import * as $kernel from "./../../../../kernel/index.js";
 import * as $structure from "./../../../../structure/index.js";
-
-import { GraphQLInt, GraphQLList, GraphQLString, GraphQLObjectType, GraphQLInputObjectType } from "graphql";
 
 import { ENTITY1_CONTROLLER_SYSTEM } from "./../../../controllers/entity1.js";
 
@@ -15,20 +14,20 @@ const ENTITY1_SERIALIZER = new $structure.serializers.GraphQLSerializer({
 	sql_primary_key: $structure.entity1.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY1__STRUCTURE,
 });
 
-const ENTITY1_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new GraphQLInputObjectType({
+const ENTITY1_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity1_Query__Attributes",
 	description: "Entity1 Query Attributes",
 	fields: $structure.entity1.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
 });
 
-const ENTITY1_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM = new GraphQLInputObjectType({
+const ENTITY1_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity1_Query__Attributes_Array",
 	description: "Entity1 Query Attributes Array",
 	fields: $structure.entity1.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
 });
 
 const READ__ENTITY1__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
-	type: new GraphQLList($structure.entity1.system.graphql.QUERY__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entity1.system.graphql.QUERY__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE),
 	args: {
 		where: {
 			description: "where",
@@ -44,23 +43,23 @@ const READ__ENTITY1__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 		limit: {
 			description: "limit",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		offset: {
 			description: "offset",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order: {
 			description: "order",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_direction: {
 			description: "order direction",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_nulls: {
 			description: "order nulls",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
 	resolve: (_source, query_arguments, context) => {

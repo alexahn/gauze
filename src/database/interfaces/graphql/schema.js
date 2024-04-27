@@ -1,5 +1,6 @@
-import { GraphQLSchema, GraphQLObjectType } from "graphql";
+import { GraphQLSchema } from "graphql";
 
+import * as $abstract from "./../../../abstract/index.js";
 import * as $structure from "./../../../structure/index.js";
 
 import { DATABASE_RELATIONSHIP_STRUCTURE } from "./../../../structure/relationships.js";
@@ -75,12 +76,12 @@ function root(query_root, mutation_root) {
 const QUERY_FIELDS = {};
 const MUTATION_FIELDS = {};
 
-const QUERY_TYPE = new GraphQLObjectType({
+const QUERY_TYPE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Query",
 	fields: () => QUERY_FIELDS,
 });
 
-const MUTATION_TYPE = new GraphQLObjectType({
+const MUTATION_TYPE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Mutation",
 	fields: () => MUTATION_FIELDS,
 });

@@ -3,10 +3,9 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
+import * as $abstract from "./../../../../abstract/index.js";
 import * as $kernel from "./../../../../kernel/index.js";
 import * as $structure from "./../../../../structure/index.js";
-
-import { GraphQLInt, GraphQLList, GraphQLString, GraphQLObjectType, GraphQLInputObjectType } from "graphql";
 
 import { ENTITY2_CONTROLLER_DATABASE } from "./../../../controllers/entity2.js";
 
@@ -15,21 +14,31 @@ const ENTITY2_SERIALIZER = new $structure.serializers.GraphQLSerializer({
 	sql_primary_key: $structure.entity2.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY2__STRUCTURE,
 });
 
-const ENTITY2_ATTRIBUTES_QUERY_INTERFACE_DATABASE = new GraphQLInputObjectType({
+const ENTITY2_PARENT_QUERY_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Entity2__Parent",
+	description: "Entity2 Parent",
+	fields: () => $structure.entity2.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__ENTITY2__STRUCTURE,
+});
+
+const ENTITY2_ATTRIBUTES_QUERY_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity2_Query__Attributes",
 	description: "Entity2 Query Attributes",
 	fields: $structure.entity2.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__ENTITY2__STRUCTURE,
 });
 
-const ENTITY2_ATTRIBUTES_ARRAY_QUERY_INTERFACE_DATABASE = new GraphQLInputObjectType({
+const ENTITY2_ATTRIBUTES_ARRAY_QUERY_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity2_Query__Attributes_Array",
 	description: "Entity2 Query Attributes Array",
 	fields: $structure.entity2.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__ENTITY2__STRUCTURE,
 });
 
 const READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__DATABASE = {
-	type: new GraphQLList($structure.entity2.database.graphql.QUERY__GRAPHQL__DATABASE__ENTITY2__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entity2.database.graphql.QUERY__GRAPHQL__DATABASE__ENTITY2__STRUCTURE),
 	args: {
+		parent: {
+			description: "parent",
+			type: ENTITY2_PARENT_QUERY_INTERFACE_DATABASE,
+		},
 		where: {
 			description: "where",
 			type: ENTITY2_ATTRIBUTES_QUERY_INTERFACE_DATABASE,
@@ -44,23 +53,23 @@ const READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		limit: {
 			description: "limit",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		offset: {
 			description: "offset",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order: {
 			description: "order",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_direction: {
 			description: "order direction",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_nulls: {
 			description: "order nulls",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
 	resolve: (_source, query_arguments, context) => {
