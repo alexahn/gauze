@@ -205,6 +205,7 @@ class GauzeManager {
 			path.resolve(project_dir, `./database/interfaces/graphql/operations/${entity.name}/update.graphql`),
 			path.resolve(project_dir, `./database/interfaces/graphql/operations/${entity.name}/delete.graphql`),
 		]
+		console.log("OPERATIONS", OPERATIONS)
 		return Promise.all(OPERATIONS.map(function (operation) {
 			return self.interpolate_operation(operation, entity.graphql_attributes_string)
 		}))
@@ -232,7 +233,7 @@ class GauzeManager {
 					const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/module_link");
 					const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${ENTITY_CONFIG_FILE} ${entity.name}`;
 					return self.execute(COMMAND).then(function () {
-						return self.interpolate_operation(GAUZE_PROJECT_DIR, entity)
+						return self.interpolate_operations(GAUZE_PROJECT_DIR, entity)
 					})
 				});
 			})
