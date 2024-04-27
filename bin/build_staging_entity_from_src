@@ -27,6 +27,7 @@ cp $src/database/interfaces/graphql/operations/$from1/delete.graphql $staging/da
 # system
 cp $src/system/models/$from1.js $staging/system/models/$arg1.js
 cp $src/system/controllers/$from1.js $staging/system/controllers/$arg1.js
+cp $src/system/interfaces/graphql/entities/$from1.js $staging/system/interfaces/graphql/entities/$arg1.js
 cp $src/system/interfaces/graphql/mutations/$from1.js $staging/system/interfaces/graphql/mutations/$arg1.js
 cp $src/system/interfaces/graphql/queries/$from1.js $staging/system/interfaces/graphql/queries/$arg1.js
 
