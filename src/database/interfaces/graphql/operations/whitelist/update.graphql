@@ -1,0 +1,34 @@
+mutation UpdateWhitelist(
+	$attributes: Whitelist_Mutation__Attributes
+	$where: Whitelist_Mutation__Attributes
+	$where_in: Whitelist_Mutation__Attributes_Array
+	$where_not_in: Whitelist_Mutation__Attributes_Array
+	$limit: Int
+	$offset: Int
+	$order: String
+	$order_direction: String
+	$order_nulls: String
+) {
+	update_whitelist(
+		attributes: $attributes
+		where_in: $where_in
+		where_not_in: $where_not_in
+		where: $where
+		limit: $limit
+		offset: $offset
+		order: $order
+		order_direction: $order_direction
+		order_nulls: $order_nulls
+	) {
+		attributes {
+			_id
+			_created_at
+			_updated_at
+			_deleted_at
+			_from_type
+			_from_id
+			_to_type
+			_to_id
+		}
+	}
+}
