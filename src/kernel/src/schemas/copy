@@ -1,0 +1,4 @@
+rm -rf ./system
+cp -r database system
+find ./system -type f -name '*.js' -exec sed -i '' "s/database/system/g" {} +
+find ./system -type f -name '*.js' -exec sed -i '' "s/DATABASE/SYSTEM/g" {} +
