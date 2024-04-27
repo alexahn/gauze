@@ -176,11 +176,12 @@
 	[ ] do we need to enforce not being able to change some fields after they are set?
 [x] proper names for entities and gauze files generated from kernel
 [ ] start thinking about kernel/src or kernel/source
-	[ ] bootstrap new project by using commands that use the source code
-		[ ] should have commands to create new entities
-			[ ] base everything off structures
+	[x] bootstrap new project by using commands that use the source code
+		[x] should have commands to create new entities
+			[-] base everything off structures
+				[x] base everything off abstract atoms
 			[ ] look into programmatically generating graphql and sql structures from an abstract structure
-	[ ] create abstract structures
+	[x] create abstract structures
 	[x] move entity1 and entity2 into kernel/src/migrations to make it easier for development
 		[ ] remove later once we can generate entities
 		[ ] move these migrations to structure?
@@ -213,11 +214,13 @@
 	[x] gauze cli (from node_modules), gauze-project cli (from bootstrapped project)
 		[x] implemented as a subcommand for the gauze cli to proxy into the project cli
 	[ ] reorder export order in module files so that internal files are first
-	[ ] move base classes to the kernel
+	[x] move base classes to the kernel
 [ ] have read command manually construct a list of files and directories and intersect with the results from find
 	[ ] kind of problematic when we just use find because an entity might contain another entity's name inside it
 		[ ] e.g. hello_entity and hello_entity_world
 [ ] refactor server application to use kernel graphql shell execute
-[ ] update schema files to use $structure instead of directly importing
-[ ] group protected fields by method for sql structures
+[x] update schema files to use $structure instead of directly importing
+[-] group protected fields by method for sql structures
+	[x] protected fields are now handled via pre_serializer middlewares
 [ ] add attribute flag to designate builtin entities
+[ ] refactor schema to use interface entities

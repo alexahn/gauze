@@ -1,0 +1,31 @@
+import * as $structure from "./../../../../structure/index.js";
+
+import { READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM } from "./../queries/entity2.js";
+import {
+    CREATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+    UPDATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+    DELETE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+} from "./../mutations/entity2.js";
+
+const CONNECTION__ENTITY2__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
+	query_relationships: $structure.entity2.system.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
+	mutation_relationships: $structure.entity2.system.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
+	query_query: $structure.entity2.system.graphql.QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
+	mutation_mutation: $structure.entity2.system.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
+}
+
+const METHODS__ENTITY2__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
+	query: {
+		read_entity2: READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+	},
+	mutation: {
+		create_entity2: CREATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		update_entity2: UPDATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		delete_entity2: DELETE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+	},
+}
+
+export {
+	CONNECTION__ENTITY2__ENTITY__GRAPHQL__INTERFACE__SYSTEM,
+	METHODS__ENTITY2__ENTITY__GRAPHQL__INTERFACE__SYSTEM
+}
