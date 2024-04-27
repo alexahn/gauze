@@ -1,3 +1,5 @@
+import * as $abstract from "./../../../abstract/index.js";
+
 import { GraphQLNonNull, GraphQLInt, GraphQLList, GraphQLString, GraphQLObjectType } from "graphql";
 
 import GraphQLDate from "graphql-date";

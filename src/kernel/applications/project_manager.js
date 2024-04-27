@@ -60,9 +60,9 @@ class GauzeProjectManager {
 				sub_command_argv.push(val);
 			}
 		});
-		var GAUZE_SUB_COMMAND = sub_command_argv.join(" ");
-		console.log(`node ${GAUZE_PROJECT_DIR}/command/gauze.js ${GAUZE_SUB_COMMAND}`);
-		this.execute(`node ${GAUZE_PROJECT_DIR}/command/gauze.js ${GAUZE_SUB_COMMAND}`).catch(function (err) {});
+		const GAUZE_SUB_COMMAND = sub_command_argv.join(" ");
+		const COMMAND = `node ${GAUZE_PROJECT_DIR}/command/gauze.js ${GAUZE_SUB_COMMAND}`;
+		return this.execute(COMMAND).catch(function (err) {});
 	}
 }
 
