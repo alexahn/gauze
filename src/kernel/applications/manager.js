@@ -8,6 +8,7 @@ import child_process from "child_process";
 
 const __FILEDIR = import.meta.dirname;
 const GAUZE_BASE_DIR = path.resolve(__FILEDIR, "../../");
+// GAUZE_ROOT_DIR is only used when we need to reference the src directory from outside of it
 const GAUZE_ROOT_DIR = path.resolve(__FILEDIR, "../../../");
 
 class GauzeManager {
@@ -287,35 +288,35 @@ class GauzeManager {
 	}
 	migrate_run() {
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_run");
-		const COMMAND = `${GAUZE_SHELL_COMMAND}`;
+		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR}`;
 		this.execute(COMMAND).catch(function (err) {
 			// do something here
 		});
 	}
 	migrate_make(name) {
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_make");
-		const COMMAND = `${GAUZE_SHELL_COMMAND} ${name}`;
+		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${name}`;
 		this.execute(COMMAND).catch(function (err) {
 			// do something here
 		});
 	}
 	migrate_rollback() {
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_rollback");
-		const COMMAND = `${GAUZE_SHELL_COMMAND}`;
+		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR}`;
 		this.execute(COMMAND).catch(function (err) {
 			// do something here
 		});
 	}
 	seed_run() {
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/seed_run");
-		const COMMAND = `${GAUZE_SHELL_COMMAND}`;
+		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR}`;
 		this.execute(COMMAND).catch(function (err) {
 			// do something here
 		});
 	}
 	seed_make(name) {
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/seed_make");
-		const COMMAND = `${GAUZE_SHELL_COMMAND} ${name}`;
+		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${name}`;
 		this.execute(COMMAND).catch(function (err) {
 			// do something here
 		});
