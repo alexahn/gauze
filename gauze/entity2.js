@@ -1,5 +1,6 @@
 export default function ($abstract) {
 	const ENTITY = {
+		name: "entity2",
 		primary_key: "id",
 		fields: {
 			id: {

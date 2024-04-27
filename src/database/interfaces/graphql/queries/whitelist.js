@@ -14,6 +14,12 @@ const WHITELIST_SERIALIZER = new $structure.serializers.GraphQLSerializer({
 	sql_primary_key: $structure.whitelist.database.sql.PRIMARY_KEY__SQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
+const WHITELIST_PARENT_QUERY_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Whitelist__Parent",
+	description: "Whitelist Parent",
+	fields: () => $structure.whitelist.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
+});
+
 const WHITELIST_ATTRIBUTES_QUERY_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Query__Attributes",
 	description: "Whitelist Query Attributes",
@@ -29,6 +35,10 @@ const WHITELIST_ATTRIBUTES_ARRAY_QUERY_INTERFACE_DATABASE = new $abstract.gauze.
 const READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.whitelist.database.graphql.QUERY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE),
 	args: {
+		parent: {
+			description: "parent",
+			type: WHITELIST_PARENT_QUERY_INTERFACE_DATABASE,
+		},
 		where: {
 			description: "where",
 			type: WHITELIST_ATTRIBUTES_QUERY_INTERFACE_DATABASE,
