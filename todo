@@ -214,12 +214,12 @@
 			[x] migrate root bin to kernel/bin
 	[x] gauze cli (from node_modules), gauze-project cli (from bootstrapped project)
 		[x] implemented as a subcommand for the gauze cli to proxy into the project cli
-	[ ] reorder export order in module files so that internal files are first
+	[x] reorder export order in module files so that internal files are first
 	[x] move base classes to the kernel
 [ ] have read command manually construct a list of files and directories and intersect with the results from find
 	[ ] kind of problematic when we just use find because an entity might contain another entity's name inside it
 		[ ] e.g. hello_entity and hello_entity_world
-[ ] refactor server application to use kernel graphql shell execute
+[x] refactor server application to use kernel graphql shell execute
 [x] update schema files to use $structure instead of directly importing
 [-] group protected fields by method for sql structures
 	[x] protected fields are now handled via pre_serializer middlewares
@@ -227,3 +227,4 @@
 [x] refactor schema to use interface entities
 	[x] add new files to base kernel
 [ ] refactor all exports to use the same naming convention (need two underscores instead of one in a lot of places)
+[ ] use es6 map for lru cache (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
