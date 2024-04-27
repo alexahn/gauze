@@ -172,8 +172,9 @@
 [ ] optimizations for end scale
 	[ ] have a look up data structure that maps the data name in the database to a readable name
 		[ ] table names are limited to 4 characters in the database
-[ ] create protected fields and update protected fields?
-	[ ] do we need to enforce not being able to change some fields after they are set?
+[x] create protected fields and update protected fields?
+	[x] do we need to enforce not being able to change some fields after they are set?
+		[x] split all protected fields to be implemented as pre serializer middleware
 [x] proper names for entities and gauze files generated from kernel
 [ ] start thinking about kernel/src or kernel/source
 	[x] bootstrap new project by using commands that use the source code

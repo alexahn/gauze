@@ -15,6 +15,12 @@ const RELATIONSHIP_SERIALIZER = new $structure.serializers.GraphQLSerializer({
 	sql_primary_key: $structure.relationship.database.sql.PRIMARY_KEY__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
 });
 
+const RELATIONSHIP_PARENT_QUERY_INTERFACE_DATABASE = new GraphQLInputObjectType({
+	name: "Relationship__Parent",
+	description: "Relationship Parent",
+	fields: () => $structure.relationship.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE,
+});
+
 const RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_DATABASE = new GraphQLInputObjectType({
 	name: "Relationship_Query__Attributes",
 	description: "Relationship Query Attributes",
@@ -30,6 +36,10 @@ const RELATIONSHIP_ATTRIBUTES_ARRAY_QUERY_INTERFACE_DATABASE = new GraphQLInputO
 const READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new GraphQLList($structure.relationship.database.graphql.QUERY__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE),
 	args: {
+		parent: {
+			description: "parent",
+			type: RELATIONSHIP_PARENT_QUERY_INTERFACE_DATABASE,
+		},
 		where: {
 			description: "where",
 			type: RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_DATABASE,
