@@ -1,1 +1,0 @@
-npx knex --knexfile=./src/database/knexfile.js seed:make $1

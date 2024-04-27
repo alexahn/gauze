@@ -5,3 +5,4 @@ format:
 	npx prettier package.json --write
 	npx prettier src --write
 	npx prettier test --write
+	npx prettier gauze --write
