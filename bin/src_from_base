@@ -40,7 +40,7 @@ npx gauze create gauze ./src ./gauze/ezuag.js
 cp -r ./src/kernel/src/stages/stage1/* ./src/
 
 # create ytitne
-npx gauze create gauze ./src ./gauze/ytitne.js
+npx gauze create entity ./src ./gauze/ytitne.js
 # use stage2 schema
 cp -r ./src/kernel/src/stages/stage2/* ./src/
 
