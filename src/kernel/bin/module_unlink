@@ -58,6 +58,7 @@ node $gauze_root/kernel/bin/module.js $project_root/database/interfaces/graphql/
 
 node $gauze_root/kernel/bin/module.js $project_root/system/models/index.js unjoin $arg1 file
 node $gauze_root/kernel/bin/module.js $project_root/system/controllers/index.js unjoin $arg1 file
+node $gauze_root/kernel/bin/module.js $project_root/system/interfaces/graphql/entities/index.js unjoin $arg1 file
 node $gauze_root/kernel/bin/module.js $project_root/system/interfaces/graphql/mutations/index.js unjoin $arg1 file
 node $gauze_root/kernel/bin/module.js $project_root/system/interfaces/graphql/queries/index.js unjoin $arg1 file
 
