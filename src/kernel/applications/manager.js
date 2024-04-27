@@ -179,7 +179,7 @@ class GauzeManager {
 			} {
 				if (START_PATTERN.test(line)) {
 					matched = true
-					matched_index = index
+					matched_start = index
 					return line
 				} else {
 					return line
