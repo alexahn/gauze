@@ -112,7 +112,7 @@ class IOLogger extends Logger {
 		} else if (this.STDERR_LEVEL_MINIMUM <= level && level <= this.STDERR_LEVEL_MAXIMUM) {
 			lines.forEach(function (line) {
 				if (line === null) return;
-				console.err(line);
+				console.error(line);
 			});
 		}
 	}
