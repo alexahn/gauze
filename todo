@@ -180,7 +180,8 @@
 		[x] should have commands to create new entities
 			[-] base everything off structures
 				[x] base everything off abstract atoms
-			[ ] look into programmatically generating graphql and sql structures from an abstract structure
+			[x] look into programmatically generating graphql and sql structures from an abstract structure
+				[ ] look into doing ast parsing and some table management data structures to programmatically generate migration files
 	[x] create abstract structures
 	[x] move entity1 and entity2 into kernel/src/migrations to make it easier for development
 		[ ] remove later once we can generate entities
@@ -223,4 +224,6 @@
 [-] group protected fields by method for sql structures
 	[x] protected fields are now handled via pre_serializer middlewares
 [ ] add attribute flag to designate builtin entities
-[ ] refactor schema to use interface entities
+[x] refactor schema to use interface entities
+	[x] add new files to base kernel
+[ ] refactor all exports to use the same naming convention (need two underscores instead of one in a lot of places)

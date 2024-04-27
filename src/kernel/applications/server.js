@@ -4,11 +4,11 @@ const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
 import http from "http";
-import { graphql } from "graphql";
 
 class GauzeServer {
 	// note: config takes the command argv structure (src/command/commands/run/server.js)
 	constructor({ $gauze }, config) {
+		const self = this;
 		this.$gauze = $gauze;
 		this.config = config;
 
@@ -27,6 +27,7 @@ class GauzeServer {
 
 		// this is called once the exit trajectory has been set
 		process.on("exit", function (val) {
+			self.database.destroy();
 			$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.exit: ${val}`);
 		});
 
@@ -59,28 +60,27 @@ class GauzeServer {
 				const context = {};
 				context.database = self.database;
 				context.transaction = transaction;
-				return graphql({
-					schema: schema,
-					source: parsed.query,
-					contextValue: context,
-					variableValues: parsed.variables,
-					operationName: parsed.operationName,
-				})
+				return self.$gauze.kernel.shell.graphql
+					.EXECUTE__GRAPHQL__SHELL__KERNEL({
+						schema: schema,
+						context: context,
+						operation: parsed.query,
+						operation_name: parsed.operationName,
+						operation_variables: parsed.variables,
+					})
 					.then(function (data) {
-						//console.log('result', JSON.stringify(data, null, 4))
 						if (data.errors && data.errors.length) {
-							console.log(data.errors);
+							self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "errors", data.errors);
 							return transaction
 								.rollback()
 								.then(function () {
-									console.log("transaction reverted");
-									// database.destroy()
+									self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION REVERTED");
 									res.writeHead(400, "Bad Request", {
 										"content-type": "application/json; charset=utf-8",
 									}).end(JSON.stringify(data));
 								})
 								.catch(function (err) {
-									console.log("transaction failed to revert", err);
+									self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO REVERT");
 									res.writeHead(500, "Internal Server Error", {
 										"content-type": "application/json; charset=utf-8",
 									}).end(JSON.stringify(data));
@@ -89,15 +89,13 @@ class GauzeServer {
 							return transaction
 								.commit(data)
 								.then(function () {
-									// write to body
-									console.log("transaction committed");
-									//database.destroy()
+									self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION COMMITTED");
 									res.writeHead(200, "OK", {
 										"content-type": "application/json; charset=utf-8",
 									}).end(JSON.stringify(data));
 								})
 								.catch(function (err) {
-									console.log("transaction failed to commit", err);
+									self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO COMMIT");
 									res.writeHead(500, "Internal Server Error", {
 										"content-type": "application/json; charset=utf-8",
 									}).end(JSON.stringify(data));
@@ -105,8 +103,7 @@ class GauzeServer {
 						}
 					})
 					.catch(function (err) {
-						console.log("err", err);
-						//database.destroy()
+						self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "err", err);
 						return transaction
 							.rollback(err)
 							.then(function () {
