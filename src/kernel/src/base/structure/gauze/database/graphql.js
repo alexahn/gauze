@@ -4,8 +4,6 @@ import * as $abstract from "./../../../abstract/index.js";
 
 import { create_fields_array } from "./../../utility.js";
 
-import GraphQLDate from "graphql-date";
-
 const TYPE__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = "caf5342ac38d41a6a02bb81d2d2b21a4";
 
 const METADATA_FIELDS__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = {
@@ -26,42 +24,6 @@ const METADATA__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE =
 });
 
 const ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = $abstract.entities.a543731262804f64adcc0eae1a225acc.default($abstract).graphql_fields;
-/*
-const ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = {
-	gauze__a543731262804f64adcc0eae1a225acc__id: {
-		type: GraphQLString,
-		description: "id",
-	},
-	gauze__a543731262804f64adcc0eae1a225acc__created_at: {
-		type: GraphQLDate,
-		description: "created_at",
-	},
-	gauze__a543731262804f64adcc0eae1a225acc__updated_at: {
-		type: GraphQLDate,
-		description: "updated_at",
-	},
-	gauze__a543731262804f64adcc0eae1a225acc__deleted_at: {
-		type: GraphQLDate,
-		description: "deleted_at",
-	},
-	gauze__a543731262804f64adcc0eae1a225acc__from_type: {
-		type: GraphQLString,
-		description: "from",
-	},
-	gauze__a543731262804f64adcc0eae1a225acc__from_id: {
-		type: GraphQLString,
-		description: "from_id",
-	},
-	gauze__a543731262804f64adcc0eae1a225acc__to_type: {
-		type: GraphQLString,
-		description: "to",
-	},
-	gauze__a543731262804f64adcc0eae1a225acc__to_id: {
-		type: GraphQLString,
-		description: "to_id",
-	},
-};
-*/
 
 const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = create_fields_array(
 	ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
