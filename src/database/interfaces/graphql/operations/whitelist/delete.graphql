@@ -23,8 +23,12 @@ mutation DeleteWhitelist(
 			gauze__whitelist__created_at
 			gauze__whitelist__updated_at
 			gauze__whitelist__deleted_at
-			gauze__whitelist__text1
-			gauze__whitelist__text2
+			gauze__whitelist__realm
+			gauze__whitelist__agent_role
+			gauze__whitelist__agent_id
+			gauze__whitelist__agent_type
+			gauze__whitelist__entity_id
+			gauze__whitelist__entity_type
 		}
 	}
 }
