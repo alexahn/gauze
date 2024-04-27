@@ -9,6 +9,10 @@ if (!process.argv[2]) {
 // pascal snake case
 // upper snake case
 
+function identity (x) {
+	return x
+}
+
 process.stdin.on("readable", function () {
 	var chunk = "";
 	while (null !== (chunk = process.stdin.read())) {
@@ -23,7 +27,7 @@ process.stdin.on("end", function () {
 			body = body.replace("-", "_");
 			var split = body.split("_").map(function (part) {
 				return part.toLowerCase();
-			});
+			}).filter(identity)
 			process.stdout.write(split.join("_"));
 			break;
 		case "lower_kebab_case":
@@ -31,7 +35,7 @@ process.stdin.on("end", function () {
 			body = body.replace("_", "-");
 			var split = body.split("-").map(function (part) {
 				return part.toLowerCase();
-			});
+			}).filter(identity)
 			process.stdout.write(split.join("-"));
 			break;
 		case "pascal_snake_case":
@@ -43,7 +47,7 @@ process.stdin.on("end", function () {
 				} else {
 					return part
 				}
-			});
+			}).filter(identity)
 			process.stdout.write(split.join("_"));
 			break;
 		case "upper_snake_case":
@@ -51,7 +55,7 @@ process.stdin.on("end", function () {
 			body = body.replace("-", "_");
 			var split = body.split("_").map(function (part) {
 				return part.toUpperCase();
-			});
+			}).filter(identity)
 			process.stdout.write(split.join("_"));
 			break;
 		default:
