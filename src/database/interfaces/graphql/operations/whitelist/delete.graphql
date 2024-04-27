@@ -19,14 +19,12 @@ mutation DeleteWhitelist(
 		order_nulls: $order_nulls
 	) {
 		attributes {
-			_id
-			_created_at
-			_updated_at
-			_deleted_at
-			_from_type
-			_from_id
-			_to_type
-			_to_id
+			gauze__whitelist__id
+			gauze__whitelist__created_at
+			gauze__whitelist__updated_at
+			gauze__whitelist__deleted_at
+			gauze__whitelist__text1
+			gauze__whitelist__text2
 		}
 	}
 }

@@ -21,12 +21,12 @@ mutation UpdateEzuag(
 		order_nulls: $order_nulls
 	) {
 		attributes {
-            gauze__ezuag__id
-            gauze__ezuag__created_at
-            gauze__ezuag__updated_at
-            gauze__ezuag__deleted_at
-            gauze__ezuag__text1
-            gauze__ezuag__text2
+			gauze__ezuag__id
+			gauze__ezuag__created_at
+			gauze__ezuag__updated_at
+			gauze__ezuag__deleted_at
+			gauze__ezuag__text1
+			gauze__ezuag__text2
 		}
 	}
 }

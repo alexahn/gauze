@@ -21,14 +21,12 @@ mutation Updatebb95d174a16f4ddd935ff3a802f7c7bc(
 		order_nulls: $order_nulls
 	) {
 		attributes {
-			_id
-			_created_at
-			_updated_at
-			_deleted_at
-			_from_type
-			_from_id
-			_to_type
-			_to_id
+			gauze__a543731262804f64adcc0eae1a225acc__id
+			gauze__a543731262804f64adcc0eae1a225acc__created_at
+			gauze__a543731262804f64adcc0eae1a225acc__updated_at
+			gauze__a543731262804f64adcc0eae1a225acc__deleted_at
+			gauze__a543731262804f64adcc0eae1a225acc__text1
+			gauze__a543731262804f64adcc0eae1a225acc__text2
 		}
 	}
 }
