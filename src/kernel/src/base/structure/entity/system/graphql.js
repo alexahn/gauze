@@ -1,6 +1,4 @@
-import { GraphQLNonNull, GraphQLInt, GraphQLList, GraphQLString, GraphQLObjectType } from "graphql";
-
-import GraphQLDate from "graphql-date";
+import * as $abstract from "./../../../abstract/index.js";
 
 import { create_fields_array } from "./../../utility.js";
 
@@ -8,16 +6,16 @@ const TYPE__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = "cd63
 
 const METADATA_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = {
 	id: {
-		type: new GraphQLNonNull(GraphQLString),
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "id",
 	},
 	type: {
-		type: new GraphQLNonNull(GraphQLString),
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "type",
 	},
 };
 
-const METADATA__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new GraphQLObjectType({
+const METADATA__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "ba381b0cc764c4c9a187b716ae94ed96__Metadata",
 	description: "ba381b0cc764c4c9a187b716ae94ed96 Metadata",
 	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
@@ -25,23 +23,23 @@ const METADATA__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = n
 
 const ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = {
 	id: {
-		type: GraphQLString,
+		type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		description: "id",
 	},
 	created_at: {
-		type: GraphQLDate,
+		type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		description: "created_at",
 	},
 	updated_at: {
-		type: GraphQLDate,
+		type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		description: "updated_at",
 	},
 	deleted_at: {
-		type: GraphQLDate,
+		type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		description: "updated_at",
 	},
 	text: {
-		type: GraphQLString,
+		type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		description: "text",
 	},
 };
@@ -50,7 +48,7 @@ const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8
 	ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 );
 
-const ATTRIBUTES__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new GraphQLObjectType({
+const ATTRIBUTES__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "ba381b0cc764c4c9a187b716ae94ed96__Attributes",
 	description: "ba381b0cc764c4c9a187b716ae94ed96 Attributes",
 	fields: () => ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
@@ -64,7 +62,7 @@ const QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3d
 	//read_entity2: ENTITY2_READ_QUERY
 };
 
-const QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new GraphQLObjectType({
+const QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Query__Relationships",
 	description: "ba381b0cc764c4c9a187b716ae94ed96 Query Relationships",
 	fields: () => QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
@@ -72,7 +70,7 @@ const QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__ST
 
 const QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = {};
 
-const QUERY_QUERY__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new GraphQLObjectType({
+const QUERY_QUERY__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Query__Query",
 	description: "ba381b0cc764c4c9a187b716ae94ed96 Query Query",
 	fields: () => QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
@@ -86,7 +84,7 @@ const MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396
 	//create_entity2: ENTITY2_CREATE_MUTATION
 };
 
-const MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new GraphQLObjectType({
+const MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Mutation__Relationships",
 	description: "ba381b0cc764c4c9a187b716ae94ed96 Mutation Relationships",
 	fields: () => MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
@@ -94,7 +92,7 @@ const MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8_
 
 const MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = {};
 
-const MUTATION_MUTATION__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new GraphQLObjectType({
+const MUTATION_MUTATION__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Mutation__Mutation",
 	description: "ba381b0cc764c4c9a187b716ae94ed96 Mutation Mutation",
 	fields: () => MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
@@ -111,7 +109,7 @@ const FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = {
 	},
 };
 
-const QUERY__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new GraphQLObjectType({
+const QUERY__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Query",
 	description: "Entity 1",
 	fields: () => ({
@@ -128,7 +126,7 @@ const QUERY__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new 
 	}),
 });
 
-const MUTATION__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new GraphQLObjectType({
+const MUTATION__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Mutation",
 	description: "Entity 1",
 	fields: () => ({

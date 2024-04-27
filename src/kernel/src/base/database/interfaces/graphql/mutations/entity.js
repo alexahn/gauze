@@ -3,10 +3,9 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
+import * as $abstract from "./../../../../abstract/index.js";
 import * as $structure from "./../../../../structure/index.js";
 import * as $kernel from "./../../../../kernel/index.js";
-
-import { GraphQLNonNull, GraphQLInt, GraphQLList, GraphQLString, GraphQLObjectType, GraphQLInputObjectType, GraphQLInterfaceType } from "graphql";
 
 import { cd637bc32c364580be5cc28396d3dee8_CONTROLLER_DATABASE } from "./../../../controllers/a2b8dbc3427b41a9899e11671c2422c7.js";
 
@@ -15,20 +14,22 @@ const cd637bc32c364580be5cc28396d3dee8_SERIALIZER = new $structure.serializers.G
 	sql_primary_key: $structure.a2b8dbc3427b41a9899e11671c2422c7.database.sql.PRIMARY_KEY__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 });
 
-const cd637bc32c364580be5cc28396d3dee8_ATTRIBUTES_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({
+const cd637bc32c364580be5cc28396d3dee8_ATTRIBUTES_MUTATION_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Mutation__Attributes",
 	description: "ba381b0cc764c4c9a187b716ae94ed96 Mutation Attributes",
 	fields: $structure.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 });
 
-const cd637bc32c364580be5cc28396d3dee8_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE = new GraphQLInputObjectType({
+const cd637bc32c364580be5cc28396d3dee8_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Mutation__Attributes_Array",
 	description: "ba381b0cc764c4c9a187b716ae94ed96 Mutation Attributes Array",
 	fields: $structure.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 });
 
 const CREATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new GraphQLList($structure.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.MUTATION__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+		$structure.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.MUTATION__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+	),
 	args: {
 		attributes: {
 			description: "attributes",
@@ -73,7 +74,9 @@ const CREATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 };
 
 const UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new GraphQLList($structure.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.MUTATION__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+		$structure.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.MUTATION__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+	),
 	args: {
 		where: {
 			description: "where",
@@ -93,23 +96,23 @@ const UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 		},
 		limit: {
 			description: "limit",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		offset: {
 			description: "offset",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order: {
 			description: "order",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_direction: {
 			description: "order direction",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_nulls: {
 			description: "order nulls",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {
@@ -150,7 +153,9 @@ const UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 };
 
 const DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new GraphQLList($structure.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.MUTATION__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+		$structure.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.MUTATION__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+	),
 	args: {
 		where: {
 			description: "where",
@@ -158,23 +163,23 @@ const DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 		},
 		limit: {
 			description: "limit",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		offset: {
 			description: "offset",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order: {
 			description: "order",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_direction: {
 			description: "order direction",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_nulls: {
 			description: "order nulls",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {

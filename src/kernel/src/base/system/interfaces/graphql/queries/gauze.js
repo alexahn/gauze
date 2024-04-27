@@ -3,10 +3,9 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
+import * as $abstract from "./../../../../abstract/index.js";
 import * as $kernel from "./../../../../kernel/index.js";
 import * as $structure from "./../../../../structure/index.js";
-
-import { GraphQLInt, GraphQLList, GraphQLString, GraphQLObjectType, GraphQLInputObjectType } from "graphql";
 
 import { caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_SYSTEM } from "./../../../controllers/a543731262804f64adcc0eae1a225acc.js";
 
@@ -15,20 +14,22 @@ const caf5342ac38d41a6a02bb81d2d2b21a4_SERIALIZER = new $structure.serializers.G
 	sql_primary_key: $structure.a543731262804f64adcc0eae1a225acc.database.sql.PRIMARY_KEY__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 });
 
-const caf5342ac38d41a6a02bb81d2d2b21a4_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new GraphQLInputObjectType({
+const caf5342ac38d41a6a02bb81d2d2b21a4_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "bb95d174a16f4ddd935ff3a802f7c7bc_Query__Attributes",
 	description: "bb95d174a16f4ddd935ff3a802f7c7bc Query Attributes",
 	fields: $structure.a543731262804f64adcc0eae1a225acc.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 });
 
-const caf5342ac38d41a6a02bb81d2d2b21a4_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM = new GraphQLInputObjectType({
+const caf5342ac38d41a6a02bb81d2d2b21a4_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "bb95d174a16f4ddd935ff3a802f7c7bc_Query__Attributes_Array",
 	description: "bb95d174a16f4ddd935ff3a802f7c7bc Query Attributes Array",
 	fields: $structure.a543731262804f64adcc0eae1a225acc.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 });
 
 const READ__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
-	type: new GraphQLList($structure.a543731262804f64adcc0eae1a225acc.system.graphql.QUERY__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+		$structure.a543731262804f64adcc0eae1a225acc.system.graphql.QUERY__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
+	),
 	args: {
 		where: {
 			description: "where",
@@ -44,23 +45,23 @@ const READ__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__SYSTEM 
 		},
 		limit: {
 			description: "limit",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		offset: {
 			description: "offset",
-			type: GraphQLInt,
+			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order: {
 			description: "order",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_direction: {
 			description: "order direction",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_nulls: {
 			description: "order nulls",
-			type: GraphQLString,
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
 	resolve: (_source, query_arguments, context) => {
