@@ -4,3 +4,5 @@ export * as whitelist from "./whitelist.js";
 // project modules
 export * as entity1 from "./entity1.js";
 export * as entity2 from "./entity2.js";
+export * as ezuag from "./ezuag.js";
+export * as ytitne from "./ytitne.js";

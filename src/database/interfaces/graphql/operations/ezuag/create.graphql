@@ -1,0 +1,14 @@
+mutation CreateEzuag($attributes: Ezuag_Mutation__Attributes) {
+	create_ezuag(attributes: $attributes) {
+		attributes {
+			_id
+			_created_at
+			_updated_at
+			_deleted_at
+			_from_type
+			_from_id
+			_to_type
+			_to_id
+		}
+	}
+}
