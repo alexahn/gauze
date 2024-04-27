@@ -1,1 +1,17 @@
-npx knex --knexfile=./src/database/knexfile.js seed:run
+#!/bin/zsh
+
+if [ $# -eq 0 ]
+    then
+        echo "No arguments supplied"
+        exit 1
+fi
+
+if [ -z "$1" ]
+    then
+        echo "No gauze base path argument supplied"
+        exit 1
+fi
+
+gauze_root=$1
+
+npx knex --knexfile=$gauze_root/database/knexfile.js seed:run

@@ -1,1 +1,24 @@
-npx knex --knexfile=./src/database/knexfile.js migrate:make $1
+#!/bin/zsh
+
+if [ $# -eq 0 ]
+    then
+        echo "No arguments supplied"
+        exit 1
+fi
+
+if [ -z "$1" ]
+    then
+        echo "No gauze base path argument supplied"
+        exit 1
+fi
+
+if [ -z "$2" ]
+	then
+		echo "No migration file name supplied"
+		exit 1
+fi
+
+gauze_root=$1
+migration_name=$2
+
+npx knex --knexfile=$gauze_root/database/knexfile.js migrate:make $migration_name
