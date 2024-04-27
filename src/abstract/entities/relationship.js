@@ -1,6 +1,6 @@
 export default function ($abstract) {
 	const ENTITY = {
-		name: "gauze__relationship",
+		name: "relationship",
 		primary_key: "gauze__relationship__id",
 		fields: {
 			gauze__relationship__id: {
@@ -102,15 +102,19 @@ export default function ($abstract) {
 		},
 		methods: {
 			create: {
+				name: "create",
 				privacy: "public",
 			},
 			read: {
+				name: "read",
 				privacy: "private",
 			},
 			update: {
+				name: "update",
 				privacy: "private",
 			},
 			delete: {
+				name: "delete",
 				privacy: "private",
 			},
 		},
