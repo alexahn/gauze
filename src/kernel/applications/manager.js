@@ -13,7 +13,7 @@ const GAUZE_BASE_DIR = path.resolve(__FILEDIR, "../../");
 const GAUZE_ROOT_DIR = path.resolve(__FILEDIR, "../../../");
 
 // only allows one underscore per word
-function to_snake_case(string) {
+function to_snake_case (string) {
 	string = string.replace(" ", "_");
 	string = string.replace("-", "_");
 	var split = string
@@ -22,9 +22,9 @@ function to_snake_case(string) {
 			return part.toLowerCase();
 		})
 		.filter(function (x) {
-			return x;
+			return x
 		});
-	return split.join("_");
+	return split.join("_")
 }
 
 class GauzeManager {
@@ -85,7 +85,7 @@ class GauzeManager {
 		}
 		// should have a name attribute
 		if (typeof config.name !== "string") throw new Error(`Entity must have a 'name' attribute of type 'string': ${config.name}`);
-		if (to_snake_case(config.name) !== config.name) throw new Error(`Entity must have a 'name' attribute in lower snake case: ${config.name} !== ${to_snake_case(config.name)}`);
+		if (to_snake_case(config.name) !== config.name) throw new Error(`Entity must have a 'name' attribute in lower snake case: ${config.name} !== ${to_snake_case(config.name)}`)
 		// should have a primary_key attribute
 		if (typeof config.primary_key !== "string") throw new Error(`Entity must have a 'primary_key' attribute of type 'string': ${config.primary_key}`);
 		// should have a fields attribute
@@ -160,56 +160,53 @@ class GauzeManager {
 	}
 	// note: very basic interpolation that will just look for a line ending with "attributes {" and delete all the lines until a line ends with "}"
 	interpolate_operation(operation_file, substitute) {
-		return fs.readFile(operation_file, { encoding: "utf8" }).then(function (source) {
-			const SPLIT = source.split("\n");
-			const START_PATTERN = new RegExp("attributes {$");
-			const END_PATTERN = new RegExp("}$");
-			var matched = false;
-			var matched_start = null;
-			var matched_end = null;
+		return fs.readFile(operation_file, { encoding: 'utf8' }).then(function (source) {
+			const SPLIT = source.split('\n')
+			const START_PATTERN = new RegExp("attributes {$")
+			const END_PATTERN = new RegExp("}$")
+			var matched = false
+			var matched_start = null
+			var matched_end = null
 			SPLIT.map(function (line, index) {
 				if (matched) {
 					if (END_PATTERN.test(line)) {
-						matched = false;
-						matched_end = index;
-						return line;
+						matched = false
+						matched_end = index
+						return line
 					} else {
-						return null;
+						return null
 					}
-				}
-				{
+				} {
 					if (START_PATTERN.test(line)) {
-						matched = true;
-						matched_index = index;
-						return line;
+						matched = true
+						matched_index = index
+						return line
 					} else {
-						return line;
+						return line
 					}
 				}
 			}).filter(function (x) {
-				return x;
-			});
-			if (typeof matched_start === "number") {
+				return x
+			})
+			if (typeof matched_start === 'number') {
 				// splice SPLIT here with the substitute
-				SPLIT.splice(matched_start + 1, 0, substitute);
+				SPLIT.splice(matched_start + 1, 0, substitute)
 			}
-			return fs.writeFile(operation_file, SPLIT.join("\n"), { encoding: "utf8" });
-		});
+			return fs.writeFile(operation_file, SPLIT.join('\n'), { encoding: 'utf8' })
+		})
 	}
 	interpolate_operations(project_dir, entity) {
-		const self = this;
+		const self = this
 		// use entity.graphql_attributes_string as the substitution
 		const OPERATIONS = [
 			path.resolve(project_dir, `./database/interfaces/graphql/operations/${entity.name}/create.graphql`),
 			path.resolve(project_dir, `./database/interfaces/graphql/operations/${entity.name}/read.graphql`),
 			path.resolve(project_dir, `./database/interfaces/graphql/operations/${entity.name}/update.graphql`),
 			path.resolve(project_dir, `./database/interfaces/graphql/operations/${entity.name}/delete.graphql`),
-		];
-		return Promise.all(
-			OPERATIONS.map(function (operation) {
-				return self.interpolate_operation(operation, entity.graphql_attributes_string);
-			}),
-		);
+		]
+		return Promise.all(OPERATIONS.map(function (operation) {
+			return self.interpolate_operation(operation, entity.graphql_attributes_string)
+		}))
 	}
 	// =========================
 	create_project(project_dir) {
@@ -233,7 +230,9 @@ class GauzeManager {
 					const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), project_dir);
 					const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/module_link");
 					const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${ENTITY_CONFIG_FILE} ${entity.name}`;
-					return self.execute(COMMAND);
+					return self.execute(COMMAND).then(function () {
+						return self.interpolate_operation(GAUZE_PROJECT_DIR, entity)
+					})
 				});
 			})
 			.catch(function (err) {
