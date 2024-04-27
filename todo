@@ -176,7 +176,7 @@
 	[x] do we need to enforce not being able to change some fields after they are set?
 		[x] split all protected fields to be implemented as pre serializer middleware
 [x] proper names for entities and gauze files generated from kernel
-[ ] start thinking about kernel/src or kernel/source
+[x] start thinking about kernel/src or kernel/source
 	[x] bootstrap new project by using commands that use the source code
 		[x] should have commands to create new entities
 			[-] base everything off structures
