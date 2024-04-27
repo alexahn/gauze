@@ -160,40 +160,41 @@ class GauzeManager {
 	}
 	// note: very basic interpolation that will just look for a line ending with "attributes {" and delete all the lines until a line ends with "}"
 	interpolate_operation(operation_file, substitute) {
-		return fs.readFile(operation_file, { encoding: 'utf8' }).then(function (source) {
-			const SPLIT = source.split('\n')
-			const START_PATTERN = new RegExp("attributes {$")
-			const END_PATTERN = new RegExp("}$")
-			var matched = false
-			var matched_start = null
-			var matched_end = null
-			SPLIT.map(function (line, index) {
-				if (matched) {
-					if (END_PATTERN.test(line)) {
-						matched = false
-						matched_end = index
-						return line
-					} else {
-						return null
-					}
-				} {
-					if (START_PATTERN.test(line)) {
-						matched = true
-						matched_index = index
-						return line
-					} else {
-						return line
-					}
+		const SOURCE = fs.readFileSync(operation_file, { encoding: 'utf8' })
+		const SPLIT = SOURCE.split('\n')
+		const START_PATTERN = new RegExp("attributes {$")
+		const END_PATTERN = new RegExp("}$")
+		var matched = false
+		var matched_start = null
+		var matched_end = null
+		SPLIT.map(function (line, index) {
+			if (matched) {
+				if (END_PATTERN.test(line)) {
+					matched = false
+					matched_end = index
+					return line
+				} else {
+					return null
 				}
-			}).filter(function (x) {
-				return x
-			})
-			if (typeof matched_start === 'number') {
-				// splice SPLIT here with the substitute
-				SPLIT.splice(matched_start + 1, 0, substitute)
+			} {
+				if (START_PATTERN.test(line)) {
+					matched = true
+					matched_index = index
+					return line
+				} else {
+					return line
+				}
 			}
-			return fs.writeFile(operation_file, SPLIT.join('\n'), { encoding: 'utf8' })
+		}).filter(function (x) {
+			return x
 		})
+		if (typeof matched_start === 'number') {
+			// splice SPLIT here with the substitute
+			SPLIT.splice(matched_start + 1, 0, substitute)
+		}
+		const JOINED = SPLIT.join('\n')
+		fs.writeFileSync(operation_file, JOINED, { encoding: 'utf8' })
+		return Promise.resolve(JOINED)
 	}
 	interpolate_operations(project_dir, entity) {
 		const self = this
