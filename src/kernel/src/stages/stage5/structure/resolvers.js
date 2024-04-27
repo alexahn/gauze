@@ -4,6 +4,12 @@ import { TABLE_NAME__SQL__DATABASE__EZUAG__STRUCTURE } from "./ezuag/database/sq
 // ytitne
 import { TYPE__GRAPHQL__DATABASE__YTITNE__STRUCTURE } from "./ytitne/database/graphql.js";
 import { TABLE_NAME__SQL__DATABASE__YTITNE__STRUCTURE } from "./ytitne/database/sql.js";
+// relationship
+import { TYPE__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE } from "./relationship/database/graphql.js";
+import { TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE } from "./relationship/database/sql.js";
+// entity1
+import { TYPE__GRAPHQL__DATABASE__ENTITY1__STRUCTURE } from "./entity1/database/graphql.js";
+import { TABLE_NAME__SQL__DATABASE__ENTITY1__STRUCTURE } from "./entity1/database/sql.js";
 
 function invert(obj) {
 	const inverted = {};
@@ -17,6 +23,8 @@ function invert(obj) {
 const DATABASE_GRAPHQL_TYPE_TO_SQL_TABLE = {
 	[TYPE__GRAPHQL__DATABASE__EZUAG__STRUCTURE]: TABLE_NAME__SQL__DATABASE__EZUAG__STRUCTURE,
 	[TYPE__GRAPHQL__DATABASE__YTITNE__STRUCTURE]: TABLE_NAME__SQL__DATABASE__YTITNE__STRUCTURE,
+	[TYPE__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE]: TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
+	[TYPE__GRAPHQL__DATABASE__ENTITY1__STRUCTURE]: TABLE_NAME__SQL__DATABASE__ENTITY1__STRUCTURE,
 };
 const DATABASE_SQL_TABLE_TO_GRAPHQL_TYPE = invert(DATABASE_GRAPHQL_TYPE_TO_SQL_TABLE);
 

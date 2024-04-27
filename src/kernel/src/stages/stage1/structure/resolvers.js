@@ -1,3 +1,6 @@
+import { TYPE__GRAPHQL__DATABASE__EZUAG__STRUCTURE } from "./ezuag/database/graphql.js";
+import { TABLE_NAME__SQL__DATABASE__EZUAG__STRUCTURE } from "./ezuag/database/sql.js";
+
 function invert(obj) {
 	const inverted = {};
 	Object.keys(obj).forEach(function (key) {
@@ -7,7 +10,9 @@ function invert(obj) {
 	return inverted;
 }
 
-const DATABASE_GRAPHQL_TYPE_TO_SQL_TABLE = {};
+const DATABASE_GRAPHQL_TYPE_TO_SQL_TABLE = {
+	[TYPE__GRAPHQL__DATABASE__EZUAG__STRUCTURE]: TABLE_NAME__SQL__DATABASE__EZUAG__STRUCTURE,
+};
 const DATABASE_SQL_TABLE_TO_GRAPHQL_TYPE = invert(DATABASE_GRAPHQL_TYPE_TO_SQL_TABLE);
 
 const SYSTEM_GRAPHQL_TYPE_TO_SQL_TABLE = DATABASE_GRAPHQL_TYPE_TO_SQL_TABLE;

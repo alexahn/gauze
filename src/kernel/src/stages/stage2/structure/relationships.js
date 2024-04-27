@@ -1,4 +1,5 @@
 // relationships are defined using the graphql type constant
+
 const DATABASE_RELATIONSHIP_STRUCTURE = {};
 
 const SYSTEM_RELATIONSHIP_STRUCTURE = DATABASE_RELATIONSHIP_STRUCTURE;

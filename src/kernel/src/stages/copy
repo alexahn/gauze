@@ -5,6 +5,8 @@ cp ./stage1/database/interfaces/graphql/schema.js ./stage1/system/interfaces/gra
 cp ./stage2/database/interfaces/graphql/schema.js ./stage2/system/interfaces/graphql/schema.js
 cp ./stage3/database/interfaces/graphql/schema.js ./stage3/system/interfaces/graphql/schema.js
 cp ./stage4/database/interfaces/graphql/schema.js ./stage4/system/interfaces/graphql/schema.js
+cp ./stage5/database/interfaces/graphql/schema.js ./stage5/system/interfaces/graphql/schema.js
+cp ./stage6/database/interfaces/graphql/schema.js ./stage6/system/interfaces/graphql/schema.js
 
 find ./stage*/system -type f -name '*.js' -exec sed -i '' "s/database/system/g" {} +
 find ./stage*/system -type f -name '*.js' -exec sed -i '' "s/DATABASE/SYSTEM/g" {} +
