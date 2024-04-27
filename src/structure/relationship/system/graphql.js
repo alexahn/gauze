@@ -4,8 +4,6 @@ import * as $abstract from "./../../../abstract/index.js";
 
 import { create_fields_array } from "./../../utility.js";
 
-import GraphQLDate from "graphql-date";
-
 const TYPE__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE = "RELATIONSHIP";
 
 const METADATA_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE = {
@@ -26,42 +24,6 @@ const METADATA__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE = new GraphQLObjectType
 });
 
 const ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE = $abstract.entities.relationship.default($abstract).graphql_fields;
-/*
-const ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE = {
-	gauze__relationship__id: {
-		type: GraphQLString,
-		description: "id",
-	},
-	gauze__relationship__created_at: {
-		type: GraphQLDate,
-		description: "created_at",
-	},
-	gauze__relationship__updated_at: {
-		type: GraphQLDate,
-		description: "updated_at",
-	},
-	gauze__relationship__deleted_at: {
-		type: GraphQLDate,
-		description: "deleted_at",
-	},
-	gauze__relationship__from_type: {
-		type: GraphQLString,
-		description: "from",
-	},
-	gauze__relationship__from_id: {
-		type: GraphQLString,
-		description: "from_id",
-	},
-	gauze__relationship__to_type: {
-		type: GraphQLString,
-		description: "to",
-	},
-	gauze__relationship__to_id: {
-		type: GraphQLString,
-		description: "to_id",
-	},
-};
-*/
 
 const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE = create_fields_array(ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE);
 

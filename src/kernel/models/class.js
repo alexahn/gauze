@@ -25,7 +25,6 @@ class Model {
 		var self = this;
 		return Object.keys(self.fields).reduce(function (previous_field_result, key) {
 			const field = self.fields[key];
-			console.log("field", field, reducers);
 			return field[reducers].reduce(function (previous_reducer_result, next_reducer) {
 				return next_reducer[method](previous_reducer_result, method);
 			}, previous_field_result);
