@@ -8,6 +8,7 @@ import child_process from "child_process";
 
 const __FILEDIR = import.meta.dirname;
 const GAUZE_BASE_DIR = path.resolve(__FILEDIR, "../../");
+const GAUZE_ROOT_DIR = path.resolve(__FILEDIR, "../../../");
 
 class GauzeManager {
 	// note: config takes the command argv structure (src/command/commands/create/project.js)
@@ -142,7 +143,7 @@ class GauzeManager {
 	create_project(project_dir) {
 		const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), project_dir);
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/manager_create_project");
-		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR}`;
+		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_ROOT_DIR} ${GAUZE_PROJECT_DIR}`;
 		return this.execute(COMMAND).catch(function (err) {
 			// do something here
 		});
