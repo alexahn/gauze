@@ -5,48 +5,40 @@ set -e
 # delete entity2
 npx gauze delete entity ./src ./gauze/entity2.js
 # use stage3 schema
-cp ./src/kernel/src/schemas/database/stage3.js ./src/database/interfaces/graphql/schema.js
-cp ./src/kernel/src/schemas/system/stage3.js ./src/system/interfaces/graphql/schema.js
+cp -r ./src/kernel/src/stages/stage3/* ./src/
 
 # delete entity1
 npx gauze delete entity ./src ./gauze/entity1.js
 # use stage2 schema
-cp ./src/kernel/src/schemas/database/stage2.js ./src/database/interfaces/graphql/schema.js
-cp ./src/kernel/src/schemas/system/stage2.js ./src/system/interfaces/graphql/schema.js
+cp -r ./src/kernel/src/stages/stage2/* ./src/
 
 # delete whitelist
 npx gauze delete gauze ./src ./gauze/whitelist.js
 # use stage1 schema
-cp ./src/kernel/src/schemas/database/stage1.js ./src/database/interfaces/graphql/schema.js
-cp ./src/kernel/src/schemas/system/stage1.js ./src/system/interfaces/graphql/schema.js
+cp -r ./src/kernel/src/stages/stage1/* ./src/
 
 # delete relationship
 npx gauze delete gauze ./src ./gauze/relationship.js
 # use stage0 schema
-cp ./src/kernel/src/schemas/database/stage.js ./src/database/interfaces/graphql/schema.js
-cp ./src/kernel/src/schemas/system/stage.js ./src/system/interfaces/graphql/schema.js
+cp -r ./src/kernel/src/stages/stage0/* ./src/
 
 # create relationship
 npx gauze create gauze ./src ./gauze/relationship.js
 # use stage1 schema
-cp ./src/kernel/src/schemas/database/stage1.js ./src/database/interfaces/graphql/schema.js
-cp ./src/kernel/src/schemas/system/stage1.js ./src/system/interfaces/graphql/schema.js
+cp -r ./src/kernel/src/stages/stage1/* ./src/
 
 # create whitelist
 npx gauze create gauze ./src ./gauze/whitelist.js
 # use stage2 schema
-cp ./src/kernel/src/schemas/database/stage2.js ./src/database/interfaces/graphql/schema.js
-cp ./src/kernel/src/schemas/system/stage2.js ./src/system/interfaces/graphql/schema.js
+cp -r ./src/kernel/src/stages/stage2/* ./src/
 
 # create entity1
 npx gauze create gauze ./src ./gauze/entity1.js
 # use stage3 schema
-cp ./src/kernel/src/schemas/database/stage3.js ./src/database/interfaces/graphql/schema.js
-cp ./src/kernel/src/schemas/system/stage3.js ./src/system/interfaces/graphql/schema.js
+cp -r ./src/kernel/src/stages/stage3/* ./src/
 
 # create entity2
 npx gauze create gauze ./src ./gauze/entity2.js
 # use stage4 schema
-cp ./src/kernel/src/schemas/database/stage4.js ./src/database/interfaces/graphql/schema.js
-cp ./src/kernel/src/schemas/system/stage4.js ./src/system/interfaces/graphql/schema.js
+cp -r ./src/kernel/src/stages/stage4/* ./src/
 
