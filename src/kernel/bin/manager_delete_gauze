@@ -39,6 +39,7 @@ arg3=$(echo "$arg1" | node $gauze_root/src/kernel/bin/format_string.js upper_sna
 # database
 rm $project_root/database/models/$arg1.js
 rm $project_root/database/controllers/$arg1.js
+rm $project_root/database/interfaces/graphql/entities/$arg1.js
 rm $project_root/database/interfaces/graphql/mutations/$arg1.js
 rm $project_root/database/interfaces/graphql/queries/$arg1.js
 rm -rf $project_root/database/interfaces/graphql/operations/$arg1
@@ -46,23 +47,10 @@ rm -rf $project_root/database/interfaces/graphql/operations/$arg1
 # system
 rm $project_root/system/models/$arg1.js
 rm $project_root/system/controllers/$arg1.js
+rm $project_root/system/interfaces/graphql/entities/$arg1.js
 rm $project_root/system/interfaces/graphql/mutations/$arg1.js
 rm $project_root/system/interfaces/graphql/queries/$arg1.js
 
 # structure
 rm -rf $project_root/structure/$arg1
-
-# UNJOIN
-#node $gauze_root/src/kernel/bin/module.js $project_root/database/models/index.js unjoin $arg1 file
-#node $gauze_root/src/kernel/bin/module.js $project_root/database/controllers/index.js unjoin $arg1 file
-#node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/mutations/index.js unjoin $arg1 file
-#node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/queries/index.js unjoin $arg1 file
-#node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/operations/index.js unjoin $arg1 directory
-
-#node $gauze_root/src/kernel/bin/module.js $project_root/system/models/index.js unjoin $arg1 file
-#node $gauze_root/src/kernel/bin/module.js $project_root/system/controllers/index.js unjoin $arg1 file
-#node $gauze_root/src/kernel/bin/module.js $project_root/system/interfaces/graphql/mutations/index.js unjoin $arg1 file
-#node $gauze_root/src/kernel/bin/module.js $project_root/system/interfaces/graphql/queries/index.js unjoin $arg1 file
-
-#node $gauze_root/src/kernel/bin/module.js $project_root/structure/index.js unjoin $arg1 directory
 

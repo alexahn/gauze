@@ -14,6 +14,7 @@ staging=./src/kernel/src/staging
 # database
 cp $src/database/models/$from1.js $staging/database/models/$arg1.js
 cp $src/database/controllers/$from1.js $staging/database/controllers/$arg1.js
+cp $src/database/interfaces/graphql/entities/$from1.js $staging/database/interfaces/graphql/entities/$arg1.js
 cp $src/database/interfaces/graphql/mutations/$from1.js $staging/database/interfaces/graphql/mutations/$arg1.js
 cp $src/database/interfaces/graphql/queries/$from1.js $staging/database/interfaces/graphql/queries/$arg1.js
 mkdir -p $staging/database/interfaces/graphql/operations/$arg1

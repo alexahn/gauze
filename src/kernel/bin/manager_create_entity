@@ -50,8 +50,10 @@ find $staging -type f -name '*.graphql' -exec sed -i '' "s/cd637bc32c364580be5cc
 # database
 cp $staging/database/models/entity.js $project_root/database/models/$arg1.js
 cp $staging/database/controllers/entity.js $project_root/database/controllers/$arg1.js
+cp $staging/database/interfaces/graphql/entities/entity.js $project_root/database/interfaces/graphql/entities/$arg1.js
 cp $staging/database/interfaces/graphql/mutations/entity.js $project_root/database/interfaces/graphql/mutations/$arg1.js
 cp $staging/database/interfaces/graphql/queries/entity.js $project_root/database/interfaces/graphql/queries/$arg1.js
+
 mkdir -p $project_root/database/interfaces/graphql/operations/$arg1
 cp $staging/database/interfaces/graphql/operations/entity/index.js $project_root/database/interfaces/graphql/operations/$arg1/index.js
 cp $staging/database/interfaces/graphql/operations/entity/read.graphql $project_root/database/interfaces/graphql/operations/$arg1/read.graphql
@@ -62,6 +64,7 @@ cp $staging/database/interfaces/graphql/operations/entity/delete.graphql $projec
 # system
 cp $staging/system/models/entity.js $project_root/system/models/$arg1.js
 cp $staging/system/controllers/entity.js $project_root/system/controllers/$arg1.js
+cp $staging/system/interfaces/graphql/entities/entity.js $project_root/system/interfaces/graphql/entities/$arg1.js
 cp $staging/system/interfaces/graphql/mutations/entity.js $project_root/system/interfaces/graphql/mutations/$arg1.js
 cp $staging/system/interfaces/graphql/queries/entity.js $project_root/system/interfaces/graphql/queries/$arg1.js
 
@@ -77,17 +80,3 @@ cp $staging/structure/entity/system/graphql.js $project_root/structure/$arg1/sys
 cp $staging/structure/entity/system/index.js $project_root/structure/$arg1/system/index.js
 
 rm -rf $staging
-
-# JOIN
-#node $gauze_root/src/kernel/bin/module.js $project_root/database/models/index.js join $arg1 file
-#node $gauze_root/src/kernel/bin/module.js $project_root/database/controllers/index.js join $arg1 file
-#node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/mutations/index.js join $arg1 file
-#node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/queries/index.js join $arg1 file
-#node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/operations/index.js join $arg1 directory
-
-#node $gauze_root/src/kernel/bin/module.js $project_root/system/models/index.js join $arg1 file
-#node $gauze_root/src/kernel/bin/module.js $project_root/system/controllers/index.js join $arg1 file
-#node $gauze_root/src/kernel/bin/module.js $project_root/system/interfaces/graphql/mutations/index.js join $arg1 file
-#node $gauze_root/src/kernel/bin/module.js $project_root/system/interfaces/graphql/queries/index.js join $arg1 file
-
-#node $gauze_root/src/kernel/bin/module.js $project_root/structure/index.js join $arg1 directory

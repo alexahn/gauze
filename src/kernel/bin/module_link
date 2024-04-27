@@ -51,6 +51,7 @@ node $gauze_root/src/kernel/bin/module.js $project_root/abstract/entities/index.
 
 node $gauze_root/src/kernel/bin/module.js $project_root/database/models/index.js join $arg1 file
 node $gauze_root/src/kernel/bin/module.js $project_root/database/controllers/index.js join $arg1 file
+node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/entities/index.js join $arg1 file
 node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/mutations/index.js join $arg1 file
 node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/queries/index.js join $arg1 file
 node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/operations/index.js join $arg1 directory

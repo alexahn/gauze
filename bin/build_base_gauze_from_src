@@ -14,6 +14,7 @@ base=./src/kernel/src/base
 # database
 cp $src/database/models/$from1.js $base/database/models/$arg1.js
 cp $src/database/controllers/$from1.js $base/database/controllers/$arg1.js
+cp $src/database/interfaces/graphql/entities/$from1.js $base/database/interfaces/graphql/entities/$arg1.js
 cp $src/database/interfaces/graphql/mutations/$from1.js $base/database/interfaces/graphql/mutations/$arg1.js
 cp $src/database/interfaces/graphql/queries/$from1.js $base/database/interfaces/graphql/queries/$arg1.js
 mkdir -p $base/database/interfaces/graphql/operations/$arg1
