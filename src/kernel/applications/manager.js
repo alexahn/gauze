@@ -200,7 +200,7 @@ class GauzeManager {
 		return self
 			.read_entity_config(ENTITY_CONFIG_FILE)
 			.then(function (entity) {
-				const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), dir);
+				const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), project_dir);
 				const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./src/kernel/bin/manager_delete_gauze");
 				const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${entity.name}`;
 				return self.execute(COMMAND).then(function () {
