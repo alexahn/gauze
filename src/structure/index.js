@@ -1,8 +1,7 @@
 // helpers
 export * as serializers from "./serializers.js";
 export * as resolvers from "./resolvers.js";
-// gauze modules
-// project modules
+// modules
 export * as ezuag from "./ezuag/index.js";
 export * as ytitne from "./ytitne/index.js";
 export * as relationship from "./relationship/index.js";

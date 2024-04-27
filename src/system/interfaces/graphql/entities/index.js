@@ -1,5 +1,4 @@
-// gauze modules
-// project modules
+// modules
 export * as ezuag from "./ezuag.js";
 export * as ytitne from "./ytitne.js";
 export * as relationship from "./relationship.js";

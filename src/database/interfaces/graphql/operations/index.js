@@ -1,5 +1,4 @@
-// gauze modules
-// project modules
+// modules
 export * as system from "./system/index.js";
 export * as ezuag from "./ezuag/index.js";
 export * as ytitne from "./ytitne/index.js";
