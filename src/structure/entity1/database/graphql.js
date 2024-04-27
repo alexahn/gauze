@@ -109,7 +109,7 @@ const FIELDS__GRAPHQL__DATABASE__ENTITY1__STRUCTURE = {
 
 const QUERY__GRAPHQL__DATABASE__ENTITY1__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity1_Query",
-	description: "Entity 1",
+	description: "Entity1 Query",
 	fields: () => ({
 		_metadata: FIELDS__GRAPHQL__DATABASE__ENTITY1__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__DATABASE__ENTITY1__STRUCTURE.attributes,
@@ -126,7 +126,7 @@ const QUERY__GRAPHQL__DATABASE__ENTITY1__STRUCTURE = new $abstract.gauze.types.g
 
 const MUTATION__GRAPHQL__DATABASE__ENTITY1__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity1_Mutation",
-	description: "Entity 1",
+	description: "Entity1 Mutation",
 	fields: () => ({
 		_metadata: FIELDS__GRAPHQL__DATABASE__ENTITY1__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__DATABASE__ENTITY1__STRUCTURE.attributes,
