@@ -1,25 +1,35 @@
 import { GraphQLSchema, GraphQLObjectType } from "graphql";
 
-import * as $structure from "./../../../structure/index.js"
+import * as $structure from "./../../../structure/index.js";
 
 import { DATABASE_RELATIONSHIP_STRUCTURE } from "./../../../structure/relationships.js";
 
-// queries
+// relationship
 import { READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE } from "./queries/relationship.js";
-import { READ__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE } from "./queries/entity1.js";
-import { READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__DATABASE } from "./queries/entity2.js";
-
-// mutations
 import {
 	CREATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 	UPDATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 	DELETE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 } from "./mutations/relationship.js";
+
+// whitelist
+import { READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE } from "./queries/whitelist.js";
+import {
+	CREATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+	UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+	DELETE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+} from "./mutations/whitelist.js";
+
+// entity1
+import { READ__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE } from "./queries/entity1.js";
 import {
 	CREATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 	UPDATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 	DELETE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 } from "./mutations/entity1.js";
+
+// entity2
+import { READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__DATABASE } from "./queries/entity2.js";
 import {
 	CREATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 	UPDATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -32,6 +42,12 @@ const ENTITIES = {
 		mutation_relationships: null,
 		query_query: $structure.relationship.database.graphql.QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE,
 		mutation_mutation: $structure.relationship.database.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE,
+	},
+	[$structure.whitelist.database.graphql.TYPE__GRAPHQL__DATABASE__WHITELIST__STRUCTURE]: {
+		query_relationships: null,
+		mutation_relationships: null,
+		query_query: $structure.whitelist.database.graphql.QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
+		mutation_mutation: $structure.whitelist.database.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 	},
 	[$structure.entity1.database.graphql.TYPE__GRAPHQL__DATABASE__ENTITY1__STRUCTURE]: {
 		query_relationships: $structure.entity1.database.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__ENTITY1__STRUCTURE,
@@ -56,6 +72,16 @@ const METHODS = {
 			create_relationship: CREATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 			update_relationship: UPDATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 			delete_relationship: DELETE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+	},
+	[$structure.whitelist.database.graphql.TYPE__GRAPHQL__DATABASE__WHITELIST__STRUCTURE]: {
+		query: {
+			read_whitelist: READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		mutation: {
+			create_whitelist: CREATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			update_whitelist: UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			delete_whitelist: DELETE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 	},
 	[$structure.entity1.database.graphql.TYPE__GRAPHQL__DATABASE__ENTITY1__STRUCTURE]: {
