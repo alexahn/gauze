@@ -1,26 +1,8 @@
 import { GraphQLSchema, GraphQLObjectType } from "graphql";
 
-import { SYSTEM_RELATIONSHIP_STRUCTURE } from "./../../../structure/relationships.js";
+import * as $structure from "./../../../structure/index.js"
 
-import {
-	TYPE__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
-	QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
-	MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
-} from "./../../../structure/relationship/system/graphql.js";
-import {
-	TYPE__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
-	QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
-	MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
-	QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
-	MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
-} from "./../../../structure/entity1/system/graphql.js";
-import {
-	TYPE__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
-	QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
-	MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
-	QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
-	MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
-} from "./../../../structure/entity2/system/graphql.js";
+import { SYSTEM_RELATIONSHIP_STRUCTURE } from "./../../../structure/relationships.js";
 
 // queries
 import { READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM } from "./queries/relationship.js";
@@ -45,28 +27,28 @@ import {
 } from "./mutations/entity2.js";
 
 const ENTITIES = {
-	[TYPE__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE]: {
+	[$structure.relationship.system.graphql.TYPE__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE]: {
 		query_relationships: null,
 		mutation_relationships: null,
-		query_query: QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
-		mutation_mutation: MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
+		query_query: $structure.relationship.system.graphql.QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
+		mutation_mutation: $structure.relationship.system.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
 	},
-	[TYPE__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE]: {
-		query_relationships: QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
-		mutation_relationships: MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
-		query_query: QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
-		mutation_mutation: MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
+	[$structure.entity1.system.graphql.TYPE__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE]: {
+		query_relationships: $structure.entity1.system.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
+		mutation_relationships: $structure.entity1.system.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
+		query_query: $structure.entity1.system.graphql.QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
+		mutation_mutation: $structure.entity1.system.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
 	},
-	[TYPE__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE]: {
-		query_relationships: QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
-		mutation_relationships: MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
-		query_query: QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
-		mutation_mutation: MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
+	[$structure.entity2.system.graphql.TYPE__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE]: {
+		query_relationships: $structure.entity2.system.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
+		mutation_relationships: $structure.entity2.system.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
+		query_query: $structure.entity2.system.graphql.QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
+		mutation_mutation: $structure.entity2.system.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
 	},
 };
 
 const METHODS = {
-	[TYPE__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE]: {
+	[$structure.relationship.system.graphql.TYPE__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE]: {
 		query: {
 			read_relationship: READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
@@ -76,7 +58,7 @@ const METHODS = {
 			delete_relationship: DELETE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 	},
-	[TYPE__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE]: {
+	[$structure.entity1.system.graphql.TYPE__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE]: {
 		query: {
 			read_entity1: READ__ENTITY1__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
@@ -86,7 +68,7 @@ const METHODS = {
 			delete_entity1: DELETE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 	},
-	[TYPE__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE]: {
+	[$structure.entity2.system.graphql.TYPE__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE]: {
 		query: {
 			read_entity2: READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
