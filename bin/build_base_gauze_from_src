@@ -1,8 +1,8 @@
 #!/bin/zsh
 
-from1="relationship"
-from2="Relationship"
-from3="RELATIONSHIP"
+from1="ezuag"
+from2="Ezuag"
+from3="EZUAG"
 
 arg1="gauze"
 arg2="Gauze"

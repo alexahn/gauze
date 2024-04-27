@@ -1,8 +1,8 @@
 #!/bin/zsh
 
-from1="entity1"
-from2="Entity1"
-from3="ENTITY1"
+from1="ytitne"
+from2="Ytitne"
+from3="YTITNE"
 
 arg1="entity"
 arg2="Entity"
