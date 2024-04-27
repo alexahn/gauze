@@ -1,3 +1,4 @@
+export * as abstract from "./abstract/index.js";
 export * as structure from "./structure/index.js";
 export * as kernel from "./kernel/index.js";
 export * as database from "./database/index.js";

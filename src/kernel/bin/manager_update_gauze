@@ -72,7 +72,6 @@ mkdir -p $project_root/structure/$arg1/system
 cp $staging/structure/gauze/database/graphql.js $project_root/structure/$arg1/database/graphql.js
 cp $staging/structure/gauze/database/index.js $project_root/structure/$arg1/database/index.js
 cp $staging/structure/gauze/database/sql.js $project_root/structure/$arg1/database/sql.js
-cp $staging/structure/gauze/abstract.js $project_root/structure/$arg1/abstract.js
 cp $staging/structure/gauze/index.js $project_root/structure/$arg1/index.js
 cp $staging/structure/gauze/system/graphql.js $project_root/structure/$arg1/system/graphql.js
 cp $staging/structure/gauze/system/index.js $project_root/structure/$arg1/system/index.js

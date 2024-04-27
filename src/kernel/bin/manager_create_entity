@@ -70,7 +70,6 @@ mkdir -p $project_root/structure/$arg1
 mkdir -p $project_root/structure/$arg1/database
 mkdir -p $project_root/structure/$arg1/system
 cp $staging/structure/entity/index.js $project_root/structure/$arg1/index.js
-cp $staging/structure/entity/abstract.js $project_root/structure/$arg1/abstract.js
 cp $staging/structure/entity/database/graphql.js $project_root/structure/$arg1/database/graphql.js
 cp $staging/structure/entity/database/index.js $project_root/structure/$arg1/database/index.js
 cp $staging/structure/entity/database/sql.js $project_root/structure/$arg1/database/sql.js
@@ -80,15 +79,15 @@ cp $staging/structure/entity/system/index.js $project_root/structure/$arg1/syste
 rm -rf $staging
 
 # JOIN
-node $gauze_root/src/kernel/bin/module.js $project_root/database/models/index.js join $arg1 file
-node $gauze_root/src/kernel/bin/module.js $project_root/database/controllers/index.js join $arg1 file
-node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/mutations/index.js join $arg1 file
-node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/queries/index.js join $arg1 file
-node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/operations/index.js join $arg1 directory
+#node $gauze_root/src/kernel/bin/module.js $project_root/database/models/index.js join $arg1 file
+#node $gauze_root/src/kernel/bin/module.js $project_root/database/controllers/index.js join $arg1 file
+#node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/mutations/index.js join $arg1 file
+#node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/queries/index.js join $arg1 file
+#node $gauze_root/src/kernel/bin/module.js $project_root/database/interfaces/graphql/operations/index.js join $arg1 directory
 
-node $gauze_root/src/kernel/bin/module.js $project_root/system/models/index.js join $arg1 file
-node $gauze_root/src/kernel/bin/module.js $project_root/system/controllers/index.js join $arg1 file
-node $gauze_root/src/kernel/bin/module.js $project_root/system/interfaces/graphql/mutations/index.js join $arg1 file
-node $gauze_root/src/kernel/bin/module.js $project_root/system/interfaces/graphql/queries/index.js join $arg1 file
+#node $gauze_root/src/kernel/bin/module.js $project_root/system/models/index.js join $arg1 file
+#node $gauze_root/src/kernel/bin/module.js $project_root/system/controllers/index.js join $arg1 file
+#node $gauze_root/src/kernel/bin/module.js $project_root/system/interfaces/graphql/mutations/index.js join $arg1 file
+#node $gauze_root/src/kernel/bin/module.js $project_root/system/interfaces/graphql/queries/index.js join $arg1 file
 
-node $gauze_root/src/kernel/bin/module.js $project_root/structure/index.js join $arg1 directory
+#node $gauze_root/src/kernel/bin/module.js $project_root/structure/index.js join $arg1 directory
