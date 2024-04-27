@@ -47,7 +47,7 @@ rm -rf $project_root/database/interfaces/graphql/operations/$arg1
 # system
 rm $project_root/system/models/$arg1.js
 rm $project_root/system/controllers/$arg1.js
-rm $project_root/system/interfaces/graphql/entities/$arg1.j
+rm $project_root/system/interfaces/graphql/entities/$arg1.js
 rm $project_root/system/interfaces/graphql/mutations/$arg1.js
 rm $project_root/system/interfaces/graphql/queries/$arg1.js
 
