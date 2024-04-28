@@ -20,3 +20,12 @@ cp ./src/kernel/src/migrations/whitelist.js ./src/database/migrations/0000000000
 cp ./src/kernel/src/migrations/blacklist.js ./src/database/migrations/00000000000005_blacklist.js
 cp ./src/kernel/src/migrations/entity1.js ./src/database/migrations/00000000000006_entity1.js
 cp ./src/kernel/src/migrations/entity2.js ./src/database/migrations/00000000000007_entity2.js
+
+# base seeds
+cp ./src/kernel/src/seeds/ezuag.js ./src/database/seeds/ezuag.js
+cp ./src/kernel/src/seeds/ytitne.js ./src/database/seeds/ytitne.js
+cp ./src/kernel/src/seeds/relationship.js ./src/database/seeds/relationship.js
+# cp ./src/kernel/src/seeds/whitelist.js ./src/database/seeds/whitelist.js
+# cp ./src/kernel/src/seeds/blacklist.js ./src/database/seeds/blacklist.js
+cp ./src/kernel/src/seeds/entity1.js ./src/database/seeds/entity1.js
+cp ./src/kernel/src/seeds/entity2.js ./src/database/seeds/entity2.js
