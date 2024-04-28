@@ -24,57 +24,61 @@ class SystemController extends Controller {
 		const self = this;
 		return SystemController._class_name(self.model_name);
 	}
-	create({ user, source, database, transaction }, input) {
+	_create(context, input) {
 		const self = this;
-		const context = {
+		const { user, source, database, transaction } = context;
+		const model_context = {
 			source,
 			database,
 			transaction,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.create:enter`, "input", input);
-		return this.model.create(context, input).then(function (rows) {
+		return self.model.create(model_context, input).then(function (rows) {
 			return rows.map(function (row) {
 				return self.model.deserialize(row, "create");
 			});
 		});
 	}
-	read({ user, source, database, transaction }, input) {
+	_read(context, input) {
 		const self = this;
-		const context = {
+		const { user, source, database, transaction } = context;
+		const model_context = {
 			source,
 			database,
 			transaction,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.read:enter`, "input", input);
-		return this.model.read(context, input).then(function (rows) {
+		return self.model.read(model_context, input).then(function (rows) {
 			return rows.map(function (row) {
 				return self.model.deserialize(row, "read");
 			});
 		});
 	}
-	update({ user, source, database, transaction }, input) {
+	_update(context, input) {
 		const self = this;
-		const context = {
+		const { user, source, database, transaction } = context;
+		const model_context = {
 			source,
 			database,
 			transaction,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.update:enter`, "input", input);
-		return this.model.update(context, input).then(function (rows) {
+		return self.model.update(model_context, input).then(function (rows) {
 			return rows.map(function (row) {
 				return self.model.deserialize(row, "update");
 			});
 		});
 	}
-	delete({ user, source, database, transaction }, input) {
+	_delete(context, input) {
 		const self = this;
-		const context = {
+		const { user, source, database, transaction } = context;
+		const model_context = {
 			source,
 			database,
 			transaction,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.delete:enter`, "input", input);
-		return this.model.delete(context, input).then(function (rows) {
+		return self.model.delete(model_context, input).then(function (rows) {
 			return rows.map(function (row) {
 				return self.model.deserialize(row, "delete");
 			});
