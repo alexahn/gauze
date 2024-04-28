@@ -239,9 +239,9 @@
 [x] set up migrations for ezuag and ytitne
 [x] set up seed data for ezuag and ytitne
 [ ] validate id field to ensure uuid structure
-[ ] merge system models into one (there is no reason to have multiple)
+[x] merge system models into one (there is no reason to have multiple)
 [ ] naming convention refactor (update according to all rules)
 	[ ] double underscore for module namespacing hierarchy
-[ ] rename all kernel model methods to be underscore prefixed
-	[ ] refactor database models so that they have create, read, update, delete methods that proxy to the kernel method
-		[ ] allows for people to extend the models however they want, while preserving core internal logic
+[x] rename all kernel model methods to be underscore prefixed
+	[x] refactor database models so that they have create, read, update, delete methods that proxy to the kernel method
+		[x] allows for people to extend the models however they want, while preserving core internal logic
