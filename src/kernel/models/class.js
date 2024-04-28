@@ -3,8 +3,9 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
-import * as $kernel from "./../../kernel/index.js";
 import * as $structure from "./../../structure/index.js";
+
+import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
 
 // base model handles middlewares, serializers, and deserializers based on the abstract entity definition
 class Model {
@@ -13,7 +14,7 @@ class Model {
 		this.entity_name = name;
 		this.fields = fields;
 		this.name = this.__name();
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
 	}
 	__name() {
 		return this.constructor.name;
@@ -35,10 +36,10 @@ class Model {
 	}
 	serialize(attributes, method) {
 		const self = this;
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.serialize:enter`, "attributes", attributes);
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.serialize:enter`, "method", method);
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.serialize:enter`, "attributes", attributes);
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.serialize:enter`, "method", method);
 		attributes = self.reduce_fields(attributes, method, "serializers");
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.deserialize:exit`, "attributes", attributes);
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.deserialize:exit`, "attributes", attributes);
 		return attributes;
 	}
 	post_serialize_middleware(attributes, method) {
@@ -52,9 +53,9 @@ class Model {
 	}
 	deserialize(row, method) {
 		const self = this;
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.deserialize:enter`, "row", row);
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.deserialize:enter`, "row", row);
 		row = self.reduce_fields(row, method, "deserializers");
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.serialize_output:exit`, "row", row);
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.serialize_output:exit`, "row", row);
 		return row;
 	}
 	post_deserialize_middleware(row, method) {
