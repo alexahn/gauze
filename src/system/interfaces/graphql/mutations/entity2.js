@@ -4,20 +4,26 @@ const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
 import * as $abstract from "./../../../../abstract/index.js";
-import * as $kernel from "./../../../../kernel/index.js";
 import * as $structure from "./../../../../structure/index.js";
+import * as $kernel from "./../../../../kernel/index.js";
 
-import { ENTITY2_CONTROLLER_SYSTEM } from "./../../../controllers/entity2.js";
+import { CONTROLLER__ENTITY2__CONTROLLER__SYSTEM } from "./../../../controllers/entity2.js";
 
-const ENTITY2_SERIALIZER = new $structure.serializers.GraphQLSerializer({
+const SERIALIZER__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.entity2.system.graphql.TYPE__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
-	sql_primary_key: $structure.entity2.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY2__STRUCTURE,
+	sql_primary_key: $structure.entity2.database.sql.PRIMARY_KEY__SQL__SYSTEM__ENTITY2__STRUCTURE,
 });
 
-const ENTITY2_MUTATION_ATTRIBUTES = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity2_Mutation__Attributes",
 	description: "Entity2 Mutation Attributes",
 	fields: $structure.entity2.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
+});
+
+const ATTRIBUTES_ARRAY__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Entity2_Mutation__Attributes_Array",
+	description: "Entity2 Mutation Attributes Array",
+	fields: $structure.entity2.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
 });
 
 const CREATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
@@ -25,7 +31,7 @@ const CREATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	args: {
 		attributes: {
 			description: "attributes",
-			type: ENTITY2_MUTATION_ATTRIBUTES,
+			type: ATTRIBUTES__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {
@@ -37,7 +43,7 @@ const CREATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return ENTITY2_CONTROLLER_SYSTEM.create(
+		return CONTROLLER__ENTITY2__CONTROLLER__SYSTEM.create(
 			{
 				source: _source,
 				database: context.database,
@@ -46,7 +52,7 @@ const CREATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "CREATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(ENTITY2_SERIALIZER.serialize);
+			return data.map(SERIALIZER__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
 };
@@ -56,11 +62,19 @@ const UPDATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	args: {
 		where: {
 			description: "where",
-			type: ENTITY2_MUTATION_ATTRIBUTES,
+			type: ATTRIBUTES__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_in: {
+			description: "where in",
+			type: ATTRIBUTES_ARRAY__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_not_in: {
+			description: "where not in",
+			type: ATTRIBUTES_ARRAY__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		attributes: {
 			description: "attributes",
-			type: ENTITY2_MUTATION_ATTRIBUTES,
+			type: ATTRIBUTES__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		limit: {
 			description: "limit",
@@ -92,7 +106,7 @@ const UPDATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return ENTITY2_CONTROLLER_SYSTEM.update(
+		return CONTROLLER__ENTITY2__CONTROLLER__SYSTEM.update(
 			{
 				source: _source,
 				database: context.database,
@@ -101,7 +115,7 @@ const UPDATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "UPDATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(ENTITY2_SERIALIZER.serialize);
+			return data.map(SERIALIZER__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
 };
@@ -111,7 +125,15 @@ const DELETE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	args: {
 		where: {
 			description: "where",
-			type: ENTITY2_MUTATION_ATTRIBUTES,
+			type: ATTRIBUTES__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_in: {
+			description: "where in",
+			type: ATTRIBUTES_ARRAY__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_not_in: {
+			description: "where not in",
+			type: ATTRIBUTES_ARRAY__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		limit: {
 			description: "limit",
@@ -143,7 +165,7 @@ const DELETE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return ENTITY2_CONTROLLER_SYSTEM.delete(
+		return CONTROLLER__ENTITY2__CONTROLLER__SYSTEM.delete(
 			{
 				source: _source,
 				database: context.database,
@@ -152,7 +174,7 @@ const DELETE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "DELETE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(ENTITY2_SERIALIZER.serialize);
+			return data.map(SERIALIZER__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
 };

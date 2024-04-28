@@ -7,26 +7,26 @@ import * as $abstract from "./../../../../abstract/index.js";
 import * as $kernel from "./../../../../kernel/index.js";
 import * as $structure from "./../../../../structure/index.js";
 
-import { ENTITY1_CONTROLLER_DATABASE } from "./../../../controllers/entity1.js";
+import { CONTROLLER__ENTITY1__CONTROLLER__DATABASE } from "./../../../controllers/entity1.js";
 
-const ENTITY1_SERIALIZER = new $structure.serializers.GraphQLSerializer({
+const SERIALIZER__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.entity1.database.graphql.TYPE__GRAPHQL__DATABASE__ENTITY1__STRUCTURE,
 	sql_primary_key: $structure.entity1.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY1__STRUCTURE,
 });
 
-const ENTITY1_PARENT_QUERY_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const PARENT__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity1__Parent",
 	description: "Entity1 Parent",
 	fields: () => $structure.entity1.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__ENTITY1__STRUCTURE,
 });
 
-const ENTITY1_ATTRIBUTES_QUERY_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity1_Query__Attributes",
 	description: "Entity1 Query Attributes",
 	fields: $structure.entity1.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__ENTITY1__STRUCTURE,
 });
 
-const ENTITY1_ATTRIBUTES_ARRAY_QUERY_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES_ARRAY__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity1_Query__Attributes_Array",
 	description: "Entity1 Query Attributes Array",
 	fields: $structure.entity1.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__ENTITY1__STRUCTURE,
@@ -37,19 +37,19 @@ const READ__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	args: {
 		parent: {
 			description: "parent",
-			type: ENTITY1_PARENT_QUERY_INTERFACE_DATABASE,
+			type: PARENT__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where: {
 			description: "where",
-			type: ENTITY1_ATTRIBUTES_QUERY_INTERFACE_DATABASE,
+			type: ATTRIBUTES__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_in: {
 			description: "where in",
-			type: ENTITY1_ATTRIBUTES_ARRAY_QUERY_INTERFACE_DATABASE,
+			type: ATTRIBUTES_ARRAY__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ENTITY1_ATTRIBUTES_ARRAY_QUERY_INTERFACE_DATABASE,
+			type: ATTRIBUTES_ARRAY__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",
@@ -75,7 +75,7 @@ const READ__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	resolve: (_source, query_arguments, context) => {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "query_arguments", query_arguments);
-		return ENTITY1_CONTROLLER_DATABASE.read(
+		return CONTROLLER__ENTITY1__CONTROLLER__DATABASE.read(
 			{
 				source: _source,
 				database: context.database,
@@ -84,7 +84,7 @@ const READ__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			query_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "READ__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(ENTITY1_SERIALIZER.serialize);
+			return data.map(SERIALIZER__ENTITY1__QUERY__GRAPHQL__INTERFACE__DATABASE.serialize);
 		});
 	},
 };

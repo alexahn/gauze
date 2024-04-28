@@ -25,14 +25,14 @@ class RelationshipDatabaseModel extends $kernel.models.database.DatabaseModel {
 	}
 }
 
-const RELATIONSHIP_MODEL_DATABASE_ROOT_CONFIG = {
+const ROOT_CONFIG__RELATIONSHIP__MODEL__DATABASE = {
 	entity: $abstract.entities.relationship.default($abstract),
 	entity_name: "$abstract.entities.relationship.default",
 };
-const RELATIONSHIP_MODEL_DATABASE_CONFIG = {
+const CONFIG__RELATIONSHIP__MODEL__DATABASE = {
 	table_name: $structure.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
 	primary_key: $structure.relationship.database.sql.PRIMARY_KEY__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
 };
-const RELATIONSHIP_MODEL_DATABASE = new RelationshipDatabaseModel(RELATIONSHIP_MODEL_DATABASE_ROOT_CONFIG, RELATIONSHIP_MODEL_DATABASE_CONFIG);
+const MODEL__RELATIONSHIP__MODEL__DATABASE = new RelationshipDatabaseModel(ROOT_CONFIG__RELATIONSHIP__MODEL__DATABASE, CONFIG__RELATIONSHIP__MODEL__DATABASE);
 
-export { RELATIONSHIP_MODEL_DATABASE };
+export { MODEL__RELATIONSHIP__MODEL__DATABASE };

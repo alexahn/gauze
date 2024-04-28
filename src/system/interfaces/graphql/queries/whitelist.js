@@ -7,20 +7,26 @@ import * as $abstract from "./../../../../abstract/index.js";
 import * as $kernel from "./../../../../kernel/index.js";
 import * as $structure from "./../../../../structure/index.js";
 
-import { WHITELIST_CONTROLLER_SYSTEM } from "./../../../controllers/whitelist.js";
+import { CONTROLLER__WHITELIST__CONTROLLER__SYSTEM } from "./../../../controllers/whitelist.js";
 
-const WHITELIST_SERIALIZER = new $structure.serializers.GraphQLSerializer({
+const SERIALIZER__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.whitelist.system.graphql.TYPE__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
-	sql_primary_key: $structure.whitelist.database.sql.PRIMARY_KEY__SQL__DATABASE__WHITELIST__STRUCTURE,
+	sql_primary_key: $structure.whitelist.database.sql.PRIMARY_KEY__SQL__SYSTEM__WHITELIST__STRUCTURE,
 });
 
-const WHITELIST_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const PARENT__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Whitelist__Parent",
+	description: "Whitelist Parent",
+	fields: () => $structure.whitelist.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
+});
+
+const ATTRIBUTES__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Query__Attributes",
 	description: "Whitelist Query Attributes",
 	fields: $structure.whitelist.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
 });
 
-const WHITELIST_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Query__Attributes_Array",
 	description: "Whitelist Query Attributes Array",
 	fields: $structure.whitelist.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
@@ -29,17 +35,21 @@ const WHITELIST_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.ty
 const READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.whitelist.system.graphql.QUERY__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE),
 	args: {
+		parent: {
+			description: "parent",
+			type: PARENT__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
 		where: {
 			description: "where",
-			type: WHITELIST_ATTRIBUTES_QUERY_INTERFACE_SYSTEM,
+			type: ATTRIBUTES__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: WHITELIST_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM,
+			type: ATTRIBUTES_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: WHITELIST_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM,
+			type: ATTRIBUTES_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		limit: {
 			description: "limit",
@@ -65,7 +75,7 @@ const READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	resolve: (_source, query_arguments, context) => {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "_source", _source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "query_arguments", query_arguments);
-		return WHITELIST_CONTROLLER_SYSTEM.read(
+		return CONTROLLER__WHITELIST__CONTROLLER__SYSTEM.read(
 			{
 				source: _source,
 				database: context.database,
@@ -74,7 +84,7 @@ const READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 			query_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(WHITELIST_SERIALIZER.serialize);
+			return data.map(SERIALIZER__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
 };

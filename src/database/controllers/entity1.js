@@ -1,6 +1,6 @@
 import * as $kernel from "./../../kernel/index.js";
 
-import { ENTITY1_MODEL_DATABASE } from "./../models/entity1.js";
+import { MODEL__ENTITY1__MODEL__DATABASE } from "./../models/entity1.js";
 
 class Entity1DatabaseController extends $kernel.controllers.database.DatabaseController {
 	constructor(root_config, config) {
@@ -25,11 +25,11 @@ class Entity1DatabaseController extends $kernel.controllers.database.DatabaseCon
 	}
 }
 
-const ENTITY1_CONTROLLER_ROOT_CONFIG = {};
-const ENTITY1_CONTROLLER_DATABASE_CONFIG = {
-	model: ENTITY1_MODEL_DATABASE,
+const ROOT_CONFIG__ENTITY1__CONTROLLER__DATABASE = {};
+const CONFIG__ENTITY1__CONTROLLER__DATABASE = {
+	model: MODEL__ENTITY1__MODEL__DATABASE,
 	model_name: "ENTITY1_MODEL_DATABASE",
 };
-const ENTITY1_CONTROLLER_DATABASE = new Entity1DatabaseController(ENTITY1_CONTROLLER_ROOT_CONFIG, ENTITY1_CONTROLLER_DATABASE_CONFIG);
+const CONTROLLER__ENTITY1__CONTROLLER__DATABASE = new Entity1DatabaseController(ROOT_CONFIG__ENTITY1__CONTROLLER__DATABASE, CONFIG__ENTITY1__CONTROLLER__DATABASE);
 
-export { ENTITY1_CONTROLLER_DATABASE };
+export { CONTROLLER__ENTITY1__CONTROLLER__DATABASE };

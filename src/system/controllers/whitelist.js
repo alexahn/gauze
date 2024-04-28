@@ -1,6 +1,6 @@
 import * as $kernel from "./../../kernel/index.js";
 
-import { WHITELIST_MODEL_SYSTEM } from "./../models/whitelist.js";
+import { MODEL__WHITELIST__MODEL__SYSTEM } from "./../models/whitelist.js";
 
 class WhitelistSystemController extends $kernel.controllers.system.SystemController {
 	constructor(root_config, config) {
@@ -25,11 +25,11 @@ class WhitelistSystemController extends $kernel.controllers.system.SystemControl
 	}
 }
 
-const WHITELIST_CONTROLLER_ROOT_CONFIG = {};
-const WHITELIST_CONTROLLER_SYSTEM_CONFIG = {
-	model: WHITELIST_MODEL_SYSTEM,
-	model_name: "WHITELIST_MODEL_SYSTEM",
+const ROOT_CONFIG__WHITELIST__CONTROLLER__SYSTEM = {};
+const CONFIG__WHITELIST__CONTROLLER__SYSTEM = {
+	model: MODEL__WHITELIST__MODEL__SYSTEM,
+	model_name: "MODEL__WHITELIST__MODEL__SYSTEM",
 };
-const WHITELIST_CONTROLLER_SYSTEM = new WhitelistSystemController(WHITELIST_CONTROLLER_ROOT_CONFIG, WHITELIST_CONTROLLER_SYSTEM_CONFIG);
+const CONTROLLER__WHITELIST__CONTROLLER__SYSTEM = new WhitelistSystemController(ROOT_CONFIG__WHITELIST__CONTROLLER__SYSTEM, CONFIG__WHITELIST__CONTROLLER__SYSTEM);
 
-export { WHITELIST_CONTROLLER_SYSTEM };
+export { CONTROLLER__WHITELIST__CONTROLLER__SYSTEM };

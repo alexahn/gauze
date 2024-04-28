@@ -25,14 +25,14 @@ class Entity2DatabaseModel extends $kernel.models.database.DatabaseModel {
 	}
 }
 
-const ENTITY2_MODEL_DATABASE_ROOT_CONFIG = {
+const ROOT_CONFIG__ENTITY2__MODEL__DATABASE = {
 	entity: $abstract.entities.entity2.default($abstract),
 	entity_name: "$abstract.entities.entity2.default",
 };
-const ENTITY2_MODEL_DATABASE_CONFIG = {
+const CONFIG__ENTITY2__MODEL__DATABASE = {
 	table_name: $structure.entity2.database.sql.TABLE_NAME__SQL__DATABASE__ENTITY2__STRUCTURE,
 	primary_key: $structure.entity2.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY2__STRUCTURE,
 };
-const ENTITY2_MODEL_DATABASE = new Entity2DatabaseModel(ENTITY2_MODEL_DATABASE_ROOT_CONFIG, ENTITY2_MODEL_DATABASE_CONFIG);
+const MODEL__ENTITY2__MODEL__DATABASE = new Entity2DatabaseModel(ROOT_CONFIG__ENTITY2__MODEL__DATABASE, CONFIG__ENTITY2__MODEL__DATABASE);
 
-export { ENTITY2_MODEL_DATABASE };
+export { MODEL__ENTITY2__MODEL__DATABASE };

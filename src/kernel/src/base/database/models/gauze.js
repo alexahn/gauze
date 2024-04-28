@@ -25,17 +25,17 @@ class bb95d174a16f4ddd935ff3a802f7c7bcDatabaseModel extends $kernel.models.datab
 	}
 }
 
-const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE_ROOT_CONFIG = {
+const ROOT_CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__DATABASE = {
 	entity: $abstract.entities.a543731262804f64adcc0eae1a225acc.default($abstract),
 	entity_name: "$abstract.entities.a543731262804f64adcc0eae1a225acc.default",
 };
-const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE_CONFIG = {
+const CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__DATABASE = {
 	table_name: $structure.a543731262804f64adcc0eae1a225acc.database.sql.TABLE_NAME__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 	primary_key: $structure.a543731262804f64adcc0eae1a225acc.database.sql.PRIMARY_KEY__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 };
-const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE = new bb95d174a16f4ddd935ff3a802f7c7bcDatabaseModel(
-	caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE_ROOT_CONFIG,
-	caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE_CONFIG,
+const MODEL__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__DATABASE = new bb95d174a16f4ddd935ff3a802f7c7bcDatabaseModel(
+	ROOT_CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__DATABASE,
+	CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__DATABASE,
 );
 
-export { caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE };
+export { MODEL__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__DATABASE };

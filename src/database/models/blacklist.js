@@ -25,14 +25,14 @@ class BlacklistDatabaseModel extends $kernel.models.database.DatabaseModel {
 	}
 }
 
-const BLACKLIST_MODEL_DATABASE_ROOT_CONFIG = {
+const ROOT_CONFIG__BLACKLIST__MODEL__DATABASE = {
 	entity: $abstract.entities.blacklist.default($abstract),
 	entity_name: "$abstract.entities.blacklist.default",
 };
-const BLACKLIST_MODEL_DATABASE_CONFIG = {
+const CONFIG__BLACKLIST__MODEL__DATABASE = {
 	table_name: $structure.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
 	primary_key: $structure.blacklist.database.sql.PRIMARY_KEY__SQL__DATABASE__BLACKLIST__STRUCTURE,
 };
-const BLACKLIST_MODEL_DATABASE = new BlacklistDatabaseModel(BLACKLIST_MODEL_DATABASE_ROOT_CONFIG, BLACKLIST_MODEL_DATABASE_CONFIG);
+const MODEL__BLACKLIST__MODEL__DATABASE = new BlacklistDatabaseModel(ROOT_CONFIG__BLACKLIST__MODEL__DATABASE, CONFIG__BLACKLIST__MODEL__DATABASE);
 
-export { BLACKLIST_MODEL_DATABASE };
+export { MODEL__BLACKLIST__MODEL__DATABASE };

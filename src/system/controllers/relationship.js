@@ -1,6 +1,6 @@
 import * as $kernel from "./../../kernel/index.js";
 
-import { RELATIONSHIP_MODEL_SYSTEM } from "./../models/relationship.js";
+import { MODEL__RELATIONSHIP__MODEL__SYSTEM } from "./../models/relationship.js";
 
 class RelationshipSystemController extends $kernel.controllers.system.SystemController {
 	constructor(root_config, config) {
@@ -25,11 +25,11 @@ class RelationshipSystemController extends $kernel.controllers.system.SystemCont
 	}
 }
 
-const RELATIONSHIP_CONTROLLER_ROOT_CONFIG = {};
-const RELATIONSHIP_CONTROLLER_SYSTEM_CONFIG = {
-	model: RELATIONSHIP_MODEL_SYSTEM,
-	model_name: "RELATIONSHIP_MODEL_SYSTEM",
+const ROOT_CONFIG__RELATIONSHIP__CONTROLLER__SYSTEM = {};
+const CONFIG__RELATIONSHIP__CONTROLLER__SYSTEM = {
+	model: MODEL__RELATIONSHIP__MODEL__SYSTEM,
+	model_name: "MODEL__RELATIONSHIP__MODEL__SYSTEM",
 };
-const RELATIONSHIP_CONTROLLER_SYSTEM = new RelationshipSystemController(RELATIONSHIP_CONTROLLER_ROOT_CONFIG, RELATIONSHIP_CONTROLLER_SYSTEM_CONFIG);
+const CONTROLLER__RELATIONSHIP__CONTROLLER__SYSTEM = new RelationshipSystemController(ROOT_CONFIG__RELATIONSHIP__CONTROLLER__SYSTEM, CONFIG__RELATIONSHIP__CONTROLLER__SYSTEM);
 
-export { RELATIONSHIP_CONTROLLER_SYSTEM };
+export { CONTROLLER__RELATIONSHIP__CONTROLLER__SYSTEM };

@@ -7,20 +7,26 @@ import * as $abstract from "./../../../../abstract/index.js";
 import * as $kernel from "./../../../../kernel/index.js";
 import * as $structure from "./../../../../structure/index.js";
 
-import { RELATIONSHIP_CONTROLLER_SYSTEM } from "./../../../controllers/relationship.js";
+import { CONTROLLER__RELATIONSHIP__CONTROLLER__SYSTEM } from "./../../../controllers/relationship.js";
 
-const RELATIONSHIP_SERIALIZER = new $structure.serializers.GraphQLSerializer({
+const SERIALIZER__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.relationship.system.graphql.TYPE__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
-	sql_primary_key: $structure.relationship.database.sql.PRIMARY_KEY__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
+	sql_primary_key: $structure.relationship.database.sql.PRIMARY_KEY__SQL__SYSTEM__RELATIONSHIP__STRUCTURE,
 });
 
-const RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const PARENT__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Relationship__Parent",
+	description: "Relationship Parent",
+	fields: () => $structure.relationship.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
+});
+
+const ATTRIBUTES__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Relationship_Query__Attributes",
 	description: "Relationship Query Attributes",
 	fields: $structure.relationship.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
 });
 
-const RELATIONSHIP_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES_ARRAY__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Relationship_Query__Attributes_Array",
 	description: "Relationship Query Attributes Array",
 	fields: $structure.relationship.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
@@ -29,17 +35,21 @@ const RELATIONSHIP_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM = new $abstract.gauze
 const READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.relationship.system.graphql.QUERY__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE),
 	args: {
+		parent: {
+			description: "parent",
+			type: PARENT__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
 		where: {
 			description: "where",
-			type: RELATIONSHIP_ATTRIBUTES_QUERY_INTERFACE_SYSTEM,
+			type: ATTRIBUTES__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: RELATIONSHIP_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM,
+			type: ATTRIBUTES_ARRAY__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: RELATIONSHIP_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM,
+			type: ATTRIBUTES_ARRAY__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		limit: {
 			description: "limit",
@@ -71,7 +81,7 @@ const READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 			"query_arguments",
 			query_arguments,
 		);
-		return RELATIONSHIP_CONTROLLER_SYSTEM.read(
+		return CONTROLLER__RELATIONSHIP__CONTROLLER__SYSTEM.read(
 			{
 				source: _source,
 				database: context.database,
@@ -80,7 +90,7 @@ const READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 			query_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(RELATIONSHIP_SERIALIZER.serialize);
+			return data.map(SERIALIZER__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
 };

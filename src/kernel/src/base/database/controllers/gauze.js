@@ -1,6 +1,6 @@
 import * as $kernel from "./../../kernel/index.js";
 
-import { caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE } from "./../models/a543731262804f64adcc0eae1a225acc.js";
+import { MODEL__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__DATABASE } from "./../models/a543731262804f64adcc0eae1a225acc.js";
 
 class bb95d174a16f4ddd935ff3a802f7c7bcDatabaseController extends $kernel.controllers.database.DatabaseController {
 	constructor(root_config, config) {
@@ -25,14 +25,14 @@ class bb95d174a16f4ddd935ff3a802f7c7bcDatabaseController extends $kernel.control
 	}
 }
 
-const caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_ROOT_CONFIG = {};
-const caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_DATABASE_CONFIG = {
-	model: caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE,
+const ROOT_CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE = {};
+const CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE = {
+	model: MODEL__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__DATABASE,
 	model_name: "caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE",
 };
-const caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_DATABASE = new bb95d174a16f4ddd935ff3a802f7c7bcDatabaseController(
-	caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_ROOT_CONFIG,
-	caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_DATABASE_CONFIG,
+const CONTROLLER__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE = new bb95d174a16f4ddd935ff3a802f7c7bcDatabaseController(
+	ROOT_CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE,
+	CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE,
 );
 
-export { caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_DATABASE };
+export { CONTROLLER__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE };

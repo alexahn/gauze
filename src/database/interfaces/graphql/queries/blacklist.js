@@ -7,26 +7,26 @@ import * as $abstract from "./../../../../abstract/index.js";
 import * as $kernel from "./../../../../kernel/index.js";
 import * as $structure from "./../../../../structure/index.js";
 
-import { BLACKLIST_CONTROLLER_DATABASE } from "./../../../controllers/blacklist.js";
+import { CONTROLLER__BLACKLIST__CONTROLLER__DATABASE } from "./../../../controllers/blacklist.js";
 
-const BLACKLIST_SERIALIZER = new $structure.serializers.GraphQLSerializer({
+const SERIALIZER__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.blacklist.database.graphql.TYPE__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
 	sql_primary_key: $structure.blacklist.database.sql.PRIMARY_KEY__SQL__DATABASE__BLACKLIST__STRUCTURE,
 });
 
-const BLACKLIST_PARENT_QUERY_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const PARENT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Blacklist__Parent",
 	description: "Blacklist Parent",
 	fields: () => $structure.blacklist.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
 });
 
-const BLACKLIST_ATTRIBUTES_QUERY_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Blacklist_Query__Attributes",
 	description: "Blacklist Query Attributes",
 	fields: $structure.blacklist.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
 });
 
-const BLACKLIST_ATTRIBUTES_ARRAY_QUERY_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES_ARRAY__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Blacklist_Query__Attributes_Array",
 	description: "Blacklist Query Attributes Array",
 	fields: $structure.blacklist.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
@@ -37,19 +37,19 @@ const READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	args: {
 		parent: {
 			description: "parent",
-			type: BLACKLIST_PARENT_QUERY_INTERFACE_DATABASE,
+			type: PARENT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where: {
 			description: "where",
-			type: BLACKLIST_ATTRIBUTES_QUERY_INTERFACE_DATABASE,
+			type: ATTRIBUTES__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_in: {
 			description: "where in",
-			type: BLACKLIST_ATTRIBUTES_ARRAY_QUERY_INTERFACE_DATABASE,
+			type: ATTRIBUTES_ARRAY__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: BLACKLIST_ATTRIBUTES_ARRAY_QUERY_INTERFACE_DATABASE,
+			type: ATTRIBUTES_ARRAY__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",
@@ -81,7 +81,7 @@ const READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			"query_arguments",
 			query_arguments,
 		);
-		return BLACKLIST_CONTROLLER_DATABASE.read(
+		return CONTROLLER__BLACKLIST__CONTROLLER__DATABASE.read(
 			{
 				source: _source,
 				database: context.database,
@@ -90,7 +90,7 @@ const READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			query_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(BLACKLIST_SERIALIZER.serialize);
+			return data.map(SERIALIZER__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE.serialize);
 		});
 	},
 };

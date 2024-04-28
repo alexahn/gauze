@@ -7,20 +7,26 @@ import * as $abstract from "./../../../../abstract/index.js";
 import * as $kernel from "./../../../../kernel/index.js";
 import * as $structure from "./../../../../structure/index.js";
 
-import { ENTITY2_CONTROLLER_SYSTEM } from "./../../../controllers/entity2.js";
+import { CONTROLLER__ENTITY2__CONTROLLER__SYSTEM } from "./../../../controllers/entity2.js";
 
-const ENTITY2_SERIALIZER = new $structure.serializers.GraphQLSerializer({
+const SERIALIZER__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.entity2.system.graphql.TYPE__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
-	sql_primary_key: $structure.entity2.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY2__STRUCTURE,
+	sql_primary_key: $structure.entity2.database.sql.PRIMARY_KEY__SQL__SYSTEM__ENTITY2__STRUCTURE,
 });
 
-const ENTITY2_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const PARENT__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Entity2__Parent",
+	description: "Entity2 Parent",
+	fields: () => $structure.entity2.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
+});
+
+const ATTRIBUTES__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity2_Query__Attributes",
 	description: "Entity2 Query Attributes",
 	fields: $structure.entity2.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
 });
 
-const ENTITY2_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES_ARRAY__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity2_Query__Attributes_Array",
 	description: "Entity2 Query Attributes Array",
 	fields: $structure.entity2.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
@@ -29,17 +35,21 @@ const ENTITY2_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.type
 const READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entity2.system.graphql.QUERY__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE),
 	args: {
+		parent: {
+			description: "parent",
+			type: PARENT__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
 		where: {
 			description: "where",
-			type: ENTITY2_ATTRIBUTES_QUERY_INTERFACE_SYSTEM,
+			type: ATTRIBUTES__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: ENTITY2_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM,
+			type: ATTRIBUTES_ARRAY__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ENTITY2_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM,
+			type: ATTRIBUTES_ARRAY__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		limit: {
 			description: "limit",
@@ -65,7 +75,7 @@ const READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	resolve: (_source, query_arguments, context) => {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "_source", _source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "query_arguments", query_arguments);
-		return ENTITY2_CONTROLLER_SYSTEM.read(
+		return CONTROLLER__ENTITY2__CONTROLLER__SYSTEM.read(
 			{
 				source: _source,
 				database: context.database,
@@ -74,7 +84,7 @@ const READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 			query_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "READ__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(ENTITY2_SERIALIZER.serialize);
+			return data.map(SERIALIZER__ENTITY2__QUERY__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
 };

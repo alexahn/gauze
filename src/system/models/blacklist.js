@@ -3,7 +3,6 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-//class BlacklistSystemModel extends $kernel.models.system.GraphQLOperationSystemModel {
 class BlacklistSystemModel extends $kernel.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
@@ -75,14 +74,14 @@ class BlacklistSystemModel extends $kernel.models.system.SystemModel {
 	}
 }
 
-const BLACKLIST_MODEL_SYSTEM_ROOT_CONFIG = {
+const ROOT_CONFIG__BLACKLIST__MODEL__SYSTEM = {
 	entity: $abstract.entities.blacklist.default($abstract),
 	entity_name: "$abstract.entities.blacklist.default",
 };
-const BLACKLIST_MODEL_SYSTEM_CONFIG = {
+const CONFIG__BLACKLIST__MODEL__SYSTEM = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 };
-const BLACKLIST_MODEL_SYSTEM = new BlacklistSystemModel(BLACKLIST_MODEL_SYSTEM_ROOT_CONFIG, BLACKLIST_MODEL_SYSTEM_CONFIG);
+const MODEL__BLACKLIST__MODEL__SYSTEM = new BlacklistSystemModel(ROOT_CONFIG__BLACKLIST__MODEL__SYSTEM, CONFIG__BLACKLIST__MODEL__SYSTEM);
 
-export { BLACKLIST_MODEL_SYSTEM };
+export { MODEL__BLACKLIST__MODEL__SYSTEM };

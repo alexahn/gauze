@@ -25,14 +25,14 @@ class WhitelistDatabaseModel extends $kernel.models.database.DatabaseModel {
 	}
 }
 
-const WHITELIST_MODEL_DATABASE_ROOT_CONFIG = {
+const ROOT_CONFIG__WHITELIST__MODEL__DATABASE = {
 	entity: $abstract.entities.whitelist.default($abstract),
 	entity_name: "$abstract.entities.whitelist.default",
 };
-const WHITELIST_MODEL_DATABASE_CONFIG = {
+const CONFIG__WHITELIST__MODEL__DATABASE = {
 	table_name: $structure.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE,
 	primary_key: $structure.whitelist.database.sql.PRIMARY_KEY__SQL__DATABASE__WHITELIST__STRUCTURE,
 };
-const WHITELIST_MODEL_DATABASE = new WhitelistDatabaseModel(WHITELIST_MODEL_DATABASE_ROOT_CONFIG, WHITELIST_MODEL_DATABASE_CONFIG);
+const MODEL__WHITELIST__MODEL__DATABASE = new WhitelistDatabaseModel(ROOT_CONFIG__WHITELIST__MODEL__DATABASE, CONFIG__WHITELIST__MODEL__DATABASE);
 
-export { WHITELIST_MODEL_DATABASE };
+export { MODEL__WHITELIST__MODEL__DATABASE };

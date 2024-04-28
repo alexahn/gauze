@@ -3,7 +3,6 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-//class Entity1SystemModel extends $kernel.models.system.GraphQLOperationSystemModel {
 class Entity1SystemModel extends $kernel.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
@@ -75,14 +74,14 @@ class Entity1SystemModel extends $kernel.models.system.SystemModel {
 	}
 }
 
-const ENTITY1_MODEL_SYSTEM_ROOT_CONFIG = {
+const ROOT_CONFIG__ENTITY1__MODEL__SYSTEM = {
 	entity: $abstract.entities.entity1.default($abstract),
 	entity_name: "$abstract.entities.entity1.default",
 };
-const ENTITY1_MODEL_SYSTEM_CONFIG = {
+const CONFIG__ENTITY1__MODEL__SYSTEM = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 };
-const ENTITY1_MODEL_SYSTEM = new Entity1SystemModel(ENTITY1_MODEL_SYSTEM_ROOT_CONFIG, ENTITY1_MODEL_SYSTEM_CONFIG);
+const MODEL__ENTITY1__MODEL__SYSTEM = new Entity1SystemModel(ROOT_CONFIG__ENTITY1__MODEL__SYSTEM, CONFIG__ENTITY1__MODEL__SYSTEM);
 
-export { ENTITY1_MODEL_SYSTEM };
+export { MODEL__ENTITY1__MODEL__SYSTEM };

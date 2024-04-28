@@ -25,14 +25,14 @@ class Entity1DatabaseModel extends $kernel.models.database.DatabaseModel {
 	}
 }
 
-const ENTITY1_MODEL_DATABASE_ROOT_CONFIG = {
+const ROOT_CONFIG__ENTITY1__MODEL__DATABASE = {
 	entity: $abstract.entities.entity1.default($abstract),
 	entity_name: "$abstract.entities.entity1.default",
 };
-const ENTITY1_MODEL_DATABASE_CONFIG = {
+const CONFIG__ENTITY1__MODEL__DATABASE = {
 	table_name: $structure.entity1.database.sql.TABLE_NAME__SQL__DATABASE__ENTITY1__STRUCTURE,
 	primary_key: $structure.entity1.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY1__STRUCTURE,
 };
-const ENTITY1_MODEL_DATABASE = new Entity1DatabaseModel(ENTITY1_MODEL_DATABASE_ROOT_CONFIG, ENTITY1_MODEL_DATABASE_CONFIG);
+const MODEL__ENTITY1__MODEL__DATABASE = new Entity1DatabaseModel(ROOT_CONFIG__ENTITY1__MODEL__DATABASE, CONFIG__ENTITY1__MODEL__DATABASE);
 
-export { ENTITY1_MODEL_DATABASE };
+export { MODEL__ENTITY1__MODEL__DATABASE };

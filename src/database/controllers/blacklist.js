@@ -1,6 +1,6 @@
 import * as $kernel from "./../../kernel/index.js";
 
-import { BLACKLIST_MODEL_DATABASE } from "./../models/blacklist.js";
+import { MODEL__BLACKLIST__MODEL__DATABASE } from "./../models/blacklist.js";
 
 class BlacklistDatabaseController extends $kernel.controllers.database.DatabaseController {
 	constructor(root_config, config) {
@@ -25,11 +25,11 @@ class BlacklistDatabaseController extends $kernel.controllers.database.DatabaseC
 	}
 }
 
-const BLACKLIST_CONTROLLER_ROOT_CONFIG = {};
-const BLACKLIST_CONTROLLER_DATABASE_CONFIG = {
-	model: BLACKLIST_MODEL_DATABASE,
+const ROOT_CONFIG__BLACKLIST__CONTROLLER__DATABASE = {};
+const CONFIG__BLACKLIST__CONTROLLER__DATABASE = {
+	model: MODEL__BLACKLIST__MODEL__DATABASE,
 	model_name: "BLACKLIST_MODEL_DATABASE",
 };
-const BLACKLIST_CONTROLLER_DATABASE = new BlacklistDatabaseController(BLACKLIST_CONTROLLER_ROOT_CONFIG, BLACKLIST_CONTROLLER_DATABASE_CONFIG);
+const CONTROLLER__BLACKLIST__CONTROLLER__DATABASE = new BlacklistDatabaseController(ROOT_CONFIG__BLACKLIST__CONTROLLER__DATABASE, CONFIG__BLACKLIST__CONTROLLER__DATABASE);
 
-export { BLACKLIST_CONTROLLER_DATABASE };
+export { CONTROLLER__BLACKLIST__CONTROLLER__DATABASE };

@@ -7,20 +7,20 @@ import * as $abstract from "./../../../../abstract/index.js";
 import * as $structure from "./../../../../structure/index.js";
 import * as $kernel from "./../../../../kernel/index.js";
 
-import { WHITELIST_CONTROLLER_DATABASE } from "./../../../controllers/whitelist.js";
+import { CONTROLLER__WHITELIST__CONTROLLER__DATABASE } from "./../../../controllers/whitelist.js";
 
-const WHITELIST_SERIALIZER = new $structure.serializers.GraphQLSerializer({
+const SERIALIZER__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.whitelist.database.graphql.TYPE__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 	sql_primary_key: $structure.whitelist.database.sql.PRIMARY_KEY__SQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
-const WHITELIST_ATTRIBUTES_MUTATION_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Mutation__Attributes",
 	description: "Whitelist Mutation Attributes",
 	fields: $structure.whitelist.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
-const WHITELIST_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES_ARRAY__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Mutation__Attributes_Array",
 	description: "Whitelist Mutation Attributes Array",
 	fields: $structure.whitelist.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
@@ -31,7 +31,7 @@ const CREATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	args: {
 		attributes: {
 			description: "attributes",
-			type: WHITELIST_ATTRIBUTES_MUTATION_INTERFACE_DATABASE,
+			type: ATTRIBUTES__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {
@@ -43,7 +43,7 @@ const CREATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return WHITELIST_CONTROLLER_DATABASE.create(
+		return CONTROLLER__WHITELIST__CONTROLLER__DATABASE.create(
 			{
 				source: _source,
 				database: context.database,
@@ -52,7 +52,7 @@ const CREATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "CREATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(WHITELIST_SERIALIZER.serialize);
+			return data.map(SERIALIZER__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize);
 		});
 	},
 };
@@ -62,19 +62,19 @@ const UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	args: {
 		where: {
 			description: "where",
-			type: WHITELIST_ATTRIBUTES_MUTATION_INTERFACE_DATABASE,
+			type: ATTRIBUTES__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_in: {
 			description: "where in",
-			type: WHITELIST_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE,
+			type: ATTRIBUTES_ARRAY__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: WHITELIST_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE,
+			type: ATTRIBUTES_ARRAY__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		attributes: {
 			description: "attributes",
-			type: WHITELIST_ATTRIBUTES_MUTATION_INTERFACE_DATABASE,
+			type: ATTRIBUTES__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",
@@ -106,7 +106,7 @@ const UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return WHITELIST_CONTROLLER_DATABASE.update(
+		return CONTROLLER__WHITELIST__CONTROLLER__DATABASE.update(
 			{
 				source: _source,
 				database: context.database,
@@ -115,7 +115,7 @@ const UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(WHITELIST_SERIALIZER.serialize);
+			return data.map(SERIALIZER__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize);
 		});
 	},
 };
@@ -125,15 +125,15 @@ const DELETE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	args: {
 		where: {
 			description: "where",
-			type: WHITELIST_ATTRIBUTES_MUTATION_INTERFACE_DATABASE,
+			type: ATTRIBUTES__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_in: {
 			description: "where in",
-			type: WHITELIST_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE,
+			type: ATTRIBUTES_ARRAY__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: WHITELIST_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE,
+			type: ATTRIBUTES_ARRAY__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",
@@ -165,7 +165,7 @@ const DELETE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return WHITELIST_CONTROLLER_DATABASE.delete(
+		return CONTROLLER__WHITELIST__CONTROLLER__DATABASE.delete(
 			{
 				source: _source,
 				database: context.database,
@@ -174,7 +174,7 @@ const DELETE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "DELETE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(WHITELIST_SERIALIZER.serialize);
+			return data.map(SERIALIZER__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize);
 		});
 	},
 };

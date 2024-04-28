@@ -1,6 +1,6 @@
 import * as $kernel from "./../../kernel/index.js";
 
-import { RELATIONSHIP_MODEL_DATABASE } from "./../models/relationship.js";
+import { MODEL__RELATIONSHIP__MODEL__DATABASE } from "./../models/relationship.js";
 
 class RelationshipDatabaseController extends $kernel.controllers.database.DatabaseController {
 	constructor(root_config, config) {
@@ -25,11 +25,11 @@ class RelationshipDatabaseController extends $kernel.controllers.database.Databa
 	}
 }
 
-const RELATIONSHIP_CONTROLLER_ROOT_CONFIG = {};
-const RELATIONSHIP_CONTROLLER_DATABASE_CONFIG = {
-	model: RELATIONSHIP_MODEL_DATABASE,
+const ROOT_CONFIG__RELATIONSHIP__CONTROLLER__DATABASE = {};
+const CONFIG__RELATIONSHIP__CONTROLLER__DATABASE = {
+	model: MODEL__RELATIONSHIP__MODEL__DATABASE,
 	model_name: "RELATIONSHIP_MODEL_DATABASE",
 };
-const RELATIONSHIP_CONTROLLER_DATABASE = new RelationshipDatabaseController(RELATIONSHIP_CONTROLLER_ROOT_CONFIG, RELATIONSHIP_CONTROLLER_DATABASE_CONFIG);
+const CONTROLLER__RELATIONSHIP__CONTROLLER__DATABASE = new RelationshipDatabaseController(ROOT_CONFIG__RELATIONSHIP__CONTROLLER__DATABASE, CONFIG__RELATIONSHIP__CONTROLLER__DATABASE);
 
-export { RELATIONSHIP_CONTROLLER_DATABASE };
+export { CONTROLLER__RELATIONSHIP__CONTROLLER__DATABASE };

@@ -3,7 +3,6 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-//class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends $kernel.models.system.GraphQLOperationSystemModel {
 class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends $kernel.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
@@ -75,17 +74,17 @@ class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends $kernel.models.system.
 	}
 }
 
-const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_ROOT_CONFIG = {
+const ROOT_CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__SYSTEM = {
 	entity: $abstract.entities.a543731262804f64adcc0eae1a225acc.default($abstract),
 	entity_name: "$abstract.entities.a543731262804f64adcc0eae1a225acc.default",
 };
-const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_CONFIG = {
+const CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__SYSTEM = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 };
-const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM = new bb95d174a16f4ddd935ff3a802f7c7bcSystemModel(
-	caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_ROOT_CONFIG,
-	caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_CONFIG,
+const MODEL__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__SYSTEM = new bb95d174a16f4ddd935ff3a802f7c7bcSystemModel(
+	ROOT_CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__SYSTEM,
+	CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__SYSTEM,
 );
 
-export { caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM };
+export { MODEL__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__SYSTEM };

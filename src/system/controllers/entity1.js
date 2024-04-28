@@ -1,6 +1,6 @@
 import * as $kernel from "./../../kernel/index.js";
 
-import { ENTITY1_MODEL_SYSTEM } from "./../models/entity1.js";
+import { MODEL__ENTITY1__MODEL__SYSTEM } from "./../models/entity1.js";
 
 class Entity1SystemController extends $kernel.controllers.system.SystemController {
 	constructor(root_config, config) {
@@ -25,11 +25,11 @@ class Entity1SystemController extends $kernel.controllers.system.SystemControlle
 	}
 }
 
-const ENTITY1_CONTROLLER_ROOT_CONFIG = {};
-const ENTITY1_CONTROLLER_SYSTEM_CONFIG = {
-	model: ENTITY1_MODEL_SYSTEM,
-	model_name: "ENTITY1_MODEL_SYSTEM",
+const ROOT_CONFIG__ENTITY1__CONTROLLER__SYSTEM = {};
+const CONFIG__ENTITY1__CONTROLLER__SYSTEM = {
+	model: MODEL__ENTITY1__MODEL__SYSTEM,
+	model_name: "MODEL__ENTITY1__MODEL__SYSTEM",
 };
-const ENTITY1_CONTROLLER_SYSTEM = new Entity1SystemController(ENTITY1_CONTROLLER_ROOT_CONFIG, ENTITY1_CONTROLLER_SYSTEM_CONFIG);
+const CONTROLLER__ENTITY1__CONTROLLER__SYSTEM = new Entity1SystemController(ROOT_CONFIG__ENTITY1__CONTROLLER__SYSTEM, CONFIG__ENTITY1__CONTROLLER__SYSTEM);
 
-export { ENTITY1_CONTROLLER_SYSTEM };
+export { CONTROLLER__ENTITY1__CONTROLLER__SYSTEM };

@@ -1,6 +1,6 @@
 import * as $kernel from "./../../kernel/index.js";
 
-import { caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM } from "./../models/a543731262804f64adcc0eae1a225acc.js";
+import { MODEL__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__SYSTEM } from "./../models/a543731262804f64adcc0eae1a225acc.js";
 
 class bb95d174a16f4ddd935ff3a802f7c7bcSystemController extends $kernel.controllers.system.SystemController {
 	constructor(root_config, config) {
@@ -25,14 +25,14 @@ class bb95d174a16f4ddd935ff3a802f7c7bcSystemController extends $kernel.controlle
 	}
 }
 
-const caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_ROOT_CONFIG = {};
-const caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_SYSTEM_CONFIG = {
-	model: caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM,
-	model_name: "caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM",
+const ROOT_CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__SYSTEM = {};
+const CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__SYSTEM = {
+	model: MODEL__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__SYSTEM,
+	model_name: "MODEL__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__SYSTEM",
 };
-const caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_SYSTEM = new bb95d174a16f4ddd935ff3a802f7c7bcSystemController(
-	caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_ROOT_CONFIG,
-	caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_SYSTEM_CONFIG,
+const CONTROLLER__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__SYSTEM = new bb95d174a16f4ddd935ff3a802f7c7bcSystemController(
+	ROOT_CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__SYSTEM,
+	CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__SYSTEM,
 );
 
-export { caf5342ac38d41a6a02bb81d2d2b21a4_CONTROLLER_SYSTEM };
+export { CONTROLLER__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__SYSTEM };

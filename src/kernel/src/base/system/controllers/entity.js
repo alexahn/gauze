@@ -1,6 +1,6 @@
 import * as $kernel from "./../../kernel/index.js";
 
-import { cd637bc32c364580be5cc28396d3dee8_MODEL_SYSTEM } from "./../models/a2b8dbc3427b41a9899e11671c2422c7.js";
+import { MODEL__cd637bc32c364580be5cc28396d3dee8__MODEL__SYSTEM } from "./../models/a2b8dbc3427b41a9899e11671c2422c7.js";
 
 class ba381b0cc764c4c9a187b716ae94ed96SystemController extends $kernel.controllers.system.SystemController {
 	constructor(root_config, config) {
@@ -25,14 +25,14 @@ class ba381b0cc764c4c9a187b716ae94ed96SystemController extends $kernel.controlle
 	}
 }
 
-const cd637bc32c364580be5cc28396d3dee8_CONTROLLER_ROOT_CONFIG = {};
-const cd637bc32c364580be5cc28396d3dee8_CONTROLLER_SYSTEM_CONFIG = {
-	model: cd637bc32c364580be5cc28396d3dee8_MODEL_SYSTEM,
-	model_name: "cd637bc32c364580be5cc28396d3dee8_MODEL_SYSTEM",
+const ROOT_CONFIG__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__SYSTEM = {};
+const CONFIG__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__SYSTEM = {
+	model: MODEL__cd637bc32c364580be5cc28396d3dee8__MODEL__SYSTEM,
+	model_name: "MODEL__cd637bc32c364580be5cc28396d3dee8__MODEL__SYSTEM",
 };
-const cd637bc32c364580be5cc28396d3dee8_CONTROLLER_SYSTEM = new ba381b0cc764c4c9a187b716ae94ed96SystemController(
-	cd637bc32c364580be5cc28396d3dee8_CONTROLLER_ROOT_CONFIG,
-	cd637bc32c364580be5cc28396d3dee8_CONTROLLER_SYSTEM_CONFIG,
+const CONTROLLER__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__SYSTEM = new ba381b0cc764c4c9a187b716ae94ed96SystemController(
+	ROOT_CONFIG__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__SYSTEM,
+	CONFIG__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__SYSTEM,
 );
 
-export { cd637bc32c364580be5cc28396d3dee8_CONTROLLER_SYSTEM };
+export { CONTROLLER__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__SYSTEM };

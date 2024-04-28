@@ -3,7 +3,6 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-//class WhitelistSystemModel extends $kernel.models.system.GraphQLOperationSystemModel {
 class WhitelistSystemModel extends $kernel.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
@@ -75,14 +74,14 @@ class WhitelistSystemModel extends $kernel.models.system.SystemModel {
 	}
 }
 
-const WHITELIST_MODEL_SYSTEM_ROOT_CONFIG = {
+const ROOT_CONFIG__WHITELIST__MODEL__SYSTEM = {
 	entity: $abstract.entities.whitelist.default($abstract),
 	entity_name: "$abstract.entities.whitelist.default",
 };
-const WHITELIST_MODEL_SYSTEM_CONFIG = {
+const CONFIG__WHITELIST__MODEL__SYSTEM = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 };
-const WHITELIST_MODEL_SYSTEM = new WhitelistSystemModel(WHITELIST_MODEL_SYSTEM_ROOT_CONFIG, WHITELIST_MODEL_SYSTEM_CONFIG);
+const MODEL__WHITELIST__MODEL__SYSTEM = new WhitelistSystemModel(ROOT_CONFIG__WHITELIST__MODEL__SYSTEM, CONFIG__WHITELIST__MODEL__SYSTEM);
 
-export { WHITELIST_MODEL_SYSTEM };
+export { MODEL__WHITELIST__MODEL__SYSTEM };

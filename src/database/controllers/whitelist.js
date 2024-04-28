@@ -1,6 +1,6 @@
 import * as $kernel from "./../../kernel/index.js";
 
-import { WHITELIST_MODEL_DATABASE } from "./../models/whitelist.js";
+import { MODEL__WHITELIST__MODEL__DATABASE } from "./../models/whitelist.js";
 
 class WhitelistDatabaseController extends $kernel.controllers.database.DatabaseController {
 	constructor(root_config, config) {
@@ -25,11 +25,11 @@ class WhitelistDatabaseController extends $kernel.controllers.database.DatabaseC
 	}
 }
 
-const WHITELIST_CONTROLLER_ROOT_CONFIG = {};
-const WHITELIST_CONTROLLER_DATABASE_CONFIG = {
-	model: WHITELIST_MODEL_DATABASE,
+const ROOT_CONFIG__WHITELIST__CONTROLLER__DATABASE = {};
+const CONFIG__WHITELIST__CONTROLLER__DATABASE = {
+	model: MODEL__WHITELIST__MODEL__DATABASE,
 	model_name: "WHITELIST_MODEL_DATABASE",
 };
-const WHITELIST_CONTROLLER_DATABASE = new WhitelistDatabaseController(WHITELIST_CONTROLLER_ROOT_CONFIG, WHITELIST_CONTROLLER_DATABASE_CONFIG);
+const CONTROLLER__WHITELIST__CONTROLLER__DATABASE = new WhitelistDatabaseController(ROOT_CONFIG__WHITELIST__CONTROLLER__DATABASE, CONFIG__WHITELIST__CONTROLLER__DATABASE);
 
-export { WHITELIST_CONTROLLER_DATABASE };
+export { CONTROLLER__WHITELIST__CONTROLLER__DATABASE };

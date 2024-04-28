@@ -1,6 +1,6 @@
 import * as $kernel from "./../../kernel/index.js";
 
-import { BLACKLIST_MODEL_SYSTEM } from "./../models/blacklist.js";
+import { MODEL__BLACKLIST__MODEL__SYSTEM } from "./../models/blacklist.js";
 
 class BlacklistSystemController extends $kernel.controllers.system.SystemController {
 	constructor(root_config, config) {
@@ -25,11 +25,11 @@ class BlacklistSystemController extends $kernel.controllers.system.SystemControl
 	}
 }
 
-const BLACKLIST_CONTROLLER_ROOT_CONFIG = {};
-const BLACKLIST_CONTROLLER_SYSTEM_CONFIG = {
-	model: BLACKLIST_MODEL_SYSTEM,
-	model_name: "BLACKLIST_MODEL_SYSTEM",
+const ROOT_CONFIG__BLACKLIST__CONTROLLER__SYSTEM = {};
+const CONFIG__BLACKLIST__CONTROLLER__SYSTEM = {
+	model: MODEL__BLACKLIST__MODEL__SYSTEM,
+	model_name: "MODEL__BLACKLIST__MODEL__SYSTEM",
 };
-const BLACKLIST_CONTROLLER_SYSTEM = new BlacklistSystemController(BLACKLIST_CONTROLLER_ROOT_CONFIG, BLACKLIST_CONTROLLER_SYSTEM_CONFIG);
+const CONTROLLER__BLACKLIST__CONTROLLER__SYSTEM = new BlacklistSystemController(ROOT_CONFIG__BLACKLIST__CONTROLLER__SYSTEM, CONFIG__BLACKLIST__CONTROLLER__SYSTEM);
 
-export { BLACKLIST_CONTROLLER_SYSTEM };
+export { CONTROLLER__BLACKLIST__CONTROLLER__SYSTEM };
