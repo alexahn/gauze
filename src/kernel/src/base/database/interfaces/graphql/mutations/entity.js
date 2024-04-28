@@ -161,6 +161,14 @@ const DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 			description: "where",
 			type: cd637bc32c364580be5cc28396d3dee8_ATTRIBUTES_MUTATION_INTERFACE_DATABASE,
 		},
+		where_in: {
+			description: "where in",
+			type: cd637bc32c364580be5cc28396d3dee8_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE,
+		},
+		where_not_in: {
+			description: "where not in",
+			type: cd637bc32c364580be5cc28396d3dee8_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE,
+		},
 		limit: {
 			description: "limit",
 			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,

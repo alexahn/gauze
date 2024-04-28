@@ -21,28 +21,7 @@ const METADATA__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE =
 	fields: () => METADATA_FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 });
 
-const ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = {
-	id: {
-		type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "id",
-	},
-	created_at: {
-		type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "created_at",
-	},
-	updated_at: {
-		type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "updated_at",
-	},
-	deleted_at: {
-		type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "updated_at",
-	},
-	text: {
-		type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "text",
-	},
-};
+const ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = $abstract.entities.a2b8dbc3427b41a9899e11671c2422c7.default($abstract).graphql_fields;
 
 const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = create_fields_array(
 	ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,

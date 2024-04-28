@@ -21,28 +21,7 @@ const METADATA__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE = new $abstract.gauze.types.
 	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
 });
 
-const ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE = {
-	id: {
-		type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "id",
-	},
-	created_at: {
-		type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "created_at",
-	},
-	updated_at: {
-		type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "updated_at",
-	},
-	deleted_at: {
-		type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "updated_at",
-	},
-	text: {
-		type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "text",
-	},
-};
+const ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE = $abstract.entities.entity1.default($abstract).graphql_fields;
 
 const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE = create_fields_array(ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE);
 
@@ -109,7 +88,7 @@ const FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE = {
 
 const QUERY__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity1_Query",
-	description: "Entity 1",
+	description: "Entity1 Query",
 	fields: () => ({
 		_metadata: FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE.attributes,
@@ -126,7 +105,7 @@ const QUERY__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE = new $abstract.gauze.types.gra
 
 const MUTATION__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity1_Mutation",
-	description: "Entity 1",
+	description: "Entity1 Mutation",
 	fields: () => ({
 		_metadata: FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE.attributes,

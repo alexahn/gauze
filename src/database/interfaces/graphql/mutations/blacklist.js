@@ -127,6 +127,14 @@ const DELETE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			description: "where",
 			type: BLACKLIST_ATTRIBUTES_MUTATION_INTERFACE_DATABASE,
 		},
+		where_in: {
+			description: "where in",
+			type: BLACKLIST_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE,
+		},
+		where_not_in: {
+			description: "where not in",
+			type: BLACKLIST_ATTRIBUTES_ARRAY_MUTATION_INTERFACE_DATABASE,
+		},
 		limit: {
 			description: "limit",
 			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
