@@ -1,0 +1,3 @@
+#!/bin/zsh
+
+./src/kernel/bin/module_unlink ./src ./src $1 $2
