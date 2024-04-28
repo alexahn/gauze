@@ -12,7 +12,7 @@ A GraphQL server architecture.
 	- TwoWords
 - Function, variable, and method names are lower Snake Case (all lower case).
 	- two_words
-- Globals and constants are upper Snake Case (all upper case).
+- Global constants and module exports are upper Snake Case (all upper case).
 	- TWO_WORDS
 
 ### External Code
