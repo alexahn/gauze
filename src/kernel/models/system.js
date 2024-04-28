@@ -32,13 +32,14 @@ class SystemModel extends Model {
 	}
 	// should return a list of ids
 	read_whitelist(context, input) {
-		const { database } = context;
+		const self = this;
+		const { database, transaction } = context;
 		const { entity_type, agent_id } = input;
 		const sql = database(self.whitelist_table)
 			.where({
-				realm: "system",
-				agent_id: agent_id,
-				entity_type: entity_type,
+				gauze__whitelist__realm: "system",
+				gauze__whitelist__agent_id: agent_id,
+				gauze__whitelist__entity_type: entity_type,
 			})
 			.limit(4294967296)
 			.transacting(transaction);
@@ -47,19 +48,20 @@ class SystemModel extends Model {
 		}
 		return sql.then(function (rows) {
 			return rows.map(function (row) {
-				return row.entity_id;
+				return row.gauze__whitelist__entity_id;
 			});
 		});
 	}
 	// should return a list of ids
 	read_blacklist(context, input) {
-		const { database } = context;
+		const self = this;
+		const { database, transaction } = context;
 		const { entity_type, agent_id } = input;
 		const sql = database(self.blacklist_table)
 			.where({
-				realm: "system",
-				agent_id: agent_id,
-				entity_type: entity_type,
+				gauze__blacklist__realm: "system",
+				gauze__blacklist__agent_id: agent_id,
+				gauze__blacklist__entity_type: entity_type,
 			})
 			.limit(4294967296)
 			.transacting(transaction);
@@ -68,7 +70,7 @@ class SystemModel extends Model {
 		}
 		return sql.then(function (rows) {
 			return rows.map(function (row) {
-				return row.entity_id;
+				return row.gauze__blacklist__entity_id;
 			});
 		});
 	}
