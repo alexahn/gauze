@@ -23,13 +23,6 @@ class EzuagSystemModel extends $kernel.models.system.GraphQLOperationSystemModel
 		} else {
 			return Promise.reject(new Error("Agent does not have access to this method"));
 		}
-		/*
-		return this.execute(context, operation, input).then(function (data) {
-			return data.data.create_ezuag.map(function (row) {
-				return row.attributes;
-			});
-		});
-		*/
 	}
 	read(context, input) {
 		const self = this;
