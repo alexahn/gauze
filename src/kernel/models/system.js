@@ -14,27 +14,25 @@ import { EXECUTE__GRAPHQL__SHELL__KERNEL } from "./../shell/graphql.js";
 class SystemModel extends Model {
 	constructor(config, graphql_config) {
 		super(config);
-		// from graphql begin
-		if (graphql_config) {
-			const { schema, schema_name } = graphql_config;
-			this.schema = schema;
-		}
-		// from graphql end
+		const self = this;
+		const { schema, schema_name } = graphql_config;
+		self.schema = schema;
 		if ($structure.whitelist) {
-			this.whitelist_table = $structure.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE;
+			self.whitelist_table = $structure.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE;
 		} else {
-			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${this.name}.constructor:WARNING`, new Error("Whitelist structure not found"));
+			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Whitelist structure not found"));
 		}
 		if ($structure.blacklist) {
-			this.blacklist_table = $structure.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE;
+			self.blacklist_table = $structure.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE;
 		} else {
-			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${this.name}.constructor:WARNING`, new Error("Blacklist structure not found"));
+			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Blacklist structure not found"));
 		}
-		this.name = this.__name();
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
+		self.name = self.__name();
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.constructor:exit`);
 	}
 	__name() {
-		return this.constructor.name;
+		const self = this;
+		return self.constructor.name;
 	}
 	// should return a list of ids
 	read_whitelist(context, input) {
@@ -80,9 +78,11 @@ class SystemModel extends Model {
 			});
 		});
 	}
-	execute(context, { operation, operation_name }, operation_variables) {
+	execute(context, operation_source, operation_variables) {
+		const self = this;
+		const { operation, operation_name } = operation_source;
 		return EXECUTE__GRAPHQL__SHELL__KERNEL({
-			schema: this.schema,
+			schema: self.schema,
 			context,
 			operation,
 			operation_name,
@@ -114,7 +114,7 @@ class SystemModel extends Model {
 				};
 				return self.execute(context, operation, input);
 			});
-		} else if (this.entity.methods["read"].privacy === "public") {
+		} else if (self.entity.methods["read"].privacy === "public") {
 			return self.read_blacklist(context, access).then(function (invalid_ids) {
 				console.log("INVALID_IDS", invalid_ids);
 				input.where_not_in = {
@@ -149,34 +149,4 @@ class SystemModel extends Model {
 	}
 }
 
-class GraphQLOperationSystemModel extends SystemModel {
-	constructor(config, { schema, schema_name }) {
-		super(config);
-		this.schema = schema;
-		this.name = this._name();
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
-	}
-	_name() {
-		return this.constructor.name;
-	}
-	execute(context, { operation, operation_name }, operation_variables) {
-		return EXECUTE__GRAPHQL__SHELL__KERNEL({
-			schema: this.schema,
-			context,
-			operation,
-			operation_name,
-			operation_variables,
-		}).then(function (data) {
-			if (data.errors && data.errors.length) {
-				// should we make a new error here?
-				// todo: figure out if we need to log here or not
-				console.log(data.errors);
-				throw data.errors;
-			} else {
-				return Promise.resolve(data);
-			}
-		});
-	}
-}
-
-export { SystemModel, GraphQLOperationSystemModel };
+export { SystemModel };
