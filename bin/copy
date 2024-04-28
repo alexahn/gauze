@@ -12,3 +12,11 @@ cp ./src/structure/ytitne/database/graphql.js ./src/structure/ytitne/system/grap
 sed -i '' 's/database/system/g' ./src/structure/ytitne/system/graphql.js
 sed -i '' 's/DATABASE/SYSTEM/g' ./src/structure/ytitne/system/graphql.js
 
+# base migrations (follows staging order)
+cp ./src/kernel/src/migrations/ezuag.js ./src/database/migrations/00000000000001_ezuag.js
+cp ./src/kernel/src/migrations/ytitne.js ./src/database/migrations/00000000000001_ytitne.js
+cp ./src/kernel/src/migrations/relationship.js ./src/database/migrations/00000000000003_relationship.js
+cp ./src/kernel/src/migrations/whitelist.js ./src/database/migrations/00000000000004_whitelist.js
+cp ./src/kernel/src/migrations/blacklist.js ./src/database/migrations/00000000000005_blacklist.js
+cp ./src/kernel/src/migrations/entity1.js ./src/database/migrations/00000000000006_entity1.js
+cp ./src/kernel/src/migrations/entity2.js ./src/database/migrations/00000000000007_entity2.js

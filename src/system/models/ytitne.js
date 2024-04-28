@@ -6,23 +6,34 @@ import * as $kernel from "./../../kernel/index.js";
 class YtitneSystemModel extends $kernel.models.system.GraphQLOperationSystemModel {
 	constructor(root_config, parent_config, config) {
 		super(root_config, parent_config);
+		this.entity = $abstract.entities.ytitne.default($abstract);
 	}
 	create(context, input) {
 		const operation = {
 			operation: $database.interfaces.graphql.operations.ytitne.CREATE__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			operation_name: $database.interfaces.graphql.operations.ytitne.CREATE_NAME__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 		};
-		return this.execute(context, operation, input).then(function (data) {
-			return data.data.create_ytitne.map(function (row) {
-				return row.attributes;
+		// check abstract entity method privacy
+		if (this.entity.methods["create"].privacy === "public") {
+			return this.execute(context, operation, input).then(function (data) {
+				return data.data.create_ytitne.map(function (row) {
+					return row.attributes;
+				});
 			});
-		});
+		} else {
+			return Promise.reject(new Error("Agent does not have access to this method"));
+		}
 	}
 	read(context, input) {
 		const operation = {
 			operation: $database.interfaces.graphql.operations.ytitne.READ__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			operation_name: $database.interfaces.graphql.operations.ytitne.READ_NAME__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 		};
+		// check abstract entity method privacy
+		// check whitelist if privacy is private, proceed with a list of entities the agent has access to
+		// check blacklist if privacy is public, proceed with a list of entities the agent does not have access to
+		// if privacy is private, then stitch together the where in by doing an intersection
+		// if privacy is public, then stitch together the where not in by doing a union
 		return this.execute(context, operation, input).then(function (data) {
 			return data.data.read_ytitne.map(function (row) {
 				return row.attributes;
