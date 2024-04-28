@@ -21,28 +21,7 @@ const METADATA__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = new $abstract.gauze.types.g
 	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 });
 
-const ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = {
-	id: {
-		type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "id",
-	},
-	created_at: {
-		type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "created_at",
-	},
-	updated_at: {
-		type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "updated_at",
-	},
-	deleted_at: {
-		type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "updated_at",
-	},
-	text: {
-		type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "text",
-	},
-};
+const ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = $abstract.entities.ytitne.default($abstract).graphql_fields;
 
 const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = create_fields_array(ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE);
 
@@ -109,7 +88,7 @@ const FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = {
 
 const QUERY__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne_Query",
-	description: "Entity 1",
+	description: "Ytitne Query",
 	fields: () => ({
 		_metadata: FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE.attributes,
@@ -126,7 +105,7 @@ const QUERY__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = new $abstract.gauze.types.grap
 
 const MUTATION__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne_Mutation",
-	description: "Entity 1",
+	description: "Ytitne Mutation",
 	fields: () => ({
 		_metadata: FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE.attributes,
