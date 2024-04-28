@@ -25,14 +25,14 @@ class EzuagDatabaseModel extends $kernel.models.database.DatabaseModel {
 	}
 }
 
-const EZUAG_MODEL_DATABASE_ROOT_CONFIG = {
+const ROOT_CONFIG__EZUAG__MODEL__DATABASE = {
 	entity: $abstract.entities.ezuag.default($abstract),
 	entity_name: "$abstract.entities.ezuag.default",
 };
-const EZUAG_MODEL_DATABASE_CONFIG = {
+const CONFIG__EZUAG__MODEL__DATABASE = {
 	table_name: $structure.ezuag.database.sql.TABLE_NAME__SQL__DATABASE__EZUAG__STRUCTURE,
 	primary_key: $structure.ezuag.database.sql.PRIMARY_KEY__SQL__DATABASE__EZUAG__STRUCTURE,
 };
-const EZUAG_MODEL_DATABASE = new EzuagDatabaseModel(EZUAG_MODEL_DATABASE_ROOT_CONFIG, EZUAG_MODEL_DATABASE_CONFIG);
+const MODEL__EZUAG__MODEL__DATABASE = new EzuagDatabaseModel(ROOT_CONFIG__EZUAG__MODEL__DATABASE, CONFIG__EZUAG__MODEL__DATABASE);
 
-export { EZUAG_MODEL_DATABASE };
+export { MODEL__EZUAG__MODEL__DATABASE };

@@ -1,6 +1,6 @@
 import * as $kernel from "./../../kernel/index.js";
 
-import { YTITNE_MODEL_DATABASE } from "./../models/ytitne.js";
+import { MODEL__YTITNE__MODEL__DATABASE } from "./../models/ytitne.js";
 
 class YtitneDatabaseController extends $kernel.controllers.database.DatabaseController {
 	constructor(root_config, config) {
@@ -25,11 +25,11 @@ class YtitneDatabaseController extends $kernel.controllers.database.DatabaseCont
 	}
 }
 
-const YTITNE_CONTROLLER_ROOT_CONFIG = {};
-const YTITNE_CONTROLLER_DATABASE_CONFIG = {
-	model: YTITNE_MODEL_DATABASE,
+const ROOT_CONFIG__YTITNE__CONTROLLER__DATABASE = {};
+const CONFIG__YTITNE__CONTROLLER__DATABASE = {
+	model: MODEL__YTITNE__MODEL__DATABASE,
 	model_name: "YTITNE_MODEL_DATABASE",
 };
-const YTITNE_CONTROLLER_DATABASE = new YtitneDatabaseController(YTITNE_CONTROLLER_ROOT_CONFIG, YTITNE_CONTROLLER_DATABASE_CONFIG);
+const CONTROLLER__YTITNE__CONTROLLER__DATABASE = new YtitneDatabaseController(ROOT_CONFIG__YTITNE__CONTROLLER__DATABASE, CONFIG__YTITNE__CONTROLLER__DATABASE);
 
-export { YTITNE_CONTROLLER_DATABASE };
+export { CONTROLLER__YTITNE__CONTROLLER__DATABASE };

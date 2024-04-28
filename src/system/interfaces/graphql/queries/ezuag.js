@@ -7,20 +7,26 @@ import * as $abstract from "./../../../../abstract/index.js";
 import * as $kernel from "./../../../../kernel/index.js";
 import * as $structure from "./../../../../structure/index.js";
 
-import { EZUAG_CONTROLLER_SYSTEM } from "./../../../controllers/ezuag.js";
+import { CONTROLLER__EZUAG__CONTROLLER__SYSTEM } from "./../../../controllers/ezuag.js";
 
-const EZUAG_SERIALIZER = new $structure.serializers.GraphQLSerializer({
+const SERIALIZER__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.ezuag.system.graphql.TYPE__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
-	sql_primary_key: $structure.ezuag.database.sql.PRIMARY_KEY__SQL__DATABASE__EZUAG__STRUCTURE,
+	sql_primary_key: $structure.ezuag.database.sql.PRIMARY_KEY__SQL__SYSTEM__EZUAG__STRUCTURE,
 });
 
-const EZUAG_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const PARENT__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Ezuag__Parent",
+	description: "Ezuag Parent",
+	fields: () => $structure.ezuag.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
+});
+
+const ATTRIBUTES__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ezuag_Query__Attributes",
 	description: "Ezuag Query Attributes",
 	fields: $structure.ezuag.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
 });
 
-const EZUAG_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES_ARRAY__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ezuag_Query__Attributes_Array",
 	description: "Ezuag Query Attributes Array",
 	fields: $structure.ezuag.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
@@ -29,17 +35,21 @@ const EZUAG_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.types.
 const READ__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.ezuag.system.graphql.QUERY__GRAPHQL__SYSTEM__EZUAG__STRUCTURE),
 	args: {
+		parent: {
+			description: "parent",
+			type: PARENT__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
 		where: {
 			description: "where",
-			type: EZUAG_ATTRIBUTES_QUERY_INTERFACE_SYSTEM,
+			type: ATTRIBUTES__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: EZUAG_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM,
+			type: ATTRIBUTES_ARRAY__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: EZUAG_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM,
+			type: ATTRIBUTES_ARRAY__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		limit: {
 			description: "limit",
@@ -65,7 +75,7 @@ const READ__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	resolve: (_source, query_arguments, context) => {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "_source", _source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "query_arguments", query_arguments);
-		return EZUAG_CONTROLLER_SYSTEM.read(
+		return CONTROLLER__EZUAG__CONTROLLER__SYSTEM.read(
 			{
 				source: _source,
 				database: context.database,
@@ -74,7 +84,7 @@ const READ__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 			query_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "READ__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(EZUAG_SERIALIZER.serialize);
+			return data.map(SERIALIZER__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
 };

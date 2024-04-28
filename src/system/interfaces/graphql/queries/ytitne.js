@@ -7,20 +7,26 @@ import * as $abstract from "./../../../../abstract/index.js";
 import * as $kernel from "./../../../../kernel/index.js";
 import * as $structure from "./../../../../structure/index.js";
 
-import { YTITNE_CONTROLLER_SYSTEM } from "./../../../controllers/ytitne.js";
+import { CONTROLLER__YTITNE__CONTROLLER__SYSTEM } from "./../../../controllers/ytitne.js";
 
-const YTITNE_SERIALIZER = new $structure.serializers.GraphQLSerializer({
+const SERIALIZER__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.ytitne.system.graphql.TYPE__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
-	sql_primary_key: $structure.ytitne.database.sql.PRIMARY_KEY__SQL__DATABASE__YTITNE__STRUCTURE,
+	sql_primary_key: $structure.ytitne.database.sql.PRIMARY_KEY__SQL__SYSTEM__YTITNE__STRUCTURE,
 });
 
-const YTITNE_ATTRIBUTES_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const PARENT__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Ytitne__Parent",
+	description: "Ytitne Parent",
+	fields: () => $structure.ytitne.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
+});
+
+const ATTRIBUTES__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne_Query__Attributes",
 	description: "Ytitne Query Attributes",
 	fields: $structure.ytitne.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 });
 
-const YTITNE_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne_Query__Attributes_Array",
 	description: "Ytitne Query Attributes Array",
 	fields: $structure.ytitne.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
@@ -29,17 +35,21 @@ const YTITNE_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM = new $abstract.gauze.types
 const READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.ytitne.system.graphql.QUERY__GRAPHQL__SYSTEM__YTITNE__STRUCTURE),
 	args: {
+		parent: {
+			description: "parent",
+			type: PARENT__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
 		where: {
 			description: "where",
-			type: YTITNE_ATTRIBUTES_QUERY_INTERFACE_SYSTEM,
+			type: ATTRIBUTES__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: YTITNE_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM,
+			type: ATTRIBUTES_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: YTITNE_ATTRIBUTES_ARRAY_QUERY_INTERFACE_SYSTEM,
+			type: ATTRIBUTES_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		limit: {
 			description: "limit",
@@ -65,7 +75,7 @@ const READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	resolve: (_source, query_arguments, context) => {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "_source", _source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "query_arguments", query_arguments);
-		return YTITNE_CONTROLLER_SYSTEM.read(
+		return CONTROLLER__YTITNE__CONTROLLER__SYSTEM.read(
 			{
 				source: _source,
 				database: context.database,
@@ -74,7 +84,7 @@ const READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 			query_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(YTITNE_SERIALIZER.serialize);
+			return data.map(SERIALIZER__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
 };

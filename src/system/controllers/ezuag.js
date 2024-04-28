@@ -1,6 +1,6 @@
 import * as $kernel from "./../../kernel/index.js";
 
-import { EZUAG_MODEL_SYSTEM } from "./../models/ezuag.js";
+import { MODEL__EZUAG__MODEL__SYSTEM } from "./../models/ezuag.js";
 
 class EzuagSystemController extends $kernel.controllers.system.SystemController {
 	constructor(root_config, config) {
@@ -25,11 +25,11 @@ class EzuagSystemController extends $kernel.controllers.system.SystemController 
 	}
 }
 
-const EZUAG_CONTROLLER_ROOT_CONFIG = {};
-const EZUAG_CONTROLLER_SYSTEM_CONFIG = {
-	model: EZUAG_MODEL_SYSTEM,
-	model_name: "EZUAG_MODEL_SYSTEM",
+const ROOT_CONFIG__EZUAG__CONTROLLER__SYSTEM = {};
+const CONFIG__EZUAG__CONTROLLER__SYSTEM = {
+	model: MODEL__EZUAG__MODEL__SYSTEM,
+	model_name: "MODEL__EZUAG__MODEL__SYSTEM",
 };
-const EZUAG_CONTROLLER_SYSTEM = new EzuagSystemController(EZUAG_CONTROLLER_ROOT_CONFIG, EZUAG_CONTROLLER_SYSTEM_CONFIG);
+const CONTROLLER__EZUAG__CONTROLLER__SYSTEM = new EzuagSystemController(ROOT_CONFIG__EZUAG__CONTROLLER__SYSTEM, CONFIG__EZUAG__CONTROLLER__SYSTEM);
 
-export { EZUAG_CONTROLLER_SYSTEM };
+export { CONTROLLER__EZUAG__CONTROLLER__SYSTEM };

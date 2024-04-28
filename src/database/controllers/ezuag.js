@@ -1,6 +1,6 @@
 import * as $kernel from "./../../kernel/index.js";
 
-import { EZUAG_MODEL_DATABASE } from "./../models/ezuag.js";
+import { MODEL__EZUAG__MODEL__DATABASE } from "./../models/ezuag.js";
 
 class EzuagDatabaseController extends $kernel.controllers.database.DatabaseController {
 	constructor(root_config, config) {
@@ -25,11 +25,11 @@ class EzuagDatabaseController extends $kernel.controllers.database.DatabaseContr
 	}
 }
 
-const EZUAG_CONTROLLER_ROOT_CONFIG = {};
-const EZUAG_CONTROLLER_DATABASE_CONFIG = {
-	model: EZUAG_MODEL_DATABASE,
+const ROOT_CONFIG__EZUAG__CONTROLLER__DATABASE = {};
+const CONFIG__EZUAG__CONTROLLER__DATABASE = {
+	model: MODEL__EZUAG__MODEL__DATABASE,
 	model_name: "EZUAG_MODEL_DATABASE",
 };
-const EZUAG_CONTROLLER_DATABASE = new EzuagDatabaseController(EZUAG_CONTROLLER_ROOT_CONFIG, EZUAG_CONTROLLER_DATABASE_CONFIG);
+const CONTROLLER__EZUAG__CONTROLLER__DATABASE = new EzuagDatabaseController(ROOT_CONFIG__EZUAG__CONTROLLER__DATABASE, CONFIG__EZUAG__CONTROLLER__DATABASE);
 
-export { EZUAG_CONTROLLER_DATABASE };
+export { CONTROLLER__EZUAG__CONTROLLER__DATABASE };

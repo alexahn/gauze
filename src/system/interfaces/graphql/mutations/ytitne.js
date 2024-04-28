@@ -4,20 +4,26 @@ const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
 import * as $abstract from "./../../../../abstract/index.js";
-import * as $kernel from "./../../../../kernel/index.js";
 import * as $structure from "./../../../../structure/index.js";
+import * as $kernel from "./../../../../kernel/index.js";
 
-import { YTITNE_CONTROLLER_SYSTEM } from "./../../../controllers/ytitne.js";
+import { CONTROLLER__YTITNE__CONTROLLER__SYSTEM } from "./../../../controllers/ytitne.js";
 
-const YTITNE_SERIALIZER = new $structure.serializers.GraphQLSerializer({
+const SERIALIZER__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.ytitne.system.graphql.TYPE__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
-	sql_primary_key: $structure.ytitne.database.sql.PRIMARY_KEY__SQL__DATABASE__YTITNE__STRUCTURE,
+	sql_primary_key: $structure.ytitne.database.sql.PRIMARY_KEY__SQL__SYSTEM__YTITNE__STRUCTURE,
 });
 
-const YTITNE_MUTATION_ATTRIBUTES = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne_Mutation__Attributes",
 	description: "Ytitne Mutation Attributes",
 	fields: $structure.ytitne.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
+});
+
+const ATTRIBUTES_ARRAY__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Ytitne_Mutation__Attributes_Array",
+	description: "Ytitne Mutation Attributes Array",
+	fields: $structure.ytitne.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 });
 
 const CREATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
@@ -25,7 +31,7 @@ const CREATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	args: {
 		attributes: {
 			description: "attributes",
-			type: YTITNE_MUTATION_ATTRIBUTES,
+			type: ATTRIBUTES__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 	},
 	resolve: (_source, mutation_arguments, context) => {
@@ -37,7 +43,7 @@ const CREATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return YTITNE_CONTROLLER_SYSTEM.create(
+		return CONTROLLER__YTITNE__CONTROLLER__SYSTEM.create(
 			{
 				source: _source,
 				database: context.database,
@@ -46,7 +52,7 @@ const CREATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "CREATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(YTITNE_SERIALIZER.serialize);
+			return data.map(SERIALIZER__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
 };
@@ -56,11 +62,19 @@ const UPDATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	args: {
 		where: {
 			description: "where",
-			type: YTITNE_MUTATION_ATTRIBUTES,
+			type: ATTRIBUTES__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_in: {
+			description: "where in",
+			type: ATTRIBUTES_ARRAY__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_not_in: {
+			description: "where not in",
+			type: ATTRIBUTES_ARRAY__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		attributes: {
 			description: "attributes",
-			type: YTITNE_MUTATION_ATTRIBUTES,
+			type: ATTRIBUTES__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		limit: {
 			description: "limit",
@@ -92,7 +106,7 @@ const UPDATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return YTITNE_CONTROLLER_SYSTEM.update(
+		return CONTROLLER__YTITNE__CONTROLLER__SYSTEM.update(
 			{
 				source: _source,
 				database: context.database,
@@ -101,7 +115,7 @@ const UPDATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "UPDATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(YTITNE_SERIALIZER.serialize);
+			return data.map(SERIALIZER__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
 };
@@ -111,7 +125,15 @@ const DELETE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	args: {
 		where: {
 			description: "where",
-			type: YTITNE_MUTATION_ATTRIBUTES,
+			type: ATTRIBUTES__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_in: {
+			description: "where in",
+			type: ATTRIBUTES_ARRAY__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_not_in: {
+			description: "where not in",
+			type: ATTRIBUTES_ARRAY__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		limit: {
 			description: "limit",
@@ -143,7 +165,7 @@ const DELETE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		return YTITNE_CONTROLLER_SYSTEM.delete(
+		return CONTROLLER__YTITNE__CONTROLLER__SYSTEM.delete(
 			{
 				source: _source,
 				database: context.database,
@@ -152,7 +174,7 @@ const DELETE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "DELETE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(YTITNE_SERIALIZER.serialize);
+			return data.map(SERIALIZER__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
 };

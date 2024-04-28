@@ -3,7 +3,6 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-//class EzuagSystemModel extends $kernel.models.system.GraphQLOperationSystemModel {
 class EzuagSystemModel extends $kernel.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
@@ -75,14 +74,14 @@ class EzuagSystemModel extends $kernel.models.system.SystemModel {
 	}
 }
 
-const EZUAG_MODEL_SYSTEM_ROOT_CONFIG = {
+const ROOT_CONFIG__EZUAG__MODEL__SYSTEM = {
 	entity: $abstract.entities.ezuag.default($abstract),
 	entity_name: "$abstract.entities.ezuag.default",
 };
-const EZUAG_MODEL_SYSTEM_CONFIG = {
+const CONFIG__EZUAG__MODEL__SYSTEM = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 };
-const EZUAG_MODEL_SYSTEM = new EzuagSystemModel(EZUAG_MODEL_SYSTEM_ROOT_CONFIG, EZUAG_MODEL_SYSTEM_CONFIG);
+const MODEL__EZUAG__MODEL__SYSTEM = new EzuagSystemModel(ROOT_CONFIG__EZUAG__MODEL__SYSTEM, CONFIG__EZUAG__MODEL__SYSTEM);
 
-export { EZUAG_MODEL_SYSTEM };
+export { MODEL__EZUAG__MODEL__SYSTEM };

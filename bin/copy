@@ -53,3 +53,34 @@ cp ./src/database/controllers/ezuag.js ./src/database/controllers/ytitne.js
 sed -i '' 's/ezuag/ytitne/g' ./src/database/controllers/ytitne.js
 sed -i '' 's/Ezuag/Ytitne/g' ./src/database/controllers/ytitne.js
 sed -i '' 's/EZUAG/YTITNE/g' ./src/database/controllers/ytitne.js
+
+cp ./src/database/interfaces/graphql/queries/ezuag.js ./src/database/interfaces/graphql/queries/ytitne.js
+sed -i '' 's/ezuag/ytitne/g' ./src/database/interfaces/graphql/queries/ytitne.js
+sed -i '' 's/Ezuag/Ytitne/g' ./src/database/interfaces/graphql/queries/ytitne.js
+sed -i '' 's/EZUAG/YTITNE/g' ./src/database/interfaces/graphql/queries/ytitne.js
+
+cp ./src/database/interfaces/graphql/mutations/ezuag.js ./src/database/interfaces/graphql/mutations/ytitne.js
+sed -i '' 's/ezuag/ytitne/g' ./src/database/interfaces/graphql/mutations/ytitne.js
+sed -i '' 's/Ezuag/Ytitne/g' ./src/database/interfaces/graphql/mutations/ytitne.js
+sed -i '' 's/EZUAG/YTITNE/g' ./src/database/interfaces/graphql/mutations/ytitne.js
+
+cp ./src/system/interfaces/graphql/queries/ezuag.js ./src/system/interfaces/graphql/queries/ytitne.js
+sed -i '' 's/ezuag/ytitne/g' ./src/system/interfaces/graphql/queries/ytitne.js
+sed -i '' 's/Ezuag/Ytitne/g' ./src/system/interfaces/graphql/queries/ytitne.js
+sed -i '' 's/EZUAG/YTITNE/g' ./src/system/interfaces/graphql/queries/ytitne.js
+
+cp ./src/system/interfaces/graphql/mutations/ezuag.js ./src/system/interfaces/graphql/mutations/ytitne.js
+sed -i '' 's/ezuag/ytitne/g' ./src/system/interfaces/graphql/mutations/ytitne.js
+sed -i '' 's/Ezuag/Ytitne/g' ./src/system/interfaces/graphql/mutations/ytitne.js
+sed -i '' 's/EZUAG/YTITNE/g' ./src/system/interfaces/graphql/mutations/ytitne.js
+
+# temporary because we dont have structure/(entity)/system/sql.js (should we copy it from database?)
+# cp ./src/database/interfaces/graphql/queries/ezuag.js ./src/system/interfaces/graphql/queries/ezuag.js
+# sed -i '' 's/database/system/g' ./src/system/interfaces/graphql/queries/ezuag.js
+# sed -i '' 's/DATABASE/SYSTEM/g' ./src/system/interfaces/graphql/queries/ezuag.js
+
+# cp ./src/database/interfaces/graphql/mutations/ezuag.js ./src/system/interfaces/graphql/mutations/ezuag.js
+# sed -i '' 's/database/system/g' ./src/system/interfaces/graphql/mutations/ezuag.js
+# sed -i '' 's/DATABASE/SYSTEM/g' ./src/system/interfaces/graphql/mutations/ezuag.js
+
+

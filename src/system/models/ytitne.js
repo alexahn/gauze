@@ -3,7 +3,6 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-//class YtitneSystemModel extends $kernel.models.system.GraphQLOperationSystemModel {
 class YtitneSystemModel extends $kernel.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
@@ -75,14 +74,14 @@ class YtitneSystemModel extends $kernel.models.system.SystemModel {
 	}
 }
 
-const YTITNE_MODEL_SYSTEM_ROOT_CONFIG = {
+const ROOT_CONFIG__YTITNE__MODEL__SYSTEM = {
 	entity: $abstract.entities.ytitne.default($abstract),
 	entity_name: "$abstract.entities.ytitne.default",
 };
-const YTITNE_MODEL_SYSTEM_CONFIG = {
+const CONFIG__YTITNE__MODEL__SYSTEM = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 };
-const YTITNE_MODEL_SYSTEM = new YtitneSystemModel(YTITNE_MODEL_SYSTEM_ROOT_CONFIG, YTITNE_MODEL_SYSTEM_CONFIG);
+const MODEL__YTITNE__MODEL__SYSTEM = new YtitneSystemModel(ROOT_CONFIG__YTITNE__MODEL__SYSTEM, CONFIG__YTITNE__MODEL__SYSTEM);
 
-export { YTITNE_MODEL_SYSTEM };
+export { MODEL__YTITNE__MODEL__SYSTEM };

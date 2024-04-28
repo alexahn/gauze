@@ -1,6 +1,6 @@
 import * as $kernel from "./../../kernel/index.js";
 
-import { YTITNE_MODEL_SYSTEM } from "./../models/ytitne.js";
+import { MODEL__YTITNE__MODEL__SYSTEM } from "./../models/ytitne.js";
 
 class YtitneSystemController extends $kernel.controllers.system.SystemController {
 	constructor(root_config, config) {
@@ -25,11 +25,11 @@ class YtitneSystemController extends $kernel.controllers.system.SystemController
 	}
 }
 
-const YTITNE_CONTROLLER_ROOT_CONFIG = {};
-const YTITNE_CONTROLLER_SYSTEM_CONFIG = {
-	model: YTITNE_MODEL_SYSTEM,
-	model_name: "YTITNE_MODEL_SYSTEM",
+const ROOT_CONFIG__YTITNE__CONTROLLER__SYSTEM = {};
+const CONFIG__YTITNE__CONTROLLER__SYSTEM = {
+	model: MODEL__YTITNE__MODEL__SYSTEM,
+	model_name: "MODEL__YTITNE__MODEL__SYSTEM",
 };
-const YTITNE_CONTROLLER_SYSTEM = new YtitneSystemController(YTITNE_CONTROLLER_ROOT_CONFIG, YTITNE_CONTROLLER_SYSTEM_CONFIG);
+const CONTROLLER__YTITNE__CONTROLLER__SYSTEM = new YtitneSystemController(ROOT_CONFIG__YTITNE__CONTROLLER__SYSTEM, CONFIG__YTITNE__CONTROLLER__SYSTEM);
 
-export { YTITNE_CONTROLLER_SYSTEM };
+export { CONTROLLER__YTITNE__CONTROLLER__SYSTEM };

@@ -25,14 +25,14 @@ class YtitneDatabaseModel extends $kernel.models.database.DatabaseModel {
 	}
 }
 
-const YTITNE_MODEL_DATABASE_ROOT_CONFIG = {
+const ROOT_CONFIG__YTITNE__MODEL__DATABASE = {
 	entity: $abstract.entities.ytitne.default($abstract),
 	entity_name: "$abstract.entities.ytitne.default",
 };
-const YTITNE_MODEL_DATABASE_CONFIG = {
+const CONFIG__YTITNE__MODEL__DATABASE = {
 	table_name: $structure.ytitne.database.sql.TABLE_NAME__SQL__DATABASE__YTITNE__STRUCTURE,
 	primary_key: $structure.ytitne.database.sql.PRIMARY_KEY__SQL__DATABASE__YTITNE__STRUCTURE,
 };
-const YTITNE_MODEL_DATABASE = new YtitneDatabaseModel(YTITNE_MODEL_DATABASE_ROOT_CONFIG, YTITNE_MODEL_DATABASE_CONFIG);
+const MODEL__YTITNE__MODEL__DATABASE = new YtitneDatabaseModel(ROOT_CONFIG__YTITNE__MODEL__DATABASE, CONFIG__YTITNE__MODEL__DATABASE);
 
-export { YTITNE_MODEL_DATABASE };
+export { MODEL__YTITNE__MODEL__DATABASE };
