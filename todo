@@ -237,4 +237,5 @@
 	[ ] realms can have their own custom errors, but only for the particular logic they are handling
 		[ ] in all other cases, we should just bubble up the error from below
 [x] set up migrations for ezuag and ytitne
-[ ] set up seed data for ezuag and ytitne
+[x] set up seed data for ezuag and ytitne
+[ ] validate id field to ensure uuid structure

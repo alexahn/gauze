@@ -13,6 +13,7 @@ sed -i '' 's/database/system/g' ./src/structure/ytitne/system/graphql.js
 sed -i '' 's/DATABASE/SYSTEM/g' ./src/structure/ytitne/system/graphql.js
 
 # base migrations (follows staging order)
+
 cp ./src/kernel/src/migrations/ezuag.js ./src/database/migrations/00000000000001_ezuag.js
 cp ./src/kernel/src/migrations/ytitne.js ./src/database/migrations/00000000000001_ytitne.js
 cp ./src/kernel/src/migrations/relationship.js ./src/database/migrations/00000000000003_relationship.js
@@ -22,6 +23,7 @@ cp ./src/kernel/src/migrations/entity1.js ./src/database/migrations/000000000000
 cp ./src/kernel/src/migrations/entity2.js ./src/database/migrations/00000000000007_entity2.js
 
 # base seeds
+
 cp ./src/kernel/src/seeds/ezuag.js ./src/database/seeds/ezuag.js
 cp ./src/kernel/src/seeds/ytitne.js ./src/database/seeds/ytitne.js
 cp ./src/kernel/src/seeds/relationship.js ./src/database/seeds/relationship.js
@@ -29,3 +31,10 @@ cp ./src/kernel/src/seeds/relationship.js ./src/database/seeds/relationship.js
 # cp ./src/kernel/src/seeds/blacklist.js ./src/database/seeds/blacklist.js
 cp ./src/kernel/src/seeds/entity1.js ./src/database/seeds/entity1.js
 cp ./src/kernel/src/seeds/entity2.js ./src/database/seeds/entity2.js
+
+# working space
+
+cp ./src/system/models/ezuag.js ./src/system/models/ytitne.js
+sed -i '' 's/ezuag/ytitne/g' ./src/system/models/ytitne.js
+sed -i '' 's/Ezuag/Ytitne/g' ./src/system/models/ytitne.js
+sed -i '' 's/EZUAG/YTITNE/g' ./src/system/models/ytitne.js

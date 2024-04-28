@@ -12,8 +12,9 @@ import * as $structure from "./../../structure/index.js";
 // constructor (config, input)
 // method (context, input)
 class DatabaseModel extends Model {
-	constructor(config, { table, primary_key }) {
-		super(config);
+	constructor(root_config, database_config) {
+		const { table, primary_key } = database_config;
+		super(root_config);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:enter`);
 		this.table = table;
 		this.primary_key = primary_key;
@@ -22,7 +23,6 @@ class DatabaseModel extends Model {
 		} else {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${this.name}.constructor:WARNING`, new Error("Relationship structure not found"));
 		}
-		//this.fields = fields
 		this.name = this._name();
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
 	}
@@ -30,8 +30,9 @@ class DatabaseModel extends Model {
 		return `[${this.table}]${this.constructor.name}`;
 	}
 	// create a row
-	create({ source, database, transaction }, input) {
+	create(context, input) {
 		const self = this;
+		const { source, database, transaction } = context;
 		const { attributes = {} } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.create.enter`, "source", source);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.create.enter`, "input", input);
@@ -66,8 +67,9 @@ class DatabaseModel extends Model {
 			});
 	}
 	// read a row
-	read({ source, database, transaction }, input) {
+	read(context, input) {
 		const self = this;
+		const { source, database, transaction } = context;
 		const { where = {}, where_in = {}, where_not_in = {}, limit = 128, offset = 0, order = this.primary_key, order_direction = "asc", order_nulls = "first" } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "source", source);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "input", input);
@@ -158,8 +160,9 @@ class DatabaseModel extends Model {
 		}
 	}
 	// update a row
-	update({ source, database, transaction }, input) {
+	update(context, input) {
 		var self = this;
+		const { source, database, transaction } = context;
 		const { attributes = {}, where = {}, where_in = {}, where_not_in = {} } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "source", source);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "input", input);
@@ -232,8 +235,9 @@ class DatabaseModel extends Model {
 		}
 	}
 	// delete a row
-	delete({ source, database, transaction }, input) {
+	delete(context, input) {
 		var self = this;
+		const { source, database, transaction } = context;
 		const { where = {}, where_in = {}, where_not_in = {} } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "source", source);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "input", input);
