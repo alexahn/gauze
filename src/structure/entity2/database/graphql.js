@@ -90,7 +90,7 @@ const QUERY__GRAPHQL__DATABASE__ENTITY2__STRUCTURE = new $abstract.gauze.types.g
 	name: "Entity2_Query",
 	description: "Entity2 Query",
 	fields: () => ({
-		_metadata: FIELDS__GRAPHQL__DATABASE__ENTITY2__STRUCTURE._metadata,
+		metadata: FIELDS__GRAPHQL__DATABASE__ENTITY2__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__DATABASE__ENTITY2__STRUCTURE.attributes,
 		relationships: {
 			type: QUERY_RELATIONSHIPS__GRAPHQL__DATABASE__ENTITY2__STRUCTURE,
@@ -107,7 +107,7 @@ const MUTATION__GRAPHQL__DATABASE__ENTITY2__STRUCTURE = new $abstract.gauze.type
 	name: "Entity2_Mutation",
 	description: "Entity2 Mutation",
 	fields: () => ({
-		_metadata: FIELDS__GRAPHQL__DATABASE__ENTITY2__STRUCTURE._metadata,
+		metadata: FIELDS__GRAPHQL__DATABASE__ENTITY2__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__DATABASE__ENTITY2__STRUCTURE.attributes,
 		relationships: {
 			type: MUTATION_RELATIONSHIPS__GRAPHQL__DATABASE__ENTITY2__STRUCTURE,
