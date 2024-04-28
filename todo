@@ -249,6 +249,7 @@
 		[x] allows for people to extend the models however they want, while preserving core internal logic
 [x] update create operations to also create a whitelist entry
 [ ] isolated tests
+	[ ]  make ytitne self-relational
 	[ ] don't depend on seed data for tests
 		[ ] will still depend on tables existing because we can't programmatically generate migration files
 	[ ] combinatorially try every system state
