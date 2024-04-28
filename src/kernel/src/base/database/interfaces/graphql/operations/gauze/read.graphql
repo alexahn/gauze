@@ -1,7 +1,7 @@
 query Readbb95d174a16f4ddd935ff3a802f7c7bc(
 	$where: bb95d174a16f4ddd935ff3a802f7c7bc_Query__Attributes
-	$where_in: bb95d174a16f4ddd935ff3a802f7c7bc_Mutation__Attributes_Array
-	$where_not_in: bb95d174a16f4ddd935ff3a802f7c7bc_Mutation__Attributes_Array
+	$where_in: bb95d174a16f4ddd935ff3a802f7c7bc_Query__Attributes_Array
+	$where_not_in: bb95d174a16f4ddd935ff3a802f7c7bc_Query__Attributes_Array
 	$limit: Int
 	$offset: Int
 	$order: String

@@ -60,7 +60,7 @@ npx gauze create gauze ./src ./gauze/whitelist.js
 cp -r ./src/kernel/src/stages/stage4/* ./src/
 
 # create blacklist
-npx gauze create gauze ./src ./gauze/blacklistlist.js
+npx gauze create gauze ./src ./gauze/blacklist.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 

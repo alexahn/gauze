@@ -1,7 +1,7 @@
 query ReadWhitelist(
 	$where: Whitelist_Query__Attributes
-	$where_in: Whitelist_Mutation__Attributes_Array
-	$where_not_in: Whitelist_Mutation__Attributes_Array
+	$where_in: Whitelist_Query__Attributes_Array
+	$where_not_in: Whitelist_Query__Attributes_Array
 	$limit: Int
 	$offset: Int
 	$order: String

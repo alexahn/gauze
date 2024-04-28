@@ -11,9 +11,9 @@ mutation UpdateBlacklist(
 ) {
 	update_blacklist(
 		attributes: $attributes
-		where: $where
 		where_in: $where_in
 		where_not_in: $where_not_in
+		where: $where
 		limit: $limit
 		offset: $offset
 		order: $order

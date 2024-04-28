@@ -1,7 +1,7 @@
 query ReadEzuag(
 	$where: Ezuag_Query__Attributes
-	$where_in: Ezuag_Mutation__Attributes_Array
-	$where_not_in: Ezuag_Mutation__Attributes_Array
+	$where_in: Ezuag_Query__Attributes_Array
+	$where_not_in: Ezuag_Query__Attributes_Array
 	$limit: Int
 	$offset: Int
 	$order: String

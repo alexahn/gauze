@@ -1,7 +1,7 @@
 query ReadRelationship(
 	$where: Relationship_Query__Attributes
-	$where_in: Relationship_Mutation__Attributes_Array
-	$where_not_in: Relationship_Mutation__Attributes_Array
+	$where_in: Relationship_Query__Attributes_Array
+	$where_not_in: Relationship_Query__Attributes_Array
 	$limit: Int
 	$offset: Int
 	$order: String
