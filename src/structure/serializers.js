@@ -79,3 +79,4 @@ class GraphQLSerializer {
 }
 
 export { SERIALIZER_CREATED_AT_STRUCTURE, SERIALIZER_UPDATED_AT_STRUCTURE, SERIALIZER_DELETED_AT_STRUCTURE, GraphQLSerializer };
+//export { GraphQLSerializer }

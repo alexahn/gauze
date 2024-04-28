@@ -11,7 +11,7 @@ import { CONTROLLER__YTITNE__CONTROLLER__SYSTEM } from "./../../../controllers/y
 
 const SERIALIZER__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.ytitne.system.graphql.TYPE__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
-	sql_primary_key: $structure.ytitne.database.sql.PRIMARY_KEY__SQL__SYSTEM__YTITNE__STRUCTURE,
+	sql_primary_key: $structure.ytitne.database.sql.PRIMARY_KEY__SQL__DATABASE__YTITNE__STRUCTURE,
 });
 
 const ATTRIBUTES__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

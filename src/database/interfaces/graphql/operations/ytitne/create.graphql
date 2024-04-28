@@ -1,4 +1,4 @@
-mutation CreateYtitne($attributes: Ytitne_Mutation__Attributes) {
+mutation CreateYtitne($attributes: Ytitne_Mutation__Attributes, $whitelist: Whitelist_Mutation__Attributes) {
 	create_ytitne(attributes: $attributes) {
 		attributes {
 			id
@@ -6,6 +6,13 @@ mutation CreateYtitne($attributes: Ytitne_Mutation__Attributes) {
 			updated_at
 			deleted_at
 			text
+		}
+		mutation {
+			create_whitelist(attributes: $whitelist) {
+				_metadata {
+					id
+				}
+			}
 		}
 	}
 }

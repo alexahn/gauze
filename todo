@@ -247,3 +247,9 @@
 [x] rename all kernel model methods to be underscore prefixed
 	[x] refactor database models so that they have create, read, update, delete methods that proxy to the kernel method
 		[x] allows for people to extend the models however they want, while preserving core internal logic
+[ ] update create operations to also create a whitelist entry
+[ ] isolated tests
+	[ ] don't depend on seed data for tests
+		[ ] will still depend on tables existing because we can't programmatically generate migration files
+	[ ] combinatorially try every system state
+		[ ] need a consise way to write these tests, the current way is too heavy

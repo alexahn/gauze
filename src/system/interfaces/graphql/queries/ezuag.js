@@ -11,7 +11,7 @@ import { CONTROLLER__EZUAG__CONTROLLER__SYSTEM } from "./../../../controllers/ez
 
 const SERIALIZER__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.ezuag.system.graphql.TYPE__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
-	sql_primary_key: $structure.ezuag.database.sql.PRIMARY_KEY__SQL__SYSTEM__EZUAG__STRUCTURE,
+	sql_primary_key: $structure.ezuag.database.sql.PRIMARY_KEY__SQL__DATABASE__EZUAG__STRUCTURE,
 });
 
 const PARENT__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
