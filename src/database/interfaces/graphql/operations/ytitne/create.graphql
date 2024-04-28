@@ -9,7 +9,7 @@ mutation CreateYtitne($attributes: Ytitne_Mutation__Attributes, $whitelist: Whit
 		}
 		mutation {
 			create_whitelist(attributes: $whitelist) {
-				_metadata {
+				metadata {
 					id
 				}
 			}

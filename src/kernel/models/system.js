@@ -3,6 +3,8 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
+import { v4 as uuidv4 } from "uuid";
+
 import * as $structure from "./../../structure/index.js";
 
 import { Model } from "./class.js";
@@ -39,10 +41,10 @@ class SystemModel extends Model {
 		return SystemModel._class_name(self.schema_name);
 	}
 	// should return a list of ids
-	_read_whitelist(context, input) {
+	_read_whitelist(context, access) {
 		const self = this;
 		const { database, transaction } = context;
-		const { entity_type, agent_id } = input;
+		const { entity_type, agent_id } = access;
 		const sql = database(self.whitelist_table)
 			.where({
 				gauze__whitelist__realm: "system",
@@ -61,10 +63,10 @@ class SystemModel extends Model {
 		});
 	}
 	// should return a list of ids
-	_read_blacklist(context, input) {
+	_read_blacklist(context, access) {
 		const self = this;
 		const { database, transaction } = context;
-		const { entity_type, agent_id } = input;
+		const { entity_type, agent_id } = access;
 		const sql = database(self.blacklist_table)
 			.where({
 				gauze__blacklist__realm: "system",
@@ -132,8 +134,17 @@ class SystemModel extends Model {
 	}
 	_create(context, input, access, operation) {
 		const self = this;
-		// todo: set primary key if not set
+		if (!input[self.primary_key]) {
+			input[self.primary_key] = uuidv4();
+		}
 		if (self.entity.methods["create"].privacy === "public") {
+			input.whitelist = {
+				gauze__whitelist__agent_role: "root",
+				gauze__whitelist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
+				gauze__whitelist__agent_id: access.agent_id,
+				gauze__whitelist__entity_type: access.entity_type,
+				gauez__whitelist__entity_id: input[self.primary_key],
+			};
 			return self._execute(context, operation, input);
 		} else {
 			return Promise.reject(new Error("Agent does not have access to this method"));

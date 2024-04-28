@@ -90,7 +90,7 @@ const QUERY__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = new $abstract.gauze.types.grap
 	name: "Ytitne_Query",
 	description: "Ytitne Query",
 	fields: () => ({
-		_metadata: FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE._metadata,
+		metadata: FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE.attributes,
 		relationships: {
 			type: QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
@@ -107,7 +107,7 @@ const MUTATION__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = new $abstract.gauze.types.g
 	name: "Ytitne_Mutation",
 	description: "Ytitne Mutation",
 	fields: () => ({
-		_metadata: FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE._metadata,
+		metadata: FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE.attributes,
 		relationships: {
 			type: MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
