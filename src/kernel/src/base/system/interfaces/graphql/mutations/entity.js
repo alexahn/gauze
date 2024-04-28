@@ -11,7 +11,7 @@ import { CONTROLLER__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__SYSTEM } from
 
 const SERIALIZER__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.a2b8dbc3427b41a9899e11671c2422c7.system.graphql.TYPE__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
-	sql_primary_key: $structure.a2b8dbc3427b41a9899e11671c2422c7.database.sql.PRIMARY_KEY__SQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+	sql_primary_key: $structure.a2b8dbc3427b41a9899e11671c2422c7.database.sql.PRIMARY_KEY__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 });
 
 const ATTRIBUTES__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

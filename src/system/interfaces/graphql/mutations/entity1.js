@@ -11,7 +11,7 @@ import { CONTROLLER__ENTITY1__CONTROLLER__SYSTEM } from "./../../../controllers/
 
 const SERIALIZER__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.entity1.system.graphql.TYPE__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
-	sql_primary_key: $structure.entity1.database.sql.PRIMARY_KEY__SQL__SYSTEM__ENTITY1__STRUCTURE,
+	sql_primary_key: $structure.entity1.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY1__STRUCTURE,
 });
 
 const ATTRIBUTES__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

@@ -11,7 +11,7 @@ import { CONTROLLER__WHITELIST__CONTROLLER__SYSTEM } from "./../../../controller
 
 const SERIALIZER__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.whitelist.system.graphql.TYPE__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
-	sql_primary_key: $structure.whitelist.database.sql.PRIMARY_KEY__SQL__SYSTEM__WHITELIST__STRUCTURE,
+	sql_primary_key: $structure.whitelist.database.sql.PRIMARY_KEY__SQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
 const PARENT__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

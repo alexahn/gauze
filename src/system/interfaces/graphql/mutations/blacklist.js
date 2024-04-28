@@ -11,7 +11,7 @@ import { CONTROLLER__BLACKLIST__CONTROLLER__SYSTEM } from "./../../../controller
 
 const SERIALIZER__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
 	graphql_type: $structure.blacklist.system.graphql.TYPE__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE,
-	sql_primary_key: $structure.blacklist.database.sql.PRIMARY_KEY__SQL__SYSTEM__BLACKLIST__STRUCTURE,
+	sql_primary_key: $structure.blacklist.database.sql.PRIMARY_KEY__SQL__DATABASE__BLACKLIST__STRUCTURE,
 });
 
 const ATTRIBUTES__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
