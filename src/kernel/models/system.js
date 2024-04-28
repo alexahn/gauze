@@ -17,6 +17,7 @@ class SystemModel extends Model {
 		const self = this;
 		const { schema, schema_name } = graphql_config;
 		self.schema = schema;
+		self.schema_name = schema_name;
 		if ($structure.whitelist) {
 			self.whitelist_table = $structure.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE;
 		} else {
@@ -30,9 +31,12 @@ class SystemModel extends Model {
 		self.name = self.__name();
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.constructor:exit`);
 	}
+	static _class_name(schema_name) {
+		return `(${schema_name})[${super._class_name()}]SystemModel`;
+	}
 	__name() {
 		const self = this;
-		return self.constructor.name;
+		return SystemModel._class_name(self.schema_name);
 	}
 	// should return a list of ids
 	_read_whitelist(context, input) {

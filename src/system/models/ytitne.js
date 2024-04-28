@@ -8,7 +8,6 @@ class YtitneSystemModel extends $kernel.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
-		self.entity = $abstract.entities.ytitne.default($abstract);
 	}
 	create(context, input) {
 		const self = this;
@@ -76,9 +75,13 @@ class YtitneSystemModel extends $kernel.models.system.SystemModel {
 	}
 }
 
-const YTITNE_MODEL_SYSTEM_ROOT_CONFIG = $abstract.entities.ytitne.default($abstract);
+const YTITNE_MODEL_SYSTEM_ROOT_CONFIG = {
+	entity: $abstract.entities.ytitne.default($abstract),
+	entity_name: "$abstract.entities.ytitne.default",
+};
 const YTITNE_MODEL_SYSTEM_CONFIG = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
+	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 };
 const YTITNE_MODEL_SYSTEM = new YtitneSystemModel(YTITNE_MODEL_SYSTEM_ROOT_CONFIG, YTITNE_MODEL_SYSTEM_CONFIG);
 

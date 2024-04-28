@@ -11,20 +11,24 @@ import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
 class Model {
 	constructor(abstract_entity) {
 		const { name, fields } = abstract_entity;
+		this.entity = abstract_entity;
 		this.entity_name = name;
-		this.fields = fields;
-		this.name = this.__name();
+		this.name = this._name();
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
 	}
-	__name() {
-		return this.constructor.name;
+	static _class_name(entity_name) {
+		return `Model`;
+	}
+	_name() {
+		const self = this;
+		return Model._class_name(self.entity_name);
 	}
 	// todo: add some error visibility here
 	// todo: it's kind of rough when a middleware or serializer is misconfigured and there is just some generic error
 	reduce_fields(input, method, reducers) {
 		var self = this;
-		return Object.keys(self.fields).reduce(function (previous_field_result, key) {
-			const field = self.fields[key];
+		return Object.keys(self.entity.fields).reduce(function (previous_field_result, key) {
+			const field = self.entity.fields[key];
 			return field[reducers].reduce(function (previous_reducer_result, next_reducer) {
 				return next_reducer[method](previous_reducer_result, method);
 			}, previous_field_result);

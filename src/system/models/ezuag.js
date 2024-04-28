@@ -8,7 +8,6 @@ class EzuagSystemModel extends $kernel.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
-		self.entity = $abstract.entities.ezuag.default($abstract);
 	}
 	create(context, input) {
 		const self = this;
@@ -76,9 +75,13 @@ class EzuagSystemModel extends $kernel.models.system.SystemModel {
 	}
 }
 
-const EZUAG_MODEL_SYSTEM_ROOT_CONFIG = $abstract.entities.ezuag.default($abstract);
+const EZUAG_MODEL_SYSTEM_ROOT_CONFIG = {
+	entity: $abstract.entities.ezuag.default($abstract),
+	entity_name: "$abstract.entities.ezuag.default",
+};
 const EZUAG_MODEL_SYSTEM_CONFIG = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
+	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 };
 const EZUAG_MODEL_SYSTEM = new EzuagSystemModel(EZUAG_MODEL_SYSTEM_ROOT_CONFIG, EZUAG_MODEL_SYSTEM_CONFIG);
 

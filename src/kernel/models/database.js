@@ -13,30 +13,34 @@ import * as $structure from "./../../structure/index.js";
 // method (context, input)
 class DatabaseModel extends Model {
 	constructor(root_config, database_config) {
-		const { table, primary_key } = database_config;
+		const { table_name, primary_key } = database_config;
 		super(root_config);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:enter`);
-		this.table = table;
+		this.table_name = table_name;
 		this.primary_key = primary_key;
 		if ($structure.relationship) {
-			this.relationship_table = $structure.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE;
+			this.relationship_table_name = $structure.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE;
 		} else {
 			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${this.name}.constructor:WARNING`, new Error("Relationship structure not found"));
 		}
-		this.name = this._name();
+		this.name = this.__name();
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
 	}
-	_name() {
-		return `[${this.table}]${this.constructor.name}`;
+	static _class_name(table_name) {
+		return `(${table_name})[${super._class_name()}]DatabaseModel`;
+	}
+	__name() {
+		const self = this;
+		return DatabaseModel._class_name(self.table_name);
 	}
 	// create a row
-	create(context, input) {
+	_create(context, input) {
 		const self = this;
 		const { source, database, transaction } = context;
 		const { attributes = {} } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.create.enter`, "source", source);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.create.enter`, "input", input);
-		const sql = database(self.table).insert(attributes, [self.primary_key]).transacting(transaction);
+		const sql = database(self.table_name).insert(attributes, [self.primary_key]).transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.create:debug_sql`, sql.toString());
 		}
@@ -67,7 +71,7 @@ class DatabaseModel extends Model {
 			});
 	}
 	// read a row
-	read(context, input) {
+	_read(context, input) {
 		const self = this;
 		const { source, database, transaction } = context;
 		const { where = {}, where_in = {}, where_not_in = {}, limit = 128, offset = 0, order = this.primary_key, order_direction = "asc", order_nulls = "first" } = input;
@@ -75,32 +79,32 @@ class DatabaseModel extends Model {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "input", input);
 		if (source && source._metadata) {
 			// do join here based on source metadata
-			// use structure resolvers to convert graphql type to table name
+			// use structure resolvers to convert graphql type to table_name name
 			// relationships are one directional, so use from as the parent
 			const PARENT_SQL_ID = source._metadata.id;
 			const PARENT_GRAPHQL_TYPE = source._metadata.type;
 			const PARENT_SQL_TABLE = $structure.resolvers.DATABASE_GRAPHQL_TYPE_TO_SQL_TABLE[PARENT_GRAPHQL_TYPE];
-			// mutate where by prefixing with table name
+			// mutate where by prefixing with table_name name
 			var joined_where = {};
 			Object.keys(where).forEach(function (k) {
-				var joined_key = self.table + "." + k;
+				var joined_key = self.table_name + "." + k;
 				joined_where[joined_key] = where[k];
 			});
 			var joined_where_in = {};
 			Object.keys(where_in).forEach(function (k) {
-				var joined_key = self.table + "." + k;
+				var joined_key = self.table_name + "." + k;
 				joined_where_in[joined_key] = where_in[k];
 			});
 			var joined_where_not_in = {};
 			Object.keys(where_not_in).forEach(function (k) {
-				var joined_key = self.table + "." + k;
+				var joined_key = self.table_name + "." + k;
 				joined_where_not_in[joined_key] = where_not_in[k];
 			});
-			var joined_order = self.table + "." + order;
-			const sql = database(self.table)
-				.join(self.relationship_table, `${self.relationship_table}.gauze__relationship__to_id`, "=", `${self.table}.id`)
-				.where(`${self.relationship_table}.gauze__relationship__from_id`, PARENT_SQL_ID)
-				.where(`${self.relationship_table}.gauze__relationship__from_type`, PARENT_SQL_TABLE)
+			var joined_order = self.table_name + "." + order;
+			const sql = database(self.table_name)
+				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.id`)
+				.where(`${self.relationship_table_name}.gauze__relationship__from_id`, PARENT_SQL_ID)
+				.where(`${self.relationship_table_name}.gauze__relationship__from_type`, PARENT_SQL_TABLE)
 				.where(function (builder) {
 					builder.where(joined_where);
 					Object.keys(joined_where_in).forEach(function (key) {
@@ -128,7 +132,7 @@ class DatabaseModel extends Model {
 					throw err;
 				});
 		} else {
-			const sql = database(self.table)
+			const sql = database(self.table_name)
 				.where(function (builder) {
 					builder.where(where);
 					Object.keys(where_in).forEach(function (key) {
@@ -160,7 +164,7 @@ class DatabaseModel extends Model {
 		}
 	}
 	// update a row
-	update(context, input) {
+	_update(context, input) {
 		var self = this;
 		const { source, database, transaction } = context;
 		const { attributes = {}, where = {}, where_in = {}, where_not_in = {} } = input;
@@ -186,7 +190,7 @@ class DatabaseModel extends Model {
 						return item[self.primary_key];
 					});
 					// use valid_ids to do a where in query
-					const sql = database(self.table).whereIn(self.primary_key, valid_ids).update(attributes).transacting(transaction);
+					const sql = database(self.table_name).whereIn(self.primary_key, valid_ids).update(attributes).transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
 					}
@@ -212,7 +216,7 @@ class DatabaseModel extends Model {
 					throw err;
 				});
 		} else {
-			const sql = database(self.table)
+			const sql = database(self.table_name)
 				.where(function (builder) {
 					builder.where(where);
 					Object.keys(where_in).forEach(function (key) {
@@ -247,7 +251,7 @@ class DatabaseModel extends Model {
 		}
 	}
 	// delete a row
-	delete(context, input) {
+	_delete(context, input) {
 		var self = this;
 		const { source, database, transaction } = context;
 		const { where = {}, where_in = {}, where_not_in = {} } = input;
@@ -274,7 +278,7 @@ class DatabaseModel extends Model {
 						return item[self.primary_key];
 					});
 					// use valid_ids to do a where in query
-					const sql = database(self.table).whereIn(self.primary_key, valid_ids).del().transacting(transaction);
+					const sql = database(self.table_name).whereIn(self.primary_key, valid_ids).del().transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
 					}
@@ -300,7 +304,7 @@ class DatabaseModel extends Model {
 					throw err;
 				});
 		} else {
-			const sql = database(self.table)
+			const sql = database(self.table_name)
 				.where(function (builder) {
 					builder.where(where);
 					Object.keys(where_in).forEach(function (key) {
