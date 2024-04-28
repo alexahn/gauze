@@ -1,0 +1,34 @@
+mutation DeleteBlacklist(
+	$where: Blacklist_Mutation__Attributes
+	$where_in: Blacklist_Mutation__Attributes_Array
+	$where_not_in: Blacklist_Mutation__Attributes_Array
+	$limit: Int
+	$offset: Int
+	$order: String
+	$order_direction: String
+	$order_nulls: String
+) {
+	delete_blacklist(
+		where: $where
+		where_in: $where_in
+		where_not_in: $where_not_in
+		limit: $limit
+		offset: $offset
+		order: $order
+		order_direction: $order_direction
+		order_nulls: $order_nulls
+	) {
+		attributes {
+			gauze__blacklist__id
+			gauze__blacklist__created_at
+			gauze__blacklist__updated_at
+			gauze__blacklist__deleted_at
+			gauze__blacklist__realm
+			gauze__blacklist__agent_role
+			gauze__blacklist__agent_id
+			gauze__blacklist__agent_type
+			gauze__blacklist__entity_id
+			gauze__blacklist__entity_type
+		}
+	}
+}

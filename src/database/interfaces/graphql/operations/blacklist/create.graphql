@@ -1,0 +1,16 @@
+mutation CreateBlacklist($attributes: Blacklist_Mutation__Attributes) {
+	create_blacklist(attributes: $attributes) {
+		attributes {
+			gauze__blacklist__id
+			gauze__blacklist__created_at
+			gauze__blacklist__updated_at
+			gauze__blacklist__deleted_at
+			gauze__blacklist__realm
+			gauze__blacklist__agent_role
+			gauze__blacklist__agent_id
+			gauze__blacklist__agent_type
+			gauze__blacklist__entity_id
+			gauze__blacklist__entity_type
+		}
+	}
+}
