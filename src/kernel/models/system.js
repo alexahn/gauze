@@ -32,7 +32,7 @@ class SystemModel extends Model {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.constructor:exit`);
 	}
 	static _class_name(schema_name) {
-		return `(${schema_name})[${super._class_name()}]SystemModel`;
+		return schema_name ? `(${schema_name})[${super._class_name()}]SystemModel` : `[${super._class_name()}]SystemModel`;
 	}
 	__name() {
 		const self = this;

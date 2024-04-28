@@ -8,7 +8,6 @@ class BlacklistSystemModel extends $kernel.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
-		self.entity = $abstract.entities.blacklist.default($abstract);
 	}
 	create(context, input) {
 		const self = this;
@@ -76,9 +75,13 @@ class BlacklistSystemModel extends $kernel.models.system.SystemModel {
 	}
 }
 
-const BLACKLIST_MODEL_SYSTEM_ROOT_CONFIG = $abstract.entities.blacklist.default($abstract);
+const BLACKLIST_MODEL_SYSTEM_ROOT_CONFIG = {
+	entity: $abstract.entities.blacklist.default($abstract),
+	entity_name: "$abstract.entities.blacklist.default",
+};
 const BLACKLIST_MODEL_SYSTEM_CONFIG = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
+	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 };
 const BLACKLIST_MODEL_SYSTEM = new BlacklistSystemModel(BLACKLIST_MODEL_SYSTEM_ROOT_CONFIG, BLACKLIST_MODEL_SYSTEM_CONFIG);
 

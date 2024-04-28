@@ -8,7 +8,6 @@ class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends $kernel.models.system.
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
-		self.entity = $abstract.entities.a543731262804f64adcc0eae1a225acc.default($abstract);
 	}
 	create(context, input) {
 		const self = this;
@@ -76,9 +75,13 @@ class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends $kernel.models.system.
 	}
 }
 
-const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_ROOT_CONFIG = $abstract.entities.a543731262804f64adcc0eae1a225acc.default($abstract);
+const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_ROOT_CONFIG = {
+	entity: $abstract.entities.a543731262804f64adcc0eae1a225acc.default($abstract),
+	entity_name: "$abstract.entities.a543731262804f64adcc0eae1a225acc.default",
+};
 const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_CONFIG = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
+	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 };
 const caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM = new bb95d174a16f4ddd935ff3a802f7c7bcSystemModel(
 	caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_SYSTEM_ROOT_CONFIG,

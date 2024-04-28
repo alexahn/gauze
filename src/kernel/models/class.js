@@ -9,15 +9,16 @@ import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
 
 // base model handles middlewares, serializers, and deserializers based on the abstract entity definition
 class Model {
-	constructor(abstract_entity) {
-		const { name, fields } = abstract_entity;
-		this.entity = abstract_entity;
-		this.entity_name = name;
+	constructor(config) {
+		const self = this;
+		const { entity, entity_name } = config;
+		this.entity = entity;
+		this.entity_name = entity_name;
 		this.name = this._name();
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
 	}
 	static _class_name(entity_name) {
-		return `Model`;
+		return entity_name ? `(${entity_name})Model` : `Model`;
 	}
 	_name() {
 		const self = this;

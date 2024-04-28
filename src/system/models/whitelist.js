@@ -8,7 +8,6 @@ class WhitelistSystemModel extends $kernel.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
-		self.entity = $abstract.entities.whitelist.default($abstract);
 	}
 	create(context, input) {
 		const self = this;
@@ -76,9 +75,13 @@ class WhitelistSystemModel extends $kernel.models.system.SystemModel {
 	}
 }
 
-const WHITELIST_MODEL_SYSTEM_ROOT_CONFIG = $abstract.entities.whitelist.default($abstract);
+const WHITELIST_MODEL_SYSTEM_ROOT_CONFIG = {
+	entity: $abstract.entities.whitelist.default($abstract),
+	entity_name: "$abstract.entities.whitelist.default",
+};
 const WHITELIST_MODEL_SYSTEM_CONFIG = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
+	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 };
 const WHITELIST_MODEL_SYSTEM = new WhitelistSystemModel(WHITELIST_MODEL_SYSTEM_ROOT_CONFIG, WHITELIST_MODEL_SYSTEM_CONFIG);
 

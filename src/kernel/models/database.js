@@ -9,15 +9,13 @@ import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
 
 import * as $structure from "./../../structure/index.js";
 
-// constructor (config, input)
-// method (context, input)
 class DatabaseModel extends Model {
 	constructor(root_config, database_config) {
-		const { table_name, primary_key } = database_config;
 		super(root_config);
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:enter`);
-		this.table_name = table_name;
-		this.primary_key = primary_key;
+		const self = this;
+		const { table_name, primary_key } = database_config;
+		self.table_name = table_name;
+		self.primary_key = primary_key;
 		if ($structure.relationship) {
 			this.relationship_table_name = $structure.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE;
 		} else {
@@ -27,7 +25,7 @@ class DatabaseModel extends Model {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
 	}
 	static _class_name(table_name) {
-		return `(${table_name})[${super._class_name()}]DatabaseModel`;
+		return table_name ? `(${table_name})[${super._class_name()}]DatabaseModel` : `[${super._class_name()}]DatabaseModel`;
 	}
 	__name() {
 		const self = this;

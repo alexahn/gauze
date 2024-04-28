@@ -8,7 +8,6 @@ class Entity2SystemModel extends $kernel.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
-		self.entity = $abstract.entities.entity2.default($abstract);
 	}
 	create(context, input) {
 		const self = this;
@@ -76,9 +75,13 @@ class Entity2SystemModel extends $kernel.models.system.SystemModel {
 	}
 }
 
-const ENTITY2_MODEL_SYSTEM_ROOT_CONFIG = $abstract.entities.entity2.default($abstract);
+const ENTITY2_MODEL_SYSTEM_ROOT_CONFIG = {
+	entity: $abstract.entities.entity2.default($abstract),
+	entity_name: "$abstract.entities.entity2.default",
+};
 const ENTITY2_MODEL_SYSTEM_CONFIG = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
+	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 };
 const ENTITY2_MODEL_SYSTEM = new Entity2SystemModel(ENTITY2_MODEL_SYSTEM_ROOT_CONFIG, ENTITY2_MODEL_SYSTEM_CONFIG);
 

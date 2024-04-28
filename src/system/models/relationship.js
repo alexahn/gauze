@@ -8,7 +8,6 @@ class RelationshipSystemModel extends $kernel.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
-		self.entity = $abstract.entities.relationship.default($abstract);
 	}
 	create(context, input) {
 		const self = this;
@@ -76,9 +75,13 @@ class RelationshipSystemModel extends $kernel.models.system.SystemModel {
 	}
 }
 
-const RELATIONSHIP_MODEL_SYSTEM_ROOT_CONFIG = $abstract.entities.relationship.default($abstract);
+const RELATIONSHIP_MODEL_SYSTEM_ROOT_CONFIG = {
+	entity: $abstract.entities.relationship.default($abstract),
+	entity_name: "$abstract.entities.relationship.default",
+};
 const RELATIONSHIP_MODEL_SYSTEM_CONFIG = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
+	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 };
 const RELATIONSHIP_MODEL_SYSTEM = new RelationshipSystemModel(RELATIONSHIP_MODEL_SYSTEM_ROOT_CONFIG, RELATIONSHIP_MODEL_SYSTEM_CONFIG);
 
