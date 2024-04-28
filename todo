@@ -227,7 +227,7 @@
 [ ] add attribute flag to designate builtin entities
 [x] refactor schema to use interface entities
 	[x] add new files to base kernel
-[ ] refactor all exports to use the same naming convention (need two underscores instead of one in a lot of places)
+[x] refactor all exports to use the same naming convention (need two underscores instead of one in a lot of places)
 [ ] use es6 map for lru cache (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
 [x] copy the date graphql scalar so we have one less dependency
 [x] sub categorize internal gauze commands and user commands
@@ -241,7 +241,8 @@
 [ ] validate id field to ensure uuid structure
 [x] merge system models into one (there is no reason to have multiple)
 [ ] naming convention refactor (update according to all rules)
-	[ ] double underscore for module namespacing hierarchy
+	[x] double underscore for module namespacing hierarchy
+	[ ] only use upper snake case for global constants and module exports (convert in function const to lower snake case)
 [x] rename all kernel model methods to be underscore prefixed
 	[x] refactor database models so that they have create, read, update, delete methods that proxy to the kernel method
 		[x] allows for people to extend the models however they want, while preserving core internal logic

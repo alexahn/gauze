@@ -28,7 +28,7 @@ class bb95d174a16f4ddd935ff3a802f7c7bcDatabaseController extends $kernel.control
 const ROOT_CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE = {};
 const CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE = {
 	model: MODEL__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__DATABASE,
-	model_name: "caf5342ac38d41a6a02bb81d2d2b21a4_MODEL_DATABASE",
+	model_name: "MODEL__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__DATABASE",
 };
 const CONTROLLER__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE = new bb95d174a16f4ddd935ff3a802f7c7bcDatabaseController(
 	ROOT_CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE,

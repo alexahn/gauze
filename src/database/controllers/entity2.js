@@ -28,7 +28,7 @@ class Entity2DatabaseController extends $kernel.controllers.database.DatabaseCon
 const ROOT_CONFIG__ENTITY2__CONTROLLER__DATABASE = {};
 const CONFIG__ENTITY2__CONTROLLER__DATABASE = {
 	model: MODEL__ENTITY2__MODEL__DATABASE,
-	model_name: "ENTITY2_MODEL_DATABASE",
+	model_name: "MODEL__ENTITY2__MODEL__DATABASE",
 };
 const CONTROLLER__ENTITY2__CONTROLLER__DATABASE = new Entity2DatabaseController(ROOT_CONFIG__ENTITY2__CONTROLLER__DATABASE, CONFIG__ENTITY2__CONTROLLER__DATABASE);
 

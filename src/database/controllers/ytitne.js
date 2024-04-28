@@ -28,7 +28,7 @@ class YtitneDatabaseController extends $kernel.controllers.database.DatabaseCont
 const ROOT_CONFIG__YTITNE__CONTROLLER__DATABASE = {};
 const CONFIG__YTITNE__CONTROLLER__DATABASE = {
 	model: MODEL__YTITNE__MODEL__DATABASE,
-	model_name: "YTITNE_MODEL_DATABASE",
+	model_name: "MODEL__YTITNE__MODEL__DATABASE",
 };
 const CONTROLLER__YTITNE__CONTROLLER__DATABASE = new YtitneDatabaseController(ROOT_CONFIG__YTITNE__CONTROLLER__DATABASE, CONFIG__YTITNE__CONTROLLER__DATABASE);
 

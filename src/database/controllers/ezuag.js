@@ -28,7 +28,7 @@ class EzuagDatabaseController extends $kernel.controllers.database.DatabaseContr
 const ROOT_CONFIG__EZUAG__CONTROLLER__DATABASE = {};
 const CONFIG__EZUAG__CONTROLLER__DATABASE = {
 	model: MODEL__EZUAG__MODEL__DATABASE,
-	model_name: "EZUAG_MODEL_DATABASE",
+	model_name: "MODEL__EZUAG__MODEL__DATABASE",
 };
 const CONTROLLER__EZUAG__CONTROLLER__DATABASE = new EzuagDatabaseController(ROOT_CONFIG__EZUAG__CONTROLLER__DATABASE, CONFIG__EZUAG__CONTROLLER__DATABASE);
 
