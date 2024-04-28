@@ -31,6 +31,12 @@ const CREATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SY
 		$structure.a2b8dbc3427b41a9899e11671c2422c7.system.graphql.MUTATION__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 	),
 	args: {
+		// note: this is temporary so we can test the access control logic without maintaining a session
+		// todo: remove this once we set up user authentication
+		agent_id: {
+			description: "agent_id",
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
 		attributes: {
 			description: "attributes",
 			type: ATTRIBUTES__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
@@ -76,6 +82,12 @@ const UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SY
 		$structure.a2b8dbc3427b41a9899e11671c2422c7.system.graphql.MUTATION__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 	),
 	args: {
+		// note: this is temporary so we can test the access control logic without maintaining a session
+		// todo: remove this once we set up user authentication
+		agent_id: {
+			description: "agent_id",
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
 		where: {
 			description: "where",
 			type: ATTRIBUTES__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
@@ -153,6 +165,12 @@ const DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SY
 		$structure.a2b8dbc3427b41a9899e11671c2422c7.system.graphql.MUTATION__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 	),
 	args: {
+		// note: this is temporary so we can test the access control logic without maintaining a session
+		// todo: remove this once we set up user authentication
+		agent_id: {
+			description: "agent_id",
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
 		where: {
 			description: "where",
 			type: ATTRIBUTES__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM,

@@ -29,6 +29,12 @@ const ATTRIBUTES_ARRAY__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new
 const CREATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.relationship.system.graphql.MUTATION__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE),
 	args: {
+		// note: this is temporary so we can test the access control logic without maintaining a session
+		// todo: remove this once we set up user authentication
+		agent_id: {
+			description: "agent_id",
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
 		attributes: {
 			description: "attributes",
 			type: ATTRIBUTES__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
@@ -60,6 +66,12 @@ const CREATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 const UPDATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.relationship.system.graphql.MUTATION__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE),
 	args: {
+		// note: this is temporary so we can test the access control logic without maintaining a session
+		// todo: remove this once we set up user authentication
+		agent_id: {
+			description: "agent_id",
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
 		where: {
 			description: "where",
 			type: ATTRIBUTES__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
@@ -123,6 +135,12 @@ const UPDATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 const DELETE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.relationship.system.graphql.MUTATION__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE),
 	args: {
+		// note: this is temporary so we can test the access control logic without maintaining a session
+		// todo: remove this once we set up user authentication
+		agent_id: {
+			description: "agent_id",
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
 		where: {
 			description: "where",
 			type: ATTRIBUTES__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,

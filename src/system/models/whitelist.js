@@ -10,9 +10,12 @@ class WhitelistSystemModel extends $kernel.models.system.SystemModel {
 	}
 	create(context, input) {
 		const self = this;
+		var { agent_id = "" } = context;
+		// todo: remove this input proxy once we set up user authentication
+		agent_id = input.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE,
-			agent_id: "00000000-0000-0000-0000-000000000001",
+			agent_id: agent_id,
 		};
 		const operation = {
 			operation: $database.interfaces.graphql.operations.whitelist.CREATE__WHITELIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
@@ -26,9 +29,12 @@ class WhitelistSystemModel extends $kernel.models.system.SystemModel {
 	}
 	read(context, input) {
 		const self = this;
+		var { agent_id = "" } = context;
+		// todo: remove this input proxy once we set up user authentication
+		agent_id = input.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE,
-			agent_id: "00000000-0000-0000-0000-000000000001",
+			agent_id: agent_id,
 		};
 		const operation = {
 			operation: $database.interfaces.graphql.operations.whitelist.READ__WHITELIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
@@ -42,9 +48,12 @@ class WhitelistSystemModel extends $kernel.models.system.SystemModel {
 	}
 	update(context, input) {
 		const self = this;
+		var { agent_id = "" } = context;
+		// todo: remove this input proxy once we set up user authentication
+		agent_id = input.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE,
-			agent_id: "00000000-0000-0000-0000-000000000001",
+			agent_id: agent_id,
 		};
 		const operation = {
 			operation: $database.interfaces.graphql.operations.whitelist.UPDATE__WHITELIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
@@ -58,9 +67,12 @@ class WhitelistSystemModel extends $kernel.models.system.SystemModel {
 	}
 	delete(context, input) {
 		const self = this;
+		var { agent_id = "" } = context;
+		// todo: remove this input proxy once we set up user authentication
+		agent_id = input.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE,
-			agent_id: "00000000-0000-0000-0000-000000000001",
+			agent_id: agent_id,
 		};
 		const operation = {
 			operation: $database.interfaces.graphql.operations.whitelist.DELETE__WHITELIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,

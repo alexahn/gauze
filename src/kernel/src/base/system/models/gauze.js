@@ -10,9 +10,12 @@ class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends $kernel.models.system.
 	}
 	create(context, input) {
 		const self = this;
+		var { agent_id = "" } = context;
+		// todo: remove this input proxy once we set up user authentication
+		agent_id = input.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.a543731262804f64adcc0eae1a225acc.database.sql.TABLE_NAME__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
-			agent_id: "00000000-0000-0000-0000-000000000001",
+			agent_id: agent_id,
 		};
 		const operation = {
 			operation: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
@@ -26,9 +29,12 @@ class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends $kernel.models.system.
 	}
 	read(context, input) {
 		const self = this;
+		var { agent_id = "" } = context;
+		// todo: remove this input proxy once we set up user authentication
+		agent_id = input.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.a543731262804f64adcc0eae1a225acc.database.sql.TABLE_NAME__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
-			agent_id: "00000000-0000-0000-0000-000000000001",
+			agent_id: agent_id,
 		};
 		const operation = {
 			operation: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.READ__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
@@ -42,9 +48,12 @@ class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends $kernel.models.system.
 	}
 	update(context, input) {
 		const self = this;
+		var { agent_id = "" } = context;
+		// todo: remove this input proxy once we set up user authentication
+		agent_id = input.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.a543731262804f64adcc0eae1a225acc.database.sql.TABLE_NAME__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
-			agent_id: "00000000-0000-0000-0000-000000000001",
+			agent_id: agent_id,
 		};
 		const operation = {
 			operation: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
@@ -58,9 +67,12 @@ class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends $kernel.models.system.
 	}
 	delete(context, input) {
 		const self = this;
+		var { agent_id = "" } = context;
+		// todo: remove this input proxy once we set up user authentication
+		agent_id = input.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.a543731262804f64adcc0eae1a225acc.database.sql.TABLE_NAME__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
-			agent_id: "00000000-0000-0000-0000-000000000001",
+			agent_id: agent_id,
 		};
 		const operation = {
 			operation: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
