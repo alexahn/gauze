@@ -239,3 +239,4 @@
 [x] set up migrations for ezuag and ytitne
 [x] set up seed data for ezuag and ytitne
 [ ] validate id field to ensure uuid structure
+[ ] merge system models into one (there is no reason to have multiple)
