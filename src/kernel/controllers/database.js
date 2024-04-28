@@ -7,16 +7,22 @@ import { Controller } from "./class.js";
 
 import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
 
-// input model is a database model
 class DatabaseController extends Controller {
-	constructor(config, model) {
-		super(config);
+	constructor(root_config, database_config) {
+		super(root_config);
+		const self = this;
+		const { model, model_name } = database_config;
 		this.model = model;
-		this.name = this._name();
+		this.model_name = model_name;
+		this.name = this.__name();
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
 	}
-	_name() {
-		return `[${this.model.name}]${this.constructor.name}`;
+	static _class_name(model_name) {
+		return model_name ? `(${model_name})[${super._class_name()}]DatabaseController` : `[${super._class_name()}]DatabaseController`;
+	}
+	__name() {
+		const self = this;
+		return DatabaseController._class_name(self.model_name);
 	}
 	create({ user, source, database, transaction }, input) {
 		const self = this;

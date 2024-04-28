@@ -43,3 +43,13 @@ cp ./src/database/models/ezuag.js ./src/database/models/ytitne.js
 sed -i '' 's/ezuag/ytitne/g' ./src/database/models/ytitne.js
 sed -i '' 's/Ezuag/Ytitne/g' ./src/database/models/ytitne.js
 sed -i '' 's/EZUAG/YTITNE/g' ./src/database/models/ytitne.js
+
+cp ./src/system/controllers/ezuag.js ./src/system/controllers/ytitne.js
+sed -i '' 's/ezuag/ytitne/g' ./src/system/controllers/ytitne.js
+sed -i '' 's/Ezuag/Ytitne/g' ./src/system/controllers/ytitne.js
+sed -i '' 's/EZUAG/YTITNE/g' ./src/system/controllers/ytitne.js
+
+cp ./src/database/controllers/ezuag.js ./src/database/controllers/ytitne.js
+sed -i '' 's/ezuag/ytitne/g' ./src/database/controllers/ytitne.js
+sed -i '' 's/Ezuag/Ytitne/g' ./src/database/controllers/ytitne.js
+sed -i '' 's/EZUAG/YTITNE/g' ./src/database/controllers/ytitne.js

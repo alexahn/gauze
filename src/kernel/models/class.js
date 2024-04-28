@@ -59,6 +59,7 @@ class Model {
 	deserialize(row, method) {
 		const self = this;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.deserialize:enter`, "row", row);
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.deserialize:enter`, "method", method);
 		row = self.reduce_fields(row, method, "deserializers");
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.serialize_output:exit`, "row", row);
 		return row;
