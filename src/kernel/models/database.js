@@ -212,7 +212,19 @@ class DatabaseModel extends Model {
 					throw err;
 				});
 		} else {
-			const sql = database(self.table).where(where).update(attributes).transacting(transaction);
+			const sql = database(self.table)
+				.where(function (builder) {
+					builder.where(where);
+					Object.keys(where_in).forEach(function (key) {
+						builder.whereIn(key, where_in[key]);
+					});
+					Object.keys(where_not_in).forEach(function (key) {
+						builder.whereNotIn(key, where_not_in[key]);
+					});
+					return builder;
+				})
+				.update(attributes)
+				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
 			}
@@ -288,7 +300,19 @@ class DatabaseModel extends Model {
 					throw err;
 				});
 		} else {
-			const sql = database(self.table).where(where).del().transacting(transaction);
+			const sql = database(self.table)
+				.where(function (builder) {
+					builder.where(where);
+					Object.keys(where_in).forEach(function (key) {
+						builder.whereIn(key, where_in[key]);
+					});
+					Object.keys(where_not_in).forEach(function (key) {
+						builder.whereNotIn(key, where_not_in[key]);
+					});
+					return builder;
+				})
+				.del()
+				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
 			}

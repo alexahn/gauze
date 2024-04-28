@@ -242,3 +242,6 @@
 [ ] merge system models into one (there is no reason to have multiple)
 [ ] naming convention refactor (update according to all rules)
 	[ ] double underscore for module namespacing hierarchy
+[ ] rename all kernel model methods to be underscore prefixed
+	[ ] refactor database models so that they have create, read, update, delete methods that proxy to the kernel method
+		[ ] allows for people to extend the models however they want, while preserving core internal logic
