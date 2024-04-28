@@ -11,8 +11,8 @@ import { TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE } from "./relationsh
 import { TYPE__GRAPHQL__DATABASE__WHITELIST__STRUCTURE } from "./whitelist/database/graphql.js";
 import { TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE } from "./whitelist/database/sql.js";
 // blacklist
-import { TYPE__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE } from "./whitelist/database/graphql.js";
-import { TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE } from "./whitelist/database/sql.js";
+import { TYPE__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE } from "./blacklist/database/graphql.js";
+import { TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE } from "./blacklist/database/sql.js";
 
 function invert(obj) {
 	const inverted = {};
