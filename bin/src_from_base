@@ -4,11 +4,16 @@ set -e
 
 # delete entity2
 npx gauze delete entity ./src ./gauze/entity2.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
+# use stage6 schema
+cp -r ./src/kernel/src/stages/stage6/* ./src/
 
 # delete entity1
 npx gauze delete entity ./src ./gauze/entity1.js
+# use stage5 schema
+cp -r ./src/kernel/src/stages/stage5/* ./src/
+
+# delete blacklist
+npx gauze delete gauze ./src ./gauze/blacklist.js
 # use stage4 schema
 cp -r ./src/kernel/src/stages/stage4/* ./src/
 
@@ -54,13 +59,18 @@ npx gauze create gauze ./src ./gauze/whitelist.js
 # use stage4 schema
 cp -r ./src/kernel/src/stages/stage4/* ./src/
 
-# create entity1
-npx gauze create entity ./src ./gauze/entity1.js
+# create blacklist
+npx gauze create gauze ./src ./gauze/blacklistlist.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
-# create entity2
-npx gauze create entity ./src ./gauze/entity2.js
+# create entity1
+npx gauze create entity ./src ./gauze/entity1.js
 # use stage6 schema
 cp -r ./src/kernel/src/stages/stage6/* ./src/
+
+# create entity2
+npx gauze create entity ./src ./gauze/entity2.js
+# use stage7 schema
+cp -r ./src/kernel/src/stages/stage7/* ./src/
 

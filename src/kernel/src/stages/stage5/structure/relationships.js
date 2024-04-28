@@ -1,7 +1,4 @@
 // relationships are defined using the graphql type constant
-
-import { TYPE__GRAPHQL__DATABASE__ENTITY1__STRUCTURE } from "./entity1/database/graphql.js";
-
 const DATABASE_RELATIONSHIP_STRUCTURE = {};
 
 const SYSTEM_RELATIONSHIP_STRUCTURE = DATABASE_RELATIONSHIP_STRUCTURE;
