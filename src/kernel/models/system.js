@@ -134,16 +134,17 @@ class SystemModel extends Model {
 	}
 	_create(context, input, access, operation) {
 		const self = this;
-		if (!input[self.primary_key]) {
-			input[self.primary_key] = uuidv4();
+		if (!input.attributes[self.entity.primary_key]) {
+			input.attributes[self.entity.primary_key] = uuidv4();
 		}
 		if (self.entity.methods["create"].privacy === "public") {
 			input.whitelist = {
+				gauze__whitelist__realm: "system",
 				gauze__whitelist__agent_role: "root",
 				gauze__whitelist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
 				gauze__whitelist__agent_id: access.agent_id,
 				gauze__whitelist__entity_type: access.entity_type,
-				gauez__whitelist__entity_id: input[self.primary_key],
+				gauze__whitelist__entity_id: input.attributes[self.entity.primary_key],
 			};
 			return self._execute(context, operation, input);
 		} else {
