@@ -143,12 +143,13 @@
 	[x] whitelist and blacklist tables
 	[x] structure information for default mode for methods (e.g. private or public)
 	[x] blacklist and whitelist structures
-	[ ] blacklist and whitelist database models, controllers, and interface
+	[x] blacklist and whitelist database models, controllers, and interface
 [ ] cached where in and cached where not in exposed to database graphql
 	[ ] value is a string key that is a key to a value in cache
 	[ ] hook up lru cache to system and database
-[ ] accept a query parameter to simulate user id
-	[ ] allows us to work on permission/authorization layer without having a user table
+[x] accept a query parameter to simulate user id
+	[x] allows us to work on permission/authorization layer without having a user table
+	[x] agent_id is exposed for all queries and mutations to simulate an agent
 [ ] add parent argument to database graphql queries and mutations
 	[ ] it should have a structure like:  { _metadata: { id, type } }
 	[ ] we need this to pass in the source (e.g. parent) from the system to honor relationships

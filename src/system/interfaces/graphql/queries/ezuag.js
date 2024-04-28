@@ -35,6 +35,12 @@ const ATTRIBUTES_ARRAY__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract
 const READ__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.ezuag.system.graphql.QUERY__GRAPHQL__SYSTEM__EZUAG__STRUCTURE),
 	args: {
+		// note: this is temporary so we can test the access control logic without maintaining a session
+		// todo: remove this once we set up user authentication
+		agent_id: {
+			description: "agent_id",
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
 		parent: {
 			description: "parent",
 			type: PARENT__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM,
