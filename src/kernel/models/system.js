@@ -35,7 +35,7 @@ class SystemModel extends Model {
 		return self.constructor.name;
 	}
 	// should return a list of ids
-	read_whitelist(context, input) {
+	_read_whitelist(context, input) {
 		const self = this;
 		const { database, transaction } = context;
 		const { entity_type, agent_id } = input;
@@ -57,7 +57,7 @@ class SystemModel extends Model {
 		});
 	}
 	// should return a list of ids
-	read_blacklist(context, input) {
+	_read_blacklist(context, input) {
 		const self = this;
 		const { database, transaction } = context;
 		const { entity_type, agent_id } = input;
@@ -78,7 +78,7 @@ class SystemModel extends Model {
 			});
 		});
 	}
-	execute(context, operation_source, operation_variables) {
+	_execute(context, operation_source, operation_variables) {
 		const self = this;
 		const { operation, operation_name } = operation_source;
 		return EXECUTE__GRAPHQL__SHELL__KERNEL({
@@ -103,7 +103,7 @@ class SystemModel extends Model {
 		const { source, database, transaction } = context;
 		if (self.entity.methods["read"].privacy === "private") {
 			// note: tempted to construct a graphql query here to get the access list, but i think it would severely impact performance for large results
-			return self.read_whitelist(context, access).then(function (valid_ids) {
+			return self._read_whitelist(context, access).then(function (valid_ids) {
 				console.log("VALID_IDS", valid_ids);
 				// construct a where in array
 				// make a key and store the array in lru cache
@@ -112,15 +112,15 @@ class SystemModel extends Model {
 				input.where_in = {
 					[self.entity.primary_key]: valid_ids,
 				};
-				return self.execute(context, operation, input);
+				return self._execute(context, operation, input);
 			});
 		} else if (self.entity.methods["read"].privacy === "public") {
-			return self.read_blacklist(context, access).then(function (invalid_ids) {
+			return self._read_blacklist(context, access).then(function (invalid_ids) {
 				console.log("INVALID_IDS", invalid_ids);
 				input.where_not_in = {
 					[self.entity.primary_key]: invalid_ids,
 				};
-				return self.execute(context, operation, input);
+				return self._execute(context, operation, input);
 			});
 		} else {
 			return Promise.reject(new Error("Privacy policy does not exist for this method"));
@@ -130,7 +130,7 @@ class SystemModel extends Model {
 		const self = this;
 		// todo: set primary key if not set
 		if (self.entity.methods["create"].privacy === "public") {
-			return self.execute(context, operation, input);
+			return self._execute(context, operation, input);
 		} else {
 			return Promise.reject(new Error("Agent does not have access to this method"));
 		}
