@@ -30,6 +30,11 @@ function load_steps(base_path, directory) {
 					.map(function (file) {
 						const file_path = path.resolve(base_path, directory, file);
 						return import(file_path).then(function (module) {
+							// check that the filename is prefixed with the step number
+							const file_split = file.split(".");
+							const prefix = parseInt(file_split[0]);
+							if (prefix !== module.default.step)
+								throw new Error(`Step file must be prefixed with the step number followed by a '.', step is ${module.default.step} but prefix is: ${file_split[0]}`);
 							module.default.file_path = file_path;
 							return module.default;
 						});
