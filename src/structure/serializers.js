@@ -62,13 +62,17 @@ class GraphQLSerializer {
 			type: this.graphql_type,
 		};
 		const model = {
-			metadata: metadata,
+			_metadata: metadata,
 			attributes: sql_record,
 			relationships: {
 				_metadata: metadata,
 			},
-			query: {},
-			mutation: {},
+			query: {
+				_metadata: metadata,
+			},
+			mutation: {
+				_metadata: metadata,
+			},
 		};
 		return model;
 	}

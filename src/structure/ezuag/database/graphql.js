@@ -51,7 +51,7 @@ const QUERY__GRAPHQL__DATABASE__EZUAG__STRUCTURE = new $abstract.gauze.types.gra
 	name: "Ezuag_Query",
 	description: "Ezuag",
 	fields: () => ({
-		metadata: {
+		_metadata: {
 			type: METADATA__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
 			description: "metadata",
 		},
@@ -70,7 +70,7 @@ const MUTATION__GRAPHQL__DATABASE__EZUAG__STRUCTURE = new $abstract.gauze.types.
 	name: "Ezuag_Mutation",
 	description: "Ezuag",
 	fields: () => ({
-		metadata: {
+		_metadata: {
 			type: METADATA__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
 			description: "metadata",
 		},

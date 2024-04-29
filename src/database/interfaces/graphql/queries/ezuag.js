@@ -15,7 +15,7 @@ const SERIALIZER__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = new $structure.se
 });
 
 const PARENT__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Ezuag__Parent",
+	name: "Ezuag_Query__Parent",
 	description: "Ezuag Parent",
 	fields: () => $structure.ezuag.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
 });

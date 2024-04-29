@@ -14,6 +14,12 @@ const SERIALIZER__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $structure.
 	sql_primary_key: $structure.ytitne.database.sql.PRIMARY_KEY__SQL__DATABASE__YTITNE__STRUCTURE,
 });
 
+const PARENT__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Ytitne_Mutation__Parent",
+	description: "Ytitne Parent",
+	fields: () => $structure.ytitne.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
+});
+
 const ATTRIBUTES__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne_Mutation__Attributes",
 	description: "Ytitne Mutation Attributes",
@@ -34,6 +40,10 @@ const CREATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		agent_id: {
 			description: "agent_id",
 			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
+		parent: {
+			description: "parent",
+			type: PARENT__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		attributes: {
 			description: "attributes",
@@ -72,6 +82,10 @@ const UPDATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		agent_id: {
 			description: "agent_id",
 			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
+		parent: {
+			description: "parent",
+			type: PARENT__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
@@ -141,6 +155,10 @@ const DELETE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		agent_id: {
 			description: "agent_id",
 			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
+		parent: {
+			description: "parent",
+			type: PARENT__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",

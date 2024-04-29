@@ -15,7 +15,7 @@ const SERIALIZER__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $structure.s
 });
 
 const PARENT__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Ytitne__Parent",
+	name: "Ytitne_Query__Parent",
 	description: "Ytitne Parent",
 	fields: () => $structure.ytitne.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
 });
