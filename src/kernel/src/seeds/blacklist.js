@@ -16,6 +16,7 @@ const seed = async function (knex) {
 			gauze__blacklist__agent_id: "00000000-0000-0000-0000-000000000001",
 			gauze__blacklist__entity_type: "gauze__ytitne",
 			gauze__blacklist__entity_id: "00000000-0000-0000-0000-000000000001",
+			gauze__blacklist__method: "read",
 		},
 		{
 			gauze__blacklist__id: "00000000-0000-0000-0000-000000000002",
@@ -27,6 +28,7 @@ const seed = async function (knex) {
 			gauze__blacklist__agent_id: "00000000-0000-0000-0000-000000000002",
 			gauze__blacklist__entity_type: "gauze__ytitne",
 			gauze__blacklist__entity_id: "00000000-0000-0000-0000-000000000002",
+			gauze__blacklist__method: "read",
 		},
 	]);
 };
