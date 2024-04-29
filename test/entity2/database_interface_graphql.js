@@ -220,7 +220,7 @@ test.describe("entity2 graphql interface database", function (suite_ctx) {
 						console.log(data.errors);
 					}
 					assert.strictEqual(data.errors, undefined);
-					assert.strictEqual(data.data.delete_entity2.length, 0);
+					assert.strictEqual(data.data.delete_entity2.length, 1);
 					return Promise.resolve(data);
 				})
 				.then(function () {
@@ -444,7 +444,7 @@ test.describe("entity2 graphql interface database", function (suite_ctx) {
 			})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined);
-					assert.strictEqual(data.data.delete_entity2.length, 0);
+					assert.strictEqual(data.data.delete_entity2.length, 1);
 					return Promise.resolve(data);
 				})
 				.then(function () {
@@ -643,7 +643,7 @@ test.describe("entity2 graphql interface database", function (suite_ctx) {
 			})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined);
-					assert.strictEqual(data.data.delete_entity2.length, 0);
+					assert.strictEqual(data.data.delete_entity2.length, 1);
 					return Promise.resolve(data);
 				})
 				.then(function () {

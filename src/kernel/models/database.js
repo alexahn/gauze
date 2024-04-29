@@ -252,7 +252,7 @@ class DatabaseModel extends Model {
 	_delete(context, input) {
 		var self = this;
 		const { source, database, transaction } = context;
-		const { where = {}, where_in = {}, where_not_in = {} } = input;
+		const { where = {}, where_in = {}, where_not_in = {}, limit = 128 } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "source", source);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "input", input);
 		const MAXIMUM_ROWS = 4294967296;
@@ -271,8 +271,8 @@ class DatabaseModel extends Model {
 						limit: MAXIMUM_ROWS,
 					},
 				)
-				.then(function (data) {
-					const valid_ids = data.map(function (item) {
+				.then(function (read_data) {
+					const valid_ids = read_data.map(function (item) {
 						return item[self.primary_key];
 					});
 					// use valid_ids to do a where in query
@@ -281,8 +281,10 @@ class DatabaseModel extends Model {
 						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
 					}
 					return sql
-						.then(function (data) {
-							LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:success`, "data", data);
+						.then(function (delete_data) {
+							LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:success`, "delete_data", delete_data);
+							return read_data.slice(0, limit);
+							/*
 							return self.read(
 								{
 									source,
@@ -291,6 +293,7 @@ class DatabaseModel extends Model {
 								},
 								input,
 							);
+							*/
 						})
 						.catch(function (err) {
 							LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, "err", err);
@@ -302,37 +305,55 @@ class DatabaseModel extends Model {
 					throw err;
 				});
 		} else {
-			const sql = database(self.table_name)
-				.where(function (builder) {
-					builder.where(where);
-					Object.keys(where_in).forEach(function (key) {
-						builder.whereIn(key, where_in[key]);
-					});
-					Object.keys(where_not_in).forEach(function (key) {
-						builder.whereNotIn(key, where_not_in[key]);
-					});
-					return builder;
-				})
-				.del()
-				.transacting(transaction);
-			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
-			}
-			return sql
-				.then(function (data) {
-					LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:success`, "data", data);
-					return self.read(
-						{
-							source,
-							database,
-							transaction,
-						},
-						input,
-					);
-				})
-				.catch(function (err) {
-					LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, "err", err);
-					throw err;
+			// do a read first
+			return self
+				.read(
+					{
+						source,
+						database,
+						transaction,
+					},
+					{
+						...input,
+						limit: MAXIMUM_ROWS,
+					},
+				)
+				.then(function (read_data) {
+					const sql = database(self.table_name)
+						.where(function (builder) {
+							builder.where(where);
+							Object.keys(where_in).forEach(function (key) {
+								builder.whereIn(key, where_in[key]);
+							});
+							Object.keys(where_not_in).forEach(function (key) {
+								builder.whereNotIn(key, where_not_in[key]);
+							});
+							return builder;
+						})
+						.del()
+						.transacting(transaction);
+					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
+					}
+					return sql
+						.then(function (delete_data) {
+							LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:success`, "delete_data", delete_data);
+							return read_data.slice(0, limit);
+							/*
+							return self.read(
+								{
+									source,
+									database,
+									transaction,
+								},
+								input,
+							);
+							*/
+						})
+						.catch(function (err) {
+							LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, "err", err);
+							throw err;
+						});
 				});
 		}
 	}

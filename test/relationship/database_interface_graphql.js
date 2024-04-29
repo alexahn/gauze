@@ -226,7 +226,7 @@ test.describe("relationship graphql interface database", function (suite_ctx) {
 						console.log(data.errors);
 					}
 					assert.strictEqual(data.errors, undefined);
-					assert.strictEqual(data.data.delete_relationship.length, 0);
+					assert.strictEqual(data.data.delete_relationship.length, 1);
 					return Promise.resolve(data);
 				})
 				.then(function () {
@@ -498,7 +498,7 @@ test.describe("relationship graphql interface database", function (suite_ctx) {
 			})
 				.then(function (data) {
 					assert.strictEqual(data.errors, undefined);
-					assert.strictEqual(data.data.delete_relationship.length, 0);
+					assert.strictEqual(data.data.delete_relationship.length, 1);
 					return Promise.resolve(data);
 				})
 				.then(function () {
