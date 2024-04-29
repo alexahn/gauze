@@ -115,7 +115,6 @@ function run_steps(environment, steps) {
 	// augment context with database and transaction
 	const { database, schema } = environment;
 	return database.transaction(function (transaction) {
-		console.log("steps", steps);
 		return steps
 			.reduce(function (prev, next) {
 				return prev.then(function () {
@@ -148,18 +147,5 @@ function run_steps(environment, steps) {
 			});
 	});
 }
-/*
-const db = $gauze.database.knex.create_connection("test");
-
-load_steps('./steps').then(function (steps) {
-	return run_steps({
-		database: db,
-		schema: $gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM
-	}, steps).then(function () {
-		console.log("PASSED")
-		db.destroy()
-	})
-})
-*/
 
 export { load_steps, run_steps };
