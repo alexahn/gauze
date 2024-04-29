@@ -133,12 +133,15 @@ class SystemModel extends Model {
 	}
 	_create(context, input, access, operation) {
 		const self = this;
-		if (!input.attributes[self.entity.primary_key]) {
-			input.attributes[self.entity.primary_key] = uuidv4();
-		}
 		const { source } = context;
 		if (source && source._metadata) {
 			input.parent = source._metadata;
+		}
+		if (!input.attributes) {
+			throw new Error("Field 'attributes' is required");
+		}
+		if (!input.attributes[self.entity.primary_key]) {
+			input.attributes[self.entity.primary_key] = uuidv4();
 		}
 		if (self.entity.methods["create"].privacy === "public") {
 			input.whitelist = {
@@ -167,6 +170,9 @@ class SystemModel extends Model {
 		const { source } = context;
 		if (source && source._metadata) {
 			input.parent = source._metadata;
+		}
+		if (!input.attributes) {
+			throw new Error("Field 'attributes' is required");
 		}
 		return self._access_execute(context, input, access, operation);
 	}

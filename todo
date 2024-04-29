@@ -249,12 +249,18 @@
 		[x] allows for people to extend the models however they want, while preserving core internal logic
 [x] update create operations to also create a whitelist entry
 [ ] isolated tests
-	[ ]  make ytitne self-relational
-	[ ] don't depend on seed data for tests
-		[ ] will still depend on tables existing because we can't programmatically generate migration files
+	[x] make ytitne self-relational
+	[x] don't depend on seed data for tests
+		[x] will still depend on tables existing because we aren't programmatically generating migration files
 	[ ] combinatorially try every system state
-		[ ] need a consise way to write these tests, the current way is too heavy
+		[x] need a consise way to write these tests, the current way is too heavy
+			[x] write a way to define tests by treating the interface(s) as functions
+			[x] make a steps loader and steps runner
+		[ ] tests for access control
+		[ ] creating relationships (should only be possible to create relationships for things the agent can access)
 [ ] use import.meta.filename instead of parsing import.meta.url
-[ ] add mandatory input guards in controllers (or into the type definition?)
-	[ ] as an example, attributes can currently be null right now, which causes an error
+[x] add mandatory input guards in controllers (or into the type definition?)
+	[x] as an example, attributes can currently be null right now, which causes an error
+	[x] tried to do it through graphql type definitions but it is a pain in the ass because it treats the new type as a different type
+		[x] the error message that graphql returns isn't exceptionally useful, so we can just throw our own error
 [ ] prevent update from working with an empty where query? there is no reason to update everything a user has access to
