@@ -56,6 +56,13 @@ const CREATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			"0",
 			__RELATIVE_FILEPATH,
 			"CREATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"access:agent_id",
+			context.agent_id,
+		);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"CREATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
 			"mutation_arguments",
 			mutation_arguments,
 		);
@@ -130,6 +137,13 @@ const UPDATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			"0",
 			__RELATIVE_FILEPATH,
 			"UPDATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"access:agent_id",
+			context.agent_id,
+		);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"UPDATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
 			"mutation_arguments",
 			mutation_arguments,
 		);
@@ -138,6 +152,7 @@ const UPDATE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
+				agent_id: context.agent_id,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -199,6 +214,13 @@ const DELETE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			"0",
 			__RELATIVE_FILEPATH,
 			"DELETE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"access:agent_id",
+			context.agent_id,
+		);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"DELETE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
 			"mutation_arguments",
 			mutation_arguments,
 		);
@@ -207,6 +229,7 @@ const DELETE__ENTITY1__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
+				agent_id: context.agent_id,
 			},
 			mutation_arguments,
 		).then(function (data) {

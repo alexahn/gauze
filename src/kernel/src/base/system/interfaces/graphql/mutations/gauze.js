@@ -64,6 +64,13 @@ const CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SY
 			"0",
 			__RELATIVE_FILEPATH,
 			"CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"access:agent_id",
+			context.agent_id,
+		);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
 			"mutation_arguments",
 			mutation_arguments,
 		);
@@ -152,6 +159,13 @@ const UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SY
 			"0",
 			__RELATIVE_FILEPATH,
 			"UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"access:agent_id",
+			context.agent_id,
+		);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
 			"mutation_arguments",
 			mutation_arguments,
 		);
@@ -160,6 +174,7 @@ const UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SY
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
+				agent_id: context.agent_id,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -235,6 +250,13 @@ const DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SY
 			"0",
 			__RELATIVE_FILEPATH,
 			"DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"access:agent_id",
+			context.agent_id,
+		);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
 			"mutation_arguments",
 			mutation_arguments,
 		);
@@ -243,6 +265,7 @@ const DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SY
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
+				agent_id: context.agent_id,
 			},
 			mutation_arguments,
 		).then(function (data) {

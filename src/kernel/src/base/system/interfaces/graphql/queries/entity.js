@@ -95,6 +95,13 @@ const READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__SYSTEM 
 			"query_arguments",
 			query_arguments,
 		);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"access:agent_id",
+			context.agent_id,
+		);
 		return CONTROLLER__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__SYSTEM.read(
 			{
 				source: _source,
