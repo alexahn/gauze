@@ -136,6 +136,10 @@ class SystemModel extends Model {
 		if (!input.attributes[self.entity.primary_key]) {
 			input.attributes[self.entity.primary_key] = uuidv4();
 		}
+		const { source } = context;
+		if (source && source._metadata) {
+			input.parent = source._metadata;
+		}
 		if (self.entity.methods["create"].privacy === "public") {
 			input.whitelist = {
 				gauze__whitelist__realm: "system",
@@ -152,14 +156,26 @@ class SystemModel extends Model {
 	}
 	_read(context, input, access, operation) {
 		const self = this;
+		const { source } = context;
+		if (source && source._metadata) {
+			input.parent = source._metadata;
+		}
 		return self._access_execute(context, input, access, operation);
 	}
 	_update(context, input, access, operation) {
 		const self = this;
+		const { source } = context;
+		if (source && source._metadata) {
+			input.parent = source._metadata;
+		}
 		return self._access_execute(context, input, access, operation);
 	}
 	_delete(context, input, access, operation) {
 		const self = this;
+		const { source } = context;
+		if (source && source._metadata) {
+			input.parent = source._metadata;
+		}
 		return self._access_execute(context, input, access, operation);
 	}
 }

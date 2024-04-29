@@ -1,5 +1,5 @@
-mutation CreateYtitne($attributes: Ytitne_Mutation__Attributes, $whitelist: Whitelist_Mutation__Attributes) {
-	create_ytitne(attributes: $attributes) {
+mutation CreateYtitne($parent: Ytitne_Mutation__Parent, $attributes: Ytitne_Mutation__Attributes, $whitelist: Whitelist_Mutation__Attributes) {
+	create_ytitne(parent: $parent, attributes: $attributes) {
 		attributes {
 			id
 			created_at

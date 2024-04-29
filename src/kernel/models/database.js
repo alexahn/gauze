@@ -83,7 +83,7 @@ class DatabaseModel extends Model {
 			const PARENT_GRAPHQL_TYPE = source._metadata.type;
 			const PARENT_SQL_TABLE = $structure.resolvers.DATABASE_GRAPHQL_TYPE_TO_SQL_TABLE[PARENT_GRAPHQL_TYPE];
 			// mutate where by prefixing with table_name name
-			console.log("SOURCE", source)
+			console.log("SOURCE", source);
 			var joined_where = {};
 			Object.keys(where).forEach(function (k) {
 				var joined_key = self.table_name + "." + k;
