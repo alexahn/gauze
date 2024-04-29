@@ -265,3 +265,6 @@
 		[x] the error message that graphql returns isn't exceptionally useful, so we can just throw our own error
 [x] prevent update/delete from working with an empty where query? there is no reason to update everything a user has access to
 	[x] added guards to database kernel model to check that where is provided
+	[ ] think about how to make this prettier later
+[ ] use graphql enum types (https://graphql.org/graphql-js/type/#example-4) to lock down fields that act on a set of values
+	[ ] entity_type, agent_type, realm, agent_role

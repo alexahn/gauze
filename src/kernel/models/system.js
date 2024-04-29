@@ -122,7 +122,6 @@ class SystemModel extends Model {
 			});
 		} else if (self.entity.methods["read"].privacy === "public") {
 			return self._read_blacklist(context, access).then(function (invalid_ids) {
-				console.log("INVALID_IDS", invalid_ids);
 				input.where_not_in = {
 					[self.entity.primary_key]: invalid_ids,
 				};
