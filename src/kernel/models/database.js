@@ -31,6 +31,9 @@ class DatabaseModel extends Model {
 		const self = this;
 		return DatabaseModel._class_name(self.table_name);
 	}
+	_parse_relationship_metadata(source, input) {
+		return source && source._metadata ? source._metadata : input.parent && input.parent.id && input.parent.type ? input.parent : null;
+	}
 	// create a row
 	_create(context, input) {
 		const self = this;
@@ -75,15 +78,15 @@ class DatabaseModel extends Model {
 		const { where = {}, where_in = {}, where_not_in = {}, limit = 128, offset = 0, order = this.primary_key, order_direction = "asc", order_nulls = "first" } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "source", source);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "input", input);
-		if (source && source._metadata) {
+		const relationship_metadata = self._parse_relationship_metadata(context, input);
+		if (relationship_metadata) {
 			// do join here based on source metadata
 			// use structure resolvers to convert graphql type to table_name name
 			// relationships are one directional, so use from as the parent
-			const PARENT_SQL_ID = source._metadata.id;
-			const PARENT_GRAPHQL_TYPE = source._metadata.type;
+			const PARENT_SQL_ID = relationship_metadata.id;
+			const PARENT_GRAPHQL_TYPE = relationship_metadata.type;
 			const PARENT_SQL_TABLE = $structure.resolvers.DATABASE_GRAPHQL_TYPE_TO_SQL_TABLE[PARENT_GRAPHQL_TYPE];
 			// mutate where by prefixing with table_name name
-			console.log("SOURCE", source);
 			var joined_where = {};
 			Object.keys(where).forEach(function (k) {
 				var joined_key = self.table_name + "." + k;
@@ -170,7 +173,8 @@ class DatabaseModel extends Model {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "source", source);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "input", input);
 		const MAXIMUM_ROWS = 4294967296;
-		if (source && source._metadata) {
+		const relationship_metadata = self._parse_relationship_metadata(context, input);
+		if (relationship_metadata) {
 			// todo: hook up lru cache when dealing with id arrays
 			return self
 				.read(
@@ -258,7 +262,8 @@ class DatabaseModel extends Model {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "input", input);
 		const MAXIMUM_ROWS = 4294967296;
 		// todo: use attributes and update deleted_at instead of deleting the row
-		if (source && source._metadata) {
+		const relationship_metadata = self._parse_relationship_metadata(context, input);
+		if (relationship_metadata) {
 			// todo: hook up lru cache when dealing with id arrays
 			return self
 				.read(

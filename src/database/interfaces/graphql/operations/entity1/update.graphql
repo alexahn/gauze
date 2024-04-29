@@ -1,4 +1,5 @@
 mutation UpdateEntity1(
+	$parent: Entity1_Mutation__Parent
 	$attributes: Entity1_Mutation__Attributes
 	$where: Entity1_Mutation__Attributes
 	$where_in: Entity1_Mutation__Attributes_Array
@@ -10,6 +11,7 @@ mutation UpdateEntity1(
 	$order_nulls: String
 ) {
 	update_entity1(
+		parent: $parent
 		attributes: $attributes
 		where: $where
 		where_in: $where_in

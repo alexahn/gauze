@@ -1,4 +1,5 @@
 mutation DeleteEntity2(
+	$parent: Entity2_Mutation__Parent
 	$where: Entity2_Mutation__Attributes
 	$where_in: Entity2_Mutation__Attributes_Array
 	$where_not_in: Entity2_Mutation__Attributes_Array
@@ -9,6 +10,7 @@ mutation DeleteEntity2(
 	$order_nulls: String
 ) {
 	delete_entity2(
+		parent: $parent
 		where: $where
 		where_in: $where_in
 		where_not_in: $where_not_in

@@ -1,5 +1,5 @@
-mutation CreateEntity1($attributes: Entity1_Mutation__Attributes, $whitelist: Whitelist_Mutation__Attributes) {
-	create_entity1(attributes: $attributes) {
+mutation CreateEntity1($parent: Entity1_Mutation__Parent, $attributes: Entity1_Mutation__Attributes, $whitelist: Whitelist_Mutation__Attributes) {
+	create_entity1(parent: $parent, attributes: $attributes) {
 		attributes {
 			id
 			created_at

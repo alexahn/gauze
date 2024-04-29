@@ -1,4 +1,5 @@
 query ReadEntity2(
+	$parent: Entity2_Query__Parent
 	$where: Entity2_Query__Attributes
 	$where_in: Entity2_Query__Attributes_Array
 	$where_not_in: Entity2_Query__Attributes_Array
@@ -9,6 +10,7 @@ query ReadEntity2(
 	$order_nulls: String
 ) {
 	read_entity2(
+		parent: $parent
 		where: $where
 		where_in: $where_in
 		where_not_in: $where_not_in
