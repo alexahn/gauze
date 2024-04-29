@@ -111,6 +111,8 @@ class SystemModel extends Model {
 		if (self.entity.methods["read"].privacy === "private") {
 			// note: tempted to construct a graphql query here to get the access list, but i think it would severely impact performance for large results
 			return self._read_whitelist(context, access).then(function (valid_ids) {
+				LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:agent_id", access.agent_id);
+				LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:valid_ids", valid_ids);
 				// construct a where in array
 				// make a key and store the array in lru cache
 				// send the key into the query as cached_where_in
@@ -122,6 +124,8 @@ class SystemModel extends Model {
 			});
 		} else if (self.entity.methods["read"].privacy === "public") {
 			return self._read_blacklist(context, access).then(function (invalid_ids) {
+				LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:agent_id", access.agent_id);
+				LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:invalid_ids", invalid_ids);
 				input.where_not_in = {
 					[self.entity.primary_key]: invalid_ids,
 				};

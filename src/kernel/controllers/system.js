@@ -26,11 +26,12 @@ class SystemController extends Controller {
 	}
 	_create(context, input) {
 		const self = this;
-		const { user, source, database, transaction } = context;
+		const { user, source, database, transaction, agent_id } = context;
 		const model_context = {
 			source,
 			database,
 			transaction,
+			agent_id,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.create:enter`, "input", input);
 		return self.model.create(model_context, input).then(function (rows) {
@@ -41,11 +42,12 @@ class SystemController extends Controller {
 	}
 	_read(context, input) {
 		const self = this;
-		const { user, source, database, transaction } = context;
+		const { user, source, database, transaction, agent_id } = context;
 		const model_context = {
 			source,
 			database,
 			transaction,
+			agent_id,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.read:enter`, "input", input);
 		return self.model.read(model_context, input).then(function (rows) {
@@ -56,11 +58,12 @@ class SystemController extends Controller {
 	}
 	_update(context, input) {
 		const self = this;
-		const { user, source, database, transaction } = context;
+		const { user, source, database, transaction, agent_id } = context;
 		const model_context = {
 			source,
 			database,
 			transaction,
+			agent_id,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.update:enter`, "input", input);
 		return self.model.update(model_context, input).then(function (rows) {
@@ -71,11 +74,12 @@ class SystemController extends Controller {
 	}
 	_delete(context, input) {
 		const self = this;
-		const { user, source, database, transaction } = context;
+		const { user, source, database, transaction, agent_id } = context;
 		const model_context = {
 			source,
 			database,
 			transaction,
+			agent_id,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.delete:enter`, "input", input);
 		return self.model.delete(model_context, input).then(function (rows) {

@@ -268,3 +268,5 @@
 	[ ] think about how to make this prettier later
 [ ] use graphql enum types (https://graphql.org/graphql-js/type/#example-4) to lock down fields that act on a set of values
 	[ ] entity_type, agent_type, realm, agent_role
+[x] logging strategy so we can see the entire access control pipeline from beginning to end
+	[x] just prefix the message with something like 'access'
