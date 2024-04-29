@@ -257,3 +257,4 @@
 [ ] use import.meta.filename instead of parsing import.meta.url
 [ ] add mandatory input guards in controllers (or into the type definition?)
 	[ ] as an example, attributes can currently be null right now, which causes an error
+[ ] prevent update from working with an empty where query? there is no reason to update everything a user has access to

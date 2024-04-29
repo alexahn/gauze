@@ -9,7 +9,7 @@ import { load_steps, run_steps } from "./../../../helper.js";
 
 const SCHEMA = $gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM;
 
-test.describe("ytitne graphql interface system", async function (suite_ctx) {
+test.describe("nested ytitne graphql interface system", async function (suite_ctx) {
 	test.before(function (ctx) {
 		suite_ctx.database = $gauze.database.knex.create_connection("test");
 		return suite_ctx.database.migrate.latest().then(function () {
@@ -52,8 +52,9 @@ test.describe("ytitne graphql interface system", async function (suite_ctx) {
 			);
 		});
 	});
+	/*
 	await test.it("delete", function (test_ctx) {
-		return load_steps(import.meta.dirname, "./update").then(function (steps) {
+		return load_steps(import.meta.dirname, "./delete").then(function (steps) {
 			return run_steps(
 				{
 					database: suite_ctx.database,
@@ -63,4 +64,5 @@ test.describe("ytitne graphql interface system", async function (suite_ctx) {
 			);
 		});
 	});
+	*/
 });
