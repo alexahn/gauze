@@ -54,6 +54,7 @@ const CREATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
+				agent_id: context.agent_id,
 			},
 			mutation_arguments,
 		).then(function (data) {
