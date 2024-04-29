@@ -67,12 +67,9 @@ class GraphQLSerializer {
 			relationships: {
 				_metadata: metadata,
 			},
-			query: {
-				_metadata: metadata,
-			},
-			mutation: {
-				_metadata: metadata,
-			},
+			// todo: maybe figure out if we want to set _relationship instead of _metadata, because if we set _metadata for query and mutation, it is interpreted as a relationship
+			query: {},
+			mutation: {},
 		};
 		return model;
 	}

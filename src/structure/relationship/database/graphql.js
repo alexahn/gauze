@@ -51,7 +51,7 @@ const QUERY__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE = new $abstract.gauze.ty
 	name: "Relationship_Query",
 	description: "Relationship",
 	fields: () => ({
-		metadata: {
+		_metadata: {
 			type: METADATA__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE,
 			description: "metadata",
 		},
@@ -70,7 +70,7 @@ const MUTATION__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE = new $abstract.gauze
 	name: "Relationship_Mutation",
 	description: "Relationship",
 	fields: () => ({
-		metadata: {
+		_metadata: {
 			type: METADATA__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE,
 			description: "metadata",
 		},

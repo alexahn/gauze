@@ -15,7 +15,7 @@ const SERIALIZER__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structu
 });
 
 const PARENT__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Relationship__Parent",
+	name: "Relationship_Query__Parent",
 	description: "Relationship Parent",
 	fields: () => $structure.relationship.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
 });

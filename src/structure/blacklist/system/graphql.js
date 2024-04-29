@@ -51,7 +51,7 @@ const QUERY__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE = new $abstract.gauze.types.g
 	name: "Blacklist_Query",
 	description: "Blacklist",
 	fields: () => ({
-		metadata: {
+		_metadata: {
 			type: METADATA__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE,
 			description: "metadata",
 		},
@@ -70,7 +70,7 @@ const MUTATION__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE = new $abstract.gauze.type
 	name: "Blacklist_Mutation",
 	description: "Blacklist",
 	fields: () => ({
-		metadata: {
+		_metadata: {
 			type: METADATA__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE,
 			description: "metadata",
 		},

@@ -110,7 +110,6 @@ class SystemModel extends Model {
 		if (self.entity.methods["read"].privacy === "private") {
 			// note: tempted to construct a graphql query here to get the access list, but i think it would severely impact performance for large results
 			return self._read_whitelist(context, access).then(function (valid_ids) {
-				console.log("VALID_IDS", valid_ids);
 				// construct a where in array
 				// make a key and store the array in lru cache
 				// send the key into the query as cached_where_in

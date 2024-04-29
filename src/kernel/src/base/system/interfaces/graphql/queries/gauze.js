@@ -15,7 +15,7 @@ const SERIALIZER__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__S
 });
 
 const PARENT__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "bb95d174a16f4ddd935ff3a802f7c7bc__Parent",
+	name: "bb95d174a16f4ddd935ff3a802f7c7bc_Query__Parent",
 	description: "bb95d174a16f4ddd935ff3a802f7c7bc Parent",
 	fields: () => $structure.a543731262804f64adcc0eae1a225acc.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 });

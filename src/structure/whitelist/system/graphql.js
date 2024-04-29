@@ -51,7 +51,7 @@ const QUERY__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE = new $abstract.gauze.types.g
 	name: "Whitelist_Query",
 	description: "Whitelist",
 	fields: () => ({
-		metadata: {
+		_metadata: {
 			type: METADATA__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
 			description: "metadata",
 		},
@@ -70,7 +70,7 @@ const MUTATION__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE = new $abstract.gauze.type
 	name: "Whitelist_Mutation",
 	description: "Whitelist",
 	fields: () => ({
-		metadata: {
+		_metadata: {
 			type: METADATA__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
 			description: "metadata",
 		},

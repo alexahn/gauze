@@ -14,6 +14,12 @@ const SERIALIZER__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $structure
 	sql_primary_key: $structure.entity2.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY2__STRUCTURE,
 });
 
+const PARENT__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Entity2_Mutation__Parent",
+	description: "Entity2 Parent",
+	fields: () => $structure.entity2.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__ENTITY2__STRUCTURE,
+});
+
 const ATTRIBUTES__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity2_Mutation__Attributes",
 	description: "Entity2 Mutation Attributes",
@@ -34,6 +40,10 @@ const CREATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		agent_id: {
 			description: "agent_id",
 			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
+		parent: {
+			description: "parent",
+			type: PARENT__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		attributes: {
 			description: "attributes",
@@ -72,6 +82,10 @@ const UPDATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		agent_id: {
 			description: "agent_id",
 			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
+		parent: {
+			description: "parent",
+			type: PARENT__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
@@ -141,6 +155,10 @@ const DELETE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		agent_id: {
 			description: "agent_id",
 			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
+		parent: {
+			description: "parent",
+			type: PARENT__ENTITY2__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",

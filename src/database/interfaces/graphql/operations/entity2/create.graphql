@@ -9,7 +9,7 @@ mutation CreateEntity2($attributes: Entity2_Mutation__Attributes, $whitelist: Wh
 		}
 		mutation {
 			create_whitelist(attributes: $whitelist) {
-				metadata {
+				_metadata {
 					id
 				}
 			}

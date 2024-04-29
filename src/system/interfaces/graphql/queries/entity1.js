@@ -15,7 +15,7 @@ const SERIALIZER__ENTITY1__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.se
 });
 
 const PARENT__ENTITY1__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Entity1__Parent",
+	name: "Entity1_Query__Parent",
 	description: "Entity1 Parent",
 	fields: () => $structure.entity1.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__ENTITY1__STRUCTURE,
 });

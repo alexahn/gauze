@@ -15,7 +15,7 @@ const SERIALIZER__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $structur
 });
 
 const PARENT__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Whitelist__Parent",
+	name: "Whitelist_Query__Parent",
 	description: "Whitelist Parent",
 	fields: () => $structure.whitelist.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 });

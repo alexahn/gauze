@@ -15,7 +15,7 @@ const SERIALIZER__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $structur
 });
 
 const PARENT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Blacklist__Parent",
+	name: "Blacklist_Query__Parent",
 	description: "Blacklist Parent",
 	fields: () => $structure.blacklist.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
 });

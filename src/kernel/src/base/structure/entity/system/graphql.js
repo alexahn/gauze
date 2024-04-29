@@ -92,7 +92,7 @@ const QUERY__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new 
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Query",
 	description: "ba381b0cc764c4c9a187b716ae94ed96 Query",
 	fields: () => ({
-		metadata: FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE._metadata,
+		_metadata: FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE.attributes,
 		relationships: {
 			type: QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
@@ -109,7 +109,7 @@ const MUTATION__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = n
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Mutation",
 	description: "ba381b0cc764c4c9a187b716ae94ed96 Mutation",
 	fields: () => ({
-		metadata: FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE._metadata,
+		_metadata: FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE.attributes,
 		relationships: {
 			type: MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,

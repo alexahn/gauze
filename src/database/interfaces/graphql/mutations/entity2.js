@@ -14,6 +14,12 @@ const SERIALIZER__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $structu
 	sql_primary_key: $structure.entity2.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY2__STRUCTURE,
 });
 
+const PARENT__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Entity2_Mutation__Parent",
+	description: "Entity2 Parent",
+	fields: () => $structure.entity2.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__ENTITY2__STRUCTURE,
+});
+
 const ATTRIBUTES__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity2_Mutation__Attributes",
 	description: "Entity2 Mutation Attributes",
@@ -29,6 +35,10 @@ const ATTRIBUTES_ARRAY__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $a
 const CREATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entity2.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY2__STRUCTURE),
 	args: {
+		parent: {
+			description: "parent",
+			type: PARENT__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
 		attributes: {
 			description: "attributes",
 			type: ATTRIBUTES__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -60,6 +70,10 @@ const CREATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 const UPDATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entity2.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY2__STRUCTURE),
 	args: {
+		parent: {
+			description: "parent",
+			type: PARENT__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
 		where: {
 			description: "where",
 			type: ATTRIBUTES__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -123,6 +137,10 @@ const UPDATE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 const DELETE__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entity2.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY2__STRUCTURE),
 	args: {
+		parent: {
+			description: "parent",
+			type: PARENT__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
 		where: {
 			description: "where",
 			type: ATTRIBUTES__ENTITY2__MUTATION__GRAPHQL__INTERFACE__DATABASE,

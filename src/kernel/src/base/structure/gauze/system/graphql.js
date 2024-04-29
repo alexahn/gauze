@@ -53,7 +53,7 @@ const QUERY__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = new 
 	name: "bb95d174a16f4ddd935ff3a802f7c7bc_Query",
 	description: "bb95d174a16f4ddd935ff3a802f7c7bc",
 	fields: () => ({
-		metadata: {
+		_metadata: {
 			type: METADATA__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 			description: "metadata",
 		},
@@ -72,7 +72,7 @@ const MUTATION__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE = n
 	name: "bb95d174a16f4ddd935ff3a802f7c7bc_Mutation",
 	description: "bb95d174a16f4ddd935ff3a802f7c7bc",
 	fields: () => ({
-		metadata: {
+		_metadata: {
 			type: METADATA__GRAPHQL__SYSTEM__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 			description: "metadata",
 		},
