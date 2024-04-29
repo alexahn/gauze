@@ -1,0 +1,5 @@
+find . -type f -name '*.graphql' -exec sed -i '' "s/system/database/g" {} +
+find . -type f -name '*.graphql' -exec sed -i '' "s/SYSTEM/DATABASE/g" {} +
+
+find . -type f -name '*.js' -exec sed -i '' "s/system/database/g" {} +
+find . -type f -name '*.js' -exec sed -i '' "s/SYSTEM/DATABASE/g" {} +

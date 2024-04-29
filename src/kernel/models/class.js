@@ -44,7 +44,7 @@ class Model {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.serialize:enter`, "attributes", attributes);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.serialize:enter`, "method", method);
 		attributes = self.reduce_fields(attributes, method, "serializers");
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.deserialize:exit`, "attributes", attributes);
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.serialize:exit`, "attributes", attributes);
 		return attributes;
 	}
 	post_serialize_middleware(attributes, method) {
@@ -61,7 +61,7 @@ class Model {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.deserialize:enter`, "row", row);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.deserialize:enter`, "method", method);
 		row = self.reduce_fields(row, method, "deserializers");
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.serialize_output:exit`, "row", row);
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.deserialize:exit`, "row", row);
 		return row;
 	}
 	post_deserialize_middleware(row, method) {

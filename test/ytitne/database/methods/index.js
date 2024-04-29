@@ -7,9 +7,9 @@ import assert from "node:assert/strict";
 
 import { load_steps, run_steps } from "./../../../helper.js";
 
-const SCHEMA = $gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM;
+const SCHEMA = $gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE;
 
-test.describe("invalid relationships ytitne graphql interface system", async function (suite_ctx) {
+test.describe("ytitne graphql interface database", async function (suite_ctx) {
 	test.before(function (ctx) {
 		suite_ctx.database = $gauze.database.knex.create_connection("test");
 		return suite_ctx.database.migrate.latest().then(function () {
@@ -53,7 +53,7 @@ test.describe("invalid relationships ytitne graphql interface system", async fun
 		});
 	});
 	await test.it("delete", function (test_ctx) {
-		return load_steps(import.meta.dirname, "./delete").then(function (steps) {
+		return load_steps(import.meta.dirname, "./update").then(function (steps) {
 			return run_steps(
 				{
 					database: suite_ctx.database,

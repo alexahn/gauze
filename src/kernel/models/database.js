@@ -31,15 +31,18 @@ class DatabaseModel extends Model {
 		const self = this;
 		return DatabaseModel._class_name(self.table_name);
 	}
-	_parse_relationship_metadata(source, input) {
-		return source && source._metadata ? source._metadata : input.parent && input.parent.id && input.parent.type ? input.parent : null;
+	_parse_relationship_metadata(context, input) {
+		const self = this;
+		const { source } = context;
+		const relationship = source && source._metadata ? source._metadata : input.parent && input.parent.id && input.parent.type ? input.parent : null;
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.parse_relationship:enter`, "relationship", relationship);
+		return relationship;
 	}
 	// create a row
 	_create(context, input) {
 		const self = this;
 		const { source, database, transaction } = context;
 		const { attributes } = input;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.create.enter`, "source", source);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.create.enter`, "input", input);
 		if (!attributes) {
 			throw new Error("Field 'attributes' is required");
@@ -79,7 +82,6 @@ class DatabaseModel extends Model {
 		const self = this;
 		const { source, database, transaction } = context;
 		const { where = {}, where_in = {}, where_not_in = {}, limit = 128, offset = 0, order = this.primary_key, order_direction = "asc", order_nulls = "first" } = input;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "source", source);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "input", input);
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
 		if (relationship_metadata) {
@@ -173,7 +175,6 @@ class DatabaseModel extends Model {
 		var self = this;
 		const { source, database, transaction } = context;
 		var { attributes, where, where_in = {}, where_not_in = {} } = input;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "source", source);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "input", input);
 		if (!attributes) {
 			throw new Error("Field 'attributes' is required");
@@ -267,7 +268,6 @@ class DatabaseModel extends Model {
 		var self = this;
 		const { source, database, transaction } = context;
 		const { where, where_in = {}, where_not_in = {}, limit = 128 } = input;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "source", source);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "input", input);
 		const MAXIMUM_ROWS = 4294967296;
 		if (!where) {
