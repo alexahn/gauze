@@ -98,7 +98,8 @@ class SystemModel extends Model {
 				// should we make a new error here?
 				// todo: figure out if we need to log here or not
 				console.log(data.errors);
-				throw data.errors;
+				// throw the first error
+				throw data.errors[0];
 			} else {
 				return Promise.resolve(data);
 			}

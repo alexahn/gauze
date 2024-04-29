@@ -172,11 +172,14 @@ class DatabaseModel extends Model {
 	_update(context, input) {
 		var self = this;
 		const { source, database, transaction } = context;
-		const { attributes, where = {}, where_in = {}, where_not_in = {} } = input;
+		var { attributes, where, where_in = {}, where_not_in = {} } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "source", source);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "input", input);
 		if (!attributes) {
 			throw new Error("Field 'attributes' is required");
+		}
+		if (!where) {
+			throw new Error("Field 'where' is required");
 		}
 		const MAXIMUM_ROWS = 4294967296;
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
@@ -263,12 +266,15 @@ class DatabaseModel extends Model {
 	_delete(context, input) {
 		var self = this;
 		const { source, database, transaction } = context;
-		const { where = {}, where_in = {}, where_not_in = {}, limit = 128 } = input;
+		const { where, where_in = {}, where_not_in = {}, limit = 128 } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "source", source);
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "input", input);
 		const MAXIMUM_ROWS = 4294967296;
-		// todo: use attributes and update deleted_at instead of deleting the row
+		if (!where) {
+			throw new Error("Field 'where' is required");
+		}
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
+		// todo: use attributes and update deleted_at instead of deleting the row
 		if (relationship_metadata) {
 			// todo: hook up lru cache when dealing with id arrays
 			return self

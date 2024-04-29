@@ -263,4 +263,5 @@
 	[x] as an example, attributes can currently be null right now, which causes an error
 	[x] tried to do it through graphql type definitions but it is a pain in the ass because it treats the new type as a different type
 		[x] the error message that graphql returns isn't exceptionally useful, so we can just throw our own error
-[ ] prevent update from working with an empty where query? there is no reason to update everything a user has access to
+[x] prevent update/delete from working with an empty where query? there is no reason to update everything a user has access to
+	[x] added guards to database kernel model to check that where is provided
