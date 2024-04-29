@@ -29,6 +29,7 @@ query ReadWhitelist(
 			gauze__whitelist__agent_type
 			gauze__whitelist__entity_id
 			gauze__whitelist__entity_type
+			gauze__whitelist__method
 		}
 	}
 }

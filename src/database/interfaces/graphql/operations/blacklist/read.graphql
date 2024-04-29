@@ -29,6 +29,7 @@ query ReadBlacklist(
 			gauze__blacklist__agent_type
 			gauze__blacklist__entity_id
 			gauze__blacklist__entity_type
+			gauze__blacklist__method
 		}
 	}
 }

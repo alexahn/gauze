@@ -123,6 +123,18 @@ export default function ($abstract) {
 				deserializers: [],
 				post_deserialize_middlewares: [],
 			},
+			gauze__blacklist__method: {
+				name: "gauze__blacklist__method",
+				sql_type: "string",
+				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				description: "method",
+				pre_serialize_middlewares: [],
+				serializers: [],
+				post_serialize_middlewares: [],
+				pre_deserialize_middlewares: [],
+				deserializers: [],
+				post_deserialize_middlewares: [],
+			},
 		},
 		methods: {
 			create: {
