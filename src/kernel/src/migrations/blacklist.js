@@ -24,9 +24,19 @@ const up = function (knex) {
 			table.index("gauze__blacklist__entity_type");
 			table.index("gauze__blacklist__entity_id");
 
-			table.unique(["gauze__blacklist__realm", "gauze__blacklist__agent_type", "gauze__blacklist__agent_id", "gauze__blacklist__entity_type", "gauze__blacklist__entity_id"], {
-				useConstraint: true,
-			});
+			table.unique(
+				[
+					"gauze__blacklist__realm",
+					"gauze__blacklist__agent_type",
+					"gauze__blacklist__agent_id",
+					"gauze__blacklist__entity_type",
+					"gauze__blacklist__entity_id",
+					"gauze__blacklist__method",
+				],
+				{
+					useConstraint: true,
+				},
+			);
 		}),
 	]);
 };

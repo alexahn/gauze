@@ -24,9 +24,19 @@ const up = function (knex) {
 			table.index("gauze__whitelist__entity_type");
 			table.index("gauze__whitelist__entity_id");
 
-			table.unique(["gauze__whitelist__realm", "gauze__whitelist__agent_type", "gauze__whitelist__agent_id", "gauze__whitelist__entity_type", "gauze__whitelist__entity_id"], {
-				useConstraint: true,
-			});
+			table.unique(
+				[
+					"gauze__whitelist__realm",
+					"gauze__whitelist__agent_type",
+					"gauze__whitelist__agent_id",
+					"gauze__whitelist__entity_type",
+					"gauze__whitelist__entity_id",
+					"gauze__whitelist__method",
+				],
+				{
+					useConstraint: true,
+				},
+			);
 		}),
 	]);
 };

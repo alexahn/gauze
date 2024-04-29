@@ -144,13 +144,41 @@ class SystemModel extends Model {
 			input.attributes[self.entity.primary_key] = uuidv4();
 		}
 		if (self.entity.methods["create"].privacy === "public") {
-			input.whitelist = {
+			input.whitelist_create = {
 				gauze__whitelist__realm: "system",
 				gauze__whitelist__agent_role: "root",
 				gauze__whitelist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
 				gauze__whitelist__agent_id: access.agent_id,
 				gauze__whitelist__entity_type: access.entity_type,
 				gauze__whitelist__entity_id: input.attributes[self.entity.primary_key],
+				gauze__whitelist__method: "create",
+			};
+			input.whitelist_read = {
+				gauze__whitelist__realm: "system",
+				gauze__whitelist__agent_role: "root",
+				gauze__whitelist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
+				gauze__whitelist__agent_id: access.agent_id,
+				gauze__whitelist__entity_type: access.entity_type,
+				gauze__whitelist__entity_id: input.attributes[self.entity.primary_key],
+				gauze__whitelist__method: "read",
+			};
+			input.whitelist_update = {
+				gauze__whitelist__realm: "system",
+				gauze__whitelist__agent_role: "root",
+				gauze__whitelist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
+				gauze__whitelist__agent_id: access.agent_id,
+				gauze__whitelist__entity_type: access.entity_type,
+				gauze__whitelist__entity_id: input.attributes[self.entity.primary_key],
+				gauze__whitelist__method: "update",
+			};
+			input.whitelist_delete = {
+				gauze__whitelist__realm: "system",
+				gauze__whitelist__agent_role: "root",
+				gauze__whitelist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
+				gauze__whitelist__agent_id: access.agent_id,
+				gauze__whitelist__entity_type: access.entity_type,
+				gauze__whitelist__entity_id: input.attributes[self.entity.primary_key],
+				gauze__whitelist__method: "delete",
 			};
 			return self._execute(context, operation, input);
 		} else {
