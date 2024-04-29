@@ -5,7 +5,7 @@ import path from "node:path";
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { load_steps, run_steps } from "./../../../helper.js";
+import { load_steps, run_steps } from "./../../../steps.js";
 
 const SCHEMA = $gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE;
 
