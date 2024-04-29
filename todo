@@ -254,3 +254,6 @@
 		[ ] will still depend on tables existing because we can't programmatically generate migration files
 	[ ] combinatorially try every system state
 		[ ] need a consise way to write these tests, the current way is too heavy
+[ ] use import.meta.filename instead of parsing import.meta.url
+[ ] add mandatory input guards in controllers (or into the type definition?)
+	[ ] as an example, attributes can currently be null right now, which causes an error
