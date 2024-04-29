@@ -1,7 +1,10 @@
 mutation Createba381b0cc764c4c9a187b716ae94ed96(
 	$parent: ba381b0cc764c4c9a187b716ae94ed96_Mutation__Parent
 	$attributes: ba381b0cc764c4c9a187b716ae94ed96_Mutation__Attributes
-	$whitelist: Whitelist_Mutation__Attributes
+	$whitelist_create: Whitelist_Mutation__Attributes
+	$whitelist_read: Whitelist_Mutation__Attributes
+	$whitelist_update: Whitelist_Mutation__Attributes
+	$whitelist_delete: Whitelist_Mutation__Attributes
 ) {
 	create_a2b8dbc3427b41a9899e11671c2422c7(parent: $parent, attributes: $attributes) {
 		attributes {
@@ -12,7 +15,22 @@ mutation Createba381b0cc764c4c9a187b716ae94ed96(
 			text
 		}
 		mutation {
-			create_whitelist(attributes: $whitelist) {
+			create_whitelist: create_whitelist(attributes: $whitelist_create) {
+				_metadata {
+					id
+				}
+			}
+			read_whitelist: create_whitelist(attributes: $whitelist_read) {
+				_metadata {
+					id
+				}
+			}
+			update_whitelist: create_whitelist(attributes: $whitelist_update) {
+				_metadata {
+					id
+				}
+			}
+			delete_whitelist: create_whitelist(attributes: $whitelist_delete) {
 				_metadata {
 					id
 				}
