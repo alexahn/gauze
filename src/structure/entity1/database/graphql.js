@@ -2,7 +2,7 @@ import * as $abstract from "./../../../abstract/index.js";
 
 import { create_fields_array } from "./../../utility.js";
 
-const TYPE__GRAPHQL__DATABASE__ENTITY1__STRUCTURE = "ENTITY1";
+const TYPE__GRAPHQL__DATABASE__ENTITY1__STRUCTURE = $abstract.entities.entity1.default($abstract).graphql_meta_type;
 
 const METADATA_FIELDS__GRAPHQL__DATABASE__ENTITY1__STRUCTURE = {
 	id: {
