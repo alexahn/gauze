@@ -1,6 +1,7 @@
 export default function ($abstract) {
 	const ENTITY = {
 		name: "whitelist",
+		table_name: "gaue__whitelist",
 		primary_key: "gauze__whitelist__id",
 		fields: {
 			gauze__whitelist__id: {

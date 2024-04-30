@@ -1,6 +1,7 @@
 export default function ($abstract) {
 	const ENTITY = {
 		name: "blacklist",
+		table_name: "gauze__blacklist",
 		primary_key: "gauze__blacklist__id",
 		fields: {
 			gauze__blacklist__id: {

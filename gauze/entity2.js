@@ -1,6 +1,7 @@
 export default function ($abstract) {
 	const ENTITY = {
 		name: "entity2",
+		table_name: "gauze__entity2",
 		primary_key: "id",
 		fields: {
 			id: {
