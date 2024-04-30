@@ -63,9 +63,9 @@ class RelationshipSystemModel extends Model {
 		const { agent_id } = agent;
 		self._validate_relationship(relationship);
 		const from_entity_module_name = $structure.resolver.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__from_type];
-		const from_entity_module = $abstract[from_entity_module_name].default($abstract);
+		const from_entity_module = $abstract.entities[from_entity_module_name].default($abstract);
 		const to_entity_module_name = $structure.resolver.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__to_type];
-		const to_entity_module = $abstract[to_entity_module_name].default($abstract);
+		const to_entity_module = $abstract.entities[to_entity_module_name].default($abstract);
 		const from_entity_method_privacy = from_entity_module.methods[method].privacy;
 		const to_entity_methid_privacy = to_entity_module.methods[method].privacy;
 		const targets = [
@@ -192,6 +192,139 @@ class RelationshipSystemModel extends Model {
 			return self._execute(context, operation, input);
 		});
 	}
+	_read_from(context, input, access, operation) {
+		// check that from policy aligns
+		// get list of relationship
+		// intersect with agent whitelist or blacklist based on policy by doing a where in query (this could work if we leverage the fact that uuids rarely have collisions)
+		// the problem is that every to target has its own policy
+		// do an in memory join basically
+		// final set of relationships the user has access to
+		const self = this
+		const { database, transaction } = context
+		const { agent_id } = access
+		const method = "read"
+        const from_entity_module_name = $structure.resolver.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__from_type];
+        const from_entity_module = $abstract.entities[from_entity_module_name].default($abstract);
+        const from_entity_method_privacy = from_entity_module.methods[method].privacy;
+		return self._access_target(context, {
+			agent_id: agent_id,
+			entity_id: input.where.gauze__relationship__from_id,
+			entity_type: input.where.gauze__relationship__from_type,
+			method: method,
+			method_privacy: from_entity_method_privacy,
+		}).then(function () {
+			const sql = database(self.entity.table_name).where({
+				gauze__relationship__from_type: input.where.gauze__relationship__from_type,
+				gauze__relationship__from_id: input.where.gauze__relationship__from_id
+			}).transacting(transaction)
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+            	LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_from:debug_sql`, sql.toString());
+        	}
+			return sql.then(function (relationship_rows) {
+				const valid_to_ids = relationship_rows.map(function (relationship) {
+					return relationship.gauze__relationship__to_id
+				})
+				// use relationships to do a where in query on both whitelist and blacklist
+				const sql = database(self.whitelist_table)
+					.where({
+						gauze__whitelist__agent_id: agent_id,
+						gauze__whitelist__method: method
+					})
+					.whereIn('gauze__whitelist__entity_id', valid_to_ids).transacting(transaction)
+				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_from:debug_sql`, sql.toString());
+				}
+				return sql.then(function (whitelist_rows) {
+					const sql = database(self.blacklist_table)
+						.where({
+							gauze__blacklist__agent_id: agent_id,
+							gauze__blacklist__method: method
+						})
+						.whereIn('gauze__blacklist__entity_id', valid_to_ids).transacting(transaction)
+					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_from:debug_sql`, sql.toString());
+					}
+					return sql.then(function (blacklist_rows) {
+						// in memory join here
+						const modules = {}
+						const whitelist = {}
+						const blacklist = {}
+						// todo: can move this logic into the filter if we want, but this is easier to implement
+						relationship_rows.forEach(function (row) {
+							if (modules[row.gauze__relationship__to_type]) {
+								// skip
+							} else {
+								const module_name = $structure.resolver.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[row.gauze__relationship__to_type];
+								const module = $abstract.entities[module_name].default($abstract);
+								modules[row.gauze__relationship__to_type] = module
+							}
+						})
+						whitelist_rows.forEach(function (row) {
+							whitelist[row.gauze__whitelist__entity_id] = row
+						})
+						blacklist_rows.forEach(function (row) {
+							blacklist[row.gauze__blacklist__entity_id] = row
+						})
+						const filtered = relationship_rows.filter(function (relationship) {
+							// to_id
+							// to_type
+							// get method privacy for to_type
+							// look at whitelist if method is private
+							// look at blacklist if method is public
+							const method_privacy = modules[relationship.gauze__relationship__to_type].methods.read.privacy
+							if (method_privacy === 'private') {
+								const whitelist_row = whitelist[relationship.gauze__relationship__to_id]
+								if (whitelist_row) {
+									// check to make sure everything aligns
+									if (whitelist_row.gauze__whitelist__realm === 'system'
+											&& whitelist_row.gauze__whitelist__agent_id === agent_id
+											&& whitelist_row.gauze__whitelist__entity_type === relationship.gauze__relationship__to_type
+											&& whitelist_row.gauze__whitelist__entity_id === relationship.gauze__relationship__to_id
+											&& method === method) {
+										return true
+									} else {
+										return false
+									}
+								} else {
+									return false
+								}
+							} else if (method_privacy === 'public') {
+								const blacklist_row = blacklist[relationship.gauze__relationship__to_id]
+								if (blacklist_row) {
+									// check to make sure everything aligns
+                                    if (blacklist_row.gauze__blacklist__realm === 'system'
+                                            && blacklist_row.gauze__blacklist__agent_id === agent_id
+                                            && blacklist_row.gauze__blacklist__entity_type === relationship.gauze__relationship__to_type
+                                            && blacklist_row.gauze__blacklist__entity_id === relationship.gauze__relationship__to_id
+                                            && method === method) {
+                                        return false
+                                    } else {
+                                        return true
+                                    }
+								} else {
+									return true
+								}
+							} else {
+								// note: this is kind of brutal because it will prevent any results from showing up
+								// throw new Error("Privacy policy does not exist for this method")
+								// note: let's just return false here to filter it out
+								return false
+							}
+						})
+						// use filtered to construct a where in 
+						const valid_ids = filtered.map(function (function (row) {
+							return row.gauze__relationship__id
+						})
+						input.where_in = {
+							[self.entity.primary_key]: valid_ids,
+						};
+						// note: should we just return the relationships here instead of executing a graphql query?
+						return self._execute(context, operation, input);
+					})
+				})
+			})
+		})
+	}
 	// note: this method will not be able to navigate relationships
 	// note: for private methods, user will have to use the whitelist methods to see what entities they have read access to
 	// note: for public methods, user will need to have exposure to an entity before they can explore its relationships
@@ -208,12 +341,7 @@ class RelationshipSystemModel extends Model {
 			});
 		} else {
 			if (input.where && input.where.gauze__relationship__from_id && input.where.gauze__relationship__from_type) {
-				// check that from policy aligns
-				// get list of relationship
-				// intersect with agent whitelist or blacklist based on policy by doing a where in query (this could work if we leverage the fact that uuids rarely have collisions)
-				// the problem is that every to target has its own policy
-				// do an in memory join basically
-				// final set of relationships the user has access to
+				return self._read_from(context, input, access, operation)
 			} else {
 				throw new Error("Field 'where.gauze__relationship__id' is required or (Field 'where.gauze__relationship__from_id' and 'where.gauze__relationship__from_type' are required)");
 			}
