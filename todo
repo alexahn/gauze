@@ -274,3 +274,9 @@
 [x] move graphql meta type to abstract entities (the meta type is not a name that is encoded within the schema, but a framework identifier)
 [x] refactor structure/resolvers to use abstract entities so we can reduce the surface area of the staging layers
 	[x] delete resolver staging files
+[ ] think about how to do field validation so that field errors can be abstracted
+	[ ] currently we will just throw hand crafted errors, but we could probably have a structured approach
+[ ] refactor kernel models to have elegant function signatures
+	[ ] currently just hacking what works, but we should probably group things together to have better conceptual clarity
+[ ] prevent particular types of data from being created, such as relationships on relationships
+	[ ] gauze internal models should be siloed as much as possible

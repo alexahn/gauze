@@ -14,8 +14,8 @@ import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
 import { EXECUTE__GRAPHQL__SHELL__KERNEL } from "./../shell/graphql.js";
 
 class SystemModel extends Model {
-	constructor(config, graphql_config) {
-		super(config);
+	constructor(root_config, graphql_config) {
+		super(root_config);
 		const self = this;
 		const { schema, schema_name } = graphql_config;
 		self.schema = schema;
