@@ -1,8 +1,8 @@
-const description = `Update a ytitne object`;
-const operation_name = "UpdateYtitne";
+const description = `Read a ytitne object`;
+const operation_name = "ReadYtitne";
 const operation_source = `
-mutation ${operation_name}($where: Ytitne_Mutation__Attributes, $attributes: Ytitne_Mutation__Attributes) {
-	update_ytitne(where: $where, attributes: $attributes) {
+query ${operation_name}($where: Ytitne_Query__Attributes) {
+	read_ytitne(where: $where) {
 		attributes {
 			id
 			text
@@ -14,14 +14,10 @@ const operation_variables = {
 	where: {
 		id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
 	},
-	attributes: {
-		id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
-		text: "world",
-	},
 };
 const expected = `{
     "data": {
-        "update_ytitne": [
+        "read_ytitne": [
             {
                 "attributes": {
                     "id": "3ab515f4-5391-4af9-a2c9-a7119ad262ce",

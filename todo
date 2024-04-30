@@ -296,3 +296,5 @@
 	[x] reconfigure stages
 		[x] will need to have a truncated stage for the last two stages so that teardown doesn't crash
 		[x] after successful setup copy the new stages to the last two stages
+[ ] move all existence checks to the edge (e.g. attributes, where, where_in, etc)
+	[ ] to interfaces

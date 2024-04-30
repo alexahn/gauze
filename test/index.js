@@ -1,5 +1,5 @@
-export * as relationship from "./legacy/relationship/index.js";
-//export * as entity1 from "./entity1/index.js";
-//export * as entity2 from "./entity2/index.js";
-
+// legacy
+export * as legacy_relationship from "./legacy/relationship/index.js";
+// current
 export * as ytitne from "./ytitne/index.js";
+export * as relationship from "./relationship/index.js";
