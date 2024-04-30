@@ -6,7 +6,8 @@ import { TYPE__GRAPHQL__DATABASE__YTITNE__STRUCTURE } from "./ytitne/database/gr
 import { TYPE__GRAPHQL__DATABASE__ENTITY__STRUCTURE } from "./entity/database/graphql.js";
 
 /*
-	ytitne <-> entity1
+	ytitne <-> ytitne
+	ytitne <-> entity
 */
 const DATABASE_RELATIONSHIP_STRUCTURE = {
 	[TYPE__GRAPHQL__DATABASE__YTITNE__STRUCTURE]: [TYPE__GRAPHQL__DATABASE__YTITNE__STRUCTURE, TYPE__GRAPHQL__DATABASE__ENTITY__STRUCTURE],
