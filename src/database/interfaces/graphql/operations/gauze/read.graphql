@@ -1,0 +1,21 @@
+query ReadGauze(
+	$where: Gauze_Query__Attributes
+	$where_in: Gauze_Query__Attributes_Array
+	$where_not_in: Gauze_Query__Attributes_Array
+	$limit: Int
+	$offset: Int
+	$order: String
+	$order_direction: String
+	$order_nulls: String
+) {
+	read_gauze(where: $where, where_in: $where_in, where_not_in: $where_not_in, limit: $limit, offset: $offset, order: $order, order_direction: $order_direction, order_nulls: $order_nulls) {
+		attributes {
+			gauze__gauze__id
+			gauze__gauze__created_at
+			gauze__gauze__updated_at
+			gauze__gauze__deleted_at
+			gauze__gauze__text1
+			gauze__gauze__text2
+		}
+	}
+}

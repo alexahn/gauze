@@ -1,0 +1,33 @@
+mutation UpdateEntity(
+	$parent: Entity_Mutation__Parent
+	$attributes: Entity_Mutation__Attributes
+	$where: Entity_Mutation__Attributes
+	$where_in: Entity_Mutation__Attributes_Array
+	$where_not_in: Entity_Mutation__Attributes_Array
+	$limit: Int
+	$offset: Int
+	$order: String
+	$order_direction: String
+	$order_nulls: String
+) {
+	update_entity(
+		parent: $parent
+		attributes: $attributes
+		where: $where
+		where_in: $where_in
+		where_not_in: $where_not_in
+		limit: $limit
+		offset: $offset
+		order: $order
+		order_direction: $order_direction
+		order_nulls: $order_nulls
+	) {
+		attributes {
+			id
+			created_at
+			updated_at
+			deleted_at
+			text
+		}
+	}
+}
