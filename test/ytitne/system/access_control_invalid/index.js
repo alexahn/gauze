@@ -52,7 +52,6 @@ test.describe("invalid access control ytitne graphql interface system", async fu
 			);
 		});
 	});
-	/*
 	await test.it("delete", function (test_ctx) {
 		return load_steps(import.meta.dirname, "./delete").then(function (steps) {
 			return run_steps(
@@ -64,5 +63,4 @@ test.describe("invalid access control ytitne graphql interface system", async fu
 			);
 		});
 	});
-	*/
 });

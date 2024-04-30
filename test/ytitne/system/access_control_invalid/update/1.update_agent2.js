@@ -26,14 +26,7 @@ const operation_variables = {
 };
 const expected = `{
     "data": {
-        "update_ytitne": [
-            {
-                "attributes": {
-                    "id": "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
-                    "text": "world"
-                }
-            }
-        ]
+        "update_ytitne": []
     }
 }`;
 

@@ -6,16 +6,33 @@ const operation_name = "CreateYtitne";
 const operation_source = `
 mutation ${operation_name}(
 	$ytitne: Ytitne_Mutation__Attributes,
+	$whitelist: Whitelist_Mutation__Attributes
 ) {
 	create_ytitne(attributes: $ytitne) {
 		attributes {
 			id
 			text
 		}
+		mutation {
+			create_whitelist(attributes: $whitelist) {
+				_metadata {
+					type
+				}
+			}
+		}
 	}
 }
 `;
 const operation_variables = {
+	whitelist: {
+		gauze__whitelist__realm: "system",
+		gauze__whitelist__agent_type: "user",
+		gauze__whitelist__agent_role: "leaf",
+		gauze__whitelist__agent_id: "2",
+		gauze__whitelist__entity_type: "gauze__ytitne",
+		gauze__whitelist__entity_id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
+		gauze__whitelist__method: "read",
+	},
 	ytitne: {
 		id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
 		text: "hello",
@@ -28,6 +45,15 @@ const expected = `{
                 "attributes": {
                     "id": "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
                     "text": "hello"
+                },
+                "mutation": {
+                    "create_whitelist": [
+                        {
+                            "_metadata": {
+                                "type": "WHITELIST"
+                            }
+                        }
+                    ]
                 }
             }
         ]

@@ -41,7 +41,7 @@ class SystemModel extends Model {
 		return SystemModel._class_name(self.schema_name);
 	}
 	// should return a list of ids
-	_read_whitelist(context, access) {
+	_read_whitelist(context, access, method) {
 		const self = this;
 		const { database, transaction } = context;
 		const { entity_type, agent_id } = access;
@@ -50,6 +50,7 @@ class SystemModel extends Model {
 				gauze__whitelist__realm: "system",
 				gauze__whitelist__agent_id: agent_id,
 				gauze__whitelist__entity_type: entity_type,
+				gauze__whitelist__method: method,
 			})
 			.limit(4294967296)
 			.transacting(transaction);
@@ -63,7 +64,7 @@ class SystemModel extends Model {
 		});
 	}
 	// should return a list of ids
-	_read_blacklist(context, access) {
+	_read_blacklist(context, access, method) {
 		const self = this;
 		const { database, transaction } = context;
 		const { entity_type, agent_id } = access;
@@ -72,6 +73,7 @@ class SystemModel extends Model {
 				gauze__blacklist__realm: "system",
 				gauze__blacklist__agent_id: agent_id,
 				gauze__blacklist__entity_type: entity_type,
+				gauze__blacklist__method: method,
 			})
 			.limit(4294967296)
 			.transacting(transaction);
@@ -105,12 +107,12 @@ class SystemModel extends Model {
 			}
 		});
 	}
-	_access_execute(context, input, access, operation) {
+	_access_execute(context, input, access, method, operation) {
 		const self = this;
 		const { source, database, transaction } = context;
 		if (self.entity.methods["read"].privacy === "private") {
 			// note: tempted to construct a graphql query here to get the access list, but i think it would severely impact performance for large results
-			return self._read_whitelist(context, access).then(function (valid_ids) {
+			return self._read_whitelist(context, access, method).then(function (valid_ids) {
 				LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:agent_id", access.agent_id);
 				LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:valid_ids", valid_ids);
 				// construct a where in array
@@ -123,7 +125,7 @@ class SystemModel extends Model {
 				return self._execute(context, operation, input);
 			});
 		} else if (self.entity.methods["read"].privacy === "public") {
-			return self._read_blacklist(context, access).then(function (invalid_ids) {
+			return self._read_blacklist(context, access, method).then(function (invalid_ids) {
 				LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:agent_id", access.agent_id);
 				LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:invalid_ids", invalid_ids);
 				input.where_not_in = {
@@ -195,7 +197,7 @@ class SystemModel extends Model {
 		if (source && source._metadata) {
 			input.parent = source._metadata;
 		}
-		return self._access_execute(context, input, access, operation);
+		return self._access_execute(context, input, access, "read", operation);
 	}
 	_update(context, input, access, operation) {
 		const self = this;
@@ -206,7 +208,7 @@ class SystemModel extends Model {
 		if (!input.attributes) {
 			throw new Error("Field 'attributes' is required");
 		}
-		return self._access_execute(context, input, access, operation);
+		return self._access_execute(context, input, access, "update", operation);
 	}
 	_delete(context, input, access, operation) {
 		const self = this;
@@ -214,7 +216,7 @@ class SystemModel extends Model {
 		if (source && source._metadata) {
 			input.parent = source._metadata;
 		}
-		return self._access_execute(context, input, access, operation);
+		return self._access_execute(context, input, access, "delete", operation);
 	}
 }
 

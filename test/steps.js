@@ -82,7 +82,6 @@ function run_step(environment, step) {
 	Object.keys(step.context).forEach(function (key) {
 		context[key] = step.context[key];
 	});
-	//console.log('context', context)
 	// schema, context, operation, operation_name, operation_variables
 	return $gauze.kernel.shell.graphql
 		.EXECUTE__GRAPHQL__SHELL__KERNEL({
@@ -97,10 +96,10 @@ function run_step(environment, step) {
 				console.error(data.errors);
 				throw make_step_error(step);
 			} else {
-				// assert that data.data is the same as the expecation
 				const result = JSON.stringify(data, null, 4);
-				// actual, expected
 				try {
+					// assert that data.data is the same as the expecation
+					// actual, expected
 					assert.strictEqual(result, step.expected);
 				} catch (err) {
 					console.log("actual:");
