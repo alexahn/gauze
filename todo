@@ -285,3 +285,15 @@
 		[ ] methods are limited to 4 characters in the database
 	[ ] have a look up data structure/table that maps the realm name in field values to a readable value
 		[ ] realms are limited to 4 characters in the database
+[ ] rework workspace entities
+	[ ] remove relationship from entity1 to entity2
+		[ ] rework seed data
+	[ ] rename entity1 to entity
+		[ ] remove relationship from entity to entity2
+		[ ] rework seed data
+	[ ] rename entity2 to gauze (internal)
+		[ ] remove relationship from gauze to entity1
+		[ ] rework seed data
+	[ ] reconfigure stages
+		[ ] will need to have a truncated stage for the last two stages so that teardown doesn't crash
+		[ ] after successful setup copy the new stages to the last two stages
