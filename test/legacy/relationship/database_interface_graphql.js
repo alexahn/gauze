@@ -1,4 +1,4 @@
-import * as $gauze from "./../../src/index.js";
+import * as $gauze from "./../../../src/index.js";
 
 import fs from "node:fs";
 import path from "node:path";
