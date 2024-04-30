@@ -15,12 +15,15 @@ sed -i '' 's/DATABASE/SYSTEM/g' ./src/structure/ytitne/system/graphql.js
 # base migrations (follows staging order)
 
 cp ./src/kernel/src/migrations/ezuag.js ./src/database/migrations/00000000000001_ezuag.js
-cp ./src/kernel/src/migrations/ytitne.js ./src/database/migrations/00000000000001_ytitne.js
+cp ./src/kernel/src/migrations/ytitne.js ./src/database/migrations/00000000000002_ytitne.js
 cp ./src/kernel/src/migrations/relationship.js ./src/database/migrations/00000000000003_relationship.js
 cp ./src/kernel/src/migrations/whitelist.js ./src/database/migrations/00000000000004_whitelist.js
 cp ./src/kernel/src/migrations/blacklist.js ./src/database/migrations/00000000000005_blacklist.js
-cp ./src/kernel/src/migrations/entity1.js ./src/database/migrations/00000000000006_entity1.js
-cp ./src/kernel/src/migrations/entity2.js ./src/database/migrations/00000000000007_entity2.js
+cp ./src/kernel/src/migrations/gauze.js ./src/database/migrations/00000000000006_gauze.js
+cp ./src/kernel/src/migrations/entity.js ./src/database/migrations/00000000000007_entity.js
+# deprecated below
+#cp ./src/kernel/src/migrations/entity1.js ./src/database/migrations/00000000000006_entity1.js
+#cp ./src/kernel/src/migrations/entity2.js ./src/database/migrations/00000000000007_entity2.js
 
 # base seeds
 
@@ -29,8 +32,11 @@ cp ./src/kernel/src/seeds/ytitne.js ./src/database/seeds/ytitne.js
 cp ./src/kernel/src/seeds/relationship.js ./src/database/seeds/relationship.js
 cp ./src/kernel/src/seeds/whitelist.js ./src/database/seeds/whitelist.js
 cp ./src/kernel/src/seeds/blacklist.js ./src/database/seeds/blacklist.js
-cp ./src/kernel/src/seeds/entity1.js ./src/database/seeds/entity1.js
-cp ./src/kernel/src/seeds/entity2.js ./src/database/seeds/entity2.js
+cp ./src/kernel/src/seeds/gauze.js ./src/database/seeds/gauze.js
+cp ./src/kernel/src/seeds/entity.js ./src/database/seeds/entity.js
+# deprecated below
+#cp ./src/kernel/src/seeds/entity1.js ./src/database/seeds/entity1.js
+#cp ./src/kernel/src/seeds/entity2.js ./src/database/seeds/entity2.js
 
 # working space
 

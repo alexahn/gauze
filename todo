@@ -287,8 +287,6 @@
 	[ ] have a look up data structure/table that maps the realm name in field values to a readable value
 		[ ] realms are limited to 4 characters in the database
 [ ] rework workspace entities
-	[ ] remove relationship from entity1 to entity2
-		[ ] rework seed data
 	[ ] rename entity1 to entity
 		[ ] remove relationship from entity to entity2
 		[ ] rework seed data
