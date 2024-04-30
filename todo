@@ -289,10 +289,10 @@
 [ ] rework workspace entities
 	[x] rename entity1 to entity
 		[x] remove relationship from entity to entity2
-		[ ] rework seed data
+		[x] rework seed data
 	[x] rename entity2 to gauze (internal)
 		[x] remove relationship from gauze to entity1
-		[ ] rework seed data
-	[ ] reconfigure stages
+		[x] rework seed data
+	[x] reconfigure stages
 		[x] will need to have a truncated stage for the last two stages so that teardown doesn't crash
-		[ ] after successful setup copy the new stages to the last two stages
+		[x] after successful setup copy the new stages to the last two stages

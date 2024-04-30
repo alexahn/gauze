@@ -19,8 +19,8 @@ cp ./src/kernel/src/migrations/ytitne.js ./src/database/migrations/0000000000000
 cp ./src/kernel/src/migrations/relationship.js ./src/database/migrations/00000000000003_relationship.js
 cp ./src/kernel/src/migrations/whitelist.js ./src/database/migrations/00000000000004_whitelist.js
 cp ./src/kernel/src/migrations/blacklist.js ./src/database/migrations/00000000000005_blacklist.js
-cp ./src/kernel/src/migrations/gauze.js ./src/database/migrations/00000000000006_gauze.js
-cp ./src/kernel/src/migrations/entity.js ./src/database/migrations/00000000000007_entity.js
+cp ./src/kernel/src/migrations/entity.js ./src/database/migrations/00000000000006_entity.js
+cp ./src/kernel/src/migrations/gauze.js ./src/database/migrations/00000000000007_gauze.js
 # deprecated below
 #cp ./src/kernel/src/migrations/entity1.js ./src/database/migrations/00000000000006_entity1.js
 #cp ./src/kernel/src/migrations/entity2.js ./src/database/migrations/00000000000007_entity2.js
