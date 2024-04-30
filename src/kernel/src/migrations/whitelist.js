@@ -15,7 +15,7 @@ const up = function (knex) {
 			table.string("gauze__whitelist__agent_type", 64).notNullable();
 			table.uuid("gauze__whitelist__agent_id").notNullable();
 			table.string("gauze__whitelist__entity_type", 64).notNullable();
-			table.uuid("gauze__whitelist__entity_id").notNullable();
+			table.uuid("gauze__whitelist__entity_id");
 			table.string("gauze__whitelist__method").notNullable();
 
 			table.index("gauze__whitelist__realm");

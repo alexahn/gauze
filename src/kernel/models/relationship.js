@@ -210,7 +210,7 @@ class RelationshipSystemModel extends Model {
 			if (input.where && input.where.gauze__relationship__from_id && input.where.gauze__relationship__from_type) {
 				// check that from policy aligns
 				// get list of relationship
-				// intersect with agent whitelist or blacklist based on policy by doing a where in query
+				// intersect with agent whitelist or blacklist based on policy by doing a where in query (this could work if we leverage the fact that uuids rarely have collisions)
 				// the problem is that every to target has its own policy
 				// do an in memory join basically
 				// final set of relationships the user has access to
@@ -225,7 +225,9 @@ class RelationshipSystemModel extends Model {
 		if (input.where && input.where.gauze__relationship__id) {
 			return self._preread(database, transaction, input.where.gauze__relationship__id).then(function (relationship) {
 				return self._access_relationship(context, relationship, access, "update").then(function () {
-					return self._execute(context, operation, input);
+					return self._access_relationship(context, input.attributes, access, "update").then(function () {
+						return self._execute(context, operation, input);
+					});
 				});
 			});
 		} else {
