@@ -85,10 +85,6 @@
 	[x] where in and where not in exposed to system graphql
 	[ ] implement error visibility (right now it's a little rough if something goes wrong)
 [x] move server.js into command
-[ ] turn kernel into a proper stack
-	[x] kernel/controllers/class.js
-	[x] kernel/models/class.js
-	[ ] kernel/interfaces
 [x] serialize / deserialize
 	[x] call serialize and deserialize from controllers, but defined on models
 [x] update constants in interface to use the subdirectory (e.g. add GRAPHQL)
@@ -174,6 +170,11 @@
 	[x] do we need to enforce not being able to change some fields after they are set?
 		[x] split all protected fields to be implemented as pre serializer middleware
 [x] proper names for entities and gauze files generated from kernel
+[ ] turn kernel into a proper stack
+	[x] kernel/controllers/class.js
+	[x] kernel/models/class.js
+	[ ] kernel/interfaces
+		[ ] manage cache, logging, shell, infrastructure, etc
 [x] start thinking about kernel/src or kernel/source
 	[x] bootstrap new project by using commands that use the source code
 		[x] should have commands to create new entities
@@ -278,7 +279,7 @@
 [ ] prevent particular types of data from being created, such as relationships on relationships
 	[ ] gauze internal models should be siloed as much as possible
 [ ] update system model create method to do policy checking just like other system model methods
-[ ] optimizations for end scale
+[ ] optimizations for high performance
 	[ ] have a look up data structure/table that maps the table name in the database to a readable name
 		[ ] table names are limited to 4 characters in the database
 	[ ] have a look up data structure/table that maps the method name in field values to a readable value
