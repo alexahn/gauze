@@ -256,7 +256,7 @@
 		[x] need a consise way to write these tests, the current way is too heavy
 			[x] write a way to define tests by treating the interface(s) as functions
 			[x] make a steps loader and steps runner
-		[ ] tests for access control
+		[x] tests for access control
 		[ ] creating relationships (should only be possible to create relationships for things the agent can access)
 [ ] use import.meta.filename instead of parsing import.meta.url
 [x] add mandatory input guards in controllers (or into the type definition?)
