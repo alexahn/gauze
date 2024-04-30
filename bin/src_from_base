@@ -2,13 +2,13 @@
 
 set -e
 
-# delete entity2
-npx gauze delete entity ./src ./gauze/entity2.js
+# delete entity
+npx gauze delete entity ./src ./gauze/entity.js
 # use stage6 schema
 cp -r ./src/kernel/src/stages/stage6/* ./src/
 
-# delete entity1
-npx gauze delete entity ./src ./gauze/entity1.js
+# delete gauze
+npx gauze delete entity ./src ./gauze/gauze.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
