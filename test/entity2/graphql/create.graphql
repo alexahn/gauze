@@ -1,8 +1,0 @@
-mutation CreateEntity2($attributes: Entity2_Mutation__Attributes) {
-	create_entity2(attributes: $attributes) {
-		attributes {
-			id
-			text
-		}
-	}
-}

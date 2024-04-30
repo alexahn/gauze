@@ -1,8 +1,0 @@
-query ReadEntity2($where: Entity2_Query__Attributes) {
-	read_entity2(where: $where) {
-		attributes {
-			id
-			text
-		}
-	}
-}
