@@ -272,4 +272,5 @@
 	[x] just prefix the message with something like 'access'
 [x] move sql table name to abstract entities
 [x] move graphql meta type to abstract entities (the meta type is not a name that is encoded within the schema, but a framework identifier)
-[ ] refactor structure/resolvers to use abstract entities so we can reduce the surface area of the staging layers
+[x] refactor structure/resolvers to use abstract entities so we can reduce the surface area of the staging layers
+	[ ] delete resolver staging files
