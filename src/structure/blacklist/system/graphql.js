@@ -2,7 +2,7 @@ import * as $abstract from "./../../../abstract/index.js";
 
 import { create_fields_array } from "./../../utility.js";
 
-const TYPE__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE = "BLACKLIST";
+const TYPE__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE = $abstract.entities.blacklist.default($abstract).graphql_meta_type;
 
 const METADATA_FIELDS__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE = {
 	id: {
