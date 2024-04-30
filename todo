@@ -270,3 +270,4 @@
 	[ ] entity_type, agent_type, realm, agent_role
 [x] logging strategy so we can see the entire access control pipeline from beginning to end
 	[x] just prefix the message with something like 'access'
+[ ] move sql table name to abstract entities
