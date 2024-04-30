@@ -3,6 +3,7 @@ export default function ($abstract) {
 		name: "relationship",
 		table_name: "gauze__relationship",
 		primary_key: "gauze__relationship__id",
+		graphql_meta_type: "RELATIONSHIP",
 		fields: {
 			gauze__relationship__id: {
 				name: "gauze__relationship__id",

@@ -3,6 +3,7 @@ export default function ($abstract) {
 		name: "ytitne",
 		table_name: "gauze__ytitne",
 		primary_key: "id",
+		graphql_meta_type: "YTITNE",
 		fields: {
 			id: {
 				name: "id",

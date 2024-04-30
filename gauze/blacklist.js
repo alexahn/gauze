@@ -3,6 +3,7 @@ export default function ($abstract) {
 		name: "blacklist",
 		table_name: "gauze__blacklist",
 		primary_key: "gauze__blacklist__id",
+		graphql_meta_type: "BLACKLIST",
 		fields: {
 			gauze__blacklist__id: {
 				name: "gauze__blacklist__id",

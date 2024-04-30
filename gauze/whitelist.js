@@ -3,6 +3,7 @@ export default function ($abstract) {
 		name: "whitelist",
 		table_name: "gauze__whitelist",
 		primary_key: "gauze__whitelist__id",
+		graphql_meta_type: "WHITELIST",
 		fields: {
 			gauze__whitelist__id: {
 				name: "gauze__whitelist__id",

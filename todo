@@ -270,4 +270,6 @@
 	[ ] entity_type, agent_type, realm, agent_role
 [x] logging strategy so we can see the entire access control pipeline from beginning to end
 	[x] just prefix the message with something like 'access'
-[ ] move sql table name to abstract entities
+[x] move sql table name to abstract entities
+[x] move graphql meta type to abstract entities (the meta type is not a name that is encoded within the schema, but a framework identifier)
+[ ] refactor structure/resolvers to use abstract entities so we can reduce the surface area of the staging layers
