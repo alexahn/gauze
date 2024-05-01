@@ -260,13 +260,6 @@ class SystemModel extends Model {
 			gauze__whitelist__entity_id: input.attributes[self.entity.primary_key],
 			gauze__whitelist__method: "delete",
 		};
-		/*
-		if (self.entity.methods["create"].privacy === "public") {
-			return self._execute(context, operation, input);
-		} else {
-			return Promise.reject(new Error("Agent does not have access to this method"));
-		}
-		*/
 		return self._access_execute(context, input, access, "create", operation);
 	}
 	_read(context, input, access, operation) {
