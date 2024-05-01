@@ -81,7 +81,7 @@ export default function ($abstract) {
 		methods: {
 			create: {
 				name: "create",
-				privacy: "public",
+				privacy: "private",
 			},
 			read: {
 				name: "read",

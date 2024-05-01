@@ -170,7 +170,7 @@ class RelationshipSystemModel extends Model {
 		}
 	}
 	_preread(database, transaction, id) {
-		const self = this
+		const self = this;
 		const sql = database(self.entity.table_name)
 			.where({
 				gauze__relationship__id: id,
@@ -179,7 +179,7 @@ class RelationshipSystemModel extends Model {
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._preread:debug_sql`, sql.toString());
 		}
-		return sql
+		return sql;
 	}
 	_create(context, input, access, operation) {
 		const self = this;
@@ -340,7 +340,7 @@ class RelationshipSystemModel extends Model {
 		if (input.where && input.where.gauze__relationship__id) {
 			return self._preread(database, transaction, input.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
-					const relationship = relationships[0]
+					const relationship = relationships[0];
 					return self._access_relationship(context, relationship, access, "read").then(function () {
 						// note: should we just return the relationship here instead of executing a graphql query?
 						return self._execute(context, operation, input);
@@ -348,11 +348,11 @@ class RelationshipSystemModel extends Model {
 				} else {
 					return {
 						data: {
-							read_relationship: []
-						}
-					}
+							read_relationship: [],
+						},
+					};
 				}
-			})
+			});
 		} else {
 			if (input.where && input.where.gauze__relationship__from_id && input.where.gauze__relationship__from_type) {
 				return self._read_from(context, input, access, operation);
@@ -364,11 +364,11 @@ class RelationshipSystemModel extends Model {
 	// requires where.id
 	_update(context, input, access, operation) {
 		const self = this;
-		const {  database, transaction } = context
+		const { database, transaction } = context;
 		if (input.where && input.where.gauze__relationship__id) {
 			return self._preread(database, transaction, input.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
-					const relationship = relationships[0]
+					const relationship = relationships[0];
 					return self._access_relationship(context, relationship, access, "update").then(function () {
 						return self._access_relationship(context, input.attributes, access, "update").then(function () {
 							return self._execute(context, operation, input);
@@ -377,9 +377,9 @@ class RelationshipSystemModel extends Model {
 				} else {
 					return {
 						data: {
-							update_relationship: []
-						}
-					}
+							update_relationship: [],
+						},
+					};
 				}
 			});
 		} else {
@@ -389,22 +389,22 @@ class RelationshipSystemModel extends Model {
 	// requires where.id
 	_delete(context, input, access, operation) {
 		const self = this;
-		const {  database, transaction } = context
+		const { database, transaction } = context;
 		if (input.where && input.where.gauze__relationship__id) {
 			return self._preread(database, transaction, input.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
-					const relationship = relationships[0]
+					const relationship = relationships[0];
 					return self._access_relationship(context, relationship, access, "delete").then(function () {
 						return self._execute(context, operation, input);
 					});
 				} else {
 					return {
 						data: {
-							delete_relationship: []
-						}
-					}
+							delete_relationship: [],
+						},
+					};
 				}
-			})
+			});
 		} else {
 			throw new Error("Field 'where.gauze__relationship__id' is required");
 		}

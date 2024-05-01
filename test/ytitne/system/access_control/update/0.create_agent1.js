@@ -1,6 +1,8 @@
 const description = `Create a ytitne object`;
+const agent1 = "00000000-0000-0000-0000-000000000001";
+const agent2 = "00000000-0000-0000-0000-000000000002";
 const context = {
-	agent_id: "1",
+	agent_id: agent1,
 };
 const operation_name = "CreateYtitne";
 const operation_source = `
@@ -46,7 +48,7 @@ const operation_variables = {
 		gauze__whitelist__realm: "system",
 		gauze__whitelist__agent_type: "user",
 		gauze__whitelist__agent_role: "leaf",
-		gauze__whitelist__agent_id: "2",
+		gauze__whitelist__agent_id: agent2,
 		gauze__whitelist__entity_type: "gauze__ytitne",
 		gauze__whitelist__entity_id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
 		gauze__whitelist__method: "read",
@@ -55,7 +57,7 @@ const operation_variables = {
 		gauze__whitelist__realm: "system",
 		gauze__whitelist__agent_type: "user",
 		gauze__whitelist__agent_role: "leaf",
-		gauze__whitelist__agent_id: "2",
+		gauze__whitelist__agent_id: agent2,
 		gauze__whitelist__entity_type: "gauze__ytitne",
 		gauze__whitelist__entity_id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
 		gauze__whitelist__method: "update",

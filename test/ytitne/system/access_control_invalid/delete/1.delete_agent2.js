@@ -1,6 +1,8 @@
 const description = `Delete a ytitne object`;
+const agent1 = "00000000-0000-0000-0000-000000000001";
+const agent2 = "00000000-0000-0000-0000-000000000002";
 const context = {
-	agent_id: "2",
+	agent_id: agent2,
 };
 const operation_name = "DeleteYtitne";
 const operation_source = `

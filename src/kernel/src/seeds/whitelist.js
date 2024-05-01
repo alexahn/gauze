@@ -15,8 +15,8 @@ const seed = async function (knex) {
 			gauze__whitelist__agent_type: "gauze__user",
 			gauze__whitelist__agent_id: "00000000-0000-0000-0000-000000000001",
 			gauze__whitelist__entity_type: "gauze__ytitne",
-			gauze__whitelist__entity_id: "00000000-0000-0000-0000-000000000001",
-			gauze__whitelist__method: "read",
+			gauze__whitelist__entity_id: null,
+			gauze__whitelist__method: "create",
 		},
 		{
 			gauze__whitelist__id: "00000000-0000-0000-0000-000000000002",
@@ -27,8 +27,8 @@ const seed = async function (knex) {
 			gauze__whitelist__agent_type: "gauze__user",
 			gauze__whitelist__agent_id: "00000000-0000-0000-0000-000000000002",
 			gauze__whitelist__entity_type: "gauze__ytitne",
-			gauze__whitelist__entity_id: "00000000-0000-0000-0000-000000000002",
-			gauze__whitelist__method: "read",
+			gauze__whitelist__entity_id: null,
+			gauze__whitelist__method: "create",
 		},
 	]);
 };

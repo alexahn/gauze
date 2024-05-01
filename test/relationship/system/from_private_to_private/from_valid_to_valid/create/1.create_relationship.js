@@ -1,7 +1,7 @@
 const description = `Create a relationship object`;
 const context = {
-	agent_id: "00000000-0000-0000-0000-000000000002"
-}
+	agent_id: "00000000-0000-0000-0000-000000000002",
+};
 const operation_name = "CreateRelationship";
 const operation_source = `
 mutation ${operation_name}(
@@ -24,7 +24,7 @@ const operation_variables = {
 		gauze__relationship__from_type: "gauze__ytitne",
 		gauze__relationship__from_id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
 		gauze__relationship__to_type: "gauze__entity",
-		gauze__relationship__to_id: "55c29b50-5e24-447d-8505-75e82c2aa8cc"
+		gauze__relationship__to_id: "55c29b50-5e24-447d-8505-75e82c2aa8cc",
 	},
 };
 const expected = `{
@@ -41,7 +41,7 @@ const expected = `{
             }
         ]
     }
-}`
+}`;
 
 export default {
 	step: 1,

@@ -85,15 +85,15 @@ export default function ($abstract) {
 			},
 			read: {
 				name: "read",
-				privacy: "private",
+				privacy: "public",
 			},
 			update: {
 				name: "update",
-				privacy: "private",
+				privacy: "public",
 			},
 			delete: {
 				name: "delete",
-				privacy: "private",
+				privacy: "public",
 			},
 		},
 	};

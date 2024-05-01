@@ -1,7 +1,7 @@
 const description = `Create a relationship environment`;
 const context = {
-	agent_id: "00000000-0000-0000-0000-000000000001"
-}
+	agent_id: "00000000-0000-0000-0000-000000000001",
+};
 const operation_name = "CreateRelationshipEnvironment";
 const operation_source = `
 mutation ${operation_name}(
@@ -71,15 +71,15 @@ const operation_variables = {
 	},
 	ytitne2: {
 		id: "7f84c508-b714-41c1-b986-2d6ed64fc5e9",
-		text: "nothing"
+		text: "nothing",
 	},
 	entity: {
 		id: "55c29b50-5e24-447d-8505-75e82c2aa8cc",
-		text: "goodbye"
+		text: "goodbye",
 	},
 	entity2: {
 		id: "45f5266f-1971-4b9a-985d-ac650449b589",
-		text: "everything"
+		text: "everything",
 	},
 	ytitne_whitelist: {
 		gauze__whitelist__realm: "system",
@@ -88,16 +88,16 @@ const operation_variables = {
 		gauze__whitelist__agent_id: "00000000-0000-0000-0000-000000000002",
 		gauze__whitelist__entity_type: "gauze__ytitne",
 		gauze__whitelist__entity_id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
-		gauze__whitelist__method: "create"
+		gauze__whitelist__method: "create",
 	},
 	ytitne2_whitelist: {
-        gauze__whitelist__realm: "system",
-        gauze__whitelist__agent_role: "leaf",
-        gauze__whitelist__agent_type: "gauze__user",
-        gauze__whitelist__agent_id: "00000000-0000-0000-0000-000000000002",
-        gauze__whitelist__entity_type: "gauze__ytitne",
-        gauze__whitelist__entity_id: "7f84c508-b714-41c1-b986-2d6ed64fc5e9",
-        gauze__whitelist__method: "create"
+		gauze__whitelist__realm: "system",
+		gauze__whitelist__agent_role: "leaf",
+		gauze__whitelist__agent_type: "gauze__user",
+		gauze__whitelist__agent_id: "00000000-0000-0000-0000-000000000002",
+		gauze__whitelist__entity_type: "gauze__ytitne",
+		gauze__whitelist__entity_id: "7f84c508-b714-41c1-b986-2d6ed64fc5e9",
+		gauze__whitelist__method: "create",
 	},
 	entity_whitelist: {
 		gauze__whitelist__realm: "system",
@@ -106,17 +106,17 @@ const operation_variables = {
 		gauze__whitelist__agent_id: "00000000-0000-0000-0000-000000000002",
 		gauze__whitelist__entity_type: "gauze__entity",
 		gauze__whitelist__entity_id: "55c29b50-5e24-447d-8505-75e82c2aa8cc",
-		gauze__whitelist__method: "create"
+		gauze__whitelist__method: "create",
 	},
 	entity2_whitelist: {
-        gauze__whitelist__realm: "system",
-        gauze__whitelist__agent_role: "leaf",
-        gauze__whitelist__agent_type: "gauze__user",
-        gauze__whitelist__agent_id: "00000000-0000-0000-0000-000000000002",
-        gauze__whitelist__entity_type: "gauze__entity",
-        gauze__whitelist__entity_id: "45f5266f-1971-4b9a-985d-ac650449b589",
-        gauze__whitelist__method: "create"
-	}
+		gauze__whitelist__realm: "system",
+		gauze__whitelist__agent_role: "leaf",
+		gauze__whitelist__agent_type: "gauze__user",
+		gauze__whitelist__agent_id: "00000000-0000-0000-0000-000000000002",
+		gauze__whitelist__entity_type: "gauze__entity",
+		gauze__whitelist__entity_id: "45f5266f-1971-4b9a-985d-ac650449b589",
+		gauze__whitelist__method: "create",
+	},
 };
 const expected = `{
     "data": {
@@ -185,7 +185,7 @@ const expected = `{
             }
         ]
     }
-}`
+}`;
 
 export default {
 	step: 0,

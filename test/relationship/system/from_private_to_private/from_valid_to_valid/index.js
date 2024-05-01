@@ -61,8 +61,8 @@ test.describe("relationship graphql interface system", async function (suite_ctx
 				},
 				steps,
 			).catch(function (err) {
-				console.log("error message: ", err.message)
-			})
+				console.log("error message: ", err.message);
+			});
 		});
 	});
 });

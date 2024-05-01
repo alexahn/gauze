@@ -1,7 +1,7 @@
 const description = `Read a relationship object`;
 const context = {
-	agent_id: "00000000-0000-0000-0000-000000000002"
-}
+	agent_id: "00000000-0000-0000-0000-000000000002",
+};
 const operation_name = "ReadRelationship";
 const operation_source = `
 query ${operation_name}(
@@ -20,7 +20,7 @@ query ${operation_name}(
 `;
 const operation_variables = {
 	relationship: {
-		gauze__relationship__id: "ad0007d2-9c8f-4c97-92b6-f48e393b00c9"
+		gauze__relationship__id: "ad0007d2-9c8f-4c97-92b6-f48e393b00c9",
 	},
 };
 const expected = `{
@@ -37,7 +37,7 @@ const expected = `{
             }
         ]
     }
-}`
+}`;
 
 export default {
 	step: 2,
