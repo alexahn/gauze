@@ -1,4 +1,9 @@
 const description = `Update a ytitne object`;
+const agent1 = "00000000-0000-0000-0000-000000000001";
+const agent2 = "00000000-0000-0000-0000-000000000002";
+const context = {
+	agent_id: agent1,
+};
 const operation_name = "UpdateYtitne";
 const operation_source = `
 mutation ${operation_name}(
@@ -58,9 +63,7 @@ const expected = `{
 export default {
 	step: 1,
 	description: description,
-	context: {
-		agent_id: "1",
-	},
+	context: context,
 	operation: {
 		name: operation_name,
 		source: operation_source,

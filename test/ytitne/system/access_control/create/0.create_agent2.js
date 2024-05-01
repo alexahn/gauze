@@ -61,7 +61,7 @@ const expected = `{
                                 "gauze__whitelist__realm": "system",
                                 "gauze__whitelist__agent_type": "user",
                                 "gauze__whitelist__agent_role": "leaf",
-                                "gauze__whitelist__agent_id": "1",
+                                "gauze__whitelist__agent_id": "00000000-0000-0000-0000-000000000001",
                                 "gauze__whitelist__entity_type": "gauze__ytitne",
                                 "gauze__whitelist__entity_id": "55c29b50-5e24-447d-8505-75e82c2aa8cc",
                                 "gauze__whitelist__method": "create"
