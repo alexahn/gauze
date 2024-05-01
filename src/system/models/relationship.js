@@ -3,7 +3,7 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-class RelationshipSystemModel extends $kernel.models.system.SystemModel {
+class RelationshipSystemModel extends $kernel.models.relationship.RelationshipSystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

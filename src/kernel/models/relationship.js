@@ -3,6 +3,7 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
+import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 
 import { Model } from "./class.js";
@@ -14,7 +15,7 @@ import { EXECUTE__GRAPHQL__SHELL__KERNEL } from "./../shell/graphql.js";
 // todo: replace sql queries with database graphql queries?
 class RelationshipSystemModel extends Model {
 	constructor(root_config, relationship_config) {
-		super(config);
+		super(root_config);
 		const self = this;
 		const { schema, schema_name } = relationship_config;
 		self.schema = schema;
@@ -62,9 +63,9 @@ class RelationshipSystemModel extends Model {
 		const self = this;
 		const { agent_id } = agent;
 		self._validate_relationship(relationship);
-		const from_entity_module_name = $structure.resolver.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__from_type];
+		const from_entity_module_name = $structure.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__from_type];
 		const from_entity_module = $abstract.entities[from_entity_module_name].default($abstract);
-		const to_entity_module_name = $structure.resolver.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__to_type];
+		const to_entity_module_name = $structure.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__to_type];
 		const to_entity_module = $abstract.entities[to_entity_module_name].default($abstract);
 		const from_entity_method_privacy = from_entity_module.methods[method].privacy;
 		const to_entity_methid_privacy = to_entity_module.methods[method].privacy;
@@ -169,6 +170,7 @@ class RelationshipSystemModel extends Model {
 		}
 	}
 	_preread(database, transaction, id) {
+		const self = this
 		const sql = database(self.entity.table_name)
 			.where({
 				gauze__relationship__id: id,
@@ -177,14 +179,7 @@ class RelationshipSystemModel extends Model {
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._preread:debug_sql`, sql.toString());
 		}
-		return sql.then(function (rows) {
-			if (rows && rows.length) {
-				const relationship = rows[0];
-				return relationship;
-			} else {
-				throw new Error("Relationship does not exist");
-			}
-		});
+		return sql
 	}
 	_create(context, input, access, operation) {
 		const self = this;
@@ -203,7 +198,7 @@ class RelationshipSystemModel extends Model {
 		const { database, transaction } = context;
 		const { agent_id } = access;
 		const method = "read";
-		const from_entity_module_name = $structure.resolver.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__from_type];
+		const from_entity_module_name = $structure.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__from_type];
 		const from_entity_module = $abstract.entities[from_entity_module_name].default($abstract);
 		const from_entity_method_privacy = from_entity_module.methods[method].privacy;
 		return self
@@ -260,7 +255,7 @@ class RelationshipSystemModel extends Model {
 								if (modules[row.gauze__relationship__to_type]) {
 									// skip
 								} else {
-									const module_name = $structure.resolver.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[row.gauze__relationship__to_type];
+									const module_name = $structure.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[row.gauze__relationship__to_type];
 									const module = $abstract.entities[module_name].default($abstract);
 									modules[row.gauze__relationship__to_type] = module;
 								}
@@ -343,12 +338,21 @@ class RelationshipSystemModel extends Model {
 		const self = this;
 		const { database, transaction } = context;
 		if (input.where && input.where.gauze__relationship__id) {
-			return self._preread(database, transaction, input.where.gauze__relationship__id).then(function (relationship) {
-				return self._access_relationship(context, relationship, access, "read").then(function () {
-					// note: should we just return the relationship here instead of executing a graphql query?
-					return self._execute(context, operation, input);
-				});
-			});
+			return self._preread(database, transaction, input.where.gauze__relationship__id).then(function (relationships) {
+				if (relationships && relationships.length) {
+					const relationship = relationships[0]
+					return self._access_relationship(context, relationship, access, "read").then(function () {
+						// note: should we just return the relationship here instead of executing a graphql query?
+						return self._execute(context, operation, input);
+					});
+				} else {
+					return {
+						data: {
+							read_relationship: []
+						}
+					}
+				}
+			})
 		} else {
 			if (input.where && input.where.gauze__relationship__from_id && input.where.gauze__relationship__from_type) {
 				return self._read_from(context, input, access, operation);
@@ -360,13 +364,23 @@ class RelationshipSystemModel extends Model {
 	// requires where.id
 	_update(context, input, access, operation) {
 		const self = this;
+		const {  database, transaction } = context
 		if (input.where && input.where.gauze__relationship__id) {
-			return self._preread(database, transaction, input.where.gauze__relationship__id).then(function (relationship) {
-				return self._access_relationship(context, relationship, access, "update").then(function () {
-					return self._access_relationship(context, input.attributes, access, "update").then(function () {
-						return self._execute(context, operation, input);
+			return self._preread(database, transaction, input.where.gauze__relationship__id).then(function (relationships) {
+				if (relationships && relationships.length) {
+					const relationship = relationships[0]
+					return self._access_relationship(context, relationship, access, "update").then(function () {
+						return self._access_relationship(context, input.attributes, access, "update").then(function () {
+							return self._execute(context, operation, input);
+						});
 					});
-				});
+				} else {
+					return {
+						data: {
+							update_relationship: []
+						}
+					}
+				}
 			});
 		} else {
 			throw new Error("Field 'where.gauze__relationship__id' is required");
@@ -375,12 +389,22 @@ class RelationshipSystemModel extends Model {
 	// requires where.id
 	_delete(context, input, access, operation) {
 		const self = this;
+		const {  database, transaction } = context
 		if (input.where && input.where.gauze__relationship__id) {
-			return self._preread(database, transaction, input.where.gauze__relationship__id).then(function (relationship) {
-				return self._access_relationship(context, relationship, access, "delete").then(function () {
-					return self._execute(context, operation, input);
-				});
-			});
+			return self._preread(database, transaction, input.where.gauze__relationship__id).then(function (relationships) {
+				if (relationships && relationships.length) {
+					const relationship = relationships[0]
+					return self._access_relationship(context, relationship, access, "delete").then(function () {
+						return self._execute(context, operation, input);
+					});
+				} else {
+					return {
+						data: {
+							delete_relationship: []
+						}
+					}
+				}
+			})
 		} else {
 			throw new Error("Field 'where.gauze__relationship__id' is required");
 		}
