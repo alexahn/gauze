@@ -299,3 +299,8 @@
 [ ] move all existence checks to the edge (e.g. attributes, where, where_in, etc)
 	[ ] to interfaces
 [ ] change _access_execute in system model to not throw errors
+[ ] make a database directory per steps directory that has initialization for the database
+	[ ] run the steps in the database directory against the database schema
+	[ ] we should be able to one shot initialization for every test case using the database interface
+	[ ] currently, we are relying on the seed data for whitelist to enable creating models for two fixed agent ids
+	[ ] or we can set up independent seed sources, so that test data has its own reliable seed structure

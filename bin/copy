@@ -27,13 +27,18 @@ cp ./src/kernel/src/migrations/gauze.js ./src/database/migrations/00000000000007
 
 # base seeds
 
-cp ./src/kernel/src/seeds/ezuag.js ./src/database/seeds/ezuag.js
-cp ./src/kernel/src/seeds/ytitne.js ./src/database/seeds/ytitne.js
-cp ./src/kernel/src/seeds/relationship.js ./src/database/seeds/relationship.js
-cp ./src/kernel/src/seeds/whitelist.js ./src/database/seeds/whitelist.js
-cp ./src/kernel/src/seeds/blacklist.js ./src/database/seeds/blacklist.js
-cp ./src/kernel/src/seeds/gauze.js ./src/database/seeds/gauze.js
-cp ./src/kernel/src/seeds/entity.js ./src/database/seeds/entity.js
+rm -rf ./src/database/seeds/development
+cp -r ./src/kernel/src/seeds/development ./src/database/seeds/development
+rm -rf ./src/database/seeds/test
+cp -r ./src/kernel/src/seeds/test ./src/database/seeds/test
+
+#cp ./src/kernel/src/seeds/ezuag.js ./src/database/seeds/ezuag.js
+#cp ./src/kernel/src/seeds/ytitne.js ./src/database/seeds/ytitne.js
+#cp ./src/kernel/src/seeds/relationship.js ./src/database/seeds/relationship.js
+#cp ./src/kernel/src/seeds/whitelist.js ./src/database/seeds/whitelist.js
+#cp ./src/kernel/src/seeds/blacklist.js ./src/database/seeds/blacklist.js
+#cp ./src/kernel/src/seeds/gauze.js ./src/database/seeds/gauze.js
+#cp ./src/kernel/src/seeds/entity.js ./src/database/seeds/entity.js
 # deprecated below
 #cp ./src/kernel/src/seeds/entity1.js ./src/database/seeds/entity1.js
 #cp ./src/kernel/src/seeds/entity2.js ./src/database/seeds/entity2.js

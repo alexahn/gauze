@@ -24,7 +24,7 @@ const KNEX_CONFIG = {
 			directory: path.join(__dirname, "migrations"),
 		},
 		seeds: {
-			directory: path.join(__dirname, "seeds"),
+			directory: path.join(__dirname, "seeds", "test"),
 		},
 		useNullAsDefault: true,
 	},
@@ -38,7 +38,7 @@ const KNEX_CONFIG = {
 			directory: path.join(__dirname, "migrations"),
 		},
 		seeds: {
-			directory: path.join(__dirname, "seeds"),
+			directory: path.join(__dirname, "seeds", "development"),
 		},
 		useNullAsDefault: true,
 	},
@@ -52,7 +52,7 @@ const KNEX_CONFIG = {
 			directory: path.join(__dirname, "migrations"),
 		},
 		seeds: {
-			directory: path.join(__dirname, "seeds"),
+			directory: path.join(__dirname, "seeds", "staging"),
 		},
 		useNullAsDefault: true,
 	},
@@ -66,7 +66,7 @@ const KNEX_CONFIG = {
 			directory: path.join(__dirname, "migrations"),
 		},
 		seeds: {
-			directory: path.join(__dirname, "seeds"),
+			directory: path.join(__dirname, "seeds", "production"),
 		},
 		useNullAsDefault: true,
 	},

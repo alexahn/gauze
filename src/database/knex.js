@@ -8,7 +8,7 @@ import KNEX_FILE from "./knexfile.js";
 
 export function create_connection(environment) {
 	// if environment is passed in, forcefully use it
-	const KNEX_ENV = environment ? environment : process.env.NODE_ENV || "development";
+	const KNEX_ENV = environment ? environment : process.env.KNEX_ENV || "development";
 	const KNEX_CONFIG = KNEX_FILE[KNEX_ENV];
 	return knex(KNEX_CONFIG);
 }
