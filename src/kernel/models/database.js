@@ -198,22 +198,17 @@ class DatabaseModel extends Model {
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
 					}
-					return sql
-						.then(function (data) {
-							LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
-							return self.read(
-								{
-									source,
-									database,
-									transaction,
-								},
-								input,
-							);
-						})
-						.catch(function (err) {
-							LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.update:failure`, "err", err);
-							throw err;
-						});
+					return sql.then(function (data) {
+						LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
+						return self.read(
+							{
+								source,
+								database,
+								transaction,
+							},
+							input,
+						);
+					});
 				})
 				.catch(function (err) {
 					LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.update:failure`, "err", err);
@@ -286,18 +281,13 @@ class DatabaseModel extends Model {
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
 					}
-					return sql
-						.then(function (delete_data) {
-							LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:success`, "delete_data", delete_data);
-							return read_data.slice(0, limit);
-						})
-						.catch(function (err) {
-							LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, "err", err);
-							throw err;
-						});
+					return sql.then(function (delete_data) {
+						LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
+						return read_data.slice(0, limit);
+					});
 				})
 				.catch(function (err) {
-					LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, "err", err);
+					LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.delete:failure`, "err", err);
 					throw err;
 				});
 		} else {
@@ -331,15 +321,14 @@ class DatabaseModel extends Model {
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
 					}
-					return sql
-						.then(function (delete_data) {
-							LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:success`, "delete_data", delete_data);
-							return read_data.slice(0, limit);
-						})
-						.catch(function (err) {
-							LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, "err", err);
-							throw err;
-						});
+					return sql.then(function (delete_data) {
+						LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
+						return read_data.slice(0, limit);
+					});
+				})
+				.catch(function (err) {
+					LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.delete:failure`, "err", err);
+					throw err;
 				});
 		}
 	}
