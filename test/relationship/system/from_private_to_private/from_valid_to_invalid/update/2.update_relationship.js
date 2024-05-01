@@ -31,18 +31,22 @@ const operation_variables = {
 	},
 };
 const expected = `{
-    "data": {
-        "update_relationship": [
-            {
-                "attributes": {
-                    "gauze__relationship__id": "ad0007d2-9c8f-4c97-92b6-f48e393b00c9",
-                    "gauze__relationship__from_type": "gauze__ytitne",
-                    "gauze__relationship__from_id": "7f84c508-b714-41c1-b986-2d6ed64fc5e9",
-                    "gauze__relationship__to_type": "gauze__ytitne",
-                    "gauze__relationship__to_id": "45f5266f-1971-4b9a-985d-ac650449b589"
+    "errors": [
+        {
+            "message": "Agent does not have access to target method",
+            "locations": [
+                {
+                    "line": 6,
+                    "column": 2
                 }
-            }
-        ]
+            ],
+            "path": [
+                "update_relationship"
+            ]
+        }
+    ],
+    "data": {
+        "update_relationship": null
     }
 }`;
 

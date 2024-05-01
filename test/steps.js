@@ -93,8 +93,19 @@ function run_step(environment, step) {
 		})
 		.then(function (data) {
 			if (data.errors && data.errors.length) {
-				console.error(data.errors);
-				throw make_step_error(step);
+				const result = JSON.stringify(data, null, 4);
+				try {
+					assert.strictEqual(result, step.expected);
+				} catch (err) {
+					console.log("actual:");
+					console.log(result);
+					console.log("expected:");
+					console.log(step.expected);
+					console.log("error:");
+					console.log(data.errors);
+					throw make_step_error(step);
+				}
+				return data;
 			} else {
 				const result = JSON.stringify(data, null, 4);
 				try {

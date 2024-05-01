@@ -120,7 +120,7 @@ class RelationshipSystemModel extends Model {
 				if (rows.length) {
 					return Promise.resolve(rows);
 				} else {
-					throw new Error("Agent does not have access to method");
+					throw new Error("Agent does not have access to target method");
 				}
 			});
 		} else if (method_privacy === "public") {
@@ -143,13 +143,13 @@ class RelationshipSystemModel extends Model {
 			}
 			return sql.then(function (rows) {
 				if (rows.length) {
-					throw new Error("Agent does not have access to method");
+					throw new Error("Agent does not have access to target method");
 				} else {
 					return Promise.resolve(rows);
 				}
 			});
 		} else {
-			throw new Error("Privacy policy does not exist for this method");
+			throw new Error("Privacy policy does not exist for target method");
 		}
 	}
 	_validate_relationship(attributes) {

@@ -139,22 +139,6 @@ const expected = `{
         "ytitne2": [
             {
                 "_metadata": {
-                    "id": "7f84c508-b714-41c1-b986-2d6ed64fc5e9"
-                },
-                "mutation": {
-                    "create_whitelist": [
-                        {
-                            "_metadata": {
-                                "type": "WHITELIST"
-                            }
-                        }
-                    ]
-                }
-            }
-        ],
-        "create_ytitne": [
-            {
-                "_metadata": {
                     "id": "55c29b50-5e24-447d-8505-75e82c2aa8cc"
                 },
                 "mutation": {
@@ -168,7 +152,23 @@ const expected = `{
                 }
             }
         ],
-        "ytitne2": [
+        "ytitne3": [
+            {
+                "_metadata": {
+                    "id": "7f84c508-b714-41c1-b986-2d6ed64fc5e9"
+                },
+                "mutation": {
+                    "create_whitelist": [
+                        {
+                            "_metadata": {
+                                "type": "WHITELIST"
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "ytitne4": [
             {
                 "_metadata": {
                     "id": "45f5266f-1971-4b9a-985d-ac650449b589"

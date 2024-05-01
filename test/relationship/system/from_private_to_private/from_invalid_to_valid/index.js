@@ -9,7 +9,7 @@ import { load_steps, run_steps } from "./../../../../steps.js";
 
 const SCHEMA = $gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM;
 
-test.describe("(from private to private - from valid to valid) relationship graphql interface system", async function (suite_ctx) {
+test.describe("(from private to private - from invalid to valid) relationship graphql interface system", async function (suite_ctx) {
 	test.before(function (ctx) {
 		suite_ctx.database = $gauze.database.knex.create_connection("test");
 		return suite_ctx.database.migrate.latest().then(function () {
