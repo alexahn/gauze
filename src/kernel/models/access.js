@@ -11,7 +11,10 @@
 // what is changing
 //	- the units of change should be agent id, agent type, and agent role
 //  - realm, entity id, entity type, and method (rename to entity method?) are locked
-class AccessSystemModel {
+class AccessSystemModel extends Model {
+	constructor() {
+		this.access_table_name = this.entity.table_name
+	}
 	// grab all records for the current agent
 	// sort by role
 	// use highest role to commit to action
@@ -28,3 +31,4 @@ class AccessSystemModel {
 
 	}
 }
+
