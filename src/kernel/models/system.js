@@ -58,6 +58,7 @@ class SystemModel extends Model {
 			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_whitelist:debug_sql`, sql.toString());
 		}
 		return sql.then(function (rows) {
+			console.log("NULL ROWS", rows)
 			return rows.map(function (row) {
 				return row.gauze__whitelist__entity_id;
 			});
