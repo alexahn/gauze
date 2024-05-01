@@ -7,12 +7,12 @@ const operation_source = `
 mutation ${operation_name}(
 	$ytitne: Ytitne_Mutation__Attributes,
 	$ytitne2: Ytitne_Mutation__Attributes,
-	$ytitne3: Ytitne_Mutation__Attributes,
-	$ytitne4: Ytitne_Mutation__Attributes,
+	$entity: Entity_Mutation__Attributes,
+	$entity2: Entity_Mutation__Attributes,
 	$ytitne_whitelist: Whitelist_Mutation__Attributes,
 	$ytitne2_whitelist: Whitelist_Mutation__Attributes,
-	$ytitne3_whitelist: Whitelist_Mutation__Attributes,
-	$ytitne4_whitelist: Whitelist_Mutation__Attributes
+	$entity_blacklist: Blacklist_Mutation__Attributes,
+	$entity2_blacklist: Blacklist_Mutation__Attributes
 ) {
 	create_ytitne(attributes: $ytitne) {
 		_metadata {
@@ -38,24 +38,24 @@ mutation ${operation_name}(
 			}
 		}
 	}
-	ytitne3: create_ytitne(attributes: $ytitne3) {
+	create_entity(attributes: $entity) {
 		_metadata {
 			id
 		}
 		mutation {
-			create_whitelist(attributes: $ytitne3_whitelist) {
+			create_blacklist(attributes: $entity_blacklist) {
 				_metadata {
 					type
 				}
 			}
 		}
 	}
-	ytitne4: create_ytitne(attributes: $ytitne4) {
+	entity2: create_entity(attributes: $entity2) {
 		_metadata {
 			id
 		}
 		mutation {
-			create_whitelist(attributes: $ytitne4_whitelist) {
+			create_blacklist(attributes: $entity2_blacklist) {
 				_metadata {
 					type
 				}
@@ -69,15 +69,15 @@ const operation_variables = {
 		id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
 		text: "hello",
 	},
-	ytitne2: {
+	entity: {
 		id: "55c29b50-5e24-447d-8505-75e82c2aa8cc",
 		text: "goodbye",
 	},
-	ytitne3: {
+	ytitne2: {
 		id: "7f84c508-b714-41c1-b986-2d6ed64fc5e9",
 		text: "nothing",
 	},
-	ytitne4: {
+	entity2: {
 		id: "45f5266f-1971-4b9a-985d-ac650449b589",
 		text: "everything",
 	},
@@ -85,37 +85,37 @@ const operation_variables = {
 		gauze__whitelist__realm: "system",
 		gauze__whitelist__agent_role: "leaf",
 		gauze__whitelist__agent_type: "gauze__user",
-		gauze__whitelist__agent_id: "00000000-0000-0000-0000-000000000002",
+		gauze__whitelist__agent_id: "00000000-0000-0000-0000-000000000003",
 		gauze__whitelist__entity_type: "gauze__ytitne",
 		gauze__whitelist__entity_id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
-		gauze__whitelist__method: "create",
+		gauze__whitelist__method: "delete",
+	},
+	entity_blacklist: {
+		gauze__blacklist__realm: "system",
+		gauze__blacklist__agent_role: "leaf",
+		gauze__blacklist__agent_type: "gauze__user",
+		gauze__blacklist__agent_id: "00000000-0000-0000-0000-000000000003",
+		gauze__blacklist__entity_type: "gauze__entity",
+		gauze__blacklist__entity_id: "55c29b50-5e24-447d-8505-75e82c2aa8cc",
+		gauze__blacklist__method: "delete",
 	},
 	ytitne2_whitelist: {
 		gauze__whitelist__realm: "system",
 		gauze__whitelist__agent_role: "leaf",
 		gauze__whitelist__agent_type: "gauze__user",
-		gauze__whitelist__agent_id: "00000000-0000-0000-0000-000000000002",
-		gauze__whitelist__entity_type: "gauze__ytitne",
-		gauze__whitelist__entity_id: "55c29b50-5e24-447d-8505-75e82c2aa8cc",
-		gauze__whitelist__method: "create",
-	},
-	ytitne3_whitelist: {
-		gauze__whitelist__realm: "system",
-		gauze__whitelist__agent_role: "leaf",
-		gauze__whitelist__agent_type: "gauze__user",
-		gauze__whitelist__agent_id: "00000000-0000-0000-0000-000000000002",
-		gauze__whitelist__entity_type: "gauze__ytitne",
-		gauze__whitelist__entity_id: "7f84c508-b714-41c1-b986-2d6ed64fc5e9",
-		gauze__whitelist__method: "create",
-	},
-	ytitne4_whitelist: {
-		gauze__whitelist__realm: "system",
-		gauze__whitelist__agent_role: "leaf",
-		gauze__whitelist__agent_type: "gauze__user",
 		gauze__whitelist__agent_id: "00000000-0000-0000-0000-000000000003",
 		gauze__whitelist__entity_type: "gauze__ytitne",
-		gauze__whitelist__entity_id: "45f5266f-1971-4b9a-985d-ac650449b589",
-		gauze__whitelist__method: "create",
+		gauze__whitelist__entity_id: "7f84c508-b714-41c1-b986-2d6ed64fc5e9",
+		gauze__whitelist__method: "delete",
+	},
+	entity2_blacklist: {
+		gauze__blacklist__realm: "system",
+		gauze__blacklist__agent_role: "leaf",
+		gauze__blacklist__agent_type: "gauze__user",
+		gauze__blacklist__agent_id: "00000000-0000-0000-0000-000000000003",
+		gauze__blacklist__entity_type: "gauze__entity",
+		gauze__blacklist__entity_id: "45f5266f-1971-4b9a-985d-ac650449b589",
+		gauze__blacklist__method: "delete",
 	},
 };
 const expected = `{
@@ -139,22 +139,6 @@ const expected = `{
         "ytitne2": [
             {
                 "_metadata": {
-                    "id": "55c29b50-5e24-447d-8505-75e82c2aa8cc"
-                },
-                "mutation": {
-                    "create_whitelist": [
-                        {
-                            "_metadata": {
-                                "type": "WHITELIST"
-                            }
-                        }
-                    ]
-                }
-            }
-        ],
-        "ytitne3": [
-            {
-                "_metadata": {
                     "id": "7f84c508-b714-41c1-b986-2d6ed64fc5e9"
                 },
                 "mutation": {
@@ -168,16 +152,32 @@ const expected = `{
                 }
             }
         ],
-        "ytitne4": [
+        "create_entity": [
+            {
+                "_metadata": {
+                    "id": "55c29b50-5e24-447d-8505-75e82c2aa8cc"
+                },
+                "mutation": {
+                    "create_blacklist": [
+                        {
+                            "_metadata": {
+                                "type": "BLACKLIST"
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "entity2": [
             {
                 "_metadata": {
                     "id": "45f5266f-1971-4b9a-985d-ac650449b589"
                 },
                 "mutation": {
-                    "create_whitelist": [
+                    "create_blacklist": [
                         {
                             "_metadata": {
-                                "type": "WHITELIST"
+                                "type": "BLACKLIST"
                             }
                         }
                     ]
