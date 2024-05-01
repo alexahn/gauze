@@ -58,7 +58,6 @@ class SystemModel extends Model {
 			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_whitelist:debug_sql`, sql.toString());
 		}
 		return sql.then(function (rows) {
-			console.log("NULL ROWS", rows)
 			return rows.map(function (row) {
 				return row.gauze__whitelist__entity_id;
 			});
@@ -167,18 +166,23 @@ class SystemModel extends Model {
 					LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:valid_null_ids", valid_null_ids);
 					return self._execute(context, operation, input);
 				} else {
-					return self._read_whitelist(context, access, method).then(function (valid_ids) {
-						LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:agent_id", access.agent_id);
-						LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:valid_ids", valid_ids);
-						// construct a where in array
-						// make a key and store the array in lru cache
-						// send the key into the query as cached_where_in
-						// replace input.where_in for now, but do intersection logic in the future
-						input.where_in = {
-							[self.entity.primary_key]: valid_ids,
-						};
-						return self._execute(context, operation, input);
-					});
+					if (method === "create") {
+						// todo: change this to return an empty response
+						throw new Error("Agent does not have access to this method");
+					} else {
+						return self._read_whitelist(context, access, method).then(function (valid_ids) {
+							LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:agent_id", access.agent_id);
+							LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:valid_ids", valid_ids);
+							// construct a where in array
+							// make a key and store the array in lru cache
+							// send the key into the query as cached_where_in
+							// replace input.where_in for now, but do intersection logic in the future
+							input.where_in = {
+								[self.entity.primary_key]: valid_ids,
+							};
+							return self._execute(context, operation, input);
+						});
+					}
 				}
 			});
 		} else if (self.entity.methods[method].privacy === "public") {
@@ -190,14 +194,18 @@ class SystemModel extends Model {
 					// note: for now just throw an error
 					throw new Error("Agent does not have access to this method");
 				} else {
-					return self._read_blacklist(context, access, method).then(function (invalid_ids) {
-						LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:agent_id", access.agent_id);
-						LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:invalid_ids", invalid_ids);
-						input.where_not_in = {
-							[self.entity.primary_key]: invalid_ids,
-						};
+					if (method === "create") {
 						return self._execute(context, operation, input);
-					});
+					} else {
+						return self._read_blacklist(context, access, method).then(function (invalid_ids) {
+							LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:agent_id", access.agent_id);
+							LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}:_access_execute`, "access:invalid_ids", invalid_ids);
+							input.where_not_in = {
+								[self.entity.primary_key]: invalid_ids,
+							};
+							return self._execute(context, operation, input);
+						});
+					}
 				}
 			});
 		} else {
