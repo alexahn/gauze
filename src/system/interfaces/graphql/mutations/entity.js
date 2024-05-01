@@ -66,6 +66,9 @@ const CREATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
+		if (!mutation_arguments.attributes) {
+			throw new Error("Field 'attributes' is required");
+		}
 		return CONTROLLER__ENTITY__CONTROLLER__SYSTEM.create(
 			{
 				source: _source,
@@ -147,6 +150,12 @@ const UPDATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
+		if (!mutation_arguments.attributes) {
+			throw new Error("Field 'attributes' is required");
+		}
+		if (!mutation_arguments.where) {
+			throw new Error("Field 'where' is required");
+		}
 		return CONTROLLER__ENTITY__CONTROLLER__SYSTEM.update(
 			{
 				source: _source,
@@ -224,6 +233,9 @@ const DELETE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
+		if (!mutation_arguments.where) {
+			throw new Error("Field 'where' is required");
+		}
 		return CONTROLLER__ENTITY__CONTROLLER__SYSTEM.delete(
 			{
 				source: _source,

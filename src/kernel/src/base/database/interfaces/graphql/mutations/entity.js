@@ -61,6 +61,9 @@ const CREATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 			"mutation_arguments",
 			mutation_arguments,
 		);
+		if (!mutation_arguments.attributes) {
+			throw new Error("Field 'attributes' is required");
+		}
 		return CONTROLLER__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__DATABASE.create(
 			{
 				source: _source,
@@ -142,6 +145,12 @@ const UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 			"mutation_arguments",
 			mutation_arguments,
 		);
+		if (!mutation_arguments.attributes) {
+			throw new Error("Field 'attributes' is required");
+		}
+		if (!mutation_arguments.where) {
+			throw new Error("Field 'where' is required");
+		}
 		return CONTROLLER__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__DATABASE.update(
 			{
 				source: _source,
@@ -219,6 +228,9 @@ const DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 			"mutation_arguments",
 			mutation_arguments,
 		);
+		if (!mutation_arguments.where) {
+			throw new Error("Field 'where' is required");
+		}
 		return CONTROLLER__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__DATABASE.delete(
 			{
 				source: _source,

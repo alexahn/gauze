@@ -297,8 +297,8 @@
 	[x] reconfigure stages
 		[x] will need to have a truncated stage for the last two stages so that teardown doesn't crash
 		[x] after successful setup copy the new stages to the last two stages
-[ ] move all existence checks to the edge (e.g. attributes, where, where_in, etc)
-	[ ] to interfaces
+[x] move all existence checks to the edge (e.g. attributes, where, where_in, etc)
+	[x] to interfaces
 [-] change _access_execute in system model to not throw errors
 [-] make a database directory per steps directory that has initialization for the database
 	[-] run the steps in the database directory against the database schema
@@ -306,9 +306,14 @@
 	[-] currently, we are relying on the seed data for whitelist to enable creating models for two fixed agent ids
 	[x] or we can set up independent seed sources, so that test data has its own reliable seed structure
 		[x] tests now use src/database/seeds/test
+[ ] prevent relationships from being made if the from and to are not connected
+	[ ] use structure definition
 [ ] whitelist/blacklist kernel system model
 	[ ] enforce hierarchy of roles
 	[ ] if an entity is private, reject association with blacklist
 	[ ] if an entity is public, reject association with whitelist
 	[ ] all operations require that the agent have equal or higher hierarchy
 	[ ] there can only be one root, and it is only granted on entity creation
+[ ] add a required attribute to fields in abstract entity definitions?
+	[ ] we can use it to create two different attribute types
+		[ ] one for creation, and another for querying and updating

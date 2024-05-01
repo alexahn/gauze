@@ -44,9 +44,6 @@ class DatabaseModel extends Model {
 		const { source, database, transaction } = context;
 		const { attributes } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.create.enter`, "input", input);
-		if (!attributes) {
-			throw new Error("Field 'attributes' is required");
-		}
 		const sql = database(self.table_name).insert(attributes, [self.primary_key]).transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.create:debug_sql`, sql.toString());
@@ -176,12 +173,6 @@ class DatabaseModel extends Model {
 		const { source, database, transaction } = context;
 		var { attributes, where, where_in = {}, where_not_in = {} } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "input", input);
-		if (!attributes) {
-			throw new Error("Field 'attributes' is required");
-		}
-		if (!where) {
-			throw new Error("Field 'where' is required");
-		}
 		const MAXIMUM_ROWS = 4294967296;
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
 		if (relationship_metadata) {
@@ -270,9 +261,6 @@ class DatabaseModel extends Model {
 		const { where, where_in = {}, where_not_in = {}, limit = 128 } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "input", input);
 		const MAXIMUM_ROWS = 4294967296;
-		if (!where) {
-			throw new Error("Field 'where' is required");
-		}
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
 		// todo: use attributes and update deleted_at instead of deleting the row
 		if (relationship_metadata) {
@@ -302,16 +290,6 @@ class DatabaseModel extends Model {
 						.then(function (delete_data) {
 							LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:success`, "delete_data", delete_data);
 							return read_data.slice(0, limit);
-							/*
-							return self.read(
-								{
-									source,
-									database,
-									transaction,
-								},
-								input,
-							);
-							*/
 						})
 						.catch(function (err) {
 							LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, "err", err);
@@ -357,16 +335,6 @@ class DatabaseModel extends Model {
 						.then(function (delete_data) {
 							LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:success`, "delete_data", delete_data);
 							return read_data.slice(0, limit);
-							/*
-							return self.read(
-								{
-									source,
-									database,
-									transaction,
-								},
-								input,
-							);
-							*/
 						})
 						.catch(function (err) {
 							LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.Delete:failure`, "err", err);
