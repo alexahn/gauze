@@ -38,7 +38,7 @@ const expected = `{
 }`;
 
 export default {
-	step: 2,
+	step: 1,
 	description: description,
 	context: context,
 	operation: {
