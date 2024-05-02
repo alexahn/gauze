@@ -32,7 +32,6 @@ class RelationshipSystemModel extends Model {
 		}
 		self.name = self.__name();
 		self.relations_map = self._create_relations_map();
-		console.log("relations_map", self.relations_map);
 	}
 	static _class_name(schema_name) {
 		return schema_name ? `(${schema_name})[${super._class_name()}]RelationshipSystemModel` : `[${super._class_name()}]RelationshipSystemModel`;
@@ -184,6 +183,16 @@ class RelationshipSystemModel extends Model {
 			throw new Error("Field 'attributes.gauze__relationship__to_type' is required");
 		}
 	}
+	_connected_relationship(attributes) {
+		const self = this;
+		const from_type = $structure.gauze.resolvers.SQL_TABLE_TO_GRAPHQL_TYPE__RESOLVER__STRUCTURE[attributes.gauze__relationship__from_type];
+		const to_type = $structure.gauze.resolvers.SQL_TABLE_TO_GRAPHQL_TYPE__RESOLVER__STRUCTURE[attributes.gauze__relationship__to_type];
+		if (self.relations_map[from_type][to_type]) {
+			return true;
+		} else {
+			throw new Error("Entities are not configured to have relationships to each other");
+		}
+	}
 	_preread(database, transaction, id) {
 		const self = this;
 		const sql = database(self.entity.table_name)
@@ -198,6 +207,7 @@ class RelationshipSystemModel extends Model {
 	}
 	_create(context, input, access, operation) {
 		const self = this;
+		self._connected_relationship(input.attributes);
 		return self._access_relationship(context, input.attributes, access, "create").then(function () {
 			return self._execute(context, operation, input);
 		});
@@ -384,6 +394,8 @@ class RelationshipSystemModel extends Model {
 			return self._preread(database, transaction, input.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
+					const staged = { ...relationship, ...input.attributes };
+					self._connected_relationship(staged);
 					return self._access_relationship(context, relationship, access, "update").then(function () {
 						return self._access_relationship(context, input.attributes, access, "update").then(function () {
 							return self._execute(context, operation, input);

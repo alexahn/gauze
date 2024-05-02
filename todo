@@ -306,11 +306,12 @@
 	[-] currently, we are relying on the seed data for whitelist to enable creating models for two fixed agent ids
 	[x] or we can set up independent seed sources, so that test data has its own reliable seed structure
 		[x] tests now use src/database/seeds/test
-[ ] prevent relationships from being made if the from and to are not connected
-	[ ] use structure definition
+[x] prevent relationships from being made if the from and to are not connected
+	[x] use structure definition
 	[ ] rename DATABASE_RELATIONSHIP_STRUCTURE to proper naming convention
 		[ ] don't import DATABASE_RELATIONSHIP_STRUCTURE directly from schemas
-	[ ] rename structure/relationships to structure/connections
+	[-] rename structure/relationships to structure/connections
+		[x] moved all entities into src/structure/entities instead
 [ ] whitelist/blacklist kernel system model
 	[ ] enforce hierarchy of roles
 	[ ] if an entity is private, reject association with blacklist
