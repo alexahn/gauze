@@ -10,7 +10,7 @@ export default function ($abstract) {
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "id",
-				pre_serialize_middlewares: [$abstract.gauze.middlewares.ID_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("gauze__relationship__id")],
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.RUD_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("gauze__relationship__id")],
 				serializers: [],
 				post_serialize_middlewares: [],
 				pre_deserialize_middlewares: [],

@@ -98,17 +98,19 @@ class AccessSystemModel extends Model {
 	}
 	// get the access records for the initiator
 	_initiator_records(context, entity, agent) {
-		const { database, transaction } = context
-		const sql = sql(self.entity.table_name).where({
-			[self.key_entity_type]: entity[self.key_entity_type],
-			[self.key_entity_id]: entity[self.key_entity_id],
-			[self.key_method]: entity[self.key_method],
-			[self.key_agent_id]: agent.agent_id
-		}).transacting(transaction);
-        if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-            LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._initiator_records:debug_sql`, sql.toString());
-        }
-        return sql;
+		const { database, transaction } = context;
+		const sql = sql(self.entity.table_name)
+			.where({
+				[self.key_entity_type]: entity[self.key_entity_type],
+				[self.key_entity_id]: entity[self.key_entity_id],
+				[self.key_method]: entity[self.key_method],
+				[self.key_agent_id]: agent.agent_id,
+			})
+			.transacting(transaction);
+		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._initiator_records:debug_sql`, sql.toString());
+		}
+		return sql;
 	}
 	_highest_record(records) {
 		const self = this;
@@ -122,9 +124,7 @@ class AccessSystemModel extends Model {
 		});
 		return sorted[0];
 	}
-	_validate_target(record) {
-		
-	}
+	_validate_target(record) {}
 	_validate_hierarchy(initiator_record, target_record, method) {
 		const self = this;
 		const initiator_role = initiator_record[self.key_agent_role];

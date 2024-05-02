@@ -1,5 +1,5 @@
-// allows id to be set from the outside
-const ID_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT = function (field) {
+// allows field to be set only on create
+const RUD_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT = function (field) {
 	return {
 		create: function (attributes) {
 			return attributes;
@@ -83,7 +83,7 @@ const DELETED_AT_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT = function (field) {
 };
 
 export {
-	ID_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT,
+	RUD_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT,
 	CREATED_AT_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT,
 	UPDATED_AT_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT,
 	DELETED_AT_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT,
