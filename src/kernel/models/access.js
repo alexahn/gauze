@@ -25,92 +25,270 @@ import { EXECUTE__GRAPHQL__SHELL__KERNEL } from "./../shell/graphql.js";
 //  - realm, entity id, entity type, and method (rename to entity method?) are locked
 class AccessSystemModel extends Model {
 	constructor() {
-        super(root_config);
-        const self = this;
-        const { schema, schema_name } = relationship_config;
-        self.schema = schema;
-        self.schema_name = schema_name;
+		super(root_config);
+		const self = this;
+		const { schema, schema_name } = relationship_config;
+		self.schema = schema;
+		self.schema_name = schema_name;
+		self.key_id = `${self.entity.table_name}__id`;
+		self.key_realm = `${self.entity.table_name}__realm`;
+		self.key_agent_role = `${self.entity.table_name}__agent_role`;
+		self.key_agent_type = `${self.entity.table_name}__agent_type`;
+		self.key_agent_id = `${self.entity.table_name}__agent_id`;
+		self.key_entity_type = `${self.entity.table_name}__entity_type`;
+		self.key_entity_id = `${self.entity.table_name}__entity_id`;
+		self.key_method = `${self.entity.table_name}__method`;
+		self.name = self.__name();
 	}
-	// get the access records for the initiator
-	_initiator_records(context, entity, agent) {
-		
+	static _class_name(schema_name) {
+		return schema_name ? `(${schema_name})[${super._class_name()}]AccessSystemModel` : `[${super._class_name()}]AccessSystemModel`;
 	}
-	// initiator is the highest level role record for the initiator
-	// logic for leaf is annoying, so maybe we need to include method here
-	_validate_hierarchy(initiator_record, record, method) {
-		const initiator_role = initiator_record[`${this.table_name}__agent_role`]
-		const record_role = record_role[`${this.table_name}__agent_role`]
-		if (initiator_role === 'root') {
-			// root can create trunk or leaf
-			if (record_role === 'root') {
-				throw new Error('Agent role cannot be root')
-			} else if (record_role === 'trunk') {
-				return true
-			} else if (record_role === 'leaf') {
-				return true
-			} else {
-				throw new Error('Agent role must be either trunk, or leaf')
-			}
-		} else if (initiator_role === 'trunk') {
-			// trunk can create trunk or leaf
-			if (record_role === 'root') {
-				throw new Error("Agent role cannot be higher than initiator's role')
-			} else if (record_role === 'trunk') {
-				return true
-			} else if (record_role === 'leaf') {
-				return true
-			} else {
-				throw new Error('Agent role must be either trunk, or leaf')
-			}
-		} else if (initiator_role === 'leaf') {
-			// leaf cannot create anything
-			if (record_role === 'root') {
-				throw new Error("Agent role cannot be higher than initiator's role')
-			} else if (record_role === 'trunk') {
-				throw new Error("Agent role cannot be higher than initiator's role')
-			} else if (record_role === 'leaf') {
-				// we need to return true here to proceed with read and delete
-				// but this also means that a leaf can update other leaf records, which shouldn't be allowed
-				// use method argument here to differentiate?
-			} else {
-				throw new Error('Agent role must be either trunk, or leaf')
-			}
-		} else {
-
-		}
+	__name() {
+		const self = this;
+		return AccessSystemModel._class_name(self.schema_name);
 	}
-	// grab all records for the current agent
-	// sort by role
-	// use highest role to commit to action
-	_create(context, input, agent, operation) {
-		const self = this
-		const record = this.attributes
+	_execute(context, operation_source, operation_variables) {
+		const self = this;
+		const { operation, operation_name } = operation_source;
+		return EXECUTE__GRAPHQL__SHELL__KERNEL({
+			schema: self.schema,
+			context,
+			operation,
+			operation_name,
+			operation_variables,
+		}).then(function (data) {
+			if (data.errors && data.errors.length) {
+				// should we make a new error here?
+				// todo: figure out if we need to log here or not
+				console.log(data.errors);
+				// throw the first error
+				throw data.errors[0];
+			} else {
+				return Promise.resolve(data);
+			}
+		});
+	}
+	_valid_access(context, agent, method, record) {
+		const self = this;
 		return self._initiator_records(context, record, agent).then(function (access_records) {
 			if (access_records && access_records.length) {
 				// get record for the highest role
-				const highest_record = self._highest_record(access_records)
-				const valid_hierarchy = self._validate_hierarchy(highest_record, record)
-				if (valid_hierarchy) {
+				const highest_record = self._highest_record(access_records);
+				self._validate_hierarchy(highest_record, record, method);
+				return highest_record;
+			} else {
+				throw new Error("Agent does not have access to this method");
+			}
+		});
+	}
+	// get the access records for the initiator
+	_initiator_records(context, entity, agent) {}
+	_highest_record(records) {
+		const self = this;
+		const ranking = {
+			root: 0,
+			trunk: 1,
+			leaf: 2,
+		};
+		const sorted = records.sort(function (a, b) {
+			return ranking[a[self.key_agent_role]] - ranking[b[self.key_agent_role]];
+		});
+		return sorted[0];
+	}
 
+	// initiator is the highest level role record for the initiator
+	// logic for leaf is annoying, so maybe we need to include method here
+	_validate_hierarchy(initiator_record, target_record, method) {
+		const self = this;
+		const initiator_role = initiator_record[self.key_agent_role];
+		const target_role = target_record[self.key_agent_role];
+		if (initiator_role === "root") {
+			// root can create trunk or leaf
+			if (target_role === "root") {
+				throw new Error("Target agent's role cannot be root");
+			} else if (target_role === "trunk") {
+				return true;
+			} else if (target_role === "leaf") {
+				return true;
+			} else {
+				throw new Error("Target agent's role must be either trunk, or leaf");
+			}
+		} else if (initiator_role === "trunk") {
+			// trunk can create trunk or leaf
+			if (target_role === "root") {
+				throw new Error("Target agent role cannot be higher than initiator's role");
+			} else if (target_role === "trunk") {
+				return true;
+			} else if (target_role === "leaf") {
+				return true;
+			} else {
+				throw new Error("Target agent's role must be either trunk, or leaf");
+			}
+		} else if (initiator_role === "leaf") {
+			// leaf cannot create anything
+			if (target_role === "root") {
+				throw new Error("Target agent's role cannot be higher than initiator's role");
+			} else if (target_role === "trunk") {
+				throw new Error("Target agent's role cannot be higher than initiator's role");
+			} else if (target_role === "leaf") {
+				if (method === "read") {
+					return true;
+				} else if (method === "delete") {
+					return true;
 				} else {
-
+					throw new Error("Target agent does not have access to this method");
 				}
 			} else {
-
+				throw new Error("Target agent's role must be either trunk, or leaf");
 			}
-		})
+		} else {
+			throw new Error("Initiator agent's role must be either root, trunk, or leaf");
+		}
 	}
-	// requires where.id or where.agent_id or where.entity_id
-	_read() {
-		const self = this
+	_preread(database, transaction, where) {
+		const self = this;
+		const sql = database(self.entity.table_name).where(where).transacting(transaction);
+		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._preread:debug_sql`, sql.toString());
+		}
+		return sql;
+	}
+	// requires a valid record
+	_create(context, input, agent, operation) {
+		const self = this;
+		const target_record = this.attributes;
+		return self._valid_execute(context, agent, "create", target_record).then(function () {
+			return self._execute(context, operation, input);
+		});
+	}
+	_read_agent(context, input, agent, operation) {
+		const self = this;
+		if (input.where[self.key_id] === agent.agent_id) {
+			// agent should be able to see all their own records
+			return self._execute(context, operation, input);
+		} else {
+			// agent should not be able to see anyone else's records
+			throw new Error(`Field '${self.key_agent_id}' must be equal to the initiating agent's id`);
+		}
+	}
+	_read_entity(context, input, agent, operation) {
+		const self = this;
+		// get highest record for initiator
+		// get list of records based on entity_id, entity_type, and method
+		// filter list of records based on role hierarchy
+		// root initiator can see everything, trunk can see trunk and leaf, leaf can only see itself
+		return self._initiator_records(context, input.where, agent).then(function (access_records) {
+			if (access_records && access_records.length) {
+				// get record for the highest role
+				const highest_record = self._highest_record(access_records);
+				return self._preread(database, transaction, input.where).then(function (target_records) {
+					const highest_id = highest_record[self.key_id];
+					const highest_role = highest_record[self.key_agent_role];
+					const filtered = target_records.filter(function (record) {
+						const target_id = record[self.key_id];
+						const target_role = record[self.key_agent_role];
+						if (highest_role === "root") {
+							return true;
+						} else if (highest_role === "trunk") {
+							if (target_role === "trunk") {
+								return true;
+							} else if (target_role === "leaf") {
+								return true;
+							} else {
+								return false;
+							}
+						} else if (highest_role === "leaf") {
+							if (target_id == highest_id) {
+								return true;
+							} else {
+								return false;
+							}
+						} else {
+							return false;
+						}
+					});
+					const valid_ids = filtered.map(function (record) {
+						return record[self.key_id];
+					});
+					input.where_in = {
+						[self.key_id]: valid_ids,
+					};
+					// we could manually construct the response from the filtered object here instead?
+					return self._execute(context, operation, input);
+				});
+			} else {
+				throw new Error("Agent does not have access to this method");
+			}
+		});
+	}
+	// requires where.id or where.agent_id or (where.entity_id and where.entity_type and where.method)
+	_read(context, input, agent, operation) {
+		const self = this;
+		const { database, transaction } = context;
+		if (input.where && input.where[self.key_id]) {
+			return self._preread(database, transaction, input.where).then(function (target_records) {
+				if (target_records && target_records.length) {
+					const target_record = target_records[0];
+					return self._valid_access(context, agent, "read", target_record).then(function () {
+						return self._execute(context, operation, input);
+					});
+				} else {
+					return {
+						data: {
+							read_whitelist: [],
+						},
+					};
+				}
+			});
+		} else if (input.where && input.where[self.key_id]) {
+			return self._read_agent(context, input, agent, operation);
+		} else if (input.where && input.where[self.key_entity_id] && input.where[self.key_entity_type] && input.where[self.key_method]) {
+			return self._read_entity(context, input, agent, operation);
+		} else {
+			// todo: move this to system interface
+			throw new Error(
+				`Field 'where.${self.key_id}' or 'where.${self.key_agent_id}' or ('where.${self.key_entity_id}' and 'where.${self.key_entity_type}' and 'where.${self.key_method}') are required`,
+			);
+		}
 	}
 	// requires where.id
-	_update() {
-		
+	_update(context, input, agent, operation) {
+		const self = this;
+		const { database, transaction } = context;
+		const change_record = input.attributes;
+		if (input && input.where && input.where[self.key_id]) {
+			return self._preread(database, transaction, input.where).then(function (target_records) {
+				if (target_records && target_records.length) {
+					const target_record = target_records[0];
+					return self._valid_access(context, agent, "update", target_record).then(function () {
+						return self._valid_access(context, agent, "update", change_record).then(function () {
+							return self._execute(context, operation, input);
+						});
+					});
+				} else {
+					return {
+						data: {
+							update_whitelist: [],
+						},
+					};
+				}
+			});
+		} else {
+			throw new Error(`Field 'where.${self.key_id}' is required`);
+		}
 	}
 	// requires where.id
-	_delete() {
-
+	_delete(context, input, agent, operation) {
+		const self = this;
+		const { database, transaction } = context;
+		if (input && input.where && input.where[`${self.table_name}__id`]) {
+			return self._preread(database, transaction, input.where).then(function (target_record) {
+				return self._valid_access(context, agent, "delete", target_record).then(function () {
+					return self._execute(context, operation, input);
+				});
+			});
+		} else {
+			throw new Error(`Field 'where.${self.key_id}' is required`);
+		}
 	}
 }
-
