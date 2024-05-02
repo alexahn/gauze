@@ -1,14 +1,16 @@
 export default function ($abstract) {
 	const ENTITY = {
 		name: "whitelist",
+		table_name: "gauze__whitelist",
 		primary_key: "gauze__whitelist__id",
+		graphql_meta_type: "WHITELIST",
 		fields: {
 			gauze__whitelist__id: {
 				name: "gauze__whitelist__id",
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "id",
-				pre_serialize_middlewares: [$abstract.gauze.middlewares.ID_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("gauze__whitelist__id")],
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.RUD_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("gauze__whitelist__id")],
 				serializers: [],
 				post_serialize_middlewares: [],
 				pre_deserialize_middlewares: [],
@@ -56,7 +58,7 @@ export default function ($abstract) {
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "realm",
-				pre_serialize_middlewares: [],
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.RUD_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("gauze__whitelist__realm")],
 				serializers: [],
 				post_serialize_middlewares: [],
 				pre_deserialize_middlewares: [],
@@ -104,7 +106,7 @@ export default function ($abstract) {
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "entity_id",
-				pre_serialize_middlewares: [],
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.RUD_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("gauze__whitelist__entity_id")],
 				serializers: [],
 				post_serialize_middlewares: [],
 				pre_deserialize_middlewares: [],
@@ -116,7 +118,19 @@ export default function ($abstract) {
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "entity_type",
-				pre_serialize_middlewares: [],
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.RUD_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("gauze__whitelist__entity_type")],
+				serializers: [],
+				post_serialize_middlewares: [],
+				pre_deserialize_middlewares: [],
+				deserializers: [],
+				post_deserialize_middlewares: [],
+			},
+			gauze__whitelist__method: {
+				name: "gauze__whitelist__method",
+				sql_type: "string",
+				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				description: "method",
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.RUD_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("gauze__whitelist__method")],
 				serializers: [],
 				post_serialize_middlewares: [],
 				pre_deserialize_middlewares: [],
@@ -143,7 +157,7 @@ export default function ($abstract) {
 			},
 		},
 	};
-	ENTITY.graphql_fields = $abstract.helpers.create_graphql_fields(ENTITY);
-	ENTITY.graphql_attributes_string = $abstract.helpers.create_graphql_attributes_string(ENTITY);
+	ENTITY.graphql_fields = $abstract.gauze.utility.create_graphql_fields(ENTITY);
+	ENTITY.graphql_attributes_string = $abstract.gauze.utility.create_graphql_attributes_string(ENTITY);
 	return ENTITY;
 }

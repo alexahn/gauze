@@ -340,3 +340,5 @@
 	[x] commit when all paths have been updated
 	[x] recompile
 [ ] rename src/kernel/src/initial to src/kernel/src/skeleton
+[x] move src/kernel/entities to src/kernel/src/entities
+[ ] move link and root functions used in schemas to kernel

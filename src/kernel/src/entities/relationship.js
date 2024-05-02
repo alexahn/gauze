@@ -1,14 +1,16 @@
 export default function ($abstract) {
 	const ENTITY = {
 		name: "relationship",
+		table_name: "gauze__relationship",
 		primary_key: "gauze__relationship__id",
+		graphql_meta_type: "RELATIONSHIP",
 		fields: {
 			gauze__relationship__id: {
 				name: "gauze__relationship__id",
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "id",
-				pre_serialize_middlewares: [$abstract.gauze.middlewares.ID_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("gauze__relationship__id")],
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.RUD_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("gauze__relationship__id")],
 				serializers: [],
 				post_serialize_middlewares: [],
 				pre_deserialize_middlewares: [],
@@ -119,7 +121,7 @@ export default function ($abstract) {
 			},
 		},
 	};
-	ENTITY.graphql_fields = $abstract.helpers.create_graphql_fields(ENTITY);
-	ENTITY.graphql_attributes_string = $abstract.helpers.create_graphql_attributes_string(ENTITY);
+	ENTITY.graphql_fields = $abstract.gauze.utility.create_graphql_fields(ENTITY);
+	ENTITY.graphql_attributes_string = $abstract.gauze.utility.create_graphql_attributes_string(ENTITY);
 	return ENTITY;
 }
