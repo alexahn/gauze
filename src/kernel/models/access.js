@@ -38,6 +38,21 @@ class AccessSystemModel extends Model {
 		self.key_entity_type = `${self.entity.table_name}__entity_type`;
 		self.key_entity_id = `${self.entity.table_name}__entity_id`;
 		self.key_method = `${self.entity.table_name}__method`;
+		self.empty_read_response = {
+			data: {
+				[`read_${self.entity.name}`]: [],
+			},
+		};
+		self.empty_update_response = {
+			data: {
+				[`update_${self.entity.name}`]: [],
+			},
+		};
+		self.empty_delete_response = {
+			data: {
+				[`delete_${self.entity.name}`]: [],
+			},
+		};
 		self.name = self.__name();
 	}
 	static _class_name(schema_name) {
@@ -233,11 +248,7 @@ class AccessSystemModel extends Model {
 						return self._execute(context, operation, input);
 					});
 				} else {
-					return {
-						data: {
-							read_whitelist: [],
-						},
-					};
+					return self.empty_read_response;
 				}
 			});
 		} else if (input.where && input.where[self.key_id]) {
@@ -266,11 +277,7 @@ class AccessSystemModel extends Model {
 						});
 					});
 				} else {
-					return {
-						data: {
-							update_whitelist: [],
-						},
-					};
+					return self.empty_update_response;
 				}
 			});
 		} else {
@@ -282,10 +289,15 @@ class AccessSystemModel extends Model {
 		const self = this;
 		const { database, transaction } = context;
 		if (input && input.where && input.where[`${self.table_name}__id`]) {
-			return self._preread(database, transaction, input.where).then(function (target_record) {
-				return self._valid_access(context, agent, "delete", target_record).then(function () {
-					return self._execute(context, operation, input);
-				});
+			return self._preread(database, transaction, input.where).then(function (target_records) {
+				if (target_records && target_records.length) {
+					const target_record = target_records[0];
+					return self._valid_access(context, agent, "delete", target_record).then(function () {
+						return self._execute(context, operation, input);
+					});
+				} else {
+					return self.empty_delete_response;
+				}
 			});
 		} else {
 			throw new Error(`Field 'where.${self.key_id}' is required`);

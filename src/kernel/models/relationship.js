@@ -90,10 +90,7 @@ class RelationshipSystemModel extends Model {
 			targets.map(function (target) {
 				return self._access_target(context, target);
 			}),
-		); /*.then(function () {
-			// both targets abide by their method policies
-			//return self._execute(context, operation, input);
-		})*/
+		);
 	}
 	_access_target(context, target) {
 		const self = this;
