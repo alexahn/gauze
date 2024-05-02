@@ -87,7 +87,7 @@ class DatabaseModel extends Model {
 			// relationships are one directional, so use from as the parent
 			const PARENT_SQL_ID = relationship_metadata.id;
 			const PARENT_GRAPHQL_TYPE = relationship_metadata.type;
-			const PARENT_SQL_TABLE = $structure.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[PARENT_GRAPHQL_TYPE];
+			const PARENT_SQL_TABLE = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[PARENT_GRAPHQL_TYPE];
 			// mutate where by prefixing with table_name name
 			var joined_where = {};
 			Object.keys(where).forEach(function (k) {

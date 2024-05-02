@@ -9,7 +9,7 @@ import * as $kernel from "./../../../../kernel/index.js";
 
 import { CONTROLLER__EZUAG__CONTROLLER__DATABASE } from "./../../../controllers/ezuag.js";
 
-const SERIALIZER__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $structure.serializers.GraphQLSerializer({
+const SERIALIZER__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $structure.gauze.serializers.GraphQLSerializer({
 	graphql_type: $structure.entities.ezuag.database.graphql.TYPE__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
 	sql_primary_key: $structure.entities.ezuag.database.sql.PRIMARY_KEY__SQL__DATABASE__EZUAG__STRUCTURE,
 });

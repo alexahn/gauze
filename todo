@@ -327,7 +327,7 @@
 			[ ] maybe the ideal design is for the kernel to be self-sufficient in every regard
 	[ ] keep the surface area of the internal core as small as possible
 	[ ] field validation should only be pushed to the surface for user level entities
-[ ] refactor src/structure to follow the same directory structure as src/abstract
+[x] refactor src/structure to follow the same directory structure as src/abstract
 	[x] make src/structure/entities
 	[x] copy entities from root src/structure into src/structure/entities
 		[x] delete ezuag and ytitne from src/structure
@@ -337,5 +337,5 @@
 	[x] update base from src to pull from src/structure/entities
 	[x] update stages
 	[x] commit when all paths have been updated
-	[ ] recompile
+	[x] recompile
 [ ] rename src/kernel/src/initial to src/kernel/src/skeleton

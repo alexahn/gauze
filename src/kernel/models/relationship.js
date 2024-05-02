@@ -81,9 +81,9 @@ class RelationshipSystemModel extends Model {
 		const self = this;
 		const { agent_id } = agent;
 		self._validate_relationship(relationship);
-		const from_entity_module_name = $structure.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__from_type];
+		const from_entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__from_type];
 		const from_entity_module = $abstract.entities[from_entity_module_name].default($abstract);
-		const to_entity_module_name = $structure.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__to_type];
+		const to_entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__to_type];
 		const to_entity_module = $abstract.entities[to_entity_module_name].default($abstract);
 		const from_entity_method_privacy = from_entity_module.methods[method].privacy;
 		const to_entity_methid_privacy = to_entity_module.methods[method].privacy;
@@ -213,7 +213,7 @@ class RelationshipSystemModel extends Model {
 		const { database, transaction } = context;
 		const { agent_id } = access;
 		const method = "read";
-		const from_entity_module_name = $structure.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__from_type];
+		const from_entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__from_type];
 		const from_entity_module = $abstract.entities[from_entity_module_name].default($abstract);
 		const from_entity_method_privacy = from_entity_module.methods[method].privacy;
 		return self
@@ -270,7 +270,7 @@ class RelationshipSystemModel extends Model {
 								if (modules[row.gauze__relationship__to_type]) {
 									// skip
 								} else {
-									const module_name = $structure.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[row.gauze__relationship__to_type];
+									const module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[row.gauze__relationship__to_type];
 									const module = $abstract.entities[module_name].default($abstract);
 									modules[row.gauze__relationship__to_type] = module;
 								}
