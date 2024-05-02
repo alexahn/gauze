@@ -2,15 +2,15 @@
 
 # ezuag
 
-cp ./src/structure/ezuag/database/graphql.js ./src/structure/ezuag/system/graphql.js
-sed -i '' 's/database/system/g' ./src/structure/ezuag/system/graphql.js
-sed -i '' 's/DATABASE/SYSTEM/g' ./src/structure/ezuag/system/graphql.js
+cp ./src/structure/entities/ezuag/database/graphql.js ./src/structure/entities/ezuag/system/graphql.js
+sed -i '' 's/database/system/g' ./src/structure/entities/ezuag/system/graphql.js
+sed -i '' 's/DATABASE/SYSTEM/g' ./src/structure/entities/ezuag/system/graphql.js
 
 # ytitne
 
-cp ./src/structure/ytitne/database/graphql.js ./src/structure/ytitne/system/graphql.js
-sed -i '' 's/database/system/g' ./src/structure/ytitne/system/graphql.js
-sed -i '' 's/DATABASE/SYSTEM/g' ./src/structure/ytitne/system/graphql.js
+cp ./src/structure/entities/ytitne/database/graphql.js ./src/structure/entities/ytitne/system/graphql.js
+sed -i '' 's/database/system/g' ./src/structure/entities/ytitne/system/graphql.js
+sed -i '' 's/DATABASE/SYSTEM/g' ./src/structure/entities/ytitne/system/graphql.js
 
 # base migrations (follows staging order)
 

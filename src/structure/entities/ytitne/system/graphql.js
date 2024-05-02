@@ -1,6 +1,6 @@
 import * as $abstract from "./../../../../abstract/index.js";
 
-import { create_fields_array } from "./../../../utility.js";
+import { create_fields_array } from "./../../../gauze/utility.js";
 
 const TYPE__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = $abstract.entities.ytitne.default($abstract).graphql_meta_type;
 

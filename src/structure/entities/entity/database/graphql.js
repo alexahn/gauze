@@ -1,6 +1,6 @@
 import * as $abstract from "./../../../../abstract/index.js";
 
-import { create_fields_array } from "./../../../utility.js";
+import { create_fields_array } from "./../../../gauze/utility.js";
 
 const TYPE__GRAPHQL__DATABASE__ENTITY__STRUCTURE = $abstract.entities.entity.default($abstract).graphql_meta_type;
 
