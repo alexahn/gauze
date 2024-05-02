@@ -52,5 +52,5 @@ rm $project_root/system/interfaces/graphql/mutations/$arg1.js
 rm $project_root/system/interfaces/graphql/queries/$arg1.js
 
 # structure
-rm -rf $project_root/structure/$arg1
+rm -rf $project_root/structure/entities/$arg1
 

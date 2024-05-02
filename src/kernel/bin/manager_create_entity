@@ -69,14 +69,14 @@ cp $staging/system/interfaces/graphql/mutations/entity.js $project_root/system/i
 cp $staging/system/interfaces/graphql/queries/entity.js $project_root/system/interfaces/graphql/queries/$arg1.js
 
 # structure
-mkdir -p $project_root/structure/$arg1
-mkdir -p $project_root/structure/$arg1/database
-mkdir -p $project_root/structure/$arg1/system
-cp $staging/structure/entity/index.js $project_root/structure/$arg1/index.js
-cp $staging/structure/entity/database/graphql.js $project_root/structure/$arg1/database/graphql.js
-cp $staging/structure/entity/database/index.js $project_root/structure/$arg1/database/index.js
-cp $staging/structure/entity/database/sql.js $project_root/structure/$arg1/database/sql.js
-cp $staging/structure/entity/system/graphql.js $project_root/structure/$arg1/system/graphql.js
-cp $staging/structure/entity/system/index.js $project_root/structure/$arg1/system/index.js
+mkdir -p $project_root/structure/entities/$arg1
+mkdir -p $project_root/structure/entities/$arg1/database
+mkdir -p $project_root/structure/entities/$arg1/system
+cp $staging/structure/entities/entity/index.js $project_root/structure/entities/$arg1/index.js
+cp $staging/structure/entities/entity/database/graphql.js $project_root/structure/entities/$arg1/database/graphql.js
+cp $staging/structure/entities/entity/database/index.js $project_root/structure/entities/$arg1/database/index.js
+cp $staging/structure/entities/entity/database/sql.js $project_root/structure/entities/$arg1/database/sql.js
+cp $staging/structure/entities/entity/system/graphql.js $project_root/structure/entities/$arg1/system/graphql.js
+cp $staging/structure/entities/entity/system/index.js $project_root/structure/entities/$arg1/system/index.js
 
 rm -rf $staging

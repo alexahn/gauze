@@ -333,7 +333,8 @@
 		[x] delete ezuag and ytitne from src/structure
 	[x] update only ezuag and ytitne to use the new src/structure/entities path
 	[x] commit when all tests pass
-	[ ] update kernel initial skeleton by adding src/entities
-	[ ] update base from src to pull from src/structure/entities
+	[x] update kernel initial skeleton by adding src/entities
+	[x] update base from src to pull from src/structure/entities
 	[ ] commit when all paths have been updated
 	[ ] recompile
+[ ] rename src/kernel/src/initial to src/kernel/src/skeleton

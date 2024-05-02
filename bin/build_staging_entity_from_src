@@ -32,15 +32,15 @@ cp $src/system/interfaces/graphql/mutations/$from1.js $staging/system/interfaces
 cp $src/system/interfaces/graphql/queries/$from1.js $staging/system/interfaces/graphql/queries/$arg1.js
 
 # structure
-mkdir -p $staging/structure/$arg1
-mkdir -p $staging/structure/$arg1/database
-mkdir -p $staging/structure/$arg1/system
-cp $src/structure/$from1/index.js $staging/structure/$arg1/index.js
-cp $src/structure/$from1/database/graphql.js $staging/structure/$arg1/database/graphql.js
-cp $src/structure/$from1/database/index.js $staging/structure/$arg1/database/index.js
-cp $src/structure/$from1/database/sql.js $staging/structure/$arg1/database/sql.js
-cp $src/structure/$from1/system/graphql.js $staging/structure/$arg1/system/graphql.js
-cp $src/structure/$from1/system/index.js $staging/structure/$arg1/system/index.js
+mkdir -p $staging/structure/entities/$arg1
+mkdir -p $staging/structure/entities/$arg1/database
+mkdir -p $staging/structure/entities/$arg1/system
+cp $src/structure/entities/$from1/index.js $staging/structure/entities/$arg1/index.js
+cp $src/structure/entities/$from1/database/graphql.js $staging/structure/entities/$arg1/database/graphql.js
+cp $src/structure/entities/$from1/database/index.js $staging/structure/entities/$arg1/database/index.js
+cp $src/structure/entities/$from1/database/sql.js $staging/structure/entities/$arg1/database/sql.js
+cp $src/structure/entities/$from1/system/graphql.js $staging/structure/entities/$arg1/system/graphql.js
+cp $src/structure/entities/$from1/system/index.js $staging/structure/entities/$arg1/system/index.js
 
 find $staging -type f -name '*.js' -exec sed -i '' "s/$from1/a2b8dbc3427b41a9899e11671c2422c7/g" {} +
 find $staging -type f -name '*.js' -exec sed -i '' "s/$from2/ba381b0cc764c4c9a187b716ae94ed96/g" {} +
