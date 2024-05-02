@@ -317,3 +317,10 @@
 [ ] add a required attribute to fields in abstract entity definitions?
 	[ ] we can use it to create two different attribute types
 		[ ] one for creation, and another for querying and updating
+[ ] core system integrity checks should be independent of surface field validation
+	[ ] e.g. internal models such as relationships, whitelist, and blacklist should not depend on interface field validation to function
+		[ ] we need to ensure that the only valid data gets saved to the database
+		[ ] is it reasonable to use middlewares for core system logic? maybe we should just inhouse it in the kernel because someone might change the abstract definition?
+			[ ] maybe the ideal design is for the kernel to be self-sufficient in every regard
+	[ ] keep the surface area of the internal core as small as possible
+	[ ] field validation should only be pushed to the surface for user level entities
