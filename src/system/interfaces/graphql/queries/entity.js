@@ -9,7 +9,7 @@ import * as $structure from "./../../../../structure/index.js";
 
 import { CONTROLLER__ENTITY__CONTROLLER__SYSTEM } from "./../../../controllers/entity.js";
 
-const SERIALIZER__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
+const SERIALIZER__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.gauze.serializers.GraphQLSerializer({
 	graphql_type: $structure.entities.entity.system.graphql.TYPE__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
 	sql_primary_key: $structure.entities.entity.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY__STRUCTURE,
 });
