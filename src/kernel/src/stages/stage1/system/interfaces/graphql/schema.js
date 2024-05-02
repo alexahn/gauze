@@ -9,11 +9,11 @@ import { SYSTEM_RELATIONSHIP_STRUCTURE } from "./../../../structure/relationship
 import { CONNECTION__EZUAG__ENTITY__GRAPHQL__INTERFACE__SYSTEM, METHODS__EZUAG__ENTITY__GRAPHQL__INTERFACE__SYSTEM } from "./entities/ezuag.js";
 
 const ENTITIES = {
-	[$structure.ezuag.system.graphql.TYPE__GRAPHQL__SYSTEM__EZUAG__STRUCTURE]: CONNECTION__EZUAG__ENTITY__GRAPHQL__INTERFACE__SYSTEM,
+	[$structure.entities.ezuag.system.graphql.TYPE__GRAPHQL__SYSTEM__EZUAG__STRUCTURE]: CONNECTION__EZUAG__ENTITY__GRAPHQL__INTERFACE__SYSTEM,
 };
 
 const METHODS = {
-	[$structure.ezuag.system.graphql.TYPE__GRAPHQL__SYSTEM__EZUAG__STRUCTURE]: METHODS__EZUAG__ENTITY__GRAPHQL__INTERFACE__SYSTEM,
+	[$structure.entities.ezuag.system.graphql.TYPE__GRAPHQL__SYSTEM__EZUAG__STRUCTURE]: METHODS__EZUAG__ENTITY__GRAPHQL__INTERFACE__SYSTEM,
 };
 
 // todo: add some existence checks and guards to these loops

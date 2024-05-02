@@ -10,30 +10,30 @@ import * as $structure from "./../../../../structure/index.js";
 import { CONTROLLER__EZUAG__CONTROLLER__SYSTEM } from "./../../../controllers/ezuag.js";
 
 const SERIALIZER__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.ezuag.system.graphql.TYPE__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
-	sql_primary_key: $structure.ezuag.database.sql.PRIMARY_KEY__SQL__DATABASE__EZUAG__STRUCTURE,
+	graphql_type: $structure.entities.ezuag.system.graphql.TYPE__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
+	sql_primary_key: $structure.entities.ezuag.database.sql.PRIMARY_KEY__SQL__DATABASE__EZUAG__STRUCTURE,
 });
 
 const PARENT__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ezuag_Query__Parent",
 	description: "Ezuag Parent",
-	fields: () => $structure.ezuag.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
+	fields: () => $structure.entities.ezuag.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
 });
 
 const ATTRIBUTES__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ezuag_Query__Attributes",
 	description: "Ezuag Query Attributes",
-	fields: $structure.ezuag.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
+	fields: $structure.entities.ezuag.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
 });
 
 const ATTRIBUTES_ARRAY__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ezuag_Query__Attributes_Array",
 	description: "Ezuag Query Attributes Array",
-	fields: $structure.ezuag.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
+	fields: $structure.entities.ezuag.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
 });
 
 const READ__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.ezuag.system.graphql.QUERY__GRAPHQL__SYSTEM__EZUAG__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ezuag.system.graphql.QUERY__GRAPHQL__SYSTEM__EZUAG__STRUCTURE),
 	args: {
 		// note: this is temporary so we can test the access control logic without maintaining a session
 		// todo: remove this once we set up user authentication

@@ -8,10 +8,10 @@ import {
 } from "./../mutations/ezuag.js";
 
 const CONNECTION__EZUAG__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
-	query_relationships: $structure.ezuag.system.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
-	mutation_relationships: $structure.ezuag.system.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
-	query_query: $structure.ezuag.system.graphql.QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
-	mutation_mutation: $structure.ezuag.system.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
+	query_relationships: $structure.entities.ezuag.system.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
+	mutation_relationships: $structure.entities.ezuag.system.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
+	query_query: $structure.entities.ezuag.system.graphql.QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
+	mutation_mutation: $structure.entities.ezuag.system.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
 };
 
 const METHODS__EZUAG__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {

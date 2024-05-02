@@ -30,8 +30,8 @@ const ROOT_CONFIG__EZUAG__MODEL__DATABASE = {
 	entity_name: "$abstract.entities.ezuag.default",
 };
 const CONFIG__EZUAG__MODEL__DATABASE = {
-	table_name: $structure.ezuag.database.sql.TABLE_NAME__SQL__DATABASE__EZUAG__STRUCTURE,
-	primary_key: $structure.ezuag.database.sql.PRIMARY_KEY__SQL__DATABASE__EZUAG__STRUCTURE,
+	table_name: $structure.entities.ezuag.database.sql.TABLE_NAME__SQL__DATABASE__EZUAG__STRUCTURE,
+	primary_key: $structure.entities.ezuag.database.sql.PRIMARY_KEY__SQL__DATABASE__EZUAG__STRUCTURE,
 };
 const MODEL__EZUAG__MODEL__DATABASE = new EzuagDatabaseModel(ROOT_CONFIG__EZUAG__MODEL__DATABASE, CONFIG__EZUAG__MODEL__DATABASE);
 

@@ -10,30 +10,30 @@ import * as $kernel from "./../../../../kernel/index.js";
 import { CONTROLLER__YTITNE__CONTROLLER__SYSTEM } from "./../../../controllers/ytitne.js";
 
 const SERIALIZER__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.ytitne.system.graphql.TYPE__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
-	sql_primary_key: $structure.ytitne.database.sql.PRIMARY_KEY__SQL__DATABASE__YTITNE__STRUCTURE,
+	graphql_type: $structure.entities.ytitne.system.graphql.TYPE__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
+	sql_primary_key: $structure.entities.ytitne.database.sql.PRIMARY_KEY__SQL__DATABASE__YTITNE__STRUCTURE,
 });
 
 const PARENT__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne_Mutation__Parent",
 	description: "Ytitne Parent",
-	fields: () => $structure.ytitne.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
+	fields: () => $structure.entities.ytitne.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 });
 
 const ATTRIBUTES__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne_Mutation__Attributes",
 	description: "Ytitne Mutation Attributes",
-	fields: $structure.ytitne.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
+	fields: $structure.entities.ytitne.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 });
 
 const ATTRIBUTES_ARRAY__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne_Mutation__Attributes_Array",
 	description: "Ytitne Mutation Attributes Array",
-	fields: $structure.ytitne.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
+	fields: $structure.entities.ytitne.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 });
 
 const CREATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.ytitne.system.graphql.MUTATION__GRAPHQL__SYSTEM__YTITNE__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ytitne.system.graphql.MUTATION__GRAPHQL__SYSTEM__YTITNE__STRUCTURE),
 	args: {
 		// note: this is temporary so we can test the access control logic without maintaining a session
 		// todo: remove this once we set up user authentication
@@ -85,7 +85,7 @@ const CREATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 };
 
 const UPDATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.ytitne.system.graphql.MUTATION__GRAPHQL__SYSTEM__YTITNE__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ytitne.system.graphql.MUTATION__GRAPHQL__SYSTEM__YTITNE__STRUCTURE),
 	args: {
 		// note: this is temporary so we can test the access control logic without maintaining a session
 		// todo: remove this once we set up user authentication
@@ -172,7 +172,7 @@ const UPDATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 };
 
 const DELETE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.ytitne.system.graphql.MUTATION__GRAPHQL__SYSTEM__YTITNE__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ytitne.system.graphql.MUTATION__GRAPHQL__SYSTEM__YTITNE__STRUCTURE),
 	args: {
 		// note: this is temporary so we can test the access control logic without maintaining a session
 		// todo: remove this once we set up user authentication

@@ -308,6 +308,9 @@
 		[x] tests now use src/database/seeds/test
 [ ] prevent relationships from being made if the from and to are not connected
 	[ ] use structure definition
+	[ ] rename DATABASE_RELATIONSHIP_STRUCTURE to proper naming convention
+		[ ] don't import DATABASE_RELATIONSHIP_STRUCTURE directly from schemas
+	[ ] rename structure/relationships to structure/connections
 [ ] whitelist/blacklist kernel system model
 	[ ] enforce hierarchy of roles
 	[ ] if an entity is private, reject association with blacklist
@@ -319,8 +322,18 @@
 		[ ] one for creation, and another for querying and updating
 [ ] core system integrity checks should be independent of surface field validation
 	[ ] e.g. internal models such as relationships, whitelist, and blacklist should not depend on interface field validation to function
-		[ ] we need to ensure that the only valid data gets saved to the database
+		[ ] we need to ensure that only valid data gets saved to the database
 		[ ] is it reasonable to use middlewares for core system logic? maybe we should just inhouse it in the kernel because someone might change the abstract definition?
 			[ ] maybe the ideal design is for the kernel to be self-sufficient in every regard
 	[ ] keep the surface area of the internal core as small as possible
 	[ ] field validation should only be pushed to the surface for user level entities
+[ ] refactor src/structure to follow the same directory structure as src/abstract
+	[x] make src/structure/entities
+	[x] copy entities from root src/structure into src/structure/entities
+		[x] delete ezuag and ytitne from src/structure
+	[x] update only ezuag and ytitne to use the new src/structure/entities path
+	[x] commit when all tests pass
+	[ ] update kernel initial skeleton by adding src/entities
+	[ ] update base from src to pull from src/structure/entities
+	[ ] commit when all paths have been updated
+	[ ] recompile

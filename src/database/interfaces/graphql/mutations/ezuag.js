@@ -10,30 +10,30 @@ import * as $kernel from "./../../../../kernel/index.js";
 import { CONTROLLER__EZUAG__CONTROLLER__DATABASE } from "./../../../controllers/ezuag.js";
 
 const SERIALIZER__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.ezuag.database.graphql.TYPE__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
-	sql_primary_key: $structure.ezuag.database.sql.PRIMARY_KEY__SQL__DATABASE__EZUAG__STRUCTURE,
+	graphql_type: $structure.entities.ezuag.database.graphql.TYPE__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
+	sql_primary_key: $structure.entities.ezuag.database.sql.PRIMARY_KEY__SQL__DATABASE__EZUAG__STRUCTURE,
 });
 
 const PARENT__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ezuag_Mutation__Parent",
 	description: "Ezuag Parent",
-	fields: () => $structure.ezuag.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
+	fields: () => $structure.entities.ezuag.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
 });
 
 const ATTRIBUTES__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ezuag_Mutation__Attributes",
 	description: "Ezuag Mutation Attributes",
-	fields: $structure.ezuag.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
+	fields: $structure.entities.ezuag.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
 });
 
 const ATTRIBUTES_ARRAY__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ezuag_Mutation__Attributes_Array",
 	description: "Ezuag Mutation Attributes Array",
-	fields: $structure.ezuag.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
+	fields: $structure.entities.ezuag.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
 });
 
 const CREATE__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.ezuag.database.graphql.MUTATION__GRAPHQL__DATABASE__EZUAG__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ezuag.database.graphql.MUTATION__GRAPHQL__DATABASE__EZUAG__STRUCTURE),
 	args: {
 		parent: {
 			description: "parent",
@@ -71,7 +71,7 @@ const CREATE__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 };
 
 const UPDATE__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.ezuag.database.graphql.MUTATION__GRAPHQL__DATABASE__EZUAG__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ezuag.database.graphql.MUTATION__GRAPHQL__DATABASE__EZUAG__STRUCTURE),
 	args: {
 		parent: {
 			description: "parent",
@@ -144,7 +144,7 @@ const UPDATE__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 };
 
 const DELETE__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.ezuag.database.graphql.MUTATION__GRAPHQL__DATABASE__EZUAG__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ezuag.database.graphql.MUTATION__GRAPHQL__DATABASE__EZUAG__STRUCTURE),
 	args: {
 		parent: {
 			description: "parent",

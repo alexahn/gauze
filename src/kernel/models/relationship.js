@@ -31,6 +31,8 @@ class RelationshipSystemModel extends Model {
 			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Blacklist structure not found"));
 		}
 		self.name = self.__name();
+		self.relations_map = self._create_relations_map();
+		console.log("relations_map", self.relations_map);
 	}
 	static _class_name(schema_name) {
 		return schema_name ? `(${schema_name})[${super._class_name()}]RelationshipSystemModel` : `[${super._class_name()}]RelationshipSystemModel`;
@@ -38,6 +40,21 @@ class RelationshipSystemModel extends Model {
 	__name() {
 		const self = this;
 		return RelationshipSystemModel._class_name(self.schema_name);
+	}
+	_create_relations_map() {
+		// iterate over $abstract.entities
+		const map = {};
+		Object.keys($abstract.entities).forEach(function (name) {
+			const entity = $abstract.entities[name].default($abstract);
+			map[entity.graphql_meta_type] = {};
+		});
+		// iterate over $structure.relationships.SYSTEM_RELATIONSHIP_STRUCTURE
+		Object.keys($structure.relationships.SYSTEM_RELATIONSHIP_STRUCTURE).forEach(function (from) {
+			$structure.relationships.SYSTEM_RELATIONSHIP_STRUCTURE[from].forEach(function (to) {
+				map[from][to] = true;
+			});
+		});
+		return map;
 	}
 	_execute(context, operation_source, operation_variables) {
 		const self = this;

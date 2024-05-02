@@ -8,10 +8,10 @@ import {
 } from "./../mutations/ytitne.js";
 
 const CONNECTION__YTITNE__ENTITY__GRAPHQL__INTERFACE__DATABASE = {
-	query_relationships: $structure.ytitne.database.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
-	mutation_relationships: $structure.ytitne.database.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
-	query_query: $structure.ytitne.database.graphql.QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
-	mutation_mutation: $structure.ytitne.database.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
+	query_relationships: $structure.entities.ytitne.database.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
+	mutation_relationships: $structure.entities.ytitne.database.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
+	query_query: $structure.entities.ytitne.database.graphql.QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
+	mutation_mutation: $structure.entities.ytitne.database.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
 };
 
 const METHODS__YTITNE__ENTITY__GRAPHQL__INTERFACE__DATABASE = {

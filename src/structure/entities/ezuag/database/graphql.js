@@ -1,6 +1,6 @@
-import * as $abstract from "./../../../abstract/index.js";
+import * as $abstract from "./../../../../abstract/index.js";
 
-import { create_fields_array } from "./../../utility.js";
+import { create_fields_array } from "./../../../utility.js";
 
 const TYPE__GRAPHQL__DATABASE__EZUAG__STRUCTURE = $abstract.entities.ezuag.default($abstract).graphql_meta_type;
 

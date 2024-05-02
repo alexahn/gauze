@@ -10,30 +10,30 @@ import * as $structure from "./../../../../structure/index.js";
 import { CONTROLLER__YTITNE__CONTROLLER__DATABASE } from "./../../../controllers/ytitne.js";
 
 const SERIALIZER__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.ytitne.database.graphql.TYPE__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
-	sql_primary_key: $structure.ytitne.database.sql.PRIMARY_KEY__SQL__DATABASE__YTITNE__STRUCTURE,
+	graphql_type: $structure.entities.ytitne.database.graphql.TYPE__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
+	sql_primary_key: $structure.entities.ytitne.database.sql.PRIMARY_KEY__SQL__DATABASE__YTITNE__STRUCTURE,
 });
 
 const PARENT__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne_Query__Parent",
 	description: "Ytitne Parent",
-	fields: () => $structure.ytitne.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
+	fields: () => $structure.entities.ytitne.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
 });
 
 const ATTRIBUTES__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne_Query__Attributes",
 	description: "Ytitne Query Attributes",
-	fields: $structure.ytitne.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
+	fields: $structure.entities.ytitne.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
 });
 
 const ATTRIBUTES_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne_Query__Attributes_Array",
 	description: "Ytitne Query Attributes Array",
-	fields: $structure.ytitne.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
+	fields: $structure.entities.ytitne.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
 });
 
 const READ__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.ytitne.database.graphql.QUERY__GRAPHQL__DATABASE__YTITNE__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ytitne.database.graphql.QUERY__GRAPHQL__DATABASE__YTITNE__STRUCTURE),
 	args: {
 		parent: {
 			description: "parent",

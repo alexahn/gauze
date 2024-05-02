@@ -30,8 +30,8 @@ const ROOT_CONFIG__YTITNE__MODEL__DATABASE = {
 	entity_name: "$abstract.entities.ytitne.default",
 };
 const CONFIG__YTITNE__MODEL__DATABASE = {
-	table_name: $structure.ytitne.database.sql.TABLE_NAME__SQL__DATABASE__YTITNE__STRUCTURE,
-	primary_key: $structure.ytitne.database.sql.PRIMARY_KEY__SQL__DATABASE__YTITNE__STRUCTURE,
+	table_name: $structure.entities.ytitne.database.sql.TABLE_NAME__SQL__DATABASE__YTITNE__STRUCTURE,
+	primary_key: $structure.entities.ytitne.database.sql.PRIMARY_KEY__SQL__DATABASE__YTITNE__STRUCTURE,
 };
 const MODEL__YTITNE__MODEL__DATABASE = new YtitneDatabaseModel(ROOT_CONFIG__YTITNE__MODEL__DATABASE, CONFIG__YTITNE__MODEL__DATABASE);
 
