@@ -1,6 +1,11 @@
 // relationships are defined using the graphql type constant
 
-const DATABASE_RELATIONSHIP_STRUCTURE = {};
+// ytitne
+import { TYPE__GRAPHQL__DATABASE__YTITNE__STRUCTURE } from "./entities/ytitne/database/graphql.js";
+
+const DATABASE_RELATIONSHIP_STRUCTURE = {
+	[TYPE__GRAPHQL__DATABASE__YTITNE__STRUCTURE]: [TYPE__GRAPHQL__DATABASE__YTITNE__STRUCTURE],
+};
 
 const SYSTEM_RELATIONSHIP_STRUCTURE = DATABASE_RELATIONSHIP_STRUCTURE;
 
