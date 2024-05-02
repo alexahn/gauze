@@ -335,6 +335,7 @@
 	[x] commit when all tests pass
 	[x] update kernel initial skeleton by adding src/entities
 	[x] update base from src to pull from src/structure/entities
-	[ ] commit when all paths have been updated
+	[x] update stages
+	[x] commit when all paths have been updated
 	[ ] recompile
 [ ] rename src/kernel/src/initial to src/kernel/src/skeleton

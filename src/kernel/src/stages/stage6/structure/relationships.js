@@ -1,9 +1,9 @@
 // relationships are defined using the graphql type constant
 
 // ytitne
-import { TYPE__GRAPHQL__DATABASE__YTITNE__STRUCTURE } from "./ytitne/database/graphql.js";
+import { TYPE__GRAPHQL__DATABASE__YTITNE__STRUCTURE } from "./entities/ytitne/database/graphql.js";
 // entity1
-import { TYPE__GRAPHQL__DATABASE__ENTITY__STRUCTURE } from "./entity/database/graphql.js";
+import { TYPE__GRAPHQL__DATABASE__ENTITY__STRUCTURE } from "./entities/entity/database/graphql.js";
 
 /*
 	ytitne <-> ytitne
