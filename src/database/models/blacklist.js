@@ -30,8 +30,8 @@ const ROOT_CONFIG__BLACKLIST__MODEL__DATABASE = {
 	entity_name: "$abstract.entities.blacklist.default",
 };
 const CONFIG__BLACKLIST__MODEL__DATABASE = {
-	table_name: $structure.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
-	primary_key: $structure.blacklist.database.sql.PRIMARY_KEY__SQL__DATABASE__BLACKLIST__STRUCTURE,
+	table_name: $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
+	primary_key: $structure.entities.blacklist.database.sql.PRIMARY_KEY__SQL__DATABASE__BLACKLIST__STRUCTURE,
 };
 const MODEL__BLACKLIST__MODEL__DATABASE = new BlacklistDatabaseModel(ROOT_CONFIG__BLACKLIST__MODEL__DATABASE, CONFIG__BLACKLIST__MODEL__DATABASE);
 

@@ -8,10 +8,10 @@ import {
 } from "./../mutations/blacklist.js";
 
 const CONNECTION__BLACKLIST__ENTITY__GRAPHQL__INTERFACE__DATABASE = {
-	query_relationships: $structure.blacklist.database.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
-	mutation_relationships: $structure.blacklist.database.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
-	query_query: $structure.blacklist.database.graphql.QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
-	mutation_mutation: $structure.blacklist.database.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
+	query_relationships: $structure.entities.blacklist.database.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
+	mutation_relationships: $structure.entities.blacklist.database.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
+	query_query: $structure.entities.blacklist.database.graphql.QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
+	mutation_mutation: $structure.entities.blacklist.database.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
 };
 
 const METHODS__BLACKLIST__ENTITY__GRAPHQL__INTERFACE__DATABASE = {

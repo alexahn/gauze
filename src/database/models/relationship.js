@@ -30,8 +30,8 @@ const ROOT_CONFIG__RELATIONSHIP__MODEL__DATABASE = {
 	entity_name: "$abstract.entities.relationship.default",
 };
 const CONFIG__RELATIONSHIP__MODEL__DATABASE = {
-	table_name: $structure.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
-	primary_key: $structure.relationship.database.sql.PRIMARY_KEY__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
+	table_name: $structure.entities.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
+	primary_key: $structure.entities.relationship.database.sql.PRIMARY_KEY__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
 };
 const MODEL__RELATIONSHIP__MODEL__DATABASE = new RelationshipDatabaseModel(ROOT_CONFIG__RELATIONSHIP__MODEL__DATABASE, CONFIG__RELATIONSHIP__MODEL__DATABASE);
 

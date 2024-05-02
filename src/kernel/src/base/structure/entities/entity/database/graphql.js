@@ -1,6 +1,6 @@
-import * as $abstract from "./../../../abstract/index.js";
+import * as $abstract from "./../../../../abstract/index.js";
 
-import { create_fields_array } from "./../../utility.js";
+import { create_fields_array } from "./../../../utility.js";
 
 const TYPE__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = $abstract.entities.a2b8dbc3427b41a9899e11671c2422c7.default($abstract).graphql_meta_type;
 

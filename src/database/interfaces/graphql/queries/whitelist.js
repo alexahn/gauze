@@ -10,30 +10,30 @@ import * as $structure from "./../../../../structure/index.js";
 import { CONTROLLER__WHITELIST__CONTROLLER__DATABASE } from "./../../../controllers/whitelist.js";
 
 const SERIALIZER__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.whitelist.database.graphql.TYPE__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
-	sql_primary_key: $structure.whitelist.database.sql.PRIMARY_KEY__SQL__DATABASE__WHITELIST__STRUCTURE,
+	graphql_type: $structure.entities.whitelist.database.graphql.TYPE__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
+	sql_primary_key: $structure.entities.whitelist.database.sql.PRIMARY_KEY__SQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
 const PARENT__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Query__Parent",
 	description: "Whitelist Parent",
-	fields: () => $structure.whitelist.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
+	fields: () => $structure.entities.whitelist.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
 const ATTRIBUTES__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Query__Attributes",
 	description: "Whitelist Query Attributes",
-	fields: $structure.whitelist.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
+	fields: $structure.entities.whitelist.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
 const ATTRIBUTES_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Query__Attributes_Array",
 	description: "Whitelist Query Attributes Array",
-	fields: $structure.whitelist.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
+	fields: $structure.entities.whitelist.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
 const READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.whitelist.database.graphql.QUERY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.whitelist.database.graphql.QUERY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE),
 	args: {
 		parent: {
 			description: "parent",

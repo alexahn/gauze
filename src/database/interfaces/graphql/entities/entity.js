@@ -8,10 +8,10 @@ import {
 } from "./../mutations/entity.js";
 
 const CONNECTION__ENTITY__ENTITY__GRAPHQL__INTERFACE__DATABASE = {
-	query_relationships: $structure.entity.database.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
-	mutation_relationships: $structure.entity.database.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
-	query_query: $structure.entity.database.graphql.QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
-	mutation_mutation: $structure.entity.database.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
+	query_relationships: $structure.entities.entity.database.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
+	mutation_relationships: $structure.entities.entity.database.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
+	query_query: $structure.entities.entity.database.graphql.QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
+	mutation_mutation: $structure.entities.entity.database.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
 };
 
 const METHODS__ENTITY__ENTITY__GRAPHQL__INTERFACE__DATABASE = {

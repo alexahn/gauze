@@ -10,30 +10,30 @@ import * as $kernel from "./../../../../kernel/index.js";
 import { CONTROLLER__ENTITY__CONTROLLER__SYSTEM } from "./../../../controllers/entity.js";
 
 const SERIALIZER__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.entity.system.graphql.TYPE__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
-	sql_primary_key: $structure.entity.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY__STRUCTURE,
+	graphql_type: $structure.entities.entity.system.graphql.TYPE__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
+	sql_primary_key: $structure.entities.entity.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY__STRUCTURE,
 });
 
 const PARENT__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity_Mutation__Parent",
 	description: "Entity Parent",
-	fields: () => $structure.entity.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
+	fields: () => $structure.entities.entity.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
 });
 
 const ATTRIBUTES__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity_Mutation__Attributes",
 	description: "Entity Mutation Attributes",
-	fields: $structure.entity.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
+	fields: $structure.entities.entity.system.graphql.ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
 });
 
 const ATTRIBUTES_ARRAY__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity_Mutation__Attributes_Array",
 	description: "Entity Mutation Attributes Array",
-	fields: $structure.entity.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
+	fields: $structure.entities.entity.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
 });
 
 const CREATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entity.system.graphql.MUTATION__GRAPHQL__SYSTEM__ENTITY__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.entity.system.graphql.MUTATION__GRAPHQL__SYSTEM__ENTITY__STRUCTURE),
 	args: {
 		// note: this is temporary so we can test the access control logic without maintaining a session
 		// todo: remove this once we set up user authentication
@@ -85,7 +85,7 @@ const CREATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 };
 
 const UPDATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entity.system.graphql.MUTATION__GRAPHQL__SYSTEM__ENTITY__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.entity.system.graphql.MUTATION__GRAPHQL__SYSTEM__ENTITY__STRUCTURE),
 	args: {
 		// note: this is temporary so we can test the access control logic without maintaining a session
 		// todo: remove this once we set up user authentication
@@ -172,7 +172,7 @@ const UPDATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 };
 
 const DELETE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entity.system.graphql.MUTATION__GRAPHQL__SYSTEM__ENTITY__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.entity.system.graphql.MUTATION__GRAPHQL__SYSTEM__ENTITY__STRUCTURE),
 	args: {
 		// note: this is temporary so we can test the access control logic without maintaining a session
 		// todo: remove this once we set up user authentication

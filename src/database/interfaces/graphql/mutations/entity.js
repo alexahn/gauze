@@ -10,30 +10,30 @@ import * as $kernel from "./../../../../kernel/index.js";
 import { CONTROLLER__ENTITY__CONTROLLER__DATABASE } from "./../../../controllers/entity.js";
 
 const SERIALIZER__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $structure.serializers.GraphQLSerializer({
-	graphql_type: $structure.entity.database.graphql.TYPE__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
-	sql_primary_key: $structure.entity.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY__STRUCTURE,
+	graphql_type: $structure.entities.entity.database.graphql.TYPE__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
+	sql_primary_key: $structure.entities.entity.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY__STRUCTURE,
 });
 
 const PARENT__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity_Mutation__Parent",
 	description: "Entity Parent",
-	fields: () => $structure.entity.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
+	fields: () => $structure.entities.entity.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
 });
 
 const ATTRIBUTES__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity_Mutation__Attributes",
 	description: "Entity Mutation Attributes",
-	fields: $structure.entity.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
+	fields: $structure.entities.entity.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
 });
 
 const ATTRIBUTES_ARRAY__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity_Mutation__Attributes_Array",
 	description: "Entity Mutation Attributes Array",
-	fields: $structure.entity.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
+	fields: $structure.entities.entity.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
 });
 
 const CREATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entity.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.entity.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY__STRUCTURE),
 	args: {
 		parent: {
 			description: "parent",
@@ -71,7 +71,7 @@ const CREATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 };
 
 const UPDATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entity.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.entity.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY__STRUCTURE),
 	args: {
 		parent: {
 			description: "parent",
@@ -144,7 +144,7 @@ const UPDATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 };
 
 const DELETE__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entity.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.entity.database.graphql.MUTATION__GRAPHQL__DATABASE__ENTITY__STRUCTURE),
 	args: {
 		parent: {
 			description: "parent",

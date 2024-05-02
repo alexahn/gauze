@@ -30,8 +30,8 @@ const ROOT_CONFIG__ENTITY__MODEL__DATABASE = {
 	entity_name: "$abstract.entities.entity.default",
 };
 const CONFIG__ENTITY__MODEL__DATABASE = {
-	table_name: $structure.entity.database.sql.TABLE_NAME__SQL__DATABASE__ENTITY__STRUCTURE,
-	primary_key: $structure.entity.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY__STRUCTURE,
+	table_name: $structure.entities.entity.database.sql.TABLE_NAME__SQL__DATABASE__ENTITY__STRUCTURE,
+	primary_key: $structure.entities.entity.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY__STRUCTURE,
 };
 const MODEL__ENTITY__MODEL__DATABASE = new EntityDatabaseModel(ROOT_CONFIG__ENTITY__MODEL__DATABASE, CONFIG__ENTITY__MODEL__DATABASE);
 

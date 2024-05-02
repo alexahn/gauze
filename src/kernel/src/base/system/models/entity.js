@@ -14,7 +14,7 @@ class ba381b0cc764c4c9a187b716ae94ed96SystemModel extends $kernel.models.system.
 		// todo: remove this input proxy once we set up user authentication
 		agent_id = input.agent_id || agent_id;
 		const access = {
-			entity_type: $structure.a2b8dbc3427b41a9899e11671c2422c7.database.sql.TABLE_NAME__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+			entity_type: $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.sql.TABLE_NAME__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 			agent_id: agent_id,
 		};
 		const operation = {
@@ -33,7 +33,7 @@ class ba381b0cc764c4c9a187b716ae94ed96SystemModel extends $kernel.models.system.
 		// todo: remove this input proxy once we set up user authentication
 		agent_id = input.agent_id || agent_id;
 		const access = {
-			entity_type: $structure.a2b8dbc3427b41a9899e11671c2422c7.database.sql.TABLE_NAME__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+			entity_type: $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.sql.TABLE_NAME__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 			agent_id: agent_id,
 		};
 		const operation = {
@@ -52,7 +52,7 @@ class ba381b0cc764c4c9a187b716ae94ed96SystemModel extends $kernel.models.system.
 		// todo: remove this input proxy once we set up user authentication
 		agent_id = input.agent_id || agent_id;
 		const access = {
-			entity_type: $structure.a2b8dbc3427b41a9899e11671c2422c7.database.sql.TABLE_NAME__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+			entity_type: $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.sql.TABLE_NAME__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 			agent_id: agent_id,
 		};
 		const operation = {
@@ -71,7 +71,7 @@ class ba381b0cc764c4c9a187b716ae94ed96SystemModel extends $kernel.models.system.
 		// todo: remove this input proxy once we set up user authentication
 		agent_id = input.agent_id || agent_id;
 		const access = {
-			entity_type: $structure.a2b8dbc3427b41a9899e11671c2422c7.database.sql.TABLE_NAME__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+			entity_type: $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.sql.TABLE_NAME__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 			agent_id: agent_id,
 		};
 		const operation = {

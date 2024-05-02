@@ -30,8 +30,8 @@ const ROOT_CONFIG__cd637bc32c364580be5cc28396d3dee8__MODEL__DATABASE = {
 	entity_name: "$abstract.entities.a2b8dbc3427b41a9899e11671c2422c7.default",
 };
 const CONFIG__cd637bc32c364580be5cc28396d3dee8__MODEL__DATABASE = {
-	table_name: $structure.a2b8dbc3427b41a9899e11671c2422c7.database.sql.TABLE_NAME__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
-	primary_key: $structure.a2b8dbc3427b41a9899e11671c2422c7.database.sql.PRIMARY_KEY__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+	table_name: $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.sql.TABLE_NAME__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+	primary_key: $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.sql.PRIMARY_KEY__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 };
 const MODEL__cd637bc32c364580be5cc28396d3dee8__MODEL__DATABASE = new ba381b0cc764c4c9a187b716ae94ed96DatabaseModel(
 	ROOT_CONFIG__cd637bc32c364580be5cc28396d3dee8__MODEL__DATABASE,

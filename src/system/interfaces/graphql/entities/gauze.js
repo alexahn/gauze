@@ -8,10 +8,10 @@ import {
 } from "./../mutations/gauze.js";
 
 const CONNECTION__GAUZE__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
-	query_relationships: $structure.gauze.system.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__GAUZE__STRUCTURE,
-	mutation_relationships: $structure.gauze.system.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__GAUZE__STRUCTURE,
-	query_query: $structure.gauze.system.graphql.QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__GAUZE__STRUCTURE,
-	mutation_mutation: $structure.gauze.system.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__GAUZE__STRUCTURE,
+	query_relationships: $structure.entities.gauze.system.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__GAUZE__STRUCTURE,
+	mutation_relationships: $structure.entities.gauze.system.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__GAUZE__STRUCTURE,
+	query_query: $structure.entities.gauze.system.graphql.QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__GAUZE__STRUCTURE,
+	mutation_mutation: $structure.entities.gauze.system.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__GAUZE__STRUCTURE,
 };
 
 const METHODS__GAUZE__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {

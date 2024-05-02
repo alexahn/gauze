@@ -14,7 +14,7 @@ class BlacklistSystemModel extends $kernel.models.system.SystemModel {
 		// todo: remove this input proxy once we set up user authentication
 		agent_id = input.agent_id || agent_id;
 		const access = {
-			entity_type: $structure.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
+			entity_type: $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
 			agent_id: agent_id,
 		};
 		const operation = {
@@ -33,7 +33,7 @@ class BlacklistSystemModel extends $kernel.models.system.SystemModel {
 		// todo: remove this input proxy once we set up user authentication
 		agent_id = input.agent_id || agent_id;
 		const access = {
-			entity_type: $structure.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
+			entity_type: $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
 			agent_id: agent_id,
 		};
 		const operation = {
@@ -52,7 +52,7 @@ class BlacklistSystemModel extends $kernel.models.system.SystemModel {
 		// todo: remove this input proxy once we set up user authentication
 		agent_id = input.agent_id || agent_id;
 		const access = {
-			entity_type: $structure.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
+			entity_type: $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
 			agent_id: agent_id,
 		};
 		const operation = {
@@ -71,7 +71,7 @@ class BlacklistSystemModel extends $kernel.models.system.SystemModel {
 		// todo: remove this input proxy once we set up user authentication
 		agent_id = input.agent_id || agent_id;
 		const access = {
-			entity_type: $structure.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
+			entity_type: $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
 			agent_id: agent_id,
 		};
 		const operation = {

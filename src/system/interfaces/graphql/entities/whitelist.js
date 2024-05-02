@@ -8,10 +8,10 @@ import {
 } from "./../mutations/whitelist.js";
 
 const CONNECTION__WHITELIST__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
-	query_relationships: $structure.whitelist.system.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
-	mutation_relationships: $structure.whitelist.system.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
-	query_query: $structure.whitelist.system.graphql.QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
-	mutation_mutation: $structure.whitelist.system.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
+	query_relationships: $structure.entities.whitelist.system.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
+	mutation_relationships: $structure.entities.whitelist.system.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
+	query_query: $structure.entities.whitelist.system.graphql.QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
+	mutation_mutation: $structure.entities.whitelist.system.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
 };
 
 const METHODS__WHITELIST__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {

@@ -30,8 +30,8 @@ const ROOT_CONFIG__GAUZE__MODEL__DATABASE = {
 	entity_name: "$abstract.entities.gauze.default",
 };
 const CONFIG__GAUZE__MODEL__DATABASE = {
-	table_name: $structure.gauze.database.sql.TABLE_NAME__SQL__DATABASE__GAUZE__STRUCTURE,
-	primary_key: $structure.gauze.database.sql.PRIMARY_KEY__SQL__DATABASE__GAUZE__STRUCTURE,
+	table_name: $structure.entities.gauze.database.sql.TABLE_NAME__SQL__DATABASE__GAUZE__STRUCTURE,
+	primary_key: $structure.entities.gauze.database.sql.PRIMARY_KEY__SQL__DATABASE__GAUZE__STRUCTURE,
 };
 const MODEL__GAUZE__MODEL__DATABASE = new GauzeDatabaseModel(ROOT_CONFIG__GAUZE__MODEL__DATABASE, CONFIG__GAUZE__MODEL__DATABASE);
 

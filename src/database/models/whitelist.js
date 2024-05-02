@@ -30,8 +30,8 @@ const ROOT_CONFIG__WHITELIST__MODEL__DATABASE = {
 	entity_name: "$abstract.entities.whitelist.default",
 };
 const CONFIG__WHITELIST__MODEL__DATABASE = {
-	table_name: $structure.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE,
-	primary_key: $structure.whitelist.database.sql.PRIMARY_KEY__SQL__DATABASE__WHITELIST__STRUCTURE,
+	table_name: $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE,
+	primary_key: $structure.entities.whitelist.database.sql.PRIMARY_KEY__SQL__DATABASE__WHITELIST__STRUCTURE,
 };
 const MODEL__WHITELIST__MODEL__DATABASE = new WhitelistDatabaseModel(ROOT_CONFIG__WHITELIST__MODEL__DATABASE, CONFIG__WHITELIST__MODEL__DATABASE);
 
