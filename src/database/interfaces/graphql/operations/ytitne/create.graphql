@@ -5,6 +5,10 @@ mutation CreateYtitne(
 	$whitelist_read: Whitelist_Mutation__Attributes
 	$whitelist_update: Whitelist_Mutation__Attributes
 	$whitelist_delete: Whitelist_Mutation__Attributes
+	$blacklist_create: Blacklist_Mutation__Attributes
+	$blacklist_read: Blacklist_Mutation__Attributes
+	$blacklist_update: Blacklist_Mutation__Attributes
+	$blacklist_delete: Blacklist_Mutation__Attributes
 ) {
 	create_ytitne(parent: $parent, attributes: $attributes) {
 		attributes {
@@ -31,6 +35,26 @@ mutation CreateYtitne(
 				}
 			}
 			delete_whitelist: create_whitelist(attributes: $whitelist_delete) {
+				_metadata {
+					id
+				}
+			}
+			create_blacklist: create_blacklist(attributes: $blacklist_create) {
+				_metadata {
+					id
+				}
+			}
+			read_blacklist: create_blacklist(attributes: $blacklist_read) {
+				_metadata {
+					id
+				}
+			}
+			update_blacklist: create_blacklist(attributes: $blacklist_update) {
+				_metadata {
+					id
+				}
+			}
+			delete_blacklist: create_blacklist(attributes: $blacklist_delete) {
 				_metadata {
 					id
 				}
