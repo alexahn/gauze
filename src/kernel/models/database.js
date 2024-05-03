@@ -37,6 +37,23 @@ class DatabaseModel extends Model {
 		const parameters_key = JSON.stringify(parameters)
 		return [source_key, operation_key, parameters_key].join(':')
 	}
+	_batch(keys) {
+		// group keys according to operation and params
+		// e.g. 1:1:1, 2:1:1 1:2:2:, 3:2:2, 4:2:2 will become [1:1:1, 2:1:1], [1:2:2, 3:2:2, 4:2:2]
+		// in effect the source attribute will become the only active variable if we treat operation and params as a subkey
+		// we we need new methods that act on arrays: create([]), read([]), update([]), delete([]) to resolve the source null case
+		// for source non null, we need to do a full database join using where in for the from_id and from_type
+		// we will need to manually construct the result set for each subgroup (e.g. by manually handling limit, order, offset, etc)
+		// my original idea was to avoid data batching because at extreme scales, i'm not convinced this approach is feasible
+		// the problem with software engineering is that things appear inefficient in the simple use cases, but they might actually be the right way at large scale
+		// to do a full database join and sort through the results in memory for millions or billions of records will not scale
+		// at that point, it would be better to shard the database to thousands of nodes and accept the increase in number of queries and put a hard cap to the number of results that can be returned at once
+		// and also put a limit to the depth of nested queries/mutations/relationships
+		// e.g. as an example you can set the limit for returning results to be 128, with a max nested depth of 3
+		// the maximum number of queries initiated on the backend would be 2097152, which seems like a lot, but if you can shard your data to an arbitrary resolution, then you could have for example 100000 database nodes
+		// and not all of them would be hit at once because those potential 2097152 queries would be aggregated to the nodes that hold the data
+		// on average, each database would only be seeing about 20 queries in the example above, and the architecture would avoid doing any in memory joins, so there would be a near constant latency
+	}
 	_parse_relationship_metadata(context, input) {
 		const self = this;
 		const { source } = context;
