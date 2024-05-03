@@ -7,21 +7,21 @@ class ba381b0cc764c4c9a187b716ae94ed96DatabaseModel extends $kernel.models.datab
 		super(root_config, config);
 		const self = this;
 	}
-	create(context, input) {
+	create(context, parameters) {
 		const self = this;
-		return self._create(context, input);
+		return self._create(context, parameters);
 	}
-	read(context, input) {
+	read(context, parameters) {
 		const self = this;
-		return self._read(context, input);
+		return self._read(context, parameters);
 	}
-	update(context, input) {
+	update(context, parameters) {
 		const self = this;
-		return self._update(context, input);
+		return self._update(context, parameters);
 	}
-	delete(context, input) {
+	delete(context, parameters) {
 		const self = this;
-		return self._delete(context, input);
+		return self._delete(context, parameters);
 	}
 }
 

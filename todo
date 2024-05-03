@@ -342,3 +342,7 @@
 [ ] rename src/kernel/src/initial to src/kernel/src/skeleton
 [x] move src/kernel/entities to src/kernel/src/entities
 [ ] move link and root functions used in schemas to kernel
+[ ] refactor all kernel models
+	[x] rename input to parameters
+	[ ] context, agent, parameters, entity, operation
+		[ ] centralize all authorization checks in two functions: authorization and authorization_set

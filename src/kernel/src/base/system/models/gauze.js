@@ -8,11 +8,11 @@ class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends $kernel.models.system.
 		super(root_config, config);
 		const self = this;
 	}
-	create(context, input) {
+	create(context, parameters) {
 		const self = this;
 		var { agent_id = "" } = context;
-		// todo: remove this input proxy once we set up user authentication
-		agent_id = input.agent_id || agent_id;
+		// todo: remove this parameters proxy once we set up user authentication
+		agent_id = parameters.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.entities.a543731262804f64adcc0eae1a225acc.database.sql.TABLE_NAME__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 			agent_id: agent_id,
@@ -21,17 +21,17 @@ class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends $kernel.models.system.
 			operation: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			operation_name: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.CREATE_NAME__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 		};
-		return self._create(context, input, access, operation).then(function (data) {
+		return self._create(context, parameters, access, operation).then(function (data) {
 			return data.data.create_a543731262804f64adcc0eae1a225acc.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	read(context, input) {
+	read(context, parameters) {
 		const self = this;
 		var { agent_id = "" } = context;
-		// todo: remove this input proxy once we set up user authentication
-		agent_id = input.agent_id || agent_id;
+		// todo: remove this parameters proxy once we set up user authentication
+		agent_id = parameters.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.entities.a543731262804f64adcc0eae1a225acc.database.sql.TABLE_NAME__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 			agent_id: agent_id,
@@ -40,17 +40,17 @@ class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends $kernel.models.system.
 			operation: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.READ__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			operation_name: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.READ_NAME__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 		};
-		return self._read(context, input, access, operation).then(function (data) {
+		return self._read(context, parameters, access, operation).then(function (data) {
 			return data.data.read_a543731262804f64adcc0eae1a225acc.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	update(context, input) {
+	update(context, parameters) {
 		const self = this;
 		var { agent_id = "" } = context;
-		// todo: remove this input proxy once we set up user authentication
-		agent_id = input.agent_id || agent_id;
+		// todo: remove this parameters proxy once we set up user authentication
+		agent_id = parameters.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.entities.a543731262804f64adcc0eae1a225acc.database.sql.TABLE_NAME__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 			agent_id: agent_id,
@@ -59,17 +59,17 @@ class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends $kernel.models.system.
 			operation: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			operation_name: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.UPDATE_NAME__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 		};
-		return self._update(context, input, access, operation).then(function (data) {
+		return self._update(context, parameters, access, operation).then(function (data) {
 			return data.data.update_a543731262804f64adcc0eae1a225acc.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	delete(context, input) {
+	delete(context, parameters) {
 		const self = this;
 		var { agent_id = "" } = context;
-		// todo: remove this input proxy once we set up user authentication
-		agent_id = input.agent_id || agent_id;
+		// todo: remove this parameters proxy once we set up user authentication
+		agent_id = parameters.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.entities.a543731262804f64adcc0eae1a225acc.database.sql.TABLE_NAME__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 			agent_id: agent_id,
@@ -78,7 +78,7 @@ class bb95d174a16f4ddd935ff3a802f7c7bcSystemModel extends $kernel.models.system.
 			operation: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			operation_name: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.DELETE_NAME__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 		};
-		return self._delete(context, input, access, operation).then(function (data) {
+		return self._delete(context, parameters, access, operation).then(function (data) {
 			return data.data.delete_a543731262804f64adcc0eae1a225acc.map(function (row) {
 				return row.attributes;
 			});

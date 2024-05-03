@@ -8,11 +8,11 @@ class EzuagSystemModel extends $kernel.models.system.SystemModel {
 		super(root_config, config);
 		const self = this;
 	}
-	create(context, input) {
+	create(context, parameters) {
 		const self = this;
 		var { agent_id = "" } = context;
-		// todo: remove this input proxy once we set up user authentication
-		agent_id = input.agent_id || agent_id;
+		// todo: remove this parameters proxy once we set up user authentication
+		agent_id = parameters.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.entities.ezuag.database.sql.TABLE_NAME__SQL__DATABASE__EZUAG__STRUCTURE,
 			agent_id: agent_id,
@@ -21,17 +21,17 @@ class EzuagSystemModel extends $kernel.models.system.SystemModel {
 			operation: $database.interfaces.graphql.operations.ezuag.CREATE__EZUAG__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			operation_name: $database.interfaces.graphql.operations.ezuag.CREATE_NAME__EZUAG__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 		};
-		return self._create(context, input, access, operation).then(function (data) {
+		return self._create(context, parameters, access, operation).then(function (data) {
 			return data.data.create_ezuag.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	read(context, input) {
+	read(context, parameters) {
 		const self = this;
 		var { agent_id = "" } = context;
-		// todo: remove this input proxy once we set up user authentication
-		agent_id = input.agent_id || agent_id;
+		// todo: remove this parameters proxy once we set up user authentication
+		agent_id = parameters.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.entities.ezuag.database.sql.TABLE_NAME__SQL__DATABASE__EZUAG__STRUCTURE,
 			agent_id: agent_id,
@@ -40,17 +40,17 @@ class EzuagSystemModel extends $kernel.models.system.SystemModel {
 			operation: $database.interfaces.graphql.operations.ezuag.READ__EZUAG__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			operation_name: $database.interfaces.graphql.operations.ezuag.READ_NAME__EZUAG__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 		};
-		return self._read(context, input, access, operation).then(function (data) {
+		return self._read(context, parameters, access, operation).then(function (data) {
 			return data.data.read_ezuag.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	update(context, input) {
+	update(context, parameters) {
 		const self = this;
 		var { agent_id = "" } = context;
-		// todo: remove this input proxy once we set up user authentication
-		agent_id = input.agent_id || agent_id;
+		// todo: remove this parameters proxy once we set up user authentication
+		agent_id = parameters.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.entities.ezuag.database.sql.TABLE_NAME__SQL__DATABASE__EZUAG__STRUCTURE,
 			agent_id: agent_id,
@@ -59,17 +59,17 @@ class EzuagSystemModel extends $kernel.models.system.SystemModel {
 			operation: $database.interfaces.graphql.operations.ezuag.UPDATE__EZUAG__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			operation_name: $database.interfaces.graphql.operations.ezuag.UPDATE_NAME__EZUAG__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 		};
-		return self._update(context, input, access, operation).then(function (data) {
+		return self._update(context, parameters, access, operation).then(function (data) {
 			return data.data.update_ezuag.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	delete(context, input) {
+	delete(context, parameters) {
 		const self = this;
 		var { agent_id = "" } = context;
-		// todo: remove this input proxy once we set up user authentication
-		agent_id = input.agent_id || agent_id;
+		// todo: remove this parameters proxy once we set up user authentication
+		agent_id = parameters.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.entities.ezuag.database.sql.TABLE_NAME__SQL__DATABASE__EZUAG__STRUCTURE,
 			agent_id: agent_id,
@@ -78,7 +78,7 @@ class EzuagSystemModel extends $kernel.models.system.SystemModel {
 			operation: $database.interfaces.graphql.operations.ezuag.DELETE__EZUAG__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			operation_name: $database.interfaces.graphql.operations.ezuag.DELETE_NAME__EZUAG__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 		};
-		return self._delete(context, input, access, operation).then(function (data) {
+		return self._delete(context, parameters, access, operation).then(function (data) {
 			return data.data.delete_ezuag.map(function (row) {
 				return row.attributes;
 			});
