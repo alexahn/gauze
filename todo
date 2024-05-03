@@ -344,5 +344,5 @@
 [ ] move link and root functions used in schemas to kernel
 [ ] refactor all kernel models
 	[x] rename input to parameters
-	[ ] context, agent, parameters, entity, operation
-		[ ] centralize all authorization checks in two functions: authorization and authorization_set
+	[x] context, agent, parameters, entity, operation
+		[x] centralize all authorization checks in two functions: authorization and authorization_set

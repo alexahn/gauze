@@ -190,7 +190,7 @@ class AccessSystemModel extends Model {
 	}
 	_read_agent(context, input, agent, operation) {
 		const self = this;
-		if (input.where[self.key_id] === agent.agent_id) {
+		if (input.where[self.key_agent_id] === agent.agent_id) {
 			// agent should be able to see all their own records
 			return self._execute(context, operation, input);
 		} else {
@@ -263,7 +263,7 @@ class AccessSystemModel extends Model {
 					return self.empty_read_response;
 				}
 			});
-		} else if (input.where && input.where[self.key_id]) {
+		} else if (input.where && input.where[self.key_agent_id]) {
 			return self._read_agent(context, input, agent, operation);
 		} else if (input.where && input.where[self.key_entity_id] && input.where[self.key_entity_type] && input.where[self.key_method]) {
 			return self._read_entity(context, input, agent, operation);
@@ -284,7 +284,8 @@ class AccessSystemModel extends Model {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
 					return self._valid_access(context, agent, "update", target_record).then(function () {
-						return self._valid_access(context, agent, "update", change_record).then(function () {
+						const staged = {...target_record, ...change_record}
+						return self._valid_access(context, agent, "update", staged).then(function () {
 							return self._execute(context, operation, input);
 						});
 					});

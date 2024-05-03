@@ -387,7 +387,6 @@ class SystemModel extends Model {
 		const { source } = context;
 		const { agent, entity, operation } = realm;
 		entity.entity_method = "create";
-		const access = { ...agent, ...entity };
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
@@ -399,8 +398,8 @@ class SystemModel extends Model {
 			gauze__whitelist__realm: "system",
 			gauze__whitelist__agent_role: "root",
 			gauze__whitelist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
-			gauze__whitelist__agent_id: access.agent_id,
-			gauze__whitelist__entity_type: access.entity_type,
+			gauze__whitelist__agent_id: agent.agent_id,
+			gauze__whitelist__entity_type: entity.entity_type,
 			gauze__whitelist__entity_id: parameters.attributes[self.entity.primary_key],
 			gauze__whitelist__method: "create",
 		};
@@ -408,8 +407,8 @@ class SystemModel extends Model {
 			gauze__whitelist__realm: "system",
 			gauze__whitelist__agent_role: "root",
 			gauze__whitelist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
-			gauze__whitelist__agent_id: access.agent_id,
-			gauze__whitelist__entity_type: access.entity_type,
+			gauze__whitelist__agent_id: agent.agent_id,
+			gauze__whitelist__entity_type: entity.entity_type,
 			gauze__whitelist__entity_id: parameters.attributes[self.entity.primary_key],
 			gauze__whitelist__method: "read",
 		};
@@ -417,8 +416,8 @@ class SystemModel extends Model {
 			gauze__whitelist__realm: "system",
 			gauze__whitelist__agent_role: "root",
 			gauze__whitelist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
-			gauze__whitelist__agent_id: access.agent_id,
-			gauze__whitelist__entity_type: access.entity_type,
+			gauze__whitelist__agent_id: agent.agent_id,
+			gauze__whitelist__entity_type: entity.entity_type,
 			gauze__whitelist__entity_id: parameters.attributes[self.entity.primary_key],
 			gauze__whitelist__method: "update",
 		};
@@ -426,8 +425,8 @@ class SystemModel extends Model {
 			gauze__whitelist__realm: "system",
 			gauze__whitelist__agent_role: "root",
 			gauze__whitelist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
-			gauze__whitelist__agent_id: access.agent_id,
-			gauze__whitelist__entity_type: access.entity_type,
+			gauze__whitelist__agent_id: agent.agent_id,
+			gauze__whitelist__entity_type: entity.entity_type,
 			gauze__whitelist__entity_id: parameters.attributes[self.entity.primary_key],
 			gauze__whitelist__method: "delete",
 		};
