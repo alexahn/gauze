@@ -12,17 +12,6 @@ import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
 
 import { EXECUTE__GRAPHQL__SHELL__KERNEL } from "./../shell/graphql.js";
 
-// semantics:
-// who is changing
-// 	- all actions must ensure that the role hierarchy is honored
-//		- all actions cannot affect access units that have a higher role than the initiator
-//			- someone cannot read, update, or delete a record that has a role set higher than the initiator
-//		- all modifications cannot effectively elevate the initiator's role
-//			- create and update cannot set agent role to a higher role than the one who is initiating the change
-// 		- by induction, terminal roles can only effectively read or delete their own record
-// what is changing
-//	- the units of change should be agent id, agent type, and agent role
-//  - realm, entity id, entity type, and method (rename to entity method?) are locked
 class AccessSystemModel extends Model {
 	constructor(root_config, access_config) {
 		super(root_config);
@@ -181,11 +170,36 @@ class AccessSystemModel extends Model {
 		}
 		return sql;
 	}
+	_validate_create(attributes) {
+		const self = this;
+		if (!attributes[self.key_realm]) {
+			throw new Error(`Field '${self.key_realm}' is required`);
+		}
+		if (!attributes[self.key_agent_role]) {
+			throw new Error(`Field '${self.key_agent_role}' is required`);
+		}
+		if (!attributes[self.key_agent_type]) {
+			throw new Error(`Field '${self.key_agent_type}' is required`);
+		}
+		if (!attributes[self.key_agent_id]) {
+			throw new Error(`Field '${self.key_agent_id}' is required`);
+		}
+		if (!attributes[self.key_entity_type]) {
+			throw new Error(`Field '${self.key_entity_type}' is required`);
+		}
+		if (!attributes[self.key_entity_id]) {
+			throw new Error(`Field '${self.key_entity_id}' is required`);
+		}
+		if (!attributes[self.key_method]) {
+			throw new Error(`Field '${self.key_method}' is required`);
+		}
+	}
 	// requires a valid record
 	_create(context, input, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
 		const target_record = input.attributes;
+		self._validate_create(target_record);
 		return self._valid_access(context, agent, "create", target_record).then(function () {
 			return self._execute(context, operation, input);
 		});

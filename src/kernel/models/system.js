@@ -141,6 +141,7 @@ class SystemModel extends Model {
 			const sql = database(self.blacklist_table)
 				.where({
 					gauze__blacklist__realm: realm,
+					// note: only leaf is applied to blacklist authorization
 					gauze__blacklist__agent_role: "leaf",
 					gauze__blacklist__agent_id: agent.agent_id,
 					gauze__blacklist__entity_type: entity.entity_type,
