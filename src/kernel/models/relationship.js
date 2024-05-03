@@ -6,30 +6,17 @@ const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 
-import { Model } from "./class.js";
+import { SystemModel } from "./system.js";
 
 import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
 
 import { EXECUTE__GRAPHQL__SHELL__KERNEL } from "./../shell/graphql.js";
 
 // todo: replace sql queries with database graphql queries?
-class RelationshipSystemModel extends Model {
+class RelationshipSystemModel extends SystemModel {
 	constructor(root_config, relationship_config) {
-		super(root_config);
+		super(root_config, relationship_config);
 		const self = this;
-		const { schema, schema_name } = relationship_config;
-		self.schema = schema;
-		self.schema_name = schema_name;
-		if ($structure.entities.whitelist) {
-			self.whitelist_table = $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE;
-		} else {
-			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Whitelist structure not found"));
-		}
-		if ($structure.entities.blacklist) {
-			self.blacklist_table = $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE;
-		} else {
-			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Blacklist structure not found"));
-		}
 		self.name = self.__name();
 		self.relations_map = self._create_relations_map();
 	}
@@ -55,116 +42,33 @@ class RelationshipSystemModel extends Model {
 		});
 		return map;
 	}
-	_execute(context, operation_source, operation_variables) {
+	_authorized_relationship(context, relationship, agent, method) {
 		const self = this;
-		const { operation, operation_name } = operation_source;
-		return EXECUTE__GRAPHQL__SHELL__KERNEL({
-			schema: self.schema,
-			context,
-			operation,
-			operation_name,
-			operation_variables,
-		}).then(function (data) {
-			if (data.errors && data.errors.length) {
-				// should we make a new error here?
-				// todo: figure out if we need to log here or not
-				console.log(data.errors);
-				// throw the first error
-				throw data.errors[0];
-			} else {
-				return Promise.resolve(data);
-			}
-		});
-	}
-	_access_relationship(context, relationship, agent, method) {
-		const self = this;
-		const { agent_id } = agent;
-		self._validate_relationship(relationship);
-		const from_entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__from_type];
-		const from_entity_module = $abstract.entities[from_entity_module_name].default($abstract);
-		const to_entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__to_type];
-		const to_entity_module = $abstract.entities[to_entity_module_name].default($abstract);
-		const from_entity_method_privacy = from_entity_module.methods[method].privacy;
-		const to_entity_methid_privacy = to_entity_module.methods[method].privacy;
-		const targets = [
-			{
-				agent_id: agent_id,
-				entity_id: relationship.gauze__relationship__from_id,
-				entity_type: relationship.gauze__relationship__from_type,
-				method: method,
-				method_privacy: from_entity_method_privacy,
-			},
-			{
-				agent_id: agent_id,
-				entity_id: relationship.gauze__relationship__to_id,
-				entity_type: relationship.gauze__relationship__to_type,
-				method: method,
-				method_privacy: to_entity_methid_privacy,
-			},
-		];
+		const from_entity = {
+			entity_type: relationship.gauze__relationship__from_type,
+			entity_id: relationship.gauze__relationship__from_id,
+			entity_method: method,
+		};
+		const to_entity = {
+			entity_type: relationship.gauze__relationship__to_type,
+			entity_id: relationship.gauze__relationship__to_id,
+			entity_method: method,
+		};
+		const targets = [from_entity, to_entity];
 		return Promise.all(
 			targets.map(function (target) {
-				return self._access_target(context, target);
+				return self.authorization_element(context, "system", agent, target);
 			}),
-		);
-	}
-	_access_target(context, target) {
-		const self = this;
-		const { database, transaction } = context;
-		const { agent_id, entity_type, entity_id, method, method_privacy } = target;
-		if (method_privacy === "private") {
-			// check to make sure whitelist entry exists
-			const sql = database(self.whitelist_table)
-				.where({
-					gauze__whitelist__realm: "system",
-					// todo: spec out agent_type
-					// gauze__whitelist__agent_type: "user",
-					gauze__whitelist__agent_id: agent_id,
-					gauze__whitelist__entity_type: entity_type,
-					gauze__whitelist__entity_id: entity_id,
-					gauze__whitelist__method: method,
-				})
-				// should never exceed 12 based on architecture, so 16 should be a safe number
-				.limit(16)
-				.transacting(transaction);
-			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._validate_target:debug_sql`, sql.toString());
-			}
-			return sql.then(function (rows) {
-				if (rows.length) {
-					return Promise.resolve(rows);
-				} else {
-					throw new Error("Agent does not have access to target method");
-				}
+		).then(function (authorizations) {
+			const passed = authorizations.filter(function (auth) {
+				return auth.status === true;
 			});
-		} else if (method_privacy === "public") {
-			// check to make sure blacklist entry does not exist
-			const sql = database(self.blacklist_table)
-				.where({
-					gauze__blacklist__realm: "system",
-					// todo: spec out agent_type
-					// gauze__whitelist__agent_type: "user",
-					gauze__blacklist__agent_id: agent_id,
-					gauze__blacklist__entity_type: entity_type,
-					gauze__blacklist__entity_id: entity_id,
-					gauze__blacklist__method: method,
-				})
-				// should never exceed 12 based on architecture, so 16 should be a safe number
-				.limit(16)
-				.transacting(transaction);
-			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._validate_target:debug_sql`, sql.toString());
+			if (passed.length === authorizations.length) {
+				return authorizations;
+			} else {
+				throw new Error("Agent does not have access to target method");
 			}
-			return sql.then(function (rows) {
-				if (rows.length) {
-					throw new Error("Agent does not have access to target method");
-				} else {
-					return Promise.resolve(rows);
-				}
-			});
-		} else {
-			throw new Error("Privacy policy does not exist for target method");
-		}
+		});
 	}
 	_validate_relationship(attributes) {
 		if (!attributes) {
@@ -210,11 +114,11 @@ class RelationshipSystemModel extends Model {
 		const { agent, entity, operation } = realm;
 		const access = { ...agent, ...entity };
 		self._connected_relationship(parameters.attributes);
-		return self._access_relationship(context, parameters.attributes, access, "create").then(function () {
+		return self._authorized_relationship(context, parameters.attributes, agent, "create").then(function () {
 			return self._execute(context, operation, parameters);
 		});
 	}
-	_read_from(context, parameters, access, operation) {
+	_read_from(context, parameters, realm) {
 		// check that from policy aligns
 		// get list of relationship
 		// intersect with agent whitelist or blacklist based on policy by doing a where in query (this could work if we leverage the fact that uuids rarely have collisions)
@@ -223,138 +127,143 @@ class RelationshipSystemModel extends Model {
 		// final set of relationships the user has access to
 		const self = this;
 		const { database, transaction } = context;
-		const { agent_id } = access;
+		const { agent, entity, operation } = realm;
+		const { agent_id } = agent;
 		const method = "read";
-		const from_entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[relationship.gauze__relationship__from_type];
+
+		const from_entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[parameters.where.gauze__relationship__from_type];
 		const from_entity_module = $abstract.entities[from_entity_module_name].default($abstract);
 		const from_entity_method_privacy = from_entity_module.methods[method].privacy;
+
 		return self
-			._access_target(context, {
-				agent_id: agent_id,
+			.authorization_element(context, "system", agent, {
 				entity_id: parameters.where.gauze__relationship__from_id,
 				entity_type: parameters.where.gauze__relationship__from_type,
-				method: method,
-				method_privacy: from_entity_method_privacy,
+				entity_method: method,
 			})
-			.then(function () {
-				const sql = database(self.entity.table_name)
-					.where({
-						gauze__relationship__from_type: parameters.where.gauze__relationship__from_type,
-						gauze__relationship__from_id: parameters.where.gauze__relationship__from_id,
-					})
-					.transacting(transaction);
-				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_from:debug_sql`, sql.toString());
-				}
-				return sql.then(function (relationship_rows) {
-					const valid_to_ids = relationship_rows.map(function (relationship) {
-						return relationship.gauze__relationship__to_id;
-					});
-					// use relationships to do a where in query on both whitelist and blacklist
-					const sql = database(self.whitelist_table)
+			.then(function (auth) {
+				if (auth.status === true) {
+					const sql = database(self.entity.table_name)
 						.where({
-							gauze__whitelist__agent_id: agent_id,
-							gauze__whitelist__method: method,
+							gauze__relationship__from_type: parameters.where.gauze__relationship__from_type,
+							gauze__relationship__from_id: parameters.where.gauze__relationship__from_id,
 						})
-						.whereIn("gauze__whitelist__entity_id", valid_to_ids)
 						.transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_from:debug_sql`, sql.toString());
 					}
-					return sql.then(function (whitelist_rows) {
-						const sql = database(self.blacklist_table)
+					return sql.then(function (relationship_rows) {
+						const valid_to_ids = relationship_rows.map(function (relationship) {
+							return relationship.gauze__relationship__to_id;
+						});
+						// use relationships to do a where in query on both whitelist and blacklist
+						const sql = database(self.whitelist_table)
 							.where({
-								gauze__blacklist__agent_id: agent_id,
-								gauze__blacklist__method: method,
+								gauze__whitelist__agent_id: agent_id,
+								gauze__whitelist__method: method,
 							})
-							.whereIn("gauze__blacklist__entity_id", valid_to_ids)
+							.whereIn("gauze__whitelist__entity_id", valid_to_ids)
 							.transacting(transaction);
 						if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 							LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_from:debug_sql`, sql.toString());
 						}
-						return sql.then(function (blacklist_rows) {
-							// in memory join here
-							const modules = {};
-							const whitelist = {};
-							const blacklist = {};
-							// todo: can move this logic into the filter if we want, but this is easier to implement
-							relationship_rows.forEach(function (row) {
-								if (modules[row.gauze__relationship__to_type]) {
-									// skip
-								} else {
-									const module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[row.gauze__relationship__to_type];
-									const module = $abstract.entities[module_name].default($abstract);
-									modules[row.gauze__relationship__to_type] = module;
-								}
-							});
-							whitelist_rows.forEach(function (row) {
-								whitelist[row.gauze__whitelist__entity_id] = row;
-							});
-							blacklist_rows.forEach(function (row) {
-								blacklist[row.gauze__blacklist__entity_id] = row;
-							});
-							const filtered = relationship_rows.filter(function (relationship) {
-								// to_id
-								// to_type
-								// get method privacy for to_type
-								// look at whitelist if method is private
-								// look at blacklist if method is public
-								const method_privacy = modules[relationship.gauze__relationship__to_type].methods.read.privacy;
-								if (method_privacy === "private") {
-									const whitelist_row = whitelist[relationship.gauze__relationship__to_id];
-									if (whitelist_row) {
-										// check to make sure everything aligns
-										if (
-											whitelist_row.gauze__whitelist__realm === "system" &&
-											whitelist_row.gauze__whitelist__agent_id === agent_id &&
-											whitelist_row.gauze__whitelist__entity_type === relationship.gauze__relationship__to_type &&
-											whitelist_row.gauze__whitelist__entity_id === relationship.gauze__relationship__to_id &&
-											method === method
-										) {
-											return true;
+						return sql.then(function (whitelist_rows) {
+							const sql = database(self.blacklist_table)
+								.where({
+									gauze__blacklist__agent_id: agent_id,
+									gauze__blacklist__method: method,
+								})
+								.whereIn("gauze__blacklist__entity_id", valid_to_ids)
+								.transacting(transaction);
+							if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+								LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_from:debug_sql`, sql.toString());
+							}
+							return sql.then(function (blacklist_rows) {
+								// in memory join here
+								const modules = {};
+								const whitelist = {};
+								const blacklist = {};
+								// todo: can move this logic into the filter if we want, but this is easier to implement
+								relationship_rows.forEach(function (row) {
+									if (modules[row.gauze__relationship__to_type]) {
+										// skip
+									} else {
+										const module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[row.gauze__relationship__to_type];
+										const module = $abstract.entities[module_name].default($abstract);
+										modules[row.gauze__relationship__to_type] = module;
+									}
+								});
+								whitelist_rows.forEach(function (row) {
+									whitelist[row.gauze__whitelist__entity_id] = row;
+								});
+								blacklist_rows.forEach(function (row) {
+									blacklist[row.gauze__blacklist__entity_id] = row;
+								});
+								const filtered = relationship_rows.filter(function (relationship) {
+									// to_id
+									// to_type
+									// get method privacy for to_type
+									// look at whitelist if method is private
+									// look at blacklist if method is public
+									const method_privacy = modules[relationship.gauze__relationship__to_type].methods.read.privacy;
+									if (method_privacy === "private") {
+										const whitelist_row = whitelist[relationship.gauze__relationship__to_id];
+										if (whitelist_row) {
+											// check to make sure everything aligns
+											if (
+												whitelist_row.gauze__whitelist__realm === "system" &&
+												whitelist_row.gauze__whitelist__agent_id === agent_id &&
+												whitelist_row.gauze__whitelist__entity_type === relationship.gauze__relationship__to_type &&
+												whitelist_row.gauze__whitelist__entity_id === relationship.gauze__relationship__to_id &&
+												method === method
+											) {
+												return true;
+											} else {
+												return false;
+											}
 										} else {
 											return false;
 										}
+									} else if (method_privacy === "public") {
+										const blacklist_row = blacklist[relationship.gauze__relationship__to_id];
+										if (blacklist_row) {
+											// check to make sure everything aligns
+											if (
+												blacklist_row.gauze__blacklist__realm === "system" &&
+												blacklist_row.gauze__blacklist__agent_id === agent_id &&
+												blacklist_row.gauze__blacklist__entity_type === relationship.gauze__relationship__to_type &&
+												blacklist_row.gauze__blacklist__entity_id === relationship.gauze__relationship__to_id &&
+												method === method
+											) {
+												return false;
+											} else {
+												return true;
+											}
+										} else {
+											return true;
+										}
 									} else {
+										// note: this is kind of brutal because it will prevent any results from showing up
+										// throw new Error("Privacy policy does not exist for this method")
+										// note: let's just return false here to filter it out
 										return false;
 									}
-								} else if (method_privacy === "public") {
-									const blacklist_row = blacklist[relationship.gauze__relationship__to_id];
-									if (blacklist_row) {
-										// check to make sure everything aligns
-										if (
-											blacklist_row.gauze__blacklist__realm === "system" &&
-											blacklist_row.gauze__blacklist__agent_id === agent_id &&
-											blacklist_row.gauze__blacklist__entity_type === relationship.gauze__relationship__to_type &&
-											blacklist_row.gauze__blacklist__entity_id === relationship.gauze__relationship__to_id &&
-											method === method
-										) {
-											return false;
-										} else {
-											return true;
-										}
-									} else {
-										return true;
-									}
-								} else {
-									// note: this is kind of brutal because it will prevent any results from showing up
-									// throw new Error("Privacy policy does not exist for this method")
-									// note: let's just return false here to filter it out
-									return false;
-								}
+								});
+								// use filtered to construct a where in
+								const valid_ids = filtered.map(function (row) {
+									return row.gauze__relationship__id;
+								});
+								parameters.where_in = {
+									[self.entity.primary_key]: valid_ids,
+								};
+								// note: should we just return the relationships here instead of executing a graphql query?
+								return self._execute(context, operation, parameters);
 							});
-							// use filtered to construct a where in
-							const valid_ids = filtered.map(function (row) {
-								return row.gauze__relationship__id;
-							});
-							parameters.where_in = {
-								[self.entity.primary_key]: valid_ids,
-							};
-							// note: should we just return the relationships here instead of executing a graphql query?
-							return self._execute(context, operation, parameters);
 						});
 					});
-				});
+				} else {
+					throw new Error("Agent does not have access to target method");
+				}
 			});
 	}
 	// note: this method will not be able to navigate relationships
@@ -365,12 +274,12 @@ class RelationshipSystemModel extends Model {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
-		const access = { ...agent, ...entity };
+		entity.entity_method = "read";
 		if (parameters.where && parameters.where.gauze__relationship__id) {
 			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
-					return self._access_relationship(context, relationship, access, "read").then(function () {
+					return self._authorized_relationship(context, relationship, agent, "read").then(function () {
 						// note: should we just return the relationship here instead of executing a graphql query?
 						return self._execute(context, operation, parameters);
 					});
@@ -384,7 +293,7 @@ class RelationshipSystemModel extends Model {
 			});
 		} else {
 			if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__from_type) {
-				return self._read_from(context, parameters, access, operation);
+				return self._read_from(context, parameters, realm);
 			} else {
 				throw new Error("Field 'where.gauze__relationship__id' is required or (Field 'where.gauze__relationship__from_id' and 'where.gauze__relationship__from_type' are required)");
 			}
@@ -395,15 +304,15 @@ class RelationshipSystemModel extends Model {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
-		const access = { ...agent, ...entity };
+		entity.entity_method = "update";
 		if (parameters.where && parameters.where.gauze__relationship__id) {
 			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
 					const staged = { ...relationship, ...parameters.attributes };
 					self._connected_relationship(staged);
-					return self._access_relationship(context, relationship, access, "update").then(function () {
-						return self._access_relationship(context, parameters.attributes, access, "update").then(function () {
+					return self._authorized_relationship(context, relationship, agent, "update").then(function () {
+						return self._authorized_relationship(context, staged, agent, "update").then(function () {
 							return self._execute(context, operation, parameters);
 						});
 					});
@@ -424,12 +333,12 @@ class RelationshipSystemModel extends Model {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
-		const access = { ...agent, ...entity };
+		entity.entity_method = "delete";
 		if (parameters.where && parameters.where.gauze__relationship__id) {
 			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
-					return self._access_relationship(context, relationship, access, "delete").then(function () {
+					return self._authorized_relationship(context, relationship, agent, "delete").then(function () {
 						return self._execute(context, operation, parameters);
 					});
 				} else {
