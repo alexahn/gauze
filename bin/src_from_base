@@ -78,4 +78,5 @@ cp -r ./src/kernel/src/stages/stage7/* ./src/
 
 # class replacement for internal types
 find ./src/system/models/relationship.js -type f -name '*.js' -exec sed -i '' "s/kernel.models.system.SystemModel/kernel.models.relationship.RelationshipSystemModel/g" {} +
-
+find ./src/system/models/whitelist.js -type f -name '*.js' -exec sed -i '' "s/kernel.models.system.SystemModel/kernel.models.access.AccessSystemModel/g" {} +
+find ./src/system/models/blacklist.js -type f -name '*.js' -exec sed -i '' "s/kernel.models.system.SystemModel/kernel.models.access.AccessSystemModel/g" {} +
