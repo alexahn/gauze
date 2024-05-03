@@ -207,8 +207,8 @@ class RelationshipSystemModel extends Model {
 	}
 	_create(context, parameters, realm) {
 		const self = this;
-		const { agent, entity, operation } = realm
-		const access = {...agent, ...entity}
+		const { agent, entity, operation } = realm;
+		const access = { ...agent, ...entity };
 		self._connected_relationship(parameters.attributes);
 		return self._access_relationship(context, parameters.attributes, access, "create").then(function () {
 			return self._execute(context, operation, parameters);
@@ -364,8 +364,8 @@ class RelationshipSystemModel extends Model {
 	_read(context, parameters, realm) {
 		const self = this;
 		const { database, transaction } = context;
-		const { agent, entity, operation } = realm
-		const access = {...agent, ...entity}
+		const { agent, entity, operation } = realm;
+		const access = { ...agent, ...entity };
 		if (parameters.where && parameters.where.gauze__relationship__id) {
 			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
@@ -394,8 +394,8 @@ class RelationshipSystemModel extends Model {
 	_update(context, parameters, realm) {
 		const self = this;
 		const { database, transaction } = context;
-		const { agent, entity, operation } = realm
-		const access = {...agent, ...entity}
+		const { agent, entity, operation } = realm;
+		const access = { ...agent, ...entity };
 		if (parameters.where && parameters.where.gauze__relationship__id) {
 			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
@@ -423,8 +423,8 @@ class RelationshipSystemModel extends Model {
 	_delete(context, parameters, realm) {
 		const self = this;
 		const { database, transaction } = context;
-		const { agent, entity, operation } = realm
-		const access = {...agent, ...entity}
+		const { agent, entity, operation } = realm;
+		const access = { ...agent, ...entity };
 		if (parameters.where && parameters.where.gauze__relationship__id) {
 			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {

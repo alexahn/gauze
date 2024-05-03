@@ -12,6 +12,7 @@ class GauzeSystemModel extends $kernel.models.system.SystemModel {
 		const self = this;
 		var { agent_id = "" } = context;
 		// todo: remove this parameters proxy once we set up user authentication
+		/*
 		agent_id = parameters.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.entities.gauze.database.sql.TABLE_NAME__SQL__DATABASE__GAUZE__STRUCTURE,
@@ -21,7 +22,21 @@ class GauzeSystemModel extends $kernel.models.system.SystemModel {
 			operation: $database.interfaces.graphql.operations.gauze.CREATE__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			operation_name: $database.interfaces.graphql.operations.gauze.CREATE_NAME__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 		};
-		return self._create(context, parameters, access, operation).then(function (data) {
+		*/
+		const realm = {
+			agent: {
+				// todo: remove this parameters proxy once we set up user authentication
+				agent_id: parameters.agent_id || agent_id,
+			},
+			entity: {
+				entity_type: $structure.entities.gauze.database.sql.TABLE_NAME__SQL__DATABASE__GAUZE__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.gauze.CREATE__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.gauze.CREATE_NAME__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._create(context, parameters, realm).then(function (data) {
 			return data.data.create_gauze.map(function (row) {
 				return row.attributes;
 			});
@@ -31,6 +46,7 @@ class GauzeSystemModel extends $kernel.models.system.SystemModel {
 		const self = this;
 		var { agent_id = "" } = context;
 		// todo: remove this parameters proxy once we set up user authentication
+		/*
 		agent_id = parameters.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.entities.gauze.database.sql.TABLE_NAME__SQL__DATABASE__GAUZE__STRUCTURE,
@@ -40,7 +56,21 @@ class GauzeSystemModel extends $kernel.models.system.SystemModel {
 			operation: $database.interfaces.graphql.operations.gauze.READ__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			operation_name: $database.interfaces.graphql.operations.gauze.READ_NAME__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 		};
-		return self._read(context, parameters, access, operation).then(function (data) {
+		*/
+		const realm = {
+			agent: {
+				// todo: remove this parameters proxy once we set up user authentication
+				agent_id: parameters.agent_id || agent_id,
+			},
+			entity: {
+				entity_type: $structure.entities.gauze.database.sql.TABLE_NAME__SQL__DATABASE__GAUZE__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.gauze.READ__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.gauze.READ_NAME__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._read(context, parameters, realm).then(function (data) {
 			return data.data.read_gauze.map(function (row) {
 				return row.attributes;
 			});
@@ -50,6 +80,7 @@ class GauzeSystemModel extends $kernel.models.system.SystemModel {
 		const self = this;
 		var { agent_id = "" } = context;
 		// todo: remove this parameters proxy once we set up user authentication
+		/*
 		agent_id = parameters.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.entities.gauze.database.sql.TABLE_NAME__SQL__DATABASE__GAUZE__STRUCTURE,
@@ -59,7 +90,21 @@ class GauzeSystemModel extends $kernel.models.system.SystemModel {
 			operation: $database.interfaces.graphql.operations.gauze.UPDATE__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			operation_name: $database.interfaces.graphql.operations.gauze.UPDATE_NAME__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 		};
-		return self._update(context, parameters, access, operation).then(function (data) {
+		*/
+		const realm = {
+			agent: {
+				// todo: remove this parameters proxy once we set up user authentication
+				agent_id: (agent_id = parameters.agent_id || agent_id),
+			},
+			entity: {
+				entity_type: $structure.entities.gauze.database.sql.TABLE_NAME__SQL__DATABASE__GAUZE__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.gauze.UPDATE__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.gauze.UPDATE_NAME__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._update(context, parameters, realm).then(function (data) {
 			return data.data.update_gauze.map(function (row) {
 				return row.attributes;
 			});
@@ -69,6 +114,7 @@ class GauzeSystemModel extends $kernel.models.system.SystemModel {
 		const self = this;
 		var { agent_id = "" } = context;
 		// todo: remove this parameters proxy once we set up user authentication
+		/*
 		agent_id = parameters.agent_id || agent_id;
 		const access = {
 			entity_type: $structure.entities.gauze.database.sql.TABLE_NAME__SQL__DATABASE__GAUZE__STRUCTURE,
@@ -78,7 +124,21 @@ class GauzeSystemModel extends $kernel.models.system.SystemModel {
 			operation: $database.interfaces.graphql.operations.gauze.DELETE__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			operation_name: $database.interfaces.graphql.operations.gauze.DELETE_NAME__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 		};
-		return self._delete(context, parameters, access, operation).then(function (data) {
+		*/
+		const realm = {
+			agent: {
+				// todo: remove this parameters proxy once we set up user authentication
+				agent_id: parameters.agent_id || agent_id,
+			},
+			entity: {
+				entity_type: $structure.entities.gauze.database.sql.TABLE_NAME__SQL__DATABASE__GAUZE__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.gauze.DELETE__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.gauze.DELETE_NAME__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._delete(context, parameters, realm).then(function (data) {
 			return data.data.delete_gauze.map(function (row) {
 				return row.attributes;
 			});
