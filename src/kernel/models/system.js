@@ -434,42 +434,42 @@ class SystemModel extends Model {
 			gauze__whitelist__entity_id: parameters.attributes[self.entity.primary_key],
 			gauze__whitelist__method: "delete",
 		};
-        parameters.blacklist_create = {
-            gauze__blacklist__realm: "system",
-            gauze__blacklist__agent_role: "root",
-            gauze__blacklist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
-            gauze__blacklist__agent_id: agent.agent_id,
-            gauze__blacklist__entity_type: entity.entity_type,
-            gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
-            gauze__blacklist__method: "create",
-        };
-        parameters.blacklist_read = {
-            gauze__blacklist__realm: "system",
-            gauze__blacklist__agent_role: "root",
-            gauze__blacklist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
-            gauze__blacklist__agent_id: agent.agent_id,
-            gauze__blacklist__entity_type: entity.entity_type,
-            gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
-            gauze__blacklist__method: "read",
-        };
-        parameters.blacklist_update = {
-            gauze__blacklist__realm: "system",
-            gauze__blacklist__agent_role: "root",
-            gauze__blacklist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
-            gauze__blacklist__agent_id: agent.agent_id,
-            gauze__blacklist__entity_type: entity.entity_type,
-            gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
-            gauze__blacklist__method: "update",
-        };
-        parameters.blacklist_delete = {
-            gauze__blacklist__realm: "system",
-            gauze__blacklist__agent_role: "root",
-            gauze__blacklist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
-            gauze__blacklist__agent_id: agent.agent_id,
-            gauze__blacklist__entity_type: entity.entity_type,
-            gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
-            gauze__blacklist__method: "delete",
-        };
+		parameters.blacklist_create = {
+			gauze__blacklist__realm: "system",
+			gauze__blacklist__agent_role: "root",
+			gauze__blacklist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
+			gauze__blacklist__agent_id: agent.agent_id,
+			gauze__blacklist__entity_type: entity.entity_type,
+			gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
+			gauze__blacklist__method: "create",
+		};
+		parameters.blacklist_read = {
+			gauze__blacklist__realm: "system",
+			gauze__blacklist__agent_role: "root",
+			gauze__blacklist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
+			gauze__blacklist__agent_id: agent.agent_id,
+			gauze__blacklist__entity_type: entity.entity_type,
+			gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
+			gauze__blacklist__method: "read",
+		};
+		parameters.blacklist_update = {
+			gauze__blacklist__realm: "system",
+			gauze__blacklist__agent_role: "root",
+			gauze__blacklist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
+			gauze__blacklist__agent_id: agent.agent_id,
+			gauze__blacklist__entity_type: entity.entity_type,
+			gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
+			gauze__blacklist__method: "update",
+		};
+		parameters.blacklist_delete = {
+			gauze__blacklist__realm: "system",
+			gauze__blacklist__agent_role: "root",
+			gauze__blacklist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
+			gauze__blacklist__agent_id: agent.agent_id,
+			gauze__blacklist__entity_type: entity.entity_type,
+			gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
+			gauze__blacklist__method: "delete",
+		};
 		return self.authorized_execute(context, parameters, agent, entity, operation);
 	}
 	_read(context, parameters, realm) {
