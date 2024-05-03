@@ -212,9 +212,11 @@ class SystemModel extends Model {
 			return Promise.reject(new Error("Privacy policy does not exist for this method"));
 		}
 	}
-	_create(context, input, access, operation) {
+	_create(context, input, realm) {
 		const self = this;
 		const { source } = context;
+		const { agent, entity, operation } = realm
+		const access = {...agent, ...entity}
 		if (source && source._metadata) {
 			input.parent = source._metadata;
 		}
@@ -262,17 +264,21 @@ class SystemModel extends Model {
 		};
 		return self._access_execute(context, input, access, "create", operation);
 	}
-	_read(context, input, access, operation) {
+	_read(context, input, realm) {
 		const self = this;
 		const { source } = context;
+		const { agent, entity, operation } = realm
+		const access = {...agent, ...entity}
 		if (source && source._metadata) {
 			input.parent = source._metadata;
 		}
 		return self._access_execute(context, input, access, "read", operation);
 	}
-	_update(context, input, access, operation) {
+	_update(context, input, realm) {
 		const self = this;
 		const { source } = context;
+		const { agent, entity, operation } = realm
+		const access = {...agent, ...entity}
 		if (source && source._metadata) {
 			input.parent = source._metadata;
 		}
@@ -281,9 +287,11 @@ class SystemModel extends Model {
 		}
 		return self._access_execute(context, input, access, "update", operation);
 	}
-	_delete(context, input, access, operation) {
+	_delete(context, input, realm) {
 		const self = this;
 		const { source } = context;
+		const { agent, entity, operation } = realm
+		const access = {...agent, ...entity}
 		if (source && source._metadata) {
 			input.parent = source._metadata;
 		}

@@ -205,14 +205,16 @@ class RelationshipSystemModel extends Model {
 		}
 		return sql;
 	}
-	_create(context, input, access, operation) {
+	_create(context, parameters, realm) {
 		const self = this;
-		self._connected_relationship(input.attributes);
-		return self._access_relationship(context, input.attributes, access, "create").then(function () {
-			return self._execute(context, operation, input);
+		const { agent, entity, operation } = realm
+		const access = {...agent, ...entity}
+		self._connected_relationship(parameters.attributes);
+		return self._access_relationship(context, parameters.attributes, access, "create").then(function () {
+			return self._execute(context, operation, parameters);
 		});
 	}
-	_read_from(context, input, access, operation) {
+	_read_from(context, parameters, access, operation) {
 		// check that from policy aligns
 		// get list of relationship
 		// intersect with agent whitelist or blacklist based on policy by doing a where in query (this could work if we leverage the fact that uuids rarely have collisions)
@@ -229,16 +231,16 @@ class RelationshipSystemModel extends Model {
 		return self
 			._access_target(context, {
 				agent_id: agent_id,
-				entity_id: input.where.gauze__relationship__from_id,
-				entity_type: input.where.gauze__relationship__from_type,
+				entity_id: parameters.where.gauze__relationship__from_id,
+				entity_type: parameters.where.gauze__relationship__from_type,
 				method: method,
 				method_privacy: from_entity_method_privacy,
 			})
 			.then(function () {
 				const sql = database(self.entity.table_name)
 					.where({
-						gauze__relationship__from_type: input.where.gauze__relationship__from_type,
-						gauze__relationship__from_id: input.where.gauze__relationship__from_id,
+						gauze__relationship__from_type: parameters.where.gauze__relationship__from_type,
+						gauze__relationship__from_id: parameters.where.gauze__relationship__from_id,
 					})
 					.transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
@@ -345,11 +347,11 @@ class RelationshipSystemModel extends Model {
 							const valid_ids = filtered.map(function (row) {
 								return row.gauze__relationship__id;
 							});
-							input.where_in = {
+							parameters.where_in = {
 								[self.entity.primary_key]: valid_ids,
 							};
 							// note: should we just return the relationships here instead of executing a graphql query?
-							return self._execute(context, operation, input);
+							return self._execute(context, operation, parameters);
 						});
 					});
 				});
@@ -359,16 +361,18 @@ class RelationshipSystemModel extends Model {
 	// note: for private methods, user will have to use the whitelist methods to see what entities they have read access to
 	// note: for public methods, user will need to have exposure to an entity before they can explore its relationships
 	// requires where.id or where.from_id and where.from_type
-	_read(context, input, access, operation) {
+	_read(context, parameters, realm) {
 		const self = this;
 		const { database, transaction } = context;
-		if (input.where && input.where.gauze__relationship__id) {
-			return self._preread(database, transaction, input.where.gauze__relationship__id).then(function (relationships) {
+		const { agent, entity, operation } = realm
+		const access = {...agent, ...entity}
+		if (parameters.where && parameters.where.gauze__relationship__id) {
+			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
 					return self._access_relationship(context, relationship, access, "read").then(function () {
 						// note: should we just return the relationship here instead of executing a graphql query?
-						return self._execute(context, operation, input);
+						return self._execute(context, operation, parameters);
 					});
 				} else {
 					return {
@@ -379,26 +383,28 @@ class RelationshipSystemModel extends Model {
 				}
 			});
 		} else {
-			if (input.where && input.where.gauze__relationship__from_id && input.where.gauze__relationship__from_type) {
-				return self._read_from(context, input, access, operation);
+			if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__from_type) {
+				return self._read_from(context, parameters, access, operation);
 			} else {
 				throw new Error("Field 'where.gauze__relationship__id' is required or (Field 'where.gauze__relationship__from_id' and 'where.gauze__relationship__from_type' are required)");
 			}
 		}
 	}
 	// requires where.id
-	_update(context, input, access, operation) {
+	_update(context, parameters, realm) {
 		const self = this;
 		const { database, transaction } = context;
-		if (input.where && input.where.gauze__relationship__id) {
-			return self._preread(database, transaction, input.where.gauze__relationship__id).then(function (relationships) {
+		const { agent, entity, operation } = realm
+		const access = {...agent, ...entity}
+		if (parameters.where && parameters.where.gauze__relationship__id) {
+			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
-					const staged = { ...relationship, ...input.attributes };
+					const staged = { ...relationship, ...parameters.attributes };
 					self._connected_relationship(staged);
 					return self._access_relationship(context, relationship, access, "update").then(function () {
-						return self._access_relationship(context, input.attributes, access, "update").then(function () {
-							return self._execute(context, operation, input);
+						return self._access_relationship(context, parameters.attributes, access, "update").then(function () {
+							return self._execute(context, operation, parameters);
 						});
 					});
 				} else {
@@ -414,15 +420,17 @@ class RelationshipSystemModel extends Model {
 		}
 	}
 	// requires where.id
-	_delete(context, input, access, operation) {
+	_delete(context, parameters, realm) {
 		const self = this;
 		const { database, transaction } = context;
-		if (input.where && input.where.gauze__relationship__id) {
-			return self._preread(database, transaction, input.where.gauze__relationship__id).then(function (relationships) {
+		const { agent, entity, operation } = realm
+		const access = {...agent, ...entity}
+		if (parameters.where && parameters.where.gauze__relationship__id) {
+			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
 					return self._access_relationship(context, relationship, access, "delete").then(function () {
-						return self._execute(context, operation, input);
+						return self._execute(context, operation, parameters);
 					});
 				} else {
 					return {
