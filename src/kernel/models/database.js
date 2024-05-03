@@ -31,6 +31,12 @@ class DatabaseModel extends Model {
 		const self = this;
 		return DatabaseModel._class_name(self.table_name);
 	}
+	_batch_key(source, operation, parameters) {
+		const source_key = JSON.stringify(source)
+		const operation_key = JSON.stringify(operation)
+		const parameters_key = JSON.stringify(parameters)
+		return [source_key, operation_key, parameters_key].join(':')
+	}
 	_parse_relationship_metadata(context, input) {
 		const self = this;
 		const { source } = context;
