@@ -24,10 +24,10 @@ import { EXECUTE__GRAPHQL__SHELL__KERNEL } from "./../shell/graphql.js";
 //	- the units of change should be agent id, agent type, and agent role
 //  - realm, entity id, entity type, and method (rename to entity method?) are locked
 class AccessSystemModel extends Model {
-	constructor() {
+	constructor(root_config, access_config) {
 		super(root_config);
 		const self = this;
-		const { schema, schema_name } = relationship_config;
+		const { schema, schema_name } = access_config;
 		self.schema = schema;
 		self.schema_name = schema_name;
 		self.key_id = `${self.entity.table_name}__id`;
@@ -98,8 +98,9 @@ class AccessSystemModel extends Model {
 	}
 	// get the access records for the initiator
 	_initiator_records(context, entity, agent) {
+		const self = this;
 		const { database, transaction } = context;
-		const sql = sql(self.entity.table_name)
+		const sql = database(self.entity.table_name)
 			.where({
 				[self.key_entity_type]: entity[self.key_entity_type],
 				[self.key_entity_id]: entity[self.key_entity_id],
@@ -181,15 +182,17 @@ class AccessSystemModel extends Model {
 		return sql;
 	}
 	// requires a valid record
-	_create(context, input, agent, operation) {
+	_create(context, input, realm) {
 		const self = this;
-		const target_record = this.attributes;
-		return self._valid_execute(context, agent, "create", target_record).then(function () {
+		const { agent, entity, operation } = realm;
+		const target_record = input.attributes;
+		return self._valid_access(context, agent, "create", target_record).then(function () {
 			return self._execute(context, operation, input);
 		});
 	}
-	_read_agent(context, input, agent, operation) {
+	_read_agent(context, input, realm) {
 		const self = this;
+		const { agent, entity, operation } = realm;
 		if (input.where[self.key_agent_id] === agent.agent_id) {
 			// agent should be able to see all their own records
 			return self._execute(context, operation, input);
@@ -198,8 +201,9 @@ class AccessSystemModel extends Model {
 			throw new Error(`Field '${self.key_agent_id}' must be equal to the initiating agent's id`);
 		}
 	}
-	_read_entity(context, input, agent, operation) {
+	_read_entity(context, input, realm) {
 		const self = this;
+		const { agent, entity, operation } = realm;
 		// get highest record for initiator
 		// get list of records based on entity_id, entity_type, and method
 		// filter list of records based on role hierarchy
@@ -249,9 +253,10 @@ class AccessSystemModel extends Model {
 		});
 	}
 	// requires where.id or where.agent_id or (where.entity_id and where.entity_type and where.method)
-	_read(context, input, agent, operation) {
+	_read(context, input, realm) {
 		const self = this;
 		const { database, transaction } = context;
+		const { agent, entity, operation } = realm;
 		if (input.where && input.where[self.key_id]) {
 			return self._preread(database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
@@ -275,16 +280,21 @@ class AccessSystemModel extends Model {
 		}
 	}
 	// requires where.id
-	_update(context, input, agent, operation) {
+	_update(context, input, realm) {
 		const self = this;
 		const { database, transaction } = context;
+		const { agent, entity, operation } = realm;
+		delete input.attributes[self.key_realm];
+		delete input.attributes[self.key_entity_type];
+		delete input.attributes[self.key_entity_id];
+		delete input.attributes[self.key_method];
 		const change_record = input.attributes;
 		if (input && input.where && input.where[self.key_id]) {
 			return self._preread(database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
 					return self._valid_access(context, agent, "update", target_record).then(function () {
-						const staged = {...target_record, ...change_record}
+						const staged = { ...target_record, ...change_record };
 						return self._valid_access(context, agent, "update", staged).then(function () {
 							return self._execute(context, operation, input);
 						});
@@ -298,10 +308,11 @@ class AccessSystemModel extends Model {
 		}
 	}
 	// requires where.id
-	_delete(context, input, agent, operation) {
+	_delete(context, input, realm) {
 		const self = this;
 		const { database, transaction } = context;
-		if (input && input.where && input.where[`${self.table_name}__id`]) {
+		const { agent, entity, operation } = realm;
+		if (input && input.where && input.where[self.key_id]) {
 			return self._preread(database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
@@ -317,3 +328,5 @@ class AccessSystemModel extends Model {
 		}
 	}
 }
+
+export { AccessSystemModel };

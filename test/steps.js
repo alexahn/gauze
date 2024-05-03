@@ -163,4 +163,45 @@ function run_steps(environment, steps) {
 	});
 }
 
-export { load_steps, run_steps };
+function run_layers(environment, layers) {
+	const { database } = environment;
+	return database.transaction(function (transaction) {
+		return layers
+			.reduce(function (prev, next) {
+				return prev.then(function () {
+					const { schema, steps } = next;
+					return steps.reduce(function (prev, next) {
+						return prev.then(function () {
+							return Promise.all(
+								next.map(function (step) {
+									return run_step(
+										{
+											database,
+											schema,
+											transaction,
+										},
+										step,
+									);
+								}),
+							);
+						});
+					}, Promise.resolve([]));
+				});
+			}, Promise.resolve(true))
+			.then(function () {
+				return transaction.rollback();
+			})
+			.catch(function (err) {
+				return transaction
+					.rollback(err)
+					.then(function () {
+						throw err;
+					})
+					.catch(function (err) {
+						throw err;
+					});
+			});
+	});
+}
+
+export { load_steps, run_steps, run_layers };

@@ -1,0 +1,45 @@
+const description = `Read a whitelist`;
+const context = {
+	agent_id: "00000000-0000-0000-0000-000000000001",
+};
+const operation_name = "ReadWhitelist";
+const operation_source = `
+query ${operation_name}(
+	$whitelist: Whitelist_Query__Attributes
+) {
+	read_whitelist(where: $whitelist) {
+		attributes {
+			gauze__whitelist__id
+			gauze__whitelist__realm
+			gauze__whitelist__agent_type
+			gauze__whitelist__agent_role
+			gauze__whitelist__agent_id
+			gauze__whitelist__entity_type
+			gauze__whitelist__entity_id
+			gauze__whitelist__method
+		}
+	}
+}
+`;
+const operation_variables = {
+	whitelist: {
+		gauze__whitelist__id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
+	},
+};
+const expected = `{
+    "data": {
+        "read_whitelist": []
+    }
+}`;
+
+export default {
+	step: 2,
+	description: description,
+	context: context,
+	operation: {
+		name: operation_name,
+		source: operation_source,
+		variables: operation_variables,
+	},
+	expected: expected,
+};
