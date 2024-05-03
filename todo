@@ -312,12 +312,15 @@
 		[ ] don't import DATABASE_RELATIONSHIP_STRUCTURE directly from schemas
 	[-] rename structure/relationships to structure/connections
 		[x] moved all entities into src/structure/entities instead
-[ ] whitelist/blacklist kernel system model
-	[ ] enforce hierarchy of roles
-	[ ] if an entity is private, reject association with blacklist
-	[ ] if an entity is public, reject association with whitelist
-	[ ] all operations require that the agent have equal or higher hierarchy
-	[ ] there can only be one root, and it is only granted on entity creation
+[x] whitelist/blacklist kernel system model
+	[x] enforce hierarchy of roles
+	[x] if an entity is private, reject association with blacklist
+	[x] if an entity is public, reject association with whitelist
+	[x] all operations require that the agent have equal or higher hierarchy
+	[x] there can only be one root, and it is only granted on entity creation
+		[x] create blacklist and whitelist root on entity creation
+			[x] need a blacklist root to manage access control for public entities
+			[x] we need the system to work when the privacy of a method is changed
 [ ] add a required attribute to fields in abstract entity definitions?
 	[ ] we can use it to create two different attribute types
 		[ ] one for creation, and another for querying and updating
@@ -346,3 +349,5 @@
 	[x] rename input to parameters
 	[x] context, agent, parameters, entity, operation
 		[x] centralize all authorization checks in two functions: authorization and authorization_set
+[ ] entity tests to test public access control
+	[ ] ytitne only tests private access control
