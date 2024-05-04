@@ -32,16 +32,16 @@ class DatabaseModel extends Model {
 		return DatabaseModel._class_name(self.table_name);
 	}
 	_batch_key(source, operation, parameters) {
-		const source_key = JSON.stringify(source)
-		const operation_key = JSON.stringify(operation)
-		const parameters_key = JSON.stringify(parameters)
-		return [source_key, operation_key, parameters_key].join(':')
+		const source_key = JSON.stringify(source);
+		const operation_key = JSON.stringify(operation);
+		const parameters_key = JSON.stringify(parameters);
+		return [source_key, operation_key, parameters_key].join(":");
 	}
-	_batch(keys) {
+	_batch(contexts, keys) {
 		// group keys according to operation and params
 		// e.g. 1:1:1, 2:1:1 1:2:2:, 3:2:2, 4:2:2 will become [1:1:1, 2:1:1], [1:2:2, 3:2:2, 4:2:2]
 		// in effect the source attribute will become the only active variable if we treat operation and params as a subkey
-		// we we need new methods that act on arrays: create([]), read([]), update([]), delete([]) to resolve the source null case
+		// for source null, we just map each item to some of the existing logic
 		// for source non null, we need to do a full database join using where in for the from_id and from_type
 		// we will need to manually construct the result set for each subgroup (e.g. by manually handling limit, order, offset, etc)
 		// my original idea was to avoid data batching because at extreme scales, i'm not convinced this approach is feasible
@@ -53,6 +53,121 @@ class DatabaseModel extends Model {
 		// the maximum number of queries initiated on the backend would be 2097152, which seems like a lot, but if you can shard your data to an arbitrary resolution, then you could have for example 100000 database nodes
 		// and not all of them would be hit at once because those potential 2097152 queries would be aggregated to the nodes that hold the data
 		// on average, each database would only be seeing about 20 queries in the example above, and the architecture would avoid doing any in memory joins, so there would be a near constant latency
+		const subkey_map = {};
+		keys.forEach(function (key, index) {
+			const split = key.split(":");
+			const subkey = split.slice(1).join(":");
+			if (subkey_map[subkey]) {
+				subkey_map[subkey].push({
+					index: index,
+					source: split[0],
+				});
+			} else {
+				subkey_map[subkey] = [
+					{
+						index: index,
+						source: split[0],
+					},
+				];
+			}
+		});
+		// convert to array format so we can easily use it in promises
+		const groups_without_source = Object.keys(subkey_map).forEach(function (key) {
+			const split = key.split(":");
+			const sources = subkey_map[key];
+			return sources
+				.map(function (item) {
+					return {
+						operation: split[0],
+						parameters: split[1],
+						source: item.source,
+						index: item.index,
+					};
+				})
+				.filter(function (key) {
+					var source = JSON.parse(key.source);
+					return source === null;
+				});
+		});
+		const groups_with_source = Object.keys(subkey_map).forEach(function (key) {
+			const split = key.split(":");
+			const sources = subkey_map[key];
+			return sources
+				.map(function (item) {
+					return {
+						operation: split[0],
+						parameters: split[1],
+						source: item.source,
+						index: item.index,
+					};
+				})
+				.filter(function (key) {
+					var source = JSON.parse(key.source);
+					return source !== null;
+				});
+		});
+		function handle_groups_without_source(groups) {
+			// map each to a basic method
+			return Promise.all(
+				groups.map(function (group) {
+					return Promise.all(
+						group.map(function (key) {
+							// use key to find method
+							const parameters = JSON.parse(key.parameters);
+							if (key.operation === "create") {
+								return self.model._root_create(contexts[key.index], parameters);
+							} else if (key.operation === "read") {
+								return self.model._root_read(contexts[key.index], parameters);
+							} else if (key.operation === "update") {
+								return self.model._root_update(contexts[key.index], parameters);
+							} else if (key.operation === "delete") {
+								return self.model._root_delete(contexts[key.index], parameters);
+							} else {
+								// throw error?
+							}
+						}),
+					);
+				}),
+			);
+		}
+		function handle_groups_with_source(groups) {
+			// aggregate all source keys and use them to do a where in join
+			if (process.env.GAUZE_MONOLITHIC === "TRUE") {
+				// we need to essentially do multiple full queries as one query
+				// it seems possible to do this using a sql query, but we would need to construct it by hand because knex does not support partition by
+				// example sql: https://stackoverflow.com/questions/30768144/limit-number-of-rows-per-group-from-join-not-to-1-row
+				// knex partition by support: https://github.com/knex/knex/issues/3391
+				// using knex.raw is unpleasant because we would need to handle all the combinations of query/mutation arguments
+
+				// for now we can just do a total join based on entity types and entity ids and return all the results
+				// where, where_in, where_not_in, order, limit, and offset would all be done in memory
+				// seems like this could easily become a source of problems
+
+				// afterwards, we call a single method at the end with a set of ids
+				return Promise.resolve({});
+			} else {
+				return Promise.all(
+					groups.map(function (group) {
+						return Promise.all(
+							group.map(function (key) {
+								const parameters = JSON.parse(key.parameters);
+								if (key.operation === "create") {
+									return self.model._relationship_create(contexts[key.index], parameters);
+								} else if (key.operation === "read") {
+									return self.model._relationship_read(contexts[key.index], parameters);
+								} else if (key.operation === "update") {
+									return self.model._relationship_update(contexts[key.index], parameters);
+								} else if (key.operation === "delete") {
+									return self.model._relationship_delete(contexts[key.index], parameters);
+								} else {
+									// throw error?
+								}
+							}),
+						);
+					}),
+				);
+			}
+		}
 	}
 	_parse_relationship_metadata(context, input) {
 		const self = this;
