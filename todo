@@ -353,5 +353,14 @@
 [ ] entity tests to test public access control
 	[ ] ytitne only tests private access control
 [ ] use dataloader to batch data loading
-	[ ] use dataloader in database kernel model
-	[ ] use dataloader in system kernel model
+	[x] use dataloader in database kernel model
+	[x] use dataloader in system kernel model
+	[ ] use dataloader in relationship model
+	[ ] use dataloader in access models
+	[ ] hook up lru cache to all models
+		[x] hook up lru cache to system model
+		[x] hook up lru cache to database model
+		[ ] hook up lru cache to relationship model
+		[ ] hook up lru cache to access model
+	[-] clear cache on update or delete
+		[x] made a custom ttl based lru cache instead

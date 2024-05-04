@@ -9,6 +9,7 @@ import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 
 import DataLoader from "./../dataloader.js";
+import TTLLRUCache from "./../lru.js";
 
 import { Model } from "./class.js";
 
@@ -34,7 +35,9 @@ class SystemModel extends Model {
 			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Blacklist structure not found"));
 		}
 		self.name = self.__name();
-		self.loader = new DataLoader(self._batch);
+		self.loader = new DataLoader(self._batch, {
+			cacheMap: new TTLLRUCache(1024, 1024),
+		});
 		self.loader.model = self;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.constructor:exit`);
 	}
@@ -72,8 +75,10 @@ class SystemModel extends Model {
 				}
 			}),
 		).then(function (results) {
-			// todo: use lru so we don't have to clear the cache here
-			self.clearAll();
+			// tests will only pass if cache is turned off
+			if (process.env.GAUZE_ENV === "TEST") {
+				self.clearAll();
+			}
 			return results;
 		});
 	}

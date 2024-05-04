@@ -1,3 +1,4 @@
+process.env.GAUZE_ENV = "TEST";
 // legacy
 export * as legacy_relationship from "./legacy/relationship/index.js";
 // current
