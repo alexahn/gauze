@@ -21,7 +21,6 @@
 	"type": "module",
 	"dependencies": {
 		"better-sqlite3": "^9.5.0",
-		"dataloader": "^2.2.2",
 		"dotenv": "^16.4.5",
 		"find-config": "^1.0.0",
 		"graphql": "^16.8.1",
