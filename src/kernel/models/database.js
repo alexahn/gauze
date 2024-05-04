@@ -115,7 +115,7 @@ class DatabaseModel extends Model {
 			const sources = subkey_map[key];
 			return sources
 				.map(function (item) {
-					console.log("item", item);
+					console.log(item.source)
 					return {
 						operation: parsed.operation,
 						parameters: parsed.parameters,
@@ -176,6 +176,7 @@ class DatabaseModel extends Model {
 			);
 		}
 		function handle_groups_with_source(groups) {
+			console.log('handling with source', groups)
 			// aggregate all source keys and use them to do a where in join
 			if (process.env.GAUZE_MONOLITHIC === "TRUE") {
 				// we need to essentially do multiple full queries as one query
@@ -195,7 +196,7 @@ class DatabaseModel extends Model {
 					groups.map(function (group) {
 						return Promise.all(
 							group.map(function (key) {
-								const parameters = JSON.parse(key.parameters);
+								const parameters = key.parameters
 								if (key.operation === "create") {
 									return self.model._relationship_create(contexts[key.index], parameters).then(function (data) {
 										return {
@@ -248,7 +249,7 @@ class DatabaseModel extends Model {
 				});
 			});
 			// clear cache
-			self.loader.clearAll();
+			self.clearAll();
 			return output;
 		});
 	}
