@@ -8,6 +8,8 @@ import { v4 as uuidv4 } from "uuid";
 import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 
+import DataLoader from "./../dataloader.js";
+
 import { Model } from "./class.js";
 
 import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
@@ -32,6 +34,8 @@ class SystemModel extends Model {
 			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Blacklist structure not found"));
 		}
 		self.name = self.__name();
+		self.loader = new DataLoader(self._batch);
+		self.loader.model = self;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.constructor:exit`);
 	}
 	static _class_name(schema_name) {
@@ -40,6 +44,38 @@ class SystemModel extends Model {
 	__name() {
 		const self = this;
 		return SystemModel._class_name(self.schema_name);
+	}
+	_batch_key(realm, agent, entity, operation) {
+		return JSON.stringify({
+			realm: realm,
+			agent: agent,
+			entity: entity,
+			operation: operation,
+		});
+	}
+	_batch(contexts, keys) {
+		// this is the dataloader instance
+		const self = this;
+		return Promise.all(
+			keys.map(function (key, index) {
+				const parsed = JSON.parse(key);
+				if (parsed.operation === "authorization") {
+					return self.model._authorization(contexts[index], parsed.realm, parsed.agent, parsed.entity);
+				} else if (parsed.operation === "authorization_element") {
+					return self.model._authorization_element(contexts[index], parsed.realm, parsed.agent, parsed.entity);
+				} else if (parsed.operation === "authorization_set") {
+					return self.model._authorization_set(contexts[index], parsed.realm, parsed.agent, parsed.entity);
+				} else if (parsed.operation === "authorization_filter") {
+					return self.model._authorization_filter(contexts[index], parsed.realm, parsed.agent, parsed.entity);
+				} else {
+					throw new Error("Internal error: invalid batch operation");
+				}
+			}),
+		).then(function (results) {
+			// todo: use lru so we don't have to clear the cache here
+			self.clearAll();
+			return results;
+		});
 	}
 	_execute(context, operation_source, operation_variables) {
 		const self = this;
@@ -66,6 +102,11 @@ class SystemModel extends Model {
 	// authorization will check for authorization on both set and element scopes
 	authorization(context, realm, agent, entity) {
 		const self = this;
+		const key = self._batch_key(realm, agent, entity, "authorization");
+		return self.loader.load(context, key);
+	}
+	_authorization(context, realm, agent, entity) {
+		const self = this;
 		const entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity.entity_type];
 		const entity_module = $abstract.entities[entity_module_name].default($abstract);
 		const method_privacy = entity_module.methods[entity.entity_method].privacy;
@@ -87,8 +128,13 @@ class SystemModel extends Model {
 			}
 		});
 	}
-	// only checks element authorization (e.g. entity id cannot be null)
 	authorization_element(context, realm, agent, entity) {
+		const self = this;
+		const key = self._batch_key(realm, agent, entity, "authorization_element");
+		return self.loader.load(context, key);
+	}
+	// only checks element authorization (e.g. entity id cannot be null)
+	_authorization_element(context, realm, agent, entity) {
 		const self = this;
 		const { database, transaction } = context;
 		if (!agent) {
@@ -168,8 +214,13 @@ class SystemModel extends Model {
 			new Error("Authorization failed: privacy policy does not exist for this method");
 		}
 	}
-	// only checks set authorization (e.g. entity_id must be null)
 	authorization_set(context, realm, agent, entity) {
+		const self = this;
+		const key = self._batch_key(realm, agent, entity, "authorization_set");
+		return self.loader.load(context, key);
+	}
+	// only checks set authorization (e.g. entity_id must be null)
+	_authorization_set(context, realm, agent, entity) {
 		const self = this;
 		const { database, transaction } = context;
 		if (!agent) {
@@ -245,9 +296,14 @@ class SystemModel extends Model {
 			new Error("Authorization failed: privacy policy does not exist for this method");
 		}
 	}
+	authorization_filter(context, realm, agent, entity) {
+		const self = this;
+		const key = self._batch_key(realm, agent, entity, "authorization_filter");
+		return self.loader.load(context, key);
+	}
 	// method and entity_type must be set
 	// this function is used to set where in and where not in
-	authorization_filter(context, realm, agent, entity) {
+	_authorization_filter(context, realm, agent, entity) {
 		const self = this;
 		const { database, transaction } = context;
 		if (!agent) {
@@ -284,7 +340,7 @@ class SystemModel extends Model {
 						.limit(4294967296)
 						.transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_whitelist:debug_sql`, sql.toString());
+						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._authorization_filter:debug_sql`, sql.toString());
 					}
 					return sql.then(function (rows) {
 						return {
@@ -313,7 +369,7 @@ class SystemModel extends Model {
 						.limit(4294967296)
 						.transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_whitelist:debug_sql`, sql.toString());
+						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._authorization_filter:debug_sql`, sql.toString());
 					}
 					return sql.then(function (rows) {
 						return {

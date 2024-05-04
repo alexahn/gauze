@@ -41,12 +41,6 @@ class DatabaseModel extends Model {
 			parameters: parameters,
 		};
 		return JSON.stringify(key);
-		/*
-		const source_key = JSON.stringify(source);
-		const operation_key = JSON.stringify(operation);
-		const parameters_key = JSON.stringify(parameters);
-		return [source_key, operation_key, parameters_key].join(":");
-		*/
 	}
 	_batch(contexts, keys) {
 		const self = this;
@@ -115,7 +109,7 @@ class DatabaseModel extends Model {
 			const sources = subkey_map[key];
 			return sources
 				.map(function (item) {
-					console.log(item.source)
+					console.log(item.source);
 					return {
 						operation: parsed.operation,
 						parameters: parsed.parameters,
@@ -176,7 +170,7 @@ class DatabaseModel extends Model {
 			);
 		}
 		function handle_groups_with_source(groups) {
-			console.log('handling with source', groups)
+			console.log("handling with source", groups);
 			// aggregate all source keys and use them to do a where in join
 			if (process.env.GAUZE_MONOLITHIC === "TRUE") {
 				// we need to essentially do multiple full queries as one query
@@ -190,13 +184,13 @@ class DatabaseModel extends Model {
 				// seems like this could easily become a source of problems
 
 				// afterwards, we call a single method at the end with a set of ids
-				return Promise.resolve({});
+				return Promise.resolve([]);
 			} else {
 				return Promise.all(
 					groups.map(function (group) {
 						return Promise.all(
 							group.map(function (key) {
-								const parameters = key.parameters
+								const parameters = key.parameters;
 								if (key.operation === "create") {
 									return self.model._relationship_create(contexts[key.index], parameters).then(function (data) {
 										return {
@@ -234,24 +228,28 @@ class DatabaseModel extends Model {
 				);
 			}
 		}
-		return Promise.all([handle_groups_without_source(groups_without_source), handle_groups_with_source(groups_with_source)]).then(function (resolved) {
-			const groups_without_source = resolved[0];
-			const groups_with_source = resolved[1];
-			const output = Array(keys.length).fill(null);
-			groups_without_source.forEach(function (group) {
-				group.forEach(function (result) {
-					output[result.index] = result.data;
+		return Promise.all([handle_groups_without_source(groups_without_source), handle_groups_with_source(groups_with_source)])
+			.then(function (resolved) {
+				const groups_without_source = resolved[0];
+				const groups_with_source = resolved[1];
+				const output = Array(keys.length).fill(null);
+				groups_without_source.forEach(function (group) {
+					group.forEach(function (result) {
+						output[result.index] = result.data;
+					});
 				});
-			});
-			groups_with_source.forEach(function (group) {
-				group.forEach(function (result) {
-					output[result.index] = result.data;
+				groups_with_source.forEach(function (group) {
+					group.forEach(function (result) {
+						output[result.index] = result.data;
+					});
 				});
+				return output;
+			})
+			.then(function (results) {
+				// todo: use lru so we don't have to clear the cache here
+				self.clearAll();
+				return results;
 			});
-			// clear cache
-			self.clearAll();
-			return output;
-		});
 	}
 	_parse_relationship_metadata(context, input) {
 		const self = this;
@@ -709,6 +707,7 @@ class DatabaseModel extends Model {
 		const { source, database, transaction } = context;
 		const { where, where_in = {}, where_not_in = {}, limit = 128 } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "input", input);
+		const MAXIMUM_ROWS = 4294967296;
 		// todo: use attributes and update deleted_at instead of deleting the row
 		// do a read first
 		return self
