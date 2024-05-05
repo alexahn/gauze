@@ -383,3 +383,6 @@
 	[ ] proxy graphiql via server
 	[ ] use a higher level http server (express, fastify, koa, etc) ?
 		[ ] url and routes
+[ ] rate limiter
+	[ ] by route, by ip, by account, by location, etc
+
