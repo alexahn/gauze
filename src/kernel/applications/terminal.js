@@ -42,34 +42,33 @@ class GauzeTerminal {
 		};
 	}
 	start() {
-		const SHELL = this.$gauze.kernel.shell.node.SHELL__NODE__SHELL__KERNEL.start();
+		const shell = this.$gauze.kernel.shell.node.SHELL__NODE__SHELL__KERNEL.start();
 		// todo: maybe separate the modules from the added keys here
 		// todo: gauze vs $gauze?
-		SHELL.context.$gauze = this.$gauze;
-		SHELL.context.gauze = {};
-		SHELL.context.gauze.database = this.$gauze.database.knex.create_connection();
-		SHELL.context.gauze.modules = this.$gauze;
-		SHELL.context.gauze.execute_database_graphql = this.create_graphql_shell(
+		shell.context.$gauze = this.$gauze;
+		shell.context.gauze = {};
+		shell.context.gauze.database = this.$gauze.database.knex.create_connection();
+		shell.context.gauze.modules = this.$gauze;
+		shell.context.gauze.execute_database_graphql = this.create_graphql_shell(
 			this.$gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
-			SHELL.context.gauze.database,
+			shell.context.gauze.database,
 		);
-		SHELL.context.gauze.execute_system_graphql = this.create_graphql_shell(
+		shell.context.gauze.execute_system_graphql = this.create_graphql_shell(
 			this.$gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
-			SHELL.context.gauze.database,
+			shell.context.gauze.database,
 		);
-		SHELL.context.gauze._description = {
+		shell.context.gauze._description = {
 			database: "A Knex database connection",
 			modules: "The gauze root module (src/index.js)",
-			execute_database_graphql:
-				"A function that accepts an operation, operation_name, and operation_variables that executes the combination against the database graphql interface",
+			execute_database_graphql: "A function that accepts an operation, operation_name, and operation_variables that executes the combination against the database graphql interface",
 			execute_system_graphq: "A function that accepts an operation, operation_name, and operation_variables that executes the combination against the system graphql interface",
 		};
 		// for convenience expose the execute methods to the root shell object
-		SHELL.context.execute_database_graphql = SHELL.context.gauze.execute_database_graphql;
-		SHELL.context.execute_system_graphql = SHELL.context.gauze.execute_system_graphql;
+		shell.context.execute_database_graphql = shell.context.gauze.execute_database_graphql;
+		shell.context.execute_system_graphql = shell.context.gauze.execute_system_graphql;
 		console.log("Type gauze to explore");
-		SHELL.displayPrompt();
-		return SHELL;
+		shell.displayPrompt();
+		return shell;
 	}
 }
 

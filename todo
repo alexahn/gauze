@@ -246,16 +246,16 @@
 	[x] refactor database models so that they have create, read, update, delete methods that proxy to the kernel method
 		[x] allows for people to extend the models however they want, while preserving core internal logic
 [x] update create operations to also create a whitelist entry
-[ ] isolated tests
+[x] isolated tests
 	[x] make ytitne self-relational
 	[x] don't depend on seed data for tests
 		[x] will still depend on tables existing because we aren't programmatically generating migration files
-	[ ] combinatorially try every system state
+	[x] combinatorially try most system states
 		[x] need a consise way to write these tests, the current way is too heavy
 			[x] write a way to define tests by treating the interface(s) as functions
 			[x] make a steps loader and steps runner
 		[x] tests for access control
-		[ ] creating relationships (should only be possible to create relationships for things the agent can access)
+		[x] creating relationships (should only be possible to create relationships for things the agent can access)
 [x] use import.meta.filename instead of parsing import.meta.url
 [x] add mandatory input guards in controllers (or into the type definition?)
 	[x] as an example, attributes can currently be null right now, which causes an error
