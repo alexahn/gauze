@@ -10,19 +10,8 @@ class RelationshipSystemModel extends $kernel.models.relationship.RelationshipSy
 	}
 	create(context, parameters) {
 		const self = this;
-		var { agent_id = "" } = context;
+		var { agent_id = null } = context;
 		// todo: remove this parameters proxy once we set up user authentication
-		/*
-		agent_id = parameters.agent_id || agent_id;
-		const access = {
-			entity_type: $structure.entities.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
-			agent_id: agent_id,
-		};
-		const operation = {
-			operation: $database.interfaces.graphql.operations.relationship.CREATE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-			operation_name: $database.interfaces.graphql.operations.relationship.CREATE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-		};
-		*/
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication
@@ -44,19 +33,7 @@ class RelationshipSystemModel extends $kernel.models.relationship.RelationshipSy
 	}
 	read(context, parameters) {
 		const self = this;
-		var { agent_id = "" } = context;
-		// todo: remove this parameters proxy once we set up user authentication
-		/*
-		agent_id = parameters.agent_id || agent_id;
-		const access = {
-			entity_type: $structure.entities.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
-			agent_id: agent_id,
-		};
-		const operation = {
-			operation: $database.interfaces.graphql.operations.relationship.READ__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-			operation_name: $database.interfaces.graphql.operations.relationship.READ_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-		};
-		*/
+		var { agent_id = null } = context;
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication
@@ -78,19 +55,7 @@ class RelationshipSystemModel extends $kernel.models.relationship.RelationshipSy
 	}
 	update(context, parameters) {
 		const self = this;
-		var { agent_id = "" } = context;
-		// todo: remove this parameters proxy once we set up user authentication
-		/*
-		agent_id = parameters.agent_id || agent_id;
-		const access = {
-			entity_type: $structure.entities.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
-			agent_id: agent_id,
-		};
-		const operation = {
-			operation: $database.interfaces.graphql.operations.relationship.UPDATE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-			operation_name: $database.interfaces.graphql.operations.relationship.UPDATE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-		};
-		*/
+		var { agent_id = null } = context;
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication
@@ -112,19 +77,7 @@ class RelationshipSystemModel extends $kernel.models.relationship.RelationshipSy
 	}
 	delete(context, parameters) {
 		const self = this;
-		var { agent_id = "" } = context;
-		// todo: remove this parameters proxy once we set up user authentication
-		/*
-		agent_id = parameters.agent_id || agent_id;
-		const access = {
-			entity_type: $structure.entities.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
-			agent_id: agent_id,
-		};
-		const operation = {
-			operation: $database.interfaces.graphql.operations.relationship.DELETE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-			operation_name: $database.interfaces.graphql.operations.relationship.DELETE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-		};
-		*/
+		var { agent_id = null } = context;
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication

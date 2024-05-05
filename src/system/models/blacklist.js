@@ -10,19 +10,8 @@ class BlacklistSystemModel extends $kernel.models.access.AccessSystemModel {
 	}
 	create(context, parameters) {
 		const self = this;
-		var { agent_id = "" } = context;
+		var { agent_id = null } = context;
 		// todo: remove this parameters proxy once we set up user authentication
-		/*
-		agent_id = parameters.agent_id || agent_id;
-		const access = {
-			entity_type: $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
-			agent_id: agent_id,
-		};
-		const operation = {
-			operation: $database.interfaces.graphql.operations.blacklist.CREATE__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-			operation_name: $database.interfaces.graphql.operations.blacklist.CREATE_NAME__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-		};
-		*/
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication
@@ -44,19 +33,7 @@ class BlacklistSystemModel extends $kernel.models.access.AccessSystemModel {
 	}
 	read(context, parameters) {
 		const self = this;
-		var { agent_id = "" } = context;
-		// todo: remove this parameters proxy once we set up user authentication
-		/*
-		agent_id = parameters.agent_id || agent_id;
-		const access = {
-			entity_type: $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
-			agent_id: agent_id,
-		};
-		const operation = {
-			operation: $database.interfaces.graphql.operations.blacklist.READ__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-			operation_name: $database.interfaces.graphql.operations.blacklist.READ_NAME__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-		};
-		*/
+		var { agent_id = null } = context;
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication
@@ -78,19 +55,7 @@ class BlacklistSystemModel extends $kernel.models.access.AccessSystemModel {
 	}
 	update(context, parameters) {
 		const self = this;
-		var { agent_id = "" } = context;
-		// todo: remove this parameters proxy once we set up user authentication
-		/*
-		agent_id = parameters.agent_id || agent_id;
-		const access = {
-			entity_type: $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
-			agent_id: agent_id,
-		};
-		const operation = {
-			operation: $database.interfaces.graphql.operations.blacklist.UPDATE__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-			operation_name: $database.interfaces.graphql.operations.blacklist.UPDATE_NAME__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-		};
-		*/
+		var { agent_id = null } = context;
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication
@@ -112,19 +77,7 @@ class BlacklistSystemModel extends $kernel.models.access.AccessSystemModel {
 	}
 	delete(context, parameters) {
 		const self = this;
-		var { agent_id = "" } = context;
-		// todo: remove this parameters proxy once we set up user authentication
-		/*
-		agent_id = parameters.agent_id || agent_id;
-		const access = {
-			entity_type: $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
-			agent_id: agent_id,
-		};
-		const operation = {
-			operation: $database.interfaces.graphql.operations.blacklist.DELETE__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-			operation_name: $database.interfaces.graphql.operations.blacklist.DELETE_NAME__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-		};
-		*/
+		var { agent_id = null } = context;
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication
