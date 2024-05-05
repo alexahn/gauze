@@ -1,8 +1,6 @@
 import fs from "fs";
-import url from "url";
 import path from "path";
-const __FILEPATH = url.fileURLToPath(import.meta.url);
-const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
+const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
 import assert from "node:assert/strict";
 import child_process from "child_process";

@@ -1,7 +1,5 @@
-import url from "url";
 import path from "path";
-const __FILEPATH = url.fileURLToPath(import.meta.url);
-const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
+const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
 class GauzeTerminal {
 	// note: config takes the command argv structure (src/command/commands/run/terminal.js)
@@ -63,8 +61,8 @@ class GauzeTerminal {
 			database: "A Knex database connection",
 			modules: "The gauze root module (src/index.js)",
 			execute_database_graphql:
-				"A function that accepts an query/operation, operation_name, and operation_variables that executes the combination against the database graphql interface",
-			execute_system_graphq: "A function that accepts an query/operation, operation_name, and operation_variables that executes the combination against the system graphql interface",
+				"A function that accepts an operation, operation_name, and operation_variables that executes the combination against the database graphql interface",
+			execute_system_graphq: "A function that accepts an operation, operation_name, and operation_variables that executes the combination against the system graphql interface",
 		};
 		// for convenience expose the execute methods to the root shell object
 		SHELL.context.execute_database_graphql = SHELL.context.gauze.execute_database_graphql;

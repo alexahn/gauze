@@ -1,7 +1,5 @@
-import url from "url";
 import path from "path";
-const __FILEPATH = url.fileURLToPath(import.meta.url);
-const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
+const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
 import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
