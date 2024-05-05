@@ -10,19 +10,8 @@ class YtitneSystemModel extends $kernel.models.system.SystemModel {
 	}
 	create(context, parameters) {
 		const self = this;
-		var { agent_id = "" } = context;
+		var { agent_id = null } = context;
 		// todo: remove this parameters proxy once we set up user authentication
-		/*
-		agent_id = parameters.agent_id || agent_id;
-		const access = {
-			entity_type: $structure.entities.ytitne.database.sql.TABLE_NAME__SQL__DATABASE__YTITNE__STRUCTURE,
-			agent_id: agent_id,
-		};
-		const operation = {
-			operation: $database.interfaces.graphql.operations.ytitne.CREATE__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-			operation_name: $database.interfaces.graphql.operations.ytitne.CREATE_NAME__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-		};
-		*/
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication
@@ -44,19 +33,7 @@ class YtitneSystemModel extends $kernel.models.system.SystemModel {
 	}
 	read(context, parameters) {
 		const self = this;
-		var { agent_id = "" } = context;
-		// todo: remove this parameters proxy once we set up user authentication
-		/*
-		agent_id = parameters.agent_id || agent_id;
-		const access = {
-			entity_type: $structure.entities.ytitne.database.sql.TABLE_NAME__SQL__DATABASE__YTITNE__STRUCTURE,
-			agent_id: agent_id,
-		};
-		const operation = {
-			operation: $database.interfaces.graphql.operations.ytitne.READ__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-			operation_name: $database.interfaces.graphql.operations.ytitne.READ_NAME__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-		};
-		*/
+		var { agent_id = null } = context;
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication
@@ -78,19 +55,7 @@ class YtitneSystemModel extends $kernel.models.system.SystemModel {
 	}
 	update(context, parameters) {
 		const self = this;
-		var { agent_id = "" } = context;
-		// todo: remove this parameters proxy once we set up user authentication
-		/*
-		agent_id = parameters.agent_id || agent_id;
-		const access = {
-			entity_type: $structure.entities.ytitne.database.sql.TABLE_NAME__SQL__DATABASE__YTITNE__STRUCTURE,
-			agent_id: agent_id,
-		};
-		const operation = {
-			operation: $database.interfaces.graphql.operations.ytitne.UPDATE__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-			operation_name: $database.interfaces.graphql.operations.ytitne.UPDATE_NAME__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-		};
-		*/
+		var { agent_id = null } = context;
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication
@@ -112,19 +77,7 @@ class YtitneSystemModel extends $kernel.models.system.SystemModel {
 	}
 	delete(context, parameters) {
 		const self = this;
-		var { agent_id = "" } = context;
-		// todo: remove this parameters proxy once we set up user authentication
-		/*
-		agent_id = parameters.agent_id || agent_id;
-		const access = {
-			entity_type: $structure.entities.ytitne.database.sql.TABLE_NAME__SQL__DATABASE__YTITNE__STRUCTURE,
-			agent_id: agent_id,
-		};
-		const operation = {
-			operation: $database.interfaces.graphql.operations.ytitne.DELETE__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-			operation_name: $database.interfaces.graphql.operations.ytitne.DELETE_NAME__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-		};
-		*/
+		var { agent_id = null } = context;
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication

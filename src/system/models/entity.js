@@ -10,19 +10,8 @@ class EntitySystemModel extends $kernel.models.system.SystemModel {
 	}
 	create(context, parameters) {
 		const self = this;
-		var { agent_id = "" } = context;
+		var { agent_id = null } = context;
 		// todo: remove this parameters proxy once we set up user authentication
-		/*
-		agent_id = parameters.agent_id || agent_id;
-		const access = {
-			entity_type: $structure.entities.entity.database.sql.TABLE_NAME__SQL__DATABASE__ENTITY__STRUCTURE,
-			agent_id: agent_id,
-		};
-		const operation = {
-			operation: $database.interfaces.graphql.operations.entity.CREATE__ENTITY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-			operation_name: $database.interfaces.graphql.operations.entity.CREATE_NAME__ENTITY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-		};
-		*/
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication
@@ -44,19 +33,7 @@ class EntitySystemModel extends $kernel.models.system.SystemModel {
 	}
 	read(context, parameters) {
 		const self = this;
-		var { agent_id = "" } = context;
-		// todo: remove this parameters proxy once we set up user authentication
-		/*
-		agent_id = parameters.agent_id || agent_id;
-		const access = {
-			entity_type: $structure.entities.entity.database.sql.TABLE_NAME__SQL__DATABASE__ENTITY__STRUCTURE,
-			agent_id: agent_id,
-		};
-		const operation = {
-			operation: $database.interfaces.graphql.operations.entity.READ__ENTITY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-			operation_name: $database.interfaces.graphql.operations.entity.READ_NAME__ENTITY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-		};
-		*/
+		var { agent_id = null } = context;
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication
@@ -78,19 +55,7 @@ class EntitySystemModel extends $kernel.models.system.SystemModel {
 	}
 	update(context, parameters) {
 		const self = this;
-		var { agent_id = "" } = context;
-		// todo: remove this parameters proxy once we set up user authentication
-		/*
-		agent_id = parameters.agent_id || agent_id;
-		const access = {
-			entity_type: $structure.entities.entity.database.sql.TABLE_NAME__SQL__DATABASE__ENTITY__STRUCTURE,
-			agent_id: agent_id,
-		};
-		const operation = {
-			operation: $database.interfaces.graphql.operations.entity.UPDATE__ENTITY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-			operation_name: $database.interfaces.graphql.operations.entity.UPDATE_NAME__ENTITY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-		};
-		*/
+		var { agent_id = null } = context;
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication
@@ -112,19 +77,7 @@ class EntitySystemModel extends $kernel.models.system.SystemModel {
 	}
 	delete(context, parameters) {
 		const self = this;
-		var { agent_id = "" } = context;
-		// todo: remove this parameters proxy once we set up user authentication
-		/*
-		agent_id = parameters.agent_id || agent_id;
-		const access = {
-			entity_type: $structure.entities.entity.database.sql.TABLE_NAME__SQL__DATABASE__ENTITY__STRUCTURE,
-			agent_id: agent_id,
-		};
-		const operation = {
-			operation: $database.interfaces.graphql.operations.entity.DELETE__ENTITY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-			operation_name: $database.interfaces.graphql.operations.entity.DELETE_NAME__ENTITY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-		};
-		*/
+		var { agent_id = null } = context;
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication
