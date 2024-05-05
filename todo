@@ -308,7 +308,7 @@
 		[x] tests now use src/database/seeds/test
 [x] prevent relationships from being made if the from and to are not connected
 	[x] use structure definition
-	[ ] rename DATABASE_RELATIONSHIP_STRUCTURE to proper naming convention
+	[x] rename DATABASE_RELATIONSHIP_STRUCTURE to proper naming convention
 		[ ] don't import DATABASE_RELATIONSHIP_STRUCTURE directly from schemas
 	[-] rename structure/relationships to structure/connections
 		[x] moved all entities into src/structure/entities instead

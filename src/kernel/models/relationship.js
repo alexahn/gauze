@@ -34,9 +34,9 @@ class RelationshipSystemModel extends SystemModel {
 			const entity = $abstract.entities[name].default($abstract);
 			map[entity.graphql_meta_type] = {};
 		});
-		// iterate over $structure.relationships.SYSTEM_RELATIONSHIP_STRUCTURE
-		Object.keys($structure.relationships.SYSTEM_RELATIONSHIP_STRUCTURE).forEach(function (from) {
-			$structure.relationships.SYSTEM_RELATIONSHIP_STRUCTURE[from].forEach(function (to) {
+		// iterate over $structure.relationships.SYSTEM__RELATIONSHIP__STRUCTURE
+		Object.keys($structure.relationships.SYSTEM__RELATIONSHIP__STRUCTURE).forEach(function (from) {
+			$structure.relationships.SYSTEM__RELATIONSHIP__STRUCTURE[from].forEach(function (to) {
 				map[from][to] = true;
 			});
 		});
