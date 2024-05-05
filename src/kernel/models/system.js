@@ -277,6 +277,7 @@ class SystemModel extends Model {
 			throw new Error("Authorization failed: missing agent");
 		}
 		if (!agent.agent_id) {
+			// todo: if we want a null agent_id to represent a public user, we should comment this out?
 			throw new Error("Authorization failed: agent is missing 'agent_id' field");
 		}
 		if (!entity) {
@@ -360,6 +361,7 @@ class SystemModel extends Model {
 			throw new Error("Authorization failed: missing agent");
 		}
 		if (!agent.agent_id) {
+			// todo: if we want a null agent_id to represent a public user, we should comment this out?
 			throw new Error("Authorization failed: agent is missing 'agent_id' field");
 		}
 		if (!entity) {

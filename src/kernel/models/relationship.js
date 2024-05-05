@@ -109,7 +109,7 @@ class RelationshipSystemModel extends SystemModel {
 		}
 		return sql;
 	}
-	_create(context, parameters, realm) {
+	_root_create(context, parameters, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
 		const access = { ...agent, ...entity };
@@ -117,6 +117,11 @@ class RelationshipSystemModel extends SystemModel {
 		return self._authorized_relationship(context, parameters.attributes, agent, "create").then(function () {
 			return self._execute(context, operation, parameters);
 		});
+	}
+	_create(context, parameters, realm) {
+		const self = this;
+		const key = self._model_batch_key(parameters, realm, "create");
+		return self.model_loader.load(context, key);
 	}
 	_read_from(context, parameters, realm) {
 		// check that from policy aligns
@@ -270,7 +275,7 @@ class RelationshipSystemModel extends SystemModel {
 	// note: for private methods, user will have to use the whitelist methods to see what entities they have read access to
 	// note: for public methods, user will need to have exposure to an entity before they can explore its relationships
 	// requires where.id or where.from_id and where.from_type
-	_read(context, parameters, realm) {
+	_root_read(context, parameters, realm) {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
@@ -299,8 +304,13 @@ class RelationshipSystemModel extends SystemModel {
 			}
 		}
 	}
+	_read(context, parameters, realm) {
+		const self = this;
+		const key = self._model_batch_key(parameters, realm, "read");
+		return self.model_loader.load(context, key);
+	}
 	// requires where.id
-	_update(context, parameters, realm) {
+	_root_update(context, parameters, realm) {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
@@ -328,8 +338,13 @@ class RelationshipSystemModel extends SystemModel {
 			throw new Error("Field 'where.gauze__relationship__id' is required");
 		}
 	}
+	_update(context, parameters, realm) {
+		const self = this;
+		const key = self._model_batch_key(parameters, realm, "update");
+		return self.model_loader.load(context, key);
+	}
 	// requires where.id
-	_delete(context, parameters, realm) {
+	_root_delete(context, parameters, realm) {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
@@ -352,6 +367,11 @@ class RelationshipSystemModel extends SystemModel {
 		} else {
 			throw new Error("Field 'where.gauze__relationship__id' is required");
 		}
+	}
+	_delete(context, parameters, realm) {
+		const self = this;
+		const key = self._model_batch_key(parameters, realm, "delete");
+		return self.model_loader.load(context, key);
 	}
 }
 

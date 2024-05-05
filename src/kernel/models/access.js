@@ -6,19 +6,17 @@ const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 
-import { Model } from "./class.js";
+import { SystemModel } from "./system.js";
 
 import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
 
 import { EXECUTE__GRAPHQL__SHELL__KERNEL } from "./../shell/graphql.js";
 
-class AccessSystemModel extends Model {
+class AccessSystemModel extends SystemModel {
 	constructor(root_config, access_config) {
-		super(root_config);
+		super(root_config, access_config);
 		const self = this;
-		const { schema, schema_name } = access_config;
-		self.schema = schema;
-		self.schema_name = schema_name;
+		self.name = self.__name();
 		self.key_id = `${self.entity.table_name}__id`;
 		self.key_realm = `${self.entity.table_name}__realm`;
 		self.key_agent_role = `${self.entity.table_name}__agent_role`;
@@ -42,7 +40,6 @@ class AccessSystemModel extends Model {
 				[`delete_${self.entity.name}`]: [],
 			},
 		};
-		self.name = self.__name();
 	}
 	static _class_name(schema_name) {
 		return schema_name ? `(${schema_name})[${super._class_name()}]AccessSystemModel` : `[${super._class_name()}]AccessSystemModel`;
@@ -50,27 +47,6 @@ class AccessSystemModel extends Model {
 	__name() {
 		const self = this;
 		return AccessSystemModel._class_name(self.schema_name);
-	}
-	_execute(context, operation_source, operation_variables) {
-		const self = this;
-		const { operation, operation_name } = operation_source;
-		return EXECUTE__GRAPHQL__SHELL__KERNEL({
-			schema: self.schema,
-			context,
-			operation,
-			operation_name,
-			operation_variables,
-		}).then(function (data) {
-			if (data.errors && data.errors.length) {
-				// should we make a new error here?
-				// todo: figure out if we need to log here or not
-				console.log(data.errors);
-				// throw the first error
-				throw data.errors[0];
-			} else {
-				return Promise.resolve(data);
-			}
-		});
 	}
 	_valid_access(context, agent, method, record) {
 		const self = this;
@@ -114,7 +90,6 @@ class AccessSystemModel extends Model {
 		});
 		return sorted[0];
 	}
-	_validate_target(record) {}
 	_validate_hierarchy(initiator_record, target_record, method) {
 		const self = this;
 		const initiator_role = initiator_record[self.key_agent_role];
@@ -195,7 +170,7 @@ class AccessSystemModel extends Model {
 		}
 	}
 	// requires a valid record
-	_create(context, input, realm) {
+	_root_create(context, input, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
 		const target_record = input.attributes;
@@ -203,6 +178,11 @@ class AccessSystemModel extends Model {
 		return self._valid_access(context, agent, "create", target_record).then(function () {
 			return self._execute(context, operation, input);
 		});
+	}
+	_create(context, parameters, realm) {
+		const self = this;
+		const key = self._model_batch_key(parameters, realm, "create");
+		return self.model_loader.load(context, key);
 	}
 	_read_agent(context, input, realm) {
 		const self = this;
@@ -267,7 +247,7 @@ class AccessSystemModel extends Model {
 		});
 	}
 	// requires where.id or where.agent_id or (where.entity_id and where.entity_type and where.method)
-	_read(context, input, realm) {
+	_root_read(context, input, realm) {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
@@ -293,8 +273,13 @@ class AccessSystemModel extends Model {
 			);
 		}
 	}
+	_read(context, parameters, realm) {
+		const self = this;
+		const key = self._model_batch_key(parameters, realm, "read");
+		return self.model_loader.load(context, key);
+	}
 	// requires where.id
-	_update(context, input, realm) {
+	_root_update(context, input, realm) {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
@@ -321,8 +306,13 @@ class AccessSystemModel extends Model {
 			throw new Error(`Field 'where.${self.key_id}' is required`);
 		}
 	}
+	_update(context, parameters, realm) {
+		const self = this;
+		const key = self._model_batch_key(parameters, realm, "update");
+		return self.model_loader.load(context, key);
+	}
 	// requires where.id
-	_delete(context, input, realm) {
+	_root_delete(context, input, realm) {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
@@ -340,6 +330,11 @@ class AccessSystemModel extends Model {
 		} else {
 			throw new Error(`Field 'where.${self.key_id}' is required`);
 		}
+	}
+	_delete(context, parameters, realm) {
+		const self = this;
+		const key = self._model_batch_key(parameters, realm, "delete");
+		return self.model_loader.load(context, key);
 	}
 }
 

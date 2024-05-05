@@ -355,13 +355,13 @@
 [ ] use dataloader to batch data loading
 	[x] use dataloader in database kernel model
 	[x] use dataloader in system kernel model
-	[ ] use dataloader in relationship model
-	[ ] use dataloader in access models
-	[ ] hook up lru cache to all models
+	[x] use dataloader in relationship model
+	[x] use dataloader in access models
+	[x] hook up lru cache to all models
 		[x] hook up lru cache to system model
 		[x] hook up lru cache to database model
-		[ ] hook up lru cache to relationship model
-		[ ] hook up lru cache to access model
+		[x] hook up lru cache to relationship model
+		[x] hook up lru cache to access model
 	[-] clear cache on update or delete
 		[x] made a custom ttl based lru cache instead
 	[ ] granular cache clearing based on record (nice to have)
@@ -369,3 +369,5 @@
 		[ ] will need to add a new data structure to the lru cache we implemented to keep track of operation association with records
 			[ ] e.g. parse the parameters and construct a tree
 	[ ] hash the key to have a fixed size for the key (nice to have)
+[ ] see if we can pass in a null agent_id into authorization and have it all work
+	[ ] verify that all authorization queries are valid with a null agent_id
