@@ -18,8 +18,9 @@
 	[x] implement relationship creation and deletion via mutations
 		[-] join update and join delete doesn't seem to work in sqlite3, maybe try postgresql
 		[x] brute force this by re-using read method and using where in (works in sqlite and postgresql)
-	[ ] see if there a way to not forfeit foreign key constraints without having to create different tables for every type of relationship
-		[ ] look into constraints to manage one to one, one to many, and many to one relationships
+	[-] see if there a way to not forfeit foreign key constraints without having to create different tables for every type of relationship
+		[x] look into constraints to manage one to one, one to many, and many to one relationships
+			[x] we will have to handle this from the application level
 	[ ] have an admin method to track objects that have no relationships
 [x] logging
 	[x] visually simple logging based on level, topic, and message
@@ -31,7 +32,8 @@
 	[x] entities should be the highest directory level
 [-] look into deepcopy for graphql schema and type extension
 	[x] just hard copy the graphql definitions
-	[ ] update graphql type names and descriptions to prefix or suffix with database, system, or user
+	[-] update graphql type names and descriptions to prefix or suffix with database, system, or user
+		[x] too tedious, better to re-use the underlying unified type
 [ ] type naming constraints
 	[ ] cap table name to 255 characters
 	[ ] cap graphql type name to 255 characters
@@ -75,7 +77,6 @@
 	[x] add serializers to fields
 [x] add graphql shell
 	[x] add an execute function for database and system realms in the terminal
-[ ] soft delete
 [x] refactor system controllers to use graphql queries/mutations against the database interface
 	[x] might as well set it up now
 	[x] copy existing system controllers and interface to database
@@ -232,12 +233,8 @@
 [x] sub categorize internal gauze commands and user commands
 	[x] add example user command (so they can write their own webserver for example)
 [ ] polish commands and manager application
-[ ] errors directory per realm
-	[ ] realms can have their own custom errors, but only for the particular logic they are handling
-		[ ] in all other cases, we should just bubble up the error from below
 [x] set up migrations for ezuag and ytitne
 [x] set up seed data for ezuag and ytitne
-[ ] validate id field to ensure uuid structure
 [x] merge system models into one (there is no reason to have multiple)
 [ ] naming convention refactor (update according to all rules)
 	[x] double underscore for module namespacing hierarchy
@@ -264,8 +261,6 @@
 [x] prevent update/delete from working with an empty where query? there is no reason to update everything a user has access to
 	[x] added guards to database kernel model to check that where is provided
 	[ ] think about how to make this prettier later
-[ ] use graphql enum types (https://graphql.org/graphql-js/type/#example-4) to lock down fields that act on a set of values
-	[ ] entity_type, agent_type, realm, agent_role
 [x] logging strategy so we can see the entire access control pipeline from beginning to end
 	[x] just prefix the message with something like 'access'
 [x] move sql table name to abstract entities
@@ -321,16 +316,13 @@
 		[x] create blacklist and whitelist root on entity creation
 			[x] need a blacklist root to manage access control for public entities
 			[x] we need the system to work when the privacy of a method is changed
-[ ] add a required attribute to fields in abstract entity definitions?
-	[ ] we can use it to create two different attribute types
-		[ ] one for creation, and another for querying and updating
-[ ] core system integrity checks should be independent of surface field validation
-	[ ] e.g. internal models such as relationships, whitelist, and blacklist should not depend on interface field validation to function
-		[ ] we need to ensure that only valid data gets saved to the database
-		[ ] is it reasonable to use middlewares for core system logic? maybe we should just inhouse it in the kernel because someone might change the abstract definition?
-			[ ] maybe the ideal design is for the kernel to be self-sufficient in every regard
-	[ ] keep the surface area of the internal core as small as possible
-	[ ] field validation should only be pushed to the surface for user level entities
+[x] core system integrity checks should be independent of surface field validation
+	[x] e.g. internal models such as relationships, whitelist, and blacklist should not depend on interface field validation to function
+		[x] we need to ensure that only valid data gets saved to the database
+		[x] is it reasonable to use middlewares for core system logic? maybe we should just inhouse it in the kernel because someone might change the abstract definition?
+			[x] maybe the ideal design is for the kernel to be self-sufficient in every regard
+	[x] keep the surface area of the internal core as small as possible
+	[x] field validation should only be pushed to the surface for user level entities
 [x] refactor src/structure to follow the same directory structure as src/abstract
 	[x] make src/structure/entities
 	[x] copy entities from root src/structure into src/structure/entities
@@ -370,8 +362,20 @@
 		[ ] will need to add a new data structure to the lru cache we implemented to keep track of operation association with records
 			[ ] e.g. parse the parameters and construct a tree
 	[ ] hash the key to have a fixed size for the key (nice to have)
+[ ] soft delete
+[ ] validate id field to ensure uuid structure
 [ ] see if we can pass in a null agent_id into authorization and have it all work
 	[ ] verify that all authorization queries are valid with a null agent_id
 [ ] whitelist / blacklist symmetry?
 	[ ] should whitelist also only apply at leaf level? currently blacklist only applies at leaf level
-
+[ ] errors directory per realm
+	[ ] realms can have their own custom errors, but only for the particular logic they are handling
+		[ ] in all other cases, we should just bubble up the error from below
+[ ] add a required attribute to fields in abstract entity definitions?
+	[ ] we can use it to create two different attribute types
+		[ ] one for creation, and another for querying and updating
+[ ] use graphql enum types (https://graphql.org/graphql-js/type/#example-4) to lock down fields that act on a set of values
+	[ ] entity_type, agent_type, realm, agent_role
+	[ ] the problem is that using the enums is a pain because you need to know the name of the option
+		[ ] we can introduce a naming convention, e.g. REALM__SYSTEM, AGENT_ROLE__ROOT, AGENT_ROLE__TRUNK, AGENT_ROLE__LEAF, etc
+			[ ] but it is still awkward, and it feels like it would be easier to use if we just left it as a string field but added validation on it
