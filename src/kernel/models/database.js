@@ -38,11 +38,11 @@ class DatabaseModel extends Model {
 		const self = this;
 		return DatabaseModel._class_name(self.table_name);
 	}
-	_batch_key(source, operation, parameters) {
+	_batch_key(source, parameters, method) {
 		const key = {
 			source: source,
-			operation: operation,
 			parameters: parameters,
+			method: method,
 		};
 		return JSON.stringify(key);
 	}
@@ -67,7 +67,7 @@ class DatabaseModel extends Model {
 		keys.forEach(function (key, index) {
 			const parsed = JSON.parse(key);
 			const subkey = JSON.stringify({
-				operation: parsed.operation,
+				method: parsed.method,
 				parameters: parsed.parameters,
 			});
 			if (subkey_map[subkey]) {
@@ -92,7 +92,7 @@ class DatabaseModel extends Model {
 			return sources
 				.map(function (item) {
 					return {
-						operation: parsed.operation,
+						method: parsed.method,
 						parameters: parsed.parameters,
 						source: item.source,
 						index: item.index,
@@ -108,7 +108,7 @@ class DatabaseModel extends Model {
 			return sources
 				.map(function (item) {
 					return {
-						operation: parsed.operation,
+						method: parsed.method,
 						parameters: parsed.parameters,
 						source: item.source,
 						index: item.index,
@@ -126,32 +126,31 @@ class DatabaseModel extends Model {
 						group.map(function (key) {
 							// use key to find method
 							const parameters = key.parameters;
-							if (key.operation === "create") {
+							if (key.method === "create") {
 								return self.model._root_create(contexts[key.index], parameters).then(function (data) {
-									return {
-										index: key.index,
-										data: data,
-									};
-								});
-							} else if (key.operation === "read") {
-								return self.model._root_read(contexts[key.index], parameters).then(function (data) {
-									return {
-										index: key.index,
-										data: data,
-									};
-								});
-							} else if (key.operation === "update") {
-								return self.model._root_update(contexts[key.index], parameters).then(function (data) {
-									// clear cache
 									self.clearAll();
 									return {
 										index: key.index,
 										data: data,
 									};
 								});
-							} else if (key.operation === "delete") {
+							} else if (key.method === "read") {
+								return self.model._root_read(contexts[key.index], parameters).then(function (data) {
+									return {
+										index: key.index,
+										data: data,
+									};
+								});
+							} else if (key.method === "update") {
+								return self.model._root_update(contexts[key.index], parameters).then(function (data) {
+									self.clearAll();
+									return {
+										index: key.index,
+										data: data,
+									};
+								});
+							} else if (key.method === "delete") {
 								return self.model._root_delete(contexts[key.index], parameters).then(function (data) {
-									// clear cache
 									self.clearAll();
 									return {
 										index: key.index,
@@ -187,21 +186,22 @@ class DatabaseModel extends Model {
 						return Promise.all(
 							group.map(function (key) {
 								const parameters = key.parameters;
-								if (key.operation === "create") {
+								if (key.method === "create") {
 									return self.model._relationship_create(contexts[key.index], parameters).then(function (data) {
+										self.clearAll();
 										return {
 											index: key.index,
 											data: data,
 										};
 									});
-								} else if (key.operation === "read") {
+								} else if (key.method === "read") {
 									return self.model._relationship_read(contexts[key.index], parameters).then(function (data) {
 										return {
 											index: key.index,
 											data: data,
 										};
 									});
-								} else if (key.operation === "update") {
+								} else if (key.method === "update") {
 									return self.model._relationship_update(contexts[key.index], parameters).then(function (data) {
 										self.clearAll();
 										return {
@@ -209,7 +209,7 @@ class DatabaseModel extends Model {
 											data: data,
 										};
 									});
-								} else if (key.operation === "delete") {
+								} else if (key.method === "delete") {
 									return self.model._relationship_delete(contexts[key.index], parameters).then(function (data) {
 										self.clearAll();
 										return {
@@ -300,7 +300,7 @@ class DatabaseModel extends Model {
 	_create(context, input) {
 		const self = this;
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
-		const key = self._batch_key(relationship_metadata, "create", input);
+		const key = self._batch_key(relationship_metadata, input, "create");
 		return self.loader.load(context, key);
 	}
 	_root_read(context, input) {
@@ -403,7 +403,7 @@ class DatabaseModel extends Model {
 	_read(context, input) {
 		const self = this;
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
-		const key = self._batch_key(relationship_metadata, "read", input);
+		const key = self._batch_key(relationship_metadata, input, "read");
 		return self.loader.load(context, key);
 	}
 	_root_update(context, input) {
@@ -494,7 +494,7 @@ class DatabaseModel extends Model {
 	_update(context, input) {
 		const self = this;
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
-		const key = self._batch_key(relationship_metadata, "update", input);
+		const key = self._batch_key(relationship_metadata, input, "update");
 		return self.loader.load(context, key);
 	}
 	_root_delete(context, input) {
@@ -587,7 +587,7 @@ class DatabaseModel extends Model {
 	_delete(context, input) {
 		const self = this;
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
-		const key = self._batch_key(relationship_metadata, "delete", input);
+		const key = self._batch_key(relationship_metadata, input, "delete");
 		return self.loader.load(context, key);
 	}
 }

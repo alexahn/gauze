@@ -35,10 +35,14 @@ class SystemModel extends Model {
 			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Blacklist structure not found"));
 		}
 		self.name = self.__name();
-		self.loader = new DataLoader(self._batch, {
+		self.auth_loader = new DataLoader(self._auth_batch, {
 			cacheMap: new TTLLRUCache(1024, 1024),
 		});
-		self.loader.model = self;
+		self.auth_loader.model = self;
+		self.model_loader = new DataLoader(self._model_batch, {
+			cacheMap: new TTLLRUCache(1024, 1024),
+		});
+		self.model_loader.model = self;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.constructor:exit`);
 	}
 	static _class_name(schema_name) {
@@ -48,27 +52,27 @@ class SystemModel extends Model {
 		const self = this;
 		return SystemModel._class_name(self.schema_name);
 	}
-	_batch_key(realm, agent, entity, operation) {
+	_auth_batch_key(realm, agent, entity, method) {
 		return JSON.stringify({
 			realm: realm,
 			agent: agent,
 			entity: entity,
-			operation: operation,
+			method: method,
 		});
 	}
-	_batch(contexts, keys) {
+	_auth_batch(contexts, keys) {
 		// this is the dataloader instance
 		const self = this;
 		return Promise.all(
 			keys.map(function (key, index) {
 				const parsed = JSON.parse(key);
-				if (parsed.operation === "authorization") {
+				if (parsed.method === "authorization") {
 					return self.model._authorization(contexts[index], parsed.realm, parsed.agent, parsed.entity);
-				} else if (parsed.operation === "authorization_element") {
+				} else if (parsed.method === "authorization_element") {
 					return self.model._authorization_element(contexts[index], parsed.realm, parsed.agent, parsed.entity);
-				} else if (parsed.operation === "authorization_set") {
+				} else if (parsed.method === "authorization_set") {
 					return self.model._authorization_set(contexts[index], parsed.realm, parsed.agent, parsed.entity);
-				} else if (parsed.operation === "authorization_filter") {
+				} else if (parsed.method === "authorization_filter") {
 					return self.model._authorization_filter(contexts[index], parsed.realm, parsed.agent, parsed.entity);
 				} else {
 					throw new Error("Internal error: invalid batch operation");
@@ -76,6 +80,47 @@ class SystemModel extends Model {
 			}),
 		).then(function (results) {
 			// tests will only pass if cache is turned off
+			if (process.env.GAUZE_ENV === "TEST") {
+				self.clearAll();
+			}
+			return results;
+		});
+	}
+	_model_batch_key(parameters, realm, method) {
+		// only take operation_name from operation
+		return JSON.stringify({
+			parameters: parameters,
+			realm: realm,
+			method: method,
+		});
+	}
+	_model_batch(contexts, keys) {
+		const self = this;
+		return Promise.all(
+			keys.map(function (key, index) {
+				const parsed = JSON.parse(key);
+				if (parsed.method === "create") {
+					return self.model._root_create(contexts[index], parsed.parameters, parsed.realm).then(function (data) {
+						self.clearAll();
+						return data;
+					});
+				} else if (parsed.method === "read") {
+					return self.model._root_read(contexts[index], parsed.parameters, parsed.realm);
+				} else if (parsed.method === "update") {
+					return self.model._root_update(contexts[index], parsed.parameters, parsed.realm).then(function (data) {
+						self.clearAll();
+						return data;
+					});
+				} else if (parsed.method === "delete") {
+					return self.model._root_delete(contexts[index], parsed.parameters, parsed.realm).then(function (data) {
+						self.clearAll();
+						return data;
+					});
+				} else {
+					throw new Error("Internal error: invalid batch operation");
+				}
+			}),
+		).then(function (results) {
 			if (process.env.GAUZE_ENV === "TEST") {
 				self.clearAll();
 			}
@@ -107,8 +152,8 @@ class SystemModel extends Model {
 	// authorization will check for authorization on both set and element scopes
 	authorization(context, realm, agent, entity) {
 		const self = this;
-		const key = self._batch_key(realm, agent, entity, "authorization");
-		return self.loader.load(context, key);
+		const key = self._auth_batch_key(realm, agent, entity, "authorization");
+		return self.auth_loader.load(context, key);
 	}
 	_authorization(context, realm, agent, entity) {
 		const self = this;
@@ -135,8 +180,8 @@ class SystemModel extends Model {
 	}
 	authorization_element(context, realm, agent, entity) {
 		const self = this;
-		const key = self._batch_key(realm, agent, entity, "authorization_element");
-		return self.loader.load(context, key);
+		const key = self._auth_batch_key(realm, agent, entity, "authorization_element");
+		return self.auth_loader.load(context, key);
 	}
 	// only checks element authorization (e.g. entity id cannot be null)
 	_authorization_element(context, realm, agent, entity) {
@@ -221,8 +266,8 @@ class SystemModel extends Model {
 	}
 	authorization_set(context, realm, agent, entity) {
 		const self = this;
-		const key = self._batch_key(realm, agent, entity, "authorization_set");
-		return self.loader.load(context, key);
+		const key = self._auth_batch_key(realm, agent, entity, "authorization_set");
+		return self.auth_loader.load(context, key);
 	}
 	// only checks set authorization (e.g. entity_id must be null)
 	_authorization_set(context, realm, agent, entity) {
@@ -303,8 +348,8 @@ class SystemModel extends Model {
 	}
 	authorization_filter(context, realm, agent, entity) {
 		const self = this;
-		const key = self._batch_key(realm, agent, entity, "authorization_filter");
-		return self.loader.load(context, key);
+		const key = self._auth_batch_key(realm, agent, entity, "authorization_filter");
+		return self.auth_loader.load(context, key);
 	}
 	// method and entity_type must be set
 	// this function is used to set where in and where not in
@@ -448,14 +493,16 @@ class SystemModel extends Model {
 			}
 		});
 	}
-	_create(context, parameters, realm) {
+	_root_create(context, parameters, realm) {
 		const self = this;
-		const { source } = context;
+		//const { source } = context;
 		const { agent, entity, operation } = realm;
 		entity.entity_method = "create";
+		/*
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
+		*/
 		// note: our architecture requires that the key is a uuid
 		if (!parameters.attributes[self.entity.primary_key]) {
 			parameters.attributes[self.entity.primary_key] = uuidv4();
@@ -534,35 +581,77 @@ class SystemModel extends Model {
 		};
 		return self.authorized_execute(context, parameters, agent, entity, operation);
 	}
-	_read(context, parameters, realm) {
+	_create(context, parameters, realm) {
 		const self = this;
 		const { source } = context;
-		const { agent, entity, operation } = realm;
-		entity.entity_method = "read";
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
+		const key = self._model_batch_key(parameters, realm, "create");
+		return self.model_loader.load(context, key);
+	}
+	_root_read(context, parameters, realm) {
+		const self = this;
+		//const { source } = context;
+		const { agent, entity, operation } = realm;
+		entity.entity_method = "read";
+		/*
+		if (source && source._metadata) {
+			parameters.parent = source._metadata;
+		}
+		*/
+		return self.authorized_execute(context, parameters, agent, entity, operation);
+	}
+	_read(context, parameters, realm) {
+		const self = this;
+		const { source } = context;
+		if (source && source._metadata) {
+			parameters.parent = source._metadata;
+		}
+		const key = self._model_batch_key(parameters, realm, "read");
+		return self.model_loader.load(context, key);
+	}
+	_root_update(context, parameters, realm) {
+		const self = this;
+		//const { source } = context;
+		const { agent, entity, operation } = realm;
+		entity.entity_method = "update";
+		/*
+		if (source && source._metadata) {
+			parameters.parent = source._metadata;
+		}
+		*/
 		return self.authorized_execute(context, parameters, agent, entity, operation);
 	}
 	_update(context, parameters, realm) {
 		const self = this;
 		const { source } = context;
-		const { agent, entity, operation } = realm;
-		entity.entity_method = "update";
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
+		const key = self._model_batch_key(parameters, realm, "update");
+		return self.model_loader.load(context, key);
+	}
+	_root_delete(context, parameters, realm) {
+		const self = this;
+		//const { source } = context;
+		const { agent, entity, operation } = realm;
+		entity.entity_method = "delete";
+		/*
+		if (source && source._metadata) {
+			parameters.parent = source._metadata;
+		}
+		*/
 		return self.authorized_execute(context, parameters, agent, entity, operation);
 	}
 	_delete(context, parameters, realm) {
 		const self = this;
 		const { source } = context;
-		const { agent, entity, operation } = realm;
-		entity.entity_method = "delete";
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
-		return self.authorized_execute(context, parameters, agent, entity, operation);
+		const key = self._model_batch_key(parameters, realm, "delete");
+		return self.model_loader.load(context, key);
 	}
 }
 

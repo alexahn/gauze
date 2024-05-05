@@ -364,3 +364,8 @@
 		[ ] hook up lru cache to access model
 	[-] clear cache on update or delete
 		[x] made a custom ttl based lru cache instead
+	[ ] granular cache clearing based on record (nice to have)
+		[ ] e.g. if we update a record, it should only clear the cache for all read operations on the record
+		[ ] will need to add a new data structure to the lru cache we implemented to keep track of operation association with records
+			[ ] e.g. parse the parameters and construct a tree
+	[ ] hash the key to have a fixed size for the key (nice to have)
