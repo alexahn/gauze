@@ -3,7 +3,7 @@ import { GraphQLSchema } from "graphql";
 import * as $abstract from "./../../../abstract/index.js";
 import * as $structure from "./../../../structure/index.js";
 
-import { DATABASE__RELATIONSHIP__STRUCTURE } from "./../../../structure/relationships.js";
+import { DATABASE_RELATIONSHIP_STRUCTURE } from "./../../../structure/relationships.js";
 
 const ENTITIES = {};
 
@@ -11,8 +11,8 @@ const METHODS = {};
 
 // todo: add some existence checks and guards to these loops
 function link() {
-	Object.keys(DATABASE__RELATIONSHIP__STRUCTURE).forEach(function (entity) {
-		var relationships = DATABASE__RELATIONSHIP__STRUCTURE[entity];
+	Object.keys(DATABASE_RELATIONSHIP_STRUCTURE).forEach(function (entity) {
+		var relationships = DATABASE_RELATIONSHIP_STRUCTURE[entity];
 		relationships.forEach(function (related) {
 			Object.keys(METHODS[related].query).forEach(function (query) {
 				var query_method = METHODS[related].query[query];

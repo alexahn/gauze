@@ -3,7 +3,7 @@ import { GraphQLSchema } from "graphql";
 import * as $abstract from "./../../../abstract/index.js";
 import * as $structure from "./../../../structure/index.js";
 
-import { SYSTEM__RELATIONSHIP__STRUCTURE } from "./../../../structure/relationships.js";
+import { SYSTEM_RELATIONSHIP_STRUCTURE } from "./../../../structure/relationships.js";
 
 // ezuag
 import { CONNECTION__EZUAG__ENTITY__GRAPHQL__INTERFACE__SYSTEM, METHODS__EZUAG__ENTITY__GRAPHQL__INTERFACE__SYSTEM } from "./entities/ezuag.js";
@@ -28,8 +28,8 @@ const METHODS = {
 
 // todo: add some existence checks and guards to these loops
 function link() {
-	Object.keys(SYSTEM__RELATIONSHIP__STRUCTURE).forEach(function (entity) {
-		var relationships = SYSTEM__RELATIONSHIP__STRUCTURE[entity];
+	Object.keys(SYSTEM_RELATIONSHIP_STRUCTURE).forEach(function (entity) {
+		var relationships = SYSTEM_RELATIONSHIP_STRUCTURE[entity];
 		relationships.forEach(function (related) {
 			Object.keys(METHODS[related].query).forEach(function (query) {
 				var query_method = METHODS[related].query[query];
