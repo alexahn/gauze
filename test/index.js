@@ -1,7 +1,8 @@
 process.env.GAUZE_ENV = "TEST";
-// legacy
-export * as legacy_relationship from "./legacy/relationship/index.js";
-// current
-export * as ytitne from "./ytitne/index.js";
+// internal
 export * as relationship from "./relationship/index.js";
 export * as whitelist from "./whitelist/index.js";
+export * as blacklist from "./blacklist/index.js";
+// entity
+export * as ytitne from "./ytitne/index.js";
+export * as entity from "./entity/index.js";
