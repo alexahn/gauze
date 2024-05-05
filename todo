@@ -364,6 +364,7 @@
 		[x] hook up lru cache to access model
 	[-] clear cache on update or delete
 		[x] made a custom ttl based lru cache instead
+			[ ] use es6 map instead of an object as the store
 	[ ] granular cache clearing based on record (nice to have)
 		[ ] e.g. if we update a record, it should only clear the cache for all read operations on the record
 		[ ] will need to add a new data structure to the lru cache we implemented to keep track of operation association with records
@@ -371,3 +372,6 @@
 	[ ] hash the key to have a fixed size for the key (nice to have)
 [ ] see if we can pass in a null agent_id into authorization and have it all work
 	[ ] verify that all authorization queries are valid with a null agent_id
+[ ] whitelist / blacklist symmetry?
+	[ ] should whitelist also only apply at leaf level? currently blacklist only applies at leaf level
+

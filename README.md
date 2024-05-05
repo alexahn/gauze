@@ -50,7 +50,7 @@ A GraphQL server architecture.
 ### Realms
 
 #### Abstract
-THe abstract realm contains the atomic defintions in the realm.
+The abstract realm contains the atomic defintions in the realm.
 
 #### Structure
 The structure realm contains structural information for the entities in the realm.
