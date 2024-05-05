@@ -379,3 +379,4 @@
 	[ ] the problem is that using the enums is a pain because you need to know the name of the option
 		[ ] we can introduce a naming convention, e.g. REALM__SYSTEM, AGENT_ROLE__ROOT, AGENT_ROLE__TRUNK, AGENT_ROLE__LEAF, etc
 			[ ] but it is still awkward, and it feels like it would be easier to use if we just left it as a string field but added validation on it
+	[x] add custom field validation for realm and agent_role for now

@@ -361,6 +361,7 @@ class SystemModel extends Model {
 		if (!agent.agent_id) {
 			// todo: if we want a null agent_id to represent a public user, we should comment this out?
 			throw new Error("Authorization failed: agent is missing 'agent_id' field");
+			//console.log('agent.agent_id', agent.agent_id)
 		}
 		if (!entity) {
 			throw new Error("Authorization failed: missing entity");

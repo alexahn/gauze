@@ -12,7 +12,6 @@ export {
 	GraphQLInputObjectType as INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 
 	// custom field types here
-	
 
 	// custom types here
 	DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT as DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
