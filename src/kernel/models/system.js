@@ -188,9 +188,15 @@ class SystemModel extends Model {
 		if (!agent) {
 			throw new Error("Authorization failed: missing agent");
 		}
+		if (agent.agent_id !== null && typeof agent.agent_id !== "string") {
+			throw new Error("Authorization failed: field 'agent_id' must be either null or of type string");
+		}
+		/*
+		// note: we should be able to handle a null agent_id and have all authorization logic still work
 		if (!agent.agent_id) {
 			throw new Error("Authorization failed: agent is missing 'agent_id' field");
 		}
+		*/
 		if (!entity) {
 			throw new Error("Authorization failed: missing entity");
 		}
@@ -274,10 +280,15 @@ class SystemModel extends Model {
 		if (!agent) {
 			throw new Error("Authorization failed: missing agent");
 		}
-		if (!agent.agent_id) {
-			// todo: if we want a null agent_id to represent a public user, we should comment this out?
-			//throw new Error("Authorization failed: agent is missing 'agent_id' field");
+		if (agent.agent_id !== null && typeof agent.agent_id !== "string") {
+			throw new Error("Authorization failed: field 'agent_id' must be either null or of type string");
 		}
+		/*
+		// note: authorization logic should work with a null agent_id
+		if (!agent.agent_id) {
+			throw new Error("Authorization failed: agent is missing 'agent_id' field");
+		}
+		*/
 		if (!entity) {
 			throw new Error("Authorization failed: missing entity");
 		}
@@ -358,11 +369,15 @@ class SystemModel extends Model {
 		if (!agent) {
 			throw new Error("Authorization failed: missing agent");
 		}
-		if (!agent.agent_id) {
-			// todo: if we want a null agent_id to represent a public user, we should comment this out?
-			//throw new Error("Authorization failed: agent is missing 'agent_id' field");
-			console.log("agent.agent_id", agent.agent_id);
+		if (agent.agent_id !== null && typeof agent.agent_id !== "string") {
+			throw new Error("Authorization failed: field 'agent_id' must be either null or of type string");
 		}
+		/*
+		// note: authorization logic should work with a null agent_id
+		if (!agent.agent_id) {
+			throw new Error("Authorization failed: agent is missing 'agent_id' field");
+		}
+		*/
 		if (!entity) {
 			throw new Error("Authorization failed: missing entity");
 		}
