@@ -78,6 +78,24 @@ const seed = async function (knex) {
 			gauze__relationship__to_type: "gauze__entity",
 			gauze__relationship__to_id: "00000000-0000-0000-0000-000000000004",
 		},
+		{
+			gauze__relationship__id: "00000000-0000-0000-0000-000000000009",
+			gauze__relationship__created_at: new Date(),
+			gauze__relationship__updated_at: new Date(),
+			gauze__relationship__from_type: "gauze__ytitne",
+			gauze__relationship__from_id: "00000000-0000-0000-0000-000000000001",
+			gauze__relationship__to_type: "gauze__ytitne",
+			gauze__relationship__to_id: "00000000-0000-0000-0000-000000000001",
+		},
+		{
+			gauze__relationship__id: "00000000-0000-0000-0000-0000000000010",
+			gauze__relationship__created_at: new Date(),
+			gauze__relationship__updated_at: new Date(),
+			gauze__relationship__from_type: "gauze__ytitne",
+			gauze__relationship__from_id: "00000000-0000-0000-0000-000000000001",
+			gauze__relationship__to_type: "gauze__ytitne",
+			gauze__relationship__to_id: "00000000-0000-0000-0000-000000000002",
+		},
 	]);
 };
 
