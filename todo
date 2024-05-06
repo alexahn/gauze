@@ -398,3 +398,7 @@
 				[ ] e.g. if company2 wants to use {{ entity }}.{{ company1 }}.com, then they also know the name of the graphql type so they know the structure of the data
 			[ ] com.alexahn.Entity1, com.alexahn.Entity2, etc or Entity1.alexahn.com, Entity2.alexahn.com, etc
 			[ ] graphql does not allow period in type names, so the best we can do is encode a period as three underscores (or something like this)
+			[ ] maybe the domain is implicit, and only made relevant during schema stitching by programmatic prefixing of type names with the domain?
+				[ ] but there will be ambiguity for types that are named the same, so it seems like everything should be namespaced
+		[ ] have a type resolver query at root called "name_resolver" or something
+			[ ] takes in a type name like "com.alexahn.Entity2" and returns the graphql type definition
