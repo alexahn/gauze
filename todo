@@ -403,6 +403,7 @@
 		[ ] have a type resolver query at root called "name_resolver" or something
 			[ ] takes in a type name like "com.alexahn.Entity2" and returns the graphql type definition
 		[ ] feels like interface types should be common types and concrete types should be namespaced?
-		[ ] look into nested schemas, maybe we can avoid the naming problem if we can generate schemas using schemas
-			[ ] we can have a resolver that points to another schema, as an example (whose type definitions are bound within that schema)
+		[ ] look into nested schemas, maybe we can avoid the naming problem if we can call schemas using schemas
+			[ ] as an example, we can have a resolver that evaluates another schema (whose type definitions are bound within that schema)
 				[ ] maybe we only need to associate a schema with a domain, as long as we have some domain router
+					[ ] e.g. resolve("http://localhost:4000/graphql/Gauze_Mutation")
