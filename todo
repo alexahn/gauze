@@ -407,3 +407,14 @@
 			[ ] as an example, we can have a resolver that evaluates another schema (whose type definitions are bound within that schema)
 				[ ] maybe we only need to associate a schema with a domain, as long as we have some domain router
 					[ ] e.g. resolve("http://localhost:4000/graphql/Gauze_Mutation")
+[ ] add field to abstract entity definition to exclude from graphql interface
+[ ] add field to abstract entity fields to exclude from graphql interface
+[ ] add src/application?
+[ ] create new tables and entities:
+	[ ] secret
+	[ ] session
+	[ ] proxy
+	[ ] account
+	[ ] user
+	[ ] person
+	[ ] character
