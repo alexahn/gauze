@@ -389,3 +389,7 @@
 	[ ] candidate one: wrapped jwts
 	[ ] candidate two: certificate chain
 	[ ] candidate three: one time passwords via communication channels (e.g. email or phone)
+	[ ] add a domain attribute to abstract entity definition so that entities can have a full address?
+		[ ] e.g. entity.entities.alexahn.com
+			[ ] nothing is actually hosted here, but we need a uniquely identifiable address for types of entities to form a language to exchange data
+			[ ] or maybe a certificate is hosted here
