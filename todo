@@ -396,3 +396,5 @@
 		[ ] maybe also change the name of all graphql type names to follow a similar convention so there is a one to one mapping between a type and a domain
 			[ ] this way, if you know the domain, you will be able to look for the types, and if you know the type, you know the domain
 				[ ] e.g. if company2 wants to use {{ entity }}.{{ company1 }}.com, then they also know the name of the graphql type so they know the structure of the data
+			[ ] com.alexahn.Entity1, com.alexahn.Entity2, etc or Entity1.alexahn.com, Entity2.alexahn.com, etc
+			[ ] graphql does not allow period in type names, so the best we can do is encode a period as three underscores (or something like this)
