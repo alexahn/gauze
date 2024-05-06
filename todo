@@ -418,3 +418,11 @@
 	[ ] user
 	[ ] person
 	[ ] character
+[ ] maybe aggregate account user person and character into agent
+[ ] add agent_level field to abstract entity description
+[ ] login generalized across all agents
+	[ ] src/environment/models/agent_root
+	[ ] src/environment/models/agent_account
+	[ ] src/environment/models/agent_user
+	[ ] src/environment/models/agent_person
+	[ ] src/environment/models/agent_character
