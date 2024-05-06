@@ -402,3 +402,7 @@
 				[ ] but there will be ambiguity for types that are named the same, so it seems like everything should be namespaced
 		[ ] have a type resolver query at root called "name_resolver" or something
 			[ ] takes in a type name like "com.alexahn.Entity2" and returns the graphql type definition
+		[ ] feels like interface types should be common types and concrete types should be namespaced?
+		[ ] look into nested schemas, maybe we can avoid the naming problem if we can generate schemas using schemas
+			[ ] we can have a resolver that points to another schema, as an example (whose type definitions are bound within that schema)
+				[ ] maybe we only need to associate a schema with a domain, as long as we have some domain router
