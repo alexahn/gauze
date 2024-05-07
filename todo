@@ -426,3 +426,5 @@
 	[ ] src/environment/models/agent_user
 	[ ] src/environment/models/agent_person
 	[ ] src/environment/models/agent_character
+[ ] bring back reality
+	[ ] separate sessions for different realms
