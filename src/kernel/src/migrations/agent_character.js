@@ -4,13 +4,11 @@
  */
 const up = function (knex) {
 	return Promise.all([
-		knex.schema.createTable("gauze__entity2", function (table) {
+		knex.schema.createTable("gauze__agent_character", function (table) {
 			table.uuid("id", { useBinaryUuid: true, primaryKey: true }).primary().defaultTo(knex.fn.uuid());
 			table.date("created_at").notNullable();
 			table.date("updated_at").notNullable();
 			table.date("deleted_at");
-
-			table.string("text");
 		}),
 	]);
 };
@@ -20,7 +18,7 @@ const up = function (knex) {
  * @returns { Promise<void> }
  */
 const down = function (knex) {
-	return Promise.all([knex.schema.dropTable("gauze__entity2")]);
+	return Promise.all([knex.schema.dropTable("gauze__agent_character")]);
 };
 
 export { up, down };

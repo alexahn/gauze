@@ -13,17 +13,17 @@ npx gauze delete entity ./src ./gauze/entity.js
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete blacklist
-npx gauze delete gauze ./src ./gauze/blacklist.js
+npx gauze delete gauze ./src ./src/kernel/entities/blacklist.js
 # use stage4 schema
 cp -r ./src/kernel/src/stages/stage4/* ./src/
 
 # delete whitelist
-npx gauze delete gauze ./src ./gauze/whitelist.js
+npx gauze delete gauze ./src ./src/kernel/entities/whitelist.js
 # use stage3 schema
 cp -r ./src/kernel/src/stages/stage3/* ./src/
 
 # delete relationship
-npx gauze delete gauze ./src ./gauze/relationship.js
+npx gauze delete gauze ./src ./src/kernel/entities/relationship.js
 # use stage2 schema
 cp -r ./src/kernel/src/stages/stage2/* ./src/
 
@@ -50,17 +50,57 @@ npx gauze create entity ./src ./gauze/ytitne.js
 cp -r ./src/kernel/src/stages/stage2/* ./src/
 
 # create relationship
-npx gauze create gauze ./src ./gauze/relationship.js
+npx gauze create gauze ./src ./src/kernel/src/entities/relationship.js
 # use stage3 schema
 cp -r ./src/kernel/src/stages/stage3/* ./src/
 
 # create whitelist
-npx gauze create gauze ./src ./gauze/whitelist.js
+npx gauze create gauze ./src ./src/kernel/src/entities/whitelist.js
 # use stage4 schema
 cp -r ./src/kernel/src/stages/stage4/* ./src/
 
 # create blacklist
-npx gauze create gauze ./src ./gauze/blacklist.js
+npx gauze create gauze ./src ./src/kernel/src/entities/blacklist.js
+# use stage5 schema
+cp -r ./src/kernel/src/stages/stage5/* ./src/
+
+# create secret
+npx gauze create gauze ./src ./src/kernel/src/entities/secret.js
+# use stage5 schema
+cp -r ./src/kernel/src/stages/stage5/* ./src/
+
+# create session
+npx gauze create gauze ./src ./src/kernel/src/entities/session.js
+# use stage5 schema
+cp -r ./src/kernel/src/stages/stage5/* ./src/
+
+# create proxy
+npx gauze create gauze ./src ./src/kernel/src/entities/proxy.js
+# use stage5 schema
+cp -r ./src/kernel/src/stages/stage5/* ./src/
+
+# create agent_root
+npx gauze create gauze ./src ./src/kernel/src/entities/agent_root.js
+# use stage5 schema
+cp -r ./src/kernel/src/stages/stage5/* ./src/
+
+# create agent_account
+npx gauze create gauze ./src ./src/kernel/src/entities/agent_account.js
+# use stage5 schema
+cp -r ./src/kernel/src/stages/stage5/* ./src/
+
+# create agent_user
+npx gauze create gauze ./src ./src/kernel/src/entities/agent_user.js
+# use stage5 schema
+cp -r ./src/kernel/src/stages/stage5/* ./src/
+
+# create agent_person
+npx gauze create gauze ./src ./src/kernel/src/entities/agent_person.js
+# use stage5 schema
+cp -r ./src/kernel/src/stages/stage5/* ./src/
+
+# create agent_character
+npx gauze create gauze ./src ./src/kernel/src/entities/agent_character.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 

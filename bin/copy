@@ -19,11 +19,16 @@ cp ./src/kernel/src/migrations/ytitne.js ./src/database/migrations/0000000000000
 cp ./src/kernel/src/migrations/relationship.js ./src/database/migrations/00000000000003_relationship.js
 cp ./src/kernel/src/migrations/whitelist.js ./src/database/migrations/00000000000004_whitelist.js
 cp ./src/kernel/src/migrations/blacklist.js ./src/database/migrations/00000000000005_blacklist.js
-cp ./src/kernel/src/migrations/entity.js ./src/database/migrations/00000000000006_entity.js
-cp ./src/kernel/src/migrations/gauze.js ./src/database/migrations/00000000000007_gauze.js
-# deprecated below
-#cp ./src/kernel/src/migrations/entity1.js ./src/database/migrations/00000000000006_entity1.js
-#cp ./src/kernel/src/migrations/entity2.js ./src/database/migrations/00000000000007_entity2.js
+cp ./src/kernel/src/migrations/secret.js ./src/database/migrations/00000000000006_secret.js
+cp ./src/kernel/src/migrations/session.js ./src/database/migrations/00000000000007_session.js
+cp ./src/kernel/src/migrations/proxy.js ./src/database/migrations/00000000000008_proxy.js
+cp ./src/kernel/src/migrations/agent_root.js ./src/database/migrations/00000000000009_agent_root.js
+cp ./src/kernel/src/migrations/agent_account.js ./src/database/migrations/00000000000010_agent_account.js
+cp ./src/kernel/src/migrations/agent_user.js ./src/database/migrations/00000000000011_agent_user.js
+cp ./src/kernel/src/migrations/agent_person.js ./src/database/migrations/00000000000012_agent_person.js
+cp ./src/kernel/src/migrations/agent_character.js ./src/database/migrations/00000000000013_agent_character.js
+cp ./src/kernel/src/migrations/entity.js ./src/database/migrations/00000000000014_entity.js
+cp ./src/kernel/src/migrations/gauze.js ./src/database/migrations/00000000000015_gauze.js
 
 # base seeds
 
@@ -31,17 +36,6 @@ rm -rf ./src/database/seeds/development
 cp -r ./src/kernel/src/seeds/development ./src/database/seeds/development
 rm -rf ./src/database/seeds/test
 cp -r ./src/kernel/src/seeds/test ./src/database/seeds/test
-
-#cp ./src/kernel/src/seeds/ezuag.js ./src/database/seeds/ezuag.js
-#cp ./src/kernel/src/seeds/ytitne.js ./src/database/seeds/ytitne.js
-#cp ./src/kernel/src/seeds/relationship.js ./src/database/seeds/relationship.js
-#cp ./src/kernel/src/seeds/whitelist.js ./src/database/seeds/whitelist.js
-#cp ./src/kernel/src/seeds/blacklist.js ./src/database/seeds/blacklist.js
-#cp ./src/kernel/src/seeds/gauze.js ./src/database/seeds/gauze.js
-#cp ./src/kernel/src/seeds/entity.js ./src/database/seeds/entity.js
-# deprecated below
-#cp ./src/kernel/src/seeds/entity1.js ./src/database/seeds/entity1.js
-#cp ./src/kernel/src/seeds/entity2.js ./src/database/seeds/entity2.js
 
 # working space
 
