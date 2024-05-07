@@ -407,21 +407,16 @@
 			[ ] as an example, we can have a resolver that evaluates another schema (whose type definitions are bound within that schema)
 				[ ] maybe we only need to associate a schema with a domain, as long as we have some domain router
 					[ ] e.g. resolve("http://localhost:4000/graphql/Gauze_Mutation")
-[ ] add field to abstract entity definition to exclude from graphql interface
-[ ] add field to abstract entity fields to exclude from graphql interface
-[ ] add src/application?
-[ ] create new tables and entities:
-	[ ] secret
-	[ ] session
-	[ ] proxy
-	[ ] agent_root
-	[ ] agent_account
-	[ ] agent_user
-	[ ] agent_person
-	[ ] agent_character
-[ ] maybe aggregate account user person and character into agent
-[ ] add agent_level field to abstract entity description
-[ ] login generalized across all agents
+[x] create new tables and entities:
+	[x] secret
+	[x] session
+	[x] proxy
+	[x] agent_root
+	[x] agent_account
+	[x] agent_user
+	[x] agent_person
+	[x] agent_character
+[ ] login generalized across all agents according to assert, request, verify, login flow
 	[ ] src/environment/models/agent_root
 	[ ] src/environment/models/agent_account
 	[ ] src/environment/models/agent_user
@@ -430,4 +425,11 @@
 [ ] bring back reality
 	[ ] separate sessions for different realms
 [ ] change uuid to ulid
-[ ] change src_from_base to use the entities defined in the kernel for internal entities
+[x] change src_from_base to use the entities defined in the kernel for internal entities
+[ ] update kernel stages to use new entities
+[ ] add field to abstract entity definition to exclude from graphql interface
+[ ] add field to abstract entity fields to exclude from graphql interface
+[ ] add agent_types field to method definitions for abstract entities (should be an array value of allowed agent types)
+[ ] set up environment interface, controllers, and models
+	[ ] barebones piping to get the graphql mutations working
+[ ] fix class names generated from code (there is an underscore)
