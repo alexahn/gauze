@@ -58,6 +58,7 @@ class GauzeServer {
 				const context = {};
 				context.database = self.database;
 				context.transaction = transaction;
+				context.authorization = req.headers.authorization
 				return self.$gauze.kernel.shell.graphql
 					.EXECUTE__GRAPHQL__SHELL__KERNEL({
 						schema: schema,
