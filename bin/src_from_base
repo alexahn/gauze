@@ -13,17 +13,17 @@ npx gauze delete entity ./src ./gauze/entity.js
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete blacklist
-npx gauze delete gauze ./src ./src/kernel/entities/blacklist.js
+npx gauze delete gauze ./src ./src/kernel/src/entities/blacklist.js
 # use stage4 schema
 cp -r ./src/kernel/src/stages/stage4/* ./src/
 
 # delete whitelist
-npx gauze delete gauze ./src ./src/kernel/entities/whitelist.js
+npx gauze delete gauze ./src ./src/kernel/src/entities/whitelist.js
 # use stage3 schema
 cp -r ./src/kernel/src/stages/stage3/* ./src/
 
 # delete relationship
-npx gauze delete gauze ./src ./src/kernel/entities/relationship.js
+npx gauze delete gauze ./src ./src/kernel/src/entities/relationship.js
 # use stage2 schema
 cp -r ./src/kernel/src/stages/stage2/* ./src/
 
