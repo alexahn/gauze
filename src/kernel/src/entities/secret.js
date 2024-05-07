@@ -101,7 +101,7 @@ export default function ($abstract) {
 				deserializers: [],
 				post_deserialize_middlewares: [],
 			},
-			gauze__secret__king: {
+			gauze__secret__kind: {
 				name: "gauze__secret__kind",
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
