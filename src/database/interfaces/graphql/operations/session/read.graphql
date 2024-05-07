@@ -1,0 +1,34 @@
+query ReadSession(
+	$where: Session_Query__Attributes
+	$where_in: Session_Query__Attributes_Array
+	$where_not_in: Session_Query__Attributes_Array
+	$limit: Int
+	$offset: Int
+	$order: String
+	$order_direction: String
+	$order_nulls: String
+) {
+	read_session(
+		where: $where
+		where_in: $where_in
+		where_not_in: $where_not_in
+		limit: $limit
+		offset: $offset
+		order: $order
+		order_direction: $order_direction
+		order_nulls: $order_nulls
+	) {
+		attributes {
+			gauze__session__id
+			gauze__session__created_at
+			gauze__session__updated_at
+			gauze__session__deleted_at
+			gauze__session__realm
+			gauze__session__agent_id
+			gauze__session__agent_type
+			gauze__session__value
+			gauze__session__kind
+			gauze__session__data
+		}
+	}
+}

@@ -1,0 +1,28 @@
+import * as $structure from "./../../../../structure/index.js";
+
+import { READ__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE } from "./../queries/agent_account.js";
+import {
+	CREATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+	UPDATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+	DELETE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+} from "./../mutations/agent_account.js";
+
+const CONNECTION__AGENT_ACCOUNT__ENTITY__GRAPHQL__INTERFACE__DATABASE = {
+	query_relationships: $structure.entities.agent_account.database.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
+	mutation_relationships: $structure.entities.agent_account.database.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
+	query_query: $structure.entities.agent_account.database.graphql.QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
+	mutation_mutation: $structure.entities.agent_account.database.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
+};
+
+const METHODS__AGENT_ACCOUNT__ENTITY__GRAPHQL__INTERFACE__DATABASE = {
+	query: {
+		read_agent_account: READ__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE,
+	},
+	mutation: {
+		create_agent_account: CREATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		update_agent_account: UPDATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		delete_agent_account: DELETE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+	},
+};
+
+export { CONNECTION__AGENT_ACCOUNT__ENTITY__GRAPHQL__INTERFACE__DATABASE, METHODS__AGENT_ACCOUNT__ENTITY__GRAPHQL__INTERFACE__DATABASE };

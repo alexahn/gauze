@@ -1,0 +1,10 @@
+mutation CreateAgent_Root($attributes: Agent_Root_Mutation__Attributes) {
+	create_agent_root(attributes: $attributes) {
+		attributes {
+			gauze__agent_root__id
+			gauze__agent_root__created_at
+			gauze__agent_root__updated_at
+			gauze__agent_root__deleted_at
+		}
+	}
+}

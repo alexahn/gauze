@@ -1,0 +1,30 @@
+mutation UpdateAgent_User(
+	$attributes: Agent_User_Mutation__Attributes
+	$where: Agent_User_Mutation__Attributes
+	$where_in: Agent_User_Mutation__Attributes_Array
+	$where_not_in: Agent_User_Mutation__Attributes_Array
+	$limit: Int
+	$offset: Int
+	$order: String
+	$order_direction: String
+	$order_nulls: String
+) {
+	update_agent_user(
+		attributes: $attributes
+		where_in: $where_in
+		where_not_in: $where_not_in
+		where: $where
+		limit: $limit
+		offset: $offset
+		order: $order
+		order_direction: $order_direction
+		order_nulls: $order_nulls
+	) {
+		attributes {
+			gauze__agent_user__id
+			gauze__agent_user__created_at
+			gauze__agent_user__updated_at
+			gauze__agent_user__deleted_at
+		}
+	}
+}

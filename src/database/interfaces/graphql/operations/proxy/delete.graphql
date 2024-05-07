@@ -1,0 +1,31 @@
+mutation DeleteProxy(
+	$where: Proxy_Mutation__Attributes
+	$where_in: Proxy_Mutation__Attributes_Array
+	$where_not_in: Proxy_Mutation__Attributes_Array
+	$limit: Int
+	$offset: Int
+	$order: String
+	$order_direction: String
+	$order_nulls: String
+) {
+	delete_proxy(
+		where: $where
+		where_in: $where_in
+		where_not_in: $where_not_in
+		limit: $limit
+		offset: $offset
+		order: $order
+		order_direction: $order_direction
+		order_nulls: $order_nulls
+	) {
+		attributes {
+			gauze__proxy__id
+			gauze__proxy__created_at
+			gauze__proxy__updated_at
+			gauze__proxy__deleted_at
+			gauze__proxy__agent_id
+			gauze__proxy__agent_type
+			gauze__proxy__root_id
+		}
+	}
+}

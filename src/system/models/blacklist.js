@@ -11,7 +11,6 @@ class BlacklistSystemModel extends $kernel.models.access.AccessSystemModel {
 	create(context, parameters) {
 		const self = this;
 		var { agent_id = null } = context;
-		// todo: remove this parameters proxy once we set up user authentication
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication

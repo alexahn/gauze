@@ -1,0 +1,3 @@
+#!/bin/zsh
+
+cp ./src/kernel/src/stages/stage$1/* src/

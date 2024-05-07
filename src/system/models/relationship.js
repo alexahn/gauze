@@ -11,7 +11,6 @@ class RelationshipSystemModel extends $kernel.models.relationship.RelationshipSy
 	create(context, parameters) {
 		const self = this;
 		var { agent_id = null } = context;
-		// todo: remove this parameters proxy once we set up user authentication
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication

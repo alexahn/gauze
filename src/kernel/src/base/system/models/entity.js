@@ -11,7 +11,6 @@ class ba381b0cc764c4c9a187b716ae94ed96SystemModel extends $kernel.models.system.
 	create(context, parameters) {
 		const self = this;
 		var { agent_id = null } = context;
-		// todo: remove this parameters proxy once we set up user authentication
 		const realm = {
 			agent: {
 				// todo: remove this parameters proxy once we set up user authentication

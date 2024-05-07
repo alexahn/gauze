@@ -1,0 +1,10 @@
+mutation CreateAgent_User($attributes: Agent_User_Mutation__Attributes) {
+	create_agent_user(attributes: $attributes) {
+		attributes {
+			gauze__agent_user__id
+			gauze__agent_user__created_at
+			gauze__agent_user__updated_at
+			gauze__agent_user__deleted_at
+		}
+	}
+}
