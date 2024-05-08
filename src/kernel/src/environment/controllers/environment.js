@@ -40,6 +40,9 @@ class EnvironmentController {
 			if all required verifications have passed, then create a proxy
 			call an operation that will create root, account, user, person, character
 		*/
+		// the only part that is special logic is creating the salt and hash and create a secret that is associated with agent_account
+		// also delete parameters.agent_account.password after we are done with it
+		
 		return {};
 	}
 	enter_session(context, parameters) {

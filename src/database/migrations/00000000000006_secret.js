@@ -15,6 +15,7 @@ const up = function (knex) {
 			table.uuid("gauze__secret__agent_id").notNullable();
 			table.string("gauze__secret__value", 512).notNullable();
 			table.string("gauze__secret__kind", 16).notNullable();
+			table.string("gauze__secret__name", 32).notNullable();
 
 			table.index("gauze__secret__realm");
 			table.index("gauze__secret__agent_type");
