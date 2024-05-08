@@ -3,6 +3,8 @@ const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
 import http from "http";
 
+import * as jose from "jose";
+
 class GauzeServer {
 	// note: config takes the command argv structure (src/command/commands/run/server.js)
 	constructor({ $gauze }, config) {
@@ -39,14 +41,40 @@ class GauzeServer {
 				return this.create_graphql_handler($gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM, req, res);
 			} else if (req.url.startsWith("/environment/graphql")) {
 				// parse environment jwt here
-				return this.create_graphql_handler($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res);
+				var environment_jwt = null;
+				const environment_auth = req.headers.authorization;
+				if (environment_auth) {
+					const environment_auth_split = environment_auth.split(" ");
+					if (environment_auth_split[0] === "Bearer") {
+						environment_jwt = environment_auth_split[1];
+					}
+				}
+				const secret = new TextEncoder().encode(process.env.GAUZE_ENVIRONMENT_JWT_SECRET);
+				return jose
+					.jwtVerify(environment_jwt, secret, {
+						issuer: "gauze",
+						//audience: 'urn:example:audience',
+					})
+					.then(function ({ payload, protectedHeader }) {
+						// agent is payload
+						const agent = payload;
+						console.log("agent", agent);
+						return self.create_graphql_handler($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
+					})
+					.catch(function (error) {
+						// agent is null
+						const agent = null;
+						console.log("agent", agent);
+						return self.create_graphql_handler($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
+					});
+				//return this.create_graphql_handler($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
 			} else {
 				res.writeHead(404).end();
 			}
 		});
 		return this;
 	}
-	create_graphql_handler(schema, req, res) {
+	create_graphql_handler(schema, req, res, agent) {
 		var body = "";
 		var self = this;
 		req.on("data", function (chunk) {
@@ -56,13 +84,16 @@ class GauzeServer {
 			try {
 				var parsed = JSON.parse(body);
 			} catch (err) {
-				red.end(JSON.stringify(err));
+				res.writeHead(400, "Bad Request", {
+					"content-type": "application/json; charset=utf-8",
+				}).end(JSON.stringify(err));
+				return;
 			}
 			return self.database.transaction(function (transaction) {
 				const context = {};
 				context.database = self.database;
 				context.transaction = transaction;
-				context.authorization = req.headers.authorization;
+				context.agent = agent;
 				return self.$gauze.kernel.shell.graphql
 					.EXECUTE__GRAPHQL__SHELL__KERNEL({
 						schema: schema,

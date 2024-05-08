@@ -433,3 +433,5 @@
 [ ] set up environment interface, controllers, and models
 	[ ] barebones piping to get the graphql mutations working
 [ ] fix class names generated from code (there is an underscore)
+[ ] put all auth functions into a central location so it is easy to use
+	[ ] should be a simple interface: authenticate(req) -> agent

@@ -44,6 +44,7 @@ class EnvironmentController {
 			the current session must be the proxy or null session for this to complete
 			use the agent argument to generate an isolated session for the agent
 		*/
+		console.log("context.agent", context.agent);
 		if (parameters.agent) {
 			// fetch the session according to session id in jwt
 			// check that it is proxy type
@@ -51,11 +52,12 @@ class EnvironmentController {
 			// if a record is found, then create a system realm session
 		} else {
 			const session_id = uuidv4();
-			// create an environment session (agent_type and agent_id are null)
 			const seed = randomBytes(64).toString("hex");
 			// convert seed to hexadecimal or base64
-			const secret = new TextEncoder().encode(seed);
-			const alg = "HS256";
+			const secret = new TextEncoder().encode(process.env.GAUZE_ENVIRONMENT_JWT_SECRET);
+			const header = {
+				alg: "HS256",
+			};
 			const payload = {
 				proxy_id: null,
 				agent_id: null,
@@ -63,51 +65,48 @@ class EnvironmentController {
 				session_id: session_id,
 				seed: seed,
 			};
-			new jose.SignJWT(payload)
-				.setProtectedHeader({ alg })
-				.setIssuedAt()
-				.setIssuer("gauze")
-				//.setAudience('urn:example:audience')
-				.setExpirationTime("2h")
-				.sign(secret)
-				.then(function (jwt) {
-					console.log("jwt", jwt);
-					const operation = fs.readFileSync(path.resolve(import.meta.dirname, "./operations/session_create.graphql"), {
-						encoding: "utf8",
-					});
-					return $kernel.shell.graphql
-						.EXECUTE__GRAPHQL__SHELL__KERNEL({
-							schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
-							context: context,
-							operation: operation,
-							operation_name: "CreateSession",
-							operation_variables: {
-								attributes: {
-									gauze__session__id: session_id,
-									gauze__session__agent_type: null,
-									gauze__session__agent_id: null,
-									gauze__session__realm: "environment",
-									gauze__session__value: jwt,
-									gauze__session__kind: "agent",
-									gauze__session__data: "",
-									gauze__session__seed: "123",
-								},
-							},
-						})
-						.then(function (data) {
-							console.log("reached");
-							if (data.errors && data.errors.length) {
-								console.log("errors", data.errors);
-								throw data.errors;
-							} else {
-								console.log("data.data", data.data);
-								return data.data.create_session[0];
-							}
+			return (
+				new jose.SignJWT(payload)
+					.setProtectedHeader(header)
+					.setIssuedAt()
+					.setIssuer("gauze")
+					//.setAudience('urn:example:audience')
+					.setExpirationTime("2h")
+					.sign(secret)
+					.then(function (jwt) {
+						console.log("jwt", jwt);
+						const operation = fs.readFileSync(path.resolve(import.meta.dirname, "./operations/session_create.graphql"), {
+							encoding: "utf8",
 						});
-				})
-				.catch(function (err) {
-					console.log(err);
-				});
+						return $kernel.shell.graphql
+							.EXECUTE__GRAPHQL__SHELL__KERNEL({
+								schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
+								context: context,
+								operation: operation,
+								operation_name: "CreateSession",
+								operation_variables: {
+									attributes: {
+										gauze__session__id: session_id,
+										gauze__session__agent_type: null,
+										gauze__session__agent_id: null,
+										gauze__session__realm: "environment",
+										gauze__session__value: jwt,
+										gauze__session__kind: "agent",
+										gauze__session__data: "",
+										gauze__session__seed: seed,
+									},
+								},
+							})
+							.then(function (data) {
+								if (data.errors && data.errors.length) {
+									throw data.errors;
+								} else {
+									console.log("data.data", JSON.stringify(data.data, null, 4));
+									return data.data.create_session[0].attributes;
+								}
+							});
+					})
+			);
 		}
 	}
 	exit_session(context, parameters) {
