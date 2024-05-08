@@ -30,6 +30,30 @@ const VERIFY_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT = function (jwt) {
 	});
 };
 
+const AUTHENTICATE_ENVIRONMENT__AUTHENTICATION__ENVIRONMENT = function (req) {
+	// parse the header to extract the token
+	var jwt = null;
+	const auth = req.headers.authorization;
+	if (auth) {
+		const auth_split = auth.split(" ");
+		if (auth_split[0] === "Bearer") {
+			jwt = auth_split[1];
+			return VERIFY_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT(jwt)
+				.then(function ({ payload }) {
+					return payload;
+				})
+				.catch(function (err) {
+					// note: maybe log?
+					return null;
+				});
+		} else {
+			return Promise.resolve(null);
+		}
+	} else {
+		return Promise.resolve(null);
+	}
+};
+
 const SYSTEM_JWT_ISSUER = "gauze";
 
 // note: the unwrapped jwt should have an audience that is the resource server
@@ -54,9 +78,35 @@ const VERIFY_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT = function (jwt) {
 	});
 };
 
+const AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT = function (req) {
+	// parse the header to extract the token
+	var jwt = null;
+	const auth = req.headers.authorization;
+	if (auth) {
+		const auth_split = auth.split(" ");
+		if (auth_split[0] === "Bearer") {
+			jwt = auth_split[1];
+			return VERIFY_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT(jwt)
+				.then(function ({ payload }) {
+					return payload;
+				})
+				.catch(function (err) {
+					// note: maybe log?
+					return null;
+				});
+		} else {
+			return Promise.resolve(null);
+		}
+	} else {
+		return Promise.resolve(null);
+	}
+};
+
 export {
 	SIGN_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT,
 	VERIFY_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT,
+	AUTHENTICATE_ENVIRONMENT__AUTHENTICATION__ENVIRONMENT,
 	SIGN_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT,
 	VERIFY_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT,
+	AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT,
 };
