@@ -134,7 +134,11 @@ class EnvironmentController {
 		// also delete parameters.agent_account.password after we are done with it
 		// create relationships at the end for everything
 		if (!parameters.agent_account || !parameters.agent_account.gauze__agent_account__password) throw new Error("Field 'agent_account.password' is required");
-		// generate a salt here using crypto.randomBytes
+
+		// todo: get the session by the session id in agent and check the data field
+		// check that all data requirements have passed, e.g. verifying email since we have a unique constraint on email
+		// we can require that the data json to require something like { verify: [{ source: "person.email" }] }
+
 		const salt = randomBytes(128).toString("hex");
 		return new Promise(function (resolve, reject) {
 			// 64 byte length hash generated
