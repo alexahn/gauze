@@ -8,6 +8,12 @@ const { randomBytes } = await import("node:crypto");
 import * as jose from "jose";
 import { v4 as uuidv4 } from "uuid";
 
+import { SIGN_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT, SIGN_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT } from "./../authentication.js";
+
+import { MODEL__SECRET__MODEL__ENVIRONMENT } from "./../models/secret.js";
+import { MODEL__SESSION__MODEL__ENVIRONMENT } from "./../models/session.js";
+import { MODEL__PROXY__MODEL__ENVIRONMENT } from "./../models/proxy.js";
+
 class EnvironmentController {
 	constructor() {}
 	signin(context, parameters) {
@@ -54,10 +60,12 @@ class EnvironmentController {
 			const session_id = uuidv4();
 			const seed = randomBytes(64).toString("hex");
 			// convert seed to hexadecimal or base64
+			/*
 			const secret = new TextEncoder().encode(process.env.GAUZE_ENVIRONMENT_JWT_SECRET);
 			const header = {
 				alg: "HS256",
 			};
+			*/
 			const payload = {
 				proxy_id: null,
 				agent_id: null,
@@ -65,6 +73,22 @@ class EnvironmentController {
 				session_id: session_id,
 				seed: seed,
 			};
+			return SIGN_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT(payload).then(function (jwt) {
+				const attributes = {
+					gauze__session__id: session_id,
+					gauze__session__agent_type: null,
+					gauze__session__agent_id: null,
+					gauze__session__realm: "environment",
+					gauze__session__value: jwt,
+					gauze__session__kind: "agent",
+					gauze__session__data: "",
+					gauze__session__seed: seed,
+				};
+				return MODEL__SESSION__MODEL__ENVIRONMENT.create(context, { attributes }).then(function (data) {
+					return data[0];
+				});
+			});
+			/*
 			return (
 				new jose.SignJWT(payload)
 					.setProtectedHeader(header)
@@ -107,6 +131,7 @@ class EnvironmentController {
 							});
 					})
 			);
+			*/
 		}
 	}
 	exit_session(context, parameters) {

@@ -110,42 +110,42 @@ npx gauze create gauze ./src ./src/kernel/src/entities/blacklist.js
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # create secret
-npx gauze create gauze ./src ./src/kernel/src/entities/secret.js
+npx gauze create entity ./src ./src/kernel/src/entities/secret.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # create session
-npx gauze create gauze ./src ./src/kernel/src/entities/session.js
+npx gauze create entity ./src ./src/kernel/src/entities/session.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # create proxy
-npx gauze create gauze ./src ./src/kernel/src/entities/proxy.js
+npx gauze create entity ./src ./src/kernel/src/entities/proxy.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # create agent_root
-npx gauze create gauze ./src ./src/kernel/src/entities/agent_root.js
+npx gauze create entity ./src ./src/kernel/src/entities/agent_root.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # create agent_account
-npx gauze create gauze ./src ./src/kernel/src/entities/agent_account.js
+npx gauze create entity ./src ./src/kernel/src/entities/agent_account.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # create agent_user
-npx gauze create gauze ./src ./src/kernel/src/entities/agent_user.js
+npx gauze create entity ./src ./src/kernel/src/entities/agent_user.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # create agent_person
-npx gauze create gauze ./src ./src/kernel/src/entities/agent_person.js
+npx gauze create entity ./src ./src/kernel/src/entities/agent_person.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # create agent_character
-npx gauze create gauze ./src ./src/kernel/src/entities/agent_character.js
+npx gauze create entity ./src ./src/kernel/src/entities/agent_character.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 

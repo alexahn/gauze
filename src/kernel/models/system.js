@@ -511,14 +511,8 @@ class SystemModel extends Model {
 	}
 	_root_create(context, parameters, realm) {
 		const self = this;
-		//const { source } = context;
 		const { agent, entity, operation } = realm;
 		entity.entity_method = "create";
-		/*
-		if (source && source._metadata) {
-			parameters.parent = source._metadata;
-		}
-		*/
 		// note: our architecture requires that the key is a uuid
 		if (!parameters.attributes[self.entity.primary_key]) {
 			parameters.attributes[self.entity.primary_key] = uuidv4();
@@ -608,14 +602,8 @@ class SystemModel extends Model {
 	}
 	_root_read(context, parameters, realm) {
 		const self = this;
-		//const { source } = context;
 		const { agent, entity, operation } = realm;
 		entity.entity_method = "read";
-		/*
-		if (source && source._metadata) {
-			parameters.parent = source._metadata;
-		}
-		*/
 		return self.authorized_execute(context, parameters, agent, entity, operation);
 	}
 	_read(context, parameters, realm) {
@@ -629,14 +617,8 @@ class SystemModel extends Model {
 	}
 	_root_update(context, parameters, realm) {
 		const self = this;
-		//const { source } = context;
 		const { agent, entity, operation } = realm;
 		entity.entity_method = "update";
-		/*
-		if (source && source._metadata) {
-			parameters.parent = source._metadata;
-		}
-		*/
 		return self.authorized_execute(context, parameters, agent, entity, operation);
 	}
 	_update(context, parameters, realm) {
@@ -650,14 +632,8 @@ class SystemModel extends Model {
 	}
 	_root_delete(context, parameters, realm) {
 		const self = this;
-		//const { source } = context;
 		const { agent, entity, operation } = realm;
 		entity.entity_method = "delete";
-		/*
-		if (source && source._metadata) {
-			parameters.parent = source._metadata;
-		}
-		*/
 		return self.authorized_execute(context, parameters, agent, entity, operation);
 	}
 	_delete(context, parameters, realm) {
