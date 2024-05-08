@@ -435,3 +435,4 @@
 [ ] fix class names generated from code (there is an underscore)
 [ ] put all auth functions into a central location so it is easy to use
 	[ ] should be a simple interface: authenticate(req) -> agent
+[ ] update delete methods to delete relationships in kernel database model
