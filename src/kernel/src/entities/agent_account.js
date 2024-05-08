@@ -56,7 +56,7 @@ export default function ($abstract) {
 			gauze__agent_account__password: {
 				name: "gauze__agent_account__password",
 				sql_type: "string",
-				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "password",
 				pre_serialize_middlewares: [],
 				serializers: [],
