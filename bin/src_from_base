@@ -5,76 +5,91 @@ set -e
 # delete gauze
 npx gauze delete gauze ./src ./gauze/gauze.js
 # use stage6 schema
+rm -rf ./src/environment
 cp -r ./src/kernel/src/stages/stage6/* ./src/
 
 # delete entity
 npx gauze delete entity ./src ./gauze/entity.js
 # use stage5 schema
+rm -rf ./src/environment
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete agent_character
 npx gauze delete gauze ./src ./src/kernel/src/entities/agent_character.js
 # use stage5 schema
+rm -rf ./src/environment
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete agent_person
 npx gauze delete gauze ./src ./src/kernel/src/entities/agent_person.js
 # use stage5 schema
+rm -rf ./src/environment
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete agent_user
 npx gauze delete gauze ./src ./src/kernel/src/entities/agent_user.js
 # use stage5 schema
+rm -rf ./src/environment
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete agent_account
 npx gauze delete gauze ./src ./src/kernel/src/entities/agent_account.js
 # use stage5 schema
+rm -rf ./src/environment
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete agent_root
 npx gauze delete gauze ./src ./src/kernel/src/entities/agent_root.js
 # use stage5 schema
+rm -rf ./src/environment
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete proxy
 npx gauze delete gauze ./src ./src/kernel/src/entities/proxy.js
 # use stage5 schema
+rm -rf ./src/environment
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete session
 npx gauze delete gauze ./src ./src/kernel/src/entities/session.js
 # use stage5 schema
+rm -rf ./src/environment
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete secret
 npx gauze delete gauze ./src ./src/kernel/src/entities/secret.js
 # use stage5 schema
+rm -rf ./src/environment
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete blacklist
 npx gauze delete gauze ./src ./src/kernel/src/entities/blacklist.js
 # use stage4 schema
+rm -rf ./src/environment
 cp -r ./src/kernel/src/stages/stage4/* ./src/
 
 # delete whitelist
 npx gauze delete gauze ./src ./src/kernel/src/entities/whitelist.js
 # use stage3 schema
+rm -rf ./src/environment
 cp -r ./src/kernel/src/stages/stage3/* ./src/
 
 # delete relationship
 npx gauze delete gauze ./src ./src/kernel/src/entities/relationship.js
 # use stage2 schema
+rm -rf ./src/environment
 cp -r ./src/kernel/src/stages/stage2/* ./src/
 
 # delete ytitne
 npx gauze delete gauze ./src ./gauze/ytitne.js
 # use stage1 schema
+rm -rf ./src/environment
 cp -r ./src/kernel/src/stages/stage1/* ./src/
 
 # delete ezuag
 npx gauze delete gauze ./src ./gauze/ezuag.js
 # use stage0 schema
+rm -rf ./src/environment
 cp -r ./src/kernel/src/stages/stage0/* ./src/
 
 ##########################################################
@@ -153,6 +168,8 @@ cp -r ./src/kernel/src/stages/stage6/* ./src/
 npx gauze create gauze ./src ./gauze/gauze.js
 # use stage7 schema
 cp -r ./src/kernel/src/stages/stage7/* ./src/
+
+cp -r ./src/kernel/src/environment/* ./src/environment/
 
 ##########################################################
 
