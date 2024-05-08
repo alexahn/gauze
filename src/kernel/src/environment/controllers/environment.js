@@ -43,17 +43,17 @@ class EnvironmentController {
 		// the only part that is special logic is creating the salt and hash and create a secret that is associated with agent_account
 		// also delete parameters.agent_account.password after we are done with it
 		// create relationships at the end for everything
-		if (!parameters.agent_account || !parameters.agent_account.password) throw new Error("Field 'agent_account.password' is required")
+		if (!parameters.agent_account || !parameters.agent_account.password) throw new Error("Field 'agent_account.password' is required");
 		// generate a salt here using crypto.randomBytes
 		const salt = randomBytes(64).toString("hex");
 		return new Promise(function (reject, resolve) {
 			// 64 byte length hash generated
-			pbkdf2(parameters.agent_account.password, salt, 131072, 64, 'sha512', function (err, hash) {
-				if (err) return reject(err)
-				console.log('hash', hash)
-				return {}
-			})
-		})
+			pbkdf2(parameters.agent_account.password, salt, 131072, 64, "sha512", function (err, hash) {
+				if (err) return reject(err);
+				console.log("hash", hash);
+				return {};
+			});
+		});
 		//return {};
 	}
 	enter_session(context, parameters) {

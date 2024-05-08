@@ -25,6 +25,7 @@ query ReadAgent_Account(
 			gauze__agent_account__created_at
 			gauze__agent_account__updated_at
 			gauze__agent_account__deleted_at
+			gauze__agent_account__password
 		}
 	}
 }

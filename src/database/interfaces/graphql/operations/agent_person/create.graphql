@@ -16,6 +16,7 @@ mutation CreateAgent_Person(
 			gauze__agent_person__created_at
 			gauze__agent_person__updated_at
 			gauze__agent_person__deleted_at
+			gauze__agent_person__email
 		}
 		mutation {
 			create_whitelist: create_whitelist(attributes: $whitelist_create) {
