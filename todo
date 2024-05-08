@@ -379,7 +379,8 @@
 			[ ] but it is still awkward, and it feels like it would be easier to use if we just left it as a string field but added validation on it
 	[x] add custom field validation for realm and agent_role for now
 [ ] basic authentication and session management so we have the concept of a user
-	[ ] account table (look at how passport and nextjs auth create their tables)
+	[x] account table (look at how passport and nextjs auth create their tables)
+		[x] we designed our own
 	[ ] proxy graphiql via server
 	[ ] use a higher level http server (express, fastify, koa, etc) ?
 		[ ] url and routes
@@ -416,30 +417,40 @@
 	[x] agent_user
 	[x] agent_person
 	[x] agent_character
-[ ] login generalized across all agents according to assert, request, verify, login flow
-	[ ] src/environment/models/agent_root
-	[ ] src/environment/models/agent_account
-	[ ] src/environment/models/agent_user
-	[ ] src/environment/models/agent_person
-	[ ] src/environment/models/agent_character
-[ ] bring back reality
-	[ ] separate sessions for different realms
+[x] login generalized across all agents according to assert, request, verify, login flow
+	[x] src/environment/models/agent_root
+	[x] src/environment/models/agent_account
+	[x] src/environment/models/agent_user
+	[x] src/environment/models/agent_person
+	[x] src/environment/models/agent_character
+[x] authentication flow
+	[x] jwt for each realm
+	[x] jwt payload is the store for agent information
+	[x] signup
+	[x] create anonymous session to handle authentication
+		[x] assert person email
+		[x] verify account password
+	[x] enter session for non null agent
+[ ] bring back reality realm?
+	[x] separate sessions for different realms
 [ ] change uuid to ulid
 [x] change src_from_base to use the entities defined in the kernel for internal entities
-[ ] update kernel stages to use new entities
+[x] update kernel stages to use new entities
 [ ] add field to abstract entity definition to exclude from graphql interface
 [ ] add field to abstract entity fields to exclude from graphql interface
 [ ] add agent_types field to method definitions for abstract entities (should be an array value of allowed agent types)
-[ ] set up environment interface, controllers, and models
-	[ ] barebones piping to get the graphql mutations working
+[x] set up environment interface, controllers, and models
+	[x] barebones piping to get the graphql mutations working
 [ ] fix class names generated from code (there is an underscore)
-[ ] put all auth functions into a central location so it is easy to use
-	[ ] should be a simple interface: authenticate(req) -> agent
+[x] put all auth functions into a central location so it is easy to use
+	[x] should be a simple interface: authenticate(req) -> agent
 [ ] update delete methods to delete relationships in kernel database model
-[ ] think about whether or not we want to make all associations to agent root instead of proxy root for sessions and secrets
-	[ ] it allows a simpler authentication architecture since we can change the jwt audience for the proxy session to be environment
-	[ ] but it causes more indirection in environment controllers because we need to use the agent root instead of proxy root
-		[ ] we could just add agent_root_id to the jwts
-	[ ] maybe not, because proxy has to be a system audience/realm authentication so that we can query the system interface
-		[ ] e.g. if we want to display the available proxies
+[-] think about whether or not we want to make all associations to agent root instead of proxy root for sessions and secrets
+	[-] it allows a simpler authentication architecture since we can change the jwt audience for the proxy session to be environment
+	[-] but it causes more indirection in environment controllers because we need to use the agent root instead of proxy root
+		[-] we could just add agent_root_id to the jwts
+	[x] maybe not, because proxy has to be a system audience/realm authentication so that we can query the system interface
+		[x] e.g. if we want to display the available proxies
 [ ] think about some defensive programming strategies to handle the lack of one to one constraints and other similar structural ambiguities
+[ ] update system to use the agent parsed from the jwt
+	[ ] update all tests to use the new agent structure
