@@ -15,30 +15,44 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 		});
 		self.operation_create_environment_session_name = "CreateEnvironmentSession";
 	}
-	validate_environment_data(data) {
+	validate_environment_data(serialized) {
+		var data = {};
+		try {
+			data = JSON.parse(serialized) || {};
+		} catch (error) {
+			// ignore
+		}
 		Object.keys(data).forEach(function (key) {
 			const value = data[key];
 			if (key === "assert") {
 				if (typeof value !== "string") throw new Error("Session data field 'assert' must be of type string");
 			} else if (key === "request") {
-				Object.keys(value).forEach(function (subkey) {
-					const subvalue = value[subkey];
-					if (subkey === "source") {
-						if (typeof subvalue !== "string") throw new Error("Session data field 'request.source' must be of type string");
-					} else if (subkey === "code") {
-						if (typeof subvalue !== "string") throw new Error("Session data field 'request.code' must be of type string");
-					} else {
-						throw new Error(`Session data field 'request.${subkey}' is not an allowed field, must be either 'request.source' or 'request.code'`);
-					}
+				if (typeof value !== "object") throw new Error("Session data field 'request' must be of type object");
+				if (typeof value.length !== "number") throw new Error("Session data field 'request' must be of type array");
+				value.forEach(function (item) {
+					Object.keys(item).forEach(function (subkey) {
+						const subvalue = item[subkey];
+						if (subkey === "source") {
+							if (typeof subvalue !== "string") throw new Error("Session data field 'request.source' must be of type string");
+						} else if (subkey === "code") {
+							if (typeof subvalue !== "string") throw new Error("Session data field 'request.code' must be of type string");
+						} else {
+							throw new Error(`Session data field 'request.${subkey}' is not an allowed field, must be either 'request.source' or 'request.code'`);
+						}
+					});
 				});
 			} else if (key === "verify") {
-				Object.keys(value).forEach(function (subkey) {
-					const subvalue = value[subkey];
-					if (subkey === "source") {
-						if (typeof subvalue !== "string") throw new Error("Session data field 'verify.source' must be of type string");
-					} else {
-						throw new Error(`Session data field 'verify.${subkey}' is not an allowed field, must be 'verify.source'`);
-					}
+				if (typeof value !== "object") throw new Error("Session data field 'verify' must be of type object");
+				if (typeof value.length !== "number") throw new Error("Session data field 'verify' must be of type array");
+				value.forEach(function (item) {
+					Object.keys(item).forEach(function (subkey) {
+						const subvalue = item[subkey];
+						if (subkey === "source") {
+							if (typeof subvalue !== "string") throw new Error("Session data field 'verify.source' must be of type string");
+						} else {
+							throw new Error(`Session data field 'verify.${subkey}' is not an allowed field, must be 'verify.source'`);
+						}
+					});
 				});
 			} else {
 				throw new Error(`Session data field '${key}' is not an allowed field, must be either 'assert', 'request', or 'verify'`);
@@ -58,6 +72,7 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 				operation_name: self.operation_create_environment_session_name,
 			},
 		};
+		self.validate_environment_data(parameters.attributes.gauze__session__data);
 		return self._create(context, parameters, realm).then(function (data) {
 			return data.data.create_session.map(function (row) {
 				return row.attributes;
@@ -77,6 +92,7 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 				operation_name: $database.interfaces.graphql.operations.session.CREATE_NAME__SESSION__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
+		self.validate_environment_data(parameters.attributes.gauze__session__data);
 		return self._create(context, parameters, realm).then(function (data) {
 			return data.data.create_session.map(function (row) {
 				return row.attributes;
@@ -115,6 +131,7 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 				operation_name: $database.interfaces.graphql.operations.session.UPDATE_NAME__SESSION__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
+		self.validate_environment_data(parameters.attributes.gauze__session__data);
 		return self._update(context, parameters, realm).then(function (data) {
 			return data.data.update_session.map(function (row) {
 				return row.attributes;

@@ -111,6 +111,53 @@ class AgentAccountController {
 					})
 					.then(function (collection) {
 						if (collection) {
+							const { session } = collection;
+							var parsed_data;
+							try {
+								parsed_data = JSON.parse(session.gauze__session__data);
+							} catch (error) {
+								// note: log?
+								parsed_data = {};
+							}
+							if (parsed_data.verify) {
+								parsed_data.verify.push({
+									source: "account.password",
+								});
+							} else {
+								parsed_data.verify = [
+									{
+										source: "account.password",
+									},
+								];
+							}
+							const serialized_data = JSON.stringify(parsed_data);
+							// update session data
+							const session_where = {
+								gauze__session__id: agent.session_id,
+							};
+							const session_attributes = {
+								gauze__session__data: serialized_data,
+							};
+							const session_parameters = { where: session_where, attributes: session_attributes };
+							return MODEL__SESSION__MODEL__ENVIRONMENT.update(context, session_parameters).then(function (sessions) {
+								if (sessions && sessions.length) {
+									const updated_session = sessions[0];
+									return {
+										...collection,
+										updated_session: updated_session,
+									};
+								} else {
+									return null;
+								}
+							});
+						} else {
+							return {
+								success: false,
+							};
+						}
+					})
+					.then(function (collection) {
+						if (collection) {
 							// all passed
 							return {
 								success: true,
