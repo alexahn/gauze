@@ -10,6 +10,7 @@ mutation CreateSession($attributes: Session_Mutation__Attributes) {
 			gauze__session__agent_type
 			gauze__session__value
 			gauze__session__kind
+			gauze__session__seed
 			gauze__session__data
 		}
 	}
