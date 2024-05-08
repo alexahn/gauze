@@ -75,25 +75,25 @@ const ENVIRONMENT__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new 
 		signup: {
 			type: SESSION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			args: {
-				root: {
+				agent_root: {
 					type: INPUT_AGENT_ROOT__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
-					description: "root",
+					description: "agent_root",
 				},
-				account: {
+				agent_account: {
 					type: INPUT_AGENT_ACCOUNT__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
-					description: "account",
+					description: "agent_account",
 				},
-				user: {
+				agent_user: {
 					type: INPUT_AGENT_USER__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
-					description: "user",
+					description: "agent_user",
 				},
-				person: {
+				agent_person: {
 					type: INPUT_AGENT_PERSON__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
-					description: "person",
+					description: "agent_person",
 				},
-				character: {
+				agent_character: {
 					type: INPUT_AGENT_CHARACTER__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
-					description: "character",
+					description: "agent_character",
 				},
 			},
 			resolve: function (source, args, context) {
