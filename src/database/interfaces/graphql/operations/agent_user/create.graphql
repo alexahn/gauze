@@ -1,10 +1,63 @@
-mutation CreateAgent_User($attributes: Agent_User_Mutation__Attributes) {
-	create_agent_user(attributes: $attributes) {
+mutation CreateAgent_User(
+	$parent: Agent_User_Mutation__Parent
+	$attributes: Agent_User_Mutation__Attributes
+	$whitelist_create: Whitelist_Mutation__Attributes
+	$whitelist_read: Whitelist_Mutation__Attributes
+	$whitelist_update: Whitelist_Mutation__Attributes
+	$whitelist_delete: Whitelist_Mutation__Attributes
+	$blacklist_create: Blacklist_Mutation__Attributes
+	$blacklist_read: Blacklist_Mutation__Attributes
+	$blacklist_update: Blacklist_Mutation__Attributes
+	$blacklist_delete: Blacklist_Mutation__Attributes
+) {
+	create_agent_user(parent: $parent, attributes: $attributes) {
 		attributes {
 			gauze__agent_user__id
 			gauze__agent_user__created_at
 			gauze__agent_user__updated_at
 			gauze__agent_user__deleted_at
+		}
+		mutation {
+			create_whitelist: create_whitelist(attributes: $whitelist_create) {
+				_metadata {
+					id
+				}
+			}
+			read_whitelist: create_whitelist(attributes: $whitelist_read) {
+				_metadata {
+					id
+				}
+			}
+			update_whitelist: create_whitelist(attributes: $whitelist_update) {
+				_metadata {
+					id
+				}
+			}
+			delete_whitelist: create_whitelist(attributes: $whitelist_delete) {
+				_metadata {
+					id
+				}
+			}
+			create_blacklist: create_blacklist(attributes: $blacklist_create) {
+				_metadata {
+					id
+				}
+			}
+			read_blacklist: create_blacklist(attributes: $blacklist_read) {
+				_metadata {
+					id
+				}
+			}
+			update_blacklist: create_blacklist(attributes: $blacklist_update) {
+				_metadata {
+					id
+				}
+			}
+			delete_blacklist: create_blacklist(attributes: $blacklist_delete) {
+				_metadata {
+					id
+				}
+			}
 		}
 	}
 }

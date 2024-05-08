@@ -18,42 +18,42 @@ npx gauze delete entity ./src ./gauze/entity.js
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete agent_character
-npx gauze delete gauze ./src ./src/kernel/src/entities/agent_character.js
+npx gauze delete entity ./src ./src/kernel/src/entities/agent_character.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete agent_person
-npx gauze delete gauze ./src ./src/kernel/src/entities/agent_person.js
+npx gauze delete entity ./src ./src/kernel/src/entities/agent_person.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete agent_user
-npx gauze delete gauze ./src ./src/kernel/src/entities/agent_user.js
+npx gauze delete entity ./src ./src/kernel/src/entities/agent_user.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete agent_account
-npx gauze delete gauze ./src ./src/kernel/src/entities/agent_account.js
+npx gauze delete entity ./src ./src/kernel/src/entities/agent_account.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete agent_root
-npx gauze delete gauze ./src ./src/kernel/src/entities/agent_root.js
+npx gauze delete entity ./src ./src/kernel/src/entities/agent_root.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete proxy
-npx gauze delete gauze ./src ./src/kernel/src/entities/proxy.js
+npx gauze delete entity ./src ./src/kernel/src/entities/proxy.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete session
-npx gauze delete gauze ./src ./src/kernel/src/entities/session.js
+npx gauze delete entity ./src ./src/kernel/src/entities/session.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
 # delete secret
-npx gauze delete gauze ./src ./src/kernel/src/entities/secret.js
+npx gauze delete entity ./src ./src/kernel/src/entities/secret.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 

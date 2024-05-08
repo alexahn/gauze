@@ -8,6 +8,36 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 		super(root_config, config);
 		const self = this;
 	}
+	validate_environment_data(data) {
+		Object.keys(data).forEach(function (key) {
+			const value = data[key];
+			if (key === "assert") {
+				if (typeof value !== "string") throw new Error("Session data field 'assert' must be of type string");
+			} else if (key === "request") {
+				Object.keys(value).forEach(function (subkey) {
+					const subvalue = value[subkey];
+					if (subkey === "source") {
+						if (typeof subvalue !== "string") throw new Error("Session data field 'request.source' must be of type string");
+					} else if (subkey === "code") {
+						if (typeof subvalue !== "string") throw new Error("Session data field 'request.code' must be of type string");
+					} else {
+						throw new Error(`Session data field 'request.${subkey}' is not an allowed field, must be either 'request.source' or 'request.code'`);
+					}
+				});
+			} else if (key === "verify") {
+				Object.keys(value).forEach(function (subkey) {
+					const subvalue = value[subkey];
+					if (subkey === "source") {
+						if (typeof subvalue !== "string") throw new Error("Session data field 'verify.source' must be of type string");
+					} else {
+						throw new Error(`Session data field 'verify.${subkey}' is not an allowed field, must be 'verify.source'`);
+					}
+				});
+			} else {
+				throw new Error(`Session data field '${key}' is not an allowed field, must be either 'assert', 'request', or 'verify'`);
+			}
+		});
+	}
 	create(context, parameters) {
 		const self = this;
 		var { agent } = context;

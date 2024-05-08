@@ -1,11 +1,8 @@
 import * as $kernel from "./../../kernel/index.js";
 import * as $database from "./../../database/index.js";
 
-import fs from "fs";
-import path from "path";
 const { randomBytes } = await import("node:crypto");
 
-import * as jose from "jose";
 import { v4 as uuidv4 } from "uuid";
 
 import { SIGN_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT, SIGN_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT } from "./../authentication.js";
@@ -58,14 +55,8 @@ class EnvironmentController {
 			// if a record is found, then create a system realm session
 		} else {
 			const session_id = uuidv4();
+			const session_realm = "environment";
 			const seed = randomBytes(64).toString("hex");
-			// convert seed to hexadecimal or base64
-			/*
-			const secret = new TextEncoder().encode(process.env.GAUZE_ENVIRONMENT_JWT_SECRET);
-			const header = {
-				alg: "HS256",
-			};
-			*/
 			const payload = {
 				proxy_id: null,
 				agent_id: null,
@@ -78,7 +69,7 @@ class EnvironmentController {
 					gauze__session__id: session_id,
 					gauze__session__agent_type: null,
 					gauze__session__agent_id: null,
-					gauze__session__realm: "environment",
+					gauze__session__realm: session_realm,
 					gauze__session__value: jwt,
 					gauze__session__kind: "agent",
 					gauze__session__data: "",
@@ -88,50 +79,6 @@ class EnvironmentController {
 					return data[0];
 				});
 			});
-			/*
-			return (
-				new jose.SignJWT(payload)
-					.setProtectedHeader(header)
-					.setIssuedAt()
-					.setIssuer("gauze")
-					//.setAudience('urn:example:audience')
-					.setExpirationTime("2h")
-					.sign(secret)
-					.then(function (jwt) {
-						console.log("jwt", jwt);
-						const operation = fs.readFileSync(path.resolve(import.meta.dirname, "./operations/session_create.graphql"), {
-							encoding: "utf8",
-						});
-						return $kernel.shell.graphql
-							.EXECUTE__GRAPHQL__SHELL__KERNEL({
-								schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
-								context: context,
-								operation: operation,
-								operation_name: "CreateSession",
-								operation_variables: {
-									attributes: {
-										gauze__session__id: session_id,
-										gauze__session__agent_type: null,
-										gauze__session__agent_id: null,
-										gauze__session__realm: "environment",
-										gauze__session__value: jwt,
-										gauze__session__kind: "agent",
-										gauze__session__data: "",
-										gauze__session__seed: seed,
-									},
-								},
-							})
-							.then(function (data) {
-								if (data.errors && data.errors.length) {
-									throw data.errors;
-								} else {
-									console.log("data.data", JSON.stringify(data.data, null, 4));
-									return data.data.create_session[0].attributes;
-								}
-							});
-					})
-			);
-			*/
 		}
 	}
 	exit_session(context, parameters) {

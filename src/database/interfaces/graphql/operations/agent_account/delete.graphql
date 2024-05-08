@@ -1,4 +1,5 @@
 mutation DeleteAgent_Account(
+	$parent: Agent_Account_Mutation__Parent
 	$where: Agent_Account_Mutation__Attributes
 	$where_in: Agent_Account_Mutation__Attributes_Array
 	$where_not_in: Agent_Account_Mutation__Attributes_Array
@@ -9,6 +10,7 @@ mutation DeleteAgent_Account(
 	$order_nulls: String
 ) {
 	delete_agent_account(
+		parent: $parent
 		where: $where
 		where_in: $where_in
 		where_not_in: $where_not_in

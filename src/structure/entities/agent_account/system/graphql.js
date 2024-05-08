@@ -31,12 +31,40 @@ const ATTRIBUTES__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE = new $abstract.gauz
 	fields: () => ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
 });
 
+const QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+		description: "Agent_Account Query Metadata",
+	},
+	//read_entity2: ENTITY2_READ_QUERY
+};
+
+const QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Account_Query__Relationships",
+	description: "Agent_Account Query Relationships",
+	fields: () => QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+});
+
 const QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE = {};
 
 const QUERY_QUERY__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Account_Query__Query",
 	description: "Agent_Account Query Query",
 	fields: () => QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+});
+
+const MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+		description: "Agent_Account Mutation Metadata",
+	},
+	//create_entity2: ENTITY2_CREATE_MUTATION
+};
+
+const MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Account_Mutation__Relationships",
+	description: "Agent_Account Mutation Relationships",
+	fields: () => MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
 });
 
 const MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE = {};
@@ -47,17 +75,26 @@ const MUTATION_MUTATION__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE = new $abstra
 	fields: () => MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
 });
 
+const FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+		description: "_metadata",
+	},
+	attributes: {
+		type: ATTRIBUTES__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+		description: "attributes",
+	},
+};
+
 const QUERY__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Account_Query",
-	description: "Agent_Account",
+	description: "Agent_Account Query",
 	fields: () => ({
-		_metadata: {
-			type: METADATA__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
-			description: "metadata",
-		},
-		attributes: {
-			type: ATTRIBUTES__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
-			description: "attributes",
+		_metadata: FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE._metadata,
+		attributes: FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE.attributes,
+		relationships: {
+			type: QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+			description: "relationships",
 		},
 		query: {
 			type: QUERY_QUERY__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
@@ -68,15 +105,13 @@ const QUERY__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE = new $abstract.gauze.typ
 
 const MUTATION__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Account_Mutation",
-	description: "Agent_Account",
+	description: "Agent_Account Mutation",
 	fields: () => ({
-		_metadata: {
-			type: METADATA__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
-			description: "metadata",
-		},
-		attributes: {
-			type: ATTRIBUTES__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
-			description: "attributes",
+		_metadata: FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE._metadata,
+		attributes: FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE.attributes,
+		relationships: {
+			type: MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+			description: "relationships",
 		},
 		mutation: {
 			type: MUTATION_MUTATION__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
@@ -94,6 +129,10 @@ export {
 	ATTRIBUTES__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
 	ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
 	ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+	QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+	QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+	MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+	MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
 	QUERY_QUERY__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
 	QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
 	MUTATION_MUTATION__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,

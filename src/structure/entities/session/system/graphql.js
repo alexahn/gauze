@@ -31,12 +31,40 @@ const ATTRIBUTES__GRAPHQL__SYSTEM__SESSION__STRUCTURE = new $abstract.gauze.type
 	fields: () => ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 });
 
+const QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+		description: "Session Query Metadata",
+	},
+	//read_entity2: ENTITY2_READ_QUERY
+};
+
+const QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__SESSION__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Session_Query__Relationships",
+	description: "Session Query Relationships",
+	fields: () => QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+});
+
 const QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE = {};
 
 const QUERY_QUERY__GRAPHQL__SYSTEM__SESSION__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Session_Query__Query",
 	description: "Session Query Query",
 	fields: () => QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+});
+
+const MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+		description: "Session Mutation Metadata",
+	},
+	//create_entity2: ENTITY2_CREATE_MUTATION
+};
+
+const MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__SESSION__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Session_Mutation__Relationships",
+	description: "Session Mutation Relationships",
+	fields: () => MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 });
 
 const MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE = {};
@@ -47,17 +75,26 @@ const MUTATION_MUTATION__GRAPHQL__SYSTEM__SESSION__STRUCTURE = new $abstract.gau
 	fields: () => MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 });
 
+const FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+		description: "_metadata",
+	},
+	attributes: {
+		type: ATTRIBUTES__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+		description: "attributes",
+	},
+};
+
 const QUERY__GRAPHQL__SYSTEM__SESSION__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Session_Query",
-	description: "Session",
+	description: "Session Query",
 	fields: () => ({
-		_metadata: {
-			type: METADATA__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
-			description: "metadata",
-		},
-		attributes: {
-			type: ATTRIBUTES__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
-			description: "attributes",
+		_metadata: FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE._metadata,
+		attributes: FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE.attributes,
+		relationships: {
+			type: QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+			description: "relationships",
 		},
 		query: {
 			type: QUERY_QUERY__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
@@ -68,15 +105,13 @@ const QUERY__GRAPHQL__SYSTEM__SESSION__STRUCTURE = new $abstract.gauze.types.gra
 
 const MUTATION__GRAPHQL__SYSTEM__SESSION__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Session_Mutation",
-	description: "Session",
+	description: "Session Mutation",
 	fields: () => ({
-		_metadata: {
-			type: METADATA__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
-			description: "metadata",
-		},
-		attributes: {
-			type: ATTRIBUTES__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
-			description: "attributes",
+		_metadata: FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE._metadata,
+		attributes: FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE.attributes,
+		relationships: {
+			type: MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+			description: "relationships",
 		},
 		mutation: {
 			type: MUTATION_MUTATION__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
@@ -94,6 +129,10 @@ export {
 	ATTRIBUTES__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 	ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 	ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+	QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+	QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+	MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+	MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 	QUERY_QUERY__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 	QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 	MUTATION_MUTATION__GRAPHQL__SYSTEM__SESSION__STRUCTURE,

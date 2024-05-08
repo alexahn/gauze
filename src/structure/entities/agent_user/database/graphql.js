@@ -31,12 +31,40 @@ const ATTRIBUTES__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = new $abstract.gauze
 	fields: () => ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 });
 
+const QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+		description: "Agent_User Query Metadata",
+	},
+	//read_entity2: ENTITY2_READ_QUERY
+};
+
+const QUERY_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_User_Query__Relationships",
+	description: "Agent_User Query Relationships",
+	fields: () => QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+});
+
 const QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = {};
 
 const QUERY_QUERY__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User_Query__Query",
 	description: "Agent_User Query Query",
 	fields: () => QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+});
+
+const MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+		description: "Agent_User Mutation Metadata",
+	},
+	//create_entity2: ENTITY2_CREATE_MUTATION
+};
+
+const MUTATION_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_User_Mutation__Relationships",
+	description: "Agent_User Mutation Relationships",
+	fields: () => MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 });
 
 const MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = {};
@@ -47,17 +75,26 @@ const MUTATION_MUTATION__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = new $abstrac
 	fields: () => MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 });
 
+const FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+		description: "_metadata",
+	},
+	attributes: {
+		type: ATTRIBUTES__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+		description: "attributes",
+	},
+};
+
 const QUERY__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User_Query",
-	description: "Agent_User",
+	description: "Agent_User Query",
 	fields: () => ({
-		_metadata: {
-			type: METADATA__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
-			description: "metadata",
-		},
-		attributes: {
-			type: ATTRIBUTES__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
-			description: "attributes",
+		_metadata: FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE._metadata,
+		attributes: FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE.attributes,
+		relationships: {
+			type: QUERY_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+			description: "relationships",
 		},
 		query: {
 			type: QUERY_QUERY__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
@@ -68,15 +105,13 @@ const QUERY__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = new $abstract.gauze.type
 
 const MUTATION__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User_Mutation",
-	description: "Agent_User",
+	description: "Agent_User Mutation",
 	fields: () => ({
-		_metadata: {
-			type: METADATA__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
-			description: "metadata",
-		},
-		attributes: {
-			type: ATTRIBUTES__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
-			description: "attributes",
+		_metadata: FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE._metadata,
+		attributes: FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE.attributes,
+		relationships: {
+			type: MUTATION_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+			description: "relationships",
 		},
 		mutation: {
 			type: MUTATION_MUTATION__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
@@ -94,6 +129,10 @@ export {
 	ATTRIBUTES__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 	ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 	ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+	QUERY_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+	QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+	MUTATION_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+	MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 	QUERY_QUERY__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 	QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 	MUTATION_MUTATION__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,

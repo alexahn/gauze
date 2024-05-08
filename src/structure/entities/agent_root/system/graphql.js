@@ -31,12 +31,40 @@ const ATTRIBUTES__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE = new $abstract.gauze.t
 	fields: () => ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
 });
 
+const QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+		description: "Agent_Root Query Metadata",
+	},
+	//read_entity2: ENTITY2_READ_QUERY
+};
+
+const QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Root_Query__Relationships",
+	description: "Agent_Root Query Relationships",
+	fields: () => QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+});
+
 const QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE = {};
 
 const QUERY_QUERY__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Root_Query__Query",
 	description: "Agent_Root Query Query",
 	fields: () => QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+});
+
+const MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+		description: "Agent_Root Mutation Metadata",
+	},
+	//create_entity2: ENTITY2_CREATE_MUTATION
+};
+
+const MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Root_Mutation__Relationships",
+	description: "Agent_Root Mutation Relationships",
+	fields: () => MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
 });
 
 const MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE = {};
@@ -47,17 +75,26 @@ const MUTATION_MUTATION__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE = new $abstract.
 	fields: () => MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
 });
 
+const FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+		description: "_metadata",
+	},
+	attributes: {
+		type: ATTRIBUTES__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+		description: "attributes",
+	},
+};
+
 const QUERY__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Root_Query",
-	description: "Agent_Root",
+	description: "Agent_Root Query",
 	fields: () => ({
-		_metadata: {
-			type: METADATA__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
-			description: "metadata",
-		},
-		attributes: {
-			type: ATTRIBUTES__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
-			description: "attributes",
+		_metadata: FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE._metadata,
+		attributes: FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE.attributes,
+		relationships: {
+			type: QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+			description: "relationships",
 		},
 		query: {
 			type: QUERY_QUERY__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
@@ -68,15 +105,13 @@ const QUERY__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE = new $abstract.gauze.types.
 
 const MUTATION__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Root_Mutation",
-	description: "Agent_Root",
+	description: "Agent_Root Mutation",
 	fields: () => ({
-		_metadata: {
-			type: METADATA__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
-			description: "metadata",
-		},
-		attributes: {
-			type: ATTRIBUTES__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
-			description: "attributes",
+		_metadata: FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE._metadata,
+		attributes: FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE.attributes,
+		relationships: {
+			type: MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+			description: "relationships",
 		},
 		mutation: {
 			type: MUTATION_MUTATION__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
@@ -94,6 +129,10 @@ export {
 	ATTRIBUTES__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
 	ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
 	ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+	QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+	QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+	MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+	MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
 	QUERY_QUERY__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
 	QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
 	MUTATION_MUTATION__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
