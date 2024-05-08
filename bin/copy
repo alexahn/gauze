@@ -1,5 +1,9 @@
 #!/bin/zsh
 
+# environment
+rm -rf ./src/environment
+cp -r ./src/kernel/src/environment ./src/environment
+
 # ezuag
 
 cp ./src/structure/entities/ezuag/database/graphql.js ./src/structure/entities/ezuag/system/graphql.js

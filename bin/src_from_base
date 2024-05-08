@@ -164,7 +164,7 @@ cp -r ./src/kernel/src/stages/stage7/* ./src/
 # create environment directory
 cp -r ./src/kernel/src/environment ./src/environment
 # link environment
-node src/kernel/bin/module.js src/index.js join enviroment directory
+node src/kernel/bin/module.js src/index.js join environment directory
 
 ##########################################################
 
