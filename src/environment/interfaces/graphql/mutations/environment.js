@@ -2,6 +2,8 @@ import { GraphQLObjectType, GraphQLInputObjectType } from "graphql";
 
 import * as $structure from "./../../../../structure/index.js";
 
+import { CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT } from "./../../../controllers/environment.js";
+
 const SESSION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Environment_Mutation__Session",
 	fields: $structure.entities.session.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__SESSION__STRUCTURE,
@@ -44,14 +46,30 @@ const ENVIRONMENT__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new 
 			type: SESSION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			args: {},
 			resolve: function (source, args, context) {
-				return {};
+				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.signin(
+					{
+						source: source,
+						database: context.database,
+						transaction: context.transaction,
+						agent: context.agent,
+					},
+					args,
+				);
 			},
 		},
 		signout: {
 			type: SESSION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			args: {},
 			resolve: function (source, args, context) {
-				return {};
+                return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.signout(
+                    {
+                        source: source,
+                        database: context.database,
+                        transaction: context.transaction,
+                        agent: context.agent,
+                    },
+                    args,
+                );
 			},
 		},
 		signup: {
@@ -79,7 +97,15 @@ const ENVIRONMENT__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new 
 				},
 			},
 			resolve: function (source, args, context) {
-				return {};
+                return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.signup(
+                    {
+                        source: source,
+                        database: context.database,
+                        transaction: context.transaction,
+                        agent: context.agent,
+                    },
+                    args,
+                );
 			},
 		},
 		enter_session: {
@@ -91,7 +117,15 @@ const ENVIRONMENT__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new 
 				},
 			},
 			resolve: function (source, args, context) {
-				return {};
+                return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.enter_session(
+                    {
+                        source: source,
+                        database: context.database,
+                        transaction: context.transaction,
+                        agent: context.agent,
+                    },
+                    args,
+                );
 			},
 		},
 		exit_session: {
@@ -103,7 +137,15 @@ const ENVIRONMENT__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new 
 				},
 			},
 			resolve: function (source, args, context) {
-				return {};
+                return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.exit_session(
+                    {
+                        source: source,
+                        database: context.database,
+                        transaction: context.transaction,
+                        agent: context.agent,
+                    },
+                    args,
+                );
 			},
 		},
 	},

@@ -35,7 +35,11 @@ class GauzeServer {
 			if (req.url.startsWith("/database/graphql")) {
 				return this.create_graphql_handler($gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE, req, res);
 			} else if (req.url.startsWith("/system/graphql")) {
+				// parse system jwt here
 				return this.create_graphql_handler($gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM, req, res);
+			} else if (req.url.startsWith("/environment/graphql")) {
+				// parse environment jwt here
+				return this.create_graphql_handler($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res);
 			} else {
 				res.writeHead(404).end();
 			}
@@ -58,7 +62,7 @@ class GauzeServer {
 				const context = {};
 				context.database = self.database;
 				context.transaction = transaction;
-				context.authorization = req.headers.authorization
+				context.authorization = req.headers.authorization;
 				return self.$gauze.kernel.shell.graphql
 					.EXECUTE__GRAPHQL__SHELL__KERNEL({
 						schema: schema,

@@ -113,6 +113,18 @@ export default function ($abstract) {
 				deserializers: [],
 				post_deserialize_middlewares: [],
 			},
+			gauze__session__seed: {
+				name: "gauze__session__seed",
+				sql_type: "string",
+				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				description: "seed",
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.RUD_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("gauze__session__seed")],
+				serializers: [],
+				post_serialize_middlewares: [],
+				pre_deserialize_middlewares: [],
+				deserializers: [],
+				post_deserialize_middlewares: [],
+			},
 			gauze__session__data: {
 				name: "gauze__session__data",
 				sql_type: "string",

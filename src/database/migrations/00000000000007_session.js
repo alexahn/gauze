@@ -15,6 +15,7 @@ const up = function (knex) {
 			table.uuid("gauze__session__agent_id");
 			table.string("gauze__session__value", 512).notNullable();
 			table.string("gauze__session__kind", 16).notNullable();
+			table.string("gauze__session__seed", 256).notNullable();
 			table.string("gauze__session__data", 512).notNullable();
 
 			table.index("gauze__session__realm");
