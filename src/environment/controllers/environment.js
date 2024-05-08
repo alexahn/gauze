@@ -116,10 +116,6 @@ class EnvironmentController {
 		} else {
 			throw new Error("Session is required to authenticate");
 		}
-		return {
-			gauze__session__id: "0",
-			gauze__session__value: "1",
-		};
 	}
 	signout(context, parameters) {
 		/*
@@ -641,13 +637,87 @@ class EnvironmentController {
 			use the agent argument to generate an isolated session for the agent
 		*/
 		const self = this;
+		const { agent } = context;
+		const target_agent = parameters.agent;
 		console.log("context.agent", context.agent);
-		if (parameters.agent) {
-			if (parameters.agent.session_id) {
+		if (agent) {
+			if (agent.proxy_id) {
+				if (!agent.session_id) {
+					throw new Error("Invalid session");
+				}
 				// fetch the session according to session id in jwt
 				// check that it is proxy type
 				// use the proxy id to do a look up against proxy (where: {agent_type: agent.agent_type, agent_id: agent.agent_id, root_id: proxy.id})
 				// if a record is found, then create a system realm session
+				const session_attributes = {
+					gauze__session__id: agent.session_id,
+				};
+				const session_parameters = { where: session_attributes };
+				return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, session_parameters)
+					.then(function (sessions) {
+						if (sessions && sessions.length) {
+							const session = sessions[0];
+							return {
+								session: session,
+							};
+						} else {
+							return null;
+						}
+					})
+					.then(function (collection) {
+						if (collection) {
+							const { session } = collection;
+							if (session.gauze__session__agent_type === self.proxy_type) {
+								// do a look up to find the target proxy record
+								const proxy_attributes = {
+									gauze__proxy__agent_type: target_agent.gauze__proxy__agent_type,
+									gauze__proxy__agent_id: target_agent.gauze__proxy__agent_id,
+									gauze__proxy__root_id: agent.proxy_id,
+								};
+								const proxy_parameters = { where: proxy_attributes };
+								return MODEL__PROXY__MODEL__ENVIRONMENT.read(context, proxy_parameters).then(function (proxies) {
+									if (proxies && proxies.length) {
+										const proxy = proxies[0];
+										return {
+											...collection,
+											proxy: proxy,
+										};
+									} else {
+										return null;
+									}
+								});
+							} else {
+								return null;
+							}
+						} else {
+							return null;
+						}
+					})
+					.then(function (collection) {
+						if (collection) {
+							const { proxy } = collection;
+							const session_id = uuidv4();
+							const proxy_root_id = agent.proxy_id;
+							const agent_id = proxy.gauze__proxy__agent_id;
+							const agent_type = proxy.gauze__proxy__agent_type;
+							return self._create_system_session(context, session_id, proxy_root_id, agent_id, agent_type).then(function (system_session) {
+								return {
+									...collection,
+									system_session: system_session,
+								};
+							});
+						} else {
+							return null;
+						}
+					})
+					.then(function (collection) {
+						if (collection) {
+							const { system_session } = collection;
+							return system_session;
+						} else {
+							throw new Error("Entering session failed");
+						}
+					});
 			} else {
 				throw new Error("Agent is missing session id");
 			}
