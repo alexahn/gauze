@@ -14,7 +14,7 @@ import {
 } from "./agent_character.js"
 */
 
-const AGENT__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
+const MUTATION__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent",
 	fields: {
 		root: {
@@ -48,4 +48,4 @@ const AGENT__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjec
 	},
 });
 
-export { AGENT__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT };
+export { MUTATION__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT };

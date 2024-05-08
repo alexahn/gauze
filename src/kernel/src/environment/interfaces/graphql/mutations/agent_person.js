@@ -1,13 +1,10 @@
+import * as $structure from "./../../../../structure/index.js";
+
 import { GraphQLString, GraphQLObjectType, GraphQLInputObjectType } from "graphql";
 
-import { STEP__TYPE__ENVIRONMENT, CODE__TYPE__ENVIRONMENT } from "./../../../types.js";
+import { STEP__TYPE__ENVIRONMENT, INPUT_CODE__TYPE__ENVIRONMENT, INPUT_AGENT_PERSON__TYPE__ENVIRONMENT } from "./../../../types.js";
 
 import { CONTROLLER__AGENT_PERSON__CONTROLLER__ENVIRONMENT } from "./../../../controllers/agent_person.js";
-
-const INPUT_AGENT_PERSON__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLInputObjectType({
-	name: "Environment_Mutation__Agent_Person",
-	fields: $structure.entities.agent_person.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__AGENT_PERSON__STRUCTURE,
-});
 
 const ASSERT__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Person__Assert",
@@ -16,7 +13,7 @@ const ASSERT__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Grap
 			type: STEP__TYPE__ENVIRONMENT,
 			args: {
 				agent_person: {
-					type: INPUT_AGENT_PERSON__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+					type: INPUT_AGENT_PERSON__TYPE__ENVIRONMENT,
 					description: "agent_person",
 				},
 			},
@@ -42,7 +39,7 @@ const REQUEST__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 			type: STEP__TYPE__ENVIRONMENT,
 			args: {
 				agent_person: {
-					type: INPUT_AGENT_PERSON__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+					type: INPUT_AGENT_PERSON__TYPE__ENVIRONMENT,
 					description: "agent_person",
 				},
 			},
@@ -62,7 +59,7 @@ const REQUEST__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 			type: STEP__TYPE__ENVIRONMENT,
 			args: {
 				agent_person: {
-					type: INPUT_AGENT_PERSON__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+					type: INPUT_AGENT_PERSON__TYPE__ENVIRONMENT,
 					description: "agent_person",
 				},
 			},
@@ -88,7 +85,7 @@ const VERIFY__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Grap
 			type: STEP__TYPE__ENVIRONMENT,
 			args: {
 				code: {
-					type: CODE__TYPE__ENVIRONMENT,
+					type: INPUT_CODE__TYPE__ENVIRONMENT,
 					description: "code",
 				},
 			},
@@ -108,7 +105,7 @@ const VERIFY__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Grap
 			type: STEP__TYPE__ENVIRONMENT,
 			args: {
 				code: {
-					type: CODE__TYPE__ENVIRONMENT,
+					type: INPUT_CODE__TYPE__ENVIRONMENT,
 					description: "code",
 				},
 			},
