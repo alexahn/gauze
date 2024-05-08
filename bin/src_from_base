@@ -2,6 +2,11 @@
 
 set -e
 
+# delete environment directory
+rm -rf src/environment
+# unlink environment
+node src/kernel/bin/module.js src/index.js unjoin enviroment directory
+
 # delete gauze
 npx gauze delete gauze ./src ./gauze/gauze.js
 # use stage6 schema
@@ -169,7 +174,12 @@ npx gauze create gauze ./src ./gauze/gauze.js
 # use stage7 schema
 cp -r ./src/kernel/src/stages/stage7/* ./src/
 
-cp -r ./src/kernel/src/environment/* ./src/environment/
+#cp -r ./src/kernel/src/environment/* ./src/environment/]
+
+# create environment directory
+cp -r ./src/kernel/src/environment ./src/environment
+# link environment
+node src/kernel/bin/module.js src/index.js join enviroment directory
 
 ##########################################################
 
