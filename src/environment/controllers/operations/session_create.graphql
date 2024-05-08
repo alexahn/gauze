@@ -1,0 +1,17 @@
+mutation CreateSession($attributes: Session_Mutation__Attributes) {
+	create_session(attributes: $attributes) {
+		attributes {
+			gauze__session__id
+			gauze__session__created_at
+			gauze__session__updated_at
+			gauze__session__deleted_at
+			gauze__session__realm
+			gauze__session__agent_id
+			gauze__session__agent_type
+			gauze__session__value
+			gauze__session__kind
+			gauze__session__seed
+			gauze__session__data
+		}
+	}
+}
