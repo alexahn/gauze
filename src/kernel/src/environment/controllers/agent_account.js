@@ -43,13 +43,7 @@ class AgentAccountController {
 					})
 					.then(function (collection) {
 						const { session } = collection;
-						var parsed_data;
-						try {
-							parsed_data = JSON.parse(session.gauze__session__data);
-						} catch (error) {
-							// note: log?
-							parsed_data = {};
-						}
+						const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
 						if (parsed_data.assert) {
 							// fetch secrets
 							const secret_attributes = {
@@ -112,13 +106,7 @@ class AgentAccountController {
 					.then(function (collection) {
 						if (collection) {
 							const { session } = collection;
-							var parsed_data;
-							try {
-								parsed_data = JSON.parse(session.gauze__session__data);
-							} catch (error) {
-								// note: log?
-								parsed_data = {};
-							}
+							const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
 							if (parsed_data.verify) {
 								parsed_data.verify.push({
 									source: "account.password",

@@ -15,13 +15,19 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 		});
 		self.operation_create_environment_session_name = "CreateEnvironmentSession";
 	}
-	validate_environment_data(serialized) {
-		var data = {};
+	parse_data(data) {
+		var parsed_data;
 		try {
-			data = JSON.parse(serialized) || {};
+			parsed_data = JSON.parse(data);
 		} catch (error) {
-			// ignore
+			// note: log?
+			parsed_data = {};
 		}
+		return parsed_data || {};
+	}
+	validate_environment_data(serialized) {
+		const self = this;
+		var data = self.parse_data(serialized);
 		Object.keys(data).forEach(function (key) {
 			const value = data[key];
 			if (key === "assert") {

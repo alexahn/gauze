@@ -88,13 +88,7 @@ class AgentPersonController {
 						if (collection) {
 							const { person, proxy, session } = collection;
 							// parse the JSON in session
-							var parsed_data;
-							try {
-								parsed_data = JSON.parse(session.gauze__session__data);
-							} catch (error) {
-								// note: log?
-								parsed_data = {};
-							}
+							const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
 							const proxy_root_id = proxy.gauze__proxy__root_id;
 							// update the session data with the assertion
 							parsed_data.assert = proxy_root_id;

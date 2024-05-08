@@ -25,15 +25,97 @@ class EnvironmentController {
 		const self = this;
 		self.proxy_type = $abstract.entities.proxy.default($abstract).table_name;
 		self.session_type = $abstract.entities.session.default($abstract).table_name;
+		self.required_verification = ["account.password"];
 	}
 	signin(context, parameters) {
-		/*
-			verify context.authorization with the environment jwt secret
-			get the session id that is inside the public payload and retrieve it
-			check the data field and compare it to the a required set
-			if all required verifications have passed, then generate a session for the proxy and generate a jwt using the system secret
-			return the session (which has the jwt as the value field)
-		*/
+		const self = this;
+		const { agent } = context;
+		if (agent) {
+			if (agent.proxy_id) {
+				throw new Error("Session is already authenticated");
+			} else {
+				if (!agent.session_id) {
+					throw new Error("Invalid session");
+				}
+				const session_attributes = {
+					gauze__session__id: agent.session_id,
+				};
+				const session_parameters = { where: session_attributes };
+				return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, session_parameters)
+					.then(function (sessions) {
+						if (sessions && sessions.length) {
+							const session = sessions[0];
+							return {
+								session: session,
+							};
+						} else {
+							return null;
+						}
+					})
+					.then(function (collection) {
+						if (collection) {
+							const { session } = collection;
+							// check the session data
+							const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
+							// reduce the set
+							if (parsed_data.verify) {
+								const verified = {};
+								parsed_data.verify.forEach(function (item) {
+									verified[item.source] = true;
+								});
+								// do an intersection here with a requirement set in a configuration
+								// for now, just use self.required_verification
+								const passed = self.required_verification.filter(function (requirement) {
+									return verified[requirement];
+								});
+								if (passed.length === self.required_verification.length) {
+									// done
+									return {
+										...collection,
+										passed: passed,
+									};
+								}
+							} else {
+								return null;
+							}
+						} else {
+							return null;
+						}
+					})
+					.then(function (collection) {
+						if (collection) {
+							const { session } = collection;
+							const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
+							if (parsed_data.assert) {
+								// create a proxy session here
+								const session_id = uuidv4();
+								const proxy_root_id = parsed_data.assert;
+								const proxy_type = self.proxy_type;
+								return self._create_system_session(context, session_id, proxy_root_id, proxy_root_id, proxy_type).then(function (system_session) {
+									return {
+										...collection,
+										system_session: system_session,
+									};
+								});
+							} else {
+								return null;
+							}
+						} else {
+							return null;
+						}
+					})
+					.then(function (collection) {
+						if (collection) {
+							const { system_session } = collection;
+							return system_session;
+						} else {
+							throw new Error("Authentication failed");
+						}
+					});
+			}
+		} else {
+			throw new Error("Session is required to authenticate");
+		}
 		return {
 			gauze__session__id: "0",
 			gauze__session__value: "1",
@@ -429,6 +511,7 @@ class EnvironmentController {
 						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
 					},
 					// session
+					/*
 					function () {
 						const attributes = {
 							gauze__relationship__from_type: proxy_type,
@@ -449,6 +532,7 @@ class EnvironmentController {
 						const parameters = { attributes };
 						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
 					},
+					*/
 				];
 				const transactions = secret_transactions.concat(agent_transactions, proxy_transactions, link_transactions);
 				return Promise.all(
@@ -472,21 +556,55 @@ class EnvironmentController {
 			session_id: session_id,
 			seed: seed,
 		};
+		// create a relationship
 		return SIGN_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT(payload).then(function (jwt) {
-			const attributes = {
-				gauze__session__id: session_id,
-				gauze__session__agent_type: agent_type,
-				gauze__session__agent_id: agent_id,
-				gauze__session__realm: session_realm,
-				gauze__session__value: jwt,
-				gauze__session__kind: "agent",
-				gauze__session__data: "",
-				gauze__session__seed: seed,
-			};
-			const access_parameters = self.create_access_control(proxy_id, self.proxy_type, session_id, self.session_type);
-			const parameters = { attributes, ...access_parameters };
-			return MODEL__SESSION__MODEL__ENVIRONMENT.create_environment(context, { attributes }).then(function (data) {
-				return data[0];
+			const transactions = [
+				// session
+				function () {
+					const attributes = {
+						gauze__session__id: session_id,
+						gauze__session__agent_type: agent_type,
+						gauze__session__agent_id: agent_id,
+						gauze__session__realm: session_realm,
+						gauze__session__value: jwt,
+						gauze__session__kind: "agent",
+						gauze__session__data: "",
+						gauze__session__seed: seed,
+					};
+					const access_parameters = self.create_access_control(proxy_id, self.proxy_type, session_id, self.session_type);
+					const parameters = { attributes, ...access_parameters };
+					return MODEL__SESSION__MODEL__ENVIRONMENT.create_environment(context, { attributes }).then(function (data) {
+						return data[0];
+					});
+				},
+				// relationships
+				function () {
+					const attributes = {
+						gauze__relationship__from_type: self.proxy_type,
+						gauze__relationship__from_id: proxy_id,
+						gauze__relationship__to_type: self.session_type,
+						gauze__relationship__to_id: session_id,
+					};
+					const parameters = { attributes };
+					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+				},
+				function () {
+					const attributes = {
+						gauze__relationship__from_type: self.session_type,
+						gauze__relationship__from_id: session_id,
+						gauze__relationship__to_type: self.proxy_type,
+						gauze__relationship__to_id: proxy_id,
+					};
+					const parameters = { attributes };
+					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+				},
+			];
+			return Promise.all(
+				transactions.map(function (f) {
+					return f();
+				}),
+			).then(function (results) {
+				return results[0];
 			});
 		});
 	}
