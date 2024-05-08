@@ -3,10 +3,17 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
+import fs from "fs";
+import path from "path";
+
 class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
+		self.operation_create_environment_session = fs.readFileSync(path.resolve(import.meta.dirname, "./operations/create_environment_session.graphql"), {
+			encoding: "utf8",
+		});
+		self.operation_create_environment_session_name = "CreateEnvironmentSession";
 	}
 	validate_environment_data(data) {
 		Object.keys(data).forEach(function (key) {
@@ -36,6 +43,25 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 			} else {
 				throw new Error(`Session data field '${key}' is not an allowed field, must be either 'assert', 'request', or 'verify'`);
 			}
+		});
+	}
+	create_environment(context, parameters) {
+		const self = this;
+		var { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.session.database.sql.TABLE_NAME__SQL__DATABASE__SESSION__STRUCTURE,
+			},
+			operation: {
+				operation: self.operation_create_environment_session,
+				operation_name: self.operation_create_environment_session_name,
+			},
+		};
+		return self._create(context, parameters, realm).then(function (data) {
+			return data.data.create_session.map(function (row) {
+				return row.attributes;
+			});
 		});
 	}
 	create(context, parameters) {

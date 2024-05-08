@@ -75,7 +75,7 @@ class EnvironmentController {
 					gauze__session__data: "",
 					gauze__session__seed: seed,
 				};
-				return MODEL__SESSION__MODEL__ENVIRONMENT.create(context, { attributes }).then(function (data) {
+				return MODEL__SESSION__MODEL__ENVIRONMENT.create_environment(context, { attributes }).then(function (data) {
 					return data[0];
 				});
 			});

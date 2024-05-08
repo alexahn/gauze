@@ -53,6 +53,18 @@ export default function ($abstract) {
 				deserializers: [$abstract.gauze.deserializers.DELETED_AT__DESERIALIZER__GAUZE__ABSTRACT("gauze__agent_person__deleted_at")],
 				post_deserialize_middlewares: [],
 			},
+			gauze__agent_person__email: {
+				name: "gauze__agent_person__email",
+				sql_type: "string",
+				graphql_type: abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				description: "email",
+				pre_serialize_middlewares: [],
+				serializers: [],
+				post_serialize_middlewares: [],
+				pre_deserialize_middlewares: [],
+				deserializers: [],
+				post_deserialize_middlewares: [],
+			},
 		},
 		methods: {
 			create: {

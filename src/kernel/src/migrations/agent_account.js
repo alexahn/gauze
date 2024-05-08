@@ -9,6 +9,8 @@ const up = function (knex) {
 			table.date("gauze__agent_account__created_at").notNullable();
 			table.date("gauze__agent_acount__updated_at").notNullable();
 			table.date("gauze__agent_acount__deleted_at");
+
+			table.string("gauze__agent_account__password", 2);
 		}),
 	]);
 };
