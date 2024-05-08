@@ -1,5 +1,10 @@
 import { GraphQLString, GraphQLObjectType, GraphQLInputObjectType } from "graphql";
 
+import { STEP__TYPE__ENVIRONMENT, INPUT_CODE__TYPE__ENVIRONMENT, INPUT_AGENT_ACCOUNT__TYPE__ENVIRONMENT } from "./../../../types.js";
+
+import { CONTROLLER__AGENT_ACCOUNT__CONTROLLER__ENVIRONMENT } from "./../../../controllers/agent_account.js";
+
+/*
 const ASSERT__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Account__Assert",
 	fields: {
@@ -23,14 +28,29 @@ const REQUEST__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gr
 		},
 	},
 });
+*/
 
 const VERIFY__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Account__Verify",
 	fields: {
-		verify: {
-			type: GraphQLString,
+		password: {
+			type: STEP__TYPE__ENVIRONMENT,
+			args: {
+				agent_account: {
+					type: INPUT_AGENT_ACCOUNT__TYPE__ENVIRONMENT,
+					description: "agent_account",
+				},
+			},
 			resolve: function (source, args, context) {
-				return "verify";
+				return CONTROLLER__AGENT_ACCOUNT__CONTROLLER__ENVIRONMENT.verify_password(
+					{
+						source: source,
+						database: context.database,
+						transaction: context.transaction,
+						agent: context.agent,
+					},
+					args,
+				);
 			},
 		},
 	},
@@ -39,6 +59,7 @@ const VERIFY__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 const MUTATION__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Account",
 	fields: {
+		/*
 		assert: {
 			type: ASSERT__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			resolve: function (source, args, context) {
@@ -51,6 +72,7 @@ const MUTATION__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new G
 				return {};
 			},
 		},
+		*/
 		verify: {
 			type: VERIFY__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			resolve: function (source, args, context) {

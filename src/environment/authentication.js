@@ -1,4 +1,16 @@
+const { pbkdf2 } = await import("node:crypto");
+
 import * as jose from "jose";
+
+const HASH_PASSWORD__AUTHENTICATION__ENVIRONMENT = function (password, salt) {
+	return new Promise(function (resolve, reject) {
+		// 64 byte length hash generated
+		pbkdf2(password, salt, 524288, 128, "sha512", function (err, hash) {
+			if (err) return reject(err);
+			return resolve(hash.toString("hex"));
+		});
+	});
+};
 
 const ENVIRONMENT_JWT_ISSUER = "gauze";
 
@@ -103,6 +115,7 @@ const AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT = function (req) {
 };
 
 export {
+	HASH_PASSWORD__AUTHENTICATION__ENVIRONMENT,
 	SIGN_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT,
 	VERIFY_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT,
 	AUTHENTICATE_ENVIRONMENT__AUTHENTICATION__ENVIRONMENT,

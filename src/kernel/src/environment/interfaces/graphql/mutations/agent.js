@@ -17,12 +17,14 @@ import {
 const MUTATION__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent",
 	fields: {
+		/*
 		root: {
 			type: MUTATION__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			resolve: function (source, args, context) {
 				return {};
 			},
 		},
+		*/
 		account: {
 			type: MUTATION__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			resolve: function (source, args, context) {

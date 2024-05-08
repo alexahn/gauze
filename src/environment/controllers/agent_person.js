@@ -16,8 +16,15 @@ class AgentPersonController {
 			if (agent.proxy_id) {
 				throw new Error("Session is already authenticated");
 			} else {
-				console.log("assert_email:agent", agent);
-				console.log("parameters", parameters);
+				if (!agent.session_id) {
+					throw new Error("Invalid session");
+				}
+				if (!parameters.agent_person) {
+					throw new Error("Field 'agent_person' is required");
+				}
+				if (!parameters.agent_person.gauze__agent_person__email) {
+					throw new Error("Field 'agent_person.gauze__agent_person__email' is required");
+				}
 				const attributes = parameters.agent_person;
 				const agent_parameters = { where: attributes };
 				return MODEL__AGENT_PERSON__MODEL__ENVIRONMENT.read(context, agent_parameters)
@@ -83,7 +90,7 @@ class AgentPersonController {
 							// parse the JSON in session
 							var parsed_data;
 							try {
-								parsed_data = JSON.parse(session.data);
+								parsed_data = JSON.parse(session.gauze__session__data);
 							} catch (error) {
 								// note: log?
 								parsed_data = {};
@@ -133,12 +140,6 @@ class AgentPersonController {
 		} else {
 			throw new Error("Session is required to authenticate");
 		}
-		// get the associated person by doing a query
-		// find the proxy by doing a query
-		// store the proxy id in the session data
-		// always return true so people can't find out which users are in the system
-		console.log("person assert_email called");
-		return {};
 	}
 	request_email(context, parameters) {
 		console.log("person request_email called");

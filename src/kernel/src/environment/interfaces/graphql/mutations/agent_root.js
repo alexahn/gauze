@@ -27,7 +27,7 @@ const REQUEST__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Graph
 const VERIFY__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Root__Verify",
 	fields: {
-		verify: {
+		password: {
 			type: GraphQLString,
 			resolve: function (source, args, context) {
 				return "verify";

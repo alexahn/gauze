@@ -1,49 +1,130 @@
+import * as $abstract from "./../../abstract/index.js";
+
+import { HASH_PASSWORD__AUTHENTICATION__ENVIRONMENT } from "./../authentication.js";
+
 import { MODEL__SESSION__MODEL__ENVIRONMENT } from "./../models/session.js";
-
-/*
-query {
-	read_proxy(where: {
-		agent_id: "1",
-		agent_type: "gauze__agent_root"
-	}) {
-		relationships {
-			accounts: read_proxy(where: {
-				agent_type: "gauze__agent_account"
-			}) {
-				relationships {
-					users: read_proxy(where: {
-						agent_type: "gauze__agent_user"
-					}) {
-
-					}
-				}	
-			}
-			persons: read_proxy(where: {
-				agent_type: "gauze__agent_person"
-			}) {
-				relationships {
-					characters: read_proxy(where: {
-						agent_type: "gauze__agent_character"
-					}) {
-
-					}
-				}
-			}
-		}
-	}
-}
-*/
+import { MODEL__SECRET__MODEL__ENVIRONMENT } from "./../models/secret.js";
 
 class AgentAccountController {
-	constructor() {}
-
-	verify_password(jwt, password) {
-		// get the asserted proxy from session data
-		// get the associated agent account for the proxy
-		// get the secrets (salt and hash) for the agent account
-		// pbkdf2
-		// update the session date with the result
-		// return success: true / false
+	constructor() {
+		const self = this;
+		self.proxy_type = $abstract.entities.proxy.default($abstract).table_name;
+	}
+	verify_password(context, parameters) {
+		const self = this;
+		const { agent } = context;
+		if (agent) {
+			if (agent.proxy_id) {
+				throw new Error("Session is already authenticated");
+			} else {
+				if (!agent.session_id) {
+					throw new Error("Invalid session");
+				}
+				if (!parameters.agent_account) {
+					throw new Error("Field 'agent_account' is required");
+				}
+				if (!parameters.agent_account.gauze__agent_account__password) {
+					throw new Error("Field 'agent_account.account_password' is required");
+				}
+				const session_attributes = {
+					gauze__session__id: agent.session_id,
+				};
+				const session_parameters = { where: session_attributes };
+				return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, session_parameters)
+					.then(function (sessions) {
+						if (sessions && sessions.length) {
+							const session = sessions[0];
+							return {
+								session: session,
+							};
+						} else {
+							return null;
+						}
+					})
+					.then(function (collection) {
+						const { session } = collection;
+						var parsed_data;
+						try {
+							parsed_data = JSON.parse(session.gauze__session__data);
+						} catch (error) {
+							// note: log?
+							parsed_data = {};
+						}
+						if (parsed_data.assert) {
+							// fetch secrets
+							const secret_attributes = {
+								gauze__secret__agent_type: self.proxy_type,
+								gauze__secret__agent_id: parsed_data.assert,
+								gauze__secret__name: "password",
+							};
+							const secret_parameters = { where: secret_attributes };
+							return MODEL__SECRET__MODEL__ENVIRONMENT.read(context, secret_parameters).then(function (secrets) {
+								if (secrets && secrets.length) {
+									// filter by hash and filter by salt
+									const salt = secrets.find(function (secret) {
+										return secret.gauze__secret__kind === "salt";
+									});
+									const hash = secrets.find(function (secret) {
+										return secret.gauze__secret__kind === "hash";
+									});
+									return {
+										...collection,
+										salt: salt,
+										hash: hash,
+									};
+								} else {
+									return null;
+								}
+							});
+						} else {
+							return null;
+						}
+					})
+					.then(function (collection) {
+						if (collection) {
+							const { session, salt, hash } = collection;
+							if (!salt) {
+								throw new Error("Secret could not be found for account: salt");
+							}
+							if (!hash) {
+								throw new Error("Secret could not be found for account: hash");
+							}
+							// pbkdf2
+							const password = parameters.agent_account.gauze__agent_account__password;
+							const password_salt = salt.gauze__secret__value;
+							const password_hash = hash.gauze__secret__value;
+							return HASH_PASSWORD__AUTHENTICATION__ENVIRONMENT(password, password_salt).then(function (proposed_hash) {
+								// check that the hashes align
+								if (password_hash === proposed_hash) {
+									console.log("AUTHENTICATION PASSED");
+									return {
+										...collection,
+										proposed_hash: proposed_hash,
+									};
+								} else {
+									return null;
+								}
+							});
+						} else {
+							return null;
+						}
+					})
+					.then(function (collection) {
+						if (collection) {
+							// all passed
+							return {
+								success: true,
+							};
+						} else {
+							return {
+								success: false,
+							};
+						}
+					});
+			}
+		} else {
+			throw new Error("Session is required to authenticate");
+		}
 	}
 }
 

@@ -2,11 +2,11 @@ import * as $abstract from "./../../abstract/index.js";
 import * as $kernel from "./../../kernel/index.js";
 import * as $database from "./../../database/index.js";
 
-const { randomBytes, pbkdf2 } = await import("node:crypto");
+const { randomBytes } = await import("node:crypto");
 
 import { v4 as uuidv4 } from "uuid";
 
-import { SIGN_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT, SIGN_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT } from "./../authentication.js";
+import { HASH_PASSWORD__AUTHENTICATION__ENVIRONMENT, SIGN_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT, SIGN_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT } from "./../authentication.js";
 
 import { MODEL__RELATIONSHIP__MODEL__ENVIRONMENT } from "./../models/relationship.js";
 
@@ -140,328 +140,326 @@ class EnvironmentController {
 		// we can require that the data json to require something like { verify: [{ source: "person.email" }] }
 
 		const salt = randomBytes(128).toString("hex");
-		return new Promise(function (resolve, reject) {
-			// 64 byte length hash generated
-			pbkdf2(parameters.agent_account.gauze__agent_account__password, salt, 524288, 128, "sha512", function (err, hash) {
-				if (err) return reject(err);
-				console.log("hash", hash);
+		const password = parameters.agent_account.gauze__agent_account__password;
+		return HASH_PASSWORD__AUTHENTICATION__ENVIRONMENT(password, salt)
+			.then(function (hash) {
 				delete parameters.agent_account.gauze__agent_account__password;
-				return resolve(hash);
+				return hash;
+			})
+			.then(function (hash) {
+				const secret_hash_id = uuidv4();
+				const secret_salt_id = uuidv4();
+				const secret_type = $abstract.entities.secret.default($abstract).table_name;
+				const agent_root_id = uuidv4();
+				const agent_root_type = $abstract.entities.agent_root.default($abstract).table_name;
+				const agent_account_id = uuidv4();
+				const agent_account_type = $abstract.entities.agent_account.default($abstract).table_name;
+				const agent_user_id = uuidv4();
+				const agent_user_type = $abstract.entities.agent_user.default($abstract).table_name;
+				const agent_person_id = uuidv4();
+				const agent_person_type = $abstract.entities.agent_person.default($abstract).table_name;
+				const agent_character_id = uuidv4();
+				const agent_character_type = $abstract.entities.agent_character.default($abstract).table_name;
+				const proxy_root_id = uuidv4();
+				const proxy_account_id = uuidv4();
+				const proxy_user_id = uuidv4();
+				const proxy_person_id = uuidv4();
+				const proxy_character_id = uuidv4();
+				const proxy_type = $abstract.entities.proxy.default($abstract).table_name;
+				const session_id = uuidv4();
+				const session_type = $abstract.entities.session.default($abstract).table_name;
+
+				parameters.agent_root.gauze__agent_root__id = agent_root_id;
+				parameters.agent_account.gauze__agent_account__id = agent_account_id;
+				parameters.agent_user.gauze__agent_user__id = agent_user_id;
+				parameters.agent_person.gauze__agent_person__id = agent_person_id;
+				parameters.agent_character.gauze__agent_character__id = agent_character_id;
+
+				// create secret hash
+				// create secret salt
+				// create agent root
+				// create agent account
+				// create agent user
+				// create agent person
+				// create agent character
+				// create proxy root
+				// create proxy account
+				// create proxy user
+				// create proxy person
+				// create proxy character
+				// link all proxies
+				// link secrets to proxy root
+				// link session to proxy root
+
+				const secret_transactions = [
+					function () {
+						const attributes = {
+							gauze__secret__id: secret_salt_id,
+							gauze__secret__realm: "system",
+							gauze__secret__agent_id: proxy_root_id,
+							gauze__secret__agent_type: proxy_type,
+							gauze__secret__value: salt,
+							gauze__secret__kind: "salt",
+							gauze__secret__name: "password",
+						};
+						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, secret_salt_id, secret_type);
+						const parameters = { attributes, ...access_parameters };
+						return MODEL__SECRET__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					function () {
+						const attributes = {
+							gauze__secret__id: secret_hash_id,
+							gauze__secret__realm: "system",
+							gauze__secret__agent_id: proxy_root_id,
+							gauze__secret__agent_type: proxy_type,
+							gauze__secret__value: hash,
+							gauze__secret__kind: "hash",
+							gauze__secret__name: "password",
+						};
+						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, secret_hash_id, secret_type);
+						const parameters = { attributes, ...access_parameters };
+						return MODEL__SECRET__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+				];
+				const agent_transactions = [
+					function () {
+						const access_parameters = self.create_access_control(agent_root_id, agent_root_type, agent_root_id, agent_root_type);
+						const agent_parameters = { attributes: parameters.agent_root, ...access_parameters };
+						return MODEL__AGENT_ROOT__MODEL__ENVIRONMENT.create(context, agent_parameters);
+					},
+					function () {
+						const access_parameters = self.create_access_control(agent_account_id, agent_account_type, agent_account_id, agent_account_type);
+						const agent_parameters = { attributes: parameters.agent_account, ...access_parameters };
+						return MODEL__AGENT_ACCOUNT__MODEL__ENVIRONMENT.create(context, agent_parameters);
+					},
+					function () {
+						const access_parameters = self.create_access_control(agent_user_id, agent_user_type, agent_user_id, agent_user_type);
+						const agent_parameters = { attributes: parameters.agent_user, ...access_parameters };
+						return MODEL__AGENT_USER__MODEL__ENVIRONMENT.create(context, agent_parameters);
+					},
+					function () {
+						const access_parameters = self.create_access_control(agent_person_id, agent_person_type, agent_person_id, agent_person_type);
+						const agent_parameters = { attributes: parameters.agent_person, ...access_parameters };
+						return MODEL__AGENT_PERSON__MODEL__ENVIRONMENT.create(context, agent_parameters);
+					},
+					function () {
+						const access_parameters = self.create_access_control(agent_character_id, agent_character_type, agent_character_id, agent_character_type);
+						const agent_parameters = { attributes: parameters.agent_character, ...access_parameters };
+						return MODEL__AGENT_CHARACTER__MODEL__ENVIRONMENT.create(context, agent_parameters);
+					},
+				];
+				const proxy_transactions = [
+					function () {
+						const attributes = {
+							gauze__proxy__id: proxy_root_id,
+							gauze__proxy__agent_type: agent_root_type,
+							gauze__proxy__agent_id: agent_root_id,
+							gauze__proxy__root_id: proxy_root_id,
+						};
+						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_root_id, proxy_type);
+						const parameters = { attributes, ...access_parameters };
+						return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					function () {
+						const attributes = {
+							gauze__proxy__id: proxy_account_id,
+							gauze__proxy__agent_type: agent_account_type,
+							gauze__proxy__agent_id: agent_account_id,
+							gauze__proxy__root_id: proxy_root_id,
+						};
+						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_account_id, proxy_type);
+						const parameters = { attributes, ...access_parameters };
+						return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					function () {
+						const attributes = {
+							gauze__proxy__id: proxy_user_id,
+							gauze__proxy__agent_type: agent_user_type,
+							gauze__proxy__agent_id: agent_user_id,
+							gauze__proxy__root_id: proxy_root_id,
+						};
+						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_user_id, proxy_type);
+						const parameters = { attributes, ...access_parameters };
+						return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					function () {
+						const attributes = {
+							gauze__proxy__id: proxy_person_id,
+							gauze__proxy__agent_type: agent_person_type,
+							gauze__proxy__agent_id: agent_person_id,
+							gauze__proxy__root_id: proxy_root_id,
+						};
+						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_person_id, proxy_type);
+						const parameters = { attributes, ...access_parameters };
+						return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					function () {
+						const attributes = {
+							gauze__proxy__id: proxy_character_id,
+							gauze__proxy__agent_type: agent_character_type,
+							gauze__proxy__agent_id: agent_character_id,
+							gauze__proxy__root_id: proxy_root_id,
+						};
+						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_character_id, proxy_type);
+						const parameters = { attributes, ...access_parameters };
+						return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+				];
+				const link_transactions = [
+					// proxy
+					function () {
+						const attributes = {
+							gauze__relationship__from_type: proxy_type,
+							gauze__relationship__from_id: proxy_root_id,
+							gauze__relationship__to_type: proxy_type,
+							gauze__relationship__to_id: proxy_account_id,
+						};
+						const parameters = { attributes };
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					function () {
+						const attributes = {
+							gauze__relationship__from_type: proxy_type,
+							gauze__relationship__from_id: proxy_account_id,
+							gauze__relationship__to_type: proxy_type,
+							gauze__relationship__to_id: proxy_root_id,
+						};
+						const parameters = { attributes };
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					function () {
+						const attributes = {
+							gauze__relationship__from_type: proxy_type,
+							gauze__relationship__from_id: proxy_root_id,
+							gauze__relationship__to_type: proxy_type,
+							gauze__relationship__to_id: proxy_person_id,
+						};
+						const parameters = { attributes };
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					function () {
+						const attributes = {
+							gauze__relationship__from_type: proxy_type,
+							gauze__relationship__from_id: proxy_person_id,
+							gauze__relationship__to_type: proxy_type,
+							gauze__relationship__to_id: proxy_root_id,
+						};
+						const parameters = { attributes };
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					function () {
+						const attributes = {
+							gauze__relationship__from_type: proxy_type,
+							gauze__relationship__from_id: proxy_account_id,
+							gauze__relationship__to_type: proxy_type,
+							gauze__relationship__to_id: proxy_user_id,
+						};
+						const parameters = { attributes };
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					function () {
+						const attributes = {
+							gauze__relationship__from_type: proxy_type,
+							gauze__relationship__from_id: proxy_user_id,
+							gauze__relationship__to_type: proxy_type,
+							gauze__relationship__to_id: proxy_account_id,
+						};
+						const parameters = { attributes };
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					function () {
+						const attributes = {
+							gauze__relationship__from_type: proxy_type,
+							gauze__relationship__from_id: proxy_person_id,
+							gauze__relationship__to_type: proxy_type,
+							gauze__relationship__to_id: proxy_character_id,
+						};
+						const parameters = { attributes };
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					function () {
+						const attributes = {
+							gauze__relationship__from_type: proxy_type,
+							gauze__relationship__from_id: proxy_character_id,
+							gauze__relationship__to_type: proxy_type,
+							gauze__relationship__to_id: proxy_person_id,
+						};
+						const parameters = { attributes };
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					// secret
+					function () {
+						const attributes = {
+							gauze__relationship__from_type: proxy_type,
+							gauze__relationship__from_id: proxy_root_id,
+							gauze__relationship__to_type: secret_type,
+							gauze__relationship__to_id: secret_salt_id,
+						};
+						const parameters = { attributes };
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					function () {
+						const attributes = {
+							gauze__relationship__from_type: secret_type,
+							gauze__relationship__from_id: secret_salt_id,
+							gauze__relationship__to_type: proxy_type,
+							gauze__relationship__to_id: proxy_root_id,
+						};
+						const parameters = { attributes };
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					function () {
+						const attributes = {
+							gauze__relationship__from_type: proxy_type,
+							gauze__relationship__from_id: proxy_root_id,
+							gauze__relationship__to_type: secret_type,
+							gauze__relationship__to_id: secret_hash_id,
+						};
+						const parameters = { attributes };
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					function () {
+						const attributes = {
+							gauze__relationship__from_type: secret_type,
+							gauze__relationship__from_id: secret_hash_id,
+							gauze__relationship__to_type: proxy_type,
+							gauze__relationship__to_id: proxy_root_id,
+						};
+						const parameters = { attributes };
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					// session
+					function () {
+						const attributes = {
+							gauze__relationship__from_type: proxy_type,
+							gauze__relationship__from_id: proxy_root_id,
+							gauze__relationship__to_type: session_type,
+							gauze__relationship__to_id: session_id,
+						};
+						const parameters = { attributes };
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+					function () {
+						const attributes = {
+							gauze__relationship__from_type: session_type,
+							gauze__relationship__from_id: session_id,
+							gauze__relationship__to_type: proxy_type,
+							gauze__relationship__to_id: proxy_root_id,
+						};
+						const parameters = { attributes };
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+					},
+				];
+				const transactions = secret_transactions.concat(agent_transactions, proxy_transactions, link_transactions);
+				return Promise.all(
+					transactions.map(function (f) {
+						return f();
+					}),
+				).then(function (results) {
+					// create a session now for the proxy root
+					return self._create_system_session(context, session_id, proxy_root_id, proxy_root_id, proxy_type);
+				});
 			});
-		}).then(function (hash) {
-			const secret_hash_id = uuidv4();
-			const secret_salt_id = uuidv4();
-			const secret_type = $abstract.entities.secret.default($abstract).table_name;
-			const agent_root_id = uuidv4();
-			const agent_root_type = $abstract.entities.agent_root.default($abstract).table_name;
-			const agent_account_id = uuidv4();
-			const agent_account_type = $abstract.entities.agent_account.default($abstract).table_name;
-			const agent_user_id = uuidv4();
-			const agent_user_type = $abstract.entities.agent_user.default($abstract).table_name;
-			const agent_person_id = uuidv4();
-			const agent_person_type = $abstract.entities.agent_person.default($abstract).table_name;
-			const agent_character_id = uuidv4();
-			const agent_character_type = $abstract.entities.agent_character.default($abstract).table_name;
-			const proxy_root_id = uuidv4();
-			const proxy_account_id = uuidv4();
-			const proxy_user_id = uuidv4();
-			const proxy_person_id = uuidv4();
-			const proxy_character_id = uuidv4();
-			const proxy_type = $abstract.entities.proxy.default($abstract).table_name;
-			const session_id = uuidv4();
-			const session_type = $abstract.entities.session.default($abstract).table_name;
-
-			parameters.agent_root.gauze__agent_root__id = agent_root_id;
-			parameters.agent_account.gauze__agent_account__id = agent_account_id;
-			parameters.agent_user.gauze__agent_user__id = agent_user_id;
-			parameters.agent_person.gauze__agent_person__id = agent_person_id;
-			parameters.agent_character.gauze__agent_character__id = agent_character_id;
-
-			// create secret hash
-			// create secret salt
-			// create agent root
-			// create agent account
-			// create agent user
-			// create agent person
-			// create agent character
-			// create proxy root
-			// create proxy account
-			// create proxy user
-			// create proxy person
-			// create proxy character
-			// link all proxies
-			// link secrets to proxy root
-			// link session to proxy root
-
-			const secret_transactions = [
-				function () {
-					const attributes = {
-						gauze__secret__id: secret_salt_id,
-						gauze__secret__realm: "system",
-						gauze__secret__agent_id: proxy_root_id,
-						gauze__secret__agent_type: proxy_type,
-						gauze__secret__value: salt,
-						gauze__secret__kind: "salt",
-						gauze__secret__name: "password",
-					};
-					const access_parameters = self.create_access_control(proxy_root_id, proxy_type, secret_salt_id, secret_type);
-					const parameters = { attributes, ...access_parameters };
-					return MODEL__SECRET__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__secret__id: secret_hash_id,
-						gauze__secret__realm: "system",
-						gauze__secret__agent_id: proxy_root_id,
-						gauze__secret__agent_type: proxy_type,
-						gauze__secret__value: hash.toString("hex"),
-						gauze__secret__kind: "hash",
-						gauze__secret__name: "password",
-					};
-					const access_parameters = self.create_access_control(proxy_root_id, proxy_type, secret_hash_id, secret_type);
-					const parameters = { attributes, ...access_parameters };
-					return MODEL__SECRET__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-			];
-			const agent_transactions = [
-				function () {
-					const access_parameters = self.create_access_control(agent_root_id, agent_root_type, agent_root_id, agent_root_type);
-					const agent_parameters = { attributes: parameters.agent_root, ...access_parameters };
-					return MODEL__AGENT_ROOT__MODEL__ENVIRONMENT.create(context, agent_parameters);
-				},
-				function () {
-					const access_parameters = self.create_access_control(agent_account_id, agent_account_type, agent_account_id, agent_account_type);
-					const agent_parameters = { attributes: parameters.agent_account, ...access_parameters };
-					return MODEL__AGENT_ACCOUNT__MODEL__ENVIRONMENT.create(context, agent_parameters);
-				},
-				function () {
-					const access_parameters = self.create_access_control(agent_user_id, agent_user_type, agent_user_id, agent_user_type);
-					const agent_parameters = { attributes: parameters.agent_user, ...access_parameters };
-					return MODEL__AGENT_USER__MODEL__ENVIRONMENT.create(context, agent_parameters);
-				},
-				function () {
-					const access_parameters = self.create_access_control(agent_person_id, agent_person_type, agent_person_id, agent_person_type);
-					const agent_parameters = { attributes: parameters.agent_person, ...access_parameters };
-					return MODEL__AGENT_PERSON__MODEL__ENVIRONMENT.create(context, agent_parameters);
-				},
-				function () {
-					const access_parameters = self.create_access_control(agent_character_id, agent_character_type, agent_character_id, agent_character_type);
-					const agent_parameters = { attributes: parameters.agent_character, ...access_parameters };
-					return MODEL__AGENT_CHARACTER__MODEL__ENVIRONMENT.create(context, agent_parameters);
-				},
-			];
-			const proxy_transactions = [
-				function () {
-					const attributes = {
-						gauze__proxy__id: proxy_root_id,
-						gauze__proxy__agent_type: agent_root_type,
-						gauze__proxy__agent_id: agent_root_id,
-						gauze__proxy__root_id: proxy_root_id,
-					};
-					const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_root_id, proxy_type);
-					const parameters = { attributes, ...access_parameters };
-					return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__proxy__id: proxy_account_id,
-						gauze__proxy__agent_type: agent_account_type,
-						gauze__proxy__agent_id: agent_account_id,
-						gauze__proxy__root_id: proxy_root_id,
-					};
-					const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_account_id, proxy_type);
-					const parameters = { attributes, ...access_parameters };
-					return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__proxy__id: proxy_user_id,
-						gauze__proxy__agent_type: agent_user_type,
-						gauze__proxy__agent_id: agent_user_id,
-						gauze__proxy__root_id: proxy_root_id,
-					};
-					const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_user_id, proxy_type);
-					const parameters = { attributes, ...access_parameters };
-					return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__proxy__id: proxy_person_id,
-						gauze__proxy__agent_type: agent_person_type,
-						gauze__proxy__agent_id: agent_person_id,
-						gauze__proxy__root_id: proxy_root_id,
-					};
-					const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_person_id, proxy_type);
-					const parameters = { attributes, ...access_parameters };
-					return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__proxy__id: proxy_character_id,
-						gauze__proxy__agent_type: agent_character_type,
-						gauze__proxy__agent_id: agent_character_id,
-						gauze__proxy__root_id: proxy_root_id,
-					};
-					const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_character_id, proxy_type);
-					const parameters = { attributes, ...access_parameters };
-					return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-			];
-			const link_transactions = [
-				// proxy
-				function () {
-					const attributes = {
-						gauze__relationship__from_type: proxy_type,
-						gauze__relationship__from_id: proxy_root_id,
-						gauze__relationship__to_type: proxy_type,
-						gauze__relationship__to_id: proxy_account_id,
-					};
-					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__relationship__from_type: proxy_type,
-						gauze__relationship__from_id: proxy_account_id,
-						gauze__relationship__to_type: proxy_type,
-						gauze__relationship__to_id: proxy_root_id,
-					};
-					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__relationship__from_type: proxy_type,
-						gauze__relationship__from_id: proxy_root_id,
-						gauze__relationship__to_type: proxy_type,
-						gauze__relationship__to_id: proxy_person_id,
-					};
-					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__relationship__from_type: proxy_type,
-						gauze__relationship__from_id: proxy_person_id,
-						gauze__relationship__to_type: proxy_type,
-						gauze__relationship__to_id: proxy_root_id,
-					};
-					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__relationship__from_type: proxy_type,
-						gauze__relationship__from_id: proxy_account_id,
-						gauze__relationship__to_type: proxy_type,
-						gauze__relationship__to_id: proxy_user_id,
-					};
-					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__relationship__from_type: proxy_type,
-						gauze__relationship__from_id: proxy_user_id,
-						gauze__relationship__to_type: proxy_type,
-						gauze__relationship__to_id: proxy_account_id,
-					};
-					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__relationship__from_type: proxy_type,
-						gauze__relationship__from_id: proxy_person_id,
-						gauze__relationship__to_type: proxy_type,
-						gauze__relationship__to_id: proxy_character_id,
-					};
-					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__relationship__from_type: proxy_type,
-						gauze__relationship__from_id: proxy_character_id,
-						gauze__relationship__to_type: proxy_type,
-						gauze__relationship__to_id: proxy_person_id,
-					};
-					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				// secret
-				function () {
-					const attributes = {
-						gauze__relationship__from_type: proxy_type,
-						gauze__relationship__from_id: proxy_root_id,
-						gauze__relationship__to_type: secret_type,
-						gauze__relationship__to_id: secret_salt_id,
-					};
-					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__relationship__from_type: secret_type,
-						gauze__relationship__from_id: secret_salt_id,
-						gauze__relationship__to_type: proxy_type,
-						gauze__relationship__to_id: proxy_root_id,
-					};
-					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__relationship__from_type: proxy_type,
-						gauze__relationship__from_id: proxy_root_id,
-						gauze__relationship__to_type: secret_type,
-						gauze__relationship__to_id: secret_hash_id,
-					};
-					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__relationship__from_type: secret_type,
-						gauze__relationship__from_id: secret_hash_id,
-						gauze__relationship__to_type: proxy_type,
-						gauze__relationship__to_id: proxy_root_id,
-					};
-					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				// session
-				function () {
-					const attributes = {
-						gauze__relationship__from_type: proxy_type,
-						gauze__relationship__from_id: proxy_root_id,
-						gauze__relationship__to_type: session_type,
-						gauze__relationship__to_id: session_id,
-					};
-					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__relationship__from_type: session_type,
-						gauze__relationship__from_id: session_id,
-						gauze__relationship__to_type: proxy_type,
-						gauze__relationship__to_id: proxy_root_id,
-					};
-					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
-				},
-			];
-			const transactions = secret_transactions.concat(agent_transactions, proxy_transactions, link_transactions);
-			return Promise.all(
-				transactions.map(function (f) {
-					return f();
-				}),
-			).then(function (results) {
-				// create a session now for the proxy root
-				return self._create_system_session(context, session_id, proxy_root_id, proxy_root_id, proxy_type);
-			});
-		});
 	}
 	_create_system_session(context, session_id, proxy_id, agent_id, agent_type) {
 		const self = this;
