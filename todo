@@ -448,10 +448,11 @@
 [ ] add field to abstract entity fields to exclude from graphql interface
 	[ ] we can't do this without also excluding the field from the database graphql interface
 [ ] add agent_types field to method definitions for abstract entities (should be an array value of allowed agent types)
-	[ ] we can only do this if we change the interpretation of public to mean public inside an authenticated session
-		[ ] we probably have to do this because the root whitelist and blacklist are invalid without a valid session
-			[ ] not necessarily since a null agent id and agent type means that anyone can update or change the entity
-				[ ] to do this, we have to change agent_id and agent_type to be nullable in whitelist and blacklist, which seems like a pain
+	[x] we can only do this if we change the interpretation of public to mean public inside an authenticated session
+		[x] we probably have to do this because the root whitelist and blacklist are invalid without a valid session
+			[-] not necessarily since a null agent id and agent type means that anyone can update or change the entity
+				[-] to do this, we have to change agent_id and agent_type to be nullable in whitelist and blacklist, which seems like a pain
+	[x] change system interface to reject non authenticated users
 [x] set up environment interface, controllers, and models
 	[x] barebones piping to get the graphql mutations working
 [x] fix class names generated from code (there is an underscore)
@@ -473,3 +474,4 @@
 	[ ] refactor all session data management to use something like "steps.person.assert.email.success", "steps.person.request.email.success", "steps.person.request.email.code", etc
 		[ ] set login conditions based on step definitions (e.g. an array of success values for steps: ["steps.person.assert.email.success", "steps.person.verify.email.success", "steps.account.verify.password.success"])
 [ ] use types defined in abstract realm for all environment graphql definitions
+[ ] move guards outside of batch functions so that the errors are cleaner

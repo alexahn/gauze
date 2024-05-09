@@ -39,16 +39,18 @@ class GauzeServer {
 			} else if (req.url.startsWith("/system/graphql")) {
 				// parse system jwt
 				return self.$gauze.environment.authentication.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req).then(function (agent) {
-					return self.create_graphql_handler($gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM, req, res, agent);
-					/*
 					if (agent) {
 						return self.create_graphql_handler($gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM, req, res, agent);
 					} else {
 						res.writeHead(401, "Unauthorized", {
 							"content-type": "application/json; charset=utf-8",
-						}).end(JSON.stringify({}));
+						}).end(
+							JSON.stringify({
+								status: 401,
+								message: "Unauthorized",
+							}),
+						);
 					}
-					*/
 				});
 			} else if (req.url.startsWith("/environment/graphql")) {
 				// parse environment and system jwt

@@ -622,6 +622,10 @@ class SystemModel extends Model {
 	_read(context, parameters, realm) {
 		const self = this;
 		const { source } = context;
+		const { agent } = realm;
+		if (!agent) {
+			throw new Error("Authorization failed: missing agent");
+		}
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
@@ -637,6 +641,10 @@ class SystemModel extends Model {
 	_update(context, parameters, realm) {
 		const self = this;
 		const { source } = context;
+		const { agent } = realm;
+		if (!agent) {
+			throw new Error("Authorization failed: missing agent");
+		}
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
@@ -652,6 +660,10 @@ class SystemModel extends Model {
 	_delete(context, parameters, realm) {
 		const self = this;
 		const { source } = context;
+		const { agent } = realm;
+		if (!agent) {
+			throw new Error("Authorization failed: missing agent");
+		}
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}

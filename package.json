@@ -9,8 +9,8 @@
 		"gauze": "./src/command/gauze.js",
 		"start": "node ./src/command/server.js",
 		"start-graphiql-database": "npx ruru -SP -p 4001 -e http://localhost:4000/database/graphql",
-		"start-graphiql-system": "npx ruru -SP -p 4001 -e http://localhost:4000/system/graphql",
-		"start-graphiql-environment": "npx ruru -SP -p 4001 -e http://localhost:4000/environment/graphql"
+		"start-graphiql-system": "npx ruru -SP -p 4002 -e http://localhost:4000/system/graphql",
+		"start-graphiql-environment": "npx ruru -SP -p 4003 -e http://localhost:4000/environment/graphql"
 	},
 	"author": "Alex Ahn",
 	"devDependencies": {
