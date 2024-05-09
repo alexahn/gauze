@@ -35,6 +35,8 @@ arg2=$(echo "$arg1" | node $gauze_root/kernel/bin/format_string.js pascal_snake_
 #echo "arg2: $arg2"
 arg3=$(echo "$arg1" | node $gauze_root/kernel/bin/format_string.js upper_snake_case)
 #echo "arg3: $arg3"
+arg4=$(echo "$arg1" | node $gauze_root/kernel/bin/format_string.js pascal_case)
+#echo "arg4: $arg4"
 
 # create staging directory
 cp -r $base $staging
@@ -42,10 +44,12 @@ cp -r $base $staging
 find $staging -type f -name '*.js' -exec sed -i '' "s/a2b8dbc3427b41a9899e11671c2422c7/$arg1/g" {} +
 find $staging -type f -name '*.js' -exec sed -i '' "s/ba381b0cc764c4c9a187b716ae94ed96/$arg2/g" {} +
 find $staging -type f -name '*.js' -exec sed -i '' "s/cd637bc32c364580be5cc28396d3dee8/$arg3/g" {} +
+find $staging -type f -name '*.js' -exec sed -i '' "s/d741787fe14145d79bbdd8ad8057ca28/$arg4/g" {} +
 
 find $staging -type f -name '*.graphql' -exec sed -i '' "s/a2b8dbc3427b41a9899e11671c2422c7/$arg1/g" {} +
 find $staging -type f -name '*.graphql' -exec sed -i '' "s/ba381b0cc764c4c9a187b716ae94ed96/$arg2/g" {} +
 find $staging -type f -name '*.graphql' -exec sed -i '' "s/cd637bc32c364580be5cc28396d3dee8/$arg3/g" {} +
+find $staging -type f -name '*.graphql' -exec sed -i '' "s/d741787fe14145d79bbdd8ad8057ca28/$arg4/g" {} +
 
 # database
 cp $staging/database/models/entity.js $project_root/database/models/$arg1.js

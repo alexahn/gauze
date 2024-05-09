@@ -36,5 +36,7 @@ arg2=$(echo "$arg1" | node $gauze_root/kernel/bin/format_string.js pascal_snake_
 #echo "arg2: $arg2"
 arg3=$(echo "$arg1" | node $gauze_root/kernel/bin/format_string.js upper_snake_case)
 #echo "arg3: $arg3"
+arg4=$(echo "$arg1" | node $gauze_root/kernel/bin/format_string.js pascal_case)
+#echo "arg4: $arg4"
 
 find $project_root -name "*" | grep $arg1
