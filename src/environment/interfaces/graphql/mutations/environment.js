@@ -1,6 +1,6 @@
 import * as $structure from "./../../../../structure/index.js";
 
-import { GraphQLObjectType, GraphQLInputObjectType } from "graphql";
+import { GraphQLList, GraphQLObjectType, GraphQLInputObjectType } from "graphql";
 
 import {
 	SESSION__TYPE__ENVIRONMENT,
@@ -33,7 +33,7 @@ const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 			},
 		},
 		signout: {
-			type: SESSION__TYPE__ENVIRONMENT,
+			type: new GraphQLList(SESSION__TYPE__ENVIRONMENT),
 			args: {},
 			resolve: function (source, args, context) {
 				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.signout(
@@ -104,7 +104,7 @@ const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 			},
 		},
 		exit_session: {
-			type: SESSION__TYPE__ENVIRONMENT,
+			type: new GraphQLList(SESSION__TYPE__ENVIRONMENT),
 			args: {
 				proxy: {
 					type: INPUT_PROXY__TYPE__ENVIRONMENT,

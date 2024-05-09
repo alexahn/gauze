@@ -223,7 +223,8 @@
 [x] refactor schema to use interface entities
 	[x] add new files to base kernel
 [x] refactor all exports to use the same naming convention (need two underscores instead of one in a lot of places)
-[ ] use es6 map for lru cache (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+[-] use es6 map for lru cache (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+	[x] refactored the lru cache but the performance seems worse
 [x] copy the date graphql scalar so we have one less dependency
 [x] sub categorize internal gauze commands and user commands
 	[x] add example user command (so they can write their own webserver for example)
@@ -431,13 +432,18 @@
 		[x] assert person email
 		[x] verify account password
 	[x] enter session for non null agent
+	[ ] exit session
+	[ ] signout
 [ ] bring back reality realm?
 	[x] separate sessions for different realms
 [ ] change uuid to ulid
 [x] change src_from_base to use the entities defined in the kernel for internal entities
 [x] update kernel stages to use new entities
 [ ] add field to abstract entity definition to exclude from graphql interface
+	[ ] unless we specify the realm, we can't do this without also excluding from the database graphql interface
+		[ ] then the linker has to take in a realm parameters
 [ ] add field to abstract entity fields to exclude from graphql interface
+	[ ] we can't do this without also excluding the field from the database graphql interface
 [ ] add agent_types field to method definitions for abstract entities (should be an array value of allowed agent types)
 [x] set up environment interface, controllers, and models
 	[x] barebones piping to get the graphql mutations working
@@ -459,3 +465,4 @@
 	[ ] make a method on session to augment the session data so that it all goes through one place
 	[ ] refactor all session data management to use something like "steps.person.assert.email.success", "steps.person.request.email.success", "steps.person.request.email.code", etc
 		[ ] set login conditions based on step definitions (e.g. an array of success values for steps: ["steps.person.assert.email.success", "steps.person.verify.email.success", "steps.account.verify.password.success"])
+[ ] use types defined in abstract realm for all environment graphql definitions
