@@ -2,6 +2,7 @@ import path from "path";
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
 import http from "http";
+//import { v4 as uuidv4 } from "uuid";
 
 import * as jose from "jose";
 
@@ -105,6 +106,7 @@ class GauzeServer {
 				context.database = self.database;
 				context.transaction = transaction;
 				context.agent = agent;
+				//context.request_id = uuidv4()
 				return self.$gauze.kernel.shell.graphql
 					.EXECUTE__GRAPHQL__SHELL__KERNEL({
 						schema: schema,

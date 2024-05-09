@@ -469,6 +469,11 @@
 [ ] build an admin management react app to dog food the interface
 	[ ] have an admin method to track objects that have no relationships
 	[ ] have an admin method to track objects that should be one to one but aren't
+	[ ] add a command to create an agent and set it as an admin
+		[ ] track admin users by having a field in src/gauze.json called managers or admins that holds the agent root ids
+			[ ] use the config from kernel system model to bypass authorization checks if the agent id is one of the managers
+			[ ] the config will have to be split by environment
+			[ ] this approach seems better than creating a table in sql because the set of managers is in source control
 [ ] think about some defensive programming strategies to handle the lack of one to one constraints and other similar structural ambiguities
 	[ ] we might need to specify one to one relationships via structures
 	[ ] constraint checking might be best done by creating a projection of counts for relationships because we need a data structure that is indexed on counts
