@@ -28,8 +28,9 @@ function to_snake_case(string) {
 class GauzeManager {
 	// note: config takes the command argv structure (src/command/commands/create/project.js)
 	constructor({ $gauze }, config) {
-		this.$gauze = $gauze;
-		this.config = config;
+		const self = this
+		self.$gauze = $gauze;
+		self.config = config;
 
 		self.valid_agent_types = {};
 		if ($abstract.entities.agent_root) {
