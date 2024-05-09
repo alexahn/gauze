@@ -186,7 +186,10 @@ class SystemModel extends Model {
 		const self = this;
 		const { database, transaction } = context;
 		if (!agent) {
-			throw new Error("Authorization failed: missing agent");
+			//throw new Error("Authorization failed: missing agent");
+			agent = {}
+			agent.agent_id = null
+			agent.agent_type = null
 		}
 		if (agent.agent_id !== null && typeof agent.agent_id !== "string") {
 			throw new Error("Authorization failed: field 'agent_id' must be either null or of type string");
@@ -278,7 +281,10 @@ class SystemModel extends Model {
 		const self = this;
 		const { database, transaction } = context;
 		if (!agent) {
-			throw new Error("Authorization failed: missing agent");
+			//throw new Error("Authorization failed: missing agent");
+			agent = {}
+			agent.agent_id = null
+			agent.agent_type = null
 		}
 		if (agent.agent_id !== null && typeof agent.agent_id !== "string") {
 			throw new Error("Authorization failed: field 'agent_id' must be either null or of type string");
@@ -367,7 +373,10 @@ class SystemModel extends Model {
 		const self = this;
 		const { database, transaction } = context;
 		if (!agent) {
-			throw new Error("Authorization failed: missing agent");
+			//throw new Error("Authorization failed: missing agent");
+			agent = {}
+			agent.agent_id = null
+			agent.agent_type = null
 		}
 		if (agent.agent_id !== null && typeof agent.agent_id !== "string") {
 			throw new Error("Authorization failed: field 'agent_id' must be either null or of type string");

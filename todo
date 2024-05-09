@@ -444,13 +444,16 @@
 [x] update kernel stages to use new entities
 [ ] add field to abstract entity definition to exclude from graphql interface
 	[ ] unless we specify the realm, we can't do this without also excluding from the database graphql interface
-		[ ] then the linker has to take in a realm parameters
+		[ ] then the linker has to take in a realm parameter
 [ ] add field to abstract entity fields to exclude from graphql interface
 	[ ] we can't do this without also excluding the field from the database graphql interface
 [ ] add agent_types field to method definitions for abstract entities (should be an array value of allowed agent types)
+	[ ] we can only do this if we change the interpretation of public to mean public inside an authenticated session
+		[ ] we probably have to do this because the root whitelist and blacklist are invalid without a valid session
+			[ ] not necessarily since a null agent id and agent type means that anyone can update or change the entity
 [x] set up environment interface, controllers, and models
 	[x] barebones piping to get the graphql mutations working
-[ ] fix class names generated from code (there is an underscore)
+[x] fix class names generated from code (there is an underscore)
 [x] put all auth functions into a central location so it is easy to use
 	[x] should be a simple interface: authenticate(req) -> agent
 [x] update delete methods to delete relationships in kernel database model
