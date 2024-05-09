@@ -39,7 +39,7 @@ class GauzeServer {
 			} else if (req.url.startsWith("/system/graphql")) {
 				// parse system jwt
 				return self.$gauze.environment.authentication.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req).then(function (agent) {
-					return this.create_graphql_handler($gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM, req, res, agent);
+					return self.create_graphql_handler($gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM, req, res, agent);
 				});
 			} else if (req.url.startsWith("/environment/graphql")) {
 				// parse environment and system jwt
