@@ -99,6 +99,7 @@ class GauzeManager {
 	validate_project_config(config) {}
 	read_project_config(config_path) {}
 	validate_entity_config(config) {
+		const self = this
 		function validate_reducers(reducers) {
 			reducers.forEach(function (reducer) {
 				if (typeof reducer !== "object") throw new Error(`Reducer must be of type 'object': ${reducer}`);
