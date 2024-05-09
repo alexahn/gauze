@@ -28,7 +28,7 @@ function to_snake_case(string) {
 class GauzeManager {
 	// note: config takes the command argv structure (src/command/commands/create/project.js)
 	constructor({ $gauze }, config) {
-		const self = this
+		const self = this;
 		self.$gauze = $gauze;
 		self.config = config;
 
@@ -59,13 +59,13 @@ class GauzeManager {
 		}
 
 		self.valid_agent_type_exceptions = {
-			"gauze__proxy": true,
-			"gauze__agent_root": true,
-			"gauze__agent_account": true,
-			"gauze__agent_user": true,
-			"gauze__agent_person": true,
-			"gauze__agent_character": true
-		}
+			gauze__proxy: true,
+			gauze__agent_root: true,
+			gauze__agent_account: true,
+			gauze__agent_user: true,
+			gauze__agent_person: true,
+			gauze__agent_character: true,
+		};
 
 		process.on("SIGINT", function (val) {
 			$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGINT: ${val}`);
@@ -108,7 +108,7 @@ class GauzeManager {
 	validate_project_config(config) {}
 	read_project_config(config_path) {}
 	validate_entity_config(config) {
-		const self = this
+		const self = this;
 		function validate_reducers(reducers) {
 			reducers.forEach(function (reducer) {
 				if (typeof reducer !== "object") throw new Error(`Reducer must be of type 'object': ${reducer}`);
@@ -185,7 +185,8 @@ class GauzeManager {
 			method.valid_agent_types.forEach(function (agent_type) {
 				if (typeof agent_type !== "string") throw new Error(`Method attribute 'valid_agent_types' must contain only string values`);
 				if (agent_type === config.table_name) {
-					if (!self.valid_agent_type_exceptions[agent_type]) throw new Error(`Method attribute 'valid_agent_types' must contain string values from (${Object.keys(self.valid_agent_type_exceptions)}): ${agent_type}`);
+					if (!self.valid_agent_type_exceptions[agent_type])
+						throw new Error(`Method attribute 'valid_agent_types' must contain string values from (${Object.keys(self.valid_agent_type_exceptions)}): ${agent_type}`);
 				} else {
 					if (!self.valid_agent_types[agent_type])
 						throw new Error(`Method attribute 'valid_agent_types' must contain string values from (${Object.keys(self.valid_agent_types)}): ${agent_type}`);
