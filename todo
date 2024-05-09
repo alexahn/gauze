@@ -451,6 +451,7 @@
 	[ ] we can only do this if we change the interpretation of public to mean public inside an authenticated session
 		[ ] we probably have to do this because the root whitelist and blacklist are invalid without a valid session
 			[ ] not necessarily since a null agent id and agent type means that anyone can update or change the entity
+				[ ] to do this, we have to change agent_id and agent_type to be nullable in whitelist and blacklist, which seems like a pain
 [x] set up environment interface, controllers, and models
 	[x] barebones piping to get the graphql mutations working
 [x] fix class names generated from code (there is an underscore)

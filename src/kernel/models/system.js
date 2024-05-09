@@ -603,6 +603,10 @@ class SystemModel extends Model {
 	_create(context, parameters, realm) {
 		const self = this;
 		const { source } = context;
+		const { agent } = realm;
+		if (!agent) {
+			throw new Error("Authorization failed: missing agent");
+		}
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
