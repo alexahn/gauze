@@ -33,7 +33,7 @@ const operation_variables = {
 	},
 	whitelist: {
 		gauze__whitelist__realm: "system",
-		gauze__whitelist__agent_type: "gauze__user",
+		gauze__whitelist__agent_type: "gauze__agent_user",
 		gauze__whitelist__agent_role: "trunk",
 		gauze__whitelist__agent_id: "00000000-0000-0000-0000-000000000003",
 		gauze__whitelist__entity_type: "gauze__entity",
@@ -50,7 +50,7 @@ const expected = `{
                 },
                 "attributes": {
                     "gauze__whitelist__realm": "system",
-                    "gauze__whitelist__agent_type": "gauze__user",
+                    "gauze__whitelist__agent_type": "gauze__agent_user",
                     "gauze__whitelist__agent_role": "trunk",
                     "gauze__whitelist__agent_id": "00000000-0000-0000-0000-000000000003",
                     "gauze__whitelist__entity_type": "gauze__ytitne",

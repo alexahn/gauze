@@ -33,7 +33,7 @@ const operation_variables = {
 	},
 	blacklist: {
 		gauze__blacklist__realm: "system",
-		gauze__blacklist__agent_type: "gauze__user",
+		gauze__blacklist__agent_type: "gauze__agent_user",
 		gauze__blacklist__agent_role: "trunk",
 		gauze__blacklist__agent_id: "00000000-0000-0000-0000-000000000003",
 		gauze__blacklist__entity_type: "gauze__entity",

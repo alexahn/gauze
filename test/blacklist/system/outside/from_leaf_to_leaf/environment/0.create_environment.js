@@ -21,7 +21,7 @@ const operation_variables = {
 	blacklist: {
 		gauze__blacklist__id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
 		gauze__blacklist__realm: "system",
-		gauze__blacklist__agent_type: "gauze__user",
+		gauze__blacklist__agent_type: "gauze__agent_user",
 		gauze__blacklist__agent_role: "leaf",
 		gauze__blacklist__agent_id: "00000000-0000-0000-0000-000000000004",
 		gauze__blacklist__entity_type: "gauze__entity",

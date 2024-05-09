@@ -178,6 +178,8 @@ class SystemModel extends Model {
 	}
 	authorization_element(context, realm, agent, entity) {
 		const self = this;
+	    self._validate_agent(agent)
+        self._validate_entity(entity)
 		const key = self._auth_batch_key(realm, agent, entity, "authorization_element");
 		return self.auth_loader.load(context, key);
 	}
@@ -185,33 +187,6 @@ class SystemModel extends Model {
 	_authorization_element(context, realm, agent, entity) {
 		const self = this;
 		const { database, transaction } = context;
-		if (!agent) {
-			//throw new Error("Authorization failed: missing agent");
-			agent = {};
-			agent.agent_id = null;
-			agent.agent_type = null;
-		}
-		if (agent.agent_id !== null && typeof agent.agent_id !== "string") {
-			throw new Error("Authorization failed: field 'agent_id' must be either null or of type string");
-		}
-		/*
-		// note: we should be able to handle a null agent_id and have all authorization logic still work
-		if (!agent.agent_id) {
-			throw new Error("Authorization failed: agent is missing 'agent_id' field");
-		}
-		*/
-		if (!entity) {
-			throw new Error("Authorization failed: missing entity");
-		}
-		if (!entity.entity_id) {
-			throw new Error("Authorization failed: entity is missing 'entity_id' field");
-		}
-		if (!entity.entity_type) {
-			throw new Error("Authorization failed: entity is missing 'entity_type' field");
-		}
-		if (!entity.entity_method) {
-			throw new Error("Authorization failed: entity missing 'entity_method' field");
-		}
 		const entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity.entity_type];
 		const entity_module = $abstract.entities[entity_module_name].default($abstract);
 		const method_privacy = entity_module.methods[entity.entity_method].privacy;
@@ -220,6 +195,7 @@ class SystemModel extends Model {
 				.where({
 					gauze__whitelist__realm: realm,
 					gauze__whitelist__agent_id: agent.agent_id,
+					gauze__whitelist__agent_type: agent.agent_type,
 					gauze__whitelist__entity_type: entity.entity_type,
 					gauze__whitelist__entity_id: entity.entity_id,
 					gauze__whitelist__method: entity.entity_method,
@@ -247,6 +223,7 @@ class SystemModel extends Model {
 					// note: only leaf is applied to blacklist authorization
 					gauze__blacklist__agent_role: "leaf",
 					gauze__blacklist__agent_id: agent.agent_id,
+					gauze__blacklist__agent_type: agent.agent_type,
 					gauze__blacklist__entity_type: entity.entity_type,
 					gauze__blacklist__entity_id: entity.entity_id,
 					gauze__blacklist__method: entity.entity_method,
@@ -273,6 +250,8 @@ class SystemModel extends Model {
 	}
 	authorization_set(context, realm, agent, entity) {
 		const self = this;
+        self._validate_agent(agent)
+        self._validate_entity(entity)
 		const key = self._auth_batch_key(realm, agent, entity, "authorization_set");
 		return self.auth_loader.load(context, key);
 	}
@@ -280,30 +259,6 @@ class SystemModel extends Model {
 	_authorization_set(context, realm, agent, entity) {
 		const self = this;
 		const { database, transaction } = context;
-		if (!agent) {
-			//throw new Error("Authorization failed: missing agent");
-			agent = {};
-			agent.agent_id = null;
-			agent.agent_type = null;
-		}
-		if (agent.agent_id !== null && typeof agent.agent_id !== "string") {
-			throw new Error("Authorization failed: field 'agent_id' must be either null or of type string");
-		}
-		/*
-		// note: authorization logic should work with a null agent_id
-		if (!agent.agent_id) {
-			throw new Error("Authorization failed: agent is missing 'agent_id' field");
-		}
-		*/
-		if (!entity) {
-			throw new Error("Authorization failed: missing entity");
-		}
-		if (!entity.entity_type) {
-			throw new Error("Authorization failed: entity is missing 'entity_type' field");
-		}
-		if (!entity.entity_method) {
-			throw new Error("Authorization failed: entity missing 'entity_method' field");
-		}
 		const entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity.entity_type];
 		const entity_module = $abstract.entities[entity_module_name].default($abstract);
 		const method_privacy = entity_module.methods[entity.entity_method].privacy;
@@ -312,6 +267,7 @@ class SystemModel extends Model {
 				.where({
 					gauze__whitelist__realm: realm,
 					gauze__whitelist__agent_id: agent.agent_id,
+					gauze__whitelist__agent_type: agent.agent_type,
 					gauze__whitelist__entity_type: entity.entity_type,
 					gauze__whitelist__method: entity.entity_method,
 				})
@@ -338,6 +294,7 @@ class SystemModel extends Model {
 					// note: only leaf is applied to black list filter
 					gauze__blacklist__agent_role: "leaf",
 					gauze__blacklist__agent_id: agent.agent_id,
+					gauze__blacklist__agent_type: agent.agent_type,
 					gauze__blacklist__entity_type: entity.entity_type,
 					gauze__blacklist__method: entity.entity_method,
 				})
@@ -364,6 +321,8 @@ class SystemModel extends Model {
 	}
 	authorization_filter(context, realm, agent, entity) {
 		const self = this;
+		self._validate_agent(agent)
+		self._validate_entity(entity)
 		const key = self._auth_batch_key(realm, agent, entity, "authorization_filter");
 		return self.auth_loader.load(context, key);
 	}
@@ -372,30 +331,6 @@ class SystemModel extends Model {
 	_authorization_filter(context, realm, agent, entity) {
 		const self = this;
 		const { database, transaction } = context;
-		if (!agent) {
-			//throw new Error("Authorization failed: missing agent");
-			agent = {};
-			agent.agent_id = null;
-			agent.agent_type = null;
-		}
-		if (agent.agent_id !== null && typeof agent.agent_id !== "string") {
-			throw new Error("Authorization failed: field 'agent_id' must be either null or of type string");
-		}
-		/*
-		// note: authorization logic should work with a null agent_id
-		if (!agent.agent_id) {
-			throw new Error("Authorization failed: agent is missing 'agent_id' field");
-		}
-		*/
-		if (!entity) {
-			throw new Error("Authorization failed: missing entity");
-		}
-		if (!entity.entity_type) {
-			throw new Error("Authorization failed: entity is missing 'entity_type' field");
-		}
-		if (!entity.entity_method) {
-			throw new Error("Authorization failed: entity missing 'entity_method' field");
-		}
 		const entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity.entity_type];
 		const entity_module = $abstract.entities[entity_module_name].default($abstract);
 		const method_privacy = entity_module.methods[entity.entity_method].privacy;
@@ -408,6 +343,7 @@ class SystemModel extends Model {
 						.where({
 							gauze__whitelist__realm: realm,
 							gauze__whitelist__agent_id: agent.agent_id,
+							gauze__whitelist__agent_type: agent.agent_type,
 							gauze__whitelist__entity_type: entity.entity_type,
 							gauze__whitelist__method: entity.entity_method,
 						})
@@ -437,6 +373,7 @@ class SystemModel extends Model {
 							gauze__blacklist__realm: realm,
 							gauze__blacklist__agent_role: "leaf",
 							gauze__blacklist__agent_id: agent.agent_id,
+							gauze__blacklist__agent_type: agent.agent_type,
 							gauze__blacklist__entity_type: entity.entity_type,
 							gauze__blacklist__method: entity.entity_method,
 						})
@@ -518,10 +455,31 @@ class SystemModel extends Model {
 			}
 		});
 	}
+	_validate_agent(agent) {
+	    if (!agent) {
+            throw new Error("Authorization failed: missing agent");
+        }
+        if (!agent.agent_id) {
+            throw new Error("Authorization failed: agent is missing 'agent_id' field");
+        }
+        if (!agent.agent_type) {
+            throw new Error("Authorization failed: agent is missing 'agent_type' field");
+        }
+	}
+	_validate_entity(entity) {
+        if (!entity) {
+            throw new Error("Authorization failed: missing entity");
+        }
+        if (!entity.entity_type) {
+            throw new Error("Authorization failed: entity is missing 'entity_type' field");
+        }
+        if (!entity.entity_method) {
+            throw new Error("Authorization failed: entity missing 'entity_method' field");
+        }
+	}
 	_root_create(context, parameters, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
-		entity.entity_method = "create";
 		// note: our architecture requires that the key is a uuid
 		if (!parameters.attributes[self.entity.primary_key]) {
 			parameters.attributes[self.entity.primary_key] = uuidv4();
@@ -529,7 +487,7 @@ class SystemModel extends Model {
 		parameters.whitelist_create = {
 			gauze__whitelist__realm: "system",
 			gauze__whitelist__agent_role: "root",
-			gauze__whitelist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
+			gauze__whitelist__agent_type: agent.agent_type,
 			gauze__whitelist__agent_id: agent.agent_id,
 			gauze__whitelist__entity_type: entity.entity_type,
 			gauze__whitelist__entity_id: parameters.attributes[self.entity.primary_key],
@@ -538,7 +496,7 @@ class SystemModel extends Model {
 		parameters.whitelist_read = {
 			gauze__whitelist__realm: "system",
 			gauze__whitelist__agent_role: "root",
-			gauze__whitelist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
+			gauze__whitelist__agent_type: agent.agent_type,
 			gauze__whitelist__agent_id: agent.agent_id,
 			gauze__whitelist__entity_type: entity.entity_type,
 			gauze__whitelist__entity_id: parameters.attributes[self.entity.primary_key],
@@ -547,7 +505,7 @@ class SystemModel extends Model {
 		parameters.whitelist_update = {
 			gauze__whitelist__realm: "system",
 			gauze__whitelist__agent_role: "root",
-			gauze__whitelist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
+			gauze__whitelist__agent_type: agent.agent_type,
 			gauze__whitelist__agent_id: agent.agent_id,
 			gauze__whitelist__entity_type: entity.entity_type,
 			gauze__whitelist__entity_id: parameters.attributes[self.entity.primary_key],
@@ -556,7 +514,7 @@ class SystemModel extends Model {
 		parameters.whitelist_delete = {
 			gauze__whitelist__realm: "system",
 			gauze__whitelist__agent_role: "root",
-			gauze__whitelist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
+			gauze__whitelist__agent_type: agent.agent_type,
 			gauze__whitelist__agent_id: agent.agent_id,
 			gauze__whitelist__entity_type: entity.entity_type,
 			gauze__whitelist__entity_id: parameters.attributes[self.entity.primary_key],
@@ -565,7 +523,7 @@ class SystemModel extends Model {
 		parameters.blacklist_create = {
 			gauze__blacklist__realm: "system",
 			gauze__blacklist__agent_role: "root",
-			gauze__blacklist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
+			gauze__blacklist__agent_type: agent.agent_type,
 			gauze__blacklist__agent_id: agent.agent_id,
 			gauze__blacklist__entity_type: entity.entity_type,
 			gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
@@ -574,7 +532,7 @@ class SystemModel extends Model {
 		parameters.blacklist_read = {
 			gauze__blacklist__realm: "system",
 			gauze__blacklist__agent_role: "root",
-			gauze__blacklist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
+			gauze__blacklist__agent_type: agent.agent_type,
 			gauze__blacklist__agent_id: agent.agent_id,
 			gauze__blacklist__entity_type: entity.entity_type,
 			gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
@@ -583,7 +541,7 @@ class SystemModel extends Model {
 		parameters.blacklist_update = {
 			gauze__blacklist__realm: "system",
 			gauze__blacklist__agent_role: "root",
-			gauze__blacklist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
+			gauze__blacklist__agent_type: agent.agent_type,
 			gauze__blacklist__agent_id: agent.agent_id,
 			gauze__blacklist__entity_type: entity.entity_type,
 			gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
@@ -592,7 +550,7 @@ class SystemModel extends Model {
 		parameters.blacklist_delete = {
 			gauze__blacklist__realm: "system",
 			gauze__blacklist__agent_role: "root",
-			gauze__blacklist__agent_type: "gauze__user", // change this based on agent type later but for now, let's use gauze__user
+			gauze__blacklist__agent_type: agent.agent_type,
 			gauze__blacklist__agent_id: agent.agent_id,
 			gauze__blacklist__entity_type: entity.entity_type,
 			gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
@@ -603,10 +561,10 @@ class SystemModel extends Model {
 	_create(context, parameters, realm) {
 		const self = this;
 		const { source } = context;
-		const { agent } = realm;
-		if (!agent) {
-			throw new Error("Authorization failed: missing agent");
-		}
+		const { agent, entity } = realm;
+		entity.entity_method = "create";
+		self._validate_agent(agent)
+		self._validate_entity(entity)
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
@@ -616,16 +574,15 @@ class SystemModel extends Model {
 	_root_read(context, parameters, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
-		entity.entity_method = "read";
 		return self.authorized_execute(context, parameters, agent, entity, operation);
 	}
 	_read(context, parameters, realm) {
 		const self = this;
 		const { source } = context;
-		const { agent } = realm;
-		if (!agent) {
-			throw new Error("Authorization failed: missing agent");
-		}
+        const { agent, entity } = realm;
+		entity.entity_method = "read";
+        self._validate_agent(agent)
+        self._validate_entity(entity)
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
@@ -635,16 +592,15 @@ class SystemModel extends Model {
 	_root_update(context, parameters, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
-		entity.entity_method = "update";
 		return self.authorized_execute(context, parameters, agent, entity, operation);
 	}
 	_update(context, parameters, realm) {
 		const self = this;
 		const { source } = context;
-		const { agent } = realm;
-		if (!agent) {
-			throw new Error("Authorization failed: missing agent");
-		}
+        const { agent, entity } = realm;
+		entity.entity_method = "update";
+        self._validate_agent(agent)
+        self._validate_entity(entity)
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
@@ -654,16 +610,15 @@ class SystemModel extends Model {
 	_root_delete(context, parameters, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
-		entity.entity_method = "delete";
 		return self.authorized_execute(context, parameters, agent, entity, operation);
 	}
 	_delete(context, parameters, realm) {
 		const self = this;
 		const { source } = context;
-		const { agent } = realm;
-		if (!agent) {
-			throw new Error("Authorization failed: missing agent");
-		}
+        const { agent, entity } = realm;
+		entity.entity_method = "delete";
+        self._validate_agent(agent)
+        self._validate_entity(entity)
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}

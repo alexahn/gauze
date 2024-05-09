@@ -28,7 +28,7 @@ const operation_variables = {
 	whitelist: {
 		gauze__whitelist__id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
 		gauze__whitelist__realm: "system",
-		gauze__whitelist__agent_type: "gauze__user",
+		gauze__whitelist__agent_type: "gauze__agent_user",
 		gauze__whitelist__agent_role: "root",
 		gauze__whitelist__agent_id: "00000000-0000-0000-0000-000000000001",
 		gauze__whitelist__entity_type: "gauze__ytitne",
@@ -43,7 +43,7 @@ const expected = `{
                 "attributes": {
                     "gauze__whitelist__id": "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
                     "gauze__whitelist__realm": "system",
-                    "gauze__whitelist__agent_type": "gauze__user",
+                    "gauze__whitelist__agent_type": "gauze__agent_user",
                     "gauze__whitelist__agent_role": "root",
                     "gauze__whitelist__agent_id": "00000000-0000-0000-0000-000000000001",
                     "gauze__whitelist__entity_type": "gauze__ytitne",

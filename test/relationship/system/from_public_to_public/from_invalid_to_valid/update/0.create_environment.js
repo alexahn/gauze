@@ -87,7 +87,7 @@ const operation_variables = {
 	entity_blacklist: {
 		gauze__blacklist__realm: "system",
 		gauze__blacklist__agent_role: "leaf",
-		gauze__blacklist__agent_type: "gauze__user",
+		gauze__blacklist__agent_type: "gauze__agent_user",
 		gauze__blacklist__agent_id: "00000000-0000-0000-0000-000000000003",
 		gauze__blacklist__entity_type: "gauze__entity",
 		gauze__blacklist__entity_id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
@@ -96,7 +96,7 @@ const operation_variables = {
 	entity2_blacklist: {
 		gauze__blacklist__realm: "system",
 		gauze__blacklist__agent_role: "leaf",
-		gauze__blacklist__agent_type: "gauze__user",
+		gauze__blacklist__agent_type: "gauze__agent_user",
 		gauze__blacklist__agent_id: "00000000-0000-0000-0000-000000000003",
 		gauze__blacklist__entity_type: "gauze__entity",
 		gauze__blacklist__entity_id: "55c29b50-5e24-447d-8505-75e82c2aa8cc",
@@ -105,7 +105,7 @@ const operation_variables = {
 	entity3_blacklist: {
 		gauze__blacklist__realm: "system",
 		gauze__blacklist__agent_role: "leaf",
-		gauze__blacklist__agent_type: "gauze__user",
+		gauze__blacklist__agent_type: "gauze__agent_user",
 		gauze__blacklist__agent_id: "00000000-0000-0000-0000-000000000002",
 		gauze__blacklist__entity_type: "gauze__entity",
 		gauze__blacklist__entity_id: "7f84c508-b714-41c1-b986-2d6ed64fc5e9",
@@ -114,7 +114,7 @@ const operation_variables = {
 	entity4_blacklist: {
 		gauze__blacklist__realm: "system",
 		gauze__blacklist__agent_role: "leaf",
-		gauze__blacklist__agent_type: "gauze__user",
+		gauze__blacklist__agent_type: "gauze__agent_user",
 		gauze__blacklist__agent_id: "00000000-0000-0000-0000-000000000003",
 		gauze__blacklist__entity_type: "gauze__entity",
 		gauze__blacklist__entity_id: "45f5266f-1971-4b9a-985d-ac650449b589",
