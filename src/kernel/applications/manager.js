@@ -33,28 +33,28 @@ class GauzeManager {
 		self.config = config;
 
 		self.valid_agent_types = {};
-		if ($abstract.entities.agent_root) {
-			const agent_root = $abstract.entities.agent_root.default($abstract);
+		if ($gauze.abstract.entities.agent_root) {
+			const agent_root = $gauze.abstract.entities.agent_root.default($abstract);
 			self.valid_agent_types[agent_root.table_name] = true;
 		}
-		if ($abstract.entities.agent_account) {
-			const agent_account = $abstract.entities.agent_account.default($abstract);
+		if ($gauze.abstract.entities.agent_account) {
+			const agent_account = $gauze.abstract.entities.agent_account.default($abstract);
 			self.valid_agent_types[agent_account.table_name] = true;
 		}
-		if ($abstract.entities.agent_user) {
-			const agent_user = $abstract.entities.agent_user.default($abstract);
+		if ($gauze.abstract.entities.agent_user) {
+			const agent_user = $gauze.abstract.entities.agent_user.default($abstract);
 			self.valid_agent_types[agent_user.table_name] = true;
 		}
-		if ($abstract.entities.agent_person) {
-			const agent_person = $abstract.entities.agent_person.default($abstract);
+		if ($gauze.abstract.entities.agent_person) {
+			const agent_person = $gauze.abstract.entities.agent_person.default($abstract);
 			self.valid_agent_types[agent_person.table_name] = true;
 		}
-		if ($abstract.entities.agent_character) {
-			const agent_character = $abstract.entities.agent_character.default($abstract);
+		if ($gauze.abstract.entities.agent_character) {
+			const agent_character = $gauze.abstract.entities.agent_character.default($abstract);
 			self.valid_agent_types[agent_character.table_name] = true;
 		}
-		if ($abstract.entities.proxy) {
-			const proxy = $abstract.entities.agent_root.default($abstract);
+		if ($gauze.abstract.entities.proxy) {
+			const proxy = $gauze.abstract.entities.agent_root.default($abstract);
 			self.valid_agent_types[proxy.table_name] = true;
 		}
 
