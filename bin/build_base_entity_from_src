@@ -3,10 +3,12 @@
 from1="ytitne"
 from2="Ytitne"
 from3="YTITNE"
+from4="YtitneYtitne"
 
 arg1="entity"
 arg2="Entity"
 arg3="ENTITY"
+arg4="EntityEntity"
 
 src=./src
 base=./src/kernel/src/base
@@ -45,7 +47,9 @@ cp $src/structure/entities/$from1/system/index.js $base/structure/entities/$arg1
 find $base -type f -name '*.js' -exec sed -i '' "s/$from1/a2b8dbc3427b41a9899e11671c2422c7/g" {} +
 find $base -type f -name '*.js' -exec sed -i '' "s/$from2/ba381b0cc764c4c9a187b716ae94ed96/g" {} +
 find $base -type f -name '*.js' -exec sed -i '' "s/$from3/cd637bc32c364580be5cc28396d3dee8/g" {} +
+find $base -type f -name '*.js' -exec sed -i '' "s/$from4/d741787fe14145d79bbdd8ad8057ca28/g" {} +
 
 find $base -type f -name '*.graphql' -exec sed -i '' "s/$from1/a2b8dbc3427b41a9899e11671c2422c7/g" {} +
 find $base -type f -name '*.graphql' -exec sed -i '' "s/$from2/ba381b0cc764c4c9a187b716ae94ed96/g" {} +
 find $base -type f -name '*.graphql' -exec sed -i '' "s/$from3/cd637bc32c364580be5cc28396d3dee8/g" {} +
+find $base -type f -name '*.graphql' -exec sed -i '' "s/$from4/d741787fe14145d79bbdd8ad8057ca28/g" {} +
