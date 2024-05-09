@@ -90,7 +90,6 @@ class AgentAccountController {
 							return HASH_PASSWORD__AUTHENTICATION__ENVIRONMENT(password, password_salt).then(function (proposed_hash) {
 								// check that the hashes align
 								if (password_hash === proposed_hash) {
-									console.log("AUTHENTICATION PASSED");
 									return {
 										...collection,
 										proposed_hash: proposed_hash,

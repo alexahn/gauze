@@ -609,8 +609,6 @@ class EnvironmentController {
 		const self = this;
 		const { agent } = context;
 		const target_agent = parameters.proxy;
-		console.log("target_agent", target_agent);
-		console.log("agent", context.agent);
 		if (agent) {
 			if (target_agent) {
 				if (!target_agent.gauze__proxy__agent_type) {
@@ -730,7 +728,12 @@ class EnvironmentController {
 					}
 					// first check to make sure that the target agent is a valid proxy for the current proxy session
 					// look up the proxy by using: agent_type: target_agent.agent_type, agent_id: target_agent.agent_id, root_id: agent.proxy_id
-
+					const proxy_attributes = {
+						gauze__proxy__root_id: agent.proxy_id,
+						gauze__proxy__agent_id: target_agent.gauze__proxy__agent_id,
+						gauze__proxy__agent_type: target_agent.gauze__proxy__agent_type,
+					};
+					const proxy_parameters = { where: proxy_attributes };
 					return MODEL__PROXY__MODEL__ENVIRONMENT.read(context, proxy_parameters)
 						.then(function (proxies) {
 							if (proxies && proxies.length) {
@@ -753,7 +756,12 @@ class EnvironmentController {
 								const session_parameters = {
 									where: session_attributes,
 								};
-								return MODEL__SESSION__MODEL__ENVIRONMENT.delete(context, session_parameters);
+								return MODEL__SESSION__MODEL__ENVIRONMENT.delete(context, session_parameters).then(function (sessions) {
+									return {
+										...collection,
+										sessions: sessions,
+									};
+								});
 							} else {
 								return null;
 							}

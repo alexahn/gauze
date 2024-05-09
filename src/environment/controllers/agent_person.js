@@ -29,7 +29,6 @@ class AgentPersonController {
 				const agent_parameters = { where: attributes };
 				return MODEL__AGENT_PERSON__MODEL__ENVIRONMENT.read(context, agent_parameters)
 					.then(function (persons) {
-						console.log("persons", persons);
 						if (persons && persons.length) {
 							const person = persons[0];
 							return {
@@ -118,7 +117,6 @@ class AgentPersonController {
 					})
 					.then(function (collection) {
 						if (collection) {
-							console.log("ASSERTION COMPLETE", collection.session);
 							// everything finished
 							return {
 								success: true,

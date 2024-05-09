@@ -1,14 +1,5 @@
 import http from "http";
 
-// system token
-/*
-const jwt = "eyJhbGciOiJIUzI1NiJ9.eyJwcm94eV9pZCI6ImQyODQ0MjUzLTY4NjItNGE4My1hMzkyLWMzNDYyNTcyMzEyMiIsImFnZW50X2lkIjoiZDI4NDQyNTMtNjg2Mi00YTgzLWEzOTItYzM0NjI1NzIzMTIyIiwiYWdlbnRfdHlwZSI6ImdhdXplX19wcm94eSIsInNlc3Npb25faWQiOiIyMTFmNWI1ZS05OThjLTRmMjAtYWQ3My00MTdmYWViOWYyMzEiLCJzZWVkIjoiYzVmZGQwZTVkNTdhNTcxNGMwN2E0ZWZiMGUxZWI3MDk0ODM0NGJkMjcwYzg1NWU1ZDU3OGJjZjIyMWYyZjk3YmNlMzg0YWM2YjM5NjlkMDc3ZGFhMWFlNjVhN2QwNDE5ZmJkN2EzMzY2NzRmNjgyZTRkZWYwNjU0OTcyMTc3MjUiLCJpYXQiOjE3MTUxNzI4MDEsImlzcyI6ImdhdXplIiwiYXVkIjoic3lzdGVtIiwiZXhwIjoxNzE1MTgwMDAxfQ.XWrh-huOuQSUeQU6LWdxmGkdLN3CfRtfI2tIirFXZf0"
-*/
-
-// environment token
-const jwt =
-	"eyJhbGciOiJIUzI1NiJ9.eyJwcm94eV9pZCI6bnVsbCwiYWdlbnRfaWQiOm51bGwsImFnZW50X3R5cGUiOm51bGwsInNlc3Npb25faWQiOiJmYzIyZTNmYi00M2E2LTQwZTAtYTJkZS05YjNhYTcwOWE0NDkiLCJzZWVkIjoiNWRlNGNkMTAzOTRiMzVhMDY3YzE5OTgwMzE2Y2MyZDQ0ZjQyZjRlNmFkZjllMDBkYzZlNWQ2YmZmZTVlNDliYTk0M2E0NzY2NGRmNjgzZmY5YWY5NjRkMjY5ZTdkMzlhYjhkMjNmYzc5M2ViMjM5OTJjMTQ3NDVmYWE3NTc0ZWMiLCJpYXQiOjE3MTUyNTQ0ODksImlzcyI6ImdhdXplIiwiYXVkIjoiZW52aXJvbm1lbnQiLCJleHAiOjE3MTUyNjE2ODl9.CYoLEorIumdYdaAKgcSOCrfIpZO723jx5AnupNYcQJc";
-
 function execute(path, jwt, query) {
 	return new Promise(function (resolve, reject) {
 		const req = http.request(
@@ -28,7 +19,6 @@ function execute(path, jwt, query) {
 				});
 				res.on("end", () => {
 					var parsed;
-					console.log(JSON.stringify(JSON.parse(body), null, 4));
 					try {
 						parsed = JSON.parse(body);
 					} catch (error) {
@@ -48,96 +38,249 @@ function execute(path, jwt, query) {
 	});
 }
 
-const assert_query = `
-mutation {
-	agent {
-		person {
-			assert {
-				email(agent_person: {
-					gauze__agent_person__email: "contact2@alexahn.com"
-				}) {
-					success
-				}
-			}
-		}
-	}
-}
-`;
-
-const verify_query = `
-mutation {
-	agent {
-		account {
-			verify {
-				password(agent_account: {
-					gauze__agent_account__password: "1234"
-				}) {
-					success
-				}
-			}
-		}
-	}
-}
-`;
-const signin_query = `
+const enter_login_session_query = `
 mutation {
 	environment {
-		signin {
+		enter_session(proxy: null) {
 			gauze__session__id
-			gauze__session__agent_id
-			gauze__session__agent_type
+			gauze__session__kind
+			gauze__session__data
 			gauze__session__value
+			gauze__session__agent_id
+			gauze__session__seed
 		}
 	}
 }
 `;
-
-execute("/environment/graphql", jwt, assert_query).then(function (assert_step) {
-	return execute("/environment/graphql", jwt, verify_query).then(function (verify_step) {
-		return execute("/environment/graphql", jwt, signin_query).then(function (session) {
-			console.log("SUCCESS", JSON.stringify(session, null, 4));
-			const system_jwt = session.data.environment.signin.gauze__session__value;
-			const agent_id = session.data.environment.signin.gauze__session__agent_id;
-			const proxy_query = `
-				query {
-					read_proxy(where: {gauze__proxy__root_id: "${agent_id}"}) {
-						attributes {
-							gauze__proxy__root_id
-							gauze__proxy__agent_id
-							gauze__proxy__agent_type
+execute("/environment/graphql", null, enter_login_session_query)
+	.then(function (login_session) {
+		if (login_session.errors && login_session.errors.length) {
+			console.log("enter_session.errors", login_session.errors);
+			return null;
+		} else {
+			console.log("login session:", true);
+			return {
+				login_session: login_session.data.environment.enter_session,
+			};
+		}
+	})
+	.then(function (collection) {
+		if (collection && collection.login_session) {
+			const { login_session } = collection;
+			const login_jwt = login_session.gauze__session__value;
+			const assert_query = `
+			mutation {
+				agent {
+					person {
+						assert {
+							email(agent_person: {
+								gauze__agent_person__email: "contact2@alexahn.com"
+							}) {
+								success
+							}
 						}
 					}
 				}
-			`;
-			console.log("system_jwt", system_jwt);
-			return execute("/system/graphql", system_jwt, proxy_query).then(function (proxies) {
-				console.log("proxies", proxies);
-				// select the user proxy
-				const user = proxies.data.read_proxy.find(function (proxy) {
-					return proxy.attributes.gauze__proxy__agent_type === "gauze__agent_user";
-				});
-				console.log("user", user);
-				// enter user session
-				const user_query = `
-mutation {
-	environment {
-		enter_session(proxy: {
-			gauze__proxy__agent_id: "${user.attributes.gauze__proxy__agent_id}",
-			gauze__proxy__agent_type: "${user.attributes.gauze__proxy__agent_type}"
-		}) {
-			gauze__session__id
-			gauze__session__agent_id
-			gauze__session__agent_type
-			gauze__session__value
-		}
-	}
-}
-
-				`;
-				return execute("/environment/graphql", system_jwt, user_query).then(function (user_session) {
-					console.log("user_session", user_session);
-				});
+			}
+		`;
+			return execute("/environment/graphql", login_jwt, assert_query).then(function (assert_step) {
+				if (assert_step.errors && assert_step.errors.length) {
+					console.log("assert_step.errors", assert_step.errors);
+					return collection;
+				} else {
+					console.log("assert step:", assert_step.data.agent.person.assert.email.success);
+					return {
+						...collection,
+						assert_step: assert_step.data.agent.person.assert.email,
+					};
+				}
 			});
-		});
+		} else {
+			return collection;
+		}
+	})
+	.then(function (collection) {
+		if (collection && collection.assert_step) {
+			const { login_session } = collection;
+			const login_jwt = login_session.gauze__session__value;
+			const verify_query = `
+			mutation {
+				agent {
+					account {
+						verify {
+							password(agent_account: {
+								gauze__agent_account__password: "1234"
+							}) {
+								success
+							}
+						}
+					}
+				}
+			}
+		`;
+			return execute("/environment/graphql", login_jwt, verify_query).then(function (verify_step) {
+				if (verify_step.errors && verify_step.errors.length) {
+					console.log("verify_step.errors", verify_step.errors);
+					return collection;
+				} else {
+					console.log("verify step:", verify_step.data.agent.account.verify.password.success);
+					return {
+						...collection,
+						verify_step: verify_step.data.agent.account.verify.password,
+					};
+				}
+			});
+		} else {
+			return collection;
+		}
+	})
+	.then(function (collection) {
+		if (collection && collection.verify_step) {
+			const { login_session } = collection;
+			const login_jwt = login_session.gauze__session__value;
+			const signin_query = `
+			mutation {
+				environment {
+					signin {
+						gauze__session__id
+						gauze__session__agent_id
+						gauze__session__agent_type
+						gauze__session__value
+					}
+				}
+			}
+		`;
+			return execute("/environment/graphql", login_jwt, signin_query).then(function (signin_session) {
+				if (signin_session.errors && signin_session.errors.length) {
+					console.log("signin.errors", signin_session.errors);
+					return collection;
+				} else {
+					console.log("signin:", true);
+					return {
+						...collection,
+						signin_session: signin_session.data.environment.signin,
+					};
+				}
+			});
+		} else {
+			return collection;
+		}
+	})
+	.then(function (collection) {
+		if (collection && collection.signin_session) {
+			const { signin_session } = collection;
+			const signin_jwt = signin_session.gauze__session__value;
+			const agent_id = signin_session.gauze__session__agent_id;
+			const proxy_query = `
+			query {
+				read_proxy(where: {gauze__proxy__root_id: "${agent_id}"}) {
+					attributes {
+						gauze__proxy__root_id
+						gauze__proxy__agent_id
+						gauze__proxy__agent_type
+					}
+				}
+			}
+		`;
+			return execute("/system/graphql", signin_jwt, proxy_query).then(function (proxies) {
+				if (proxies.errors && proxies.errors.length) {
+					console.log("read_proxy.errors", proxies.errors);
+					return collection;
+				} else {
+					if (proxies.data.read_proxy && proxies.data.read_proxy.length) {
+						const user_proxy = proxies.data.read_proxy.find(function (proxy) {
+							return proxy.attributes.gauze__proxy__agent_type === "gauze__agent_user";
+						});
+						if (user_proxy) {
+							console.log("user_proxy:", true);
+							return {
+								...collection,
+								user_proxy: user_proxy,
+							};
+						} else {
+							console.log("read_proxy did not contain a user proxy");
+							return collection;
+						}
+					} else {
+						console.log("read_proxy returned no proxies");
+						return collection;
+					}
+				}
+			});
+		} else {
+			return collection;
+		}
+	})
+	.then(function (collection) {
+		if (collection && collection.user_proxy) {
+			const { signin_session, user_proxy } = collection;
+			const signin_jwt = signin_session.gauze__session__value;
+			const user_query = `
+			mutation {
+				environment {
+					enter_session(proxy: {
+						gauze__proxy__agent_id: "${user_proxy.attributes.gauze__proxy__agent_id}",
+						gauze__proxy__agent_type: "${user_proxy.attributes.gauze__proxy__agent_type}"
+					}) {
+						gauze__session__id
+						gauze__session__agent_id
+						gauze__session__agent_type
+						gauze__session__value
+					}
+				}
+			}
+		`;
+			return execute("/environment/graphql", signin_jwt, user_query).then(function (user_session) {
+				if (user_session.errors && user_session.errors.length) {
+					console.log("enter_session.errors", user_session.errors);
+					return collection;
+				} else {
+					console.log("enter_session:", true);
+					return {
+						...collection,
+						user_session: user_session.data.environment.enter_session,
+					};
+				}
+			});
+		} else {
+			return collection;
+		}
+	})
+	.then(function (collection) {
+		if (collection && collection.user_session) {
+			const { signin_session, user_proxy } = collection;
+			const signin_jwt = signin_session.gauze__session__value;
+			const exit_session_query = `
+			mutation {
+				environment {
+					exit_session(proxy: {
+						gauze__proxy__agent_id: "${user_proxy.attributes.gauze__proxy__agent_id}",
+						gauze__proxy__agent_type: "${user_proxy.attributes.gauze__proxy__agent_type}"
+					}) {
+						gauze__session__id
+						gauze__session__agent_id
+						gauze__session__agent_type
+						gauze__session__value
+					}
+				}
+			}
+		`;
+			return execute("/environment/graphql", signin_jwt, exit_session_query).then(function (exit_sessions) {
+				if (exit_sessions.errors && exit_sessions.errors.length) {
+					console.log("exit_session.errors", exit_sessions.errors);
+					return collection;
+				} else {
+					console.log("exit_session:", true);
+					return {
+						...collection,
+						exit_sessions: exit_sessions.data.environment.exit_session,
+					};
+				}
+			});
+		} else {
+			return collection;
+		}
+	})
+	.then(function (collection) {
+		console.log(collection);
 	});
-});
