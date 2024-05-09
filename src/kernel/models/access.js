@@ -46,17 +46,27 @@ class AccessSystemModel extends SystemModel {
 			trunk: true,
 			leaf: true,
 		};
-		self.agent_root = $abstract.entities.agent_root.default($abstract);
-		self.agent_account = $abstract.entities.agent_account.default($abstract);
-		self.agent_user = $abstract.entities.agent_user.default($abstract);
-		self.agent_person = $abstract.entities.agent_person.default($abstract);
-		self.agent_character = $abstract.entities.agent_character.default($abstract);
 		self.valid_agent_types = {};
-		self.valid_agent_types[self.agent_root.table_name] = true;
-		self.valid_agent_types[self.agent_account.table_name] = true;
-		self.valid_agent_types[self.agent_user.table_name] = true;
-		self.valid_agent_types[self.agent_person.table_name] = true;
-		self.valid_agent_types[self.agent_character.table_name] = true;
+		if ($abstract.entities.agent_root) {
+			self.agent_root = $abstract.entities.agent_root.default($abstract);
+			self.valid_agent_types[self.agent_root.table_name] = true;
+		}
+		if ($abstract.entities.agent_account) {
+			self.agent_account = $abstract.entities.agent_account.default($abstract);
+			self.valid_agent_types[self.agent_account.table_name] = true;
+		}
+		if ($abstract.entities.agent_user) {
+			self.agent_user = $abstract.entities.agent_user.default($abstract);
+			self.valid_agent_types[self.agent_user.table_name] = true;
+		}
+		if ($abstract.entities.agent_person) {
+			self.agent_person = $abstract.entities.agent_person.default($abstract);
+			self.valid_agent_types[self.agent_person.table_name] = true;
+		}
+		if ($abstract.entities.agent_character) {
+			self.agent_character = $abstract.entities.agent_character.default($abstract);
+			self.valid_agent_types[self.agent_character.table_name] = true;
+		}
 		self.valid_entity_types = {};
 		Object.keys($abstract.entities).forEach(function (name) {
 			const entity = $abstract.entities[name].default($abstract);
