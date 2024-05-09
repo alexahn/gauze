@@ -54,7 +54,7 @@ class GauzeManager {
 			self.valid_agent_types[agent_character.table_name] = true;
 		}
 		if ($gauze.abstract.entities.proxy) {
-			const proxy = $gauze.abstract.entities.agent_root.default($gauze.abstract);
+			const proxy = $gauze.abstract.entities.proxy.default($gauze.abstract);
 			self.valid_agent_types[proxy.table_name] = true;
 		}
 
