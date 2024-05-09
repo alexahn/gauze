@@ -38,6 +38,30 @@ class AccessSystemModel extends SystemModel {
 				[`delete_${self.entity.name}`]: [],
 			},
 		};
+		self.valid_realm = {
+			system: true,
+		};
+		self.valid_agent_role = {
+			root: true,
+			trunk: true,
+			leaf: true,
+		};
+		self.agent_root = $abstract.entities.agent_root.default($abstract);
+		self.agent_account = $abstract.entities.agent_account.default($abstract);
+		self.agent_user = $abstract.entities.agent_user.default($abstract);
+		self.agent_person = $abstract.entities.agent_person.default($abstract);
+		self.agent_character = $abstract.entities.agent_character.default($abstract);
+		self.valid_agent_types = {};
+		self.valid_agent_types[self.agent_root.table_name] = true;
+		self.valid_agent_types[self.agent_account.table_name] = true;
+		self.valid_agent_types[self.agent_user.table_name] = true;
+		self.valid_agent_types[self.agent_person.table_name] = true;
+		self.valid_agent_types[self.agent_character.table_name] = true;
+		self.valid_entity_types = {};
+		Object.keys($abstract.entities).forEach(function (name) {
+			const entity = $abstract.entities[name].default($abstract);
+			self.valid_entity_types[entity.table_name] = true;
+		});
 	}
 	static _class_name(schema_name) {
 		return schema_name ? `(${schema_name})[${super._class_name()}]AccessSystemModel` : `[${super._class_name()}]AccessSystemModel`;
@@ -145,45 +169,32 @@ class AccessSystemModel extends SystemModel {
 	}
 	_validate_model(attributes) {
 		const self = this;
-		const valid_realm = {
-			system: true,
-		};
-		const valid_agent_role = {
-			root: true,
-			trunk: true,
-			leaf: true,
-		};
-		const valid_agent_type = {
-			gauze__agent_account: true,
-			gauze__agent_user: true,
-			gauze__agent_person: true,
-			gauze__agent_character: true,
-		};
 		if (!attributes[self.key_realm]) {
 			throw new Error(`Field '${self.key_realm}' is required`);
 		}
-		if (!valid_realm[attributes[self.key_realm]]) {
-			throw new Error(`Field '${self.key_realm}' must be one of: ${Object.keys(valid_realm)}`);
+		if (!self.valid_realm[attributes[self.key_realm]]) {
+			throw new Error(`Field '${self.key_realm}' must be one of: ${Object.keys(self.valid_realm)}`);
 		}
 		if (!attributes[self.key_agent_role]) {
 			throw new Error(`Field '${self.key_agent_role}' is required`);
 		}
-		if (!valid_agent_role[attributes[self.key_agent_role]]) {
-			throw new Error(`Field '${self.key_agent_role}' must be one of: ${Object.keys(valid_agent_role)}`);
+		if (!self.valid_agent_role[attributes[self.key_agent_role]]) {
+			throw new Error(`Field '${self.key_agent_role}' must be one of: ${Object.keys(self.valid_agent_role)}`);
 		}
 		if (!attributes[self.key_agent_type]) {
 			throw new Error(`Field '${self.key_agent_type}' is required`);
 		}
-		/*
-		if (!valid_agent_type[attributes[self.key_agent_type]]) {
-			throw new Error(`Field '${self.key_agent_type}' must be one of: ${Object.keys(valid_agent_type)}`)
+		if (!self.valid_agent_types[attributes[self.key_agent_type]]) {
+			throw new Error(`Field '${self.key_agent_type}' must be one of: ${Object.keys(self.valid_agent_types)}`);
 		}
-		*/
 		if (!attributes[self.key_agent_id]) {
 			throw new Error(`Field '${self.key_agent_id}' is required`);
 		}
 		if (!attributes[self.key_entity_type]) {
 			throw new Error(`Field '${self.key_entity_type}' is required`);
+		}
+		if (!self.valid_entity_types[attributes[self.key_entity_type]]) {
+			throw new Error(`Field '${self.key_entity_type}' must be one of: ${Object.keys(self.valid_entity_types)}`);
 		}
 		if (!attributes[self.key_entity_id]) {
 			throw new Error(`Field '${self.key_entity_id}' is required`);
