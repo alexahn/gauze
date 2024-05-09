@@ -42,12 +42,12 @@ cp $src/structure/entities/$from1/database/sql.js $staging/structure/entities/$a
 cp $src/structure/entities/$from1/system/graphql.js $staging/structure/entities/$arg1/system/graphql.js
 cp $src/structure/entities/$from1/system/index.js $staging/structure/entities/$arg1/system/index.js
 
+find $staging -type f -name '*.js' -exec sed -i '' "s/$from4/dd6fb00f485c4397add38780939d6923/g" {} +
 find $staging -type f -name '*.js' -exec sed -i '' "s/$from1/a543731262804f64adcc0eae1a225acc/g" {} +
 find $staging -type f -name '*.js' -exec sed -i '' "s/$from2/bb95d174a16f4ddd935ff3a802f7c7bc/g" {} +
 find $staging -type f -name '*.js' -exec sed -i '' "s/$from3/caf5342ac38d41a6a02bb81d2d2b21a4/g" {} +
-find $staging -type f -name '*.js' -exec sed -i '' "s/$from4/dd6fb00f485c4397add38780939d6923/g" {} +
 
+find $staging -type f -name '*.graphql' -exec sed -i '' "s/$from4/dd6fb00f485c4397add38780939d6923/g" {} +
 find $staging -type f -name '*.graphql' -exec sed -i '' "s/$from1/a543731262804f64adcc0eae1a225acc/g" {} +
 find $staging -type f -name '*.graphql' -exec sed -i '' "s/$from2/bb95d174a16f4ddd935ff3a802f7c7bc/g" {} +
 find $staging -type f -name '*.graphql' -exec sed -i '' "s/$from3/caf5342ac38d41a6a02bb81d2d2b21a4/g" {} +
-find $staging -type f -name '*.graphql' -exec sed -i '' "s/$from4/dd6fb00f485c4397add38780939d6923/g" {} +
