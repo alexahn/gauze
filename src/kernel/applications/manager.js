@@ -34,27 +34,27 @@ class GauzeManager {
 
 		self.valid_agent_types = {};
 		if ($gauze.abstract.entities.agent_root) {
-			const agent_root = $gauze.abstract.entities.agent_root.default($abstract);
+			const agent_root = $gauze.abstract.entities.agent_root.default($gauze.abstract);
 			self.valid_agent_types[agent_root.table_name] = true;
 		}
 		if ($gauze.abstract.entities.agent_account) {
-			const agent_account = $gauze.abstract.entities.agent_account.default($abstract);
+			const agent_account = $gauze.abstract.entities.agent_account.default($gauze.abstract);
 			self.valid_agent_types[agent_account.table_name] = true;
 		}
 		if ($gauze.abstract.entities.agent_user) {
-			const agent_user = $gauze.abstract.entities.agent_user.default($abstract);
+			const agent_user = $gauze.abstract.entities.agent_user.default($gauze.abstract);
 			self.valid_agent_types[agent_user.table_name] = true;
 		}
 		if ($gauze.abstract.entities.agent_person) {
-			const agent_person = $gauze.abstract.entities.agent_person.default($abstract);
+			const agent_person = $gauze.abstract.entities.agent_person.default($gauze.abstract);
 			self.valid_agent_types[agent_person.table_name] = true;
 		}
 		if ($gauze.abstract.entities.agent_character) {
-			const agent_character = $gauze.abstract.entities.agent_character.default($abstract);
+			const agent_character = $gauze.abstract.entities.agent_character.default($gauze.abstract);
 			self.valid_agent_types[agent_character.table_name] = true;
 		}
 		if ($gauze.abstract.entities.proxy) {
-			const proxy = $gauze.abstract.entities.agent_root.default($abstract);
+			const proxy = $gauze.abstract.entities.agent_root.default($gauze.abstract);
 			self.valid_agent_types[proxy.table_name] = true;
 		}
 
