@@ -1,6 +1,9 @@
 const description = `Delete a relationship object`;
 const context = {
-	agent_id: "00000000-0000-0000-0000-000000000002",
+	agent: {
+		agent_id: "00000000-0000-0000-0000-000000000002",
+		agent_type: "gauze__agent_user",
+	},
 };
 const operation_name = "DeleteRelationship";
 const operation_source = `

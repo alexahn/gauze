@@ -1,6 +1,9 @@
 const description = `Create a blacklist`;
 const context = {
-	agent_id: "00000000-0000-0000-0000-000000000001",
+	agent: {
+		agent_id: "00000000-0000-0000-0000-000000000001",
+		agent_type: "gauze__agent_user",
+	},
 };
 const operation_name = "CreateBlacklist";
 const operation_source = `

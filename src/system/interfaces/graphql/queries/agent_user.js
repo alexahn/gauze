@@ -91,7 +91,7 @@ const READ__AGENT_USER__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
-				agent_id: context.agent_id,
+				agent: context.agent,
 			},
 			query_arguments,
 		).then(function (data) {

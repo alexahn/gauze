@@ -72,7 +72,7 @@ const CREATE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
-				agent_id: context.agent_id,
+				agent: context.agent,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -159,7 +159,7 @@ const UPDATE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
-				agent_id: context.agent_id,
+				agent: context.agent,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -239,7 +239,7 @@ const DELETE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
-				agent_id: context.agent_id,
+				agent: context.agent,
 			},
 			mutation_arguments,
 		).then(function (data) {

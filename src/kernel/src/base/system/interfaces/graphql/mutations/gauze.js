@@ -80,7 +80,7 @@ const CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SY
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
-				agent_id: context.agent_id,
+				agent: context.agent,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -181,7 +181,7 @@ const UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SY
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
-				agent_id: context.agent_id,
+				agent: context.agent,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -275,7 +275,7 @@ const DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__SY
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
-				agent_id: context.agent_id,
+				agent: context.agent,
 			},
 			mutation_arguments,
 		).then(function (data) {
