@@ -27,12 +27,12 @@ class EnvironmentController {
 		self.session_type = $abstract.entities.session.default($abstract).table_name;
 		self.required_verification = ["account.password"];
 	}
-	signin(context, parameters) {
+	sign_in(context, parameters) {
 		const self = this;
 		const { agent } = context;
 		if (agent) {
 			if (agent.proxy_id) {
-				throw new Error("Proxy session is already authenticated");
+				throw new Error("Proxy session is already signed in");
 			} else {
 				if (agent.agent_id) {
 					throw new Error("Invalid session type: agent id must be null");
@@ -116,18 +116,90 @@ class EnvironmentController {
 							const { system_session } = collection;
 							return system_session;
 						} else {
-							throw new Error("Authentication failed");
+							throw new Error("Proxy session failed to sign in");
 						}
 					});
 			}
 		} else {
-			throw new Error("Session is required to authenticate");
+			throw new Error("Session is required to sign in");
 		}
 	}
-	signout(context, parameters) {
-		/*
-			delete all sessions for all agents in the proxy
-		*/
+	sign_out(context, parameters) {
+		const self = this;
+		const { agent } = context;
+		if (agent) {
+			if (agent.proxy_id) {
+				// get all proxies
+				const proxy_attributes = {
+					gauze__proxy__root_id: agent.proxy_id,
+				};
+				const proxy_parameters = { where: proxy_attributes };
+				return MODEL__PROXY__MODEL__ENVIRONMENT.read(context, proxy_parameters)
+					.then(function (proxies) {
+						if (proxies && proxies.length) {
+							return {
+								proxies: proxies,
+							};
+						} else {
+							return null;
+						}
+					})
+					.then(function (collection) {
+						if (collection) {
+							const { proxies } = collection;
+							const transactions = proxies.map(function (proxy) {
+								return self.exit_session(context, { proxy: proxy });
+							});
+							return Promise.all(transactions).then(function (results) {
+								const proxy_sessions = results.reduce(function (prev, next) {
+									return prev.concat(next);
+								}, []);
+								return {
+									...collection,
+									proxy_sessions,
+								};
+							});
+						} else {
+							return null;
+						}
+					})
+					.then(function (collection) {
+						if (collection) {
+							const { proxy_sessions } = collection;
+							// sign out of the root proxy
+							const session_attributes = {
+								gauze__session__id: agent.session_id,
+							};
+							const session_parameters = { where: session_attributes };
+							return MODEL__SESSION__MODEL__ENVIRONMENT.delete(context, session_parameters).then(function (sessions) {
+								if (sessions && sessions.length) {
+									const session = sessions[0];
+									return {
+										...collection,
+										session: session,
+									};
+								} else {
+									return null;
+								}
+							});
+						} else {
+							return null;
+						}
+					})
+					.then(function (collection) {
+						if (collection) {
+							const { proxy_sessions, session } = collection;
+							return proxy_sessions.concat(session);
+						} else {
+							throw new Error("Proxy session failed to sign out");
+						}
+					});
+			} else {
+				throw new Error("Proxy session is required to sign out");
+			}
+		} else {
+			throw new Error("Session is required to sign out");
+		}
 		return {};
 	}
 	create_access_control(agent_id, agent_type, entity_id, entity_type) {
@@ -206,7 +278,7 @@ class EnvironmentController {
 		};
 		return parameters;
 	}
-	signup(context, parameters) {
+	sign_up(context, parameters) {
 		const self = this;
 		if (!parameters.agent_account || !parameters.agent_account.gauze__agent_account__password) throw new Error("Field 'agent_account.password' is required");
 

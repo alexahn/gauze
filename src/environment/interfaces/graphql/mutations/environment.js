@@ -17,11 +17,11 @@ import { CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT } from "./../../../con
 const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Environment",
 	fields: {
-		signin: {
+		sign_in: {
 			type: SESSION__TYPE__ENVIRONMENT,
 			args: {},
 			resolve: function (source, args, context) {
-				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.signin(
+				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.sign_in(
 					{
 						source: source,
 						database: context.database,
@@ -32,11 +32,11 @@ const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 				);
 			},
 		},
-		signout: {
+		sign_out: {
 			type: new GraphQLList(SESSION__TYPE__ENVIRONMENT),
 			args: {},
 			resolve: function (source, args, context) {
-				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.signout(
+				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.sign_out(
 					{
 						source: source,
 						database: context.database,
@@ -47,7 +47,7 @@ const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 				);
 			},
 		},
-		signup: {
+		sign_up: {
 			type: SESSION__TYPE__ENVIRONMENT,
 			args: {
 				agent_root: {
@@ -72,7 +72,7 @@ const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 				},
 			},
 			resolve: function (source, args, context) {
-				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.signup(
+				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.sign_up(
 					{
 						source: source,
 						database: context.database,
