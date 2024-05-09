@@ -37,9 +37,12 @@ class GauzeServer {
 			if (req.url.startsWith("/database/graphql")) {
 				return this.create_graphql_handler($gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE, req, res);
 			} else if (req.url.startsWith("/system/graphql")) {
-				// parse system jwt here
-				return this.create_graphql_handler($gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM, req, res);
+				// parse system jwt
+				return self.$gauze.environment.authentication.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req).then(function (agent) {
+					return this.create_graphql_handler($gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM, req, res, agent);
+				});
 			} else if (req.url.startsWith("/environment/graphql")) {
+				// parse environment and system jwt
 				const auth_transactions = [
 					function () {
 						return self.$gauze.environment.authentication.AUTHENTICATE_ENVIRONMENT__AUTHENTICATION__ENVIRONMENT(req);
@@ -65,36 +68,6 @@ class GauzeServer {
 					.then(function (agent) {
 						return self.create_graphql_handler($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
 					});
-				/*
-				// parse environment jwt here
-				var environment_jwt = null;
-				const environment_auth = req.headers.authorization;
-				if (environment_auth) {
-					const environment_auth_split = environment_auth.split(" ");
-					if (environment_auth_split[0] === "Bearer") {
-						environment_jwt = environment_auth_split[1];
-					}
-				}
-				const secret = new TextEncoder().encode(process.env.GAUZE_ENVIRONMENT_JWT_SECRET);
-				return jose
-					.jwtVerify(environment_jwt, secret, {
-						issuer: "gauze",
-						//audience: 'urn:example:audience',
-					})
-					.then(function ({ payload, protectedHeader }) {
-						// agent is payload
-						const agent = payload;
-						console.log("agent", agent);
-						return self.create_graphql_handler($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
-					})
-					.catch(function (error) {
-						// agent is null
-						const agent = null;
-						console.log("agent", agent);
-						return self.create_graphql_handler($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
-					});
-				*/
-				//return this.create_graphql_handler($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
 			} else {
 				res.writeHead(404).end();
 			}
