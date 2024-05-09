@@ -3,10 +3,12 @@
 from1="ezuag"
 from2="Ezuag"
 from3="EZUAG"
+from4="EzuagEzuag"
 
 arg1="gauze"
 arg2="Gauze"
 arg3="GAUZE"
+arg4="GauzeGauze"
 
 src=./src
 staging=./src/kernel/src/staging
