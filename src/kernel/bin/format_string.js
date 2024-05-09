@@ -47,15 +47,18 @@ process.stdin.on("end", function () {
 		case "pascal_case":
 			body = body.replace(" ", "_");
 			body = body.replace("-", "_");
-			var split = body.split("_").map(function (part) {
-				if (part.length) {
-					return part[0].toUpperCase() + part.slice(1);
-				} else {
-					return part
-				}
-			}).filter(identity)
-			process.stdout.write(split.join(""))
-			break
+			var split = body
+				.split("_")
+				.map(function (part) {
+					if (part.length) {
+						return part[0].toUpperCase() + part.slice(1);
+					} else {
+						return part;
+					}
+				})
+				.filter(identity);
+			process.stdout.write(split.join(""));
+			break;
 		case "pascal_snake_case":
 			body = body.replace(" ", "_");
 			body = body.replace("-", "_");

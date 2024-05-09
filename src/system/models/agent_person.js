@@ -3,7 +3,7 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-class Agent_PersonSystemModel extends $kernel.models.system.SystemModel {
+class AgentPersonSystemModel extends $kernel.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
@@ -94,6 +94,6 @@ const CONFIG__AGENT_PERSON__MODEL__SYSTEM = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 };
-const MODEL__AGENT_PERSON__MODEL__SYSTEM = new Agent_PersonSystemModel(ROOT_CONFIG__AGENT_PERSON__MODEL__SYSTEM, CONFIG__AGENT_PERSON__MODEL__SYSTEM);
+const MODEL__AGENT_PERSON__MODEL__SYSTEM = new AgentPersonSystemModel(ROOT_CONFIG__AGENT_PERSON__MODEL__SYSTEM, CONFIG__AGENT_PERSON__MODEL__SYSTEM);
 
 export { MODEL__AGENT_PERSON__MODEL__SYSTEM };

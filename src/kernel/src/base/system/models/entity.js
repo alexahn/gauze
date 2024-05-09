@@ -3,7 +3,7 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-class ba381b0cc764c4c9a187b716ae94ed96SystemModel extends $kernel.models.system.SystemModel {
+class d741787fe14145d79bbdd8ad8057ca28SystemModel extends $kernel.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
@@ -97,7 +97,7 @@ const CONFIG__cd637bc32c364580be5cc28396d3dee8__MODEL__SYSTEM = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 };
-const MODEL__cd637bc32c364580be5cc28396d3dee8__MODEL__SYSTEM = new ba381b0cc764c4c9a187b716ae94ed96SystemModel(
+const MODEL__cd637bc32c364580be5cc28396d3dee8__MODEL__SYSTEM = new d741787fe14145d79bbdd8ad8057ca28SystemModel(
 	ROOT_CONFIG__cd637bc32c364580be5cc28396d3dee8__MODEL__SYSTEM,
 	CONFIG__cd637bc32c364580be5cc28396d3dee8__MODEL__SYSTEM,
 );
