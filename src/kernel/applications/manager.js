@@ -58,6 +58,15 @@ class GauzeManager {
 			self.valid_agent_types[proxy.table_name] = true;
 		}
 
+		self.valid_agent_type_exceptions = {
+			"gauze__proxy": true,
+			"gauze__agent_root": true,
+			"gauze__agent_account": true,
+			"gauze__agent_user": true,
+			"gauze__agent_person": true,
+			"gauze__agent_character": true
+		}
+
 		process.on("SIGINT", function (val) {
 			$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGINT: ${val}`);
 			process.exit(130);
@@ -112,6 +121,8 @@ class GauzeManager {
 		// should have a name attribute
 		if (typeof config.name !== "string") throw new Error(`Entity must have a 'name' attribute of type 'string': ${config.name}`);
 		if (to_snake_case(config.name) !== config.name) throw new Error(`Entity must have a 'name' attribute in lower snake case: ${config.name} !== ${to_snake_case(config.name)}`);
+		// should have a table_name attribute
+		if (typeof config.table_name !== "string") throw new Error(`Entity must have a 'table_name' attribute of type 'string': ${config.table_name}`);
 		// should have a primary_key attribute
 		if (typeof config.primary_key !== "string") throw new Error(`Entity must have a 'primary_key' attribute of type 'string': ${config.primary_key}`);
 		// should have a fields attribute
@@ -173,8 +184,12 @@ class GauzeManager {
 			if (typeof method.valid_agent_types.length !== "number") throw new Error(`Method must have a 'valid_agent_types' attribute of type 'array': ${method.valid_agent_types}`);
 			method.valid_agent_types.forEach(function (agent_type) {
 				if (typeof agent_type !== "string") throw new Error(`Method attribute 'valid_agent_types' must contain only string values`);
-				if (!self.valid_agent_types[agent_type])
-					throw new Error(`Method attribute 'valid_agent_types' must contain string values from ${Object.keys(self.valid_agent_types)}: ${agent_type}`);
+				if (agent_type === config.table_name) {
+					if (!self.valid_agent_type_exceptions[agent_type]) throw new Error(`Method attribute 'valid_agent_types' must contain string values from (${Object.keys(self.valid_agent_type_exceptions)}): ${agent_type}`);
+				} else {
+					if (!self.valid_agent_types[agent_type])
+						throw new Error(`Method attribute 'valid_agent_types' must contain string values from (${Object.keys(self.valid_agent_types)}): ${agent_type}`);
+				}
 			});
 		});
 		// graphql_fields
