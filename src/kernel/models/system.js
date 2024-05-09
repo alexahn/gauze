@@ -41,6 +41,14 @@ class SystemModel extends Model {
 			cacheMap: new TTLLRUCache(1024, 1024),
 		});
 		self.model_loader.model = self;
+		self.valid_method_agent_types = {};
+		Object.keys(self.entity.methods).forEach(function (method) {
+			const map = {};
+			self.entity.methods[method].valid_agent_types.forEach(function (agent_type) {
+				map[agent_type] = true;
+			});
+			self.valid_method_agent_types[method] = map;
+		});
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.constructor:exit`);
 	}
 	static _class_name(schema_name) {
@@ -456,6 +464,7 @@ class SystemModel extends Model {
 		});
 	}
 	_validate_agent(agent) {
+		const self = this
 		if (!agent) {
 			throw new Error("Authorization failed: missing agent");
 		}
@@ -467,6 +476,7 @@ class SystemModel extends Model {
 		}
 	}
 	_validate_entity(entity) {
+		const self = this
 		if (!entity) {
 			throw new Error("Authorization failed: missing entity");
 		}
@@ -475,6 +485,12 @@ class SystemModel extends Model {
 		}
 		if (!entity.entity_method) {
 			throw new Error("Authorization failed: entity missing 'entity_method' field");
+		}
+	}
+	_validate_method(agent, method) {
+		const self = this;
+		if (!self.valid_method_agent_types[method][agent.agent_type]) {
+			throw new Error("Authorization failed: agent type is not allowed for this method");
 		}
 	}
 	_root_create(context, parameters, realm) {
@@ -560,11 +576,13 @@ class SystemModel extends Model {
 	}
 	_create(context, parameters, realm) {
 		const self = this;
+		const method = "create";
 		const { source } = context;
 		const { agent, entity } = realm;
-		entity.entity_method = "create";
+		entity.entity_method = method;
 		self._validate_agent(agent);
 		self._validate_entity(entity);
+		self._validate_method(agent, method);
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
@@ -578,11 +596,13 @@ class SystemModel extends Model {
 	}
 	_read(context, parameters, realm) {
 		const self = this;
+		const method = "read";
 		const { source } = context;
 		const { agent, entity } = realm;
-		entity.entity_method = "read";
+		entity.entity_method = method;
 		self._validate_agent(agent);
 		self._validate_entity(entity);
+		self._validate_method(agent, method);
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
@@ -596,11 +616,13 @@ class SystemModel extends Model {
 	}
 	_update(context, parameters, realm) {
 		const self = this;
+		const method = "update";
 		const { source } = context;
 		const { agent, entity } = realm;
-		entity.entity_method = "update";
+		entity.entity_method = method;
 		self._validate_agent(agent);
 		self._validate_entity(entity);
+		self._validate_method(agent, method);
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
@@ -614,11 +636,13 @@ class SystemModel extends Model {
 	}
 	_delete(context, parameters, realm) {
 		const self = this;
+		const method = "delete";
 		const { source } = context;
 		const { agent, entity } = realm;
-		entity.entity_method = "delete";
+		entity.entity_method = method;
 		self._validate_agent(agent);
 		self._validate_entity(entity);
+		self._validate_method(agent, method);
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
