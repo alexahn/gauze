@@ -464,7 +464,7 @@ class SystemModel extends Model {
 		});
 	}
 	_validate_agent(agent) {
-		const self = this
+		const self = this;
 		if (!agent) {
 			throw new Error("Authorization failed: missing agent");
 		}
@@ -476,7 +476,7 @@ class SystemModel extends Model {
 		}
 	}
 	_validate_entity(entity) {
-		const self = this
+		const self = this;
 		if (!entity) {
 			throw new Error("Authorization failed: missing entity");
 		}

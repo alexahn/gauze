@@ -32,9 +32,6 @@
 	[x] just hard copy the graphql definitions
 	[-] update graphql type names and descriptions to prefix or suffix with database, system, or user
 		[x] too tedious, better to re-use the underlying unified type
-[ ] type naming constraints
-	[ ] cap table name to 255 characters
-	[ ] cap graphql type name to 255 characters
 [x] rename constants and variables in interfaces/mutations
 [x] use constants defined in structures for table names for database models
 [x] formalize query and mutations to look the same
@@ -59,7 +56,7 @@
 	[x] add new environment variables: GAUZE_DEBUG_SQL, GAUZE_DEBUG_GRAPHQL
 [x] add primary key to database models and use them for the default order
 	[x] add primary key to sql structures
-[ ] refactor logger to make it functional (e.g. stop mutating arrays and have functions return fully transformed items)
+[-] refactor logger to make it functional (e.g. stop mutating arrays and have functions return fully transformed items)
 	[x] remove the magic string by fully implementing the correct stack marking algorithm
 		[x] turns out we don't need to change the code, we can just do a null checkl
 [x] testing
@@ -82,7 +79,7 @@
 	[x] where in and where not in exposed to database graphql
 		[x] where not in takes precedence over where in
 	[x] where in and where not in exposed to system graphql
-	[ ] implement error visibility (right now it's a little rough if something goes wrong)
+	[x] implement error visibility (right now it's a little rough if something goes wrong)
 [x] move server.js into command
 [x] serialize / deserialize
 	[x] call serialize and deserialize from controllers, but defined on models
@@ -99,9 +96,9 @@
 	[x] import execute from kernel and use in tests
 [ ] add a _description attribute to every module so that the codebase can be explored via the repl
 	[ ] always add the field at the end of every module definition so it shows up at the bottom in the repl
-[ ] move object destructuring for database model inputs into the function itself (for debugging purposes when we want to log the entire input)
+[x] move object destructuring for database model inputs into the function itself (for debugging purposes when we want to log the entire input)
 	[x] database models
-[ ] add logging to system models
+[x] add logging to system models
 [x] fix structure names in graphql.js and sql.js files
 	[x] GRAPHQL_DATABASE_RELATIONSHIP_ATTRIBUTES_FIELDS_ARRAY_STRUCTURE shoudl be ATTRIBUTES_FIELDS_ARRAY_GRAPHQL_DATABASE_RELATIONSHIP_STRUCTURE
 		[x] maybe introduce a double underscore convention to seperate the namespace from the item?
@@ -122,33 +119,25 @@
 	[x] use as precedent for new builtin tables (e.g. whitelist and blacklist tables)
 [x] format graphql to make it consisten
 	[x] time to switch to prettier? (https://prettier.io/docs/en/index.html)
-[ ] permissions and authorization
+[x] permissions and authorization
 	[-] row based security (postgresql)?
 		[-] seems like it is technically complex because we'd need to authenticate every user to postgresql
 		[-] the application code isn't complex, but the database tuning and management would be
 		[-] the example policies i could find also don't seem to be that flexible, and it might be hard to set them up without duplicating relationship data across entities
-	[ ] maybe some kind of bit field if we want to be efficient?
+	[-] maybe some kind of bit field if we want to be efficient?
+		[x] just cache the access control rows in memory if necessary
 	[x] simple white and black list permissions
 		[x] subcategorized by realm
 	[x] whitelist and blacklist tables
 	[x] structure information for default mode for methods (e.g. private or public)
 	[x] blacklist and whitelist structures
 	[x] blacklist and whitelist database models, controllers, and interface
-[ ] cached where in and cached where not in exposed to database graphql
-	[ ] value is a string key that is a key to a value in cache
-	[ ] hook up lru cache to system and database
 [x] accept a query parameter to simulate user id
 	[x] allows us to work on permission/authorization layer without having a user table
 	[x] agent_id is exposed for all queries and mutations to simulate an agent
 [x] add parent argument to database graphql queries and mutations
 	[x] it should have a structure like:  { _metadata: { id, type } }
 	[x] we need this to pass in the source (e.g. parent) from the system to honor relationships
-[ ] file entity
-	[ ] file handler entity
-		[ ] manages an io entity that can read and write
-	[ ] streaming interface for files
-[ ] process entity
-	[ ] input and output architecture
 [x] think about realm organization
 	[x] might make more sense if system had an account, and application had a user
 	[x] might make more sense if reality had a person, and story had a character
@@ -178,8 +167,8 @@
 				[ ] look into doing ast parsing and some table management data structures to programmatically generate migration files
 	[x] create abstract structures
 	[x] move entity1 and entity2 into kernel/src/migrations to make it easier for development
-		[ ] remove later once we can generate entities
-		[ ] move these migrations to structure?
+		[x] remove later once we can generate entities
+		[-] move these migrations to structure?
 	[x] base structure in kernel
 	[x] base database model, controller, and interface
 	[x] base system model, controller, and interface
@@ -217,7 +206,6 @@
 [x] update schema files to use $structure instead of directly importing
 [-] group protected fields by method for sql structures
 	[x] protected fields are now handled via pre_serializer middlewares
-[ ] add attribute flag to designate builtin entities
 [x] refactor schema to use interface entities
 	[x] add new files to base kernel
 [x] refactor all exports to use the same naming convention (need two underscores instead of one in a lot of places)
@@ -261,8 +249,6 @@
 [x] move graphql meta type to abstract entities (the meta type is not a name that is encoded within the schema, but a framework identifier)
 [x] refactor structure/resolvers to use abstract entities so we can reduce the surface area of the staging layers
 	[x] delete resolver staging files
-[ ] think about how to do field validation so that field errors can be abstracted
-	[ ] currently we will just throw hand crafted errors, but we could probably have a structured approach
 [ ] refactor kernel models to have elegant function signatures
 	[ ] should probably group things together to have better conceptual clarity instead of abusing positional arguments
 [x] prevent particular types of data from being created, such as relationships on relationships
@@ -458,7 +444,6 @@
 		[-] we could just add agent_root_id to the jwts
 	[x] maybe not, because proxy has to be a system audience/realm authentication so that we can query the system interface
 		[x] e.g. if we want to display the available proxies
-[ ] think about some defensive programming strategies to handle the lack of one to one constraints and other similar structural ambiguities
 [x] update system to use the agent parsed from the jwt
 	[x] update all tests to use the new agent structure
 [ ] refactor environment controllers to have a function that specifies the requirements to proceed (which is stored in session data)
@@ -468,6 +453,7 @@
 [ ] use types defined in abstract realm for all environment graphql definitions
 [ ] move guards outside of batch functions so that the errors are cleaner
 	[x] system model
+	[ ] relationship model
 [ ] soft delete
 	[ ] stringified javascript dates are utc, but the dates generated by new Date() use the system clock
 [ ] refactor validate_entity_config to use dot path for error messages
@@ -483,4 +469,26 @@
 [ ] build an admin management react app to dog food the interface
 	[ ] have an admin method to track objects that have no relationships
 	[ ] have an admin method to track objects that should be one to one but aren't
-		[ ] we might need to specify one to one relationships via structures
+[ ] think about some defensive programming strategies to handle the lack of one to one constraints and other similar structural ambiguities
+	[ ] we might need to specify one to one relationships via structures
+	[ ] constraint checking might be best done by creating a projection of counts for relationships because we need a data structure that is indexed on counts
+		[ ] maybe a simple aggregation table that has from_type, to_type, from_id, count
+			[ ] probably need to use something else that is commutative at the outer layer to avoid transactions locking too much?
+				[ ] would be kind of a pain to lose transactional certainty and have to manage synchronization between two data sources
+				[ ] just shard the table
+[ ] add attribute flag to designate builtin entities
+[ ] type naming constraints
+	[ ] cap table name to 255 characters
+	[ ] cap graphql type name to 255 characters
+	[ ] align name lengths with sql column limits for all types
+[ ] cached where in and cached where not in exposed to database graphql
+	[ ] value is a string key that is a key to a value in cache
+	[ ] hook up lru cache to system and database
+[ ] file entity
+	[ ] file handler entity
+		[ ] manages an io entity that can read and write
+	[ ] streaming interface for files
+[ ] process entity
+	[ ] input and output architecture
+[ ] think about how to do field validation so that field errors can be abstracted
+	[ ] currently we will just throw hand crafted errors, but we could probably have a structured approach
