@@ -2,7 +2,10 @@ const description = `Update a entity object`;
 const agent1 = "00000000-0000-0000-0000-000000000001";
 const agent2 = "00000000-0000-0000-0000-000000000002";
 const context = {
-	agent_id: agent2,
+	agent: {
+		agent_id: agent2,
+		agent_type: "gauze__agent_user",
+	},
 };
 const operation_name = "UpdateEntity";
 const operation_source = `

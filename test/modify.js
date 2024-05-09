@@ -18,8 +18,8 @@ function replace(content) {
 	//return content.replace(/const context = {\n\tagent_id: \("\.\*\?"\)\n}/g, 'const context=\n\tagent: {\n\t\tagent_id: $1\n\t}\n}')
 	//return content.replace(/const\ context = {\n\tagent_id: "(.*)",\n};/g, 'const context = {\n\tagent: {\n\t\tagent_id: "$1",\n\t}\n};')
 	var first = content.replace(/const\ context = {\n\tagent_id: "(.*)",\n};/g, 'const context = {\n\tagent: {\n\t\tagent_id: "$1",\n\t\tagent_type: "gauze__agent_user"\n\t}\n};');
-	var second = first.replace(/const\ context = {\n\tagent_id: (.*),\n};/g, 'const context = {\n\tagent: {\n\t\tagent_id: $1,\n\t\tagent_type: "gauze__agent_user"\n\t}\n};'
-	return second
+	var second = first.replace(/const\ context = {\n\tagent_id: (.*),\n};/g, 'const context = {\n\tagent: {\n\t\tagent_id: $1,\n\t\tagent_type: "gauze__agent_user"\n\t}\n};');
+	return second;
 }
 
 Promise.all(
