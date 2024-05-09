@@ -103,6 +103,7 @@ class AccessSystemModel extends SystemModel {
 				[self.key_entity_id]: entity[self.key_entity_id],
 				[self.key_method]: entity[self.key_method],
 				[self.key_agent_id]: agent.agent_id,
+				[self.key_agent_type]: agent.agent_type,
 			})
 			.transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
