@@ -638,7 +638,8 @@ class EnvironmentController {
 		*/
 		const self = this;
 		const { agent } = context;
-		const target_agent = parameters.agent;
+		const target_agent = parameters.proxy;
+		console.log("target_agent", target_agent)
 		console.log("context.agent", context.agent);
 		if (agent) {
 			if (agent.proxy_id) {
