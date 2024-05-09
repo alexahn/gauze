@@ -17,46 +17,6 @@ npx gauze delete entity ./src ./gauze/entity.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
-# delete agent_character
-npx gauze delete entity ./src ./src/kernel/src/entities/agent_character.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
-
-# delete agent_person
-npx gauze delete entity ./src ./src/kernel/src/entities/agent_person.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
-
-# delete agent_user
-npx gauze delete entity ./src ./src/kernel/src/entities/agent_user.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
-
-# delete agent_account
-npx gauze delete entity ./src ./src/kernel/src/entities/agent_account.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
-
-# delete agent_root
-npx gauze delete entity ./src ./src/kernel/src/entities/agent_root.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
-
-# delete proxy
-npx gauze delete entity ./src ./src/kernel/src/entities/proxy.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
-
-# delete session
-npx gauze delete entity ./src ./src/kernel/src/entities/session.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
-
-# delete secret
-npx gauze delete entity ./src ./src/kernel/src/entities/secret.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
-
 # delete blacklist
 npx gauze delete gauze ./src ./src/kernel/src/entities/blacklist.js
 # use stage4 schema
@@ -82,7 +42,87 @@ npx gauze delete gauze ./src ./gauze/ezuag.js
 # use stage0 schema
 cp -r ./src/kernel/src/stages/stage0/* ./src/
 
+# delete agent_character
+npx gauze delete entity ./src ./src/kernel/src/entities/agent_character.js
+# use stage0 schema
+cp -r ./src/kernel/src/stages/stage0/* ./src/
+
+# delete agent_person
+npx gauze delete entity ./src ./src/kernel/src/entities/agent_person.js
+# use stage0 schema
+cp -r ./src/kernel/src/stages/stage0/* ./src/
+
+# delete agent_user
+npx gauze delete entity ./src ./src/kernel/src/entities/agent_user.js
+# use stage0 schema
+cp -r ./src/kernel/src/stages/stage0/* ./src/
+
+# delete agent_account
+npx gauze delete entity ./src ./src/kernel/src/entities/agent_account.js
+# use stage0 schema
+cp -r ./src/kernel/src/stages/stage0/* ./src/
+
+# delete agent_root
+npx gauze delete entity ./src ./src/kernel/src/entities/agent_root.js
+# use stage0 schema
+cp -r ./src/kernel/src/stages/stage0/* ./src/
+
+# delete session
+npx gauze delete entity ./src ./src/kernel/src/entities/session.js
+# use stage0 schema
+cp -r ./src/kernel/src/stages/stage0/* ./src/
+
+# delete secret
+npx gauze delete entity ./src ./src/kernel/src/entities/secret.js
+# use stage0 schema
+cp -r ./src/kernel/src/stages/stage0/* ./src/
+
+# delete proxy
+npx gauze delete entity ./src ./src/kernel/src/entities/proxy.js
+# use stage0 schema
+cp -r ./src/kernel/src/stages/stage0/* ./src/
+
 ##########################################################
+
+# create proxy
+npx gauze create entity ./src ./src/kernel/src/entities/proxy.js
+# use stage0 schema
+cp -r ./src/kernel/src/stages/stage0/* ./src/
+
+# create secret
+npx gauze create entity ./src ./src/kernel/src/entities/secret.js
+# use stage0 schema
+cp -r ./src/kernel/src/stages/stage0/* ./src/
+
+# create session
+npx gauze create entity ./src ./src/kernel/src/entities/session.js
+# use stage0 schema
+cp -r ./src/kernel/src/stages/stage0/* ./src/
+
+# create agent_root
+npx gauze create entity ./src ./src/kernel/src/entities/agent_root.js
+# use stage0 schema
+cp -r ./src/kernel/src/stages/stage0/* ./src/
+
+# create agent_account
+npx gauze create entity ./src ./src/kernel/src/entities/agent_account.js
+# use stage0 schema
+cp -r ./src/kernel/src/stages/stage0/* ./src/
+
+# create agent_user
+npx gauze create entity ./src ./src/kernel/src/entities/agent_user.js
+# use stage0 schema
+cp -r ./src/kernel/src/stages/stage0/* ./src/
+
+# create agent_person
+npx gauze create entity ./src ./src/kernel/src/entities/agent_person.js
+# use stage0 schema
+cp -r ./src/kernel/src/stages/stage0/* ./src/
+
+# create agent_character
+npx gauze create entity ./src ./src/kernel/src/entities/agent_character.js
+# use stage0 schema
+cp -r ./src/kernel/src/stages/stage0/* ./src/
 
 # create ezuag
 npx gauze create gauze ./src ./gauze/ezuag.js
@@ -109,47 +149,7 @@ npx gauze create gauze ./src ./src/kernel/src/entities/blacklist.js
 # use stage5 schema
 cp -r ./src/kernel/src/stages/stage5/* ./src/
 
-# create secret
-npx gauze create entity ./src ./src/kernel/src/entities/secret.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
-
-# create session
-npx gauze create entity ./src ./src/kernel/src/entities/session.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
-
-# create proxy
-npx gauze create entity ./src ./src/kernel/src/entities/proxy.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
-
-# create agent_root
-npx gauze create entity ./src ./src/kernel/src/entities/agent_root.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
-
-# create agent_account
-npx gauze create entity ./src ./src/kernel/src/entities/agent_account.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
-
-# create agent_user
-npx gauze create entity ./src ./src/kernel/src/entities/agent_user.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
-
-# create agent_person
-npx gauze create entity ./src ./src/kernel/src/entities/agent_person.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
-
-# create agent_character
-npx gauze create entity ./src ./src/kernel/src/entities/agent_character.js
-# use stage5 schema
-cp -r ./src/kernel/src/stages/stage5/* ./src/
-
-# create gauze
+# create entity
 npx gauze create entity ./src ./gauze/entity.js
 # use stage6 schema
 cp -r ./src/kernel/src/stages/stage6/* ./src/
@@ -158,8 +158,6 @@ cp -r ./src/kernel/src/stages/stage6/* ./src/
 npx gauze create gauze ./src ./gauze/gauze.js
 # use stage7 schema
 cp -r ./src/kernel/src/stages/stage7/* ./src/
-
-#cp -r ./src/kernel/src/environment/* ./src/environment/]
 
 # create environment directory
 cp -r ./src/kernel/src/environment ./src/environment
