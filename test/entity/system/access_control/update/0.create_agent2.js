@@ -1,6 +1,7 @@
 const description = `Create a entity object`;
 const agent1 = "00000000-0000-0000-0000-000000000001";
 const agent2 = "00000000-0000-0000-0000-000000000002";
+const agent3 = "00000000-0000-0000-0000-000000000003";
 const context = {
 	agent: {
 		agent_id: agent2,
@@ -37,12 +38,12 @@ mutation ${operation_name}(
 const operation_variables = {
 	blacklist: {
 		gauze__blacklist__realm: "system",
-		gauze__blacklist__agent_type: "user",
+		gauze__blacklist__agent_type: "gauze__agent_user",
 		gauze__blacklist__agent_role: "leaf",
-		gauze__blacklist__agent_id: agent2,
+		gauze__blacklist__agent_id: agent3,
 		gauze__blacklist__entity_type: "gauze__entity",
 		gauze__blacklist__entity_id: "55c29b50-5e24-447d-8505-75e82c2aa8cc",
-		gauze__blacklist__method: "update",
+		gauze__blacklist__method: "create",
 	},
 	entity: {
 		id: "55c29b50-5e24-447d-8505-75e82c2aa8cc",
@@ -62,12 +63,12 @@ const expected = `{
                         {
                             "attributes": {
                                 "gauze__blacklist__realm": "system",
-                                "gauze__blacklist__agent_type": "user",
+                                "gauze__blacklist__agent_type": "gauze__agent_user",
                                 "gauze__blacklist__agent_role": "leaf",
-                                "gauze__blacklist__agent_id": "00000000-0000-0000-0000-000000000002",
+                                "gauze__blacklist__agent_id": "00000000-0000-0000-0000-000000000003",
                                 "gauze__blacklist__entity_type": "gauze__entity",
                                 "gauze__blacklist__entity_id": "55c29b50-5e24-447d-8505-75e82c2aa8cc",
-                                "gauze__blacklist__method": "update"
+                                "gauze__blacklist__method": "create"
                             }
                         }
                     ]

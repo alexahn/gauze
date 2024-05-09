@@ -178,8 +178,8 @@ class SystemModel extends Model {
 	}
 	authorization_element(context, realm, agent, entity) {
 		const self = this;
-	    self._validate_agent(agent)
-        self._validate_entity(entity)
+		self._validate_agent(agent);
+		self._validate_entity(entity);
 		const key = self._auth_batch_key(realm, agent, entity, "authorization_element");
 		return self.auth_loader.load(context, key);
 	}
@@ -250,8 +250,8 @@ class SystemModel extends Model {
 	}
 	authorization_set(context, realm, agent, entity) {
 		const self = this;
-        self._validate_agent(agent)
-        self._validate_entity(entity)
+		self._validate_agent(agent);
+		self._validate_entity(entity);
 		const key = self._auth_batch_key(realm, agent, entity, "authorization_set");
 		return self.auth_loader.load(context, key);
 	}
@@ -321,8 +321,8 @@ class SystemModel extends Model {
 	}
 	authorization_filter(context, realm, agent, entity) {
 		const self = this;
-		self._validate_agent(agent)
-		self._validate_entity(entity)
+		self._validate_agent(agent);
+		self._validate_entity(entity);
 		const key = self._auth_batch_key(realm, agent, entity, "authorization_filter");
 		return self.auth_loader.load(context, key);
 	}
@@ -456,26 +456,26 @@ class SystemModel extends Model {
 		});
 	}
 	_validate_agent(agent) {
-	    if (!agent) {
-            throw new Error("Authorization failed: missing agent");
-        }
-        if (!agent.agent_id) {
-            throw new Error("Authorization failed: agent is missing 'agent_id' field");
-        }
-        if (!agent.agent_type) {
-            throw new Error("Authorization failed: agent is missing 'agent_type' field");
-        }
+		if (!agent) {
+			throw new Error("Authorization failed: missing agent");
+		}
+		if (!agent.agent_id) {
+			throw new Error("Authorization failed: agent is missing 'agent_id' field");
+		}
+		if (!agent.agent_type) {
+			throw new Error("Authorization failed: agent is missing 'agent_type' field");
+		}
 	}
 	_validate_entity(entity) {
-        if (!entity) {
-            throw new Error("Authorization failed: missing entity");
-        }
-        if (!entity.entity_type) {
-            throw new Error("Authorization failed: entity is missing 'entity_type' field");
-        }
-        if (!entity.entity_method) {
-            throw new Error("Authorization failed: entity missing 'entity_method' field");
-        }
+		if (!entity) {
+			throw new Error("Authorization failed: missing entity");
+		}
+		if (!entity.entity_type) {
+			throw new Error("Authorization failed: entity is missing 'entity_type' field");
+		}
+		if (!entity.entity_method) {
+			throw new Error("Authorization failed: entity missing 'entity_method' field");
+		}
 	}
 	_root_create(context, parameters, realm) {
 		const self = this;
@@ -563,8 +563,8 @@ class SystemModel extends Model {
 		const { source } = context;
 		const { agent, entity } = realm;
 		entity.entity_method = "create";
-		self._validate_agent(agent)
-		self._validate_entity(entity)
+		self._validate_agent(agent);
+		self._validate_entity(entity);
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
@@ -579,10 +579,10 @@ class SystemModel extends Model {
 	_read(context, parameters, realm) {
 		const self = this;
 		const { source } = context;
-        const { agent, entity } = realm;
+		const { agent, entity } = realm;
 		entity.entity_method = "read";
-        self._validate_agent(agent)
-        self._validate_entity(entity)
+		self._validate_agent(agent);
+		self._validate_entity(entity);
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
@@ -597,10 +597,10 @@ class SystemModel extends Model {
 	_update(context, parameters, realm) {
 		const self = this;
 		const { source } = context;
-        const { agent, entity } = realm;
+		const { agent, entity } = realm;
 		entity.entity_method = "update";
-        self._validate_agent(agent)
-        self._validate_entity(entity)
+		self._validate_agent(agent);
+		self._validate_entity(entity);
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
@@ -615,10 +615,10 @@ class SystemModel extends Model {
 	_delete(context, parameters, realm) {
 		const self = this;
 		const { source } = context;
-        const { agent, entity } = realm;
+		const { agent, entity } = realm;
 		entity.entity_method = "delete";
-        self._validate_agent(agent)
-        self._validate_entity(entity)
+		self._validate_agent(agent);
+		self._validate_entity(entity);
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}

@@ -1,6 +1,7 @@
 const description = `Create a entity object`;
 const agent1 = "00000000-0000-0000-0000-000000000001";
 const agent2 = "00000000-0000-0000-0000-000000000002";
+const agent3 = "00000000-0000-0000-0000-000000000003";
 const context = {
 	agent: {
 		agent_id: agent1,
@@ -37,9 +38,9 @@ mutation ${operation_name}(
 const operation_variables = {
 	blacklist: {
 		gauze__blacklist__realm: "system",
-		gauze__blacklist__agent_type: "user",
+		gauze__blacklist__agent_type: "gauze__agent_user",
 		gauze__blacklist__agent_role: "leaf",
-		gauze__blacklist__agent_id: agent1,
+		gauze__blacklist__agent_id: agent3,
 		gauze__blacklist__entity_type: "gauze__entity",
 		gauze__blacklist__entity_id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
 		gauze__blacklist__method: "read",
@@ -62,9 +63,9 @@ const expected = `{
                         {
                             "attributes": {
                                 "gauze__blacklist__realm": "system",
-                                "gauze__blacklist__agent_type": "user",
+                                "gauze__blacklist__agent_type": "gauze__agent_user",
                                 "gauze__blacklist__agent_role": "leaf",
-                                "gauze__blacklist__agent_id": "00000000-0000-0000-0000-000000000001",
+                                "gauze__blacklist__agent_id": "00000000-0000-0000-0000-000000000003",
                                 "gauze__blacklist__entity_type": "gauze__entity",
                                 "gauze__blacklist__entity_id": "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
                                 "gauze__blacklist__method": "read"
