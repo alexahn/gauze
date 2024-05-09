@@ -31,6 +31,32 @@ class GauzeManager {
 		this.$gauze = $gauze;
 		this.config = config;
 
+		self.valid_agent_types = {};
+		if ($abstract.entities.agent_root) {
+			const agent_root = $abstract.entities.agent_root.default($abstract);
+			self.valid_agent_types[agent_root.table_name] = true;
+		}
+		if ($abstract.entities.agent_account) {
+			const agent_account = $abstract.entities.agent_account.default($abstract);
+			self.valid_agent_types[agent_account.table_name] = true;
+		}
+		if ($abstract.entities.agent_user) {
+			const agent_user = $abstract.entities.agent_user.default($abstract);
+			self.valid_agent_types[agent_user.table_name] = true;
+		}
+		if ($abstract.entities.agent_person) {
+			const agent_person = $abstract.entities.agent_person.default($abstract);
+			self.valid_agent_types[agent_person.table_name] = true;
+		}
+		if ($abstract.entities.agent_character) {
+			const agent_character = $abstract.entities.agent_character.default($abstract);
+			self.valid_agent_types[agent_character.table_name] = true;
+		}
+		if ($abstract.entities.proxy) {
+			const proxy = $abstract.entities.agent_root.default($abstract);
+			self.valid_agent_types[proxy.table_name] = true;
+		}
+
 		process.on("SIGINT", function (val) {
 			$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGINT: ${val}`);
 			process.exit(130);
@@ -141,6 +167,13 @@ class GauzeManager {
 			if (method.name !== key) throw new Error(`Method 'name' attribute must align with the key in the 'methods' attribute: ${method.name} !== ${key}`);
 			// privacy
 			if (typeof method.privacy !== "string") throw new Error(`Method must have a 'privacy' attribute of type 'object': ${method.privacy}`);
+			if (typeof method.valid_agent_types !== "object") throw new Error(`Method must have a 'valid_agent_types' attribute of type 'array': ${method.valid_agent_types}`);
+			if (typeof method.valid_agent_types.length !== "number") throw new Error(`Method must have a 'valid_agent_types' attribute of type 'array': ${method.valid_agent_types}`);
+			method.valid_agent_types.forEach(function (agent_type) {
+				if (typeof agent_type !== "string") throw new Error(`Method attribute 'valid_agent_types' must contain only string values`);
+				if (!self.valid_agent_types[agent_type])
+					throw new Error(`Method attribute 'valid_agent_types' must contain string values from ${Object.keys(self.valid_agent_types)}: ${agent_type}`);
+			});
 		});
 		// graphql_fields
 		if (typeof config.graphql_fields !== "object") throw new Error(`Entity must have a 'graphql_fields' attribute of type 'object': ${config.graphql_fields}`);
