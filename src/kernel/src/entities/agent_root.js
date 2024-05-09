@@ -58,18 +58,22 @@ export default function ($abstract) {
 			create: {
 				name: "create",
 				privacy: "private",
+				valid_agent_types: ["gauze__agent_root"],
 			},
 			read: {
 				name: "read",
 				privacy: "private",
+				valid_agent_types: ["gauze__agent_root"],
 			},
 			update: {
 				name: "update",
 				privacy: "private",
+				valid_agent_types: ["gauze__agent_root"],
 			},
 			delete: {
 				name: "delete",
 				privacy: "private",
+				valid_agent_types: ["gauze__agent_root"],
 			},
 		},
 	};
