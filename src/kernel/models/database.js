@@ -22,6 +22,16 @@ class DatabaseModel extends Model {
 		} else {
 			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${this.name}.constructor:WARNING`, new Error("Relationship structure not found"));
 		}
+		if ($structure.entities.whitelist) {
+			self.whitelist_table = $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE;
+		} else {
+			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Whitelist structure not found"));
+		}
+		if ($structure.entities.blacklist) {
+			self.blacklist_table = $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE;
+		} else {
+			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Blacklist structure not found"));
+		}
 		self.name = self.__name();
 		self.loader = new DataLoader(self._batch, {
 			cacheMap: new TTLLRUCache(1024, 1024),
@@ -495,6 +505,65 @@ class DatabaseModel extends Model {
 		const key = self._batch_key(relationship_metadata, input, "update");
 		return self.loader.load(context, key);
 	}
+	_cleanup_delete(context, valid_ids) {
+		const self = this;
+		const { database, transaction } = context;
+		const transactions = [
+			// to relationship
+			function () {
+				const sql = database(self.relationship_table_name)
+					.where("gauze__relationship__to_type", self.entity.table_name)
+					.whereIn("gauze__relationship__to_id", valid_ids)
+					.del()
+					.transacting(transaction);
+				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
+				}
+				return sql;
+			},
+			// from relationship
+			function () {
+				const sql = database(self.relationship_table_name)
+					.where("gauze__relationship__from_type", self.entity.table_name)
+					.whereIn("gauze__relationship__from_id", valid_ids)
+					.del()
+					.transacting(transaction);
+				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
+				}
+				return sql;
+			},
+			// whitelist
+			function () {
+				const sql = database(self.whitelist_table)
+					.where("gauze__whitelist__entity_type", self.entity.table_name)
+					.whereIn("gauze__whitelist__entity_id", valid_ids)
+					.del()
+					.transacting(transaction);
+				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
+				}
+				return sql;
+			},
+			// blacklist
+			function () {
+				const sql = database(self.blacklist_table)
+					.where("gauze__blacklist__entity_type", self.entity.table_name)
+					.whereIn("gauze__blacklist__entity_id", valid_ids)
+					.del()
+					.transacting(transaction);
+				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
+				}
+				return sql;
+			},
+		];
+		return Promise.all(
+			transactions.map(function (f) {
+				return f();
+			}),
+		);
+	}
 	_root_delete(context, input) {
 		const self = this;
 		const { source, database, transaction } = context;
@@ -516,6 +585,9 @@ class DatabaseModel extends Model {
 				},
 			)
 			.then(function (read_data) {
+				const valid_ids = read_data.map(function (item) {
+					return item[self.primary_key];
+				});
 				const sql = database(self.table_name)
 					.where(function (builder) {
 						builder.where(where);
@@ -534,7 +606,9 @@ class DatabaseModel extends Model {
 				}
 				return sql.then(function (delete_data) {
 					LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
-					return read_data.slice(0, limit);
+					return self._cleanup_delete(context, valid_ids).then(function () {
+						return read_data.slice(0, limit);
+					});
 				});
 			})
 			.catch(function (err) {
@@ -573,7 +647,9 @@ class DatabaseModel extends Model {
 				}
 				return sql.then(function (delete_data) {
 					LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
-					return read_data.slice(0, limit);
+					return self._cleanup_delete(context, valid_ids).then(function () {
+						return read_data.slice(0, limit);
+					});
 				});
 			})
 			.catch(function (err) {

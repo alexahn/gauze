@@ -35,7 +35,14 @@ const operation_variables = {
 const expected = `{
     "data": {
         "read_ytitne": [],
-        "read_ytitne2": []
+        "read_ytitne2": [
+            {
+                "attributes": {
+                    "id": "55c29b50-5e24-447d-8505-75e82c2aa8cc",
+                    "text": "world"
+                }
+            }
+        ]
     }
 }`;
 

@@ -27,7 +27,14 @@ const operation_variables = {
 const expected = `{
     "data": {
         "read_entity": [],
-        "read_entity2": []
+        "read_entity2": [
+            {
+                "attributes": {
+                    "id": "55c29b50-5e24-447d-8505-75e82c2aa8cc",
+                    "text": "world"
+                }
+            }
+        ]
     }
 }`;
 

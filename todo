@@ -444,7 +444,8 @@
 [ ] fix class names generated from code (there is an underscore)
 [x] put all auth functions into a central location so it is easy to use
 	[x] should be a simple interface: authenticate(req) -> agent
-[ ] update delete methods to delete relationships in kernel database model
+[x] update delete methods to delete relationships in kernel database model
+	[x] also delete whitelist and blacklists associated with the entity
 [-] think about whether or not we want to make all associations to agent root instead of proxy root for sessions and secrets
 	[-] it allows a simpler authentication architecture since we can change the jwt audience for the proxy session to be environment
 	[-] but it causes more indirection in environment controllers because we need to use the agent root instead of proxy root
