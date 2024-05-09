@@ -456,3 +456,5 @@
 	[ ] update all tests to use the new agent structure
 [ ] refactor environment controllers to have a function that specifies the requirements to proceed (which is stored in session data)
 	[ ] make a method on session to augment the session data so that it all goes through one place
+	[ ] refactor all session data management to use something like "steps.person.assert.email.success", "steps.person.request.email.success", "steps.person.request.email.code", etc
+		[ ] set login conditions based on step definitions (e.g. an array of success values for steps: ["steps.person.assert.email.success", "steps.person.verify.email.success", "steps.account.verify.password.success"])
