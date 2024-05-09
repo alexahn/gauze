@@ -10,12 +10,9 @@ class WhitelistSystemModel extends $kernel.models.access.AccessSystemModel {
 	}
 	create(context, parameters) {
 		const self = this;
-		var { agent_id = null } = context;
+		var { agent } = context;
 		const realm = {
-			agent: {
-				// todo: remove this parameters proxy once we set up user authentication
-				agent_id: parameters.agent_id || agent_id,
-			},
+			agent: agent,
 			entity: {
 				entity_type: $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE,
 			},
@@ -32,12 +29,9 @@ class WhitelistSystemModel extends $kernel.models.access.AccessSystemModel {
 	}
 	read(context, parameters) {
 		const self = this;
-		var { agent_id = null } = context;
+		var { agent } = context;
 		const realm = {
-			agent: {
-				// todo: remove this parameters proxy once we set up user authentication
-				agent_id: parameters.agent_id || agent_id,
-			},
+			agent: agent,
 			entity: {
 				entity_type: $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE,
 			},
@@ -54,12 +48,9 @@ class WhitelistSystemModel extends $kernel.models.access.AccessSystemModel {
 	}
 	update(context, parameters) {
 		const self = this;
-		var { agent_id = null } = context;
+		var { agent } = context;
 		const realm = {
-			agent: {
-				// todo: remove this parameters proxy once we set up user authentication
-				agent_id: (agent_id = parameters.agent_id || agent_id),
-			},
+			agent: agent,
 			entity: {
 				entity_type: $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE,
 			},
@@ -76,12 +67,9 @@ class WhitelistSystemModel extends $kernel.models.access.AccessSystemModel {
 	}
 	delete(context, parameters) {
 		const self = this;
-		var { agent_id = null } = context;
+		var { agent } = context;
 		const realm = {
-			agent: {
-				// todo: remove this parameters proxy once we set up user authentication
-				agent_id: parameters.agent_id || agent_id,
-			},
+			agent: agent,
 			entity: {
 				entity_type: $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE,
 			},

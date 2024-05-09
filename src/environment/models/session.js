@@ -25,6 +25,52 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 		}
 		return parsed_data || {};
 	}
+	set_data_field(data = {}, key, value) {
+		const path = key.split(".");
+		path.reduce(function (prev, next, index) {
+			if (typeof prev[next] === "undefined") {
+				if (index === path.length - 1) {
+					prev[next] = value;
+				} else {
+					prev[next] = {};
+				}
+				return prev[next];
+			} else {
+				if (index === path.length - 1) {
+					prev[next] = value;
+					return prev[next];
+				} else {
+					return prev[next];
+				}
+			}
+		}, data);
+		return data;
+	}
+	get_data_field(data, key) {
+		const path = key.split(".");
+		return path.reduce(function (prev, next) {
+			if (typeof prev === "undefined") {
+				return prev;
+			} else {
+				return prev[next];
+			}
+		}, data);
+	}
+	delete_data_field(data, key) {
+		const path = key.split(".");
+		path.reduce(function (prev, next, index) {
+			if (index === path.length - 1) {
+				delete prev[next];
+			} else {
+				if (typeof prev === "undefined") {
+					return prev;
+				} else {
+					return prev[next];
+				}
+			}
+		}, data);
+		return data;
+	}
 	validate_environment_data(serialized) {
 		const self = this;
 		var data = self.parse_data(serialized);

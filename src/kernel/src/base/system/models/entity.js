@@ -10,12 +10,9 @@ class ba381b0cc764c4c9a187b716ae94ed96SystemModel extends $kernel.models.system.
 	}
 	create(context, parameters) {
 		const self = this;
-		var { agent_id = null } = context;
+		var { agent } = context;
 		const realm = {
-			agent: {
-				// todo: remove this parameters proxy once we set up user authentication
-				agent_id: parameters.agent_id || agent_id,
-			},
+			agent: agent,
 			entity: {
 				entity_type: $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.sql.TABLE_NAME__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 			},
@@ -33,12 +30,9 @@ class ba381b0cc764c4c9a187b716ae94ed96SystemModel extends $kernel.models.system.
 	}
 	read(context, parameters) {
 		const self = this;
-		var { agent_id = null } = context;
+		var { agent } = context;
 		const realm = {
-			agent: {
-				// todo: remove this parameters proxy once we set up user authentication
-				agent_id: parameters.agent_id || agent_id,
-			},
+			agent: agent,
 			entity: {
 				entity_type: $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.sql.TABLE_NAME__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 			},
@@ -55,12 +49,9 @@ class ba381b0cc764c4c9a187b716ae94ed96SystemModel extends $kernel.models.system.
 	}
 	update(context, parameters) {
 		const self = this;
-		var { agent_id = null } = context;
+		var { agent } = context;
 		const realm = {
-			agent: {
-				// todo: remove this parameters proxy once we set up user authentication
-				agent_id: (agent_id = parameters.agent_id || agent_id),
-			},
+			agent: agent,
 			entity: {
 				entity_type: $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.sql.TABLE_NAME__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 			},
@@ -78,12 +69,9 @@ class ba381b0cc764c4c9a187b716ae94ed96SystemModel extends $kernel.models.system.
 	}
 	delete(context, parameters) {
 		const self = this;
-		var { agent_id = null } = context;
+		var { agent } = context;
 		const realm = {
-			agent: {
-				// todo: remove this parameters proxy once we set up user authentication
-				agent_id: parameters.agent_id || agent_id,
-			},
+			agent: agent,
 			entity: {
 				entity_type: $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.sql.TABLE_NAME__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 			},

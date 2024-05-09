@@ -10,12 +10,9 @@ class ProxySystemModel extends $kernel.models.system.SystemModel {
 	}
 	create(context, parameters) {
 		const self = this;
-		var { agent_id = null } = context;
+		var { agent } = context;
 		const realm = {
-			agent: {
-				// todo: remove this parameters proxy once we set up user authentication
-				agent_id: parameters.agent_id || agent_id,
-			},
+			agent: agent,
 			entity: {
 				entity_type: $structure.entities.proxy.database.sql.TABLE_NAME__SQL__DATABASE__PROXY__STRUCTURE,
 			},
@@ -32,12 +29,9 @@ class ProxySystemModel extends $kernel.models.system.SystemModel {
 	}
 	read(context, parameters) {
 		const self = this;
-		var { agent_id = null } = context;
+		var { agent } = context;
 		const realm = {
-			agent: {
-				// todo: remove this parameters proxy once we set up user authentication
-				agent_id: parameters.agent_id || agent_id,
-			},
+			agent: agent,
 			entity: {
 				entity_type: $structure.entities.proxy.database.sql.TABLE_NAME__SQL__DATABASE__PROXY__STRUCTURE,
 			},
@@ -54,12 +48,9 @@ class ProxySystemModel extends $kernel.models.system.SystemModel {
 	}
 	update(context, parameters) {
 		const self = this;
-		var { agent_id = null } = context;
+		var { agent } = context;
 		const realm = {
-			agent: {
-				// todo: remove this parameters proxy once we set up user authentication
-				agent_id: (agent_id = parameters.agent_id || agent_id),
-			},
+			agent: agent,
 			entity: {
 				entity_type: $structure.entities.proxy.database.sql.TABLE_NAME__SQL__DATABASE__PROXY__STRUCTURE,
 			},
@@ -76,12 +67,9 @@ class ProxySystemModel extends $kernel.models.system.SystemModel {
 	}
 	delete(context, parameters) {
 		const self = this;
-		var { agent_id = null } = context;
+		var { agent } = context;
 		const realm = {
-			agent: {
-				// todo: remove this parameters proxy once we set up user authentication
-				agent_id: parameters.agent_id || agent_id,
-			},
+			agent: agent,
 			entity: {
 				entity_type: $structure.entities.proxy.database.sql.TABLE_NAME__SQL__DATABASE__PROXY__STRUCTURE,
 			},
