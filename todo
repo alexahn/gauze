@@ -454,3 +454,5 @@
 [ ] think about some defensive programming strategies to handle the lack of one to one constraints and other similar structural ambiguities
 [ ] update system to use the agent parsed from the jwt
 	[ ] update all tests to use the new agent structure
+[ ] refactor environment controllers to have a function that specifies the requirements to proceed (which is stored in session data)
+	[ ] make a method on session to augment the session data so that it all goes through one place
