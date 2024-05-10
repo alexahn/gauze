@@ -467,6 +467,8 @@
 	[ ] not sure we want to do this because the key encodes time information
 		[ ] which will seep into the sharding design
 		[ ] do we want to shard by chronological order?
+		[ ] it has some interesting qualities, in that you would be able to provision servers ahead of time for a frame of time
+			[ ] might make operations easier because the conceptual model is simple, basically a tape
 [ ] whitelist / blacklist symmetry?
 	[ ] should whitelist also only apply at leaf level? currently blacklist only applies at leaf level
 [ ] build an admin management react app to dog food the interface
