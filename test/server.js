@@ -74,7 +74,7 @@ execute("/environment/graphql", null, enter_login_session_query)
 					person {
 						assert {
 							email(agent_person: {
-								gauze__agent_person__email: "contact2@alexahn.com"
+								gauze__agent_person__email: "contact@alexahn.com"
 							}) {
 								success
 							}
