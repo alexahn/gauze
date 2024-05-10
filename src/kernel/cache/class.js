@@ -14,7 +14,7 @@ class LRUCache {
 			index: this.index[key],
 		};
 	}
-	put(key, value) {
+	set(key, value) {
 		var oldest_index = this.cursor + 1;
 		var oldest_key = this.buffer[oldest_index];
 		if (oldest_key !== undefined) {
@@ -30,7 +30,7 @@ class LRUCache {
 		this.index[key] = this.cursor;
 	}
 	// note: this is necessary to avoid flushing the expired key when traversing the buffer
-	del(key) {
+	delete(key) {
 		if (this.index[key] !== undefined) {
 			this.buffer[this.index[key]] = undefined;
 			delete this.values[key];

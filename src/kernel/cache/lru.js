@@ -30,22 +30,23 @@ class TieredLRUCache {
 		if (large_result !== undefined) return large_result;
 		return undefined;
 	}
-	put(key, val, size) {
+	set(key, val, size) {
+		if (typeof size !== "number") throw new Error("size argument must be a number");
 		if (0 < size && size <= this.maximum_small) {
-			return SMALL_CACHE__LRU__CACHE__KERNEL.put(key, val);
+			return SMALL_CACHE__LRU__CACHE__KERNEL.set(key, val);
 		} else if (this.maximum_small < size && size < this.maximum_medium) {
-			return MEDIUM_CACHE__LRU__CACHE__KERNEL.put(key, val);
+			return MEDIUM_CACHE__LRU__CACHE__KERNEL.set(key, val);
 		} else if (this.maximum_medium < size && size < this.maximum_large) {
-			return LARGE_CACHE__LRU__CACHE__KERNEL.put(key, val);
+			return LARGE_CACHE__LRU__CACHE__KERNEL.set(key, val);
 		} else {
 			// size is too large, discard
 			return undefined;
 		}
 	}
-	del(key) {
-		SMALL_CACHE__LRU__CACHE__KERNEL.del(key);
-		MEDIUM_CACHE__LRU__CACHE__KERNEL.del(key);
-		LARGE_CACHE__LRU__CACHE__KERNEL.del(key);
+	delete(key) {
+		SMALL_CACHE__LRU__CACHE__KERNEL.delete(key);
+		MEDIUM_CACHE__LRU__CACHE__KERNEL.delete(key);
+		LARGE_CACHE__LRU__CACHE__KERNEL.delete(key);
 	}
 }
 
