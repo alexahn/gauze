@@ -517,3 +517,4 @@
 [ ] frontend setup
 	[ ] esbuild
 	[ ] eslint
+[ ] add where_greater and where_lesser
