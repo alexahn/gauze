@@ -494,9 +494,9 @@
 	[ ] cap table name to 255 characters
 	[ ] cap graphql type name to 255 characters
 	[ ] align name lengths with sql column limits for all types
-[ ] cached where in and cached where not in exposed to database graphql
-	[ ] value is a string key that is a key to a value in cache
-	[ ] hook up lru cache to system and database
+[x] cached where in and cached where not in exposed to database graphql
+	[x] value is a string key that is a key to a value in cache
+	[x] hook up lru cache to system and database
 [ ] file entity
 	[ ] file handler entity
 		[ ] manages an io entity that can read and write

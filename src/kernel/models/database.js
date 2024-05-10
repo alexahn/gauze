@@ -1,14 +1,16 @@
 import path from "path";
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
+import * as $structure from "./../../structure/index.js";
+
+import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
+
+import { TIERED_CACHE__LRU__CACHE__KERNEL } from "./../cache/lru.js";
+
 import DataLoader from "./../dataloader.js";
 import TTLLRUCache from "./../lru.js";
 
 import { Model } from "./class.js";
-
-import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
-
-import * as $structure from "./../../structure/index.js";
 
 class DatabaseModel extends Model {
 	constructor(root_config, database_config) {
@@ -314,7 +316,18 @@ class DatabaseModel extends Model {
 	_root_read(context, input) {
 		const self = this;
 		const { source, database, transaction } = context;
-		const { where = {}, where_in = {}, where_not_in = {}, limit = 128, offset = 0, order = this.primary_key, order_direction = "asc", order_nulls = "first" } = input;
+		const {
+			where = {},
+			where_in = {},
+			cache_where_in = {},
+			where_not_in = {},
+			cache_where_not_in = {},
+			limit = 128,
+			offset = 0,
+			order = this.primary_key,
+			order_direction = "asc",
+			order_nulls = "first",
+		} = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "input", input);
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
 		const sql = database(self.table_name)
@@ -323,8 +336,14 @@ class DatabaseModel extends Model {
 				Object.keys(where_in).forEach(function (key) {
 					builder.whereIn(key, where_in[key]);
 				});
+				Object.keys(cache_where_in).forEach(function (key) {
+					builder.whereIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_in[key]).value);
+				});
 				Object.keys(where_not_in).forEach(function (key) {
 					builder.whereNotIn(key, where_not_in[key]);
+				});
+				Object.keys(cache_where_not_in).forEach(function (key) {
+					builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[key]).value);
 				});
 				return builder;
 			})
@@ -350,7 +369,18 @@ class DatabaseModel extends Model {
 	_relationship_read(context, input) {
 		const self = this;
 		const { source, database, transaction } = context;
-		const { where = {}, where_in = {}, where_not_in = {}, limit = 128, offset = 0, order = this.primary_key, order_direction = "asc", order_nulls = "first" } = input;
+		const {
+			where = {},
+			where_in = {},
+			cache_where_in = {},
+			where_not_in = {},
+			cache_where_not_in = {},
+			limit = 128,
+			offset = 0,
+			order = this.primary_key,
+			order_direction = "asc",
+			order_nulls = "first",
+		} = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "input", input);
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
 		// do join here based on source metadata
@@ -370,10 +400,18 @@ class DatabaseModel extends Model {
 			var joined_key = self.table_name + "." + k;
 			joined_where_in[joined_key] = where_in[k];
 		});
+		Object.keys(cache_where_in).forEach(function (k) {
+			var joined_key = self.table_name + "." + k;
+			joined_where_in[joined_key] = TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_in[k]).value;
+		});
 		var joined_where_not_in = {};
 		Object.keys(where_not_in).forEach(function (k) {
 			var joined_key = self.table_name + "." + k;
 			joined_where_not_in[joined_key] = where_not_in[k];
+		});
+		Object.keys(cache_where_not_in).forEach(function (k) {
+			var joined_key = self.table_name + "." + k;
+			joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[k]).value;
 		});
 		var joined_order = self.table_name + "." + order;
 		const sql = database(self.table_name)
@@ -417,7 +455,7 @@ class DatabaseModel extends Model {
 	_root_update(context, input) {
 		var self = this;
 		const { source, database, transaction } = context;
-		var { attributes, where, where_in = {}, where_not_in = {} } = input;
+		var { attributes, where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "input", input);
 		const sql = database(self.table_name)
 			.where(function (builder) {
@@ -425,8 +463,14 @@ class DatabaseModel extends Model {
 				Object.keys(where_in).forEach(function (key) {
 					builder.whereIn(key, where_in[key]);
 				});
+				Object.keys(cache_where_in).forEach(function (key) {
+					builder.whereIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_in[key]).value);
+				});
 				Object.keys(where_not_in).forEach(function (key) {
 					builder.whereNotIn(key, where_not_in[key]);
+				});
+				Object.keys(cache_where_not_in).forEach(function (key) {
+					builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[key]).value);
 				});
 				return builder;
 			})
@@ -567,7 +611,7 @@ class DatabaseModel extends Model {
 	_root_delete(context, input) {
 		const self = this;
 		const { source, database, transaction } = context;
-		const { where, where_in = {}, where_not_in = {}, limit = 128 } = input;
+		const { where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, limit = 128 } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "input", input);
 		const MAXIMUM_ROWS = 4294967296;
 		// todo: use attributes and update deleted_at instead of deleting the row
@@ -594,8 +638,14 @@ class DatabaseModel extends Model {
 						Object.keys(where_in).forEach(function (key) {
 							builder.whereIn(key, where_in[key]);
 						});
+						Object.keys(cache_where_in).forEach(function (key) {
+							builder.whereIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_in[key]).value);
+						});
 						Object.keys(where_not_in).forEach(function (key) {
 							builder.whereNotIn(key, where_not_in[key]);
+						});
+						Object.keys(cache_where_not_in).forEach(function (key) {
+							builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[key]).value);
 						});
 						return builder;
 					})

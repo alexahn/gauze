@@ -8,11 +8,15 @@ class LRUCache {
 		this.index = {};
 	}
 	get(key) {
-		return {
-			value: this.values[key],
-			timestamp: this.timestamps[key],
-			index: this.index[key],
-		};
+		if (typeof this.index[key] === "number") {
+			return {
+				value: this.values[key],
+				timestamp: this.timestamps[key],
+				index: this.index[key],
+			};
+		} else {
+			return undefined;
+		}
 	}
 	set(key, value) {
 		var oldest_index = this.cursor + 1;
