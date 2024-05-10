@@ -1,10 +1,16 @@
 {
 	"version": "0.0.1",
-	"admins": [
-		{
+	"development": {
+		"admins": [{
 			"name": "Alex Ahn",
 			"email": "contact@alexahn.com",
 			"agent_root_id": ""
-		}
-	]
+		}]
+	},
+	"staging": {
+		"admins": []
+	},
+	"production": {
+		"admins": []
+	}
 }
