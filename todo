@@ -489,6 +489,7 @@
 			[ ] probably need to use something else that is commutative at the outer layer to avoid transactions locking too much?
 				[ ] would be kind of a pain to lose transactional certainty and have to manage synchronization between two data sources
 				[ ] just shard the table
+			[ ] will probably need another aggregation table per item, that has the total count of relationships (to any entity) on the item
 [ ] add attribute flag to designate builtin entities
 [ ] type naming constraints
 	[ ] cap table name to 255 characters
@@ -505,3 +506,7 @@
 	[ ] input and output architecture
 [ ] think about how to do field validation so that field errors can be abstracted
 	[ ] currently we will just throw hand crafted errors, but we could probably have a structured approach
+[ ] monolithic foundation
+	[ ] source/version control system
+	[ ] build system
+	[ ] email
