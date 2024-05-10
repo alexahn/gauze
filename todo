@@ -348,9 +348,6 @@
 [x] see if we can pass in a null agent_id into authorization and have it all work
 	[x] verify that all authorization queries are valid with a null agent_id
 		[x] add guards to ensure that agent_id is either a string or null
-[ ] errors directory per realm
-	[ ] realms can have their own custom errors, but only for the particular logic they are handling
-		[ ] in all other cases, we should just bubble up the error from below
 [ ] add a required attribute to fields in abstract entity definitions?
 	[ ] we can use it to create two different attribute types
 		[ ] one for creation, and another for querying and updating
@@ -452,7 +449,6 @@
 		[x] set login conditions based on step definitions (e.g. an array of success values for steps: ["steps.person.assert.email.success", "steps.person.verify.email.success", "steps.account.verify.password.success"])
 	[x] the code could be cleaner if we are willing to do be inefficient (e.g. group the data field modification and checking to also encompass doing a database query to grab the session row)
 		[x] for now the pattern works, and it can be refined in the future so it's okay
-[ ] use types defined in abstract realm for all environment graphql definitions
 [x] move guards outside of batch functions so that the errors are cleaner
 	[x] system model
 	[x] relationship model
@@ -514,3 +510,7 @@
 	[ ] source/version control system
 	[ ] build system
 	[ ] email
+[ ] use types defined in abstract realm for all environment graphql definitions
+[ ] errors directory per realm
+	[ ] realms can have their own custom errors, but only for the particular logic they are handling
+		[ ] in all other cases, we should just bubble up the error from below
