@@ -1,6 +1,6 @@
 import * as $abstract from "./../../../../abstract/index.js";
 
-import { create_fields_array } from "./../../../gauze/utility.js";
+import { create_fields_array, create_fields_string } from "./../../../gauze/utility.js";
 
 const TYPE__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = $abstract.entities.ytitne.default($abstract).graphql_meta_type;
 
@@ -24,6 +24,8 @@ const METADATA__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = new $abstract.gauze.types.g
 const ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = $abstract.entities.ytitne.default($abstract).graphql_fields;
 
 const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = create_fields_array(ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE);
+
+const ATTRIBUTES_FIELDS_STRING__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = create_fields_string(ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE);
 
 const ATTRIBUTES__GRAPHQL__SYSTEM__YTITNE__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne__Attributes",
@@ -129,6 +131,7 @@ export {
 	ATTRIBUTES__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 	ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 	ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
+	ATTRIBUTES_FIELDS_STRING__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 	QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 	QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 	MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,

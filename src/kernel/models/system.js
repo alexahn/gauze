@@ -433,7 +433,9 @@ class SystemModel extends Model {
 						// from the database side, we use the cache key to pull the values from the lru cache
 						const cache_key = uuidv4();
 						TIERED_CACHE__LRU__CACHE__KERNEL.set(cache_key, valid_ids, valid_ids.length);
-						parameters.cache_where_in = cache_key;
+						parameters.cache_where_in = {
+							[self.entity.primary_key]: cache_key,
+						};
 						parameters.where_in = {
 							[self.entity.primary_key]: valid_ids,
 						};
@@ -463,7 +465,9 @@ class SystemModel extends Model {
 						// from the database side, we use the cache key to pull the values from the lru cache
 						const cache_key = uuidv4();
 						TIERED_CACHE__LRU__CACHE__KERNEL.set(cache_key, invalid_ids, invalid_ids.length);
-						parameters.cache_where_not_in = cache_key;
+						parameters.cache_where_not_in = {
+							[self.entity.primary_key]: cache_key,
+						};
 						parameters.where_not_in = {
 							[self.entity.primary_key]: invalid_ids,
 						};
