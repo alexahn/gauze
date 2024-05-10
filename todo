@@ -446,10 +446,12 @@
 		[x] e.g. if we want to display the available proxies
 [x] update system to use the agent parsed from the jwt
 	[x] update all tests to use the new agent structure
-[ ] refactor environment controllers to have a function that specifies the requirements to proceed (which is stored in session data)
-	[ ] make a method on session to augment the session data so that it all goes through one place
-	[ ] refactor all session data management to use something like "steps.person.assert.email.success", "steps.person.request.email.success", "steps.person.request.email.code", etc
-		[ ] set login conditions based on step definitions (e.g. an array of success values for steps: ["steps.person.assert.email.success", "steps.person.verify.email.success", "steps.account.verify.password.success"])
+[x] refactor environment controllers to have a function that specifies the requirements to proceed (which is stored in session data)
+	[x] make a method on session to augment the session data so that it all goes through one place
+	[x] refactor all session data management to use something like "steps.person.assert.email.success", "steps.person.request.email.success", "steps.person.request.email.code", etc
+		[x] set login conditions based on step definitions (e.g. an array of success values for steps: ["steps.person.assert.email.success", "steps.person.verify.email.success", "steps.account.verify.password.success"])
+	[x] the code could be cleaner if we are willing to do be inefficient (e.g. group the data field modification and checking to also encompass doing a database query to grab the session row)
+		[x] for now the pattern works, and it can be refined in the future so it's okay
 [ ] use types defined in abstract realm for all environment graphql definitions
 [ ] move guards outside of batch functions so that the errors are cleaner
 	[x] system model

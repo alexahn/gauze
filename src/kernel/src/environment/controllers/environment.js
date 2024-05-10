@@ -25,7 +25,17 @@ class EnvironmentController {
 		const self = this;
 		self.proxy_type = $abstract.entities.proxy.default($abstract).table_name;
 		self.session_type = $abstract.entities.session.default($abstract).table_name;
-		self.required_verification = ["account.password"];
+		self.sign_in_requirements = ["steps.person.assert.email.success", "steps.account.verify.password.success"];
+	}
+	verify_requirements(data, requirements) {
+		const passed = requirements
+			.map(function (step) {
+				return MODEL__SESSION__MODEL__ENVIRONMENT.get_data_field(data, step);
+			})
+			.filter(function (x) {
+				return x;
+			});
+		return passed.length === requirements.length;
 	}
 	sign_in(context, parameters) {
 		const self = this;
@@ -64,24 +74,12 @@ class EnvironmentController {
 							const { session } = collection;
 							// check the session data
 							const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
-							// reduce the set
-							if (parsed_data.verify) {
-								const verified = {};
-								parsed_data.verify.forEach(function (item) {
-									verified[item.source] = true;
-								});
-								// do an intersection here with a requirement set in a configuration
-								// for now, just use self.required_verification
-								const passed = self.required_verification.filter(function (requirement) {
-									return verified[requirement];
-								});
-								if (passed.length === self.required_verification.length) {
-									// done
-									return {
-										...collection,
-										passed: passed,
-									};
-								}
+							const requirements_passed = self.verify_requirements(parsed_data, self.sign_in_requirements);
+							if (requirements_passed) {
+								return {
+									...collection,
+									requirements_passed: requirements_passed,
+								};
 							} else {
 								return null;
 							}

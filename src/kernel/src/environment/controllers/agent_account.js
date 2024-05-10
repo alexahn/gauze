@@ -44,11 +44,12 @@ class AgentAccountController {
 					.then(function (collection) {
 						const { session } = collection;
 						const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
-						if (parsed_data.assert) {
+						const asserted_proxy = MODEL__SESSION__MODEL__ENVIRONMENT.get_data_field(parsed_data, "assert");
+						if (asserted_proxy) {
 							// fetch secrets
 							const secret_attributes = {
 								gauze__secret__agent_type: self.proxy_type,
-								gauze__secret__agent_id: parsed_data.assert,
+								gauze__secret__agent_id: asserted_proxy,
 								gauze__secret__name: "password",
 							};
 							const secret_parameters = { where: secret_attributes };
@@ -106,18 +107,8 @@ class AgentAccountController {
 						if (collection) {
 							const { session } = collection;
 							const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
-							if (parsed_data.verify) {
-								parsed_data.verify.push({
-									source: "account.password",
-								});
-							} else {
-								parsed_data.verify = [
-									{
-										source: "account.password",
-									},
-								];
-							}
-							const serialized_data = JSON.stringify(parsed_data);
+							var updated_data = MODEL__SESSION__MODEL__ENVIRONMENT.set_data_field(parsed_data, "steps.account.verify.password.success", true);
+							const serialized_data = JSON.stringify(updated_data);
 							// update session data
 							const session_where = {
 								gauze__session__id: agent.session_id,

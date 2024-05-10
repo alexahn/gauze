@@ -90,8 +90,9 @@ class AgentPersonController {
 							const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
 							const proxy_root_id = proxy.gauze__proxy__root_id;
 							// update the session data with the assertion
-							parsed_data.assert = proxy_root_id;
-							const serialized_data = JSON.stringify(parsed_data);
+							var updated_data = MODEL__SESSION__MODEL__ENVIRONMENT.set_data_field(parsed_data, "assert", proxy_root_id);
+							updated_data = MODEL__SESSION__MODEL__ENVIRONMENT.set_data_field(updated_data, "steps.person.assert.email.success", true);
+							const serialized_data = JSON.stringify(updated_data);
 							// save
 							const session_where = {
 								gauze__session__id: agent.session_id,
