@@ -33,12 +33,6 @@ const ATTRIBUTES_ARRAY__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abs
 const CREATE__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.session.system.graphql.MUTATION__GRAPHQL__SYSTEM__SESSION__STRUCTURE),
 	args: {
-		// note: this is temporary so we can test the access control logic without maintaining a session
-		// todo: remove this once we set up user authentication
-		agent_id: {
-			description: "agent_id",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		},
 		parent: {
 			description: "parent",
 			type: PARENT__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
@@ -85,12 +79,6 @@ const CREATE__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 const UPDATE__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.session.system.graphql.MUTATION__GRAPHQL__SYSTEM__SESSION__STRUCTURE),
 	args: {
-		// note: this is temporary so we can test the access control logic without maintaining a session
-		// todo: remove this once we set up user authentication
-		agent_id: {
-			description: "agent_id",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		},
 		parent: {
 			description: "parent",
 			type: PARENT__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
@@ -172,12 +160,6 @@ const UPDATE__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 const DELETE__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.session.system.graphql.MUTATION__GRAPHQL__SYSTEM__SESSION__STRUCTURE),
 	args: {
-		// note: this is temporary so we can test the access control logic without maintaining a session
-		// todo: remove this once we set up user authentication
-		agent_id: {
-			description: "agent_id",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		},
 		parent: {
 			description: "parent",
 			type: PARENT__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM,

@@ -99,9 +99,17 @@ const UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 			description: "where in",
 			type: ATTRIBUTES_ARRAY__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
+		cache_where_in: {
+			description: "cache where in",
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
 		where_not_in: {
 			description: "where not in",
 			type: ATTRIBUTES_ARRAY__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		cache_where_not_in: {
+			description: "cache where not in",
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		attributes: {
 			description: "attributes",
@@ -186,9 +194,17 @@ const DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 			description: "where in",
 			type: ATTRIBUTES_ARRAY__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
+		cache_where_in: {
+			description: "cache where in",
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
 		where_not_in: {
 			description: "where not in",
 			type: ATTRIBUTES_ARRAY__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		cache_where_not_in: {
+			description: "cache where not in",
+			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		limit: {
 			description: "limit",

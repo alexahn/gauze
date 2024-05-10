@@ -33,12 +33,6 @@ const ATTRIBUTES_ARRAY__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstrac
 const READ__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.entity.system.graphql.QUERY__GRAPHQL__SYSTEM__ENTITY__STRUCTURE),
 	args: {
-		// note: this is temporary so we can test the access control logic without maintaining a session
-		// todo: remove this once we set up user authentication
-		agent_id: {
-			description: "agent_id",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		},
 		parent: {
 			description: "parent",
 			type: PARENT__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
