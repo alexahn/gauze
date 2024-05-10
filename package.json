@@ -5,7 +5,7 @@
 	"main": "src/index.js",
 	"bin": "./src/command/gauze.js",
 	"scripts": {
-		"test": "node test",
+		"test": "LOG_LEVEL_MINIMUM=4 node test",
 		"gauze": "./src/command/gauze.js",
 		"start": "node ./src/command/gauze.js run server --port 4000",
 		"start-graphiql-database": "npx ruru -SP -p 4001 -e http://localhost:4000/database/graphql",

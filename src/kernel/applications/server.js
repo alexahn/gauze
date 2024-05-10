@@ -10,8 +10,8 @@ class GauzeServer {
 	// note: config takes the command argv structure (src/command/commands/run/server.js)
 	constructor({ $gauze }, config) {
 		const self = this;
-		this.$gauze = $gauze;
-		this.config = config;
+		self.$gauze = $gauze;
+		self.config = config;
 
 		process.on("SIGINT", function (val) {
 			$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGINT: ${val}`);
@@ -32,139 +32,199 @@ class GauzeServer {
 			$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.exit: ${val}`);
 		});
 
-		this.database = $gauze.database.knex.create_connection();
+		self.database = $gauze.database.knex.create_connection();
 
-		this.server = http.createServer((req, res) => {
-			if (req.url.startsWith("/database/graphql")) {
-				return this.create_graphql_handler($gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE, req, res);
-			} else if (req.url.startsWith("/system/graphql")) {
-				// parse system jwt
-				return self.$gauze.environment.authentication.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req).then(function (agent) {
-					if (agent) {
-						return self.create_graphql_handler($gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM, req, res, agent);
-					} else {
-						res.writeHead(401, "Unauthorized", {
-							"content-type": "application/json; charset=utf-8",
-						}).end(
-							JSON.stringify({
-								status: 401,
-								message: "Unauthorized",
-							}),
-						);
-					}
-				});
-			} else if (req.url.startsWith("/environment/graphql")) {
-				// parse environment and system jwt
-				const auth_transactions = [
-					function () {
-						return self.$gauze.environment.authentication.AUTHENTICATE_ENVIRONMENT__AUTHENTICATION__ENVIRONMENT(req);
-					},
-					function () {
-						return self.$gauze.environment.authentication.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req);
-					},
-				];
-				return Promise.all(
-					auth_transactions.map(function (f) {
-						return f();
-					}),
-				)
-					.then(function (agents) {
-						if (agents[0]) {
-							return agents[0];
-						} else if (agents[1]) {
-							return agents[1];
+		self.routes = [
+			{
+				url: new RegExp("^/database/graphql"),
+				handler: function (req, res) {
+					return self.handle_graphql($gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE, req, res);
+				},
+			},
+			{
+				url: new RegExp("^/system/graphql"),
+				handler: function (req, res) {
+					// parse system jwt
+					return self.$gauze.environment.authentication.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req).then(function (agent) {
+						if (agent) {
+							return self.handle_graphql($gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM, req, res, agent);
 						} else {
-							return null;
+							res.writeHead(401, "Unauthorized", {
+								"content-type": "application/json; charset=utf-8",
+							}).end(
+								JSON.stringify({
+									status: 401,
+									message: "Unauthorized",
+								}),
+							);
 						}
-					})
-					.then(function (agent) {
-						return self.create_graphql_handler($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
 					});
-			} else {
-				res.writeHead(404).end();
-			}
+				},
+			},
+			{
+				url: new RegExp("^/environment/graphql"),
+				handler: function (req, res) {
+					// parse environment and system jwt
+					const auth_transactions = [
+						function () {
+							return self.$gauze.environment.authentication.AUTHENTICATE_ENVIRONMENT__AUTHENTICATION__ENVIRONMENT(req);
+						},
+						function () {
+							return self.$gauze.environment.authentication.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req);
+						},
+					];
+					return Promise.all(
+						auth_transactions.map(function (f) {
+							return f();
+						}),
+					)
+						.then(function (agents) {
+							if (agents[0]) {
+								return agents[0];
+							} else if (agents[1]) {
+								return agents[1];
+							} else {
+								return null;
+							}
+						})
+						.then(function (agent) {
+							return self.handle_graphql($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
+						});
+				},
+			},
+			{
+				url: new RegExp(".*"),
+				handler: function (req, res) {
+					res.writeHead(404, "Not Found", {
+						"content-type": "application/json; charset=utf-8",
+					}).end(
+						JSON.stringify({
+							status: 404,
+							message: "Not Found",
+						}),
+					);
+				},
+			},
+		];
+
+		self.server = http.createServer((req, res) => {
+			const route = self.routes.find(function (route) {
+				return route.url.test(req.url);
+			});
+			return route.handler(req, res);
 		});
+
 		return this;
 	}
-	create_graphql_handler(schema, req, res, agent) {
-		var body = "";
+	handle_graphql_query(schema, req, res, agent, body) {
+		const self = this;
+		return self.database.transaction(function (transaction) {
+			const context = {};
+			context.database = self.database;
+			context.transaction = transaction;
+			context.agent = agent;
+			//context.request_id = uuidv4()
+			return self.$gauze.kernel.shell.graphql
+				.EXECUTE__GRAPHQL__SHELL__KERNEL({
+					schema: schema,
+					context: context,
+					operation: body.query,
+					operation_name: body.operationName,
+					operation_variables: body.variables,
+				})
+				.then(function (data) {
+					if (data.errors && data.errors.length) {
+						self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "errors", data.errors);
+						return transaction
+							.rollback()
+							.then(function () {
+								self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION REVERTED");
+								res.writeHead(400, "Bad Request", {
+									"content-type": "application/json; charset=utf-8",
+								}).end(JSON.stringify(data));
+							})
+							.catch(function (err) {
+								self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO REVERT", err);
+								res.writeHead(500, "Internal Server Error", {
+									"content-type": "application/json; charset=utf-8",
+								}).end(
+									JSON.stringify({
+										status: 500,
+										message: "Internal Server Error",
+									}),
+								);
+							});
+					} else {
+						return transaction
+							.commit(data)
+							.then(function () {
+								self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION COMMITTED");
+								res.writeHead(200, "OK", {
+									"content-type": "application/json; charset=utf-8",
+								}).end(JSON.stringify(data));
+							})
+							.catch(function (err) {
+								self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO COMMIT", err);
+								res.writeHead(500, "Internal Server Error", {
+									"content-type": "application/json; charset=utf-8",
+								}).end(
+									JSON.stringify({
+										status: 500,
+										message: "Internal Server Error",
+									}),
+								);
+							});
+					}
+				})
+				.catch(function (err) {
+					self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "internal error", err);
+					return transaction
+						.rollback(err)
+						.then(function () {
+							res.writeHead(500, "Internal Server Error", {
+								"content-type": "application/json; charset=utf-8",
+							}).end(
+								JSON.stringify({
+									status: 500,
+									message: "Internal Server Error",
+								}),
+							);
+						})
+						.catch(function (err) {
+							self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO ROLLBACK", err);
+							res.writeHead(500, "Internal Server Error", {
+								"content-type": "application/json; charset=utf-8",
+							}).end(
+								JSON.stringify({
+									status: 500,
+									message: "Internal Server Error",
+								}),
+							);
+						});
+				});
+		});
+	}
+	handle_graphql(schema, req, res, agent) {
+		var data = [];
 		var self = this;
 		req.on("data", function (chunk) {
-			body += chunk;
+			data.push(chunk);
 		});
 		req.on("end", function () {
 			try {
-				var parsed = JSON.parse(body);
+				var body = JSON.parse(Buffer.concat(data).toString("utf8"));
 			} catch (err) {
 				res.writeHead(400, "Bad Request", {
 					"content-type": "application/json; charset=utf-8",
-				}).end(JSON.stringify(err));
+				}).end(
+					JSON.stringify({
+						status: 400,
+						message: "Bad Request",
+					}),
+				);
 				return;
 			}
-			return self.database.transaction(function (transaction) {
-				const context = {};
-				context.database = self.database;
-				context.transaction = transaction;
-				context.agent = agent;
-				//context.request_id = uuidv4()
-				return self.$gauze.kernel.shell.graphql
-					.EXECUTE__GRAPHQL__SHELL__KERNEL({
-						schema: schema,
-						context: context,
-						operation: parsed.query,
-						operation_name: parsed.operationName,
-						operation_variables: parsed.variables,
-					})
-					.then(function (data) {
-						if (data.errors && data.errors.length) {
-							self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "errors", data.errors);
-							return transaction
-								.rollback()
-								.then(function () {
-									self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION REVERTED");
-									res.writeHead(400, "Bad Request", {
-										"content-type": "application/json; charset=utf-8",
-									}).end(JSON.stringify(data));
-								})
-								.catch(function (err) {
-									self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO REVERT");
-									res.writeHead(500, "Internal Server Error", {
-										"content-type": "application/json; charset=utf-8",
-									}).end(JSON.stringify(data));
-								});
-						} else {
-							return transaction
-								.commit(data)
-								.then(function () {
-									self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION COMMITTED");
-									res.writeHead(200, "OK", {
-										"content-type": "application/json; charset=utf-8",
-									}).end(JSON.stringify(data));
-								})
-								.catch(function (err) {
-									self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO COMMIT");
-									res.writeHead(500, "Internal Server Error", {
-										"content-type": "application/json; charset=utf-8",
-									}).end(JSON.stringify(data));
-								});
-						}
-					})
-					.catch(function (err) {
-						self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "err", err);
-						return transaction
-							.rollback(err)
-							.then(function () {
-								res.writeHead(500, "Internal Server Error", {
-									"content-type": "application/json; charset=utf-8",
-								}).end(JSON.stringify(err));
-							})
-							.catch(function (err) {
-								res.writeHead(500, "Internal Server Error", {
-									"content-type": "application/json; charset=utf-8",
-								}).end(JSON.stringify(err));
-							});
-					});
-			});
+			return self.handle_graphql_query(schema, req, res, agent, body);
 		});
 	}
 	start() {

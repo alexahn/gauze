@@ -118,6 +118,8 @@ class RelationshipSystemModel extends SystemModel {
 	}
 	_create(context, parameters, realm) {
 		const self = this;
+		const { attributes } = parameters;
+		self._validate_relationship(attributes);
 		const key = self._model_batch_key(parameters, realm, "create");
 		return self.model_loader.load(context, key);
 	}
