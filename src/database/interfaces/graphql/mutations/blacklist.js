@@ -30,6 +30,12 @@ const ATTRIBUTES_ARRAY__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new 
 	fields: $structure.entities.blacklist.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
 });
 
+const ATTRIBUTES_STRING__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Blacklist_Mutation__Attributes_String",
+	description: "Blacklist Mutation Attributes String",
+	fields: $structure.entities.blacklist.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
+});
+
 const CREATE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.blacklist.database.graphql.MUTATION__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE),
 	args: {
@@ -85,7 +91,7 @@ const UPDATE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
@@ -93,7 +99,7 @@ const UPDATE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		attributes: {
 			description: "attributes",
@@ -166,7 +172,7 @@ const DELETE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
@@ -174,7 +180,7 @@ const DELETE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",

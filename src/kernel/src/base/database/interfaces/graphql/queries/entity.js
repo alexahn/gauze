@@ -30,6 +30,12 @@ const ATTRIBUTES_ARRAY__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERF
 	fields: $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 });
 
+const ATTRIBUTES_STRING__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "ba381b0cc764c4c9a187b716ae94ed96_Query__Attributes_String",
+	description: "ba381b0cc764c4c9a187b716ae94ed96 Query Attributes String",
+	fields: $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+});
+
 const READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
 		$structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.QUERY__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
@@ -49,7 +55,7 @@ const READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABAS
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
@@ -57,7 +63,7 @@ const READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABAS
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",

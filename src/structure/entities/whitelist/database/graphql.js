@@ -1,6 +1,6 @@
 import * as $abstract from "./../../../../abstract/index.js";
 
-import { create_fields_array } from "./../../../gauze/utility.js";
+import { create_fields_array, create_fields_string } from "./../../../gauze/utility.js";
 
 const TYPE__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = $abstract.entities.whitelist.default($abstract).graphql_meta_type;
 
@@ -24,6 +24,8 @@ const METADATA__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.ty
 const ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = $abstract.entities.whitelist.default($abstract).graphql_fields;
 
 const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = create_fields_array(ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE);
+
+const ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = create_fields_string(ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE);
 
 const ATTRIBUTES__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist__Attributes",
@@ -94,6 +96,7 @@ export {
 	ATTRIBUTES__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 	ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 	ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
+	ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 	QUERY_QUERY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 	QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 	MUTATION_MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,

@@ -30,6 +30,12 @@ const ATTRIBUTES_ARRAY__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE = new
 	fields: $structure.entities.agent_account.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
 });
 
+const ATTRIBUTES_STRING__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Account_Query__Attributes_String",
+	description: "Agent_Account Query Attributes String",
+	fields: $structure.entities.agent_account.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
+});
+
 const READ__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_account.database.graphql.QUERY__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE),
 	args: {
@@ -47,7 +53,7 @@ const READ__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
@@ -55,7 +61,7 @@ const READ__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",

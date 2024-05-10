@@ -1,6 +1,6 @@
 import * as $abstract from "./../../../../abstract/index.js";
 
-import { create_fields_array } from "./../../../gauze/utility.js";
+import { create_fields_array, create_fields_string } from "./../../../gauze/utility.js";
 
 const TYPE__GRAPHQL__DATABASE__PROXY__STRUCTURE = $abstract.entities.proxy.default($abstract).graphql_meta_type;
 
@@ -24,6 +24,8 @@ const METADATA__GRAPHQL__DATABASE__PROXY__STRUCTURE = new $abstract.gauze.types.
 const ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE = $abstract.entities.proxy.default($abstract).graphql_fields;
 
 const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__PROXY__STRUCTURE = create_fields_array(ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE);
+
+const ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__PROXY__STRUCTURE = create_fields_string(ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE);
 
 const ATTRIBUTES__GRAPHQL__DATABASE__PROXY__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Proxy__Attributes",
@@ -129,6 +131,7 @@ export {
 	ATTRIBUTES__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 	ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 	ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+	ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 	QUERY_RELATIONSHIPS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 	QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 	MUTATION_RELATIONSHIPS__GRAPHQL__DATABASE__PROXY__STRUCTURE,

@@ -30,6 +30,12 @@ const ATTRIBUTES_ARRAY__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE = n
 	fields: $structure.entities.relationship.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE,
 });
 
+const ATTRIBUTES_STRING__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Relationship_Mutation__Attributes_String",
+	description: "Relationship Mutation Attributes String",
+	fields: $structure.entities.relationship.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE,
+});
+
 const CREATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.relationship.database.graphql.MUTATION__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE),
 	args: {
@@ -85,7 +91,7 @@ const UPDATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
@@ -93,7 +99,7 @@ const UPDATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		attributes: {
 			description: "attributes",
@@ -166,7 +172,7 @@ const DELETE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
@@ -174,7 +180,7 @@ const DELETE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",

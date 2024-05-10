@@ -30,6 +30,12 @@ const ATTRIBUTES_ARRAY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE 
 	fields: $structure.entities.agent_character.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 });
 
+const ATTRIBUTES_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Character_Mutation__Attributes_String",
+	description: "Agent_Character Mutation Attributes String",
+	fields: $structure.entities.agent_character.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
+});
+
 const CREATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
 		$structure.entities.agent_character.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
@@ -89,7 +95,7 @@ const UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
@@ -97,7 +103,7 @@ const UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		attributes: {
 			description: "attributes",
@@ -172,7 +178,7 @@ const DELETE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
@@ -180,7 +186,7 @@ const DELETE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",

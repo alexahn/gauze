@@ -30,6 +30,12 @@ const ATTRIBUTES_ARRAY__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abst
 	fields: $structure.entities.session.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__SESSION__STRUCTURE,
 });
 
+const ATTRIBUTES_STRING__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Session_Query__Attributes_String",
+	description: "Session Query Attributes String",
+	fields: $structure.entities.session.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__SESSION__STRUCTURE,
+});
+
 const READ__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.session.database.graphql.QUERY__GRAPHQL__DATABASE__SESSION__STRUCTURE),
 	args: {
@@ -47,7 +53,7 @@ const READ__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
@@ -55,7 +61,7 @@ const READ__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",

@@ -30,6 +30,12 @@ const ATTRIBUTES_ARRAY__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstr
 	fields: $structure.entities.secret.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__SECRET__STRUCTURE,
 });
 
+const ATTRIBUTES_STRING__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Secret_Query__Attributes_String",
+	description: "Secret Query Attributes String",
+	fields: $structure.entities.secret.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__SECRET__STRUCTURE,
+});
+
 const READ__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.secret.database.graphql.QUERY__GRAPHQL__DATABASE__SECRET__STRUCTURE),
 	args: {
@@ -47,7 +53,7 @@ const READ__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
@@ -55,7 +61,7 @@ const READ__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",

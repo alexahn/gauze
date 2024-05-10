@@ -30,6 +30,12 @@ const ATTRIBUTES_ARRAY__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = new 
 	fields: $structure.entities.relationship.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE,
 });
 
+const ATTRIBUTES_STRING__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Relationship_Query__Attributes_String",
+	description: "Relationship Query Attributes String",
+	fields: $structure.entities.relationship.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE,
+});
+
 const READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.relationship.database.graphql.QUERY__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE),
 	args: {
@@ -47,7 +53,7 @@ const READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
@@ -55,7 +61,7 @@ const READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: ATTRIBUTES_STRING__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",
