@@ -16,10 +16,10 @@ const SMALL_CACHE__LRU__CACHE__KERNEL = new LRUCache({
 });
 
 class TieredLRUCache {
-	constructor({ minimum_small, minimum_medium, minimum_large }) {
-		this.minimum_small = minimum_small;
-		this.minimum_medium = minimum_medium;
-		this.minimum_large = minimum_large;
+	constructor({ maximum_small, maximum_medium, maximum_large }) {
+		this.maximum_small = maximum_small;
+		this.maximum_medium = maximum_medium;
+		this.maximum_large = maximum_large;
 	}
 	get(key) {
 		var small_result = SMALL_CACHE__LRU__CACHE__KERNEL.get(key);
@@ -31,12 +31,15 @@ class TieredLRUCache {
 		return undefined;
 	}
 	put(key, val, size) {
-		if (this.minimum_small <= size && size < this.minimum_medium) {
+		if (0 < size && size <= this.maximum_small) {
 			return SMALL_CACHE__LRU__CACHE__KERNEL.put(key, val);
-		} else if (this.minimum_medium <= size && size < this.minimum_large) {
+		} else if (this.maximum_small < size && size < this.maximum_medium) {
 			return MEDIUM_CACHE__LRU__CACHE__KERNEL.put(key, val);
-		} else {
+		} else if (this.maximum_medium < size && size < this.maximum_large) {
 			return LARGE_CACHE__LRU__CACHE__KERNEL.put(key, val);
+		} else {
+			// size is too large, discard
+			return undefined;
 		}
 	}
 	del(key) {
@@ -47,9 +50,9 @@ class TieredLRUCache {
 }
 
 const TIERED_CACHE__LRU__CACHE__KERNEL = new TieredLRUCache({
-	minimum_small: 0,
-	minimum_medium: 2 << 16,
-	minimum_large: 2 << 20,
+	maximum_small: 2 << 12,
+	maximum_medium: 2 << 16,
+	maximum_large: 2 << 20,
 });
 
 export { LARGE_CACHE__LRU__CACHE__KERNEL, MEDIUM_CACHE__LRU__CACHE__KERNEL, SMALL_CACHE__LRU__CACHE__KERNEL, TIERED_CACHE__LRU__CACHE__KERNEL };

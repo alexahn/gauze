@@ -426,6 +426,9 @@ class SystemModel extends Model {
 						const valid_ids = auth.records.map(function (record) {
 							return record.gauze__whitelist__entity_id;
 						});
+						// note: we can avoid a heavy penalty parsing millions of keys in graphql by using an intermediary data store (lru cache) to communicate the values
+						// generate a uuidv4 as a cache key, put the valid ids into the cache using the cache key, and set the value of cache_where_in to the cache key
+						// from the database side, we use the cache key to pull the values from the lru cache
 						parameters.where_in = {
 							[self.entity.primary_key]: valid_ids,
 						};
@@ -450,6 +453,9 @@ class SystemModel extends Model {
 						const invalid_ids = auth.records.map(function (record) {
 							return record.gauze__blacklist__entity_id;
 						});
+						// note: we can avoid a heavy penalty parsing millions of keys in graphql by using an intermediary data store (lru cache) to communicate the values
+						// generate a uuidv4 as a cache key, put the invalid ids into the cache using the cache key, and set the value of cache_where_not_in to the cache key
+						// from the database side, we use the cache key to pull the values from the lru cache
 						parameters.where_not_in = {
 							[self.entity.primary_key]: invalid_ids,
 						};
