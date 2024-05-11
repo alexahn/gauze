@@ -10,22 +10,30 @@ import Route from "./route.jsx";
 
 const root = Client.createRoot(document.getElementById("gauze"));
 
+// strict mode causes an additional render
 root.render(
-	// Render a `<Provider>` around the entire `<App>`,
-	// and pass the Redux store to it as a prop
 	<React.StrictMode>
 		<Provider store={store}>
+			<h1>Gauze</h1>
+			<div>
+				<a href={router.buildUrl("environment.signup", {})}>Sign Up</a>
+			</div>
+			<div>
+				<a href={router.buildUrl("environment.signin", { hello: "goodbye" })}>Sign In</a>
+			</div>
+			<div>
+				<a href={router.buildUrl("environment.signout", { begin: "end" })}>Sign Out</a>
+			</div>
+			<div>
+				<a href={router.buildUrl("system", {})}>System</a>
+			</div>
 			<Route />
-			<h1>Hello World!</h1>
-			<a href={router.buildUrl("root", {})}>Root</a>
-			<a href={router.buildUrl("users", {})}>Users</a>
-			<a href={router.buildUrl("users.view", { hello: "goodbye" })}>View</a>
-			<a href={router.buildUrl("users.view", { begin: "end" })}>List</a>
-			<a href={router.buildUrl("system", {})}>System</a>
 		</Provider>
 	</React.StrictMode>,
 );
 
+router.setDependencies({ store });
+
 router.start();
 
-console.log("LOADED");
+console.log("gauze:start");

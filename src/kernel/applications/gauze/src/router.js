@@ -16,7 +16,7 @@ const dataMiddlewareFactory = (routes) => (router) => (toState, fromState) => {
 };
 
 const options = {
-	//defaultRoute: ''
+	defaultRoute: "environment.signin",
 	queryParamsMode: "loose",
 };
 

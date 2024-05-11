@@ -525,9 +525,16 @@
 	[ ] ui framework
 [ ] rename valid_agent_types in abstract definition to allowed_agent_types
 	[ ] add allowed_agent_types definitions to individual fields
-[ ] minimalist frontend setup
-	[ ] entry point
-	[ ] esbuild command
-	[ ] http-server command
-	[ ] state management
-	[ ] package.json scripts updated to allow more convenient grouping
+[x] minimalist frontend setup
+	[x] entry point
+	[x] esbuild command
+	[x] http-server command
+	[x] state management
+	[x] package.json scripts updated to allow more convenient grouping
+[ ] refresh session method
+[ ] authentication routes and flow for frontend
+	[ ] gauze environment client
+	[ ] data management for flow information
+		[ ] use the same requirements structure on the frontend
+		[ ] generalize the pattern so that new requirements can easily be added
+		[ ] instead of breaking out each requirement into a separate page, just make a component to handle it

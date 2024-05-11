@@ -1,12 +1,12 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import SignIn from "./../components/signin.jsx";
+import SignOut from "./../components/signout.jsx";
 
-// Amber hooks up the router, gauze, and model services to the SignIn component
+// Ammonite hooks up the router, gauze, and model services to the SignOut component
 
-export default function Amber() {
-	const id = "unit:amber";
+export default function Ammonite() {
+	const id = "unit:ammonite";
 	const { router, model, gauze } = useSelector((state) => {
 		const { router, model, gauze } = state.services;
 		return {
@@ -17,9 +17,9 @@ export default function Amber() {
 	});
 	return (
 		<div id={id} key={id}>
-			Amber
+			Ammonite
 			{/* render a pure function component here */}
-			<SignIn router={router} gauze={gauze} model={model} />
+			<SignOut router={router} gauze={gauze} model={model} />
 		</div>
 	);
 }

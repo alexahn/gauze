@@ -1,12 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import SignIn from "./../components/signin.jsx";
+// Azurite is currently empty
 
-// Amber hooks up the router, gauze, and model services to the SignIn component
-
-export default function Amber() {
-	const id = "unit:amber";
+export default function Azurite() {
+	const id = "unit:azurite";
 	const { router, model, gauze } = useSelector((state) => {
 		const { router, model, gauze } = state.services;
 		return {
@@ -17,9 +15,8 @@ export default function Amber() {
 	});
 	return (
 		<div id={id} key={id}>
-			Amber
+			Azurite
 			{/* render a pure function component here */}
-			<SignIn router={router} gauze={gauze} model={model} />
 		</div>
 	);
 }
