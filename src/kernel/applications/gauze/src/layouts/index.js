@@ -1,2 +1,2 @@
-export * as test from "./Test.jsx";
-export * as test2 from "./Test2.jsx";
+export * as alligator from "./Alligator.jsx";
+export * as anaconda from "./Anaconda.jsx";

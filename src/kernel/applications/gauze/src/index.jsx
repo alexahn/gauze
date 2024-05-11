@@ -16,12 +16,11 @@ root.render(
 	<React.StrictMode>
 		<Provider store={store}>
 			<Route />
-			{/* <App /> */}
 			<h1>Hello World!</h1>
 			<a href={router.buildUrl("root", {})}>Root</a>
 			<a href={router.buildUrl("users", {})}>Users</a>
-			<a href={router.buildUrl("users.view", {})}>View</a>
-			<a href={router.buildUrl("users.list", {})}>List</a>
+			<a href={router.buildUrl("users.view", { hello: "goodbye" })}>View</a>
+			<a href={router.buildUrl("users.view", { begin: "end" })}>List</a>
 			<a href={router.buildUrl("system", {})}>System</a>
 		</Provider>
 	</React.StrictMode>,

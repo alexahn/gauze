@@ -17,6 +17,7 @@ const dataMiddlewareFactory = (routes) => (router) => (toState, fromState) => {
 
 const options = {
 	//defaultRoute: ''
+	queryParamsMode: "loose",
 };
 
 const router = createRouter(routes, options);

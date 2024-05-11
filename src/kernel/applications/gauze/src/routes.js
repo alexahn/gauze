@@ -7,19 +7,33 @@ const routes = [
 		name: "root",
 		path: "/",
 		onActivate: function (params) {
-			console.log("ROOT ACTIVATE", params);
 			return Promise.resolve(true);
 		},
-		layout: layouts.test.default,
+		layout: layouts.alligator.default,
+		sections: {
+			top: sections.alder.default,
+			bottom: sections.almond.default,
+		},
+		units: {
+			header: units.amber.default,
+			body: units.amethyst.default,
+		},
 	},
 	{
 		name: "users",
 		path: "/users",
 		onActivate: function (params) {
-			console.log("USERS ACTIVATE", params);
 			return Promise.resolve(true);
 		},
-		layout: layouts.test.default,
+		layout: layouts.alligator.default,
+		sections: {
+			top: sections.alder.default,
+			bottom: sections.almond.default,
+		},
+		units: {
+			header: units.amber.default,
+			body: units.amethyst.default,
+		},
 	},
 	{
 		name: "users.id",
@@ -27,7 +41,15 @@ const routes = [
 		onActivate: function (params) {
 			return Promise.resolve(true);
 		},
-		layout: layouts.test.default,
+		layout: layouts.alligator.default,
+		sections: {
+			top: sections.alder.default,
+			bottom: sections.almond.default,
+		},
+		units: {
+			header: units.amber.default,
+			body: units.amethyst.default,
+		},
 	},
 	{
 		name: "users.id.home",
@@ -35,7 +57,15 @@ const routes = [
 		onActivate: function (params) {
 			return Promise.resolve(true);
 		},
-		layout: layouts.test.default,
+		layout: layouts.alligator.default,
+		sections: {
+			top: sections.alder.default,
+			bottom: sections.almond.default,
+		},
+		units: {
+			header: units.amber.default,
+			body: units.amethyst.default,
+		},
 	},
 	{
 		name: "users.view",
@@ -43,7 +73,15 @@ const routes = [
 		onActivate: function (params) {
 			return Promise.resolve(true);
 		},
-		layout: layouts.test.default,
+		layout: layouts.alligator.default,
+		sections: {
+			top: sections.alder.default,
+			bottom: sections.almond.default,
+		},
+		units: {
+			header: units.amber.default,
+			body: units.amethyst.default,
+		},
 	},
 	{
 		name: "users.list",
@@ -51,7 +89,15 @@ const routes = [
 		onActivate: function (params) {
 			return Promise.resolve(true);
 		},
-		layout: layouts.test.default,
+		layout: layouts.alligator.default,
+		sections: {
+			top: sections.alder.default,
+			bottom: sections.almond.default,
+		},
+		units: {
+			header: units.amber.default,
+			body: units.amethyst.default,
+		},
 	},
 	{
 		name: "system",
@@ -59,7 +105,15 @@ const routes = [
 		onActivate: function (params) {
 			return Promise.resolve(true);
 		},
-		layout: layouts.test2.default,
+		layout: layouts.anaconda.default,
+		sections: {
+			left: sections.alder.default,
+			right: sections.almond.default,
+		},
+		units: {
+			header: units.amber.default,
+			body: units.amethyst.default,
+		},
 	},
 ];
 
