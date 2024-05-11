@@ -525,3 +525,9 @@
 	[ ] ui framework
 [ ] rename valid_agent_types in abstract definition to allowed_agent_types
 	[ ] add allowed_agent_types definitions to individual fields
+[ ] minimalist frontend setup
+	[ ] entry point
+	[ ] esbuild command
+	[ ] http-server command
+	[ ] state management
+	[ ] package.json scripts updated to allow more convenient grouping

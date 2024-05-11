@@ -8,13 +8,19 @@
 		"test": "LOG_LEVEL_MINIMUM=4 node test",
 		"gauze": "./src/command/gauze.js",
 		"start": "node --watch-path=./src ./src/command/gauze.js run server --port 4000",
+		"start-graphiql": "/bin/zsh -c \"npm run start-graphiql-database & ; npm run start-graphiql-system & ; npm run start-graphiql-environment & ; wait\"",
 		"start-graphiql-database": "npx ruru -SP -p 4001 -e http://localhost:4000/database/graphql",
 		"start-graphiql-system": "npx ruru -SP -p 4002 -e http://localhost:4000/system/graphql",
-		"start-graphiql-environment": "npx ruru -SP -p 4003 -e http://localhost:4000/environment/graphql"
+		"start-graphiql-environment": "npx ruru -SP -p 4003 -e http://localhost:4000/environment/graphql",
+		"start-ui": "/bin/zsh -c \"npm run watch-ui & ; npm run serve-ui & ; wait\"",
+		"build-ui": "./node_modules/.bin/esbuild ./src/kernel/applications/gauze/index.jsx --outfile=./src/kernel/applications/gauze/build/index.js --bundle --minify",
+		"watch-ui": "./node_modules/.bin/esbuild ./src/kernel/applications/gauze/index.jsx --outfile=./src/kernel/applications/gauze/build/index.js --bundle --sourcemap --watch=forever",
+		"serve-ui": "./node_modules/.bin/http-server ./src/kernel/applications/gauze/build --port 3000"
 	},
 	"author": "Alex Ahn",
 	"devDependencies": {
 		"esbuild": "0.21.1",
+		"http-server": "^14.1.1",
 		"prettier": "3.2.5",
 		"ruru": "^2.0.0-beta.11",
 		"typescript": "^5.4.5"
