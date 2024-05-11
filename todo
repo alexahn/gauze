@@ -523,3 +523,5 @@
 	[ ] state store
 	[ ] router
 	[ ] ui framework
+[ ] rename valid_agent_types in abstract definition to allowed_agent_types
+	[ ] add allowed_agent_types definitions to individual fields
