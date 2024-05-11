@@ -4,7 +4,6 @@ import { useState } from "react";
 export default function SignIn({ router, gauze, model }) {
 	const [step, setStep] = useState(0);
 	const requirements = ["person.assert.email", "account.verify.password"];
-	console.log("rendered", router, gauze, model);
 	// have a switch here based on the requirements as a very simple implementation for the flow
 	function handleSubmit() {
 		setStep(step + 1);

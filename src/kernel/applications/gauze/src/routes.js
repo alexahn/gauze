@@ -6,8 +6,35 @@ const routes = [
 	{
 		name: "environment",
 		path: "/y",
-		onActivate: function (params) {
-			return Promise.resolve(true);
+		onActivate: function ({ dependencies }) {
+			const { services } = dependencies;
+			const { gauze, model } = services;
+			const sessions = model.default.all("SESSION");
+			const anonymous = sessions.filter(function (session) {
+				return session.gauze__session__agent_id === null && session.gauze__session__agent_type === null;
+			});
+			if (anonymous && anonymous.length) {
+				console.log("anonymous session found!", anonymous);
+				return Promise.resolve(true);
+			} else {
+				return gauze.default
+					.enterSession(null)
+					.then(function (session) {
+						console.log("session created!", session);
+						const attributes = session.data.environment.enter_session;
+						model.default.create("SESSION", attributes.gauze__session__id, attributes);
+						gauze.jwt = attributes.gauze__session__value;
+						return Promise.resolve(true);
+					})
+					.catch(function (err) {
+						console.log("SOMETHING WENT WRONG", err);
+						throw err;
+					});
+				// do graphql query and make a session
+				// save the session to the model service
+				// proceed
+			}
+			//return Promise.resolve(true);
 		},
 		layout: layouts.alligator.default,
 		sections: {
@@ -20,7 +47,7 @@ const routes = [
 	{
 		name: "environment.signup",
 		path: "/signup",
-		onActivate: function (params) {
+		onActivate: function ({ dependencies }) {
 			return Promise.resolve(true);
 		},
 		layout: layouts.alligator.default,

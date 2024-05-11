@@ -92,6 +92,17 @@ class ModelService {
 			});
 		}
 	}
+	all(type) {
+		const self = this;
+		if (self.index[type]) {
+			return Object.keys(self.index[type]).map(function (id) {
+				const index = self.index[type][id];
+				return self.collection[index];
+			});
+		} else {
+			return [];
+		}
+	}
 	create(type, id, attributes) {
 		const self = this;
 		const index = self.collection.length;

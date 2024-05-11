@@ -5,11 +5,11 @@ import transitionPath from "router5-transition-path";
 // singleton only at root level
 import routes from "./routes.js";
 
-const dataMiddlewareFactory = (routes) => (router) => (toState, fromState) => {
+const dataMiddlewareFactory = (routes) => (router, dependencies) => (toState, fromState) => {
 	const { toActivate } = transitionPath(toState, fromState);
 	const onActivateHandlers = toActivate.map((segment) => routes.find((r) => r.name === segment).onActivate).filter(Boolean);
 
-	return Promise.all(onActivateHandlers.map((callback) => callback())).then((data) => {
+	return Promise.all(onActivateHandlers.map((callback) => callback({ dependencies, toState, fromState }))).then((data) => {
 		const routeData = data.reduce((accData, rData) => Object.assign(accData, rData), {});
 		return { ...toState, data: routeData };
 	});

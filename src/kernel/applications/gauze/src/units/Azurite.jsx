@@ -5,13 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function Azurite() {
 	const id = "unit:azurite";
-	const { router, model, gauze } = useSelector((state) => {
-		const { router, model, gauze } = state.services;
-		return {
-			router: router.default,
-			model: model.default,
-			gauze: gauze.default,
-		};
+	const router = useSelector((state) => {
+		return state.services.router.default;
+	});
+	const model = useSelector((state) => {
+		return state.services.model.default;
+	});
+	const gauze = useSelector((state) => {
+		return state.services.gauze.default;
 	});
 	return (
 		<div id={id} key={id}>

@@ -7,13 +7,14 @@ import SignUp from "./../components/signup.jsx";
 
 export default function Amethyst() {
 	const id = "unit:amethyst";
-	const { router, model, gauze } = useSelector((state) => {
-		const { router, model, gauze } = state.services;
-		return {
-			router: router.default,
-			model: model.default,
-			gauze: gauze.default,
-		};
+	const router = useSelector((state) => {
+		return state.services.router.default;
+	});
+	const model = useSelector((state) => {
+		return state.services.model.default;
+	});
+	const gauze = useSelector((state) => {
+		return state.services.gauze.default;
 	});
 	return (
 		<div id={id} key={id}>

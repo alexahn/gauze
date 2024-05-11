@@ -7,6 +7,7 @@ import SignIn from "./../components/signin.jsx";
 
 export default function Amber() {
 	const id = "unit:amber";
+	/*
 	const { router, model, gauze } = useSelector((state) => {
 		const { router, model, gauze } = state.services;
 		return {
@@ -14,6 +15,16 @@ export default function Amber() {
 			model: model.default,
 			gauze: gauze.default,
 		};
+	});
+	*/
+	const router = useSelector((state) => {
+		return state.services.router.default;
+	});
+	const model = useSelector((state) => {
+		return state.services.model.default;
+	});
+	const gauze = useSelector((state) => {
+		return state.services.gauze.default;
 	});
 	return (
 		<div id={id} key={id}>

@@ -51,6 +51,7 @@ class GauzeServer {
 						} else {
 							res.writeHead(401, "Unauthorized", {
 								"content-type": "application/json; charset=utf-8",
+								"Access-Control-Allow-Origin": "*",
 							}).end(
 								JSON.stringify({
 									status: 401,
@@ -97,6 +98,7 @@ class GauzeServer {
 				handler: function (req, res) {
 					res.writeHead(404, "Not Found", {
 						"content-type": "application/json; charset=utf-8",
+						"Access-Control-Allow-Origin": "*",
 					}).end(
 						JSON.stringify({
 							status: 404,
@@ -141,12 +143,14 @@ class GauzeServer {
 								self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION REVERTED");
 								res.writeHead(400, "Bad Request", {
 									"content-type": "application/json; charset=utf-8",
+									"Access-Control-Allow-Origin": "*",
 								}).end(JSON.stringify(data));
 							})
 							.catch(function (err) {
 								self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO REVERT", err);
 								res.writeHead(500, "Internal Server Error", {
 									"content-type": "application/json; charset=utf-8",
+									"Access-Control-Allow-Origin": "*",
 								}).end(
 									JSON.stringify({
 										status: 500,
@@ -161,12 +165,14 @@ class GauzeServer {
 								self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION COMMITTED");
 								res.writeHead(200, "OK", {
 									"content-type": "application/json; charset=utf-8",
+									"Access-Control-Allow-Origin": "*",
 								}).end(JSON.stringify(data));
 							})
 							.catch(function (err) {
 								self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO COMMIT", err);
 								res.writeHead(500, "Internal Server Error", {
 									"content-type": "application/json; charset=utf-8",
+									"Access-Control-Allow-Origin": "*",
 								}).end(
 									JSON.stringify({
 										status: 500,
@@ -183,6 +189,7 @@ class GauzeServer {
 						.then(function () {
 							res.writeHead(500, "Internal Server Error", {
 								"content-type": "application/json; charset=utf-8",
+								"Access-Control-Allow-Origin": "*",
 							}).end(
 								JSON.stringify({
 									status: 500,
@@ -194,6 +201,7 @@ class GauzeServer {
 							self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO ROLLBACK", err);
 							res.writeHead(500, "Internal Server Error", {
 								"content-type": "application/json; charset=utf-8",
+								"Access-Control-Allow-Origin": "*",
 							}).end(
 								JSON.stringify({
 									status: 500,
@@ -207,25 +215,39 @@ class GauzeServer {
 	handle_graphql(schema, req, res, agent) {
 		var data = [];
 		var self = this;
-		req.on("data", function (chunk) {
-			data.push(chunk);
-		});
-		req.on("end", function () {
-			try {
-				var body = JSON.parse(Buffer.concat(data).toString("utf8"));
-			} catch (err) {
-				res.writeHead(400, "Bad Request", {
-					"content-type": "application/json; charset=utf-8",
-				}).end(
-					JSON.stringify({
-						status: 400,
-						message: "Bad Request",
-					}),
-				);
-				return;
-			}
-			return self.handle_graphql_query(schema, req, res, agent, body);
-		});
+		console.log("req.method", req.method);
+		if (req.method === "POST") {
+			req.on("data", function (chunk) {
+				data.push(chunk);
+			});
+			req.on("end", function () {
+				try {
+					var body = JSON.parse(Buffer.concat(data).toString("utf8"));
+				} catch (err) {
+					res.writeHead(400, "Bad Request", {
+						"content-type": "application/json; charset=utf-8",
+						"Access-Control-Allow-Origin": "*",
+					}).end(
+						JSON.stringify({
+							status: 400,
+							message: "Bad Request",
+						}),
+					);
+					return;
+				}
+				return self.handle_graphql_query(schema, req, res, agent, body);
+			});
+		} else if (req.method === "OPTIONS") {
+			res.writeHead(200, "OK", {
+				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Headers": "*",
+			}).end(
+				JSON.stringify({
+					status: 200,
+					message: "OK",
+				}),
+			);
+		}
 	}
 	start() {
 		this.server.listen(this.config.port);

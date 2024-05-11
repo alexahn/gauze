@@ -12,9 +12,10 @@
 		"start-graphiql-database": "npx ruru -SP -p 4001 -e http://localhost:4000/database/graphql",
 		"start-graphiql-system": "npx ruru -SP -p 4002 -e http://localhost:4000/system/graphql",
 		"start-graphiql-environment": "npx ruru -SP -p 4003 -e http://localhost:4000/environment/graphql",
-		"start-ui": "/bin/zsh -c \"npm run watch-ui & ; npm run serve-ui & ; wait\"",
+		"start-ui": "/bin/zsh -c \"npm run watch-ui-env & ; npm run serve-ui & ; wait\"",
 		"build-ui": "./node_modules/.bin/esbuild ./src/kernel/applications/gauze/src/index.jsx --outfile=./src/kernel/applications/gauze/build/index.js --bundle --minify",
 		"watch-ui": "./node_modules/.bin/esbuild ./src/kernel/applications/gauze/src/index.jsx --outfile=./src/kernel/applications/gauze/build/index.js --bundle --sourcemap --watch=forever",
+		"watch-ui-env": "node ./src/kernel/applications/gauze/watch.js",
 		"serve-ui": "./node_modules/.bin/http-server ./src/kernel/applications/gauze/build -c-1 --port 3000"
 	},
 	"author": "Alex Ahn",
