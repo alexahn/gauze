@@ -5,6 +5,7 @@ export default function Anaconda({ sections, units }) {
 	return (
 		<div id={id} key={id}>
 			<sections.left units={units.left} />
+			<hr />
 			<sections.right units={units.right} />
 		</div>
 	);

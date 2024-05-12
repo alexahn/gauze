@@ -149,7 +149,7 @@ class ModelService {
 		const key = [type, id].join(".");
 		const itemIndex = self.readField(self.index, key);
 		if (typeof itemIndex === "undefined") {
-			throw new Error("Internal error: update failed because index does not exist for the item");
+			throw new Error(`Internal error: update failed because index does not exist for the item ${key}`);
 		} else {
 			self.collection[itemIndex] = attributes;
 			// note: wrap trigger in setTimeout if we want proper ordering on changes
@@ -163,7 +163,8 @@ class ModelService {
 		const key = [type, id].join(".");
 		const itemIndex = self.readField(self.index, key);
 		if (typeof itemIndex === "undefined") {
-			throw new Error("Internal error: delete failed because index does not exist for the item");
+			//throw new Error(`Internal error: delete failed because index does not exist for the item ${key}`);
+			return undefined;
 		} else {
 			self.deleteField(self.index, key);
 			self.collection[itemIndex] = undefined;

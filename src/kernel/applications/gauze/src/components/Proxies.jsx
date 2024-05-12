@@ -17,7 +17,6 @@ export default function Proxies({ router, gauze, model }) {
 			const formData = new FormData(form);
 			const formJSON = Object.fromEntries(formData.entries());
 			setSubmitProxy(true);
-			console.log("ENTERING", proxy);
 			// async call
 			// check if we have a system session for the proxy
 			// if not, create one
@@ -33,6 +32,7 @@ export default function Proxies({ router, gauze, model }) {
 				return gauze.proxyEnterSession(proxy).then(function (session) {
 					setSubmitProxy(false);
 					gauze.setSystemJWT(session.gauze__session__value);
+					console.log("proxy", session);
 					model.create("SESSION", session.gauze__session__id, session);
 					// use router here to do a redirect
 					router.navigate("system.types", {}, {});
@@ -56,13 +56,6 @@ export default function Proxies({ router, gauze, model }) {
 					</form>
 				);
 			})}
-			{/*
-			<form method="post" onSubmit={handleProxy}>
-				<button type="submit" disabled={submitProxy}>
-					Enter
-				</button>
-			</form>
-			*/}
 			<label>{error}</label>
 		</div>
 	);
