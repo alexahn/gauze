@@ -44,22 +44,34 @@ class GauzeServer {
 			{
 				url: new RegExp("^/system/graphql"),
 				handler: function (req, res) {
-					// parse system jwt
-					return self.$gauze.environment.authentication.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req).then(function (agent) {
-						if (agent) {
-							return self.handle_graphql($gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM, req, res, agent);
-						} else {
-							res.writeHead(401, "Unauthorized", {
-								"content-type": "application/json; charset=utf-8",
-								"Access-Control-Allow-Origin": "*",
-							}).end(
-								JSON.stringify({
-									status: 401,
-									message: "Unauthorized",
-								}),
-							);
-						}
-					});
+					if (req.method === "OPTIONS") {
+						res.writeHead(200, "OK", {
+							"Access-Control-Allow-Origin": "*",
+							"Access-Control-Allow-Headers": "*",
+						}).end(
+							JSON.stringify({
+								status: 200,
+								message: "OK",
+							}),
+						);
+					} else {
+						// parse system jwt
+						return self.$gauze.environment.authentication.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req).then(function (agent) {
+							if (agent) {
+								return self.handle_graphql($gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM, req, res, agent);
+							} else {
+								res.writeHead(401, "Unauthorized", {
+									"content-type": "application/json; charset=utf-8",
+									"Access-Control-Allow-Origin": "*",
+								}).end(
+									JSON.stringify({
+										status: 401,
+										message: "Unauthorized",
+									}),
+								);
+							}
+						});
+					}
 				},
 			},
 			{

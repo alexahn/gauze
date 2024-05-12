@@ -17,7 +17,9 @@ export default function SignUp({ router, gauze, model }) {
 		const formData = new FormData(form);
 		const formJSON = Object.fromEntries(formData.entries());
 		setPerson(formJSON);
-		setStep(step + 1);
+		if (formJSON.email) {
+			setStep(step + 1);
+		}
 	}
 	function handleSubmitAccount(e) {
 		e.preventDefault();

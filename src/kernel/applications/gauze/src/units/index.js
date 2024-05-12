@@ -3,3 +3,5 @@ export * as amethyst from "./Amethyst.jsx";
 export * as ammonite from "./Ammonite.jsx";
 export * as azurite from "./Azurite.jsx";
 export * as adamite from "./Adamite.jsx";
+
+export * as proxies from "./Proxies.jsx";

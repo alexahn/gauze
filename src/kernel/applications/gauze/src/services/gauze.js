@@ -256,6 +256,35 @@ mutation enter_session($proxy: Environment_Mutation__Proxy) {
 				return data.data.environment.enter_session;
 			});
 	}
+	proxyEnterSession(proxy) {
+		const self = this;
+		const query = `
+mutation enter_session($proxy: Environment_Mutation__Proxy) {
+	environment {
+		enter_session(proxy: $proxy) {
+			gauze__session__id
+			gauze__session__realm
+			gauze__session__agent_id
+			gauze__session__agent_type
+			gauze__session__value
+			gauze__session__kind
+			gauze__session__seed
+		}
+	}
+}
+`;
+		return self
+			.proxyEnvironment({
+				query: query,
+				variables: {
+					proxy: proxy,
+				},
+				operationName: "enter_session",
+			})
+			.then(function (data) {
+				return data.data.environment.enter_session;
+			});
+	}
 }
 
 export default new GauzeClient();

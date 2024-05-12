@@ -515,13 +515,13 @@
 	[ ] realms can have their own custom errors, but only for the particular logic they are handling
 		[ ] in all other cases, we should just bubble up the error from below
 [ ] frontend setup
-	[ ] esbuild
+	[x] esbuild
 	[ ] eslint
 [ ] add where_greater and where_lesser
 [ ] add count method to database and system kernel models
 [ ] frontend architecture
-	[ ] state store
-	[ ] router
+	[x] state store
+	[x] router
 	[ ] ui framework
 [ ] rename valid_agent_types in abstract definition to allowed_agent_types
 	[ ] add allowed_agent_types definitions to individual fields
@@ -532,9 +532,10 @@
 	[x] state management
 	[x] package.json scripts updated to allow more convenient grouping
 [ ] refresh session method
-[ ] authentication routes and flow for frontend
-	[ ] gauze environment client
-	[ ] data management for flow information
-		[ ] use the same requirements structure on the frontend
-		[ ] generalize the pattern so that new requirements can easily be added
-		[ ] instead of breaking out each requirement into a separate page, just make a component to handle it
+[x] authentication routes and flow for frontend
+	[x] gauze environment client
+	[x] data management for flow information
+		[x] use the same requirements structure on the frontend
+		[x] generalize the pattern so that new requirements can easily be added
+		[x] instead of breaking out each requirement into a separate page, just make a component to handle it
+[ ] add _metadata to environment responses?

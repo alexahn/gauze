@@ -99,10 +99,50 @@ const routes = [
 		path: "/y",
 		canActivate: (router, dependencies) => (toState, fromState, done) => {
 			const { services } = dependencies;
-			const { model } = services;
+			const { gauze, model } = services;
 			const proxySessions = model.default.proxySessions();
 			if (proxySessions && proxySessions.length) {
-				return true;
+				const proxy = proxySessions[0];
+				//return true;
+				// fetch list of proxy agents from system
+				const query = `
+query read_proxy($proxy: Proxy_Query__Attributes) {
+	read_proxy(where: $proxy) {
+		_metadata {
+			id
+			type
+		}
+		attributes {
+			gauze__proxy__id
+			gauze__proxy__agent_type
+			gauze__proxy__agent_id
+			gauze__proxy__root_id
+		}
+	}
+}
+`;
+				const variables = {
+					gauze__proxy__root_id: proxy.gauze__proxy__id,
+				};
+				return gauze.default
+					.proxySystem({
+						query: query,
+						variables: variables,
+					})
+					.then(function (data) {
+						data.data.read_proxy.forEach(function (proxy) {
+							const exists = model.default.read(proxy._metadata.type, proxy._metadata.id);
+							if (exists) {
+							} else {
+								model.default.create(proxy._metadata.type, proxy._metadata.id, proxy.attributes);
+							}
+						});
+						return Promise.resolve(true);
+					})
+					.catch(function (err) {
+						console.log(err);
+						throw err;
+					});
 			} else {
 				return Promise.reject({ redirect: { name: "environment.signin" } });
 			}
@@ -140,7 +180,7 @@ const routes = [
 				body: units.adamite.default,
 			},
 			bottom: {
-				body: units.azurite.default,
+				body: units.proxies.default,
 			},
 		},
 	},

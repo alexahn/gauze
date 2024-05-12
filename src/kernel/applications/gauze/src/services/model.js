@@ -137,7 +137,8 @@ class ModelService {
 		const key = [type, id].join(".");
 		const itemIndex = self.readField(self.index, key);
 		if (typeof itemIndex === "undefined") {
-			throw new Error("Internal error: read failed because index does not exist for the item");
+			//throw new Error("Internal error: read failed because index does not exist for the item");
+			return undefined;
 		} else {
 			const item = self.collection[itemIndex];
 			return item;
