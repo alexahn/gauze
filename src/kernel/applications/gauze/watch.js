@@ -7,6 +7,20 @@ config({
 
 import * as esbuild from "esbuild";
 
+const ALLOWED_PROCESS_ENV = ["GAUZE_PROTOCOL", "GAUZE_HOST", "GAUZE_PORT", "GAUZE_DEBUG_UI"];
+
+function filterVariables(env) {
+	const filtered = {};
+	Object.keys(env)
+		.filter(function (variable) {
+			return 0 <= ALLOWED_PROCESS_ENV.indexOf(variable);
+		})
+		.forEach(function (variable) {
+			filtered[variable] = env[variable];
+		});
+	return filtered;
+}
+
 let envPlugin = {
 	name: "env",
 	setup(build) {
@@ -21,7 +35,7 @@ let envPlugin = {
 		// Load paths tagged with the "env-ns" namespace and behave as if
 		// they point to a JSON file containing the environment variables.
 		build.onLoad({ filter: /.*/, namespace: "env-ns" }, () => ({
-			contents: JSON.stringify(process.env),
+			contents: JSON.stringify(filterVariables(process.env)),
 			loader: "json",
 		}));
 	},

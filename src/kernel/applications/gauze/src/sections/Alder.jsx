@@ -5,7 +5,6 @@ export default function Alder({ units }) {
 	const id = "section:alder";
 	return (
 		<div id={id} key={id}>
-			Alder
 			<units.body />
 		</div>
 	);

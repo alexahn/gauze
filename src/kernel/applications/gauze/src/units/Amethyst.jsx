@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import SignUp from "./../components/signup.jsx";
+import SignUp from "./../components/SignUp.jsx";
 
 // Amethyst hooks up the router, gauze, and model services to the SignUp component
 
@@ -18,7 +18,6 @@ export default function Amethyst() {
 	});
 	return (
 		<div id={id} key={id}>
-			Amethyst
 			{/* render a pure function component here */}
 			<SignUp router={router} gauze={gauze} model={model} />
 		</div>

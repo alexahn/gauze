@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import SignIn from "./../components/signin.jsx";
+import SignIn from "./../components/SignIn.jsx";
 
 // Amber hooks up the router, gauze, and model services to the SignIn component
 
@@ -28,7 +28,6 @@ export default function Amber() {
 	});
 	return (
 		<div id={id} key={id}>
-			Amber
 			{/* render a pure function component here */}
 			<SignIn router={router} gauze={gauze} model={model} />
 		</div>

@@ -4,9 +4,8 @@ export default function Anaconda({ sections, units }) {
 	const id = "layout:anaconda";
 	return (
 		<div id={id} key={id}>
-			Anaconda
-			<sections.left units={units} />
-			<sections.right units={units} />
+			<sections.left units={units.left} />
+			<sections.right units={units.right} />
 		</div>
 	);
 }

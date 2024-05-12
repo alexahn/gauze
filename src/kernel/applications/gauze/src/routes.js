@@ -9,32 +9,29 @@ const routes = [
 		onActivate: function ({ dependencies }) {
 			const { services } = dependencies;
 			const { gauze, model } = services;
-			const sessions = model.default.all("SESSION");
-			const anonymous = sessions.filter(function (session) {
-				return session.gauze__session__agent_id === null && session.gauze__session__agent_type === null;
-			});
-			if (anonymous && anonymous.length) {
-				console.log("anonymous session found!", anonymous);
+			const environmentSessions = model.default.environmentSessions();
+			if (environmentSessions && environmentSessions.length) {
 				return Promise.resolve(true);
 			} else {
 				return gauze.default.enterSession(null).then(function (session) {
-					console.log("session created!", session);
 					model.default.create("SESSION", session.gauze__session__id, session);
 					gauze.default.setEnvironmentJWT(session.gauze__session__value);
 					return Promise.resolve(true);
 				});
-				// do graphql query and make a session
-				// save the session to the model service
-				// proceed
 			}
-			//return Promise.resolve(true);
 		},
 		layout: layouts.alligator.default,
 		sections: {
-			main: sections.alder.default,
+			top: sections.alder.default,
+			bottom: sections.alder.default,
 		},
 		units: {
-			body: units.azurite.default,
+			top: {
+				body: units.adamite.default,
+			},
+			bottom: {
+				body: units.azurite.default,
+			},
 		},
 	},
 	{
@@ -45,10 +42,16 @@ const routes = [
 		},
 		layout: layouts.alligator.default,
 		sections: {
-			main: sections.alder.default,
+			top: sections.alder.default,
+			bottom: sections.alder.default,
 		},
 		units: {
-			body: units.amethyst.default,
+			top: {
+				body: units.adamite.default,
+			},
+			bottom: {
+				body: units.amethyst.default,
+			},
 		},
 	},
 	{
@@ -59,10 +62,16 @@ const routes = [
 		},
 		layout: layouts.alligator.default,
 		sections: {
-			main: sections.alder.default,
+			top: sections.alder.default,
+			bottom: sections.alder.default,
 		},
 		units: {
-			body: units.amber.default,
+			top: {
+				body: units.adamite.default,
+			},
+			bottom: {
+				body: units.amber.default,
+			},
 		},
 	},
 	{
@@ -73,10 +82,16 @@ const routes = [
 		},
 		layout: layouts.alligator.default,
 		sections: {
-			main: sections.alder.default,
+			top: sections.alder.default,
+			bottom: sections.alder.default,
 		},
 		units: {
-			body: units.ammonite.default,
+			top: {
+				body: units.adamite.default,
+			},
+			bottom: {
+				body: units.ammonite.default,
+			},
 		},
 	},
 	{
@@ -84,10 +99,8 @@ const routes = [
 		path: "/y",
 		canActivate: (router, dependencies) => (toState, fromState, done) => {
 			const { services } = dependencies;
-			const proxySessions = services.model.default.all("SESSION").filter(function (session) {
-				return session.gauze__session__agent_type === "gauze__proxy";
-			});
-			console.log("proxy can activate", proxySessions);
+			const { model } = services;
+			const proxySessions = model.default.proxySessions();
 			if (proxySessions && proxySessions.length) {
 				return true;
 			} else {
@@ -99,10 +112,16 @@ const routes = [
 		},
 		layout: layouts.alligator.default,
 		sections: {
-			main: sections.alder.default,
+			top: sections.alder.default,
+			bottom: sections.alder.default,
 		},
 		units: {
-			body: units.ammonite.default,
+			top: {
+				body: units.adamite.default,
+			},
+			bottom: {
+				body: units.azurite.default,
+			},
 		},
 	},
 	{
@@ -113,10 +132,16 @@ const routes = [
 		},
 		layout: layouts.alligator.default,
 		sections: {
-			main: sections.alder.default,
+			top: sections.alder.default,
+			bottom: sections.alder.default,
 		},
 		units: {
-			body: units.ammonite.default,
+			top: {
+				body: units.adamite.default,
+			},
+			bottom: {
+				body: units.azurite.default,
+			},
 		},
 	},
 	{
@@ -124,16 +149,12 @@ const routes = [
 		path: "/x",
 		canActivate: (router, dependencies) => (toState, fromState, done) => {
 			const { services } = dependencies;
-			const systemSessions = services.model.default.all("SESSION").filter(function (session) {
-				return session.gauze__session__realm === "system";
-			});
-			console.log("system can activate", systemSessions);
+			const { model } = services;
+			const systemSessions = model.default.systemSessions();
 			if (systemSessions && systemSessions.length) {
 				return true;
 			} else {
-				const proxySessions = services.model.default.all("SESSION").filter(function (session) {
-					return session.gauze__session__agent_type === "gauze__proxy";
-				});
+				const proxySessions = model.default.proxySessions();
 				if (proxySessions && proxySessions.length) {
 					return Promise.reject({ redirect: { name: "proxy.agents" } });
 				} else {
@@ -147,11 +168,15 @@ const routes = [
 		layout: layouts.anaconda.default,
 		sections: {
 			left: sections.alder.default,
-			right: sections.almond.default,
+			right: sections.alder.default,
 		},
 		units: {
-			header: units.azurite.default,
-			body: units.azurite.default,
+			left: {
+				body: units.azurite.default,
+			},
+			right: {
+				body: units.azurite.default,
+			},
 		},
 	},
 	{
@@ -166,8 +191,13 @@ const routes = [
 			right: sections.almond.default,
 		},
 		units: {
-			header: units.amber.default,
-			body: units.amethyst.default,
+			left: {
+				body: units.azurite.default,
+			},
+			right: {
+				header: units.azurite.default,
+				body: units.azurite.default,
+			},
 		},
 	},
 ];

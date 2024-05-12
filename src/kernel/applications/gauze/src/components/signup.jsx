@@ -13,6 +13,7 @@ export default function SignUp({ gauze, model }) {
 		return (
 			<div>
 				<div>Sign Up</div>
+				<hr />
 				<div>
 					Email
 					<input />
@@ -24,6 +25,7 @@ export default function SignUp({ gauze, model }) {
 		return (
 			<div>
 				<div>Sign Up</div>
+				<hr />
 				<div>
 					Password
 					<input />
@@ -35,6 +37,7 @@ export default function SignUp({ gauze, model }) {
 		return (
 			<div>
 				<div>Sign Up</div>
+				<hr />
 				<div>Signing Up!</div>
 			</div>
 		);

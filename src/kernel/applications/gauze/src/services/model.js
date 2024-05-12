@@ -4,6 +4,27 @@ class ModelService {
 		this.collection = [];
 		this.subscriptions = {};
 	}
+	environmentSessions() {
+		const self = this;
+		const sessions = self.all("SESSION").filter(function (session) {
+			return session.gauze__session__agent_id === null && session.gauze__session__agent_type === null;
+		});
+		return sessions;
+	}
+	proxySessions() {
+		const self = this;
+		const sessions = self.all("SESSION").filter(function (session) {
+			return session.gauze__session__agent_type === "gauze__proxy";
+		});
+		return sessions;
+	}
+	systemSessions() {
+		const self = this;
+		const sessions = self.all("SESSION").filter(function (session) {
+			return session.gauze__session__realm === "system";
+		});
+		return sessions;
+	}
 	readField(data = {}, key) {
 		const path = key.split(".");
 		return path.reduce(function (prev, next) {
@@ -138,7 +159,7 @@ class ModelService {
 	}
 	delete(type, id) {
 		const self = this;
-		const key = [type, index].join(".");
+		const key = [type, id].join(".");
 		const itemIndex = self.readField(self.index, key);
 		if (typeof itemIndex === "undefined") {
 			throw new Error("Internal error: delete failed because index does not exist for the item");

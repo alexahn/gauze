@@ -20,13 +20,11 @@ export default function SignIn({ router, gauze, model }) {
 		const form = e.target;
 		const formData = new FormData(form);
 		const formJSON = Object.fromEntries(formData.entries());
-		console.log("assert form data", formJSON);
 		setPerson(formJSON);
 		setSubmitAssert(true);
 		// async call
 		return gauze.personAssert(formJSON).then(function (status) {
 			setSubmitAssert(false);
-			console.log("status", status);
 			if (status.person.assert.email.success) {
 				setAsserted({ ...asserted, ...status });
 				setStep(step + 1);
@@ -42,7 +40,6 @@ export default function SignIn({ router, gauze, model }) {
 		const form = e.target;
 		const formData = new FormData(form);
 		const formJSON = Object.fromEntries(formData.entries());
-		console.log("verify form data", formJSON);
 		setAccount(formJSON);
 		setSubmitVerify(true);
 		// async call
@@ -67,10 +64,8 @@ export default function SignIn({ router, gauze, model }) {
 		// async call
 		return gauze.signIn().then(function (session) {
 			setSubmitSignIn(false);
-			console.log("SIGNED IN", session);
 			gauze.setProxyJWT(session.gauze__session__value);
 			model.create("SESSION", session.gauze__session__id, session);
-
 			// use router here to do a redirect
 			router.navigate("proxy.agents", {}, { replace: true });
 		});

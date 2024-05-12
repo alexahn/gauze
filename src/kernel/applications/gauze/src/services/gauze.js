@@ -40,16 +40,26 @@ class GauzeClient {
 	}
 	setEnvironmentJWT(jwt) {
 		const self = this;
-		console.log("setting environment jwt", jwt);
 		self.environmentJWT = jwt;
+	}
+	getEnvironmentJWT() {
+		const self = this;
+		return self.environmentJWT;
 	}
 	setSystemJWT(jwt) {
 		const self = this;
 		self.systemJWT = jwt;
 	}
+	getSystemJWT() {
+		const self = this;
+		return self.systemJWT;
+	}
 	setProxyJWT(jwt) {
 		const self = this;
 		self.proxyJWT = jwt;
+	}
+	getProxyJWT() {
+		return self.proxyJWT;
 	}
 	// centralize environment queries here for convenience
 	personAssert(person) {
@@ -70,7 +80,6 @@ mutation assert_person($agent_person: Environment_Mutation__Agent_Person) {
 		const agent_person = {
 			gauze__agent_person__email: person.email,
 		};
-		console.log("agent_person", agent_person);
 		return self
 			.environment({
 				query: query,
@@ -122,9 +131,9 @@ mutation sign_in {
       gauze__session__id
       gauze__session__kind
       gauze__session__data
-      gauze__session__value
       gauze__session__agent_id
       gauze__session__agent_type
+      gauze__session__value
       gauze__session__seed
     }
   }
@@ -138,6 +147,33 @@ mutation sign_in {
 			})
 			.then(function (data) {
 				return data.data.environment.sign_in;
+			});
+	}
+	signOut() {
+		const self = this;
+		const query = `
+mutation sign_out {
+	environment {
+		sign_out {
+			gauze__session__id
+			gauze__session__kind
+			gauze__session__data
+			gauze__session__agent_id
+			gauze__session__agent_type
+			gauze__session__value
+			gauze__session__seed
+		}
+	}
+}
+`;
+		return self
+			.proxyEnvironment({
+				query: query,
+				variables: {},
+				operationName: "sign_out",
+			})
+			.then(function (data) {
+				return data.data.environment.sign_out;
 			});
 	}
 	enterSession(proxy) {

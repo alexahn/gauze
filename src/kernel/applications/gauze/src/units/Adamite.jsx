@@ -1,10 +1,12 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-// Azurite is currently empty
+import Banner from "./../components/Banner.jsx";
 
-export default function Azurite() {
-	const id = "unit:azurite";
+// Adamite hooks up the router, gauze, and model services to the Banner component
+
+export default function Adamite() {
+	const id = "unit:adamite";
 	const router = useSelector((state) => {
 		return state.services.router.default;
 	});
@@ -17,6 +19,7 @@ export default function Azurite() {
 	return (
 		<div id={id} key={id}>
 			{/* render a pure function component here */}
+			<Banner router={router} gauze={gauze} model={model} />
 		</div>
 	);
 }
