@@ -129,9 +129,7 @@ class AgentAccountController {
 								}
 							});
 						} else {
-							return {
-								success: false,
-							};
+							return null;
 						}
 					})
 					.then(function (collection) {
