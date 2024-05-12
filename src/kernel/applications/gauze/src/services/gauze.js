@@ -285,6 +285,59 @@ mutation enter_session($proxy: Environment_Mutation__Proxy) {
 				return data.data.environment.enter_session;
 			});
 	}
+	proxies(proxy) {
+		const self = this;
+		const query = `
+query read_proxy($proxy: Proxy_Query__Attributes) {
+    read_proxy(where: $proxy) {
+        _metadata {
+            id
+            type
+        }
+        attributes {
+            gauze__proxy__id
+            gauze__proxy__agent_type
+            gauze__proxy__agent_id
+            gauze__proxy__root_id
+        }
+    }
+}
+`;
+		const variables = {
+			gauze__proxy__root_id: proxy.gauze__proxy__id,
+		};
+		return self
+			.proxySystem({
+				query: query,
+				variables: variables,
+				operationName: "read_proxy",
+			})
+			.then(function (data) {
+				return data.data.read_proxy;
+			});
+	}
+	header() {
+		const self = this;
+		const query = `
+query header {
+	_header {
+		name
+		table_name
+		primary_key
+		type
+	}
+}
+`;
+		return self
+			.system({
+				query: query,
+				variables: {},
+				operationName: "header",
+			})
+			.then(function (data) {
+				return data.data._header;
+			});
+	}
 }
 
 export default new GauzeClient();

@@ -103,46 +103,12 @@ const routes = [
 			const proxySessions = model.default.proxySessions();
 			if (proxySessions && proxySessions.length) {
 				const proxy = proxySessions[0];
-				//return true;
-				// fetch list of proxy agents from system
-				const query = `
-query read_proxy($proxy: Proxy_Query__Attributes) {
-	read_proxy(where: $proxy) {
-		_metadata {
-			id
-			type
-		}
-		attributes {
-			gauze__proxy__id
-			gauze__proxy__agent_type
-			gauze__proxy__agent_id
-			gauze__proxy__root_id
-		}
-	}
-}
-`;
-				const variables = {
-					gauze__proxy__root_id: proxy.gauze__proxy__id,
-				};
-				return gauze.default
-					.proxySystem({
-						query: query,
-						variables: variables,
-					})
-					.then(function (data) {
-						data.data.read_proxy.forEach(function (proxy) {
-							const exists = model.default.read(proxy._metadata.type, proxy._metadata.id);
-							if (exists) {
-							} else {
-								model.default.create(proxy._metadata.type, proxy._metadata.id, proxy.attributes);
-							}
-						});
-						return Promise.resolve(true);
-					})
-					.catch(function (err) {
-						console.log(err);
-						throw err;
+				return gauze.default.proxies(proxy).then(function (proxies) {
+					proxies.forEach(function (proxy) {
+						model.default.create(proxy._metadata.type, proxy._metadata.id, proxy.attributes);
 					});
+					return Promise.resolve(true);
+				});
 			} else {
 				return Promise.reject({ redirect: { name: "environment.signin" } });
 			}
@@ -189,10 +155,16 @@ query read_proxy($proxy: Proxy_Query__Attributes) {
 		path: "/x",
 		canActivate: (router, dependencies) => (toState, fromState, done) => {
 			const { services } = dependencies;
-			const { model } = services;
+			const { gauze, model } = services;
 			const systemSessions = model.default.systemSessions();
 			if (systemSessions && systemSessions.length) {
-				return true;
+				// do graphql query to get headers
+				return gauze.default.header().then(function (headers) {
+					headers.forEach(function (header) {
+						model.default.create("HEADER", header.type, header);
+					});
+					return Promise.resolve(true);
+				});
 			} else {
 				const proxySessions = model.default.proxySessions();
 				if (proxySessions && proxySessions.length) {
@@ -228,15 +200,34 @@ query read_proxy($proxy: Proxy_Query__Attributes) {
 		layout: layouts.anaconda.default,
 		sections: {
 			left: sections.alder.default,
-			right: sections.almond.default,
+			right: sections.alder.default,
 		},
 		units: {
 			left: {
 				body: units.adamite.default,
 			},
 			right: {
-				header: units.azurite.default,
-				body: units.azurite.default,
+				body: units.header.default,
+			},
+		},
+	},
+	{
+		name: "system.types.type",
+		path: "/:type",
+		onActivate: function ({ dependencies }) {
+			return Promise.resolve(true);
+		},
+		layout: layouts.anaconda.default,
+		sections: {
+			left: sections.alder.default,
+			right: sections.alder.default,
+		},
+		units: {
+			left: {
+				body: units.adamite.default,
+			},
+			right: {
+				body: units.header.default,
 			},
 		},
 	},

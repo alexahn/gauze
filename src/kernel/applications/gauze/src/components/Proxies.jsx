@@ -7,8 +7,6 @@ export default function Proxies({ router, gauze, model }) {
 
 	const proxies = model.all("PROXY");
 
-	console.log("proxies", proxies);
-
 	function handleProxy(proxy) {
 		return function (e) {
 			e.preventDefault();

@@ -5,3 +5,4 @@ export * as azurite from "./Azurite.jsx";
 export * as adamite from "./Adamite.jsx";
 
 export * as proxies from "./Proxies.jsx";
+export * as header from "./Header.jsx";

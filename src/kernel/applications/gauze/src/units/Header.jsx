@@ -1,12 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import Proxies from "./../components/Proxies.jsx";
+import Header from "./../components/Header.jsx";
 
-// Ammonite hooks up the router, gauze, and model services to the Proxies component
-
-export default function ProxiesUnit() {
-	const id = "unit:proxies";
+export default function HeaderUnit() {
+	const id = "unit:header";
 	const router = useSelector((state) => {
 		return state.services.router.default;
 	});
@@ -19,7 +17,7 @@ export default function ProxiesUnit() {
 	return (
 		<div id={id} key={id}>
 			{/* render a pure function component here */}
-			<Proxies router={router} gauze={gauze} model={model} />
+			<Header router={router} gauze={gauze} model={model} />
 		</div>
 	);
 }

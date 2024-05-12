@@ -126,11 +126,27 @@ class ModelService {
 	}
 	create(type, id, attributes) {
 		const self = this;
-		const index = self.collection.length;
 		const key = [type, id].join(".");
+		const existing_index = self.readField(self.index, key);
+		var index;
+		if (typeof existing_index === "number") {
+			index = existing_index;
+		} else {
+			index = self.collection.length;
+		}
 		self.collection[index] = attributes;
 		self.writeField(self.index, key, index);
 		self.trigger(type, id);
+	}
+	where(type, fields) {
+		const self = this;
+		const collection = self.all(type);
+		const fieldNames = Object.keys(fields);
+		return collection.filter(function (item) {
+			return fieldNames.every(function (name) {
+				return item[name] === fields[name];
+			});
+		});
 	}
 	read(type, id) {
 		const self = this;
