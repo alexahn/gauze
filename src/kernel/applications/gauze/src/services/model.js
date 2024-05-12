@@ -158,6 +158,7 @@ class ModelService {
 			return self.collection[itemIndex];
 		}
 	}
+	//strictUpdate
 	delete(type, id) {
 		const self = this;
 		const key = [type, id].join(".");
@@ -172,6 +173,7 @@ class ModelService {
 			return undefined;
 		}
 	}
+	//strictDelete
 }
 
 export default new ModelService();

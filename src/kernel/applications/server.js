@@ -227,7 +227,6 @@ class GauzeServer {
 	handle_graphql(schema, req, res, agent) {
 		var data = [];
 		var self = this;
-		console.log("req.method", req.method);
 		if (req.method === "POST") {
 			req.on("data", function (chunk) {
 				data.push(chunk);

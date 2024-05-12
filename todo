@@ -539,3 +539,6 @@
 		[x] generalize the pattern so that new requirements can easily be added
 		[x] instead of breaking out each requirement into a separate page, just make a component to handle it
 [ ] add _metadata to environment responses?
+[x] add a root level method to query for registered entities
+	[x] call it _header
+	[x] add to kernel stages

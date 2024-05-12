@@ -3,7 +3,7 @@ export default function ($abstract) {
 		name: "gauze",
 		table_name: "gauze__gauze",
 		primary_key: "gauze__gauze__id",
-		graphql_meta_type: "EZUAG",
+		graphql_meta_type: "GAUZE",
 		fields: {
 			gauze__gauze__id: {
 				name: "gauze__gauze__id",
