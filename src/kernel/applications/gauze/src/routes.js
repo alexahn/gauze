@@ -172,7 +172,7 @@ const routes = [
 		},
 		units: {
 			left: {
-				body: units.azurite.default,
+				body: units.adamite.default,
 			},
 			right: {
 				body: units.azurite.default,
@@ -192,7 +192,7 @@ const routes = [
 		},
 		units: {
 			left: {
-				body: units.azurite.default,
+				body: units.adamite.default,
 			},
 			right: {
 				header: units.azurite.default,

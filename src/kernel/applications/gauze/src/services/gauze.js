@@ -126,17 +126,17 @@ mutation verify_account($agent_account: Environment_Mutation__Agent_Account) {
 		const self = this;
 		const query = `
 mutation sign_in {
-  environment {
-    sign_in {
-      gauze__session__id
-      gauze__session__kind
-      gauze__session__data
-      gauze__session__agent_id
-      gauze__session__agent_type
-      gauze__session__value
-      gauze__session__seed
-    }
-  }
+	environment {
+		sign_in {
+			gauze__session__id
+			gauze__session__realm
+			gauze__session__agent_id
+			gauze__session__agent_type
+			gauze__session__kind
+			gauze__session__value
+			gauze__session__seed
+		}
+	}
 }
 `;
 		return self
@@ -156,10 +156,10 @@ mutation sign_out {
 	environment {
 		sign_out {
 			gauze__session__id
-			gauze__session__kind
-			gauze__session__data
+			gauze__session__realm
 			gauze__session__agent_id
 			gauze__session__agent_type
+			gauze__session__kind
 			gauze__session__value
 			gauze__session__seed
 		}
@@ -176,21 +176,72 @@ mutation sign_out {
 				return data.data.environment.sign_out;
 			});
 	}
+	signUp(parameters) {
+		const self = this;
+		const { person, account } = parameters;
+		const variables = {
+			agent_root: {},
+			agent_account: {
+				gauze__agent_account__password: account.password,
+			},
+			agent_user: {},
+			agent_person: {
+				gauze__agent_person__email: person.email,
+			},
+			agent_character: {},
+		};
+		const query = `
+mutation sign_up(
+	$agent_root: Environment_Mutation__Agent_Root
+	$agent_account: Environment_Mutation__Agent_Account
+	$agent_user: Environment_Mutation__Agent_User
+	$agent_person: Environment_Mutation__Agent_Person
+	$agent_character: Environment_Mutation__Agent_Character
+) {
+	environment {
+		sign_up(
+			agent_root: $agent_root,
+			agent_account: $agent_account,
+			agent_user: $agent_user,
+			agent_person: $agent_person,
+			agent_character: $agent_character
+		) {
+			gauze__session__id
+			gauze__session__realm
+			gauze__session__agent_id
+			gauze__session__agent_type
+			gauze__session__kind
+			gauze__session__value
+			gauze__session__seed
+		}
+	}
+}
+`;
+		return self
+			.environment({
+				query: query,
+				variables: variables,
+				operationName: "sign_up",
+			})
+			.then(function (data) {
+				return data.data.environment.sign_up;
+			});
+	}
 	enterSession(proxy) {
 		const self = this;
 		const query = `
 mutation enter_session($proxy: Environment_Mutation__Proxy) {
-  environment {
-    enter_session(proxy: $proxy) {
-      gauze__session__id
-      gauze__session__kind
-      gauze__session__data
-      gauze__session__value
-      gauze__session__agent_id
-	  gauze__session__agent_type
-      gauze__session__seed
-    }
-  }
+	environment {
+		enter_session(proxy: $proxy) {
+			gauze__session__id
+			gauze__session__realm
+			gauze__session__agent_id
+			gauze__session__agent_type
+			gauze__session__value
+			gauze__session__kind
+			gauze__session__seed
+		}
+	}
 }
 `;
 		return self
