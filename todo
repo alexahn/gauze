@@ -521,6 +521,7 @@
 [ ] add count method to database and system kernel models
 	[x] add count method to database kernel models and controllers
 		[x] expose graphql method in database interface
+		[ ] expose graphwl method in system interface
 [ ] frontend architecture
 	[x] state store
 	[x] router
