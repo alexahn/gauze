@@ -25,6 +25,7 @@ cp $src/database/interfaces/graphql/operations/$from1/read.graphql $staging/data
 cp $src/database/interfaces/graphql/operations/$from1/create.graphql $staging/database/interfaces/graphql/operations/$arg1/create.graphql
 cp $src/database/interfaces/graphql/operations/$from1/update.graphql $staging/database/interfaces/graphql/operations/$arg1/update.graphql
 cp $src/database/interfaces/graphql/operations/$from1/delete.graphql $staging/database/interfaces/graphql/operations/$arg1/delete.graphql
+cp $src/database/interfaces/graphql/operations/$from1/count.graphql $staging/database/interfaces/graphql/operations/$arg1/count.graphql
 
 # system
 cp $src/system/models/$from1.js $staging/system/models/$arg1.js

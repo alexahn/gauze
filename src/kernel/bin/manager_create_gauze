@@ -64,6 +64,7 @@ cp $staging/database/interfaces/graphql/operations/gauze/read.graphql $project_r
 cp $staging/database/interfaces/graphql/operations/gauze/create.graphql $project_root/database/interfaces/graphql/operations/$arg1/create.graphql
 cp $staging/database/interfaces/graphql/operations/gauze/update.graphql $project_root/database/interfaces/graphql/operations/$arg1/update.graphql
 cp $staging/database/interfaces/graphql/operations/gauze/delete.graphql $project_root/database/interfaces/graphql/operations/$arg1/delete.graphql
+cp $staging/database/interfaces/graphql/operations/gauze/count.graphql $project_root/database/interfaces/graphql/operations/$arg1/count.graphql
 
 # system
 cp $staging/system/models/gauze.js $project_root/system/models/$arg1.js

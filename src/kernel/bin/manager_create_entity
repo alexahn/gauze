@@ -64,6 +64,7 @@ cp $staging/database/interfaces/graphql/operations/entity/read.graphql $project_
 cp $staging/database/interfaces/graphql/operations/entity/create.graphql $project_root/database/interfaces/graphql/operations/$arg1/create.graphql
 cp $staging/database/interfaces/graphql/operations/entity/update.graphql $project_root/database/interfaces/graphql/operations/$arg1/update.graphql
 cp $staging/database/interfaces/graphql/operations/entity/delete.graphql $project_root/database/interfaces/graphql/operations/$arg1/delete.graphql
+cp $staging/database/interfaces/graphql/operations/entity/count.graphql $project_root/database/interfaces/graphql/operations/$arg1/count.graphql
 
 # system
 cp $staging/system/models/entity.js $project_root/system/models/$arg1.js
