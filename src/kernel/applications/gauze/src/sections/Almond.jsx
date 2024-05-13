@@ -5,6 +5,7 @@ export default function Almond({ units }) {
 	return (
 		<div id={id} key={id}>
 			<units.header />
+			<hr />
 			<units.body />
 		</div>
 	);

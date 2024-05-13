@@ -7,6 +7,9 @@ import Proxies from "./../components/Proxies.jsx";
 
 export default function ProxiesUnit() {
 	const id = "unit:proxies";
+	const route = useSelector((state) => {
+		return state.router.route;
+	});
 	const router = useSelector((state) => {
 		return state.services.router.default;
 	});
@@ -19,7 +22,7 @@ export default function ProxiesUnit() {
 	return (
 		<div id={id} key={id}>
 			{/* render a pure function component here */}
-			<Proxies router={router} gauze={gauze} model={model} />
+			<Proxies route={route} router={router} gauze={gauze} model={model} />
 		</div>
 	);
 }

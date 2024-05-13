@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 
-export default function SignIn({ router, gauze, model }) {
+export default function SignIn({ route, router, gauze, model }) {
 	const [step, setStep] = useState(0);
 	const [person, setPerson] = useState({});
 	const [submitAssert, setSubmitAssert] = useState(false);
@@ -66,8 +66,8 @@ export default function SignIn({ router, gauze, model }) {
 			setSubmitSignIn(false);
 			gauze.setProxyJWT(session.gauze__session__value);
 			model.create("SESSION", session.gauze__session__id, session);
-			// use router here to do a redirect
-			router.navigate("proxy.agents", {}, { replace: true });
+			// router navigate
+			router.navigate("proxy.agents", { next: route.params.next }, { replace: true });
 		});
 	}
 	function previous() {

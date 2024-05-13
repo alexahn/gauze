@@ -542,3 +542,11 @@
 [x] add a root level method to query for registered entities
 	[x] call it _header
 	[x] add to kernel stages
+	[ ] update to pull the type names from interface definitions for attributes_query_type and attributes_mutation_type
+	[ ] add relationship data for each entry, which we can easily pull from structure definitions
+[ ] data presentation in ui
+	[x] basic piping to fetch data
+	[ ] pagination record tied to view/url
+		[ ] read the record, which is an array of primary key ids
+		[ ] map to items from the local store
+	[ ] table ui with filters and sorting

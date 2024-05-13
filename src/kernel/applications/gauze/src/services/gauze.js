@@ -325,6 +325,9 @@ query header {
 		table_name
 		primary_key
 		type
+		attributes
+		attributes_query_type
+		attributes_mutation_type
 	}
 }
 `;
@@ -336,6 +339,38 @@ query header {
 			})
 			.then(function (data) {
 				return data.data._header;
+			});
+	}
+	read(header, variables) {
+		const self = this;
+		const query = `
+query read(
+    $where: ${header.attributes_query_type}
+    $limit: Int,
+    $offset: Int,
+    $order: String,
+    $order_direction: String
+) {
+    read_${header.name}(
+        where: $where,
+        limit: $limit,
+        offset: $offset,
+        order: $order,
+        order_direction: $order_direction
+    ) {
+        attributes {
+            ${header.attributes}
+        }
+    }
+}
+`;
+		return self
+			.system({
+				query: query,
+				variables: variables,
+			})
+			.then(function (data) {
+				return data.data[`read_${header.name}`];
 			});
 	}
 }

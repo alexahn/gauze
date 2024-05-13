@@ -14,12 +14,12 @@ export default function Banner({ gauze, model, router }) {
 	);
 	const signIn = (
 		<div>
-			<a href={router.buildUrl("environment.signin", { hello: "goodbye" })}>Sign In</a>
+			<a href={router.buildUrl("environment.signin", {})}>Sign In</a>
 		</div>
 	);
 	const signOut = (
 		<div>
-			<a href={router.buildUrl("environment.signout", { begin: "end" })}>Sign Out</a>
+			<a href={router.buildUrl("environment.signout", {})}>Sign Out</a>
 		</div>
 	);
 	const proxy = (

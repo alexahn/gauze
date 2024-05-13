@@ -56,7 +56,7 @@ const routes = [
 	},
 	{
 		name: "environment.signin",
-		path: "/signin",
+		path: "/signin?next",
 		onActivate: function (params) {
 			return Promise.resolve(true);
 		},
@@ -132,7 +132,7 @@ const routes = [
 	},
 	{
 		name: "proxy.agents",
-		path: "/agents",
+		path: "/agents?next",
 		onActivate: function ({ dependencies }) {
 			return Promise.resolve(true);
 		},
@@ -159,18 +159,21 @@ const routes = [
 			const systemSessions = model.default.systemSessions();
 			if (systemSessions && systemSessions.length) {
 				// do graphql query to get headers
+				/*
 				return gauze.default.header().then(function (headers) {
 					headers.forEach(function (header) {
 						model.default.create("HEADER", header.type, header);
 					});
 					return Promise.resolve(true);
 				});
+				*/
+				return Promise.resolve(true);
 			} else {
 				const proxySessions = model.default.proxySessions();
 				if (proxySessions && proxySessions.length) {
-					return Promise.reject({ redirect: { name: "proxy.agents" } });
+					return Promise.reject({ redirect: { name: "proxy.agents" }, params: { next: window.location.href } });
 				} else {
-					return Promise.reject({ redirect: { name: "environment.signin" } });
+					return Promise.reject({ redirect: { name: "environment.signin", params: { next: window.location.href } } });
 				}
 			}
 		},
@@ -194,8 +197,17 @@ const routes = [
 	{
 		name: "system.types",
 		path: "/types",
-		onActivate: function (params) {
-			return Promise.resolve(true);
+		canActivate: (router, dependencies) => (toState, fromState, done) => {
+			//onActivate: function ({ dependencies }) {
+			const { services } = dependencies;
+			const { gauze, model } = services;
+			return gauze.default.header().then(function (headers) {
+				headers.forEach(function (header) {
+					console.log("header.name", header.name);
+					model.default.create("HEADER", header.name, header);
+				});
+				return Promise.resolve(true);
+			});
 		},
 		layout: layouts.anaconda.default,
 		sections: {
@@ -213,21 +225,44 @@ const routes = [
 	},
 	{
 		name: "system.types.type",
-		path: "/:type",
-		onActivate: function ({ dependencies }) {
-			return Promise.resolve(true);
+		path: "/:type?where&limit&offset&order&order_direction",
+		onActivate: function ({ dependencies, toState }) {
+			const { services } = dependencies;
+			const { gauze, model } = services;
+			const header = model.default.read("HEADER", toState.params.type);
+			console.log("system header", header);
+			return gauze.default
+				.read(header, {
+					where: toState.params.where,
+					limit: toState.params.limit,
+					offset: toState.params.offset,
+					order: toState.params.order,
+					order_direction: toState.params.order_direction,
+				})
+				.then(function (items) {
+					console.log("system items", items);
+					items.forEach(function (item) {
+						model.default.create(header.type, item.attributes[header.primary_key], item.attributes);
+						// create a pagination record for the results tied to the route
+					});
+					return Promise.resolve(true);
+				})
+				.catch(function (err) {
+					console.log(err);
+				});
 		},
 		layout: layouts.anaconda.default,
 		sections: {
 			left: sections.alder.default,
-			right: sections.alder.default,
+			right: sections.almond.default,
 		},
 		units: {
 			left: {
 				body: units.adamite.default,
 			},
 			right: {
-				body: units.header.default,
+				header: units.header.default,
+				body: units.type.default,
 			},
 		},
 	},

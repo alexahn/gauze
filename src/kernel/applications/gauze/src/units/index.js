@@ -6,3 +6,4 @@ export * as adamite from "./Adamite.jsx";
 
 export * as proxies from "./Proxies.jsx";
 export * as header from "./Header.jsx";
+export * as type from "./Type.jsx";

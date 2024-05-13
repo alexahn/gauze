@@ -1,6 +1,15 @@
 import * as $abstract from "./../abstract/index.js";
 import * as $structure from "./../structure/index.js";
 
+function pascal_snake_case(name) {
+	const split = name.split("_");
+	const mapped = split.map(function (part) {
+		const updated = part[0].toUpperCase() + part.slice(1);
+		return updated;
+	});
+	return mapped.join("_");
+}
+
 function HEADER__LINKER__KERNEL(query_root, entities) {
 	const HEADER__HEADER__STRUCTURE = {
 		type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.header.TYPE__HEADER__STRUCTURE),
@@ -11,11 +20,20 @@ function HEADER__LINKER__KERNEL(query_root, entities) {
 				.map(function (name) {
 					const module = $abstract.entities[name].default($abstract);
 					if (entities[module.graphql_meta_type]) {
+						const pascal_snake_name = pascal_snake_case(module.name);
+						// todo: do this the right way by reading the name field from the type definition
+						// todo: we can do this by defining an ATTRIBUTES object in the schema and passing it into this function
+						// todo: the architecture already makes this possible, so for now we are going to do string interpolation just to make things work end to end first
+						const attributes_query_type = `${pascal_snake_name}_Query__Attributes`;
+						const attributes_mutation_type = `${pascal_snake_name}_Mutation__Attributes`;
 						return {
 							name: module.name,
 							table_name: module.table_name,
 							primary_key: module.primary_key,
 							type: module.graphql_meta_type,
+							attributes: module.graphql_attributes_string,
+							attributes_query_type: attributes_query_type,
+							attributes_mutation_type: attributes_mutation_type,
 						};
 					} else {
 						return null;

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 
-export default function Proxies({ router, gauze, model }) {
+export default function Proxies({ route, router, gauze, model }) {
 	const [submitProxy, setSubmitProxy] = useState(false);
 	const [error, setError] = useState("");
 
@@ -25,15 +25,33 @@ export default function Proxies({ router, gauze, model }) {
 				const session = sessions[0];
 				setSubmitProxy(false);
 				gauze.setSystemJWT(session.gauze__session__value);
-				router.navigate("system.types", {}, {});
+				// route navigate
+				if (route.params && route.params.next) {
+					const matched = router.matchUrl(route.params.next);
+					if (matched) {
+						router.navigate(matched.name, matched.params);
+					} else {
+						router.navigate("system.types", {}, {});
+					}
+				} else {
+					router.navigate("system.types", {}, {});
+				}
 			} else {
 				return gauze.proxyEnterSession(proxy).then(function (session) {
 					setSubmitProxy(false);
 					gauze.setSystemJWT(session.gauze__session__value);
-					console.log("proxy", session);
 					model.create("SESSION", session.gauze__session__id, session);
-					// use router here to do a redirect
-					router.navigate("system.types", {}, {});
+					// router navigate
+					if (route.params && route.params.next) {
+						const matched = router.matchUrl(route.params.next);
+						if (matched) {
+							router.navigate(matched.name, matched.params);
+						} else {
+							router.navigate("system.types", {}, {});
+						}
+					} else {
+						router.navigate("system.types", {}, {});
+					}
 				});
 			}
 		};
