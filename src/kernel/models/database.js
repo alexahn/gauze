@@ -733,11 +733,18 @@ class DatabaseModel extends Model {
 	_root_count(context, input) {
 		const self = this;
 		const { source, database, transaction } = context;
-		const { where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = input;
+		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "input", input);
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
+		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
+		const reversed = {};
+		if (count_has_key) {
+			Object.keys(count).forEach(function (key) {
+				reversed[count[key]] = key;
+			});
+		}
 		const sql = database(self.table_name)
-			.count({ [self.primary_key]: "count" })
+			.count(count_has_key ? reversed : null)
 			.where(function (builder) {
 				builder.where(where);
 				Object.keys(where_in).forEach(function (key) {
@@ -754,6 +761,7 @@ class DatabaseModel extends Model {
 				});
 				return builder;
 			})
+			.first()
 			.transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
@@ -771,9 +779,18 @@ class DatabaseModel extends Model {
 	_relationship_count(context, input) {
 		const self = this;
 		const { source, database, transaction } = context;
-		const { where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = input;
+		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = input;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "input", input);
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
+
+		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
+		const reversed = {};
+		if (count_has_key) {
+			Object.keys(count).forEach(function (key) {
+				reversed[count[key]] = key;
+			});
+		}
+
 		// do join here based on source metadata
 		// use structure resolvers to convert graphql type to table_name name
 		// relationships are one directional, so use from as the parent
@@ -804,9 +821,8 @@ class DatabaseModel extends Model {
 			var joined_key = self.table_name + "." + k;
 			joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[k]).value;
 		});
-		var joined_order = self.table_name + "." + order;
 		const sql = database(self.table_name)
-			.count({ [self.primary_key]: "count" })
+			.count(count_has_key ? reversed : null)
 			.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.id`)
 			.where(`${self.relationship_table_name}.gauze__relationship__from_id`, PARENT_SQL_ID)
 			.where(`${self.relationship_table_name}.gauze__relationship__from_type`, PARENT_SQL_TABLE)
@@ -820,6 +836,7 @@ class DatabaseModel extends Model {
 				});
 				return builder;
 			})
+			.first()
 			.transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());

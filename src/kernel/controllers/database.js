@@ -109,13 +109,14 @@ class DatabaseController extends Controller {
 			transaction,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.count:enter`, "input", input);
-		return self.model.count(model_context, input).then(function (rows) {
-			return rows.map(function (row) {
-				//row = self.model.pre_deserialize_middleware(row, "count");
-				//row = self.model.deserialize(row, "delete");
-				//row = self.model.post_deserialize_middleware(row, "count");
-				return row;
+		return self.model.count(model_context, input).then(function (results) {
+			const counts = Object.keys(results).map(function (key) {
+				return {
+					select: key,
+					count: results[key],
+				};
 			});
+			return counts;
 		});
 	}
 }
