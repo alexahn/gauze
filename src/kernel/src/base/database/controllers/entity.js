@@ -23,6 +23,10 @@ class d741787fe14145d79bbdd8ad8057ca28DatabaseController extends $kernel.control
 		const self = this;
 		return self._delete(context, input);
 	}
+	count(context, input) {
+		const self = this;
+		return self._count(context, input);
+	}
 }
 
 const ROOT_CONFIG__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__DATABASE = {};

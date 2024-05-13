@@ -23,6 +23,10 @@ class RelationshipDatabaseController extends $kernel.controllers.database.Databa
 		const self = this;
 		return self._delete(context, input);
 	}
+	count(context, input) {
+		const self = this;
+		return self._count(context, input);
+	}
 }
 
 const ROOT_CONFIG__RELATIONSHIP__CONTROLLER__DATABASE = {};

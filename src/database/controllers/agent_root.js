@@ -23,6 +23,10 @@ class AgentRootDatabaseController extends $kernel.controllers.database.DatabaseC
 		const self = this;
 		return self._delete(context, input);
 	}
+	count(context, input) {
+		const self = this;
+		return self._count(context, input);
+	}
 }
 
 const ROOT_CONFIG__AGENT_ROOT__CONTROLLER__DATABASE = {};

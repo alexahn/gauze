@@ -107,4 +107,55 @@ const READ__AGENT_USER__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	},
 };
 
-export { READ__AGENT_USER__QUERY__GRAPHQL__INTERFACE__DATABASE };
+const COUNT__AGENT_USER__QUERY__GRAPHQL__INTERFACE__DATABASE = {
+	//type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_user.database.graphql.QUERY__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE),
+	type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+	args: {
+		parent: {
+			description: "parent",
+			type: PARENT__AGENT_USER__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where: {
+			description: "where",
+			type: ATTRIBUTES__AGENT_USER__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_in: {
+			description: "where in",
+			type: ATTRIBUTES_ARRAY__AGENT_USER__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		cache_where_in: {
+			description: "cache where in",
+			type: ATTRIBUTES_STRING__AGENT_USER__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_not_in: {
+			description: "where not in",
+			type: ATTRIBUTES_ARRAY__AGENT_USER__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		cache_where_not_in: {
+			description: "cache where not in",
+			type: ATTRIBUTES_STRING__AGENT_USER__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+	},
+	resolve: (_source, query_arguments, context) => {
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__AGENT_USER__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"COUNT__AGENT_USER__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
+			"query_arguments",
+			query_arguments,
+		);
+		return CONTROLLER__AGENT_USER__CONTROLLER__DATABASE.count(
+			{
+				source: _source,
+				database: context.database,
+				transaction: context.transaction,
+			},
+			query_arguments,
+		).then(function (data) {
+			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "COUNT__AGENT_USER__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
+			return data.map(SERIALIZER__AGENT_USER__QUERY__GRAPHQL__INTERFACE__DATABASE.serialize);
+		});
+	},
+};
+export { READ__AGENT_USER__QUERY__GRAPHQL__INTERFACE__DATABASE, COUNT__AGENT_USER__QUERY__GRAPHQL__INTERFACE__DATABASE };

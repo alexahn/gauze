@@ -23,6 +23,10 @@ class GauzeDatabaseController extends $kernel.controllers.database.DatabaseContr
 		const self = this;
 		return self._delete(context, input);
 	}
+	count(context, input) {
+		const self = this;
+		return self._count(context, input);
+	}
 }
 
 const ROOT_CONFIG__GAUZE__CONTROLLER__DATABASE = {};

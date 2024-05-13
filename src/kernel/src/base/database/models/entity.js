@@ -23,6 +23,10 @@ class d741787fe14145d79bbdd8ad8057ca28DatabaseModel extends $kernel.models.datab
 		const self = this;
 		return self._delete(context, parameters);
 	}
+	count(context, parameters) {
+		const self = this;
+		return self._count(context, parameters);
+	}
 }
 
 const ROOT_CONFIG__cd637bc32c364580be5cc28396d3dee8__MODEL__DATABASE = {

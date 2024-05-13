@@ -23,6 +23,10 @@ class AgentUserDatabaseModel extends $kernel.models.database.DatabaseModel {
 		const self = this;
 		return self._delete(context, parameters);
 	}
+	count(context, parameters) {
+		const self = this;
+		return self._count(context, parameters);
+	}
 }
 
 const ROOT_CONFIG__AGENT_USER__MODEL__DATABASE = {
