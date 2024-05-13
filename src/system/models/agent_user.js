@@ -84,6 +84,23 @@ class AgentUserSystemModel extends $kernel.models.system.SystemModel {
 			});
 		});
 	}
+	count(context, parameters) {
+		const self = this;
+		var { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.agent_user.database.sql.TABLE_NAME__SQL__DATABASE__AGENT_USER__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.agent_user.COUNT__AGENT_USER__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.agent_user.COUNT_NAME__AGENT_USER__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._count(context, parameters, realm).then(function (data) {
+			return data.data.count_agent_user;
+		});
+	}
 }
 
 const ROOT_CONFIG__AGENT_USER__MODEL__SYSTEM = {

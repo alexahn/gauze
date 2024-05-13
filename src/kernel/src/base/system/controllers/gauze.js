@@ -23,6 +23,10 @@ class dd6fb00f485c4397add38780939d6923SystemController extends $kernel.controlle
 		const self = this;
 		return self._delete(context, input);
 	}
+	count(context, input) {
+		const self = this;
+		return self._count(context, input);
+	}
 }
 
 const ROOT_CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__SYSTEM = {};

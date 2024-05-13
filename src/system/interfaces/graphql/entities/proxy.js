@@ -1,6 +1,6 @@
 import * as $structure from "./../../../../structure/index.js";
 
-import { READ__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM } from "./../queries/proxy.js";
+import { READ__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM, COUNT__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM } from "./../queries/proxy.js";
 import {
 	CREATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 	UPDATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
@@ -17,6 +17,7 @@ const CONNECTION__PROXY__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
 const METHODS__PROXY__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
 	query: {
 		read_proxy: READ__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		count_proxy: COUNT__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 	},
 	mutation: {
 		create_proxy: CREATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM,

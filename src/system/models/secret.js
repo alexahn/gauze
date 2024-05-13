@@ -84,6 +84,23 @@ class SecretSystemModel extends $kernel.models.system.SystemModel {
 			});
 		});
 	}
+	count(context, parameters) {
+		const self = this;
+		var { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.secret.database.sql.TABLE_NAME__SQL__DATABASE__SECRET__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.secret.COUNT__SECRET__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.secret.COUNT_NAME__SECRET__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._count(context, parameters, realm).then(function (data) {
+			return data.data.count_secret;
+		});
+	}
 }
 
 const ROOT_CONFIG__SECRET__MODEL__SYSTEM = {

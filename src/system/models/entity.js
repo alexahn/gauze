@@ -84,6 +84,23 @@ class EntitySystemModel extends $kernel.models.system.SystemModel {
 			});
 		});
 	}
+	count(context, parameters) {
+		const self = this;
+		var { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.entity.database.sql.TABLE_NAME__SQL__DATABASE__ENTITY__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.entity.COUNT__ENTITY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.entity.COUNT_NAME__ENTITY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._count(context, parameters, realm).then(function (data) {
+			return data.data.count_entity;
+		});
+	}
 }
 
 const ROOT_CONFIG__ENTITY__MODEL__SYSTEM = {

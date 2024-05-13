@@ -1,6 +1,6 @@
 import * as $structure from "./../../../../structure/index.js";
 
-import { READ__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM } from "./../queries/secret.js";
+import { READ__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM, COUNT__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM } from "./../queries/secret.js";
 import {
 	CREATE__SECRET__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 	UPDATE__SECRET__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
@@ -17,6 +17,7 @@ const CONNECTION__SECRET__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
 const METHODS__SECRET__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
 	query: {
 		read_secret: READ__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		count_secret: COUNT__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 	},
 	mutation: {
 		create_secret: CREATE__SECRET__MUTATION__GRAPHQL__INTERFACE__SYSTEM,

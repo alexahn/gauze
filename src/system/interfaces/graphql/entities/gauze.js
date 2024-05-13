@@ -1,6 +1,6 @@
 import * as $structure from "./../../../../structure/index.js";
 
-import { READ__GAUZE__QUERY__GRAPHQL__INTERFACE__SYSTEM } from "./../queries/gauze.js";
+import { READ__GAUZE__QUERY__GRAPHQL__INTERFACE__SYSTEM, COUNT__GAUZE__QUERY__GRAPHQL__INTERFACE__SYSTEM } from "./../queries/gauze.js";
 import {
 	CREATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 	UPDATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
@@ -17,6 +17,7 @@ const CONNECTION__GAUZE__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
 const METHODS__GAUZE__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
 	query: {
 		read_gauze: READ__GAUZE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		count_gauze: COUNT__GAUZE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 	},
 	mutation: {
 		create_gauze: CREATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,

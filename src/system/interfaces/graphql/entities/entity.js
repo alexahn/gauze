@@ -1,6 +1,6 @@
 import * as $structure from "./../../../../structure/index.js";
 
-import { READ__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM } from "./../queries/entity.js";
+import { READ__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM, COUNT__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM } from "./../queries/entity.js";
 import {
 	CREATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 	UPDATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
@@ -17,6 +17,7 @@ const CONNECTION__ENTITY__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
 const METHODS__ENTITY__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
 	query: {
 		read_entity: READ__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		count_entity: COUNT__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 	},
 	mutation: {
 		create_entity: CREATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM,

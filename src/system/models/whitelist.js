@@ -84,6 +84,23 @@ class WhitelistSystemModel extends $kernel.models.access.AccessSystemModel {
 			});
 		});
 	}
+	count(context, parameters) {
+		const self = this;
+		var { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.whitelist.COUNT__WHITELIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.whitelist.COUNT_NAME__WHITELIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._count(context, parameters, realm).then(function (data) {
+			return data.data.count_whitelist;
+		});
+	}
 }
 
 const ROOT_CONFIG__WHITELIST__MODEL__SYSTEM = {

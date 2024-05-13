@@ -84,6 +84,23 @@ class BlacklistSystemModel extends $kernel.models.access.AccessSystemModel {
 			});
 		});
 	}
+	count(context, parameters) {
+		const self = this;
+		var { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.blacklist.COUNT__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.blacklist.COUNT_NAME__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._count(context, parameters, realm).then(function (data) {
+			return data.data.count_blacklist;
+		});
+	}
 }
 
 const ROOT_CONFIG__BLACKLIST__MODEL__SYSTEM = {

@@ -84,6 +84,23 @@ class ProxySystemModel extends $kernel.models.system.SystemModel {
 			});
 		});
 	}
+	count(context, parameters) {
+		const self = this;
+		var { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.proxy.database.sql.TABLE_NAME__SQL__DATABASE__PROXY__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.proxy.COUNT__PROXY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.proxy.COUNT_NAME__PROXY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._count(context, parameters, realm).then(function (data) {
+			return data.data.count_proxy;
+		});
+	}
 }
 
 const ROOT_CONFIG__PROXY__MODEL__SYSTEM = {

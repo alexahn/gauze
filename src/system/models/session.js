@@ -84,6 +84,23 @@ class SessionSystemModel extends $kernel.models.system.SystemModel {
 			});
 		});
 	}
+	count(context, parameters) {
+		const self = this;
+		var { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.session.database.sql.TABLE_NAME__SQL__DATABASE__SESSION__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.session.COUNT__SESSION__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.session.COUNT_NAME__SESSION__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._count(context, parameters, realm).then(function (data) {
+			return data.data.count_session;
+		});
+	}
 }
 
 const ROOT_CONFIG__SESSION__MODEL__SYSTEM = {

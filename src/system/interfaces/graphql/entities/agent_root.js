@@ -1,6 +1,6 @@
 import * as $structure from "./../../../../structure/index.js";
 
-import { READ__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM } from "./../queries/agent_root.js";
+import { READ__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM, COUNT__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM } from "./../queries/agent_root.js";
 import {
 	CREATE__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 	UPDATE__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
@@ -17,6 +17,7 @@ const CONNECTION__AGENT_ROOT__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
 const METHODS__AGENT_ROOT__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
 	query: {
 		read_agent_root: READ__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		count_agent_root: COUNT__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 	},
 	mutation: {
 		create_agent_root: CREATE__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,

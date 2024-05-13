@@ -23,6 +23,10 @@ class AgentAccountSystemController extends $kernel.controllers.system.SystemCont
 		const self = this;
 		return self._delete(context, input);
 	}
+	count(context, input) {
+		const self = this;
+		return self._count(context, input);
+	}
 }
 
 const ROOT_CONFIG__AGENT_ACCOUNT__CONTROLLER__SYSTEM = {};

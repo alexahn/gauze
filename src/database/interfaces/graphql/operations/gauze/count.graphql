@@ -1,0 +1,13 @@
+query CountGauze(
+	$count: Gauze_Query__Attributes_String
+	$where: Gauze_Query__Attributes
+	$where_in: Gauze_Query__Attributes_Array
+	$cache_where_in: Gauze_Query__Attributes_String
+	$where_not_in: Gauze_Query__Attributes_Array
+	$cache_where_not_in: Gauze_Query__Attributes_String
+) {
+	count_gauze(count: $count, where: $where, where_in: $where_in, cache_where_in: $cache_where_in, where_not_in: $where_not_in, cache_where_not_in: $cache_where_not_in) {
+		select
+		count
+	}
+}

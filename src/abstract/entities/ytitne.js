@@ -87,11 +87,6 @@ export default function ($abstract) {
 				privacy: "private",
 				valid_agent_types: ["gauze__agent_user"],
 			},
-			count: {
-				name: "count",
-				privacy: "private",
-				valid_agent_types: ["gauze__agent_user"],
-			},
 		},
 	};
 	ENTITY.graphql_fields = $abstract.gauze.utility.create_graphql_fields(ENTITY);

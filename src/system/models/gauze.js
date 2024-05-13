@@ -84,6 +84,23 @@ class GauzeSystemModel extends $kernel.models.system.SystemModel {
 			});
 		});
 	}
+	count(context, parameters) {
+		const self = this;
+		var { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.gauze.database.sql.TABLE_NAME__SQL__DATABASE__GAUZE__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.gauze.COUNT__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.gauze.COUNT_NAME__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._count(context, parameters, realm).then(function (data) {
+			return data.data.count_gauze;
+		});
+	}
 }
 
 const ROOT_CONFIG__GAUZE__MODEL__SYSTEM = {

@@ -30,6 +30,12 @@ const ATTRIBUTES_ARRAY__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abst
 	fields: $structure.entities.blacklist.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE,
 });
 
+const ATTRIBUTES_STRING__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Blacklist_Query__Attributes_String",
+	description: "Blacklist Query Attributes String",
+	fields: $structure.entities.blacklist.system.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE,
+});
+
 const READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.blacklist.system.graphql.QUERY__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE),
 	args: {
@@ -89,4 +95,52 @@ const READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	},
 };
 
-export { READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM };
+const COUNT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
+	args: {
+		parent: {
+			description: "parent",
+			type: PARENT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		count: {
+			description: "count",
+			type: ATTRIBUTES_STRING__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where: {
+			description: "where",
+			type: ATTRIBUTES__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_in: {
+			description: "where in",
+			type: ATTRIBUTES_ARRAY__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_not_in: {
+			description: "where not in",
+			type: ATTRIBUTES_ARRAY__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+	},
+	resolve: (_source, query_arguments, context) => {
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "_source", _source);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "query_arguments", query_arguments);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"COUNT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"access:agent_id",
+			context.agent_id,
+		);
+		return CONTROLLER__BLACKLIST__CONTROLLER__SYSTEM.count(
+			{
+				source: _source,
+				database: context.database,
+				transaction: context.transaction,
+				agent: context.agent,
+			},
+			query_arguments,
+		).then(function (data) {
+			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "COUNT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
+			return data;
+		});
+	},
+};
+export { READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM, COUNT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM };

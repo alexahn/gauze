@@ -30,6 +30,12 @@ const ATTRIBUTES_ARRAY__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abs
 	fields: $structure.entities.agent_root.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
 });
 
+const ATTRIBUTES_STRING__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Root_Query__Attributes_String",
+	description: "Agent_Root Query Attributes String",
+	fields: $structure.entities.agent_root.system.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+});
+
 const READ__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_root.system.graphql.QUERY__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE),
 	args: {
@@ -95,4 +101,58 @@ const READ__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	},
 };
 
-export { READ__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM };
+const COUNT__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
+	args: {
+		parent: {
+			description: "parent",
+			type: PARENT__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		count: {
+			description: "count",
+			type: ATTRIBUTES_STRING__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where: {
+			description: "where",
+			type: ATTRIBUTES__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_in: {
+			description: "where in",
+			type: ATTRIBUTES_ARRAY__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_not_in: {
+			description: "where not in",
+			type: ATTRIBUTES_ARRAY__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+	},
+	resolve: (_source, query_arguments, context) => {
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "_source", _source);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"COUNT__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"query_arguments",
+			query_arguments,
+		);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"COUNT__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"access:agent_id",
+			context.agent_id,
+		);
+		return CONTROLLER__AGENT_ROOT__CONTROLLER__SYSTEM.count(
+			{
+				source: _source,
+				database: context.database,
+				transaction: context.transaction,
+				agent: context.agent,
+			},
+			query_arguments,
+		).then(function (data) {
+			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "COUNT__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
+			return data;
+		});
+	},
+};
+export { READ__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM, COUNT__AGENT_ROOT__QUERY__GRAPHQL__INTERFACE__SYSTEM };

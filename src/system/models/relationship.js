@@ -84,6 +84,23 @@ class RelationshipSystemModel extends $kernel.models.relationship.RelationshipSy
 			});
 		});
 	}
+	count(context, parameters) {
+		const self = this;
+		var { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.relationship.COUNT__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.relationship.COUNT_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._count(context, parameters, realm).then(function (data) {
+			return data.data.count_relationship;
+		});
+	}
 }
 
 const ROOT_CONFIG__RELATIONSHIP__MODEL__SYSTEM = {

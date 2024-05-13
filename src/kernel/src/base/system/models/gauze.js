@@ -87,6 +87,24 @@ class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.models.system.
 			});
 		});
 	}
+	count(context, parameters) {
+		const self = this;
+		var { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.a543731262804f64adcc0eae1a225acc.database.sql.TABLE_NAME__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.COUNT__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name:
+					$database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.COUNT_NAME__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._count(context, parameters, realm).then(function (data) {
+			return data.data.count_a543731262804f64adcc0eae1a225acc;
+		});
+	}
 }
 
 const ROOT_CONFIG__caf5342ac38d41a6a02bb81d2d2b21a4__MODEL__SYSTEM = {
