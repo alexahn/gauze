@@ -147,6 +147,11 @@ export default function ($abstract) {
 				privacy: "private",
 				valid_agent_types: ["gauze__proxy"],
 			},
+			count: {
+				name: "count",
+				privacy: "private",
+				valid_agent_types: ["gauze__proxy"],
+			},
 		},
 	};
 	ENTITY.graphql_fields = $abstract.gauze.utility.create_graphql_fields(ENTITY);
