@@ -29,6 +29,10 @@ const FIELDS__HEADER__STRUCTURE = {
 		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "graphql attributes mutation type",
 	},
+	attributes_string_query_type: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "graphql attributes string query type",
+	},
 };
 
 const TYPE__HEADER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

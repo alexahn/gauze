@@ -1,6 +1,6 @@
 import { GAUZE_PROTOCOL, GAUZE_HOST, GAUZE_PORT } from "env";
 
-class GauzeClient {
+class GauzeService {
 	constructor() {
 		const self = this;
 		self.base = `${GAUZE_PROTOCOL}://${GAUZE_HOST}:${GAUZE_PORT}`;
@@ -328,6 +328,7 @@ query header {
 		attributes
 		attributes_query_type
 		attributes_mutation_type
+		attributes_string_query_type
 	}
 }
 `;
@@ -358,6 +359,10 @@ query read(
         order: $order,
         order_direction: $order_direction
     ) {
+		_metadata {
+			id
+			type
+		}
         attributes {
             ${header.attributes}
         }
@@ -373,6 +378,31 @@ query read(
 				return data.data[`read_${header.name}`];
 			});
 	}
+	count(header, variables) {
+		const self = this;
+		const query = `
+query count(
+	$count: ${header.attributes_string_query_type}
+    $where: ${header.attributes_query_type}
+) {
+    count_${header.name}(
+		count: $count,
+        where: $where,
+    ) {
+		select
+		count
+    }
+}
+`;
+		return self
+			.system({
+				query: query,
+				variables: variables,
+			})
+			.then(function (data) {
+				return data.data[`count_${header.name}`];
+			});
+	}
 }
 
-export default new GauzeClient();
+export default new GauzeService();

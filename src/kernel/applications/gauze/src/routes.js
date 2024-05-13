@@ -228,28 +228,59 @@ const routes = [
 		path: "/:type?where&limit&offset&order&order_direction",
 		onActivate: function ({ dependencies, toState }) {
 			const { services } = dependencies;
-			const { gauze, model } = services;
+			const { gauze, model, router } = services;
 			const header = model.default.read("HEADER", toState.params.type);
 			console.log("system header", header);
-			return gauze.default
-				.read(header, {
-					where: toState.params.where,
-					limit: toState.params.limit,
-					offset: toState.params.offset,
-					order: toState.params.order,
-					order_direction: toState.params.order_direction,
-				})
-				.then(function (items) {
-					console.log("system items", items);
-					items.forEach(function (item) {
-						model.default.create(header.type, item.attributes[header.primary_key], item.attributes);
-						// create a pagination record for the results tied to the route
-					});
-					return Promise.resolve(true);
-				})
-				.catch(function (err) {
-					console.log(err);
-				});
+			const transactions = [
+				function () {
+					return gauze.default
+						.read(header, {
+							where: toState.params.where,
+							limit: toState.params.limit,
+							offset: toState.params.offset,
+							order: toState.params.order,
+							order_direction: toState.params.order_direction,
+						})
+						.then(function (items) {
+							console.log("system items", items);
+							items.forEach(function (item) {
+								model.default.create(header.type, item.attributes[header.primary_key], item.attributes);
+							});
+							const ids = items.map(function (item) {
+								return item.attributes[header.primary_key];
+							});
+							// create a pagination record for the results tied to the route/query
+							console.log("router", router);
+							const pagination_key = router.default.buildUrl(toState.name, toState.params);
+							model.default.create("PAGINATION_SET", pagination_key, ids);
+							return Promise.resolve(true);
+						})
+						.catch(function (err) {
+							console.log(err);
+						});
+				},
+				function () {
+					return gauze.default
+						.count(header, {
+							count: {
+								[header.primary_key]: header.primary_key,
+							},
+							where: toState.params.where,
+						})
+						.then(function (counts) {
+							console.log("counts", counts);
+							// store these results for this query/url
+							const pagination_key = router.default.buildUrl(toState.name, toState.params);
+							model.default.create("PAGINATION_COUNT", pagination_key, counts);
+							return Promise.resolve(true);
+						});
+				},
+			];
+			return Promise.all(
+				transactions.map(function (f) {
+					return f();
+				}),
+			);
 		},
 		layout: layouts.anaconda.default,
 		sections: {

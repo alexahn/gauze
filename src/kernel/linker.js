@@ -26,6 +26,7 @@ function HEADER__LINKER__KERNEL(query_root, entities) {
 						// todo: the architecture already makes this possible, so for now we are going to do string interpolation just to make things work end to end first
 						const attributes_query_type = `${pascal_snake_name}_Query__Attributes`;
 						const attributes_mutation_type = `${pascal_snake_name}_Mutation__Attributes`;
+						const attributes_string_query_type = `${pascal_snake_name}_Query__Attributes_String`;
 						return {
 							name: module.name,
 							table_name: module.table_name,
@@ -34,6 +35,7 @@ function HEADER__LINKER__KERNEL(query_root, entities) {
 							attributes: module.graphql_attributes_string,
 							attributes_query_type: attributes_query_type,
 							attributes_mutation_type: attributes_mutation_type,
+							attributes_string_query_type: attributes_string_query_type,
 						};
 					} else {
 						return null;
