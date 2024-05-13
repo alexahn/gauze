@@ -101,4 +101,50 @@ const READ__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	},
 };
 
-export { READ__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE };
+const COUNT__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = {
+	//type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ezuag.database.graphql.QUERY__GRAPHQL__DATABASE__EZUAG__STRUCTURE),
+	type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+	args: {
+		parent: {
+			description: "parent",
+			type: PARENT__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where: {
+			description: "where",
+			type: ATTRIBUTES__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_in: {
+			description: "where in",
+			type: ATTRIBUTES_ARRAY__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		cache_where_in: {
+			description: "cache where in",
+			type: ATTRIBUTES_STRING__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_not_in: {
+			description: "where not in",
+			type: ATTRIBUTES_ARRAY__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		cache_where_not_in: {
+			description: "cache where not in",
+			type: ATTRIBUTES_STRING__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+	},
+	resolve: (_source, query_arguments, context) => {
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "query_arguments", query_arguments);
+		return CONTROLLER__EZUAG__CONTROLLER__DATABASE.count(
+			{
+				source: _source,
+				database: context.database,
+				transaction: context.transaction,
+			},
+			query_arguments,
+		).then(function (data) {
+			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "COUNT__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
+			return data.map(SERIALIZER__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE.serialize);
+		});
+	},
+};
+
+export { READ__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE, COUNT__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE };

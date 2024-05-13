@@ -167,6 +167,14 @@ class DatabaseModel extends Model {
 										data: data,
 									};
 								});
+							} else if (key.method === "count") {
+								return self.model._root_count(contexts[key.index], parameters).then(function (data) {
+									self.clearAll();
+									return {
+										index: key.index,
+										data: data,
+									};
+								});
 							} else {
 								throw new Error("Internal error: invalid batch operation");
 							}
@@ -221,6 +229,14 @@ class DatabaseModel extends Model {
 									});
 								} else if (key.method === "delete") {
 									return self.model._relationship_delete(contexts[key.index], parameters).then(function (data) {
+										self.clearAll();
+										return {
+											index: key.index,
+											data: data,
+										};
+									});
+								} else if (key.method === "count") {
+									return self.model._relationship_count(contexts[key.index], parameters).then(function (data) {
 										self.clearAll();
 										return {
 											index: key.index,
@@ -712,6 +728,116 @@ class DatabaseModel extends Model {
 		const self = this;
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
 		const key = self._batch_key(relationship_metadata, input, "delete");
+		return self.loader.load(context, key);
+	}
+	_root_count(context, input) {
+		const self = this;
+		const { source, database, transaction } = context;
+		const { where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = input;
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "input", input);
+		const relationship_metadata = self._parse_relationship_metadata(context, input);
+		const sql = database(self.table_name)
+			.count({ [self.primary_key]: "count" })
+			.where(function (builder) {
+				builder.where(where);
+				Object.keys(where_in).forEach(function (key) {
+					builder.whereIn(key, where_in[key]);
+				});
+				Object.keys(cache_where_in).forEach(function (key) {
+					builder.whereIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_in[key]).value);
+				});
+				Object.keys(where_not_in).forEach(function (key) {
+					builder.whereNotIn(key, where_not_in[key]);
+				});
+				Object.keys(cache_where_not_in).forEach(function (key) {
+					builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[key]).value);
+				});
+				return builder;
+			})
+			.transacting(transaction);
+		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
+		}
+		return sql
+			.then(function (data) {
+				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
+				return Promise.resolve(data);
+			})
+			.catch(function (err) {
+				LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
+				throw err;
+			});
+	}
+	_relationship_count(context, input) {
+		const self = this;
+		const { source, database, transaction } = context;
+		const { where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = input;
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "input", input);
+		const relationship_metadata = self._parse_relationship_metadata(context, input);
+		// do join here based on source metadata
+		// use structure resolvers to convert graphql type to table_name name
+		// relationships are one directional, so use from as the parent
+		const PARENT_SQL_ID = relationship_metadata.id;
+		const PARENT_GRAPHQL_TYPE = relationship_metadata.type;
+		const PARENT_SQL_TABLE = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[PARENT_GRAPHQL_TYPE];
+		// mutate where by prefixing with table_name name
+		var joined_where = {};
+		Object.keys(where).forEach(function (k) {
+			var joined_key = self.table_name + "." + k;
+			joined_where[joined_key] = where[k];
+		});
+		var joined_where_in = {};
+		Object.keys(where_in).forEach(function (k) {
+			var joined_key = self.table_name + "." + k;
+			joined_where_in[joined_key] = where_in[k];
+		});
+		Object.keys(cache_where_in).forEach(function (k) {
+			var joined_key = self.table_name + "." + k;
+			joined_where_in[joined_key] = TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_in[k]).value;
+		});
+		var joined_where_not_in = {};
+		Object.keys(where_not_in).forEach(function (k) {
+			var joined_key = self.table_name + "." + k;
+			joined_where_not_in[joined_key] = where_not_in[k];
+		});
+		Object.keys(cache_where_not_in).forEach(function (k) {
+			var joined_key = self.table_name + "." + k;
+			joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[k]).value;
+		});
+		var joined_order = self.table_name + "." + order;
+		const sql = database(self.table_name)
+			.count({ [self.primary_key]: "count" })
+			.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.id`)
+			.where(`${self.relationship_table_name}.gauze__relationship__from_id`, PARENT_SQL_ID)
+			.where(`${self.relationship_table_name}.gauze__relationship__from_type`, PARENT_SQL_TABLE)
+			.where(function (builder) {
+				builder.where(joined_where);
+				Object.keys(joined_where_in).forEach(function (key) {
+					builder.whereIn(key, joined_where_in[key]);
+				});
+				Object.keys(joined_where_not_in).forEach(function (key) {
+					builder.whereNotIn(key, joined_where_not_in[key]);
+				});
+				return builder;
+			})
+			.transacting(transaction);
+		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
+		}
+		return sql
+			.then(function (data) {
+				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
+				return Promise.resolve(data);
+			})
+			.catch(function (err) {
+				LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
+				throw err;
+			});
+	}
+	_count(context, input) {
+		const self = this;
+		const relationship_metadata = self._parse_relationship_metadata(context, input);
+		const key = self._batch_key(relationship_metadata, input, "count");
 		return self.loader.load(context, key);
 	}
 }

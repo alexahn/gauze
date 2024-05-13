@@ -100,6 +100,24 @@ class DatabaseController extends Controller {
 			});
 		});
 	}
+	_count(context, input) {
+		const self = this;
+		const { user, source, database, transaction } = context;
+		const model_context = {
+			source,
+			database,
+			transaction,
+		};
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.count:enter`, "input", input);
+		return self.model.count(model_context, input).then(function (rows) {
+			return rows.map(function (row) {
+				//row = self.model.pre_deserialize_middleware(row, "count");
+				//row = self.model.deserialize(row, "delete");
+				//row = self.model.post_deserialize_middleware(row, "count");
+				return row;
+			});
+		});
+	}
 }
 
 export { DatabaseController };
