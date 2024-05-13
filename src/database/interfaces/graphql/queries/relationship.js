@@ -108,12 +108,15 @@ const READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 };
 
 const COUNT__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = {
-	//type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.relationship.database.graphql.QUERY__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE),
-	type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
 		parent: {
 			description: "parent",
 			type: PARENT__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		count: {
+			description: "count",
+			type: ATTRIBUTES_STRING__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where: {
 			description: "where",
@@ -154,7 +157,7 @@ const COUNT__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			query_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "COUNT__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(SERIALIZER__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE.serialize);
+			return data;
 		});
 	},
 };

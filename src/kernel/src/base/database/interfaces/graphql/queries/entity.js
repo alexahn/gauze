@@ -122,12 +122,15 @@ const READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABAS
 };
 
 const COUNT__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE = {
-	//type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.QUERY__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE),
-	type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
 		parent: {
 			description: "parent",
 			type: PARENT__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		count: {
+			description: "count",
+			type: ATTRIBUTES_STRING__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where: {
 			description: "where",
@@ -180,7 +183,7 @@ const COUNT__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABA
 				"data",
 				data,
 			);
-			return data.map(SERIALIZER__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE.serialize);
+			return data;
 		});
 	},
 };
