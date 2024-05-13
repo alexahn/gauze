@@ -1,6 +1,6 @@
 import * as $structure from "./../../../../structure/index.js";
 
-import { READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM } from "./../queries/ytitne.js";
+import { READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM, COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM } from "./../queries/ytitne.js";
 import {
 	CREATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 	UPDATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
@@ -17,6 +17,7 @@ const CONNECTION__YTITNE__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
 const METHODS__YTITNE__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
 	query: {
 		read_ytitne: READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		count_ytitne: COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 	},
 	mutation: {
 		create_ytitne: CREATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,

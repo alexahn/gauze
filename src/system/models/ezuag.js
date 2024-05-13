@@ -84,6 +84,23 @@ class EzuagEzuagSystemModel extends $kernel.models.system.SystemModel {
 			});
 		});
 	}
+	count(context, parameters) {
+		const self = this;
+		var { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.ezuag.database.sql.TABLE_NAME__SQL__DATABASE__EZUAG__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.ezuag.COUNT__EZUAG__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.ezuag.COUNT_NAME__EZUAG__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._count(context, parameters, realm).then(function (data) {
+			return data.data.count_ezuag;
+		});
+	}
 }
 
 const ROOT_CONFIG__EZUAG__MODEL__SYSTEM = {

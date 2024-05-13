@@ -84,6 +84,23 @@ class YtitneYtitneSystemModel extends $kernel.models.system.SystemModel {
 			});
 		});
 	}
+	count(context, parameters) {
+		const self = this;
+		var { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.ytitne.database.sql.TABLE_NAME__SQL__DATABASE__YTITNE__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.ytitne.COUNT__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.ytitne.COUNT_NAME__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._count(context, parameters, realm).then(function (data) {
+			return data.data.count_ytitne;
+		});
+	}
 }
 
 const ROOT_CONFIG__YTITNE__MODEL__SYSTEM = {

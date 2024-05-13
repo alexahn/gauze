@@ -124,6 +124,8 @@ class SystemModel extends Model {
 						self.clearAll();
 						return data;
 					});
+				} else if (parsed.method === "count") {
+					return self.model._root_count(contexts[index], parsed.parameters, parsed.realm);
 				} else {
 					throw new Error("Internal error: invalid batch operation");
 				}
@@ -608,7 +610,7 @@ class SystemModel extends Model {
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
-		const key = self._model_batch_key(parameters, realm, "create");
+		const key = self._model_batch_key(parameters, realm, method);
 		return self.model_loader.load(context, key);
 	}
 	_root_read(context, parameters, realm) {
@@ -628,7 +630,7 @@ class SystemModel extends Model {
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
-		const key = self._model_batch_key(parameters, realm, "read");
+		const key = self._model_batch_key(parameters, realm, method);
 		return self.model_loader.load(context, key);
 	}
 	_root_update(context, parameters, realm) {
@@ -648,7 +650,7 @@ class SystemModel extends Model {
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
-		const key = self._model_batch_key(parameters, realm, "update");
+		const key = self._model_batch_key(parameters, realm, method);
 		return self.model_loader.load(context, key);
 	}
 	_root_delete(context, parameters, realm) {
@@ -668,7 +670,27 @@ class SystemModel extends Model {
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
 		}
-		const key = self._model_batch_key(parameters, realm, "delete");
+		const key = self._model_batch_key(parameters, realm, method);
+		return self.model_loader.load(context, key);
+	}
+	_root_count(context, parameters, realm) {
+		const self = this;
+		const { agent, entity, operation } = realm;
+		return self.authorized_execute(context, parameters, agent, entity, operation);
+	}
+	_count(context, parameters, realm) {
+		const self = this;
+		const method = "count";
+		const { source } = context;
+		const { agent, entity } = realm;
+		entity.entity_method = method;
+		self._validate_agent(agent);
+		self._validate_entity(entity);
+		self._validate_method(agent, method);
+		if (source && source._metadata) {
+			parameters.parent = source._metadata;
+		}
+		const key = self._model_batch_key(parameters, realm, method);
 		return self.model_loader.load(context, key);
 	}
 }

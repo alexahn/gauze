@@ -86,6 +86,18 @@ class SystemController extends Controller {
 			});
 		});
 	}
+	_count(context, input) {
+		const self = this;
+		const { user, source, database, transaction, agent } = context;
+		const model_context = {
+			source,
+			database,
+			transaction,
+			agent,
+		};
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.count:enter`, "input", input);
+		return self.model.count(model_context, input);
+	}
 }
 
 export { SystemController };
