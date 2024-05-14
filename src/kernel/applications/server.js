@@ -101,7 +101,24 @@ class GauzeServer {
 							}
 						})
 						.then(function (agent) {
-							return self.handle_graphql($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
+							console.log("req.headers", req.headers);
+							if (req.headers.authorization) {
+								if (agent) {
+									return self.handle_graphql($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
+								} else {
+									res.writeHead(401, "Unauthorized", {
+										"content-type": "application/json; charset=utf-8",
+										"Access-Control-Allow-Origin": "*",
+									}).end(
+										JSON.stringify({
+											status: 401,
+											message: "Unauthorized",
+										}),
+									);
+								}
+							} else {
+								return self.handle_graphql($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
+							}
 						});
 				},
 			},

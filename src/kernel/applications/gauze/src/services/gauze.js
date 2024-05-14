@@ -13,16 +13,37 @@ class GauzeService {
 	}
 	fetch(path, jwt, body) {
 		const self = this;
+		const headers = {
+			"Content-Type": "application/json",
+			Accept: "application/json",
+		};
+		if (jwt) {
+			headers["Authorization"] = `Bearer ${jwt}`;
+		}
 		return fetch(`${self.base}/${path}`, {
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Accept: "application/json",
-				Authorization: `Bearer ${jwt}`,
-			},
+			headers: headers,
 			body: JSON.stringify(body),
 		}).then(function (res) {
-			return res.json();
+			if (res.status === 200) {
+				return res.json();
+			}
+			if (res.status === 401) {
+				// destroy this jwt
+				if (self.getEnvironmentJWT() === jwt) {
+					self.deleteEnvironmentJWT();
+				} else if (self.getProxyJWT() === jwt) {
+					self.deleteProxyJWT();
+				} else if (self.getSystemJWT() === jwt) {
+					self.deleteSystemJWT();
+				} else {
+					throw new Error("Internal error: invalid jwt");
+				}
+			} else if (res.status === 400) {
+				return res.json();
+			} else {
+				return res.json();
+			}
 		});
 	}
 	environment(body) {
@@ -50,6 +71,11 @@ class GauzeService {
 		const self = this;
 		return self.environmentJWT;
 	}
+	deleteEnvironmentJWT() {
+		const self = this;
+		self.environmentJWT = null;
+		localStorage.removeItem("environmentJWT");
+	}
 	setSystemJWT(jwt) {
 		const self = this;
 		self.systemJWT = jwt;
@@ -59,6 +85,11 @@ class GauzeService {
 		const self = this;
 		return self.systemJWT;
 	}
+	deleteSystemJWT() {
+		const self = this;
+		self.systemJWT = null;
+		localStorage.removeItem("systemJWT");
+	}
 	setProxyJWT(jwt) {
 		const self = this;
 		self.proxyJWT = jwt;
@@ -67,6 +98,11 @@ class GauzeService {
 	getProxyJWT() {
 		const self = this;
 		return self.proxyJWT;
+	}
+	deleteProxyJWT() {
+		const self = this;
+		self.proxyJWT = null;
+		localStorage.removeItem("proxyJWT");
 	}
 	// centralize environment queries here for convenience
 	personAssert(person) {

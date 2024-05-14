@@ -555,3 +555,5 @@
 	[ ] table ui with filters and sorting
 [ ] look into why router5 doesn't seem to be able to uri encode correctly
 	[ ] manually encoding and decoding seems to work
+[x] store jwts in local storage
+	[x] clear jwts when jwts expire
