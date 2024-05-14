@@ -2,6 +2,10 @@ import * as layouts from "./layouts/index.js";
 import * as sections from "./sections/index.js";
 import * as units from "./units/index.js";
 
+import * as jose from "jose";
+
+import { PAGINATION_PAGE_SIZE } from "./constants.js";
+
 const routes = [
 	{
 		name: "environment",
@@ -10,7 +14,10 @@ const routes = [
 			const { services } = dependencies;
 			const { gauze, model } = services;
 			const environmentSessions = model.default.environmentSessions();
+			const environmentJWT = gauze.default.getEnvironmentJWT();
 			if (environmentSessions && environmentSessions.length) {
+				return Promise.resolve(true);
+			} else if (environmentJWT) {
 				return Promise.resolve(true);
 			} else {
 				return gauze.default.enterSession(null).then(function (session) {
@@ -101,6 +108,7 @@ const routes = [
 			const { services } = dependencies;
 			const { gauze, model } = services;
 			const proxySessions = model.default.proxySessions();
+			const proxyJWT = gauze.default.getProxyJWT();
 			if (proxySessions && proxySessions.length) {
 				const proxy = proxySessions[0];
 				return gauze.default.proxies(proxy).then(function (proxies) {
@@ -109,7 +117,19 @@ const routes = [
 					});
 					return Promise.resolve(true);
 				});
+			} else if (proxyJWT) {
+				const decoded = jose.decodeProtectedHeader(proxyJWT);
+				const proxy = {
+					gauze__proxy__id: decoded.proxy_id,
+				};
+				return gauze.default.proxies(proxy).then(function (proxies) {
+					proxies.forEach(function (proxy) {
+						model.default.create(proxy._metadata.type, proxy._metadata.id, proxy.attributes);
+					});
+					return Promise.resolve(true);
+				});
 			} else {
+				console.log("proxy jwt", gauze.default.getProxyJWT(), gauze.default);
 				return Promise.reject({ redirect: { name: "environment.signin" } });
 			}
 		},
@@ -157,16 +177,10 @@ const routes = [
 			const { services } = dependencies;
 			const { gauze, model } = services;
 			const systemSessions = model.default.systemSessions();
+			const systemJWT = gauze.default.getSystemJWT();
 			if (systemSessions && systemSessions.length) {
-				// do graphql query to get headers
-				/*
-				return gauze.default.header().then(function (headers) {
-					headers.forEach(function (header) {
-						model.default.create("HEADER", header.type, header);
-					});
-					return Promise.resolve(true);
-				});
-				*/
+				return Promise.resolve(true);
+			} else if (systemJWT) {
 				return Promise.resolve(true);
 			} else {
 				const proxySessions = model.default.proxySessions();
@@ -203,7 +217,6 @@ const routes = [
 			const { gauze, model } = services;
 			return gauze.default.header().then(function (headers) {
 				headers.forEach(function (header) {
-					console.log("header.name", header.name);
 					model.default.create("HEADER", header.name, header);
 				});
 				return Promise.resolve(true);
@@ -211,15 +224,16 @@ const routes = [
 		},
 		layout: layouts.anaconda.default,
 		sections: {
-			left: sections.alder.default,
+			left: sections.almond.default,
 			right: sections.alder.default,
 		},
 		units: {
 			left: {
-				body: units.adamite.default,
+				header: units.adamite.default,
+				body: units.header.default,
 			},
 			right: {
-				body: units.header.default,
+				body: units.azurite.default,
 			},
 		},
 	},
@@ -236,8 +250,8 @@ const routes = [
 					return gauze.default
 						.read(header, {
 							where: toState.params.where,
-							limit: toState.params.limit,
-							offset: toState.params.offset,
+							limit: toState.params.limit ? Number.parseInt(toState.params.limit) : PAGINATION_PAGE_SIZE,
+							offset: toState.params.offset ? Number.parseInt(toState.params.offset) : 0,
 							order: toState.params.order,
 							order_direction: toState.params.order_direction,
 						})
@@ -284,15 +298,16 @@ const routes = [
 		},
 		layout: layouts.anaconda.default,
 		sections: {
-			left: sections.alder.default,
-			right: sections.almond.default,
+			left: sections.almond.default,
+			right: sections.alder.default,
 		},
 		units: {
 			left: {
-				body: units.adamite.default,
+				body: units.header.default,
+				header: units.adamite.default,
 			},
 			right: {
-				header: units.header.default,
+				//header: units.header.default,
 				body: units.type.default,
 			},
 		},

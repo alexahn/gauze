@@ -6,7 +6,7 @@ export default function Banner({ gauze, model, router }) {
 	const systemSessions = model.systemSessions();
 	const proxySessions = model.proxySessions();
 	const environmentSessions = model.environmentSessions();
-	const authenticated = systemSessions.length || proxySessions.length;
+	const authenticated = systemSessions.length || gauze.getSystemJWT() || proxySessions.length || gauze.getProxyJWT();
 	const signUp = (
 		<div>
 			<a href={router.buildUrl("environment.signup", {})}>Sign Up</a>

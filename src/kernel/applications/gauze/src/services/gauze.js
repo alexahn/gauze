@@ -4,9 +4,12 @@ class GauzeService {
 	constructor() {
 		const self = this;
 		self.base = `${GAUZE_PROTOCOL}://${GAUZE_HOST}:${GAUZE_PORT}`;
-		self.environmentJWT = null;
-		self.systemJWT = null;
-		self.proxyJWT = null;
+		self.environmentJWT = localStorage.getItem("environmentJWT");
+		console.log("local env jwt", localStorage.getItem("environmentJWT"));
+		self.systemJWT = localStorage.getItem("systemJWT");
+		console.log("local sys jwt", localStorage.getItem("systemJWT"));
+		self.proxyJWT = localStorage.getItem("proxyJWT");
+		console.log("local prox jwt", localStorage.getItem("proxyJWT"));
 	}
 	fetch(path, jwt, body) {
 		const self = this;
@@ -41,6 +44,7 @@ class GauzeService {
 	setEnvironmentJWT(jwt) {
 		const self = this;
 		self.environmentJWT = jwt;
+		localStorage.setItem("environmentJWT", jwt);
 	}
 	getEnvironmentJWT() {
 		const self = this;
@@ -49,6 +53,7 @@ class GauzeService {
 	setSystemJWT(jwt) {
 		const self = this;
 		self.systemJWT = jwt;
+		localStorage.setItem("systemJWT", jwt);
 	}
 	getSystemJWT() {
 		const self = this;
@@ -57,8 +62,10 @@ class GauzeService {
 	setProxyJWT(jwt) {
 		const self = this;
 		self.proxyJWT = jwt;
+		localStorage.setItem("proxyJWT", jwt);
 	}
 	getProxyJWT() {
+		const self = this;
 		return self.proxyJWT;
 	}
 	// centralize environment queries here for convenience
