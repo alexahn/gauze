@@ -1,26 +1,17 @@
 import React from "react";
 
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Unstable_Grid2";
-
 export default function Anaconda({ sections, units }) {
 	const id = "layout:anaconda";
 	return (
-		<Container fixed>
-			<div id={id} key={id}>
-				<Box>
-					<Grid container spacing={2}>
-						<Grid xs={3}>
-							<sections.left units={units.left} />
-						</Grid>
-
-						<Grid xs={9}>
-							<sections.right units={units.right} />
-						</Grid>
-					</Grid>
-				</Box>
+		<div id={id} key={id} className="flex justify-center w-100">
+			<div className="w-100 mw8">
+				<div className="fl w-third pa2">
+					<sections.left units={units.left} />
+				</div>
+				<div className="fl w-two-thirds pa2">
+					<sections.right units={units.right} />
+				</div>
 			</div>
-		</Container>
+		</div>
 	);
 }

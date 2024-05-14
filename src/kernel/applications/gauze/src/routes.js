@@ -245,11 +245,12 @@ const routes = [
 			const { gauze, model, router } = services;
 			const header = model.default.read("HEADER", toState.params.type);
 			console.log("system header", header);
+			console.log("toState", toState.params);
 			const transactions = [
 				function () {
 					return gauze.default
 						.read(header, {
-							where: toState.params.where,
+							where: toState.params.where ? JSON.parse(decodeURIComponent(toState.params.where)) : {},
 							limit: toState.params.limit ? Number.parseInt(toState.params.limit) : PAGINATION_PAGE_SIZE,
 							offset: toState.params.offset ? Number.parseInt(toState.params.offset) : 0,
 							order: toState.params.order,
@@ -279,7 +280,7 @@ const routes = [
 							count: {
 								[header.primary_key]: header.primary_key,
 							},
-							where: toState.params.where,
+							where: toState.params.where ? JSON.parse(decodeURIComponent(toState.params.where)) : {},
 						})
 						.then(function (counts) {
 							console.log("counts", counts);

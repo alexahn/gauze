@@ -22,6 +22,7 @@ const dataMiddlewareFactory = (routes) => (router, dependencies) => (toState, fr
 const options = {
 	defaultRoute: "environment.signin",
 	queryParamsMode: "strict",
+	urlParamsEncoding: "uriComponent",
 };
 
 const router = createRouter(routes, options);
