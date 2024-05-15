@@ -95,7 +95,6 @@ const READ__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
-				operation: context.operation,
 			},
 			query_arguments,
 		).then(function (data) {
@@ -148,7 +147,6 @@ const COUNT__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
-				operation: context.operation,
 			},
 			query_arguments,
 		).then(function (data) {

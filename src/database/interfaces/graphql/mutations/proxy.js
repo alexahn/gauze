@@ -65,7 +65,6 @@ const CREATE__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
-				operation: context.operation,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -147,7 +146,6 @@ const UPDATE__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
-				operation: context.operation,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -222,7 +220,6 @@ const DELETE__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
-				operation: context.operation,
 			},
 			mutation_arguments,
 		).then(function (data) {

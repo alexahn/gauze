@@ -67,7 +67,6 @@ const CREATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
-				operation: context.operation,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -151,7 +150,6 @@ const UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
-				operation: context.operation,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -228,7 +226,6 @@ const DELETE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
-				operation: context.operation,
 			},
 			mutation_arguments,
 		).then(function (data) {
