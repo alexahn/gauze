@@ -8,7 +8,12 @@ const CREATED_AT__SERIALIZER__GAUZE__ABSTRACT = function (field) {
 			attributes[field] = new Date();
 			return attributes;
 		},
-		read: preserve,
+		read: function (attributes) {
+			if (attributes[field]) {
+				attributes[field] = new Date(attributes[field]);
+			}
+			return attributes;
+		},
 		update: preserve,
 		delete: preserve,
 	};
@@ -20,7 +25,12 @@ const UPDATED_AT__SERIALIZER__GAUZE__ABSTRACT = function (field) {
 			attributes[field] = new Date();
 			return attributes;
 		},
-		read: preserve,
+		read: function (attributes) {
+			if (attributes[field]) {
+				attributes[field] = new Date(attributes[field]);
+			}
+			return attributes;
+		},
 		update: function (attributes) {
 			attributes[field] = new Date();
 			return attributes;
@@ -32,7 +42,12 @@ const UPDATED_AT__SERIALIZER__GAUZE__ABSTRACT = function (field) {
 const DELETED_AT__SERIALIZER__GAUZE__ABSTRACT = function (field) {
 	return {
 		create: preserve,
-		read: preserve,
+		read: function (attributes) {
+			if (attributes[field]) {
+				attributes[field] = new Date(attributes[field]);
+			}
+			return attributes;
+		},
 		update: preserve,
 		delete: function (attributes) {
 			attributes[field] = new Date();

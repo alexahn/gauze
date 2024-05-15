@@ -560,7 +560,8 @@
 [ ] figure out the general structure of layouts and sections
 	[ ] configure all the styles from the root node and downwards in a consistent manner
 [ ] figure out why where query on json date values doesn't work
-	[ ] probably a mismatch between the value expected in the database and the one provided by the interface
-	[ ] the dataloading is coercing all datatypes to json, so we need to do the serialization inside the dataloader
-		[ ] move the serialization logic from the controllers to the models
-	[ ] 
+	[x] probably a mismatch between the value expected in the database and the one provided by the interface
+	[-] the dataloading is coercing all datatypes to json, so we need to do the serialization inside the dataloader
+		[-] move the serialization logic from the controllers to the models
+		[x] use the cache to store the parsed input
+	[x] do pre serialization and middleware parsing for where on update and delete methods

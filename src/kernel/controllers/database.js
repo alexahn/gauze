@@ -54,9 +54,9 @@ class DatabaseController extends Controller {
 			operation,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.read:enter`, "input", input);
-		//input.where = self.model.pre_serialize_middleware(input.where, "read");
-		//input.where = self.model.serialize(input.where, "read");
-		//input.where = self.model.post_serialize_middleware(input.where, "read");
+		input.where = self.model.pre_serialize_middleware(input.where, "read");
+		input.where = self.model.serialize(input.where, "read");
+		input.where = self.model.post_serialize_middleware(input.where, "read");
 		// TODO: CONTINUE ADDING THE SERIALIZATION LOGIC HERE
 		return self.model.read(model_context, input).then(function (rows) {
 			return rows.map(function (row) {
@@ -77,6 +77,9 @@ class DatabaseController extends Controller {
 			operation,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.update:enter`, "input", input);
+		input.where = self.model.pre_serialize_middleware(input.where, "read");
+		input.where = self.model.serialize(input.where, "read");
+		input.where = self.model.post_serialize_middleware(input.where, "read");
 		input.attributes = self.model.pre_serialize_middleware(input.attributes, "update");
 		input.attributes = self.model.serialize(input.attributes, "update");
 		input.attributes = self.model.post_serialize_middleware(input.attributes, "update");
@@ -99,6 +102,9 @@ class DatabaseController extends Controller {
 			operation,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.delete:enter`, "input", input);
+		input.where = self.model.pre_serialize_middleware(input.where, "read");
+		input.where = self.model.serialize(input.where, "read");
+		input.where = self.model.post_serialize_middleware(input.where, "read");
 		return self.model.delete(model_context, input).then(function (rows) {
 			return rows.map(function (row) {
 				row = self.model.pre_deserialize_middleware(row, "delete");
@@ -118,6 +124,9 @@ class DatabaseController extends Controller {
 			operation,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.count:enter`, "input", input);
+		input.where = self.model.pre_serialize_middleware(input.where, "read");
+		input.where = self.model.serialize(input.where, "read");
+		input.where = self.model.post_serialize_middleware(input.where, "read");
 		return self.model.count(model_context, input).then(function (results) {
 			const counts = Object.keys(results).map(function (key) {
 				return {
