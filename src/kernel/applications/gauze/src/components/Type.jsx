@@ -87,9 +87,16 @@ export default function Type({ route, router, gauze, model }) {
 				}
 			};
 		}
+		function applyFilter(field) {
+			return function (e) {
+				if (e.key === "Enter") {
+					router.navigate(route.name, { ...route.params, where: encodeURIComponent(JSON.stringify(where)), offset: 0 });
+				}
+			};
+		}
 
 		return (
-			<div>
+			<div className="mw-100">
 				<h1 align="right">{header.type}</h1>
 				<div align="right">Type</div>
 				<hr />
@@ -97,23 +104,38 @@ export default function Type({ route, router, gauze, model }) {
 					<Pagination page={page_current} count={page_max} href={href} />
 				</div>
 				<hr />
-				<div className="mw-100 overflow-x-auto">
+				{/*<div className="mw-100 overflow-x-auto"> */}
+				<div className="flex mw-100 h-100">
 					<table>
-						<thead>
-							<tr align="right">
-								<th>
+						<thead className="flex flex-wrap mw-100">
+							<tr align="right" className="flex flex-wrap">
+								<th className="mw4 w4">
 									<a href={router.buildUrl(route.name, { ...route.params, where: encodeURIComponent(JSON.stringify(where)) })}>
 										<button>Filter</button>
 									</a>
 								</th>
-								{fields.map(function (field) {
+								<th className="mw4 w4 truncate-ns">
+									<button>Fields</button>
+								</th>
+								{page.map(function (item) {
 									return (
-										<th key={`${field}:filter`}>
-											<input onChange={updateFilter(field)} defaultValue={where[field] ? where[field] : ""} />
+										<th className="mw4 w4 truncate-ns">
+											<button>Edit</button>
+											<button>Delete</button>
 										</th>
 									);
 								})}
+								{/*
+								{fields.map(function (field) {
+									return (
+										<th key={`${field}:filter`}>
+											<input onChange={updateFilter(field)} onKeyDown={applyFilter(field)} defaultValue={where[field] ? where[field] : ""} />
+										</th>
+									);
+								})}
+								*/}
 							</tr>
+							{/*
 							<tr align="right">
 								<th>
 									<input type="checkbox" />
@@ -122,8 +144,35 @@ export default function Type({ route, router, gauze, model }) {
 									return <th key={`${field}:name`}>{field}</th>;
 								})}
 							</tr>
+							*/}
 						</thead>
-						<tbody align="right">
+						<tbody align="right" className="mw-100">
+							{fields.map(function (field) {
+								return (
+									<tr align="right" key={field} className="flex flex-wrap">
+										<td className="mw4 w4">
+											<input className="mw4" onChange={updateFilter(field)} onKeyDown={applyFilter(field)} defaultValue={where[field] ? where[field] : ""} />
+										</td>
+										<td className="relative mw4 w4 pa1 row" tabindex="0">
+											<div className="truncate-ns">
+												<b>{field}</b>
+											</div>
+											<span className="dn bg-white mw9 top-0 right-0 pa1 absolute f4 tooltip">
+												<b>{field}</b>
+											</span>
+										</td>
+										{page.map(function (item) {
+											return (
+												<td key={`${item[header.primary_key]}.${field}`} className="relative mw4 w4 pa1 row" tabindex="0">
+													<div className="truncate-ns">{item[field]}</div>
+													<span className="dn bg-white mw9 top-0 right-0 pa1 absolute f4 tooltip">{item[field]}</span>
+												</td>
+											);
+										})}
+									</tr>
+								);
+							})}
+							{/*
 							{page.map(function (item) {
 								return (
 									<tr align="right" key={item[header.primary_key]}>
@@ -131,11 +180,19 @@ export default function Type({ route, router, gauze, model }) {
 											<input type="checkbox" />
 										</td>
 										{fields.map(function (field) {
-											return <td key={`${item[header.primary_key]}.${field}`}>{item[field]}</td>;
+											return (
+												<td key={`${item[header.primary_key]}.${field}`} className="relative mw1 row" tabindex="0">
+													<div className="truncate-ns pl1 pr1">
+														{item[field]}
+													</div>
+													<span className='dn bg-white top-0 right-0 pa1 absolute f4 tooltip'>{item[field]}</span>
+												</td>
+											);
 										})}
 									</tr>
 								);
 							})}
+							*/}
 							{/*
 							<tr>
 								<td>Emil</td>
@@ -150,24 +207,6 @@ export default function Type({ route, router, gauze, model }) {
 							*/}
 						</tbody>
 					</table>
-					{/*
-					{page.map(function (item) {
-						return (
-							<div>
-								<div key={item[header.primary_key]}>
-									{fields.map(function (field) {
-										return (
-											<div key={field}>
-												{field}: {item[field]}
-											</div>
-										);
-									})}
-								</div>
-								<hr/>
-							</div>
-						);
-					})}
-		*/}
 				</div>
 			</div>
 		);
