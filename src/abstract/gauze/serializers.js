@@ -8,7 +8,10 @@ const CREATED_AT__SERIALIZER__GAUZE__ABSTRACT = function (field) {
 			attributes[field] = new Date();
 			return attributes;
 		},
-		read: preserve,
+		read: function (attributes) {
+			attributes[field] = new Date(attributes[field]);
+			return attributes;
+		},
 		update: preserve,
 		delete: preserve,
 	};

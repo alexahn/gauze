@@ -11,7 +11,6 @@ export default function Type({ route, router, gauze, model, where, fields }) {
 	const header = model.read("HEADER", route.params.type);
 	const headerFields = header.attributes.split(" ");
 	const [localWhere, setLocalWhere] = useState(where);
-	const [localFields, setLocalFields] = useState(fields);
 
 	// use pagination record once we implement it
 	const pagination_key = router.buildUrl(route.name, route.params);
@@ -101,8 +100,6 @@ export default function Type({ route, router, gauze, model, where, fields }) {
 					delete updatedFields[field];
 				});
 				if (e.target.checked) {
-					//updatedFields.push(field)
-					// remove from fields
 					delete updatedFields[field];
 				} else {
 					updatedFields[field] = true;

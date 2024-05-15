@@ -48,10 +48,10 @@ class DatabaseModel extends Model {
 		const self = this;
 		return DatabaseModel._class_name(self.table_name);
 	}
-	_batch_key(source, parameters, method) {
+	_batch_key(source, operation, method) {
 		const key = {
 			source: source,
-			parameters: parameters,
+			operation: operation,
 			method: method,
 		};
 		return JSON.stringify(key);
@@ -78,7 +78,8 @@ class DatabaseModel extends Model {
 			const parsed = JSON.parse(key);
 			const subkey = JSON.stringify({
 				method: parsed.method,
-				parameters: parsed.parameters,
+				operation: parsed.operation,
+				raw_key: key,
 			});
 			if (subkey_map[subkey]) {
 				subkey_map[subkey].push({
@@ -103,9 +104,10 @@ class DatabaseModel extends Model {
 				.map(function (item) {
 					return {
 						method: parsed.method,
-						parameters: parsed.parameters,
+						operation: parsed.operation,
 						source: item.source,
 						index: item.index,
+						raw_key: parsed.raw_key,
 					};
 				})
 				.filter(function (item) {
@@ -119,9 +121,10 @@ class DatabaseModel extends Model {
 				.map(function (item) {
 					return {
 						method: parsed.method,
-						parameters: parsed.parameters,
+						operation: parsed.operation,
 						source: item.source,
 						index: item.index,
+						raw_key: parsed.raw_key,
 					};
 				})
 				.filter(function (item) {
@@ -135,7 +138,8 @@ class DatabaseModel extends Model {
 					return Promise.all(
 						group.map(function (key) {
 							// use key to find method
-							const parameters = key.parameters;
+							//const parameters = key.parameters;
+							const parameters = TIERED_CACHE__LRU__CACHE__KERNEL.get(key.raw_key).value;
 							if (key.method === "create") {
 								return self.model._root_create(contexts[key.index], parameters).then(function (data) {
 									self.clearAll();
@@ -203,7 +207,8 @@ class DatabaseModel extends Model {
 					groups.map(function (group) {
 						return Promise.all(
 							group.map(function (key) {
-								const parameters = key.parameters;
+								//const parameters = key.parameters;
+								const parameters = TIERED_CACHE__LRU__CACHE__KERNEL.get(key.raw_key).value;
 								if (key.method === "create") {
 									return self.model._relationship_create(contexts[key.index], parameters).then(function (data) {
 										self.clearAll();
@@ -326,7 +331,11 @@ class DatabaseModel extends Model {
 	_create(context, input) {
 		const self = this;
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
-		const key = self._batch_key(relationship_metadata, input, "create");
+		// use the raw json input (context.parameters) to build the batch key because the input types have already been parsed by graphql, which could lead to unpredictable behavior
+		const key = self._batch_key(relationship_metadata, context.parameters, "create");
+		// use the batch key as the cache key
+		// set size of 1 until we implement a proper sizing procedure
+		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, input, 1);
 		return self.loader.load(context, key);
 	}
 	_root_read(context, input) {
@@ -465,7 +474,11 @@ class DatabaseModel extends Model {
 	_read(context, input) {
 		const self = this;
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
-		const key = self._batch_key(relationship_metadata, input, "read");
+		// use the raw json input (context.operation) to build the batch key because the input types have already been parsed by graphql, which could lead to unpredictable behavior
+		const key = self._batch_key(relationship_metadata, context.operation, "read");
+		// use the batch key as the cache key
+		// set size of 1 until we implement a proper sizing procedure
+		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, input, 1);
 		return self.loader.load(context, key);
 	}
 	_root_update(context, input) {
@@ -562,7 +575,11 @@ class DatabaseModel extends Model {
 	_update(context, input) {
 		const self = this;
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
-		const key = self._batch_key(relationship_metadata, input, "update");
+		// use the raw json input (context.operation) to build the batch key because the input types have already been parsed by graphql, which could lead to unpredictable behavior
+		const key = self._batch_key(relationship_metadata, context.operatioon, "update");
+		// use the batch key as the cache key
+		// set size of 1 until we implement a proper sizing procedure
+		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, input, 1);
 		return self.loader.load(context, key);
 	}
 	_cleanup_delete(context, valid_ids) {
@@ -727,7 +744,11 @@ class DatabaseModel extends Model {
 	_delete(context, input) {
 		const self = this;
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
-		const key = self._batch_key(relationship_metadata, input, "delete");
+		// use the raw json input (context.operation) to build the batch key because the input types have already been parsed by graphql, which could lead to unpredictable behavior
+		const key = self._batch_key(relationship_metadata, context.operation, "delete");
+		// use the batch key as the cache key
+		// set size of 1 until we implement a proper sizing procedure
+		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, input, 1);
 		return self.loader.load(context, key);
 	}
 	_root_count(context, input) {
@@ -854,7 +875,11 @@ class DatabaseModel extends Model {
 	_count(context, input) {
 		const self = this;
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
-		const key = self._batch_key(relationship_metadata, input, "count");
+		// use the raw json input (context.operation) to build the batch key because the input types have already been parsed by graphql, which could lead to unpredictable behavior
+		const key = self._batch_key(relationship_metadata, context.operation, "count");
+		// use the batch key as the cache key
+		// set size of 1 until we implement a proper sizing procedure
+		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, input, 1);
 		return self.loader.load(context, key);
 	}
 }

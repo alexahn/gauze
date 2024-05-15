@@ -2,6 +2,11 @@ import { graphql } from "graphql";
 
 // use this to execute graphql queries throughout the rest of the codebase
 const EXECUTE__GRAPHQL__SHELL__KERNEL = function ({ schema, context, operation, operation_name, operation_variables }) {
+	context.operation = JSON.stringify({
+		operation,
+		operation_name,
+		operation_variables,
+	});
 	return graphql({
 		schema: schema,
 		contextValue: context,

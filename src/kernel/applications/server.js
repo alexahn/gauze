@@ -101,7 +101,6 @@ class GauzeServer {
 							}
 						})
 						.then(function (agent) {
-							console.log("req.headers", req.headers);
 							if (req.headers.authorization) {
 								if (agent) {
 									return self.handle_graphql($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
@@ -154,6 +153,7 @@ class GauzeServer {
 			context.database = self.database;
 			context.transaction = transaction;
 			context.agent = agent;
+			//context.parameters = body.variables
 			//context.request_id = uuidv4()
 			return self.$gauze.kernel.shell.graphql
 				.EXECUTE__GRAPHQL__SHELL__KERNEL({
