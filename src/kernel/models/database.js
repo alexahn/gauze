@@ -48,10 +48,11 @@ class DatabaseModel extends Model {
 		const self = this;
 		return DatabaseModel._class_name(self.table_name);
 	}
-	_batch_key(source, operation, method) {
+	_batch_key(source, operation, parameters, method) {
 		const key = {
 			source: source,
 			operation: operation,
+			parameters: parameters,
 			method: method,
 		};
 		return JSON.stringify(key);
@@ -331,8 +332,8 @@ class DatabaseModel extends Model {
 	_create(context, input) {
 		const self = this;
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
-		// use the raw json input (context.parameters) to build the batch key because the input types have already been parsed by graphql, which could lead to unpredictable behavior
-		const key = self._batch_key(relationship_metadata, context.parameters, "create");
+		// use the raw json input (context.operation) to build the batch key because the input types have already been parsed by graphql, which could lead to unpredictable behavior
+		const key = self._batch_key(relationship_metadata, context.operation, "create");
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, input, 1);
@@ -576,7 +577,7 @@ class DatabaseModel extends Model {
 		const self = this;
 		const relationship_metadata = self._parse_relationship_metadata(context, input);
 		// use the raw json input (context.operation) to build the batch key because the input types have already been parsed by graphql, which could lead to unpredictable behavior
-		const key = self._batch_key(relationship_metadata, context.operatioon, "update");
+		const key = self._batch_key(relationship_metadata, context.operation, "update");
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, input, 1);

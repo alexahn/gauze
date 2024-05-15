@@ -73,6 +73,7 @@ const CREATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
+				operation: context.operation,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -168,6 +169,7 @@ const UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
+				operation: context.operation,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -256,6 +258,7 @@ const DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
+				operation: context.operation,
 			},
 			mutation_arguments,
 		).then(function (data) {

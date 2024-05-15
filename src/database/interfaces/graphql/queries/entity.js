@@ -84,7 +84,8 @@ const READ__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
-	resolve: (_source, query_arguments, context) => {
+	resolve: (_source, query_arguments, context, etc) => {
+		console.log('etc', etc)
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "query_arguments", query_arguments);
 		return CONTROLLER__ENTITY__CONTROLLER__DATABASE.read(

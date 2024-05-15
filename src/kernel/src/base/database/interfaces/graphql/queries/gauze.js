@@ -106,6 +106,7 @@ const READ__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABAS
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
+				operation: context.operation,
 			},
 			query_arguments,
 		).then(function (data) {
@@ -173,6 +174,7 @@ const COUNT__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABA
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
+				operation: context.operation,
 			},
 			query_arguments,
 		).then(function (data) {

@@ -65,6 +65,7 @@ const CREATE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
+				operation: context.operation,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -146,6 +147,7 @@ const UPDATE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
+				operation: context.operation,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -220,6 +222,7 @@ const DELETE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 				source: _source,
 				database: context.database,
 				transaction: context.transaction,
+				operation: context.operation,
 			},
 			mutation_arguments,
 		).then(function (data) {
