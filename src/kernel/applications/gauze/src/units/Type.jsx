@@ -19,10 +19,38 @@ export default function TypeUnit() {
 	const gauze = useSelector((state) => {
 		return state.services.gauze.default;
 	});
+	const fields = useSelector((state) => {
+		const fieldsParam = state.router.route.params.fields;
+		const header = model.read("HEADER", state.router.route.params.type);
+		const headerFields = header.attributes.split(" ");
+		// invert
+		function applyNegation(header, negated) {
+			console.log("APPLYING NEGATION", negated);
+			const filtered = header.slice(0);
+			Object.keys(negated).forEach(function (field) {
+				filtered.splice(filtered.indexOf(field), 1);
+			});
+			console.log("filtered", filtered);
+			return filtered;
+		}
+		if (fieldsParam) {
+			return applyNegation(headerFields, JSON.parse(decodeURIComponent(fieldsParam)));
+		} else {
+			return headerFields;
+		}
+	});
+	const where = useSelector((state) => {
+		const whereParam = state.router.route.params.where;
+		if (whereParam) {
+			return JSON.parse(decodeURIComponent(whereParam));
+		} else {
+			return {};
+		}
+	});
 	return (
 		<div id={id} key={id}>
 			{/* render a pure function component here */}
-			<Type route={route} router={router} gauze={gauze} model={model} />
+			<Type route={route} router={router} gauze={gauze} model={model} fields={fields} where={where} />
 		</div>
 	);
 }

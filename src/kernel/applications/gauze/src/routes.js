@@ -239,7 +239,7 @@ const routes = [
 	},
 	{
 		name: "system.types.type",
-		path: "/:type?where&limit&offset&order&order_direction",
+		path: "/:type?where&limit&offset&order&order_direction&fields",
 		onActivate: function ({ dependencies, toState }) {
 			const { services } = dependencies;
 			const { gauze, model, router } = services;
