@@ -9,7 +9,7 @@ const RUD_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT = function (field) {
 			return attributes;
 		},
 		read: function (attributes) {
-			//delete attributes[field];
+			delete attributes[field];
 			return attributes;
 		},
 		delete: function (attributes) {
@@ -30,7 +30,7 @@ const CREATED_AT_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT = function (field) {
 			return attributes;
 		},
 		read: function (attributes) {
-			//delete attributes[field];
+			delete attributes[field];
 			return attributes;
 		},
 		delete: function (attributes) {
@@ -51,7 +51,7 @@ const UPDATED_AT_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT = function (field) {
 			return attributes;
 		},
 		read: function (attributes) {
-			//delete attributes[field];
+			delete attributes[field];
 			return attributes;
 		},
 		delete: function (attributes) {
@@ -72,7 +72,7 @@ const DELETED_AT_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT = function (field) {
 			return attributes;
 		},
 		read: function (attributes) {
-			//adelete attributes[field];
+			delete attributes[field];
 			return attributes;
 		},
 		delete: function (attributes) {

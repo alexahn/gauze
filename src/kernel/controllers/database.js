@@ -54,9 +54,9 @@ class DatabaseController extends Controller {
 			operation,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.read:enter`, "input", input);
-		input.where = self.model.pre_serialize_middleware(input.where, "read");
-		input.where = self.model.serialize(input.where, "read");
-		input.where = self.model.post_serialize_middleware(input.where, "read");
+		//input.where = self.model.pre_serialize_middleware(input.where, "read");
+		//input.where = self.model.serialize(input.where, "read");
+		//input.where = self.model.post_serialize_middleware(input.where, "read");
 		// TODO: CONTINUE ADDING THE SERIALIZATION LOGIC HERE
 		return self.model.read(model_context, input).then(function (rows) {
 			return rows.map(function (row) {
