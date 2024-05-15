@@ -34,8 +34,11 @@ class GauzeService {
 					self.deleteEnvironmentJWT();
 				} else if (self.getProxyJWT() === jwt) {
 					self.deleteProxyJWT();
+					self.deleteEnvironmentJWT();
 				} else if (self.getSystemJWT() === jwt) {
 					self.deleteSystemJWT();
+					self.deleteProxyJWT();
+					self.deleteEnvironmentJWT();
 				} else {
 					throw new Error("Internal error: invalid jwt");
 				}

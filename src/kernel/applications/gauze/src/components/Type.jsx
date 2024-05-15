@@ -96,7 +96,7 @@ export default function Type({ route, router, gauze, model }) {
 		}
 
 		return (
-			<div className="mw-100">
+			<div className="mw-100 fl">
 				<h1 align="right">{header.type}</h1>
 				<div align="right">Type</div>
 				<hr />
@@ -150,11 +150,11 @@ export default function Type({ route, router, gauze, model }) {
 							{fields.map(function (field) {
 								return (
 									<tr align="right" key={field} className="flex flex-wrap">
-										<td className="mw4 w4">
+										<td className="mw4 w4 overflow-x-hidden">
 											<input className="mw4" onChange={updateFilter(field)} onKeyDown={applyFilter(field)} defaultValue={where[field] ? where[field] : ""} />
 										</td>
 										<td className="relative mw4 w4 pa1 row" tabindex="0">
-											<div className="truncate-ns">
+											<div className="truncate-ns field">
 												<b>{field}</b>
 											</div>
 											<span className="dn bg-white mw9 top-0 right-0 pa1 absolute f4 tooltip">
@@ -163,9 +163,9 @@ export default function Type({ route, router, gauze, model }) {
 										</td>
 										{page.map(function (item) {
 											return (
-												<td key={`${item[header.primary_key]}.${field}`} className="relative mw4 w4 pa1 row" tabindex="0">
+												<td align="left" key={`${item[header.primary_key]}.${field}`} className="relative mw4 w4 pa1 row" tabindex="0">
 													<div className="truncate-ns">{item[field]}</div>
-													<span className="dn bg-white mw9 top-0 right-0 pa1 absolute f4 tooltip">{item[field]}</span>
+													<span className="dn bg-white mw9 top-0 left-0 pa1 absolute f4 tooltip">{item[field]}</span>
 												</td>
 											);
 										})}

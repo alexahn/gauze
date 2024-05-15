@@ -557,3 +557,5 @@
 	[ ] manually encoding and decoding seems to work
 [x] store jwts in local storage
 	[x] clear jwts when jwts expire
+[ ] figure out the general structure of layouts and sections
+	[ ] configure all the styles from the root node and downwards in a consistent manner

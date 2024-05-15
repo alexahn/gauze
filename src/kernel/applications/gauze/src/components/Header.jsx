@@ -13,7 +13,7 @@ export default function Header({ router, gauze, model }) {
 			<hr />
 			{headers.map(function (header, index) {
 				return (
-					<div key={header.name}>
+					<div key={header.name} className="truncate-ns">
 						<a href={router.buildUrl("system.types.type", { type: header.name })}>{header.type}</a>
 					</div>
 				);

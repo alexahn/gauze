@@ -2,6 +2,23 @@ table,
 th,
 td {
 	border: 1px solid black;
+	border-spacing: 1px;
+}
+
+.flex th {
+	margin-top: 1px;
+	margin-left: 1px;
+	margin-right: 1px;
+}
+.flex td {
+	margin: 1px;
+}
+.field {
+	direction: rtl;
+}
+
+table .truncate-ns {
+	padding-left: 1px;
 }
 
 .row:focus .tooltip {
