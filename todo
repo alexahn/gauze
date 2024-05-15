@@ -573,3 +573,5 @@
 	[ ] maybe use something like zod for input validation
 [x] update headers method to return field definitions
 	[x] align header response type to look like the abstract definition as much as possible
+[ ] add column length information to fields so that we can also display an input field of the same size
+	[ ] ideally we want to parse this data from the migration files, but we can require the user to provide it in the abstract definition

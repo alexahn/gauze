@@ -292,6 +292,7 @@ const routes = [
 						})
 						.catch(function (err) {
 							console.log(err);
+							// throw?
 						});
 				},
 				function () {
@@ -378,7 +379,25 @@ const routes = [
 		name: "system.types.item.type.id",
 		path: "/:id?mode",
 		onActivate: function ({ dependencies, toState }) {
-			return Promise.resolve(true);
+			const { services } = dependencies;
+			const { gauze, model, router } = services;
+			const header = model.default.read("HEADER", toState.params.type);
+			return gauze.default
+				.read(header, {
+					where: {
+						[header.primary_key]: toState.params.id,
+					},
+				})
+				.then(function (items) {
+					items.forEach(function (item) {
+						model.default.create(header.graphql_meta_type, item.attributes[header.primary_key], item.attributes);
+					});
+					return Promise.resolve(true);
+				})
+				.catch(function (err) {
+					console.log(err);
+					// throw?
+				});
 		},
 		layout: layouts.anaconda.default,
 		sections: {
