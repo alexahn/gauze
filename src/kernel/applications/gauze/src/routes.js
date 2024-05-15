@@ -111,12 +111,16 @@ const routes = [
 			const proxyJWT = gauze.default.getProxyJWT();
 			if (proxySessions && proxySessions.length) {
 				const proxy = proxySessions[0];
-				return gauze.default.proxies(proxy).then(function (proxies) {
-					proxies.forEach(function (proxy) {
-						model.default.create(proxy._metadata.type, proxy._metadata.id, proxy.attributes);
+				return gauze.default
+					.proxies({
+						gauze__proxy__id: proxy.gauze__session__agent_id,
+					})
+					.then(function (proxies) {
+						proxies.forEach(function (proxy) {
+							model.default.create(proxy._metadata.type, proxy._metadata.id, proxy.attributes);
+						});
+						return Promise.resolve(true);
 					});
-					return Promise.resolve(true);
-				});
 			} else if (proxyJWT) {
 				const decoded = jose.decodeProtectedHeader(proxyJWT);
 				const proxy = {

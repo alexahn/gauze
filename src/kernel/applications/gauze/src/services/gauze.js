@@ -350,7 +350,9 @@ query read_proxy($proxy: Proxy_Query__Attributes) {
 }
 `;
 		const variables = {
-			gauze__proxy__root_id: proxy.gauze__proxy__id,
+			proxy: {
+				gauze__proxy__root_id: proxy.gauze__proxy__id,
+			},
 		};
 		return self
 			.proxySystem({
