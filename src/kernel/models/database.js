@@ -280,18 +280,18 @@ class DatabaseModel extends Model {
 				return result;
 			});
 	}
-	_parse_relationship_metadata(context, input) {
+	_parse_relationship_metadata(context, parameters) {
 		const self = this;
 		const { source } = context;
-		const relationship = source && source._metadata ? source._metadata : input.parent && input.parent.id && input.parent.type ? input.parent : null;
+		const relationship = source && source._metadata ? source._metadata : parameters.parent && parameters.parent.id && parameters.parent.type ? parameters.parent : null;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.parse_relationship:enter`, "relationship", relationship);
 		return relationship;
 	}
-	_root_create(context, input) {
+	_root_create(context, parameters) {
 		const self = this;
 		const { source, database, transaction } = context;
-		const { attributes } = input;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.create.enter`, "input", input);
+		const { attributes } = parameters;
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.create.enter`, "parameters", parameters);
 		const sql = database(self.table_name).insert(attributes, [self.primary_key]).transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.create:debug_sql`, sql.toString());
@@ -322,9 +322,9 @@ class DatabaseModel extends Model {
 				throw err;
 			});
 	}
-	_relationship_create(context, input) {
+	_relationship_create(context, parameters) {
 		const self = this;
-		return self._root_create(context, input);
+		return self._root_create(context, parameters);
 	}
 	// create a row
 	_create(context, parameters) {
@@ -336,7 +336,7 @@ class DatabaseModel extends Model {
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, key);
 	}
-	_root_read(context, input) {
+	_root_read(context, parameters) {
 		const self = this;
 		const { source, database, transaction } = context;
 		const {
@@ -350,9 +350,9 @@ class DatabaseModel extends Model {
 			order = this.primary_key,
 			order_direction = "asc",
 			order_nulls = "first",
-		} = input;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "input", input);
-		const relationship_metadata = self._parse_relationship_metadata(context, input);
+		} = parameters;
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
+		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 		const sql = database(self.table_name)
 			.where(function (builder) {
 				builder.where(where);
@@ -389,7 +389,7 @@ class DatabaseModel extends Model {
 				throw err;
 			});
 	}
-	_relationship_read(context, input) {
+	_relationship_read(context, parameters) {
 		const self = this;
 		const { source, database, transaction } = context;
 		const {
@@ -403,9 +403,9 @@ class DatabaseModel extends Model {
 			order = this.primary_key,
 			order_direction = "asc",
 			order_nulls = "first",
-		} = input;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "input", input);
-		const relationship_metadata = self._parse_relationship_metadata(context, input);
+		} = parameters;
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
+		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 		// do join here based on source metadata
 		// use structure resolvers to convert graphql type to table_name name
 		// relationships are one directional, so use from as the parent
@@ -478,11 +478,11 @@ class DatabaseModel extends Model {
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, key);
 	}
-	_root_update(context, input) {
+	_root_update(context, parameters) {
 		var self = this;
 		const { source, database, transaction } = context;
-		var { attributes, where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = input;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "input", input);
+		var { attributes, where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = parameters;
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
 		const sql = database(self.table_name)
 			.where(function (builder) {
 				builder.where(where);
@@ -514,7 +514,7 @@ class DatabaseModel extends Model {
 						database,
 						transaction,
 					},
-					input,
+					parameters,
 				);
 			})
 			.catch(function (err) {
@@ -522,13 +522,13 @@ class DatabaseModel extends Model {
 				throw err;
 			});
 	}
-	_relationship_update(context, input) {
+	_relationship_update(context, parameters) {
 		const self = this;
 		const { source, database, transaction } = context;
-		const { attributes, where, where_in = {}, where_not_in = {} } = input;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "input", input);
+		const { attributes, where, where_in = {}, where_not_in = {} } = parameters;
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
 		const MAXIMUM_ROWS = 4294967296;
-		const relationship_metadata = self._parse_relationship_metadata(context, input);
+		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 		// todo: hook up lru cache when dealing with id arrays
 		return self
 			.read(
@@ -538,7 +538,7 @@ class DatabaseModel extends Model {
 					transaction,
 				},
 				{
-					...input,
+					...parameters,
 					limit: MAXIMUM_ROWS,
 				},
 			)
@@ -559,7 +559,7 @@ class DatabaseModel extends Model {
 							database,
 							transaction,
 						},
-						input,
+						parameters,
 					);
 				});
 			})
@@ -637,11 +637,11 @@ class DatabaseModel extends Model {
 			}),
 		);
 	}
-	_root_delete(context, input) {
+	_root_delete(context, parameters) {
 		const self = this;
 		const { source, database, transaction } = context;
-		const { where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, limit = 128 } = input;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "input", input);
+		const { where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, limit = 128 } = parameters;
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		const MAXIMUM_ROWS = 4294967296;
 		// todo: use attributes and update deleted_at instead of deleting the row
 		// do a read first
@@ -653,7 +653,7 @@ class DatabaseModel extends Model {
 					transaction,
 				},
 				{
-					...input,
+					...parameters,
 					limit: MAXIMUM_ROWS,
 				},
 			)
@@ -695,13 +695,13 @@ class DatabaseModel extends Model {
 				throw err;
 			});
 	}
-	_relationship_delete(context, input) {
+	_relationship_delete(context, parameters) {
 		const self = this;
 		const { source, database, transaction } = context;
-		const { where, where_in = {}, where_not_in = {}, limit = 128 } = input;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "input", input);
+		const { where, where_in = {}, where_not_in = {}, limit = 128 } = parameters;
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		const MAXIMUM_ROWS = 4294967296;
-		const relationship_metadata = self._parse_relationship_metadata(context, input);
+		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 		// todo: hook up lru cache when dealing with id arrays
 		return self
 			.read(
@@ -711,7 +711,7 @@ class DatabaseModel extends Model {
 					transaction,
 				},
 				{
-					...input,
+					...parameters,
 					limit: MAXIMUM_ROWS,
 				},
 			)
@@ -746,12 +746,12 @@ class DatabaseModel extends Model {
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, key);
 	}
-	_root_count(context, input) {
+	_root_count(context, parameters) {
 		const self = this;
 		const { source, database, transaction } = context;
-		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = input;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "input", input);
-		const relationship_metadata = self._parse_relationship_metadata(context, input);
+		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = parameters;
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
+		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
 		const reversed = {};
 		if (count_has_key) {
@@ -792,12 +792,12 @@ class DatabaseModel extends Model {
 				throw err;
 			});
 	}
-	_relationship_count(context, input) {
+	_relationship_count(context, parameters) {
 		const self = this;
 		const { source, database, transaction } = context;
-		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = input;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "input", input);
-		const relationship_metadata = self._parse_relationship_metadata(context, input);
+		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = parameters;
+		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
+		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 
 		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
 		const reversed = {};
