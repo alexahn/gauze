@@ -48,10 +48,10 @@ class DatabaseModel extends Model {
 		const self = this;
 		return DatabaseModel._class_name(self.table_name);
 	}
-	_batch_key(source, operation, method) {
+	_batch_key(source, parameters, method) {
 		const key = {
 			source: source,
-			operation: operation,
+			parameters: parameters,
 			method: method,
 		};
 		return JSON.stringify(key);
@@ -78,7 +78,7 @@ class DatabaseModel extends Model {
 			const parsed = JSON.parse(key);
 			const subkey = JSON.stringify({
 				method: parsed.method,
-				operation: parsed.operation,
+				parameters: parsed.parameters,
 				raw_key: key,
 			});
 			if (subkey_map[subkey]) {
@@ -104,7 +104,7 @@ class DatabaseModel extends Model {
 				.map(function (item) {
 					return {
 						method: parsed.method,
-						operation: parsed.operation,
+						parameters: parsed.parameters,
 						source: item.source,
 						index: item.index,
 						raw_key: parsed.raw_key,
@@ -121,7 +121,7 @@ class DatabaseModel extends Model {
 				.map(function (item) {
 					return {
 						method: parsed.method,
-						operation: parsed.operation,
+						parameters: parsed.parameters,
 						source: item.source,
 						index: item.index,
 						raw_key: parsed.raw_key,
@@ -137,8 +137,7 @@ class DatabaseModel extends Model {
 				groups.map(function (group) {
 					return Promise.all(
 						group.map(function (key) {
-							// use key to find method
-							//const parameters = key.parameters;
+							// rich typed parameters (post graphql parsing) pulled from cache
 							const parameters = TIERED_CACHE__LRU__CACHE__KERNEL.get(key.raw_key).value;
 							if (key.method === "create") {
 								return self.model._root_create(contexts[key.index], parameters).then(function (data) {
@@ -207,7 +206,7 @@ class DatabaseModel extends Model {
 					groups.map(function (group) {
 						return Promise.all(
 							group.map(function (key) {
-								//const parameters = key.parameters;
+								// rich typed parameters (post graphql parsing) pulled from cache
 								const parameters = TIERED_CACHE__LRU__CACHE__KERNEL.get(key.raw_key).value;
 								if (key.method === "create") {
 									return self.model._relationship_create(contexts[key.index], parameters).then(function (data) {
@@ -328,13 +327,13 @@ class DatabaseModel extends Model {
 		return self._root_create(context, input);
 	}
 	// create a row
-	_create(context, input) {
+	_create(context, parameters) {
 		const self = this;
-		const relationship_metadata = self._parse_relationship_metadata(context, input);
-		const key = self._batch_key(relationship_metadata, input, "create");
+		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
+		const key = self._batch_key(relationship_metadata, parameters, "create");
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
-		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, input, 1);
+		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, key);
 	}
 	_root_read(context, input) {
@@ -470,13 +469,13 @@ class DatabaseModel extends Model {
 			});
 	}
 	// read a row
-	_read(context, input) {
+	_read(context, parameters) {
 		const self = this;
-		const relationship_metadata = self._parse_relationship_metadata(context, input);
-		const key = self._batch_key(relationship_metadata, input, "read");
+		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
+		const key = self._batch_key(relationship_metadata, parameters, "read");
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
-		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, input, 1);
+		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, key);
 	}
 	_root_update(context, input) {
@@ -570,13 +569,13 @@ class DatabaseModel extends Model {
 			});
 	}
 	// update a row
-	_update(context, input) {
+	_update(context, parameters) {
 		const self = this;
-		const relationship_metadata = self._parse_relationship_metadata(context, input);
-		const key = self._batch_key(relationship_metadata, input, "update");
+		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
+		const key = self._batch_key(relationship_metadata, parameters, "update");
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
-		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, input, 1);
+		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, key);
 	}
 	_cleanup_delete(context, valid_ids) {
@@ -738,13 +737,13 @@ class DatabaseModel extends Model {
 			});
 	}
 	// delete a row
-	_delete(context, input) {
+	_delete(context, parameters) {
 		const self = this;
-		const relationship_metadata = self._parse_relationship_metadata(context, input);
-		const key = self._batch_key(relationship_metadata, input, "delete");
+		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
+		const key = self._batch_key(relationship_metadata, parameters, "delete");
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
-		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, input, 1);
+		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, key);
 	}
 	_root_count(context, input) {
@@ -868,13 +867,13 @@ class DatabaseModel extends Model {
 				throw err;
 			});
 	}
-	_count(context, input) {
+	_count(context, parameters) {
 		const self = this;
-		const relationship_metadata = self._parse_relationship_metadata(context, input);
-		const key = self._batch_key(relationship_metadata, input, "count");
+		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
+		const key = self._batch_key(relationship_metadata, parameters, "count");
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
-		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, input, 1);
+		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, key);
 	}
 }

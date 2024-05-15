@@ -24,12 +24,11 @@ class DatabaseController extends Controller {
 	}
 	_create(context, input) {
 		const self = this;
-		const { user, source, database, transaction, operation } = context;
+		const { user, source, database, transaction } = context;
 		const model_context = {
 			source,
 			database,
 			transaction,
-			operation,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.create:enter`, "input", input);
 		input.attributes = self.model.pre_serialize_middleware(input.attributes, "create");
@@ -46,18 +45,16 @@ class DatabaseController extends Controller {
 	}
 	_read(context, input) {
 		const self = this;
-		const { user, source, database, transaction, operation } = context;
+		const { user, source, database, transaction } = context;
 		const model_context = {
 			source,
 			database,
 			transaction,
-			operation,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.read:enter`, "input", input);
 		input.where = self.model.pre_serialize_middleware(input.where, "read");
 		input.where = self.model.serialize(input.where, "read");
 		input.where = self.model.post_serialize_middleware(input.where, "read");
-		// TODO: CONTINUE ADDING THE SERIALIZATION LOGIC HERE
 		return self.model.read(model_context, input).then(function (rows) {
 			return rows.map(function (row) {
 				row = self.model.pre_deserialize_middleware(row, "read");
@@ -69,12 +66,11 @@ class DatabaseController extends Controller {
 	}
 	_update(context, input) {
 		const self = this;
-		const { user, source, database, transaction, operation } = context;
+		const { user, source, database, transaction } = context;
 		const model_context = {
 			source,
 			database,
 			transaction,
-			operation,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.update:enter`, "input", input);
 		input.where = self.model.pre_serialize_middleware(input.where, "read");
@@ -94,12 +90,11 @@ class DatabaseController extends Controller {
 	}
 	_delete(context, input) {
 		const self = this;
-		const { user, source, database, transaction, operation } = context;
+		const { user, source, database, transaction } = context;
 		const model_context = {
 			source,
 			database,
 			transaction,
-			operation,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.delete:enter`, "input", input);
 		input.where = self.model.pre_serialize_middleware(input.where, "read");
@@ -116,12 +111,11 @@ class DatabaseController extends Controller {
 	}
 	_count(context, input) {
 		const self = this;
-		const { user, source, database, transaction, operation } = context;
+		const { user, source, database, transaction } = context;
 		const model_context = {
 			source,
 			database,
 			transaction,
-			operation,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.count:enter`, "input", input);
 		input.where = self.model.pre_serialize_middleware(input.where, "read");
