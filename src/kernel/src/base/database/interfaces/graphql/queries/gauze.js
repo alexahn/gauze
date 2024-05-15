@@ -101,6 +101,9 @@ const READ__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABAS
 			"query_arguments",
 			query_arguments,
 		);
+		if (!query_arguments.where) {
+			throw new Error("Field 'where' is required");
+		}
 		return CONTROLLER__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE.read(
 			{
 				source: _source,
@@ -169,6 +172,9 @@ const COUNT__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABA
 			"query_arguments",
 			query_arguments,
 		);
+		if (!query_arguments.where) {
+			throw new Error("Field 'where' is required");
+		}
 		return CONTROLLER__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE.count(
 			{
 				source: _source,

@@ -93,6 +93,9 @@ const READ__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			"query_arguments",
 			query_arguments,
 		);
+		if (!query_arguments.where) {
+			throw new Error("Field 'where' is required");
+		}
 		return CONTROLLER__AGENT_PERSON__CONTROLLER__DATABASE.read(
 			{
 				source: _source,
@@ -149,6 +152,9 @@ const COUNT__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			"query_arguments",
 			query_arguments,
 		);
+		if (!query_arguments.where) {
+			throw new Error("Field 'where' is required");
+		}
 		return CONTROLLER__AGENT_PERSON__CONTROLLER__DATABASE.count(
 			{
 				source: _source,

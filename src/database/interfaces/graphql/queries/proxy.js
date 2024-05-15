@@ -87,6 +87,9 @@ const READ__PROXY__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	resolve: (_source, query_arguments, context) => {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__PROXY__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__PROXY__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "query_arguments", query_arguments);
+		if (!query_arguments.where) {
+			throw new Error("Field 'where' is required");
+		}
 		return CONTROLLER__PROXY__CONTROLLER__DATABASE.read(
 			{
 				source: _source,
@@ -137,6 +140,9 @@ const COUNT__PROXY__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	resolve: (_source, query_arguments, context) => {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__PROXY__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__PROXY__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "query_arguments", query_arguments);
+		if (!query_arguments.where) {
+			throw new Error("Field 'where' is required");
+		}
 		return CONTROLLER__PROXY__CONTROLLER__DATABASE.count(
 			{
 				source: _source,

@@ -93,6 +93,9 @@ const READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			"query_arguments",
 			query_arguments,
 		);
+		if (!query_arguments.where) {
+			throw new Error("Field 'where' is required");
+		}
 		return CONTROLLER__WHITELIST__CONTROLLER__DATABASE.read(
 			{
 				source: _source,
@@ -149,6 +152,9 @@ const COUNT__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			"query_arguments",
 			query_arguments,
 		);
+		if (!query_arguments.where) {
+			throw new Error("Field 'where' is required");
+		}
 		return CONTROLLER__WHITELIST__CONTROLLER__DATABASE.count(
 			{
 				source: _source,
