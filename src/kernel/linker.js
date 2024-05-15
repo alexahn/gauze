@@ -12,7 +12,7 @@ function pascal_snake_case(name) {
 
 function HEADER__LINKER__KERNEL(query_root, entities) {
 	const HEADER__HEADER__STRUCTURE = {
-		type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.header.TYPE__HEADER__STRUCTURE),
+		type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.header.HEADER_TYPE__HEADER__STRUCTURE),
 		args: {},
 		resolve: function (source, query_arguments, context) {
 			// reverse map from entities, keys are graphql meta types
@@ -20,6 +20,17 @@ function HEADER__LINKER__KERNEL(query_root, entities) {
 				.map(function (name) {
 					const module = $abstract.entities[name].default($abstract);
 					if (entities[module.graphql_meta_type]) {
+						const fields = Object.values(module.fields).map(function (field) {
+							return {
+								name: field.name,
+								sql_type: field.sql_type,
+								graphql_type: {
+									name: field.graphql_type.name,
+									description: field.graphql_type.description,
+								},
+								description: field.description,
+							};
+						});
 						const pascal_snake_name = pascal_snake_case(module.name);
 						// todo: do this the right way by reading the name field from the type definition
 						// todo: we can do this by defining an ATTRIBUTES object in the schema and passing it into this function
@@ -31,7 +42,8 @@ function HEADER__LINKER__KERNEL(query_root, entities) {
 							name: module.name,
 							table_name: module.table_name,
 							primary_key: module.primary_key,
-							type: module.graphql_meta_type,
+							graphql_meta_type: module.graphql_meta_type,
+							fields: fields,
 							attributes: module.graphql_attributes_string,
 							attributes_query_type: attributes_query_type,
 							attributes_mutation_type: attributes_mutation_type,

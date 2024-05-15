@@ -1,6 +1,48 @@
 import * as $abstract from "./../../abstract/index.js";
 
-const FIELDS__HEADER__STRUCTURE = {
+const GRAPHQL_TYPE_FIELDS__HEADER__STRUCTURE = {
+	name: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "graphql type name",
+	},
+	description: {
+		type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		description: "graphql type description",
+	},
+};
+
+const GRAPHQL_TYPE_TYPE__HEADER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "GraphQL_Type",
+	description: "graphql type",
+	fields: () => GRAPHQL_TYPE_FIELDS__HEADER__STRUCTURE,
+});
+
+const HEADER_FIELD_FIELDS__HEADER__STRUCTURE = {
+	name: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "field name",
+	},
+	sql_type: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "field sql_type",
+	},
+	graphql_type: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT(GRAPHQL_TYPE_TYPE__HEADER__STRUCTURE),
+		description: "field graphql_type",
+	},
+	description: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "field description",
+	},
+};
+
+const HEADER_FIELD_TYPE__HEADER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Header_Field",
+	description: "header",
+	fields: () => HEADER_FIELD_FIELDS__HEADER__STRUCTURE,
+});
+
+const HEADER_FIELDS__HEADER__STRUCTURE = {
 	name: {
 		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "name",
@@ -13,9 +55,13 @@ const FIELDS__HEADER__STRUCTURE = {
 		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "primary key",
 	},
-	type: {
+	graphql_meta_type: {
 		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "graphql meta type",
+	},
+	fields: {
+		type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(HEADER_FIELD_TYPE__HEADER__STRUCTURE),
+		description: "fields",
 	},
 	attributes: {
 		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
@@ -35,10 +81,17 @@ const FIELDS__HEADER__STRUCTURE = {
 	},
 };
 
-const TYPE__HEADER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const HEADER_TYPE__HEADER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Header",
 	description: "header",
-	fields: () => FIELDS__HEADER__STRUCTURE,
+	fields: () => HEADER_FIELDS__HEADER__STRUCTURE,
 });
 
-export { FIELDS__HEADER__STRUCTURE, TYPE__HEADER__STRUCTURE };
+export {
+	GRAPHQL_TYPE_FIELDS__HEADER__STRUCTURE,
+	GRAPHQL_TYPE_TYPE__HEADER__STRUCTURE,
+	HEADER_FIELD_FIELDS__HEADER__STRUCTURE,
+	HEADER_FIELD_TYPE__HEADER__STRUCTURE,
+	HEADER_FIELDS__HEADER__STRUCTURE,
+	HEADER_TYPE__HEADER__STRUCTURE,
+};

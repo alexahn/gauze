@@ -1,7 +1,17 @@
 import React from "react";
 import { useState } from "react";
 
-function paginationItems({ showFirstButton = false, showLastButton = false, hidePrevButton = false, hideNextButton = false, boundaryCount = 1, siblingCount = 1, page, count = 1 }) {
+function paginationItems({
+	showFirstButton = false,
+	showLastButton = false,
+	hidePrevButton = false,
+	hideNextButton = false,
+	boundaryCount = 1,
+	siblingCount = 1,
+	page,
+	count = 1,
+	reverse = false,
+}) {
 	const range = (start, end) => {
 		const length = end - start + 1;
 		return Array.from(
@@ -84,15 +94,19 @@ function paginationItems({ showFirstButton = false, showLastButton = false, hide
 					selected: false,
 				};
 	});
+	if (reverse) {
+		items.reverse();
+	}
 	return items;
 }
 
-export default function Pagination({ page, count, href }) {
+export default function Pagination({ page, count, href, reverse }) {
 	// generate an array of items to render
 	// pass the items to the renderOption function
 	const items = paginationItems({
 		page: page,
 		count: count,
+		reverse: reverse,
 	});
 	return (
 		<nav>
@@ -121,7 +135,7 @@ export default function Pagination({ page, count, href }) {
 						children = (
 							<a href={href(item)}>
 								<button type="button" {...rest}>
-									{type === "previous" ? "<" : type === "next" ? ">" : type}
+									{type === "previous" ? (reverse ? ">" : "<") : type === "next" ? (reverse ? "<" : ">") : type}
 								</button>
 							</a>
 						);

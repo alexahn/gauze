@@ -14,7 +14,7 @@ export default function Header({ router, gauze, model }) {
 			{headers.map(function (header, index) {
 				return (
 					<div key={header.name} className="truncate-ns">
-						<a href={router.buildUrl("system.types.type", { type: header.name })}>{header.type}</a>
+						<a href={router.buildUrl("system.types.list.type", { type: header.name })}>{header.graphql_meta_type}</a>
 					</div>
 				);
 			})}

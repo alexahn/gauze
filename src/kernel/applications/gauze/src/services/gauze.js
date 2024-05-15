@@ -372,7 +372,16 @@ query header {
 		name
 		table_name
 		primary_key
-		type
+		graphql_meta_type
+		fields {
+			name
+			sql_type
+			graphql_type {
+				name
+				description
+			}
+			description
+		}
 		attributes
 		attributes_query_type
 		attributes_mutation_type

@@ -133,7 +133,6 @@ const routes = [
 					return Promise.resolve(true);
 				});
 			} else {
-				console.log("proxy jwt", gauze.default.getProxyJWT(), gauze.default);
 				return Promise.reject({ redirect: { name: "environment.signin" } });
 			}
 		},
@@ -242,14 +241,33 @@ const routes = [
 		},
 	},
 	{
-		name: "system.types.type",
+		name: "system.types.list",
+		path: "/list",
+		onActivate: function ({ dependencies, toState }) {
+			return Promise.resolve(true);
+		},
+		layout: layouts.anaconda.default,
+		sections: {
+			left: sections.almond.default,
+			right: sections.alder.default,
+		},
+		units: {
+			left: {
+				body: units.header.default,
+				header: units.adamite.default,
+			},
+			right: {
+				body: units.azurite.default,
+			},
+		},
+	},
+	{
+		name: "system.types.list.type",
 		path: "/:type?where&limit&offset&order&order_direction&fields",
 		onActivate: function ({ dependencies, toState }) {
 			const { services } = dependencies;
 			const { gauze, model, router } = services;
 			const header = model.default.read("HEADER", toState.params.type);
-			console.log("system header", header);
-			console.log("toState", toState.params);
 			const transactions = [
 				function () {
 					return gauze.default
@@ -261,15 +279,13 @@ const routes = [
 							order_direction: toState.params.order_direction,
 						})
 						.then(function (items) {
-							console.log("system items", items);
 							items.forEach(function (item) {
-								model.default.create(header.type, item.attributes[header.primary_key], item.attributes);
+								model.default.create(header.graphql_meta_type, item.attributes[header.primary_key], item.attributes);
 							});
 							const ids = items.map(function (item) {
 								return item.attributes[header.primary_key];
 							});
 							// create a pagination record for the results tied to the route/query
-							console.log("router", router);
 							const pagination_key = router.default.buildUrl(toState.name, toState.params);
 							model.default.create("PAGINATION_SET", pagination_key, ids);
 							return Promise.resolve(true);
@@ -287,7 +303,6 @@ const routes = [
 							where: toState.params.where ? JSON.parse(decodeURIComponent(toState.params.where)) : {},
 						})
 						.then(function (counts) {
-							console.log("counts", counts);
 							// store these results for this query/url
 							const pagination_key = router.default.buildUrl(toState.name, toState.params);
 							model.default.create("PAGINATION_COUNT", pagination_key, counts);
@@ -313,7 +328,70 @@ const routes = [
 			},
 			right: {
 				//header: units.header.default,
-				body: units.type.default,
+				body: units.typeList.default,
+			},
+		},
+	},
+	{
+		name: "system.types.item",
+		path: "/item",
+		onActivate: function ({ dependencies, toState }) {
+			return Promise.resolve(true);
+		},
+		layout: layouts.anaconda.default,
+		sections: {
+			left: sections.almond.default,
+			right: sections.alder.default,
+		},
+		units: {
+			left: {
+				body: units.header.default,
+				header: units.adamite.default,
+			},
+			right: {
+				body: units.azurite.default,
+			},
+		},
+	},
+	{
+		name: "system.types.item.type",
+		path: "/:type",
+		onActivate: function ({ dependencies, toState }) {
+			return Promise.resolve(true);
+		},
+		layout: layouts.anaconda.default,
+		sections: {
+			left: sections.almond.default,
+			right: sections.alder.default,
+		},
+		units: {
+			left: {
+				body: units.header.default,
+				header: units.adamite.default,
+			},
+			right: {
+				body: units.azurite.default,
+			},
+		},
+	},
+	{
+		name: "system.types.item.type.id",
+		path: "/:id?mode",
+		onActivate: function ({ dependencies, toState }) {
+			return Promise.resolve(true);
+		},
+		layout: layouts.anaconda.default,
+		sections: {
+			left: sections.almond.default,
+			right: sections.alder.default,
+		},
+		units: {
+			left: {
+				body: units.header.default,
+				header: units.adamite.default,
+			},
+			right: {
+				body: units.typeItem.default,
 			},
 		},
 	},

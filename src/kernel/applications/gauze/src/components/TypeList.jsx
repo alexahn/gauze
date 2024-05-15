@@ -7,7 +7,7 @@ import Pagination from "./Pagination.jsx";
 
 import { FileTextIcon, TrashIcon, Pencil2Icon } from "@radix-ui/react-icons";
 
-export default function Type({ route, router, gauze, model, where, fields }) {
+export default function TypeList({ route, router, gauze, model, where, fields }) {
 	const header = model.read("HEADER", route.params.type);
 	const headerFields = header.attributes.split(" ");
 	const [localWhere, setLocalWhere] = useState(where);
@@ -23,16 +23,14 @@ export default function Type({ route, router, gauze, model, where, fields }) {
 	if (pagination_count && pagination_count.length && pagination_set) {
 		const total = pagination_count[0].count;
 		const page_current = Math.floor(Math.max(offset / limit) + 1);
-		const page_max_no_skew = Math.floor(Math.max(total / limit));
+		const page_max_no_skew = Math.ceil(Math.max(total / limit));
 		const page_max = page_max_no_skew < page_current ? page_current : page_max_no_skew;
-		console.log("pagination_set", pagination_set);
-		console.log("pagination_count", pagination_count);
-		console.log("page_current", page_current);
-		console.log("page_max", page_max);
-		const page = pagination_set.map(function (id) {
-			return model.read(header.type, id);
-		});
-
+		const page = pagination_set
+			.map(function (id) {
+				return model.read(header.graphql_meta_type, id);
+			})
+			.reverse();
+		console.log("header", header);
 		function href(item) {
 			var paginate;
 			if (item.type === "previous") {
@@ -109,12 +107,12 @@ export default function Type({ route, router, gauze, model, where, fields }) {
 		}
 
 		return (
-			<div className="mw-100 fl">
-				<h1 align="right">{header.type}</h1>
-				<div align="right">Type</div>
+			<div className="mw-100 fr">
+				<h1 align="right">{header.graphql_meta_type}</h1>
+				<div align="right">Type List</div>
 				<hr />
 				<div align="right" className="cf">
-					<Pagination page={page_current} count={page_max} href={href} />
+					<Pagination page={page_current} count={page_max} href={href} reverse={true} />
 				</div>
 				<hr />
 				{/*<div className="mw-100 overflow-x-auto"> */}
@@ -122,64 +120,70 @@ export default function Type({ route, router, gauze, model, where, fields }) {
 					<table>
 						<thead className="flex flex-wrap mw-100">
 							<tr align="right" className="flex flex-wrap">
-								<th className="mw4 w4">
-									<a href={router.buildUrl(route.name, { ...route.params, where: encodeURIComponent(JSON.stringify(localWhere)) })}>
-										<button>Filter</button>
-									</a>
-								</th>
+								{page.map(function (item) {
+									return (
+										<th key={item[header.primary_key]} align="left" className="mw4 w4">
+											<a href={router.buildUrl("system.types.item.type.id", { type: route.params.type, id: item[header.primary_key], mode: "view" })}>
+												<button className="pt1 pr1 pl1">
+													<FileTextIcon />
+												</button>
+											</a>
+											<a href={router.buildUrl("system.types.item.type.id", { type: route.params.type, id: item[header.primary_key], mode: "edit" })}>
+												<button className="pt1 pr1 pl1">
+													<Pencil2Icon />
+												</button>
+											</a>
+											<a href={router.buildUrl("system.types.item.type.id", { type: route.params.type, id: item[header.primary_key], mode: "remove" })}>
+												<button className="pt1 pr1 pl1">
+													<TrashIcon />
+												</button>
+											</a>
+										</th>
+									);
+								})}
 								<th className="mw4 w4 pa1 relative row" tabIndex="0">
 									<div>FIELDS</div>
-									<span className="dn bg-white mw9 top-0 right-0 pa1 absolute f4 tooltip">
+									<span className="dn bg-light-green mw9 w5 top-0 right-0 pa1 absolute f4 tooltip">
 										{headerFields.map(function (field) {
 											return (
 												<div key={`${field}.checkbox`}>
 													{field}
-													<input type="checkbox" defaultChecked={fields.indexOf(field) >= 0} onChange={updateFields(field)} />
+													<input type="checkbox" defaultChecked={fields ? fields.indexOf(field) >= 0 : true} onChange={updateFields(field)} />
 												</div>
 											);
 										})}
 									</span>
 								</th>
-								{page.map(function (item) {
-									return (
-										<th key={item[header.primary_key]} align="left" className="mw4 w4">
-											<button className="pt1 pr1 pl1">
-												<FileTextIcon />
-											</button>
-											<button className="pt1 pr1 pl1">
-												<Pencil2Icon />
-											</button>
-											<button className="pt1 pr1 pl1">
-												<TrashIcon />
-											</button>
-										</th>
-									);
-								})}
+								<th className="mw4 w4">
+									<a href={router.buildUrl(route.name, { ...route.params, where: encodeURIComponent(JSON.stringify(localWhere)) })}>
+										<button>Filter</button>
+									</a>
+								</th>
 							</tr>
 						</thead>
 						<tbody align="right" className="mw-100">
 							{fields.map(function (field) {
 								return (
 									<tr align="right" key={field} className="flex flex-wrap">
-										<td className="mw4 w4 overflow-x-hidden">
-											<input className="mw4" onChange={updateFilter(field)} onKeyDown={applyFilter(field)} defaultValue={where[field] ? where[field] : ""} />
-										</td>
-										<td className="relative mw4 w4 pa1 row" tabIndex="0">
-											<div className="truncate-ns field">
-												<b>{field}</b>
-											</div>
-											<span className="dn bg-white mw9 top-0 right-0 pa1 absolute f4 tooltip">
-												<b>{field}</b>
-											</span>
-										</td>
 										{page.map(function (item) {
 											return (
 												<td align="left" key={`${item[header.primary_key]}.${field}`} className="relative mw4 w4 pa1 row" tabIndex="0">
 													<div className="truncate-ns">{item[field]}</div>
-													<span className="dn bg-white mw9 top-0 left-0 pa1 absolute f4 tooltip">{item[field]}</span>
+													<span className="dn bg-washed-green mw9 w5 top-0 left-0 pa1 absolute f4 tooltip">{item[field]}</span>
 												</td>
 											);
 										})}
+										<td className="relative mw4 w4 pa1 row" tabIndex="0">
+											<div className="truncate-ns field">
+												<b>{field}</b>
+											</div>
+											<span className="dn bg-light-green mw9 w5 top-0 right-0 pa1 absolute f4 tooltip">
+												<b>{field}</b>
+											</span>
+										</td>
+										<td className="mw4 w4 overflow-x-hidden">
+											<input className="mw4" onChange={updateFilter(field)} onKeyDown={applyFilter(field)} defaultValue={where[field] ? where[field] : ""} />
+										</td>
 									</tr>
 								);
 							})}
