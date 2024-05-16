@@ -10,7 +10,7 @@ function pascal_snake_case(name) {
 	return mapped.join("_");
 }
 
-function HEADER__LINKER__KERNEL(query_root, entities) {
+function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 	const HEADER__HEADER__STRUCTURE = {
 		type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.header.HEADER_TYPE__HEADER__STRUCTURE),
 		args: {},
