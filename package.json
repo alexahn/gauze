@@ -21,7 +21,11 @@
 	},
 	"author": "Alex Ahn",
 	"devDependencies": {
+		"@eslint/js": "^9.2.0",
 		"esbuild": "0.21.1",
+		"eslint": "^8.57.0",
+		"eslint-plugin-react": "^7.34.1",
+		"globals": "^15.2.0",
 		"http-server": "^14.1.1",
 		"prettier": "3.2.5",
 		"ruru": "^2.0.0-beta.11",

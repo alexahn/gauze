@@ -198,7 +198,6 @@ class EnvironmentController {
 		} else {
 			throw new Error("Session is required to sign out");
 		}
-		return {};
 	}
 	create_access_control(agent_id, agent_type, entity_id, entity_type) {
 		const parameters = {};

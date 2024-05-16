@@ -22,10 +22,10 @@ process.stdin.on("readable", function () {
 process.stdin.on("end", function () {
 	const format = process.argv[2];
 	switch (format) {
-		case "lower_snake_case":
+		case "lower_snake_case": {
 			body = body.replace(" ", "_");
 			body = body.replace("-", "_");
-			var split = body
+			const split = body
 				.split("_")
 				.map(function (part) {
 					return part.toLowerCase();
@@ -33,10 +33,11 @@ process.stdin.on("end", function () {
 				.filter(identity);
 			process.stdout.write(split.join("_"));
 			break;
-		case "lower_kebab_case":
+		}
+		case "lower_kebab_case": {
 			body = body.replace(" ", "_");
 			body = body.replace("_", "-");
-			var split = body
+			const split = body
 				.split("-")
 				.map(function (part) {
 					return part.toLowerCase();
@@ -44,10 +45,11 @@ process.stdin.on("end", function () {
 				.filter(identity);
 			process.stdout.write(split.join("-"));
 			break;
-		case "pascal_case":
+		}
+		case "pascal_case": {
 			body = body.replace(" ", "_");
 			body = body.replace("-", "_");
-			var split = body
+			const split = body
 				.split("_")
 				.map(function (part) {
 					if (part.length) {
@@ -59,10 +61,11 @@ process.stdin.on("end", function () {
 				.filter(identity);
 			process.stdout.write(split.join(""));
 			break;
-		case "pascal_snake_case":
+		}
+		case "pascal_snake_case": {
 			body = body.replace(" ", "_");
 			body = body.replace("-", "_");
-			var split = body
+			const split = body
 				.split("_")
 				.map(function (part) {
 					if (part.length) {
@@ -74,10 +77,11 @@ process.stdin.on("end", function () {
 				.filter(identity);
 			process.stdout.write(split.join("_"));
 			break;
-		case "upper_snake_case":
+		}
+		case "upper_snake_case": {
 			body = body.replace(" ", "_");
 			body = body.replace("-", "_");
-			var split = body
+			const split = body
 				.split("_")
 				.map(function (part) {
 					return part.toUpperCase();
@@ -85,6 +89,7 @@ process.stdin.on("end", function () {
 				.filter(identity);
 			process.stdout.write(split.join("_"));
 			break;
+		}
 		default:
 			throw new Error(`invalid input format: ${format}`);
 	}

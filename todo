@@ -435,9 +435,9 @@
 [x] cached where in and cached where not in exposed to database graphql
 	[x] value is a string key that is a key to a value in cache
 	[x] hook up lru cache to system and database
-[ ] frontend setup
+[x] frontend setup
 	[x] esbuild
-	[ ] eslint
+	[x] eslint
 [x] add count method to database and system kernel models
 	[x] add count method to database kernel models and controllers
 		[x] expose graphql method in database interface
@@ -532,7 +532,7 @@
 	[ ] add a _description attribute to every module so that the codebase can be explored via the repl
 		[ ] always add the field at the end of every module definition so it shows up at the bottom in the repl
 	[ ] rename rud protected middleware to ud protected middleware or (updated_delete_protected_middleware)
-	[ ] eslint
+	[x] eslint
 [ ] graphql entity types and system integration
 	[ ] add field to abstract entity definition to exclude from graphql interface
 		[ ] unless we specify the realm, we can't do this without also excluding from the database graphql interface
