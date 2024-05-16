@@ -6,16 +6,16 @@ export default [
 	{
 		ignores: ["src/kernel/applications/gauze/build/"],
 	},
-{
-	languageOptions: { globals: { ...globals.browser, ...globals.node } },
-},
+	{
+		languageOptions: { globals: { ...globals.browser, ...globals.node } },
+	},
 	pluginJs.configs.recommended,
 	pluginReactConfig,
 	{
 		rules: {
 			"no-unused-vars": "off",
 			"no-undef": "off",
-			"no-empty": "off"
+			"no-empty": "off",
 		},
 	},
 ];

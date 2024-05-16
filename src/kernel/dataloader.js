@@ -340,7 +340,8 @@ function dispatchBatch(loader, batch) {
 					batch.callbacks[i].resolve(value);
 				}
 			}
-		})["catch"](function (error) {
+		})
+		["catch"](function (error) {
 			failedDispatch(loader, batch, error);
 		});
 } // Private: do not cache individual loads if the entire batch dispatch fails,
