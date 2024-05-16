@@ -599,6 +599,8 @@
 				[ ] e.g. mapping the from reference to the to reference
 			[ ] there will need to be some mapping nodes that accept the mapped values to reduce them
 			[ ] ultimately at the end, we want a set of root ids for each document
+		[ ] dynamic number of mappings and reductions according to the length of the cycle
+			[ ] would be ideal if we had a static number, but we don't have a way to prevent cycles from forming
 [ ] unknowns, abnormal behavior, and investigations
 	[ ] look into why router5 doesn't seem to be able to uri encode correctly
 		[ ] manually encoding and decoding seems to work
