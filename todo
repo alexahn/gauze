@@ -603,6 +603,8 @@
 			[ ] would be ideal if we had a static number, but we don't have a way to prevent cycles from forming
 		[ ] the problem is that the final commit has to be done atomically, so all the changes would need to be aggregated to one node
 			[ ] feels like this could be a bottleneck
+				[ ] not really? it's just a set of ids, so we can increase the frequency of the garbage collection if the set is growing too large
+					[ ] i don't imagine that the set of ids should be over a million, and a million identifiers is nothing for a single server
 			[ ] if we give up consistency then we can have partial commits, but it complicates the data integrity picture
 [ ] unknowns, abnormal behavior, and investigations
 	[ ] look into why router5 doesn't seem to be able to uri encode correctly
