@@ -107,7 +107,7 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 		}
 
 		return (
-			<div className="mw-100 fr">
+			<div className="mw-100 w-100">
 				<h1 align="right">{header.graphql_meta_type}</h1>
 				<div align="right">Type List</div>
 				<hr />
@@ -116,25 +116,25 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 				</div>
 				<hr />
 				{/*<div className="mw-100 overflow-x-auto"> */}
-				<div className="flex mw-100 h-100">
+				<div className="flex fr">
 					<table>
 						<thead className="flex flex-wrap mw-100">
 							<tr align="right" className="flex flex-wrap">
 								{page.map(function (item) {
 									return (
-										<th key={item[header.primary_key]} align="left" className="mw4 w4">
+										<th key={item[header.primary_key]} align="left" className="mw4 w4 pt1 flex justify-center">
 											<a href={router.buildUrl("system.types.item.type.id", { type: route.params.type, id: item[header.primary_key], mode: "view" })}>
-												<button className="pt1 pr1 pl1">
+												<button className="f5 ml1 mr1">
 													<FileTextIcon />
 												</button>
 											</a>
 											<a href={router.buildUrl("system.types.item.type.id", { type: route.params.type, id: item[header.primary_key], mode: "edit" })}>
-												<button className="pt1 pr1 pl1">
+												<button className="f5 ml1 mr1">
 													<Pencil2Icon />
 												</button>
 											</a>
 											<a href={router.buildUrl("system.types.item.type.id", { type: route.params.type, id: item[header.primary_key], mode: "remove" })}>
-												<button className="pt1 pr1 pl1">
+												<button className="f5 ml1 mr1">
 													<TrashIcon />
 												</button>
 											</a>
@@ -149,12 +149,22 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 												<div key={`${field}.checkbox`}>
 													{field}
 													<input type="checkbox" defaultChecked={fields ? fields.indexOf(field) >= 0 : true} onChange={updateFields(field)} />
+													<a href={router.buildUrl(route.name, { ...route.params, order: field, order_direction: "asc" })}>
+														<button className="f6" disabled={route.params.order && route.params.order === field && route.params.order_direction === "asc"}>
+															{"<"}
+														</button>
+													</a>
+													<a href={router.buildUrl(route.name, { ...route.params, order: field, order_direction: "desc" })}>
+														<button className="f6" disabled={route.params.order && route.params.order === field && route.params.order_direction === "desc"}>
+															{">"}
+														</button>
+													</a>
 												</div>
 											);
 										})}
 									</span>
 								</th>
-								<th className="mw4 w4">
+								<th align="center" className="mw4 w4">
 									<a href={router.buildUrl(route.name, { ...route.params, where: encodeURIComponent(JSON.stringify(localWhere)) })}>
 										<button>Filter</button>
 									</a>
@@ -228,8 +238,8 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 	} else {
 		return (
 			<div>
-				<h1 align="right">{header.type}</h1>
-				<div align="right">Type</div>
+				<h1 align="right">{header.graphql_meta_type}</h1>
+				<div align="right">Type List</div>
 				<hr />
 			</div>
 		);

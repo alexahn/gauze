@@ -547,12 +547,12 @@
 	[x] add to kernel stages
 	[ ] update to pull the type names from interface definitions for attributes_query_type and attributes_mutation_type
 	[ ] add relationship data for each entry, which we can easily pull from structure definitions
-[ ] data presentation in ui
+[x] data presentation in ui
 	[x] basic piping to fetch data
 	[x] pagination record tied to view/url
 		[x] read the record, which is an array of primary key ids
 		[x] map to items from the local store
-	[ ] table ui with filters and sorting
+	[x] table ui with filters and sorting
 [ ] look into why router5 doesn't seem to be able to uri encode correctly
 	[ ] manually encoding and decoding seems to work
 [x] store jwts in local storage
@@ -575,3 +575,6 @@
 	[x] align header response type to look like the abstract definition as much as possible
 [ ] add column length information to fields so that we can also display an input field of the same size
 	[ ] ideally we want to parse this data from the migration files, but we can require the user to provide it in the abstract definition
+[ ] consider adding multiple sort columns
+	[ ] the problem is that it would be a pain to handle in the ui because the order in which the sorts are applied matter
+	[ ] for now, let's keep it simple and stick to only one sort order

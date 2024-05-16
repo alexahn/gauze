@@ -57,6 +57,7 @@ class ModelService {
 		return data;
 	}
 	deleteField(data = {}, key) {
+		console.log("key", key);
 		const path = key.split(".");
 		path.reduce(function (prev, next, index) {
 			if (index === path.length - 1) {
@@ -87,7 +88,7 @@ class ModelService {
 	unsubscribe(itemType, itemID, subscriptionID) {
 		const self = this;
 		const key = [itemType, itemID, subscriptionID].join(".");
-		const existing = self.readField(key);
+		const existing = self.readField(self.subscriptions, key);
 		if (existing) {
 			self.deleteField(self.subscriptions, key);
 		} else {

@@ -28,3 +28,7 @@ table .truncate-ns {
 	border: 1px solid black;
 	z-index: 1;
 }
+
+.action {
+	height: 23px;
+}

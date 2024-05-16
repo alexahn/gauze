@@ -4,7 +4,7 @@ import React from "react";
 export default function Alder({ units }) {
 	const id = "section:alder";
 	return (
-		<div id={id} key={id}>
+		<div id={id} key={id} className="w-100 h-100">
 			<units.body />
 		</div>
 	);

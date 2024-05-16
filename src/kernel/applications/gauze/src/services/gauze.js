@@ -460,6 +460,80 @@ query count(
 				return data.data[`count_${header.name}`];
 			});
 	}
+	update(header, variables) {
+		const self = this;
+		const query = `
+mutation update(
+    $where: ${header.attributes_mutation_type}
+	$attributes: ${header.attributes_mutation_type}
+    $limit: Int,
+    $offset: Int,
+    $order: String,
+    $order_direction: String
+) {
+    update_${header.name}(
+        where: $where,
+		attributes: $attributes,
+        limit: $limit,
+        offset: $offset,
+        order: $order,
+        order_direction: $order_direction
+    ) {
+		_metadata {
+			id
+			type
+		}
+        attributes {
+            ${header.attributes}
+        }
+    }
+}
+`;
+		return self
+			.system({
+				query: query,
+				variables: variables,
+			})
+			.then(function (data) {
+				return data.data[`update_${header.name}`];
+			});
+	}
+	delete(header, variables) {
+		const self = this;
+		const query = `
+mutation delete(
+    $where: ${header.attributes_mutation_type}
+    $limit: Int,
+    $offset: Int,
+    $order: String,
+    $order_direction: String
+) {
+    delete_${header.name}(
+        where: $where,
+        limit: $limit,
+        offset: $offset,
+        order: $order,
+        order_direction: $order_direction
+    ) {
+		_metadata {
+			id
+			type
+		}
+        attributes {
+            ${header.attributes}
+        }
+    }
+}
+`;
+		return self
+			.system({
+				query: query,
+				variables: variables,
+			})
+			.then(function (data) {
+				return data.data[`delete_${header.name}`];
+			});
+	}
 }
 
 export default new GauzeService();
