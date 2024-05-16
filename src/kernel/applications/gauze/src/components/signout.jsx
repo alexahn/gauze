@@ -17,13 +17,13 @@ export default function SignOut({ router, gauze, model }) {
 			sessions.forEach(function (session) {
 				model.delete("SESSION", session.gauze__session__id);
 				if (environmentJWT === session.gauze__session__value) {
-					gauze.setEnvironmentJWT(null);
+					gauze.deleteEnvironmentJWT();
 				}
 				if (systemJWT === session.gauze__session__value) {
-					gauze.setSystemJWT(null);
+					gauze.deleteSystemJWT();
 				}
 				if (proxyJWT === session.gauze__session__value) {
-					gauze.setProxyJWT(null);
+					gauze.deleteProxyJWT();
 				}
 			});
 			// all jwts should be cleared technically
