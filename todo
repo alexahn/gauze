@@ -601,6 +601,9 @@
 			[ ] ultimately at the end, we want a set of root ids for each document
 		[ ] dynamic number of mappings and reductions according to the length of the cycle
 			[ ] would be ideal if we had a static number, but we don't have a way to prevent cycles from forming
+		[ ] the problem is that the final commit has to be done atomically, so all the changes would need to be aggregated to one node
+			[ ] feels like this could be a bottleneck
+			[ ] if we give up consistency then we can have partial commits, but it complicates the data integrity picture
 [ ] unknowns, abnormal behavior, and investigations
 	[ ] look into why router5 doesn't seem to be able to uri encode correctly
 		[ ] manually encoding and decoding seems to work
