@@ -569,7 +569,7 @@
 		[ ] it might not be necessary because the inputs to the system are expected to be able to be serialized to json
 [ ] rename rud protected middleware to ud protected middleware or (updated_delete_protected_middleware)
 [ ] ui forms
-	[ ] item route for read, update, and delete
+	[x] item route for read, update, and delete
 	[ ] maybe use something like zod for input validation
 [x] update headers method to return field definitions
 	[x] align header response type to look like the abstract definition as much as possible
@@ -578,3 +578,4 @@
 [ ] consider adding multiple sort columns
 	[ ] the problem is that it would be a pain to handle in the ui because the order in which the sorts are applied matter
 	[ ] for now, let's keep it simple and stick to only one sort order
+[ ] add a default order key for abstract definitions

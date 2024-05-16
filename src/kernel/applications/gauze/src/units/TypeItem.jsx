@@ -23,12 +23,15 @@ export default function TypeItemUnit() {
 	const fieldsSelector = createSelector([routeSelector, routerSelector, modelSelector], (route, router, model) => {
 		const fieldsParam = route.params.fields;
 		const header = model.read("HEADER", route.params.type);
-		const headerFields = header.attributes.split(" ");
+		const headerFields = header.fields;
 		// invert
 		function applyNegation(header, negated) {
-			const filtered = header.slice(0);
+			const filtered = headerFields.slice(0);
 			Object.keys(negated).forEach(function (field) {
-				filtered.splice(filtered.indexOf(field), 1);
+				const index = filtered.findIndex(function (f) {
+					return f.name == field;
+				});
+				filtered.splice(index, 1);
 			});
 			return filtered;
 		}

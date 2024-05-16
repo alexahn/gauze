@@ -399,6 +399,34 @@ query header {
 				return data.data._header;
 			});
 	}
+	create(header, variables) {
+		const self = this;
+		const query = `
+mutation create(
+	$attributes: ${header.attributes_mutation_type}
+) {
+    create_${header.name}(
+		attributes: $attributes,
+    ) {
+		_metadata {
+			id
+			type
+		}
+        attributes {
+            ${header.attributes}
+        }
+    }
+}
+`;
+		return self
+			.system({
+				query: query,
+				variables: variables,
+			})
+			.then(function (data) {
+				return data.data[`create_${header.name}`];
+			});
+	}
 	read(header, variables) {
 		const self = this;
 		const query = `

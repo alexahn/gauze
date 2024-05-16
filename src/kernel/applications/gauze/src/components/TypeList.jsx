@@ -3,14 +3,20 @@ import { useState } from "react";
 
 import { PAGINATION_PAGE_SIZE } from "./../constants.js";
 
+import Input from "./Input.jsx";
 import Pagination from "./Pagination.jsx";
 
 import { FileTextIcon, TrashIcon, Pencil2Icon } from "@radix-ui/react-icons";
 
 export default function TypeList({ route, router, gauze, model, where, fields }) {
 	const header = model.read("HEADER", route.params.type);
-	const headerFields = header.attributes.split(" ");
 	const [localWhere, setLocalWhere] = useState(where);
+	const nullItem = {};
+	header.fields.forEach(function (field) {
+		nullItem[field.name] = "";
+	});
+	const [createItem, setCreateItem] = useState({});
+	const [submitCreate, setSubmitCreate] = useState(false);
 
 	// use pagination record once we implement it
 	const pagination_key = router.buildUrl(route.name, route.params);
@@ -30,7 +36,7 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 				return model.read(header.graphql_meta_type, id);
 			})
 			.reverse();
-		console.log("header", header);
+
 		function href(item) {
 			var paginate;
 			if (item.type === "previous") {
@@ -62,7 +68,6 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 
 		function updateFilter(field) {
 			return function (e) {
-				console.log("e", e);
 				if (e.target.value !== "") {
 					const updatedWhere = {
 						...localWhere,
@@ -89,13 +94,12 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 
 		function updateFields(field) {
 			return function (e) {
-				console.log("field", field, e.target.checked);
 				const updatedFields = {};
-				headerFields.forEach(function (field) {
-					updatedFields[field] = true;
+				header.fields.forEach(function (field) {
+					updatedFields[field.name] = true;
 				});
 				fields.forEach(function (field) {
-					delete updatedFields[field];
+					delete updatedFields[field.name];
 				});
 				if (e.target.checked) {
 					delete updatedFields[field];
@@ -104,6 +108,40 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 				}
 				router.navigate(route.name, { ...route.params, fields: encodeURIComponent(JSON.stringify(updatedFields)) });
 			};
+		}
+
+		function updateCreateItem(field) {
+			return function (e) {
+				const updatedItem = { ...createItem };
+				updatedItem[field] = e.target.value;
+				setCreateItem(updatedItem);
+			};
+		}
+
+		function handleCreate(e) {
+			setSubmitCreate(true);
+			const expected = "create";
+			const input = prompt(`Confirm create by entering '${expected}'`, "");
+			if (input === expected) {
+				return gauze
+					.create(header, {
+						attributes: createItem,
+					})
+					.then(function (results) {
+						if (results && results.length) {
+							const created = results[0];
+							model.create(header.graphql_meta_type, created.attributes[header.primary_key], created.attributes);
+							setSubmitCreate(false);
+							//page.push(created.attributes)
+							setCreateItem(created.attributes);
+						} else {
+							// alert the user that something went wrong
+							setSubmitCreate(false);
+						}
+					});
+			} else {
+				setSubmitCreate(false);
+			}
 		}
 
 		return (
@@ -118,11 +156,16 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 				{/*<div className="mw-100 overflow-x-auto"> */}
 				<div className="flex fr">
 					<table>
-						<thead className="flex flex-wrap mw-100">
+						<thead className="mw-100">
 							<tr align="right" className="flex flex-wrap">
+								<th align="center" className="mw4 w4">
+									<button className="green" onClick={handleCreate} disabled={submitCreate}>
+										Create
+									</button>
+								</th>
 								{page.map(function (item) {
 									return (
-										<th key={item[header.primary_key]} align="left" className="mw4 w4 pt1 flex justify-center">
+										<th key={item[header.primary_key]} align="left" className="mw4 w4 pt1 flex flex-wrap justify-center">
 											<a href={router.buildUrl("system.types.item.type.id", { type: route.params.type, id: item[header.primary_key], mode: "view" })}>
 												<button className="f5 ml1 mr1">
 													<FileTextIcon />
@@ -144,18 +187,28 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 								<th className="mw4 w4 pa1 relative row" tabIndex="0">
 									<div>FIELDS</div>
 									<span className="dn bg-light-green mw9 w5 top-0 right-0 pa1 absolute f4 tooltip">
-										{headerFields.map(function (field) {
+										{header.fields.map(function (field) {
 											return (
-												<div key={`${field}.checkbox`}>
-													{field}
-													<input type="checkbox" defaultChecked={fields ? fields.indexOf(field) >= 0 : true} onChange={updateFields(field)} />
-													<a href={router.buildUrl(route.name, { ...route.params, order: field, order_direction: "asc" })}>
-														<button className="f6" disabled={route.params.order && route.params.order === field && route.params.order_direction === "asc"}>
+												<div key={`${field.name}.checkbox`}>
+													{field.name}
+													<input
+														type="checkbox"
+														defaultChecked={
+															fields
+																? fields.find(function (v) {
+																		return v.name === field.name;
+																	})
+																: true
+														}
+														onChange={updateFields(field.name)}
+													/>
+													<a href={router.buildUrl(route.name, { ...route.params, order: field.name, order_direction: "asc" })}>
+														<button className="f6" disabled={route.params.order && route.params.order === field.name && route.params.order_direction === "asc"}>
 															{"<"}
 														</button>
 													</a>
-													<a href={router.buildUrl(route.name, { ...route.params, order: field, order_direction: "desc" })}>
-														<button className="f6" disabled={route.params.order && route.params.order === field && route.params.order_direction === "desc"}>
+													<a href={router.buildUrl(route.name, { ...route.params, order: field.name, order_direction: "desc" })}>
+														<button className="f6" disabled={route.params.order && route.params.order === field.name && route.params.order_direction === "desc"}>
 															{">"}
 														</button>
 													</a>
@@ -174,62 +227,37 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 						<tbody align="right" className="mw-100">
 							{fields.map(function (field) {
 								return (
-									<tr align="right" key={field} className="flex flex-wrap">
+									<tr align="right" key={field.name} className="flex flex-wrap">
+										<td className="mw4 w4 overflow-x-hidden">
+											<Input field={field} className="mw4 w4" value={createItem[field.name]} onChange={updateCreateItem(field.name)} disabled={submitCreate} />
+										</td>
 										{page.map(function (item) {
 											return (
 												<td align="left" key={`${item[header.primary_key]}.${field}`} className="relative mw4 w4 pa1 row" tabIndex="0">
-													<div className="truncate-ns">{item[field]}</div>
-													<span className="dn bg-washed-green mw9 w5 top-0 left-0 pa1 absolute f4 tooltip">{item[field]}</span>
+													<div className="truncate-ns">{item[field.name]}</div>
+													<span className="dn bg-washed-green mw9 w5 top-0 left-0 pa1 absolute f4 tooltip">{item[field.name]}</span>
 												</td>
 											);
 										})}
 										<td className="relative mw4 w4 pa1 row" tabIndex="0">
 											<div className="truncate-ns field">
-												<b>{field}</b>
+												<b>{field.name}</b>
 											</div>
 											<span className="dn bg-light-green mw9 w5 top-0 right-0 pa1 absolute f4 tooltip">
-												<b>{field}</b>
+												<b>{field.name}</b>
 											</span>
 										</td>
 										<td className="mw4 w4 overflow-x-hidden">
-											<input className="mw4" onChange={updateFilter(field)} onKeyDown={applyFilter(field)} defaultValue={where[field] ? where[field] : ""} />
+											<input
+												className="mw4"
+												onChange={updateFilter(field.name)}
+												onKeyDown={applyFilter(field.name)}
+												defaultValue={where[field.name] ? where[field.name] : ""}
+											/>
 										</td>
 									</tr>
 								);
 							})}
-							{/*
-							{page.map(function (item) {
-								return (
-									<tr align="right" key={item[header.primary_key]}>
-										<td>
-											<input type="checkbox" />
-										</td>
-										{fields.map(function (field) {
-											return (
-												<td key={`${item[header.primary_key]}.${field}`} className="relative mw1 row" tabIndex="0">
-													<div className="truncate-ns pl1 pr1">
-														{item[field]}
-													</div>
-													<span className='dn bg-white top-0 right-0 pa1 absolute f4 tooltip'>{item[field]}</span>
-												</td>
-											);
-										})}
-									</tr>
-								);
-							})}
-							*/}
-							{/*
-							<tr>
-								<td>Emil</td>
-								<td>Tobias</td>
-								<td>Linus</td>
-							</tr>
-							<tr align="right">
-								<td>16</td>
-								<td>14</td>
-								<td>10</td>
-							</tr>
-							*/}
 						</tbody>
 					</table>
 				</div>

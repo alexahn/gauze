@@ -57,7 +57,6 @@ class ModelService {
 		return data;
 	}
 	deleteField(data = {}, key) {
-		console.log("key", key);
 		const path = key.split(".");
 		path.reduce(function (prev, next, index) {
 			if (index === path.length - 1) {

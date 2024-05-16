@@ -377,7 +377,7 @@ const routes = [
 	},
 	{
 		name: "system.types.item.type.id",
-		path: "/:id?mode",
+		path: "/:id?mode&fields",
 		onActivate: function ({ dependencies, toState }) {
 			const { services } = dependencies;
 			const { gauze, model, router } = services;
