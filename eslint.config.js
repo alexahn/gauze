@@ -13,6 +13,7 @@ export default [
 	pluginReactConfig,
 	{
 		rules: {
+			"no-unexpected-multiline": "off",
 			"no-unused-vars": "off",
 			"no-undef": "off",
 			"no-empty": "off",

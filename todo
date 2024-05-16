@@ -505,9 +505,9 @@
 	[ ] add attribute flag to designate builtin entities
 [ ] query and mutation argument extensions (aligned with database semantics)
 	[ ] add where_greater and where_lesser
-	[ ] consider adding multiple sort columns
+	[ ] consider changing order to accept an array of ordering arguments (e.g. column and direction)
 		[ ] the problem is that it would be a pain to handle in the ui because the order in which the sorts are applied matter
-		[ ] for now, let's keep it simple and stick to only one sort order
+		[x] for now, let's keep it simple and stick to only one sort order
 [ ] design language and visual consistency
 	[ ] figure out the general structure of layouts and sections
 		[ ] configure all the styles from the root node and downwards in a consistent manner
@@ -593,6 +593,12 @@
 		[ ] e.g. if we update a record, it should only clear the cache for all read operations on the record
 		[ ] will need to add a new data structure to the lru cache we implemented to keep track of operation association with records
 			[ ] e.g. parse the parameters and construct a tree
+	[ ] map reduce and data sharding
+		[ ] map reduce for tracing garbage collection
+			[ ] the initiation is based on the shard of data that a node is responsible for
+				[ ] e.g. mapping the from reference to the to reference
+			[ ] there will need to be some mapping nodes that accept the mapped values to reduce them
+			[ ] ultimately at the end, we want a set of root ids for each document
 [ ] unknowns, abnormal behavior, and investigations
 	[ ] look into why router5 doesn't seem to be able to uri encode correctly
 		[ ] manually encoding and decoding seems to work
