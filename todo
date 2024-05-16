@@ -94,8 +94,6 @@
 	[x] import execute from kernel and use in system models
 	[x] refactor inputs to execute to make it pretty (e.g. context instead of contextValue, variables insead of variableValues)
 	[x] import execute from kernel and use in tests
-[ ] add a _description attribute to every module so that the codebase can be explored via the repl
-	[ ] always add the field at the end of every module definition so it shows up at the bottom in the repl
 [x] move object destructuring for database model inputs into the function itself (for debugging purposes when we want to log the entire input)
 	[x] database models
 [x] add logging to system models
@@ -164,7 +162,6 @@
 			[-] base everything off structures
 				[x] base everything off abstract atoms
 			[x] look into programmatically generating graphql and sql structures from an abstract structure
-				[ ] look into doing ast parsing and some table management data structures to programmatically generate migration files
 	[x] create abstract structures
 	[x] move entity1 and entity2 into kernel/src/migrations to make it easier for development
 		[x] remove later once we can generate entities
@@ -173,7 +170,6 @@
 	[x] base database model, controller, and interface
 	[x] base system model, controller, and interface
 	[x] fuse base_entity and base_gauze as base
-	[ ] add gauze.json as a config file for the gauze cli (which will keep track of gauze base models and developer entities)
 	[x] yargs cli for project
 		[x] run server to use kernel server application
 		[x] run terminal to use kernel terminal application
@@ -183,13 +179,10 @@
 			[x] terminal
 			[x] server
 			[x] create project
-			[ ] read project
-			[ ] update project
 			[x] create entity
 			[x] read entity (see todo below)
 			[x] update entity
 			[x] delete entity
-		[ ] align environment variables with cli commands
 	[-] centralize all zsh/bash scripts under the root bin directory?
 		[-] or maybe have src/kernel/bin?
 			[-] better to have a root level directory that is the interface with the outer operating system
@@ -199,9 +192,6 @@
 		[x] implemented as a subcommand for the gauze cli to proxy into the project cli
 	[x] reorder export order in module files so that internal files are first
 	[x] move base classes to the kernel
-[ ] have read command manually construct a list of files and directories and intersect with the results from find
-	[ ] kind of problematic when we just use find because an entity might contain another entity's name inside it
-		[ ] e.g. hello_entity and hello_entity_world
 [x] refactor server application to use kernel graphql shell execute
 [x] update schema files to use $structure instead of directly importing
 [-] group protected fields by method for sql structures
@@ -214,13 +204,9 @@
 [x] copy the date graphql scalar so we have one less dependency
 [x] sub categorize internal gauze commands and user commands
 	[x] add example user command (so they can write their own webserver for example)
-[ ] polish commands and manager application
 [x] set up migrations for ezuag and ytitne
 [x] set up seed data for ezuag and ytitne
 [x] merge system models into one (there is no reason to have multiple)
-[ ] naming convention refactor (update according to all rules)
-	[x] double underscore for module namespacing hierarchy
-	[ ] only use upper snake case for global constants and module exports (convert in function const to lower snake case)
 [x] rename all kernel model methods to be underscore prefixed
 	[x] refactor database models so that they have create, read, update, delete methods that proxy to the kernel method
 		[x] allows for people to extend the models however they want, while preserving core internal logic
@@ -249,8 +235,6 @@
 [x] move graphql meta type to abstract entities (the meta type is not a name that is encoded within the schema, but a framework identifier)
 [x] refactor structure/resolvers to use abstract entities so we can reduce the surface area of the staging layers
 	[x] delete resolver staging files
-[ ] refactor kernel models to have elegant function signatures
-	[ ] should probably group things together to have better conceptual clarity instead of abusing positional arguments
 [x] prevent particular types of data from being created, such as relationships on relationships
 	[x] gauze internal models should be siloed as much as possible
 	[x] perform checks for entity_type, and agent_type for internal models
@@ -315,7 +299,6 @@
 	[x] update stages
 	[x] commit when all paths have been updated
 	[x] recompile
-[ ] rename src/kernel/src/initial to src/kernel/src/skeleton
 [x] move src/kernel/entities to src/kernel/src/entities
 [x] move link and root functions used in schemas to kernel
 [ ] refactor all kernel models
@@ -323,7 +306,7 @@
 	[x] context, agent, parameters, entity, operation
 		[x] centralize all authorization checks in two functions: authorization and authorization_set
 	[ ] refactor access model to use system model authorization methods
-[ ] use dataloader to batch data loading
+[x] use dataloader to batch data loading
 	[x] use dataloader in database kernel model
 	[x] use dataloader in system kernel model
 	[x] use dataloader in relationship model
@@ -337,25 +320,13 @@
 		[x] made a custom ttl based lru cache instead
 			[-] use es6 map instead of an object as the store
 				[x] seems faster to use an object because we are clearing it frequently
-	[ ] granular cache clearing based on record (nice to have)
-		[ ] e.g. if we update a record, it should only clear the cache for all read operations on the record
-		[ ] will need to add a new data structure to the lru cache we implemented to keep track of operation association with records
-			[ ] e.g. parse the parameters and construct a tree
-	[ ] hash the key to have a fixed size for the key (nice to have)
+	[-] hash the key to have a fixed size for the key (nice to have)
 [x] entity tests to test public access control
 	[x] ytitne only tests private access control
 [x] remove legacy relationship tests
 [x] see if we can pass in a null agent_id into authorization and have it all work
 	[x] verify that all authorization queries are valid with a null agent_id
 		[x] add guards to ensure that agent_id is either a string or null
-[ ] add a required attribute to fields in abstract entity definitions?
-	[ ] we can use it to create two different attribute types
-		[ ] one for creation, and another for querying and updating
-[ ] use graphql enum types (https://graphql.org/graphql-js/type/#example-4) to lock down fields that act on a set of values
-	[ ] entity_type, agent_type, realm, agent_role
-	[ ] the problem is that using the enums is a pain because you need to know the name of the option
-		[ ] we can introduce a naming convention, e.g. REALM__SYSTEM, AGENT_ROLE__ROOT, AGENT_ROLE__TRUNK, AGENT_ROLE__LEAF, etc
-			[ ] but it is still awkward, and it feels like it would be easier to use if we just left it as a string field but added validation on it
 	[x] add custom field validation for realm and agent_role for now
 [x] basic authentication and session management so we have the concept of a user
 	[x] account table (look at how passport and nextjs auth create their tables)
@@ -416,11 +387,6 @@
 	[x] separate sessions for different realms
 [x] change src_from_base to use the entities defined in the kernel for internal entities
 [x] update kernel stages to use new entities
-[ ] add field to abstract entity definition to exclude from graphql interface
-	[ ] unless we specify the realm, we can't do this without also excluding from the database graphql interface
-		[ ] then the linker has to take in a realm parameter
-[ ] add field to abstract entity fields to exclude from graphql interface
-	[ ] we can't do this without also excluding the field from the database graphql interface
 [x] add agent_types field to method definitions for abstract entities (should be an array value of allowed agent types)
 	[x] we can only do this if we change the interpretation of public to mean public inside an authenticated session
 		[x] we probably have to do this because the root whitelist and blacklist are invalid without a valid session
@@ -452,24 +418,9 @@
 [x] move guards outside of batch functions so that the errors are cleaner
 	[x] system model
 	[x] relationship model
-[ ] soft delete
-	[ ] stringified javascript dates are utc, but the dates generated by new Date() use the system clock
-[ ] refactor validate_entity_config to use dot path for error messages
-	[ ] use the same pattern as defined in the environment session model to validate data fields
 [x] server application clean up
 	[x] come up with a bare bones pattern to define url and routes
 	[x] refactor the server application
-[ ] rate limiter
-	[ ] by route, by ip, by account, by location, etc
-[ ] change uuid to ulid
-	[ ] validate id field to ensure ulid structure
-	[ ] not sure we want to do this because the key encodes time information
-		[ ] which will seep into the sharding design
-		[ ] do we want to shard by chronological order?
-		[ ] it has some interesting qualities, in that you would be able to provision servers ahead of time for a frame of time
-			[ ] might make operations easier because the conceptual model is simple, basically a tape
-[ ] whitelist / blacklist symmetry?
-	[ ] should whitelist also only apply at leaf level? currently blacklist only applies at leaf level
 [ ] build an admin management react app to dog food the interface
 	[ ] have an admin method to track objects that have no relationships
 	[ ] have an admin method to track objects that should be one to one but aren't
@@ -479,69 +430,37 @@
 			[ ] use the config from kernel system model to bypass authorization checks if the agent id is one of the managers
 			[ ] the config will have to be split by environment
 			[ ] this approach seems better than creating a table in sql because the set of managers is in source control
-		[ ] track entities by using the project and gauze fields?
-			[ ] the entities can just be parsed from $abstract, so maybe just create a method that returns a set of entities
-[ ] think about some defensive programming strategies to handle the lack of one to one constraints and other similar structural ambiguities
-	[ ] we might need to specify one to one relationships via structures
-	[ ] constraint checking might be best done by creating a projection of counts for relationships because we need a data structure that is indexed on counts
-		[ ] maybe a simple aggregation table that has from_type, to_type, from_id, count
-			[ ] probably need to use something else that is commutative at the outer layer to avoid transactions locking too much?
-				[ ] would be kind of a pain to lose transactional certainty and have to manage synchronization between two data sources
-				[ ] just shard the table
-			[ ] will probably need another aggregation table per item, that has the total count of relationships (to any entity) on the item
-[ ] add attribute flag to designate builtin entities
-[ ] type naming constraints
-	[ ] cap table name to 255 characters
-	[ ] cap graphql type name to 255 characters
-	[ ] align name lengths with sql column limits for all types
-		[ ] entity_type, agent_type, realm, agent_role, etc
+		[-] track entities by using the project and gauze fields?
+			[x] the entities can just be parsed from $abstract, so maybe just create a method that returns a set of entities
 [x] cached where in and cached where not in exposed to database graphql
 	[x] value is a string key that is a key to a value in cache
 	[x] hook up lru cache to system and database
-[ ] file entity
-	[ ] file handler entity
-		[ ] manages an io entity that can read and write
-	[ ] streaming interface for files
-[ ] process entity
-	[ ] input and output architecture
-[ ] think about how to do field validation so that field errors can be abstracted
-	[ ] currently we will just throw hand crafted errors, but we could probably have a structured approach
-[ ] monolithic foundation
-	[ ] source/version control system
-	[ ] build system
-	[ ] email
-[ ] use types defined in abstract realm for all environment graphql definitions
-[ ] errors directory per realm
-	[ ] realms can have their own custom errors, but only for the particular logic they are handling
-		[ ] in all other cases, we should just bubble up the error from below
 [ ] frontend setup
 	[x] esbuild
 	[ ] eslint
-[ ] add where_greater and where_lesser
 [x] add count method to database and system kernel models
 	[x] add count method to database kernel models and controllers
 		[x] expose graphql method in database interface
 		[x] expose graphwl method in system interface
-[ ] frontend architecture
+[x] frontend architecture
 	[x] state store
 	[x] router
-	[ ] ui framework
-[ ] rename valid_agent_types in abstract definition to allowed_agent_types
-	[ ] add allowed_agent_types definitions to individual fields
+	[-] ui framework
+		[x] tried material ui but didn't find it to be visually pleasing
+		[x] semantic ui seems like it is a dying project so i don't want to use it again
+		[x] trying out extreme minimalism by using browser primitives and basic styling
 [x] minimalist frontend setup
 	[x] entry point
 	[x] esbuild command
 	[x] http-server command
 	[x] state management
 	[x] package.json scripts updated to allow more convenient grouping
-[ ] refresh session method
 [x] authentication routes and flow for frontend
 	[x] gauze environment client
 	[x] data management for flow information
 		[x] use the same requirements structure on the frontend
 		[x] generalize the pattern so that new requirements can easily be added
 		[x] instead of breaking out each requirement into a separate page, just make a component to handle it
-[ ] add _metadata to environment responses?
 [x] add a root level method to query for registered entities
 	[x] call it _header
 	[x] add to kernel stages
@@ -553,29 +472,135 @@
 		[x] read the record, which is an array of primary key ids
 		[x] map to items from the local store
 	[x] table ui with filters and sorting
-[ ] look into why router5 doesn't seem to be able to uri encode correctly
-	[ ] manually encoding and decoding seems to work
 [x] store jwts in local storage
 	[x] clear jwts when jwts expire
-[ ] figure out the general structure of layouts and sections
-	[ ] configure all the styles from the root node and downwards in a consistent manner
-[ ] figure out why where query on json date values doesn't work
-	[x] probably a mismatch between the value expected in the database and the one provided by the interface
-	[-] the dataloading is coercing all datatypes to json, so we need to do the serialization inside the dataloader
-		[-] move the serialization logic from the controllers to the models
-		[x] use the cache to store the parsed input
-	[x] do pre serialization and middleware parsing for where on update and delete methods
-	[ ] figure out if we want to do the same thing for the system model and interface
-		[ ] it might not be necessary because the inputs to the system are expected to be able to be serialized to json
-[ ] rename rud protected middleware to ud protected middleware or (updated_delete_protected_middleware)
-[ ] ui forms
-	[x] item route for read, update, and delete
-	[ ] maybe use something like zod for input validation
 [x] update headers method to return field definitions
 	[x] align header response type to look like the abstract definition as much as possible
-[ ] add column length information to fields so that we can also display an input field of the same size
-	[ ] ideally we want to parse this data from the migration files, but we can require the user to provide it in the abstract definition
-[ ] consider adding multiple sort columns
-	[ ] the problem is that it would be a pain to handle in the ui because the order in which the sorts are applied matter
-	[ ] for now, let's keep it simple and stick to only one sort order
-[ ] add a default order key for abstract definitions
+[ ] data integrity guards and system integrity constraints
+	[ ] prevent agents from being deleted by removing delete whitelist in signup logic
+		[ ] the root object tied to a session should not be able to be deleted
+	[ ] add column length information to fields so that we can also display an input field of the same size
+		[ ] ideally we want to parse this data from the migration files, but we can require the user to provide it in the abstract definition
+	[ ] type naming constraints
+		[ ] cap table name to 255 characters
+		[ ] cap graphql type name to 255 characters
+		[ ] align name lengths with sql column limits for all types
+			[ ] entity_type, agent_type, realm, agent_role, etc
+	[ ] think about some defensive programming strategies to handle the lack of one to one constraints and other similar structural ambiguities
+		[ ] we might need to specify one to one relationships via structures
+		[ ] constraint checking might be best done by creating a projection of counts for relationships because we need a data structure that is indexed on counts
+			[ ] maybe a simple aggregation table that has from_type, to_type, from_id, count
+				[ ] probably need to use something else that is commutative at the outer layer to avoid transactions locking too much?
+					[ ] would be kind of a pain to lose transactional certainty and have to manage synchronization between two data sources
+					[ ] just shard the table
+				[ ] will probably need another aggregation table per item, that has the total count of relationships (to any entity) on the item
+[ ] header data expansion and entity definition display in ui
+	[ ] include relationships and method policies
+	[ ] extend type item view to be able to view relationships to the object
+[ ] abstract entity and field definition extensions (aligned with database semantics)
+	[ ] add default order key to entity definitions
+	[ ] add min and max value to field definitions
+		[ ] we would need to choose whether or not we act on pre-parsed values or parsed graphql types
+		[ ] would also need to include a comparison function that would need to be defined in $abstract
+	[ ] add attribute flag to designate builtin entities
+[ ] query and mutation argument extensions (aligned with database semantics)
+	[ ] add where_greater and where_lesser
+	[ ] consider adding multiple sort columns
+		[ ] the problem is that it would be a pain to handle in the ui because the order in which the sorts are applied matter
+		[ ] for now, let's keep it simple and stick to only one sort order
+[ ] design language and visual consistency
+	[ ] figure out the general structure of layouts and sections
+		[ ] configure all the styles from the root node and downwards in a consistent manner
+	[ ] ui forms
+		[x] item route for read, update, and delete
+		[ ] maybe use something like zod for input validation
+[ ] naming, organization, error consistency and code quality
+	[ ] rename valid_agent_types in abstract definition to allowed_agent_types
+		[ ] add allowed_agent_types definitions to individual fields
+	[ ] refactor validate_entity_config to use dot path for error messages
+		[ ] use the same pattern as defined in the environment session model to validate data fields
+	[ ] use types defined in abstract realm for all environment graphql definitions
+	[ ] errors directory per realm
+		[ ] realms can have their own custom errors, but only for the particular logic they are handling
+			[ ] in all other cases, we should just bubble up the error from below
+	[ ] rename src/kernel/src/initial to src/kernel/src/skeleton
+	[ ] refactor kernel models to have elegant function signatures
+		[ ] should probably group things together to have better conceptual clarity instead of abusing positional arguments
+	[ ] naming convention refactor (update according to all rules)
+		[x] double underscore for module namespacing hierarchy
+		[ ] only use upper snake case for global constants and module exports (convert in function const to lower snake case)
+	[ ] add a _description attribute to every module so that the codebase can be explored via the repl
+		[ ] always add the field at the end of every module definition so it shows up at the bottom in the repl
+	[ ] rename rud protected middleware to ud protected middleware or (updated_delete_protected_middleware)
+	[ ] eslint
+[ ] graphql entity types and system integration
+	[ ] add field to abstract entity definition to exclude from graphql interface
+		[ ] unless we specify the realm, we can't do this without also excluding from the database graphql interface
+			[ ] then the linker has to take in a realm parameter
+	[ ] add field to abstract entity fields to exclude from graphql interface
+		[ ] we can't do this without also excluding the field from the database graphql interface
+		[ ] we can't do this without causing a fork in the attributes definition for an entity, which would be annoying since it is an additional thing to remember
+			[ ] e.g. prefixing the graphql attribute types with the realm name
+	[ ] add a required attribute to fields in abstract entity definitions?
+		[ ] we can use it to create two different attribute types
+			[ ] one for creation, and another for querying and updating
+	[ ] use graphql enum types (https://graphql.org/graphql-js/type/#example-4) to lock down fields that act on a set of values
+		[ ] entity_type, agent_type, realm, agent_role
+		[ ] the problem is that using the enums is a pain because you need to know the name of the option
+			[ ] we can introduce a naming convention, e.g. REALM__SYSTEM, AGENT_ROLE__ROOT, AGENT_ROLE__TRUNK, AGENT_ROLE__LEAF, etc
+				[ ] but it is still awkward, and it feels like it would be easier to use if we just left it as a string field but added validation on it
+[ ] cli, commands, and manager application
+	[ ] polish commands and manager application
+	[ ] add gauze.json as a config file for the gauze cli (which will keep track of gauze base models and developer entities)
+	[ ] align environment variables with cli commands
+	[ ] commands
+		[ ] read project
+		[ ] update project
+	[ ] have read command manually construct a list of files and directories and intersect with the results from find
+		[ ] kind of problematic when we just use find because an entity might contain another entity's name inside it
+			[ ] e.g. hello_entity and hello_entity_world
+	[ ] look into doing ast parsing and some table management data structures to programmatically generate migration files
+[ ] system design
+	[ ] soft delete
+		[ ] stringified javascript dates are utc, but the dates generated by new Date() use the system clock
+	[ ] change uuid to ulid
+		[ ] validate id field to ensure ulid structure
+		[ ] not sure we want to do this because the key encodes time information
+			[ ] which will seep into the sharding design
+			[ ] do we want to shard by chronological order?
+			[ ] it has some interesting qualities, in that you would be able to provision servers ahead of time for a frame of time
+				[ ] might make operations easier because the conceptual model is simple, basically a tape
+	[ ] rate limiter
+		[ ] by route, by ip, by account, by location, etc
+	[ ] file entity
+		[ ] file handler entity
+			[ ] manages an io entity that can read and write
+		[ ] streaming interface for files
+	[ ] process entity
+		[ ] input and output architecture
+	[ ] think about how to do field validation so that field errors can be abstracted
+		[ ] currently we will just throw hand crafted errors, but we could probably have a structured approach
+	[ ] monolithic foundation
+		[ ] source/version control system
+		[ ] build system
+		[ ] email
+	[ ] session management and authentication flow
+		[ ] refresh session method
+		[ ] add _metadata to environment mutation responses?
+	[ ] whitelist / blacklist symmetry?
+		[ ] should whitelist also only apply at leaf level? currently blacklist only applies at leaf level
+	[ ] granular dataloader cache clearing based on record (nice to have)
+		[ ] e.g. if we update a record, it should only clear the cache for all read operations on the record
+		[ ] will need to add a new data structure to the lru cache we implemented to keep track of operation association with records
+			[ ] e.g. parse the parameters and construct a tree
+[ ] unknowns, abnormal behavior, and investigations
+	[ ] look into why router5 doesn't seem to be able to uri encode correctly
+		[ ] manually encoding and decoding seems to work
+	[ ] figure out why where query on json date values doesn't work
+		[x] probably a mismatch between the value expected in the database and the one provided by the interface
+		[-] the dataloading is coercing all datatypes to json, so we need to do the serialization inside the dataloader
+			[-] move the serialization logic from the controllers to the models
+			[x] use the cache to store the parsed input
+		[x] do pre serialization and middleware parsing for where on update and delete methods
+		[ ] figure out if we want to do the same thing for the system model and interface
+			[ ] it might not be necessary because the inputs to the system are expected to be able to be serialized to json
