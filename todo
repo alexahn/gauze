@@ -472,10 +472,11 @@
 [x] update headers method to return field definitions
 	[x] align header response type to look like the abstract definition as much as possible
 [ ] data integrity guards and system integrity constraints
-	[ ] prevent agents from being deleted by removing delete whitelist in signup logic
-		[ ] the root object tied to a session should not be able to be deleted
+	[x] prevent agents from being deleted by removing delete whitelist in signup logic
+		[x] the root object tied to a session should not be able to be deleted
 	[ ] add column length information to fields so that we can also display an input field of the same size
 		[ ] ideally we want to parse this data from the migration files, but we can require the user to provide it in the abstract definition
+		[ ] maybe abstract this and allow sizing functions to be defined in $abstract
 	[ ] type naming constraints
 		[ ] cap table name to 255 characters
 		[ ] cap graphql type name to 255 characters
@@ -497,8 +498,6 @@
 	[ ] add min and max value to field definitions
 		[ ] we would need to choose whether or not we act on pre-parsed values or parsed graphql types
 		[ ] would also need to include a comparison function that would need to be defined in $abstract
-	[ ] add attribute flag to designate builtin entities
-		[ ] why do we need this?
 	[x] add allowed_agent_types definitions to individual fields
 		[x] filter returned fields according to agent type
 		[x] update manager to enforce new constraints
