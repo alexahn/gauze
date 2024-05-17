@@ -36,9 +36,12 @@ function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 						// todo: do this the right way by reading the name field from the type definition
 						// todo: we can do this by defining an ATTRIBUTES object in the schema and passing it into this function
 						// todo: the architecture already makes this possible, so for now we are going to do string interpolation just to make things work end to end first
-						const attributes_query_type = `${pascal_snake_name}_Query__Attributes`;
-						const attributes_mutation_type = `${pascal_snake_name}_Mutation__Attributes`;
-						const attributes_string_query_type = `${pascal_snake_name}_Query__Attributes_String`;
+						const graphql_query_attributes_type = `${pascal_snake_name}_Query__Attributes`;
+						const graphql_query_where_type = `${pascal_snake_name}_Query__Where`;
+						const graphql_query_where_string_type = `${pascal_snake_name}_Query__Where_String`;
+						const graphql_mutation_attributes_type = `${pascal_snake_name}_Mutation__Attributes`;
+						const graphql_mutation_where_type = `${pascal_snake_name}_Mutation__Where`;
+						const graphql_mutation_where_string_type = `${pascal_snake_name}_Mutation__Where_String`;
 						let relationships;
 						if (realm === "database") {
 							relationships = $structure.relationships.DATABASE_RELATIONSHIPS__RELATIONSHIP__STRUCTURE[module.graphql_meta_type] || [];
@@ -54,10 +57,14 @@ function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 							graphql_meta_type: module.graphql_meta_type,
 							fields: fields,
 							methods: methods,
-							attributes: module.graphql_attributes_string,
-							attributes_query_type: attributes_query_type,
-							attributes_mutation_type: attributes_mutation_type,
-							attributes_string_query_type: attributes_string_query_type,
+							graphql_attributes_string: module.graphql_attributes_string,
+							graphql_where_string: module.graphql_where_string,
+							graphql_query_attributes_type: graphql_query_attributes_type,
+							graphql_query_where_type: graphql_query_where_type,
+							graphql_query_where_string_type: graphql_query_where_string_type,
+							graphql_mutation_attributes_type: graphql_mutation_attributes_type,
+							graphql_mutation_where_type: graphql_mutation_where_type,
+							graphql_mutation_where_string_type: graphql_mutation_where_string_type,
 							relationships: relationships,
 						};
 					} else {

@@ -549,14 +549,15 @@
 				[x] but it is still awkward, and it feels like it would be easier to use if we just left it as a string field but added validation on it
 			[ ] add custom validation for string types that accept a set of values
 	[ ] add a required attribute to fields in abstract entity definitions?
-		[ ] we can use it to create two different attribute types
-			[ ] one for creation, and another for querying and updating
-			[ ] we cannot do partial updates if we do this, and all updates will require the full set of attributes
-				[ ] if someone wants partial updates, they can loosen the constraint and define custom validation in the models or controllers
-		[ ] name the current attributes to something like Ezuag_Mutation__Where, along with the other types for where_in, where_not_in, cache_where_in, cache_where_not_in
+		[x] we can use it to create two different attribute types
+			[x] one for attributes (creating, updating and the returned attributes), and another for where (filtering)
+			[x] we cannot do partial updates if we do this, and all updates will require the full set of attributes
+				[x] if someone wants partial updates, they can loosen the constraint and define custom validation in the models or controllers
+		[x] name the current attributes to something like Ezuag_Mutation__Where, along with the other types for where_in, where_not_in, cache_where_in, cache_where_not_in
 		[x] define new utility functions
 		[x] add new properties to abstract entity definitions using the new utility functions
 		[x] create new graphql structures to align with the new properties
+		[x] update header graphql query to return the new properties
 	[ ] add an indexed attribute to fields in abstract entity definitions
 		[ ] only allow ordering on fields that have indexed set to true
 		[ ] ideally this setting should align with a database index
