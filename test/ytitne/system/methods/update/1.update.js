@@ -9,7 +9,7 @@ const context = {
 };
 const operation_name = "UpdateYtitne";
 const operation_source = `
-mutation ${operation_name}($where: Ytitne_Mutation__Attributes, $attributes: Ytitne_Mutation__Attributes) {
+mutation ${operation_name}($where: Ytitne_Mutation__Where, $attributes: Ytitne_Mutation__Attributes) {
 	update_ytitne(where: $where, attributes: $attributes) {
 		attributes {
 			id

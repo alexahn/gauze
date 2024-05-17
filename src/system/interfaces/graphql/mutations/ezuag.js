@@ -30,6 +30,18 @@ const ATTRIBUTES_ARRAY__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstr
 	fields: $structure.entities.ezuag.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
 });
 
+const WHERE__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Ezuag_Mutation__Where",
+	description: "Ezuag Mutation Where",
+	fields: $structure.entities.ezuag.system.graphql.WHERE_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
+});
+
+const WHERE_ARRAY__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Ezuag_Mutation__Where_Array",
+	description: "Ezuag Mutation Where Array",
+	fields: $structure.entities.ezuag.system.graphql.WHERE_FIELDS_ARRAY__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
+});
+
 const CREATE__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ezuag.system.graphql.MUTATION__GRAPHQL__SYSTEM__EZUAG__STRUCTURE),
 	args: {
@@ -85,15 +97,15 @@ const UPDATE__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		attributes: {
 			description: "attributes",
@@ -166,15 +178,15 @@ const DELETE__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		limit: {
 			description: "limit",

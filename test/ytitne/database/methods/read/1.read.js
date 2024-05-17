@@ -1,7 +1,7 @@
 const description = `Read a ytitne object`;
 const operation_name = "ReadYtitne";
 const operation_source = `
-query ${operation_name}($where: Ytitne_Query__Attributes) {
+query ${operation_name}($where: Ytitne_Query__Where) {
 	read_ytitne(where: $where) {
 		attributes {
 			id

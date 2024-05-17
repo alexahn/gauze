@@ -36,6 +36,24 @@ const ATTRIBUTES_STRING__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abst
 	fields: $structure.entities.ytitne.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
 });
 
+const WHERE__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Ytitne_Query__Where",
+	description: "Ytitne Query Where",
+	fields: $structure.entities.ytitne.database.graphql.WHERE_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
+});
+
+const WHERE_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Ytitne_Query__Where_Array",
+	description: "Ytitne Query Where Array",
+	fields: $structure.entities.ytitne.database.graphql.WHERE_FIELDS_ARRAY__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
+});
+
+const WHERE_STRING__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Ytitne_Query__Where_String",
+	description: "Ytitne Query Where String",
+	fields: $structure.entities.ytitne.database.graphql.WHERE_FIELDS_STRING__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
+});
+
 const READ__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ytitne.database.graphql.QUERY__GRAPHQL__DATABASE__YTITNE__STRUCTURE),
 	args: {
@@ -45,23 +63,23 @@ const READ__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: ATTRIBUTES_STRING__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: ATTRIBUTES_STRING__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",
@@ -113,27 +131,27 @@ const COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		count: {
 			description: "count",
-			type: ATTRIBUTES_STRING__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: ATTRIBUTES_STRING__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: ATTRIBUTES_STRING__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 	},
 	resolve: (_source, query_arguments, context) => {

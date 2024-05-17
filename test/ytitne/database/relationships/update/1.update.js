@@ -2,9 +2,9 @@ const description = `Update a ytitne object`;
 const operation_name = "UpdateYtitne";
 const operation_source = `
 mutation ${operation_name}(
-	$where: Ytitne_Mutation__Attributes,
+	$where: Ytitne_Mutation__Where,
 	$attributes: Ytitne_Mutation__Attributes,
-	$where2: Ytitne_Mutation__Attributes,
+	$where2: Ytitne_Mutation__Where,
 	$attributes2: Ytitne_Mutation__Attributes
 ) {
 	update_ytitne(where: $where, attributes: $attributes) {

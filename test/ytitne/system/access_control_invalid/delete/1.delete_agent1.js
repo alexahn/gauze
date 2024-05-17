@@ -10,7 +10,7 @@ const context = {
 const operation_name = "DeleteYtitne";
 const operation_source = `
 mutation ${operation_name}(
-	$where: Ytitne_Mutation__Attributes,
+	$where: Ytitne_Mutation__Where,
 ) {
 	delete_ytitne(where: $where) {
 		attributes {

@@ -1,7 +1,7 @@
 const description = `Delete a ytitne object`;
 const operation_name = "DeleteYtitne";
 const operation_source = `
-mutation ${operation_name}($where: Ytitne_Mutation__Attributes, $where2: Ytitne_Mutation__Attributes) {
+mutation ${operation_name}($where: Ytitne_Mutation__Where, $where2: Ytitne_Mutation__Where) {
 	delete_ytitne(where: $where) {
 		attributes {
 			id

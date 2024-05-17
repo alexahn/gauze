@@ -10,7 +10,7 @@ const context = {
 const operation_name = "ReadYtitne";
 const operation_source = `
 query ${operation_name}(
-	$ytitne: Ytitne_Query__Attributes,
+	$ytitne: Ytitne_Query__Where,
 ) {
 	read_ytitne(where: $ytitne) {
 		attributes {
