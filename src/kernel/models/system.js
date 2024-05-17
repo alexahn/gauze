@@ -51,6 +51,17 @@ class SystemModel extends Model {
 			});
 			self.allowed_method_agent_types[method] = map;
 		});
+		self.allowed_fields_agent_types = {};
+		Object.keys(self.entity.fields).forEach(function (field_key) {
+			const field = self.entity.fields[field_key];
+			field.allowed_agent_types.forEach(function (agent_type) {
+				if (self.allowed_fields_agent_types[agent_type]) {
+					self.allowed_fields_agent_types[agent_type].push(field.name);
+				} else {
+					self.allowed_fields_agent_types[agent_type] = [field.name];
+				}
+			});
+		});
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.constructor:exit`);
 	}
 	static _class_name(schema_name) {
@@ -515,6 +526,18 @@ class SystemModel extends Model {
 		const self = this;
 		if (!self.allowed_method_agent_types[method][agent.agent_type]) {
 			throw new Error("Authorization failed: agent type is not allowed for this method");
+		}
+	}
+	_filter_by_agent(agent, attributes) {
+		const self = this;
+		const filtered = {};
+		if (self.allowed_fields_agent_types[agent.agent_type]) {
+			self.allowed_fields_agent_types[agent.agent_type].forEach(function (field) {
+				filtered[field] = attributes[field];
+			});
+			return filtered;
+		} else {
+			return filtered;
 		}
 	}
 	_root_create(context, parameters, realm) {
