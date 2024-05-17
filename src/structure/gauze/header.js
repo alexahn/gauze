@@ -42,6 +42,29 @@ const HEADER_FIELD_TYPE__HEADER__STRUCTURE = new $abstract.gauze.types.graphql.O
 	fields: () => HEADER_FIELD_FIELDS__HEADER__STRUCTURE,
 });
 
+const HEADER_METHOD_FIELDS__HEADER__STRUCTURE = {
+	name: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "method name",
+	},
+	privacy: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "method privacy",
+	},
+	valid_agent_types: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+			new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		),
+		description: "method valid_agent_types",
+	},
+};
+
+const HEADER_METHOD_TYPE__HEADER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Header_Method",
+	description: "method",
+	fields: () => HEADER_METHOD_FIELDS__HEADER__STRUCTURE,
+});
+
 const HEADER_FIELDS__HEADER__STRUCTURE = {
 	name: {
 		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
@@ -63,6 +86,10 @@ const HEADER_FIELDS__HEADER__STRUCTURE = {
 		type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(HEADER_FIELD_TYPE__HEADER__STRUCTURE),
 		description: "fields",
 	},
+	methods: {
+		type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(HEADER_METHOD_TYPE__HEADER__STRUCTURE),
+		description: "methods",
+	},
 	attributes: {
 		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "graphql attributes",
@@ -80,7 +107,9 @@ const HEADER_FIELDS__HEADER__STRUCTURE = {
 		description: "graphql attributes string query type",
 	},
 	relationships: {
-		type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+			new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		),
 		description: "graphql relationships",
 	},
 };

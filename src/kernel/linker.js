@@ -31,6 +31,7 @@ function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 								description: field.description,
 							};
 						});
+						const methods = Object.values(module.methods);
 						const pascal_snake_name = pascal_snake_case(module.name);
 						// todo: do this the right way by reading the name field from the type definition
 						// todo: we can do this by defining an ATTRIBUTES object in the schema and passing it into this function
@@ -38,16 +39,26 @@ function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 						const attributes_query_type = `${pascal_snake_name}_Query__Attributes`;
 						const attributes_mutation_type = `${pascal_snake_name}_Mutation__Attributes`;
 						const attributes_string_query_type = `${pascal_snake_name}_Query__Attributes_String`;
+						let relationships;
+						if (realm === "database") {
+							relationships = $structure.relationships.DATABASE_RELATIONSHIPS__RELATIONSHIP__STRUCTURE[module.graphql_meta_type] || [];
+						} else if (realm === "system") {
+							relationships = $structure.relationships.SYSTEM_RELATIONSHIPS__RELATIONSHIP__STRUCTURE[module.graphql_meta_type] || [];
+						} else {
+							relationships = [];
+						}
 						return {
 							name: module.name,
 							table_name: module.table_name,
 							primary_key: module.primary_key,
 							graphql_meta_type: module.graphql_meta_type,
 							fields: fields,
+							methods: methods,
 							attributes: module.graphql_attributes_string,
 							attributes_query_type: attributes_query_type,
 							attributes_mutation_type: attributes_mutation_type,
 							attributes_string_query_type: attributes_string_query_type,
+							relationships: relationships,
 						};
 					} else {
 						return null;

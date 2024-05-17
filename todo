@@ -495,7 +495,7 @@
 					[ ] just shard the table
 				[ ] will probably need another aggregation table per item, that has the total count of relationships (to any entity) on the item
 [ ] header data expansion and entity definition display in ui
-	[ ] include relationships and method policies
+	[x] include relationships and method policies
 	[ ] extend type item view to be able to view relationships to the object
 [ ] abstract entity and field definition extensions (aligned with database semantics)
 	[ ] add default order key to entity definitions
