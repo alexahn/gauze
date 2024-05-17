@@ -501,7 +501,7 @@
 		[ ] why do we need this?
 	[x] add allowed_agent_types definitions to individual fields
 		[ ] filter returned fields according to agent type
-		[ ] update manager to enforce new constraints
+		[x] update manager to enforce new constraints
 [ ] query and mutation argument extensions (aligned with database semantics)
 	[ ] add where_greater and where_lesser
 	[ ] consider changing order to accept an array of ordering arguments (e.g. column and direction)

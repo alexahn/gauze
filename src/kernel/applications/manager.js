@@ -170,6 +170,18 @@ class GauzeManager {
 			if (typeof field.post_deserialize_middlewares.length !== "number")
 				throw new Error(`Field 'post_deserialize_middlewares' attribute must have length attribute of type 'number': ${field.post_deserialize_middlewares.length}`);
 			validate_reducers(field.post_deserialize_middlewares);
+			if (typeof field.allowed_agent_types !== "object") throw new Error(`Field 'allowed_agent_types' attribute must be of type 'object': ${field.allowed_agent_types}`);
+			if (typeof field.allowed_agent_types.length !== "number") throw new Error(`Field 'allowed_agent_types' attribute must be of type 'array': ${field.allowed_agent_types}`);
+			field.allowed_agent_types.forEach(function (agent_type) {
+				if (typeof agent_type !== "string") throw new Error(`Field attribute 'allowed_agent_types' must contain only string values`);
+				if (agent_type === config.table_name) {
+					if (!self.valid_agent_type_exceptions[agent_type])
+						throw new Error(`Field attribute 'allowed_agent_types' must contain string values from (${Object.keys(self.valid_agent_type_exceptions)}): ${agent_type}`);
+				} else {
+					if (!self.valid_agent_types[agent_type])
+						throw new Error(`Field attribute 'allowed_agent_types' must contain string values from (${Object.keys(self.valid_agent_types)}): ${agent_type}`);
+				}
+			});
 		});
 		// methods
 		if (typeof config.methods !== "object") throw new Error(`Entity must have a 'methods' attribute of type 'object': ${config.methods}`);

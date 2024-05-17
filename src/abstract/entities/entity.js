@@ -16,6 +16,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__agent_user"],
 			},
 			created_at: {
 				name: "created_at",
@@ -28,6 +29,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [$abstract.gauze.deserializers.CREATED_AT__DESERIALIZER__GAUZE__ABSTRACT("created_at")],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__agent_user"],
 			},
 			updated_at: {
 				name: "updated_at",
@@ -40,6 +42,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [$abstract.gauze.deserializers.UPDATED_AT__DESERIALIZER__GAUZE__ABSTRACT("updated_at")],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__agent_user"],
 			},
 			deleted_at: {
 				name: "deleted_at",
@@ -52,6 +55,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [$abstract.gauze.deserializers.DELETED_AT__DESERIALIZER__GAUZE__ABSTRACT("deleted_at")],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__agent_user"],
 			},
 			text: {
 				name: "text",
@@ -64,6 +68,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__agent_user"],
 			},
 		},
 		methods: {
