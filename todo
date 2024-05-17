@@ -554,6 +554,9 @@
 			[ ] we cannot do partial updates if we do this, and all updates will require the full set of attributes
 				[ ] if someone wants partial updates, they can loosen the constraint and define custom validation in the models or controllers
 		[ ] name the current attributes to something like Ezuag_Mutation__Where, along with the other types for where_in, where_not_in, cache_where_in, cache_where_not_in
+	[ ] add an indexed attribute to fields in abstract entity definitions
+		[ ] only allow ordering on fields that have indexed set to true
+		[ ] ideally this setting should align with a database index
 [ ] cli, commands, and manager application
 	[ ] polish commands and manager application
 	[ ] align environment variables with cli commands
