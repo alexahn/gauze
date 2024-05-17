@@ -180,16 +180,16 @@ class GauzeManager {
 			if (method.name !== key) throw new Error(`Method 'name' attribute must align with the key in the 'methods' attribute: ${method.name} !== ${key}`);
 			// privacy
 			if (typeof method.privacy !== "string") throw new Error(`Method must have a 'privacy' attribute of type 'object': ${method.privacy}`);
-			if (typeof method.valid_agent_types !== "object") throw new Error(`Method must have a 'valid_agent_types' attribute of type 'array': ${method.valid_agent_types}`);
-			if (typeof method.valid_agent_types.length !== "number") throw new Error(`Method must have a 'valid_agent_types' attribute of type 'array': ${method.valid_agent_types}`);
-			method.valid_agent_types.forEach(function (agent_type) {
-				if (typeof agent_type !== "string") throw new Error(`Method attribute 'valid_agent_types' must contain only string values`);
+			if (typeof method.allowed_agent_types !== "object") throw new Error(`Method must have a 'allowed_agent_types' attribute of type 'array': ${method.allowed_agent_types}`);
+			if (typeof method.allowed_agent_types.length !== "number") throw new Error(`Method must have a 'allowed_agent_types' attribute of type 'array': ${method.allowed_agent_types}`);
+			method.allowed_agent_types.forEach(function (agent_type) {
+				if (typeof agent_type !== "string") throw new Error(`Method attribute 'allowed_agent_types' must contain only string values`);
 				if (agent_type === config.table_name) {
 					if (!self.valid_agent_type_exceptions[agent_type])
-						throw new Error(`Method attribute 'valid_agent_types' must contain string values from (${Object.keys(self.valid_agent_type_exceptions)}): ${agent_type}`);
+						throw new Error(`Method attribute 'allowed_agent_types' must contain string values from (${Object.keys(self.valid_agent_type_exceptions)}): ${agent_type}`);
 				} else {
 					if (!self.valid_agent_types[agent_type])
-						throw new Error(`Method attribute 'valid_agent_types' must contain string values from (${Object.keys(self.valid_agent_types)}): ${agent_type}`);
+						throw new Error(`Method attribute 'allowed_agent_types' must contain string values from (${Object.keys(self.valid_agent_types)}): ${agent_type}`);
 				}
 			});
 		});
