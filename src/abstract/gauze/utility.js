@@ -1,4 +1,4 @@
-import * as $abstract from "./../abstract/index.js"
+import * as $abstract from "./../../abstract/index.js"
 
 function create_graphql_fields(entity) {
 	const graphql_fields = {};
