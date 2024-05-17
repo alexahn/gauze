@@ -16,6 +16,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
 			},
 			gauze__secret__created_at: {
 				name: "gauze__secret__created_at",
@@ -28,6 +29,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [$abstract.gauze.deserializers.CREATED_AT__DESERIALIZER__GAUZE__ABSTRACT("gauze__secret__created_at")],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
 			},
 			gauze__secret__updated_at: {
 				name: "gauze__secret__updated_at",
@@ -40,6 +42,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [$abstract.gauze.deserializers.UPDATED_AT__DESERIALIZER__GAUZE__ABSTRACT("gauze__secret__updated_at")],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
 			},
 			gauze__secret__deleted_at: {
 				name: "gauze__secret__deleted_at",
@@ -52,6 +55,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [$abstract.gauze.deserializers.DELETED_AT__DESERIALIZER__GAUZE__ABSTRACT("gauze__secret__deleted_at")],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
 			},
 			gauze__secret__realm: {
 				name: "gauze__secret__realm",
@@ -64,6 +68,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
 			},
 			gauze__secret__agent_id: {
 				name: "gauze__secret__agent_id",
@@ -76,6 +81,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
 			},
 			gauze__secret__agent_type: {
 				name: "gauze__secret__agent_type",
@@ -88,6 +94,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
 			},
 			gauze__secret__value: {
 				name: "gauze__secret__value",
@@ -100,6 +107,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: [],
 			},
 			gauze__secret__kind: {
 				name: "gauze__secret__kind",
@@ -112,6 +120,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
 			},
 			gauze__secret__name: {
 				name: "gauze__secret__name",
@@ -124,6 +133,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
 			},
 		},
 		methods: {

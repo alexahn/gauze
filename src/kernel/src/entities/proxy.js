@@ -16,6 +16,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
 			},
 			gauze__proxy__created_at: {
 				name: "gauze__proxy__created_at",
@@ -28,6 +29,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [$abstract.gauze.deserializers.CREATED_AT__DESERIALIZER__GAUZE__ABSTRACT("gauze__proxy__created_at")],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
 			},
 			gauze__proxy__updated_at: {
 				name: "gauze__proxy__updated_at",
@@ -40,6 +42,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [$abstract.gauze.deserializers.UPDATED_AT__DESERIALIZER__GAUZE__ABSTRACT("gauze__proxy__updated_at")],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
 			},
 			gauze__proxy__deleted_at: {
 				name: "gauze__proxy__deleted_at",
@@ -52,6 +55,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [$abstract.gauze.deserializers.DELETED_AT__DESERIALIZER__GAUZE__ABSTRACT("gauze__proxy__deleted_at")],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
 			},
 			gauze__proxy__agent_id: {
 				name: "gauze__proxy__agent_id",
@@ -64,6 +68,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
 			},
 			gauze__proxy__agent_type: {
 				name: "gauze__proxy__agent_type",
@@ -76,6 +81,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
 			},
 			gauze__proxy__root_id: {
 				name: "gauze__proxy__root_id",
@@ -88,6 +94,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
 			},
 		},
 		methods: {
