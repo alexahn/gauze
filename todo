@@ -558,6 +558,7 @@
 		[x] add new properties to abstract entity definitions using the new utility functions
 		[x] create new graphql structures to align with the new properties
 		[x] update header graphql query to return the new properties
+		[ ] remove graphql_fields from entity definition
 	[ ] add an indexed attribute to fields in abstract entity definitions
 		[ ] only allow ordering on fields that have indexed set to true
 		[ ] ideally this setting should align with a database index
