@@ -329,12 +329,23 @@ class GauzeManager {
 				const methods = config[key];
 				validate_methods(path, methods);
 			} else if (key === "graphql_fields") {
+				// todo: remove this property
 				const graphql_fields = config[key];
 				if (typeof graphql_fields !== "object") throw new Error(`Entity property '${path}' must be of type 'object', ${graphql_fields} is not of type 'object'`);
+			} else if (key === "graphql_attributes_fields") {
+				const graphql_attributes_fields = config[key];
+				if (typeof graphql_attributes_fields !== "object") throw new Error(`Entity property '${path}' must be of type 'object', ${graphql_attributes_fields} is not of type 'object'`);
 			} else if (key === "graphql_attributes_string") {
 				const graphql_attributes_string = config[key];
 				if (typeof graphql_attributes_string !== "string")
 					throw new Error(`Entity property '${path}' must be of type 'string', ${graphql_attributes_string} is not of type 'string'`);
+			} else if (key === "graphql_where_fields") {
+				const graphql_where_fields = config[key];
+				if (typeof graphql_where_fields !== "object") throw new Error(`Entity property '${path}' must be of type 'object', ${graphql_where_fields} is not of type 'object'`);
+			} else if (key === "graphql_where_string") {
+				const graphql_where_string = config[key];
+				if (typeof graphql_where_string !== "string")
+					throw new Error(`Entity property '${path}' must be of type 'string', ${graphql_where_string} is not of type 'string'`);
 			} else {
 				throw new Error(`Entity property '${path}' is invalid, property '${key}' must be one of: ${Object.keys(valid_entity_keys)}`);
 			}
