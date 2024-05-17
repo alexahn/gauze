@@ -63,7 +63,7 @@ export default function ($abstract) {
 			},
 			gauze__secret__realm: {
 				name: "gauze__secret__realm",
-				required: false,
+				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "realm",
@@ -77,7 +77,7 @@ export default function ($abstract) {
 			},
 			gauze__secret__agent_id: {
 				name: "gauze__secret__agent_id",
-				required: false,
+				required: true,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "agent_id",
@@ -91,7 +91,7 @@ export default function ($abstract) {
 			},
 			gauze__secret__agent_type: {
 				name: "gauze__secret__agent_type",
-				required: false,
+				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "agent_type",
@@ -105,7 +105,7 @@ export default function ($abstract) {
 			},
 			gauze__secret__value: {
 				name: "gauze__secret__value",
-				required: false,
+				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "value",
@@ -119,7 +119,7 @@ export default function ($abstract) {
 			},
 			gauze__secret__kind: {
 				name: "gauze__secret__kind",
-				required: false,
+				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "kind",
@@ -133,7 +133,7 @@ export default function ($abstract) {
 			},
 			gauze__secret__name: {
 				name: "gauze__secret__name",
-				required: false,
+				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "name",

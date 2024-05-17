@@ -63,7 +63,7 @@ export default function ($abstract) {
 			},
 			gauze__proxy__agent_id: {
 				name: "gauze__proxy__agent_id",
-				required: false,
+				required: true,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "agent_id",
@@ -77,7 +77,7 @@ export default function ($abstract) {
 			},
 			gauze__proxy__agent_type: {
 				name: "gauze__proxy__agent_type",
-				required: false,
+				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "agent_type",
@@ -91,7 +91,7 @@ export default function ($abstract) {
 			},
 			gauze__proxy__root_id: {
 				name: "gauze__proxy__root_id",
-				required: false,
+				required: true,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "root_id",

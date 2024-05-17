@@ -63,7 +63,7 @@ export default function ($abstract) {
 			},
 			gauze__session__realm: {
 				name: "gauze__session__realm",
-				required: false,
+				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "realm",
@@ -105,7 +105,7 @@ export default function ($abstract) {
 			},
 			gauze__session__value: {
 				name: "gauze__session__value",
-				required: false,
+				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "value",
@@ -119,7 +119,7 @@ export default function ($abstract) {
 			},
 			gauze__session__kind: {
 				name: "gauze__session__kind",
-				required: false,
+				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "kind",
@@ -133,7 +133,7 @@ export default function ($abstract) {
 			},
 			gauze__session__seed: {
 				name: "gauze__session__seed",
-				required: false,
+				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "seed",
@@ -147,7 +147,7 @@ export default function ($abstract) {
 			},
 			gauze__session__data: {
 				name: "gauze__session__data",
-				required: false,
+				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "data",

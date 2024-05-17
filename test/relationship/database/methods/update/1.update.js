@@ -23,6 +23,8 @@ const operation_variables = {
 	attributes: {
 		gauze__relationship__from_type: "gauze__entity",
 		gauze__relationship__from_id: "00000000-0000-0000-0000-000000000001",
+		gauze__relationship__to_type: "gauze__ytitne",
+		gauze__relationship__to_id: "00000000-0000-0000-0000-000000000004",
 	},
 };
 const expected = `{

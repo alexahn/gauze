@@ -2,7 +2,6 @@ import * as $abstract from "./../../abstract/index.js";
 
 function create_graphql_attributes_fields(entity) {
 	// todo: add a boolean attributes property to field definition so we can expose a subset of fields to attributes argument?
-	/*
 	const graphql_fields = {};
 	Object.keys(entity.fields).forEach(function (key) {
 		const field = entity.fields[key];
@@ -17,15 +16,6 @@ function create_graphql_attributes_fields(entity) {
 				description: field.description,
 			};
 		}
-	});
-	*/
-	const graphql_fields = {};
-	Object.keys(entity.fields).forEach(function (key) {
-		const field = entity.fields[key];
-		graphql_fields[key] = {
-			type: field.graphql_type,
-			description: field.description,
-		};
 	});
 	return graphql_fields;
 }

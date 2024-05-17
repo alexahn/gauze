@@ -63,7 +63,7 @@ export default function ($abstract) {
 			},
 			gauze__relationship__from_type: {
 				name: "gauze__relationship__from_type",
-				required: false,
+				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "from_type",
@@ -77,7 +77,7 @@ export default function ($abstract) {
 			},
 			gauze__relationship__from_id: {
 				name: "gauze__relationship__from_id",
-				required: false,
+				required: true,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "from_id",
@@ -91,7 +91,7 @@ export default function ($abstract) {
 			},
 			gauze__relationship__to_type: {
 				name: "gauze__relationship__to_type",
-				required: false,
+				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "to_type",
@@ -105,7 +105,7 @@ export default function ($abstract) {
 			},
 			gauze__relationship__to_id: {
 				name: "gauze__relationship__to_id",
-				required: false,
+				required: true,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "to_id",
