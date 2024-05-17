@@ -7,6 +7,7 @@ export default function ($abstract) {
 		fields: {
 			gauze__agent_person__id: {
 				name: "gauze__agent_person__id",
+				required: false,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "id",
@@ -20,6 +21,7 @@ export default function ($abstract) {
 			},
 			gauze__agent_person__created_at: {
 				name: "gauze__agent_person__created_at",
+				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "created_at",
@@ -33,6 +35,7 @@ export default function ($abstract) {
 			},
 			gauze__agent_person__updated_at: {
 				name: "gauze__agent_person__updated_at",
+				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "updated_at",
@@ -46,6 +49,7 @@ export default function ($abstract) {
 			},
 			gauze__agent_person__deleted_at: {
 				name: "gauze__agent_person__deleted_at",
+				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "deleted_at",
@@ -59,6 +63,7 @@ export default function ($abstract) {
 			},
 			gauze__agent_person__email: {
 				name: "gauze__agent_person__email",
+				required: false,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "email",

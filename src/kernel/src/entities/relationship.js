@@ -7,6 +7,7 @@ export default function ($abstract) {
 		fields: {
 			gauze__relationship__id: {
 				name: "gauze__relationship__id",
+				required: false,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "id",
@@ -20,6 +21,7 @@ export default function ($abstract) {
 			},
 			gauze__relationship__created_at: {
 				name: "gauze__relationship__created_at",
+				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "created_at",
@@ -33,6 +35,7 @@ export default function ($abstract) {
 			},
 			gauze__relationship__updated_at: {
 				name: "gauze__relationship__updated_at",
+				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "updated_at",
@@ -46,6 +49,7 @@ export default function ($abstract) {
 			},
 			gauze__relationship__deleted_at: {
 				name: "gauze__relationship__deleted_at",
+				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "deleted_at",
@@ -59,6 +63,7 @@ export default function ($abstract) {
 			},
 			gauze__relationship__from_type: {
 				name: "gauze__relationship__from_type",
+				required: false,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "from_type",
@@ -72,6 +77,7 @@ export default function ($abstract) {
 			},
 			gauze__relationship__from_id: {
 				name: "gauze__relationship__from_id",
+				required: false,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "from_id",
@@ -85,6 +91,7 @@ export default function ($abstract) {
 			},
 			gauze__relationship__to_type: {
 				name: "gauze__relationship__to_type",
+				required: false,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "to_type",
@@ -98,6 +105,7 @@ export default function ($abstract) {
 			},
 			gauze__relationship__to_id: {
 				name: "gauze__relationship__to_id",
+				required: false,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "to_id",
