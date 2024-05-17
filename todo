@@ -542,15 +542,18 @@
 		[ ] we can't do this without also excluding the field from the database graphql interface
 		[ ] we can't do this without causing a fork in the attributes definition for an entity, which would be annoying since it is an additional thing to remember
 			[ ] e.g. prefixing the graphql attribute types with the realm name
-	[ ] add a required attribute to fields in abstract entity definitions?
-		[ ] we can use it to create two different attribute types
-			[ ] one for creation, and another for querying and updating
 	[-] use graphql enum types (https://graphql.org/graphql-js/type/#example-4) to lock down fields that act on a set of values
 		[-] entity_type, agent_type, realm, agent_role
 		[x] the problem is that using the enums is a pain because you need to know the name of the option
 			[-] we can introduce a naming convention, e.g. REALM__SYSTEM, AGENT_ROLE__ROOT, AGENT_ROLE__TRUNK, AGENT_ROLE__LEAF, etc
 				[x] but it is still awkward, and it feels like it would be easier to use if we just left it as a string field but added validation on it
 			[ ] add custom validation for string types that accept a set of values
+	[ ] add a required attribute to fields in abstract entity definitions?
+		[ ] we can use it to create two different attribute types
+			[ ] one for creation, and another for querying and updating
+			[ ] we cannot do partial updates if we do this, and all updates will require the full set of attributes
+				[ ] if someone wants partial updates, they can loosen the constraint and define custom validation in the models or controllers
+		[ ] name the current attributes to something like Ezuag_Mutation__Where, along with the other types for where_in, where_not_in, cache_where_in, cache_where_not_in
 [ ] cli, commands, and manager application
 	[ ] polish commands and manager application
 	[ ] align environment variables with cli commands
@@ -632,3 +635,7 @@
 		[ ] this will cause a re-render on the client side that will essentially repeat the entire rendering logic after receiving the initial html from the server
 			[ ] if done correctly, the visual appearance of the page should not change at all, even though there was a client side re-render
 			[ ] the extra render should not impose a heavy server hit because all the graphql queries should still be in the lru cache
+[ ] networking, and load balancing based on source ip
+	[ ] same principle as database sharding
+	[ ] look into bgp to handle destination routing and configuring autonomous systems
+		[ ] probably define an autonomous system for every datacenter
