@@ -528,7 +528,7 @@ class SystemModel extends Model {
 			throw new Error("Authorization failed: agent type is not allowed for this method");
 		}
 	}
-	_filter_by_agent(agent, attributes) {
+	agent_filter(agent, attributes) {
 		const self = this;
 		const filtered = {};
 		if (self.allowed_fields_agent_types[agent.agent_type]) {

@@ -34,7 +34,9 @@ class SystemController extends Controller {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.create:enter`, "input", input);
 		return self.model.create(model_context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.deserialize(row, "create");
+				row = self.model.deserialize(row, "create");
+				row = self.model.agent_filter(agent, row);
+				return row;
 			});
 		});
 	}
@@ -50,7 +52,9 @@ class SystemController extends Controller {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.read:enter`, "input", input);
 		return self.model.read(model_context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.deserialize(row, "read");
+				row = self.model.deserialize(row, "read");
+				row = self.model.agent_filter(agent, row);
+				return row;
 			});
 		});
 	}
@@ -66,7 +70,9 @@ class SystemController extends Controller {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.update:enter`, "input", input);
 		return self.model.update(model_context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.deserialize(row, "update");
+				row = self.model.deserialize(row, "update");
+				row = self.model.agent_filter(agent, row);
+				return row;
 			});
 		});
 	}
@@ -82,7 +88,9 @@ class SystemController extends Controller {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.delete:enter`, "input", input);
 		return self.model.delete(model_context, input).then(function (rows) {
 			return rows.map(function (row) {
-				return self.model.deserialize(row, "delete");
+				row = self.model.deserialize(row, "delete");
+				row = self.model.agent_filter(agent, row);
+				return row;
 			});
 		});
 	}
