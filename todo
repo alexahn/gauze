@@ -460,7 +460,7 @@
 	[x] call it _header
 	[x] add to kernel stages
 	[ ] update to pull the type names from interface definitions for attributes_query_type and attributes_mutation_type
-	[ ] add relationship data for each entry, which we can easily pull from structure definitions
+	[x] add relationship data for each entry, which we can easily pull from structure definitions
 [x] data presentation in ui
 	[x] basic piping to fetch data
 	[x] pagination record tied to view/url
@@ -507,6 +507,8 @@
 	[ ] consider changing order to accept an array of ordering arguments (e.g. column and direction)
 		[ ] the problem is that it would be a pain to handle in the ui because the order in which the sorts are applied matter
 		[x] for now, let's keep it simple and stick to only one sort order
+[ ] admin ui
+	[ ] show relationships for type item
 [ ] design language and visual consistency
 	[ ] figure out the general structure of layouts and sections
 		[ ] configure all the styles from the root node and downwards in a consistent manner
@@ -515,8 +517,8 @@
 		[ ] maybe use something like zod for input validation
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
-	[ ] refactor validate_entity_config to use dot path for error messages
-		[ ] use the same pattern as defined in the environment session model to validate data fields
+	[x] refactor validate_entity_config to use dot path for error messages
+		[x] use the same pattern as defined in the environment session model to validate data fields
 	[ ] use types defined in abstract realm for all environment graphql definitions
 	[ ] rename src/kernel/src/initial to src/kernel/src/skeleton
 	[ ] refactor kernel models to have elegant function signatures
