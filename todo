@@ -624,3 +624,10 @@
 		[x] figure out if we want to do the same thing for the system model and interface
 			[x] it might not be necessary because the inputs to the system are expected to be able to be serialized to json
 			[x] the system model just executes a graphql operation, so it doesn't need the parsed arguments
+[ ] server side rendering bindings and architecture (nice to have)
+	[ ] either local storage binding or service binding (e.g. mirror the model service on the backend)
+	[ ] put redux state into local storage or put model data into local storage
+	[ ] inject the react output into an index.html template (that has the app script and css tags)
+		[ ] this will cause a re-render on the client side that will essentially repeat the entire rendering logic after receiving the initial html from the server
+			[ ] if done correctly, the visual appearance of the page should not change at all, even though there was a client side re-render
+			[ ] the extra render should not impose a heavy server hit because all the graphql queries should still be in the lru cache
