@@ -7,6 +7,7 @@ export default function ($abstract) {
 		fields: {
 			gauze__whitelist__id: {
 				name: "gauze__whitelist__id",
+				required: false,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "id",
@@ -20,6 +21,7 @@ export default function ($abstract) {
 			},
 			gauze__whitelist__created_at: {
 				name: "gauze__whitelist__created_at",
+				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "created_at",
@@ -33,6 +35,7 @@ export default function ($abstract) {
 			},
 			gauze__whitelist__updated_at: {
 				name: "gauze__whitelist__updated_at",
+				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "updated_at",
@@ -46,6 +49,7 @@ export default function ($abstract) {
 			},
 			gauze__whitelist__deleted_at: {
 				name: "gauze__whitelist__deleted_at",
+				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "deleted_at",
@@ -59,6 +63,7 @@ export default function ($abstract) {
 			},
 			gauze__whitelist__realm: {
 				name: "gauze__whitelist__realm",
+				required: false,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "realm",
@@ -72,6 +77,7 @@ export default function ($abstract) {
 			},
 			gauze__whitelist__agent_role: {
 				name: "gauze__whitelist__agent_role",
+				required: false,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "agent_role",
@@ -85,6 +91,7 @@ export default function ($abstract) {
 			},
 			gauze__whitelist__agent_id: {
 				name: "gauze__whitelist__agent_id",
+				required: false,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "agent_id",
@@ -98,6 +105,7 @@ export default function ($abstract) {
 			},
 			gauze__whitelist__agent_type: {
 				name: "gauze__whitelist__agent_type",
+				required: false,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "agent_type",
@@ -111,6 +119,7 @@ export default function ($abstract) {
 			},
 			gauze__whitelist__entity_id: {
 				name: "gauze__whitelist__entity_id",
+				required: false,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "entity_id",
@@ -124,6 +133,7 @@ export default function ($abstract) {
 			},
 			gauze__whitelist__entity_type: {
 				name: "gauze__whitelist__entity_type",
+				required: false,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "entity_type",
@@ -137,6 +147,7 @@ export default function ($abstract) {
 			},
 			gauze__whitelist__method: {
 				name: "gauze__whitelist__method",
+				required: false,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "method",

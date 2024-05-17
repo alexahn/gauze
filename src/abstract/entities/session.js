@@ -7,6 +7,7 @@ export default function ($abstract) {
 		fields: {
 			gauze__session__id: {
 				name: "gauze__session__id",
+				required: false,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "id",
@@ -20,6 +21,7 @@ export default function ($abstract) {
 			},
 			gauze__session__created_at: {
 				name: "gauze__session__created_at",
+				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "created_at",
@@ -33,6 +35,7 @@ export default function ($abstract) {
 			},
 			gauze__session__updated_at: {
 				name: "gauze__session__updated_at",
+				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "updated_at",
@@ -46,6 +49,7 @@ export default function ($abstract) {
 			},
 			gauze__session__deleted_at: {
 				name: "gauze__session__deleted_at",
+				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "deleted_at",
@@ -59,6 +63,7 @@ export default function ($abstract) {
 			},
 			gauze__session__realm: {
 				name: "gauze__session__realm",
+				required: false,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "realm",
@@ -72,6 +77,7 @@ export default function ($abstract) {
 			},
 			gauze__session__agent_id: {
 				name: "gauze__session__agent_id",
+				required: false,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "agent_id",
@@ -85,6 +91,7 @@ export default function ($abstract) {
 			},
 			gauze__session__agent_type: {
 				name: "gauze__session__agent_type",
+				required: false,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "agent_type",
@@ -98,6 +105,7 @@ export default function ($abstract) {
 			},
 			gauze__session__value: {
 				name: "gauze__session__value",
+				required: false,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "value",
@@ -111,6 +119,7 @@ export default function ($abstract) {
 			},
 			gauze__session__kind: {
 				name: "gauze__session__kind",
+				required: false,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "kind",
@@ -124,6 +133,7 @@ export default function ($abstract) {
 			},
 			gauze__session__seed: {
 				name: "gauze__session__seed",
+				required: false,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "seed",
@@ -137,6 +147,7 @@ export default function ($abstract) {
 			},
 			gauze__session__data: {
 				name: "gauze__session__data",
+				required: false,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "data",
