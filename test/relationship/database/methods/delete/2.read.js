@@ -1,7 +1,7 @@
 const description = `Read a relationship object`;
 const operation_name = "ReadRelationship";
 const operation_source = `
-query ${operation_name}($where: Relationship_Query__Attributes) {
+query ${operation_name}($where: Relationship_Query__Where) {
 	read_relationship(where: $where) {
 		attributes {
 			gauze__relationship__id

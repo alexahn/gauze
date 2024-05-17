@@ -36,6 +36,24 @@ const ATTRIBUTES_STRING__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abs
 	fields: $structure.entities.whitelist.system.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
 });
 
+const WHERE__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Whitelist_Query__Where",
+	description: "Whitelist Query Where",
+	fields: $structure.entities.whitelist.system.graphql.WHERE_FIELDS__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
+});
+
+const WHERE_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Whitelist_Query__Where_Array",
+	description: "Whitelist Query Where Array",
+	fields: $structure.entities.whitelist.system.graphql.WHERE_FIELDS_ARRAY__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
+});
+
+const WHERE_STRING__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Whitelist_Query__Where_String",
+	description: "Whitelist Query Where String",
+	fields: $structure.entities.whitelist.system.graphql.WHERE_FIELDS_STRING__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
+});
+
 const READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.whitelist.system.graphql.QUERY__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE),
 	args: {
@@ -45,15 +63,15 @@ const READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		limit: {
 			description: "limit",
@@ -104,19 +122,19 @@ const COUNT__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 		count: {
 			description: "count",
-			type: ATTRIBUTES_STRING__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_STRING__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 	},
 	resolve: (_source, query_arguments, context) => {

@@ -8,7 +8,7 @@ const context = {
 const operation_name = "ReadBlacklist";
 const operation_source = `
 query ${operation_name}(
-	$blacklist: Blacklist_Query__Attributes
+	$blacklist: Blacklist_Query__Where
 ) {
 	read_blacklist(where: $blacklist) {
 		attributes {

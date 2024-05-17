@@ -30,6 +30,18 @@ const ATTRIBUTES_ARRAY__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $a
 	fields: $structure.entities.blacklist.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE,
 });
 
+const WHERE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Blacklist_Mutation__Where",
+	description: "Blacklist Mutation Where",
+	fields: $structure.entities.blacklist.system.graphql.WHERE_FIELDS__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE,
+});
+
+const WHERE_ARRAY__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Blacklist_Mutation__Where_Array",
+	description: "Blacklist Mutation Where Array",
+	fields: $structure.entities.blacklist.system.graphql.WHERE_FIELDS_ARRAY__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE,
+});
+
 const CREATE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.blacklist.system.graphql.MUTATION__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE),
 	args: {
@@ -85,15 +97,15 @@ const UPDATE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		attributes: {
 			description: "attributes",
@@ -166,15 +178,15 @@ const DELETE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		limit: {
 			description: "limit",

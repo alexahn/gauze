@@ -30,6 +30,18 @@ const ATTRIBUTES_ARRAY__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $
 	fields: $structure.entities.agent_root.system.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
 });
 
+const WHERE__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Root_Mutation__Where",
+	description: "Agent_Root Mutation Where",
+	fields: $structure.entities.agent_root.system.graphql.WHERE_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+});
+
+const WHERE_ARRAY__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Root_Mutation__Where_Array",
+	description: "Agent_Root Mutation Where Array",
+	fields: $structure.entities.agent_root.system.graphql.WHERE_FIELDS_ARRAY__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+});
+
 const CREATE__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_root.system.graphql.MUTATION__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE),
 	args: {
@@ -85,15 +97,15 @@ const UPDATE__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		attributes: {
 			description: "attributes",
@@ -166,15 +178,15 @@ const DELETE__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		limit: {
 			description: "limit",

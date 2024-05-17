@@ -9,8 +9,10 @@ const context = {
 };
 const operation_name = "DeleteEntity";
 const operation_source = `
-mutation ${operation_name}($where: Entity_Mutation__Attributes) {
-	update_entity(where: $where) {
+mutation ${operation_name}(
+	$where: Entity_Mutation__Where
+) {
+	delete_entity(where: $where) {
 		attributes {
 			id
 			text
@@ -25,7 +27,14 @@ const operation_variables = {
 };
 const expected = `{
     "data": {
-        "delete_entity": []
+        "delete_entity": [
+            {
+                "attributes": {
+                    "id": "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
+                    "text": "hello"
+                }
+            }
+        ]
     }
 }`;
 

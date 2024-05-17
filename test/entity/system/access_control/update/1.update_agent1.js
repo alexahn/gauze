@@ -10,7 +10,7 @@ const context = {
 const operation_name = "UpdateEntity";
 const operation_source = `
 mutation ${operation_name}(
-	$where: Entity_Mutation__Attributes,
+	$where: Entity_Mutation__Where,
 	$entity: Entity_Mutation__Attributes,
 ) {
 	update_entity(where: $where, attributes: $entity) {

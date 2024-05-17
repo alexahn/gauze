@@ -36,6 +36,24 @@ const ATTRIBUTES_STRING__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abs
 	fields: $structure.entities.blacklist.system.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE,
 });
 
+const WHERE__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Blacklist_Query__Where",
+	description: "Blacklist Query Where",
+	fields: $structure.entities.blacklist.system.graphql.WHERE_FIELDS__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE,
+});
+
+const WHERE_ARRAY__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Blacklist_Query__Where_Array",
+	description: "Blacklist Query Where Array",
+	fields: $structure.entities.blacklist.system.graphql.WHERE_FIELDS_ARRAY__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE,
+});
+
+const WHERE_STRING__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Blacklist_Query__Where_String",
+	description: "Blacklist Query Where String",
+	fields: $structure.entities.blacklist.system.graphql.WHERE_FIELDS_STRING__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE,
+});
+
 const READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.blacklist.system.graphql.QUERY__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE),
 	args: {
@@ -45,15 +63,15 @@ const READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		limit: {
 			description: "limit",
@@ -104,19 +122,19 @@ const COUNT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 		count: {
 			description: "count",
-			type: ATTRIBUTES_STRING__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_STRING__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 	},
 	resolve: (_source, query_arguments, context) => {

@@ -53,7 +53,7 @@ test.describe("ytitne graphql interface system", async function (suite_ctx) {
 		});
 	});
 	await test.it("delete", function (test_ctx) {
-		return load_steps(import.meta.dirname, "./update").then(function (steps) {
+		return load_steps(import.meta.dirname, "./delete").then(function (steps) {
 			return run_steps(
 				{
 					database: suite_ctx.database,

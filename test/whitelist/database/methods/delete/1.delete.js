@@ -8,7 +8,7 @@ const context = {
 const operation_name = "DeleteWhitelist";
 const operation_source = `
 mutation ${operation_name}(
-	$where: Whitelist_Mutation__Attributes
+	$where: Whitelist_Mutation__Where
 ) {
 	delete_whitelist(where: $where) {
 		attributes {

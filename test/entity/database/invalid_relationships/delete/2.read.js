@@ -1,7 +1,10 @@
 const description = `Read a entity object`;
 const operation_name = "ReadEntity";
 const operation_source = `
-query ${operation_name}($where: Entity_Query__Attributes, $where2: Entity_Query__Attributes) {
+query ${operation_name}(
+	$where: Entity_Query__Where,
+	$where2: Entity_Query__Where
+) {
 	read_entity(where: $where) {
 		attributes {
 			id

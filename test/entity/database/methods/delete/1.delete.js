@@ -1,7 +1,9 @@
 const description = `Delete a entity object`;
 const operation_name = "DeleteEntity";
 const operation_source = `
-mutation ${operation_name}($where: Entity_Mutation__Attributes) {
+mutation ${operation_name}(
+	$where: Entity_Mutation__Where
+) {
 	delete_entity(where: $where) {
 		attributes {
 			id

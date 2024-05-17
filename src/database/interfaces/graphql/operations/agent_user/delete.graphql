@@ -1,10 +1,10 @@
 mutation DeleteAgent_User(
 	$parent: Agent_User_Mutation__Parent
-	$where: Agent_User_Mutation__Attributes
-	$where_in: Agent_User_Mutation__Attributes_Array
-	$cache_where_in: Agent_User_Mutation__Attributes_String
-	$where_not_in: Agent_User_Mutation__Attributes_Array
-	$cache_where_not_in: Agent_User_Mutation__Attributes_String
+	$where: Agent_User_Mutation__Where
+	$where_in: Agent_User_Mutation__Where_Array
+	$cache_where_in: Agent_User_Mutation__Where_String
+	$where_not_in: Agent_User_Mutation__Where_Array
+	$cache_where_not_in: Agent_User_Mutation__Where_String
 	$limit: Int
 	$offset: Int
 	$order: String

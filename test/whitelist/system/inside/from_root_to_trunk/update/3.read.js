@@ -8,7 +8,7 @@ const context = {
 const operation_name = "ReadWhitelist";
 const operation_source = `
 query ${operation_name}(
-	$whitelist: Whitelist_Query__Attributes,
+	$whitelist: Whitelist_Query__Where,
 ) {
 	read_whitelist(where: $whitelist) {
 		_metadata {

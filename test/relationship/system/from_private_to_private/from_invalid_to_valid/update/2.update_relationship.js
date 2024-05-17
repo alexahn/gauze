@@ -8,7 +8,7 @@ const context = {
 const operation_name = "UpdateRelationship";
 const operation_source = `
 mutation ${operation_name}(
-	$where: Relationship_Mutation__Attributes,
+	$where: Relationship_Mutation__Where,
 	$relationship: Relationship_Mutation__Attributes,
 ) {
 	update_relationship(where: $where, attributes: $relationship) {

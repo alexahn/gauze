@@ -1,11 +1,11 @@
 mutation UpdateProxy(
 	$parent: Proxy_Mutation__Parent
 	$attributes: Proxy_Mutation__Attributes
-	$where: Proxy_Mutation__Attributes
-	$where_in: Proxy_Mutation__Attributes_Array
-	$cache_where_in: Proxy_Mutation__Attributes_String
-	$where_not_in: Proxy_Mutation__Attributes_Array
-	$cache_where_not_in: Proxy_Mutation__Attributes_String
+	$where: Proxy_Mutation__Where
+	$where_in: Proxy_Mutation__Where_Array
+	$cache_where_in: Proxy_Mutation__Where_String
+	$where_not_in: Proxy_Mutation__Where_Array
+	$cache_where_not_in: Proxy_Mutation__Where_String
 	$limit: Int
 	$offset: Int
 	$order: String

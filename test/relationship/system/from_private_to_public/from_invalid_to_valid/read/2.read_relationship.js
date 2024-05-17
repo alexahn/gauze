@@ -8,7 +8,7 @@ const context = {
 const operation_name = "ReadRelationship";
 const operation_source = `
 query ${operation_name}(
-	$relationship: Relationship_Query__Attributes,
+	$relationship: Relationship_Query__Where,
 ) {
 	read_relationship(where: $relationship) {
 		attributes {

@@ -1,11 +1,11 @@
 query CountEntity(
 	$parent: Entity_Query__Parent
-	$count: Entity_Query__Attributes_String
-	$where: Entity_Query__Attributes
-	$where_in: Entity_Query__Attributes_Array
-	$cache_where_in: Entity_Query__Attributes_String
-	$where_not_in: Entity_Query__Attributes_Array
-	$cache_where_not_in: Entity_Query__Attributes_String
+	$count: Entity_Query__Where_String
+	$where: Entity_Query__Where
+	$where_in: Entity_Query__Where_Array
+	$cache_where_in: Entity_Query__Where_String
+	$where_not_in: Entity_Query__Where_Array
+	$cache_where_not_in: Entity_Query__Where_String
 ) {
 	count_entity(parent: $parent, count: $count, where: $where, where_in: $where_in, cache_where_in: $cache_where_in, where_not_in: $where_not_in, cache_where_not_in: $cache_where_not_in) {
 		select

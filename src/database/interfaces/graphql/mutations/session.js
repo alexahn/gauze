@@ -36,6 +36,24 @@ const ATTRIBUTES_STRING__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $
 	fields: $structure.entities.session.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__SESSION__STRUCTURE,
 });
 
+const WHERE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Session_Mutation__Where",
+	description: "Session Mutation Where",
+	fields: $structure.entities.session.database.graphql.WHERE_FIELDS__GRAPHQL__DATABASE__SESSION__STRUCTURE,
+});
+
+const WHERE_ARRAY__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Session_Mutation__Where_Array",
+	description: "Session Mutation Where Array",
+	fields: $structure.entities.session.database.graphql.WHERE_FIELDS_ARRAY__GRAPHQL__DATABASE__SESSION__STRUCTURE,
+});
+
+const WHERE_STRING__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Session_Mutation__Where_String",
+	description: "Session Mutation Where String",
+	fields: $structure.entities.session.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__SESSION__STRUCTURE,
+});
+
 const CREATE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.session.database.graphql.MUTATION__GRAPHQL__DATABASE__SESSION__STRUCTURE),
 	args: {
@@ -83,23 +101,23 @@ const UPDATE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_ARRAY__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: ATTRIBUTES_STRING__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_ARRAY__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: ATTRIBUTES_STRING__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		attributes: {
 			description: "attributes",
@@ -164,23 +182,23 @@ const DELETE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_ARRAY__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: ATTRIBUTES_STRING__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_ARRAY__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: ATTRIBUTES_STRING__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",

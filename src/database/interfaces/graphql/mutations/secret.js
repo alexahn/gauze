@@ -36,6 +36,24 @@ const ATTRIBUTES_STRING__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $a
 	fields: $structure.entities.secret.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__SECRET__STRUCTURE,
 });
 
+const WHERE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Secret_Mutation__Where",
+	description: "Secret Mutation Where",
+	fields: $structure.entities.secret.database.graphql.WHERE_FIELDS__GRAPHQL__DATABASE__SECRET__STRUCTURE,
+});
+
+const WHERE_ARRAY__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Secret_Mutation__Where_Array",
+	description: "Secret Mutation Where Array",
+	fields: $structure.entities.secret.database.graphql.WHERE_FIELDS_ARRAY__GRAPHQL__DATABASE__SECRET__STRUCTURE,
+});
+
+const WHERE_STRING__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Secret_Mutation__Where_String",
+	description: "Secret Mutation Where String",
+	fields: $structure.entities.secret.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__SECRET__STRUCTURE,
+});
+
 const CREATE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.secret.database.graphql.MUTATION__GRAPHQL__DATABASE__SECRET__STRUCTURE),
 	args: {
@@ -83,23 +101,23 @@ const UPDATE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_ARRAY__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: ATTRIBUTES_STRING__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_ARRAY__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: ATTRIBUTES_STRING__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		attributes: {
 			description: "attributes",
@@ -164,23 +182,23 @@ const DELETE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_ARRAY__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: ATTRIBUTES_STRING__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_ARRAY__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: ATTRIBUTES_STRING__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",

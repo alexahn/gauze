@@ -36,6 +36,24 @@ const ATTRIBUTES_STRING__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstra
 	fields: $structure.entities.entity.system.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
 });
 
+const WHERE__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Entity_Query__Where",
+	description: "Entity Query Where",
+	fields: $structure.entities.entity.system.graphql.WHERE_FIELDS__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
+});
+
+const WHERE_ARRAY__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Entity_Query__Where_Array",
+	description: "Entity Query Where Array",
+	fields: $structure.entities.entity.system.graphql.WHERE_FIELDS_ARRAY__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
+});
+
+const WHERE_STRING__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Entity_Query__Where_String",
+	description: "Entity Query Where String",
+	fields: $structure.entities.entity.system.graphql.WHERE_FIELDS_STRING__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
+});
+
 const READ__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.entity.system.graphql.QUERY__GRAPHQL__SYSTEM__ENTITY__STRUCTURE),
 	args: {
@@ -45,15 +63,15 @@ const READ__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		limit: {
 			description: "limit",
@@ -104,19 +122,19 @@ const COUNT__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 		count: {
 			description: "count",
-			type: ATTRIBUTES_STRING__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_STRING__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: WHERE_ARRAY__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 	},
 	resolve: (_source, query_arguments, context) => {

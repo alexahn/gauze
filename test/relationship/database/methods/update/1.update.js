@@ -1,7 +1,10 @@
 const description = `Update a relationship object`;
 const operation_name = "UpdateRelationship";
 const operation_source = `
-mutation ${operation_name}($where: Relationship_Mutation__Attributes, $attributes: Relationship_Mutation__Attributes) {
+mutation ${operation_name}(
+	$where: Relationship_Mutation__Where,
+	$attributes: Relationship_Mutation__Attributes
+) {
 	update_relationship(where: $where, attributes: $attributes) {
 		attributes {
 			gauze__relationship__id

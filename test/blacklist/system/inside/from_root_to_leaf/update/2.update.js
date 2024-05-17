@@ -8,7 +8,7 @@ const context = {
 const operation_name = "UpdateBlacklist";
 const operation_source = `
 mutation ${operation_name}(
-	$where: Blacklist_Mutation__Attributes,
+	$where: Blacklist_Mutation__Where,
 	$blacklist: Blacklist_Mutation__Attributes,
 ) {
 	update_blacklist(where: $where, attributes: $blacklist) {

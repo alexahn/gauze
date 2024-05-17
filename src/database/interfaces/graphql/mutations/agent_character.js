@@ -36,6 +36,24 @@ const ATTRIBUTES_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE
 	fields: $structure.entities.agent_character.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 });
 
+const WHERE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Character_Mutation__Where",
+	description: "Agent_Character Mutation Where",
+	fields: $structure.entities.agent_character.database.graphql.WHERE_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
+});
+
+const WHERE_ARRAY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Character_Mutation__Where_Array",
+	description: "Agent_Character Mutation Where Array",
+	fields: $structure.entities.agent_character.database.graphql.WHERE_FIELDS_ARRAY__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
+});
+
+const WHERE_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Character_Mutation__Where_String",
+	description: "Agent_Character Mutation Where String",
+	fields: $structure.entities.agent_character.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
+});
+
 const CREATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
 		$structure.entities.agent_character.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
@@ -87,23 +105,23 @@ const UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_ARRAY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: ATTRIBUTES_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_ARRAY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: ATTRIBUTES_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		attributes: {
 			description: "attributes",
@@ -170,23 +188,23 @@ const DELETE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		where: {
 			description: "where",
-			type: ATTRIBUTES__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_in: {
 			description: "where in",
-			type: ATTRIBUTES_ARRAY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_ARRAY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		cache_where_in: {
 			description: "cache where in",
-			type: ATTRIBUTES_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where_not_in: {
 			description: "where not in",
-			type: ATTRIBUTES_ARRAY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_ARRAY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		cache_where_not_in: {
 			description: "cache where not in",
-			type: ATTRIBUTES_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+			type: WHERE_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",
