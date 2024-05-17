@@ -170,13 +170,13 @@ class GauzeManager {
 			Object.keys(reducer).forEach(function (key) {
 				path = `${path}.${key}`;
 				if (key === "create") {
-					if (typeof reducer[key] !== "object") throw new Error(`Entity property '${path}' must be of type 'function', ${reducer[key]} is not of type 'function'`);
+					if (typeof reducer[key] !== "function") throw new Error(`Entity property '${path}' must be of type 'function', ${reducer[key]} is not of type 'function'`);
 				} else if (key === "read") {
-					if (typeof reducer[key] !== "object") throw new Error(`Entity property '${path}' must be of type 'function', ${reducer[key]} is not of type 'function'`);
+					if (typeof reducer[key] !== "function") throw new Error(`Entity property '${path}' must be of type 'function', ${reducer[key]} is not of type 'function'`);
 				} else if (key === "update") {
-					if (typeof reducer[key] !== "object") throw new Error(`Entity property '${path}' must be of type 'function', ${reducer[key]} is not of type 'function'`);
+					if (typeof reducer[key] !== "function") throw new Error(`Entity property '${path}' must be of type 'function', ${reducer[key]} is not of type 'function'`);
 				} else if (key === "delete") {
-					if (typeof reducer[key] !== "object") throw new Error(`Entity property '${path}' must be of type 'function', ${reducer[key]} is not of type 'function'`);
+					if (typeof reducer[key] !== "function") throw new Error(`Entity property '${path}' must be of type 'function', ${reducer[key]} is not of type 'function'`);
 				} else {
 					//throw new Error(`Entity property '${path}' is invalid, property '${key}' must be one of: ${Object.keys(valid_reducer_keys)}`)
 				}
@@ -229,7 +229,7 @@ class GauzeManager {
 					if (typeof sql_type !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${sql_type} is not of type 'string'`);
 				} else if (key === "graphql_type") {
 					const graphql_type = field[key];
-					if (typeof graphql_type !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${graphql_type} is not of type 'string'`);
+					if (typeof graphql_type !== "object") throw new Error(`Entity property '${path}' must be of type 'object', ${graphql_type} is not of type 'object'`);
 				} else if (key === "description") {
 					const description = field[key];
 					if (typeof description !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${description} is not of type 'string'`);
@@ -277,7 +277,7 @@ class GauzeManager {
 				} else if (key === "privacy") {
 					const privacy = method[key];
 					if (typeof privacy !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${privacy} is not of type 'string'`);
-					if (!valid_privacy[privacy]) throw new Error(`Entity property '${path}' is invalid, property '${key}' must be one of: ${Object.keys(valid_privacy)}`);
+					if (!valid_privacy[privacy]) throw new Error(`Entity property '${path}' must contain string values from (${Object.keys(valid_privacy)}): ${privacy} is not contained`)
 				} else if (key === "allowed_agent_types") {
 					validate_agent_types(path, method[key]);
 				} else {
