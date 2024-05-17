@@ -43,13 +43,13 @@ class SystemModel extends Model {
 			cacheMap: new TTLLRUCache(1024, 1024),
 		});
 		self.model_loader.model = self;
-		self.valid_method_agent_types = {};
+		self.allowed_method_agent_types = {};
 		Object.keys(self.entity.methods).forEach(function (method) {
 			const map = {};
-			self.entity.methods[method].valid_agent_types.forEach(function (agent_type) {
+			self.entity.methods[method].allowed_agent_types.forEach(function (agent_type) {
 				map[agent_type] = true;
 			});
-			self.valid_method_agent_types[method] = map;
+			self.allowed_method_agent_types[method] = map;
 		});
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.constructor:exit`);
 	}
@@ -513,7 +513,7 @@ class SystemModel extends Model {
 	}
 	_validate_method(agent, method) {
 		const self = this;
-		if (!self.valid_method_agent_types[method][agent.agent_type]) {
+		if (!self.allowed_method_agent_types[method][agent.agent_type]) {
 			throw new Error("Authorization failed: agent type is not allowed for this method");
 		}
 	}

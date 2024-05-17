@@ -10,7 +10,7 @@ export default function ($abstract) {
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "id",
-				pre_serialize_middlewares: [$abstract.gauze.middlewares.RUD_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("gauze__gauze__id")],
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.UPDATE_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("gauze__gauze__id")],
 				serializers: [],
 				post_serialize_middlewares: [],
 				pre_deserialize_middlewares: [],
@@ -82,27 +82,27 @@ export default function ($abstract) {
 			create: {
 				name: "create",
 				privacy: "public",
-				valid_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__agent_user"],
 			},
 			read: {
 				name: "read",
 				privacy: "public",
-				valid_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__agent_user"],
 			},
 			update: {
 				name: "update",
 				privacy: "public",
-				valid_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__agent_user"],
 			},
 			delete: {
 				name: "delete",
 				privacy: "public",
-				valid_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__agent_user"],
 			},
 			count: {
 				name: "count",
 				privacy: "public",
-				valid_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__agent_user"],
 			},
 		},
 	};

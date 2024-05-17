@@ -151,11 +151,6 @@
 	[x] do we need to enforce not being able to change some fields after they are set?
 		[x] split all protected fields to be implemented as pre serializer middleware
 [x] proper names for entities and gauze files generated from kernel
-[ ] turn kernel into a proper stack
-	[x] kernel/controllers/class.js
-	[x] kernel/models/class.js
-	[ ] kernel/interfaces
-		[ ] manage cache, logging, shell, infrastructure, etc
 [x] start thinking about kernel/src or kernel/source
 	[x] bootstrap new project by using commands that use the source code
 		[x] should have commands to create new entities
@@ -503,6 +498,9 @@
 		[ ] we would need to choose whether or not we act on pre-parsed values or parsed graphql types
 		[ ] would also need to include a comparison function that would need to be defined in $abstract
 	[ ] add attribute flag to designate builtin entities
+		[ ] why do we need this?
+	[ ] add allowed_agent_types definitions to individual fields
+		[ ] filter returned fields according to agent type
 [ ] query and mutation argument extensions (aligned with database semantics)
 	[ ] add where_greater and where_lesser
 	[ ] consider changing order to accept an array of ordering arguments (e.g. column and direction)
@@ -515,14 +513,10 @@
 		[x] item route for read, update, and delete
 		[ ] maybe use something like zod for input validation
 [ ] naming, organization, error consistency and code quality
-	[ ] rename valid_agent_types in abstract definition to allowed_agent_types
-		[ ] add allowed_agent_types definitions to individual fields
+	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[ ] refactor validate_entity_config to use dot path for error messages
 		[ ] use the same pattern as defined in the environment session model to validate data fields
 	[ ] use types defined in abstract realm for all environment graphql definitions
-	[ ] errors directory per realm
-		[ ] realms can have their own custom errors, but only for the particular logic they are handling
-			[ ] in all other cases, we should just bubble up the error from below
 	[ ] rename src/kernel/src/initial to src/kernel/src/skeleton
 	[ ] refactor kernel models to have elegant function signatures
 		[ ] should probably group things together to have better conceptual clarity instead of abusing positional arguments
@@ -531,8 +525,13 @@
 		[ ] only use upper snake case for global constants and module exports (convert in function const to lower snake case)
 	[ ] add a _description attribute to every module so that the codebase can be explored via the repl
 		[ ] always add the field at the end of every module definition so it shows up at the bottom in the repl
-	[ ] rename rud protected middleware to ud protected middleware or (updated_delete_protected_middleware)
+	[x] rename rud protected middleware to ud protected middleware or (updated_delete_protected_middleware)
 	[x] eslint
+	[ ] errors directory per realm
+		[ ] realms can have their own custom errors, but only for the particular logic they are handling
+			[ ] in all other cases, we should just bubble up the error from below
+	[ ] think about how to do field validation so that field errors can be abstracted
+		[ ] currently we will just throw hand crafted errors, but we could probably have a structured approach
 [ ] graphql entity types and system integration
 	[ ] add field to abstract entity definition to exclude from graphql interface
 		[ ] unless we specify the realm, we can't do this without also excluding from the database graphql interface
@@ -544,15 +543,17 @@
 	[ ] add a required attribute to fields in abstract entity definitions?
 		[ ] we can use it to create two different attribute types
 			[ ] one for creation, and another for querying and updating
-	[ ] use graphql enum types (https://graphql.org/graphql-js/type/#example-4) to lock down fields that act on a set of values
-		[ ] entity_type, agent_type, realm, agent_role
-		[ ] the problem is that using the enums is a pain because you need to know the name of the option
-			[ ] we can introduce a naming convention, e.g. REALM__SYSTEM, AGENT_ROLE__ROOT, AGENT_ROLE__TRUNK, AGENT_ROLE__LEAF, etc
-				[ ] but it is still awkward, and it feels like it would be easier to use if we just left it as a string field but added validation on it
+	[-] use graphql enum types (https://graphql.org/graphql-js/type/#example-4) to lock down fields that act on a set of values
+		[-] entity_type, agent_type, realm, agent_role
+		[x] the problem is that using the enums is a pain because you need to know the name of the option
+			[-] we can introduce a naming convention, e.g. REALM__SYSTEM, AGENT_ROLE__ROOT, AGENT_ROLE__TRUNK, AGENT_ROLE__LEAF, etc
+				[x] but it is still awkward, and it feels like it would be easier to use if we just left it as a string field but added validation on it
+			[ ] add custom validation for string types that accept a set of values
 [ ] cli, commands, and manager application
 	[ ] polish commands and manager application
-	[ ] add gauze.json as a config file for the gauze cli (which will keep track of gauze base models and developer entities)
 	[ ] align environment variables with cli commands
+		[ ] ideally have every parameter for a cli command have an equivalent env variable
+	[ ] add gauze.json as a config file for the gauze cli (which will keep track of gauze version and admin users)
 	[ ] commands
 		[ ] read project
 		[ ] update project
@@ -578,8 +579,6 @@
 		[ ] streaming interface for files
 	[ ] process entity
 		[ ] input and output architecture
-	[ ] think about how to do field validation so that field errors can be abstracted
-		[ ] currently we will just throw hand crafted errors, but we could probably have a structured approach
 	[ ] monolithic foundation
 		[ ] source/version control system
 		[ ] build system
@@ -606,14 +605,21 @@
 				[ ] not really? it's just a set of ids, so we can increase the frequency of the garbage collection if the set is growing too large
 					[ ] i don't imagine that the set of ids should be over a million, and a million identifiers is nothing for a single server
 			[ ] if we give up consistency then we can have partial commits, but it complicates the data integrity picture
+		[ ] turn kernel into a proper stack
+			[x] kernel/controllers/class.js
+			[x] kernel/models/class.js
+			[ ] kernel/interfaces
+				[ ] manage cache, logging, shell, infrastructure, etc
+			[ ] provide a map reduce interface from the kernel, and use the interface from the database realm or system realm
 [ ] unknowns, abnormal behavior, and investigations
 	[ ] look into why router5 doesn't seem to be able to uri encode correctly
 		[ ] manually encoding and decoding seems to work
-	[ ] figure out why where query on json date values doesn't work
+	[x] figure out why where query on json date values doesn't work
 		[x] probably a mismatch between the value expected in the database and the one provided by the interface
 		[-] the dataloading is coercing all datatypes to json, so we need to do the serialization inside the dataloader
 			[-] move the serialization logic from the controllers to the models
 			[x] use the cache to store the parsed input
 		[x] do pre serialization and middleware parsing for where on update and delete methods
-		[ ] figure out if we want to do the same thing for the system model and interface
-			[ ] it might not be necessary because the inputs to the system are expected to be able to be serialized to json
+		[x] figure out if we want to do the same thing for the system model and interface
+			[x] it might not be necessary because the inputs to the system are expected to be able to be serialized to json
+			[x] the system model just executes a graphql operation, so it doesn't need the parsed arguments

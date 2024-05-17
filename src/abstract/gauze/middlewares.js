@@ -1,5 +1,5 @@
 // allows field to be set only on create
-const RUD_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT = function (field) {
+const UPDATE_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT = function (field) {
 	return {
 		create: function (attributes) {
 			return attributes;
@@ -9,11 +9,9 @@ const RUD_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT = function (field) {
 			return attributes;
 		},
 		read: function (attributes) {
-			//delete attributes[field];
 			return attributes;
 		},
 		delete: function (attributes) {
-			delete attributes[field];
 			return attributes;
 		},
 	};
@@ -83,7 +81,7 @@ const DELETED_AT_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT = function (field) {
 };
 
 export {
-	RUD_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT,
+	UPDATE_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT,
 	CREATED_AT_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT,
 	UPDATED_AT_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT,
 	DELETED_AT_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT,
