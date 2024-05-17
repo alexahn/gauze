@@ -228,6 +228,84 @@ class EnvironmentController {
 			gauze__whitelist__entity_id: entity_id,
 			gauze__whitelist__method: "update",
 		};
+		/*
+		parameters.whitelist_delete = {
+			gauze__whitelist__realm: "system",
+			gauze__whitelist__agent_role: "root",
+			gauze__whitelist__agent_type: agent_type,
+			gauze__whitelist__agent_id: agent_id,
+			gauze__whitelist__entity_type: entity_type,
+			gauze__whitelist__entity_id: entity_id,
+			gauze__whitelist__method: "delete",
+		};
+		*/
+		parameters.blacklist_create = {
+			gauze__blacklist__realm: "system",
+			gauze__blacklist__agent_role: "root",
+			gauze__blacklist__agent_type: agent_type,
+			gauze__blacklist__agent_id: agent_id,
+			gauze__blacklist__entity_type: entity_type,
+			gauze__blacklist__entity_id: entity_id,
+			gauze__blacklist__method: "create",
+		};
+		parameters.blacklist_read = {
+			gauze__blacklist__realm: "system",
+			gauze__blacklist__agent_role: "root",
+			gauze__blacklist__agent_type: agent_type,
+			gauze__blacklist__agent_id: agent_id,
+			gauze__blacklist__entity_type: entity_type,
+			gauze__blacklist__entity_id: entity_id,
+			gauze__blacklist__method: "read",
+		};
+		parameters.blacklist_update = {
+			gauze__blacklist__realm: "system",
+			gauze__blacklist__agent_role: "root",
+			gauze__blacklist__agent_type: agent_type,
+			gauze__blacklist__agent_id: agent_id,
+			gauze__blacklist__entity_type: entity_type,
+			gauze__blacklist__entity_id: entity_id,
+			gauze__blacklist__method: "update",
+		};
+		parameters.blacklist_delete = {
+			gauze__blacklist__realm: "system",
+			gauze__blacklist__agent_role: "root",
+			gauze__blacklist__agent_type: agent_type,
+			gauze__blacklist__agent_id: agent_id,
+			gauze__blacklist__entity_type: entity_type,
+			gauze__blacklist__entity_id: entity_id,
+			gauze__blacklist__method: "delete",
+		};
+		return parameters;
+	}
+	create_session_access_control(agent_id, agent_type, entity_id, entity_type) {
+		const parameters = {};
+		parameters.whitelist_create = {
+			gauze__whitelist__realm: "system",
+			gauze__whitelist__agent_role: "root",
+			gauze__whitelist__agent_type: agent_type,
+			gauze__whitelist__agent_id: agent_id,
+			gauze__whitelist__entity_type: entity_type,
+			gauze__whitelist__entity_id: entity_id,
+			gauze__whitelist__method: "create",
+		};
+		parameters.whitelist_read = {
+			gauze__whitelist__realm: "system",
+			gauze__whitelist__agent_role: "root",
+			gauze__whitelist__agent_type: agent_type,
+			gauze__whitelist__agent_id: agent_id,
+			gauze__whitelist__entity_type: entity_type,
+			gauze__whitelist__entity_id: entity_id,
+			gauze__whitelist__method: "read",
+		};
+		parameters.whitelist_update = {
+			gauze__whitelist__realm: "system",
+			gauze__whitelist__agent_role: "root",
+			gauze__whitelist__agent_type: agent_type,
+			gauze__whitelist__agent_id: agent_id,
+			gauze__whitelist__entity_type: entity_type,
+			gauze__whitelist__entity_id: entity_id,
+			gauze__whitelist__method: "update",
+		};
 		parameters.whitelist_delete = {
 			gauze__whitelist__realm: "system",
 			gauze__whitelist__agent_role: "root",
@@ -610,7 +688,7 @@ class EnvironmentController {
 						gauze__session__data: "",
 						gauze__session__seed: seed,
 					};
-					const access_parameters = self.create_access_control(proxy_id, self.proxy_type, session_id, self.session_type);
+					const access_parameters = self.create_session_access_control(proxy_id, self.proxy_type, session_id, self.session_type);
 					const parameters = { attributes, ...access_parameters };
 					return MODEL__SESSION__MODEL__ENVIRONMENT.create_environment(context, { attributes }).then(function (data) {
 						return data[0];

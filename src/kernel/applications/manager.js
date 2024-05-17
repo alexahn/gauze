@@ -121,7 +121,7 @@ class GauzeManager {
 			graphql_attributes_fields: true,
 			graphql_attributes_string: true,
 			graphql_where_fields: true,
-			graphql_where_string: true
+			graphql_where_string: true,
 		};
 
 		const valid_field_keys = {
@@ -334,7 +334,8 @@ class GauzeManager {
 				if (typeof graphql_fields !== "object") throw new Error(`Entity property '${path}' must be of type 'object', ${graphql_fields} is not of type 'object'`);
 			} else if (key === "graphql_attributes_fields") {
 				const graphql_attributes_fields = config[key];
-				if (typeof graphql_attributes_fields !== "object") throw new Error(`Entity property '${path}' must be of type 'object', ${graphql_attributes_fields} is not of type 'object'`);
+				if (typeof graphql_attributes_fields !== "object")
+					throw new Error(`Entity property '${path}' must be of type 'object', ${graphql_attributes_fields} is not of type 'object'`);
 			} else if (key === "graphql_attributes_string") {
 				const graphql_attributes_string = config[key];
 				if (typeof graphql_attributes_string !== "string")
@@ -344,8 +345,7 @@ class GauzeManager {
 				if (typeof graphql_where_fields !== "object") throw new Error(`Entity property '${path}' must be of type 'object', ${graphql_where_fields} is not of type 'object'`);
 			} else if (key === "graphql_where_string") {
 				const graphql_where_string = config[key];
-				if (typeof graphql_where_string !== "string")
-					throw new Error(`Entity property '${path}' must be of type 'string', ${graphql_where_string} is not of type 'string'`);
+				if (typeof graphql_where_string !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${graphql_where_string} is not of type 'string'`);
 			} else {
 				throw new Error(`Entity property '${path}' is invalid, property '${key}' must be one of: ${Object.keys(valid_entity_keys)}`);
 			}

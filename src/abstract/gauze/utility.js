@@ -1,4 +1,4 @@
-import * as $abstract from "./../../abstract/index.js"
+import * as $abstract from "./../../abstract/index.js";
 
 function create_graphql_fields(entity) {
 	const graphql_fields = {};
@@ -67,10 +67,4 @@ function create_graphql_where_string(entity) {
 	return graphql_attributes_string;
 }
 
-export {
-	create_graphql_fields,
-	create_graphql_attributes_fields,
-	create_graphql_attributes_string,
-	create_graphql_where_fields,
-	create_graphql_where_string
-};
+export { create_graphql_fields, create_graphql_attributes_fields, create_graphql_attributes_string, create_graphql_where_fields, create_graphql_where_string };
