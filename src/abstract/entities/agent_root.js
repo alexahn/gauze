@@ -86,7 +86,6 @@ export default function ($abstract) {
 			},
 		},
 	};
-	ENTITY.graphql_fields = $abstract.gauze.utility.create_graphql_fields(ENTITY);
 	ENTITY.graphql_attributes_fields = $abstract.gauze.utility.create_graphql_attributes_fields(ENTITY);
 	ENTITY.graphql_attributes_string = $abstract.gauze.utility.create_graphql_attributes_string(ENTITY);
 	ENTITY.graphql_where_fields = $abstract.gauze.utility.create_graphql_where_fields(ENTITY);

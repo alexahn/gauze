@@ -117,7 +117,6 @@ class GauzeManager {
 			graphql_meta_type: true,
 			fields: true,
 			methods: true,
-			graphql_fields: true,
 			graphql_attributes_fields: true,
 			graphql_attributes_string: true,
 			graphql_where_fields: true,
