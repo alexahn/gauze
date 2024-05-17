@@ -222,7 +222,7 @@ class GauzeManager {
 				path = `${path}.${key}`;
 				if (key === "name") {
 					const name = field[key];
-					if (name !== field_key) throw new Error(`Entity property '${path}' must align with the field name, ${name} !== ${field_key}`);
+					if (name !== field_key) throw new Error(`Entity property '${path}' must align with the path key ${field_key}, ${name} !== ${field_key}`);
 					if (typeof name !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${name} is not of type 'string'`);
 				} else if (key === "sql_type") {
 					const sql_type = field[key];
@@ -272,7 +272,7 @@ class GauzeManager {
 				path = `${path}.${key}`;
 				if (key === "name") {
 					const name = method[key];
-					if (name !== method_key) throw new Error(`Entity property '${path}' must align with the field name, ${name} !== ${method_key}`);
+					if (name !== method_key) throw new Error(`Entity property '${path}' must align with the path key ${method_key}, ${name} !== ${method_key}`);
 					if (typeof name !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${name} is not of type 'string'`);
 				} else if (key === "privacy") {
 					const privacy = method[key];
@@ -445,7 +445,7 @@ class GauzeManager {
 		const self = this;
 		return import(config_path).then(function (config) {
 			const ENTITY = config.default(self.$gauze.abstract);
-			self.validate_entity_config(ENTITY);
+			self.validate_entity_config2(ENTITY);
 			return Promise.resolve(ENTITY);
 		});
 	}
