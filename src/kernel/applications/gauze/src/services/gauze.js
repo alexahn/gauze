@@ -334,7 +334,7 @@ mutation enter_session($proxy: Environment_Mutation__Proxy) {
 	proxies(proxy) {
 		const self = this;
 		const query = `
-query read_proxy($proxy: Proxy_Query__Attributes) {
+query read_proxy($proxy: Proxy_Query__Where) {
     read_proxy(where: $proxy) {
         _metadata {
             id
@@ -382,10 +382,14 @@ query header {
 			}
 			description
 		}
-		attributes
-		attributes_query_type
-		attributes_mutation_type
-		attributes_string_query_type
+		graphql_attributes_string
+		graphql_where_string
+		graphql_query_attributes_type
+		graphql_query_where_type
+		graphql_query_where_string_type
+        graphql_mutation_attributes_type
+        graphql_mutation_where_type
+        graphql_mutation_where_string_type
 	}
 }
 `;
@@ -403,7 +407,7 @@ query header {
 		const self = this;
 		const query = `
 mutation create(
-	$attributes: ${header.attributes_mutation_type}
+	$attributes: ${header.graphql_mutation_attributes_type}
 ) {
     create_${header.name}(
 		attributes: $attributes,
@@ -413,7 +417,7 @@ mutation create(
 			type
 		}
         attributes {
-            ${header.attributes}
+            ${header.graphql_attributes_string}
         }
     }
 }
@@ -431,7 +435,7 @@ mutation create(
 		const self = this;
 		const query = `
 query read(
-    $where: ${header.attributes_query_type}
+    $where: ${header.graphql_query_where_type}
     $limit: Int,
     $offset: Int,
     $order: String,
@@ -449,7 +453,7 @@ query read(
 			type
 		}
         attributes {
-            ${header.attributes}
+            ${header.graphql_attributes_string}
         }
     }
 }
@@ -467,8 +471,8 @@ query read(
 		const self = this;
 		const query = `
 query count(
-	$count: ${header.attributes_string_query_type}
-    $where: ${header.attributes_query_type}
+	$count: ${header.graphql_query_where_string_type}
+    $where: ${header.graphql_query_where_type}
 ) {
     count_${header.name}(
 		count: $count,
@@ -492,8 +496,8 @@ query count(
 		const self = this;
 		const query = `
 mutation update(
-    $where: ${header.attributes_mutation_type}
-	$attributes: ${header.attributes_mutation_type}
+    $where: ${header.graphql_mutation_where_type}
+	$attributes: ${header.graphql_mutation_attributes_type}
     $limit: Int,
     $offset: Int,
     $order: String,
@@ -512,7 +516,7 @@ mutation update(
 			type
 		}
         attributes {
-            ${header.attributes}
+            ${header.graphql_attributes_string}
         }
     }
 }
@@ -530,7 +534,7 @@ mutation update(
 		const self = this;
 		const query = `
 mutation delete(
-    $where: ${header.attributes_mutation_type}
+    $where: ${header.graphql_mutation_where_type}
     $limit: Int,
     $offset: Int,
     $order: String,
@@ -548,7 +552,7 @@ mutation delete(
 			type
 		}
         attributes {
-            ${header.attributes}
+            ${header.graphql_attributes_string}
         }
     }
 }
