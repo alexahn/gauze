@@ -36,7 +36,7 @@ class DatabaseModel extends Model {
 		}
 		self.name = self.__name();
 		self.loader = new DataLoader(self._batch, {
-			cacheMap: new TTLLRUCache(1024, 1024),
+			cacheMap: new TTLLRUCache(1024, 8192),
 		});
 		self.loader.model = self;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);

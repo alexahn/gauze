@@ -604,8 +604,15 @@
 	[ ] session management and authentication flow
 		[ ] refresh session method
 		[ ] add _metadata to environment mutation responses?
-		[ ] treat sessions as actual sessions and verify that every jwt exists in the database
-			[ ] verify_session method in the environment session model (that uses dataloader)
+		[x] treat sessions as actual sessions and verify that every jwt exists in the database
+			[-] verify_session method in the environment session model
+				[x] add a function to src/environment/authenticate.js
+			[x] configure the environment kernel model to use dataloader?
+				[-] might need atomic guarantees so maybe we shouldn't
+				[x] if we want dataloader for the environment, we need the controller/agent to pass in a unique seed for some of the methods (e.g. creating a null session)
+					[x] it seems the controllers are already generating ids for everything they touch
+				[x] add dataloader but make a note that we need to write tests for it later to catch any session hijacking scenarios during either sign in or sign up
+					[x] as far as i can tell, it should be okay because we are generating the session id prior to interacting with the model
 	[ ] whitelist / blacklist symmetry?
 		[ ] should whitelist also only apply at leaf level? currently blacklist only applies at leaf level
 	[ ] granular dataloader cache clearing based on record (nice to have)
@@ -633,6 +640,7 @@
 			[ ] provide a map reduce interface from the kernel, and use the interface from the database realm or system realm
 	[ ] rename the relationships field to "to" or "relationships_to", add a new field called "from" or "relationships_from" to allow bidirectional navigation of relationships
 		[ ] will need to add a "child" field to mirror the metadata proxying we do with the "parent" field
+	[ ] add a field called transaction_id (or request_id) to allow busting the cache for segments of a query or mutation?
 [ ] unknowns, abnormal behavior, and investigations
 	[ ] look into why router5 doesn't seem to be able to uri encode correctly
 		[ ] manually encoding and decoding seems to work

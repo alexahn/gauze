@@ -40,7 +40,7 @@ class SystemModel extends Model {
 		});
 		self.auth_loader.model = self;
 		self.model_loader = new DataLoader(self._model_batch, {
-			cacheMap: new TTLLRUCache(1024, 1024),
+			cacheMap: new TTLLRUCache(1024, 8192),
 		});
 		self.model_loader.model = self;
 		self.allowed_method_agent_types = {};

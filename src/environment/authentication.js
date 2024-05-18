@@ -1,6 +1,26 @@
 const { pbkdf2 } = await import("node:crypto");
 
+import { MODEL__SESSION__MODEL__ENVIRONMENT } from "./models/session.js";
+
 import * as jose from "jose";
+
+const VERIFY_JWT_PAYLOAD = function (context, payload) {
+	const session_attributes = {
+		gauze__session__id: payload.session_id,
+		gauze__session__realm: payload.aud,
+		gauze__session__agent_id: payload.agent_id,
+		gauze__session__agent_type: payload.agent_type,
+		gauze__session__seed: payload.seed,
+	};
+	const session_parameters = { where: session_attributes };
+	return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, session_parameters).then(function (sessions) {
+		if (sessions && sessions.length) {
+			return sessions[0];
+		} else {
+			throw new Error("Session could not be found for agent");
+		}
+	});
+};
 
 const HASH_PASSWORD__AUTHENTICATION__ENVIRONMENT = function (password, salt) {
 	return new Promise(function (resolve, reject) {
@@ -115,6 +135,7 @@ const AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT = function (req) {
 };
 
 export {
+	VERIFY_JWT_PAYLOAD,
 	HASH_PASSWORD__AUTHENTICATION__ENVIRONMENT,
 	SIGN_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT,
 	VERIFY_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT,

@@ -15,6 +15,11 @@ import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
 
 import { EXECUTE__GRAPHQL__SHELL__KERNEL } from "./../shell/graphql.js";
 
+// note: we need to write tests to make sure using dataloader here doesn't cause any data ownership issues
+// note: this is especially critical because this is where agents get created
+// note: from a brief overview of the environment controller logic, it seems like it shouldn't be a problem because we are generating unique ids for every entity
+// note: but we should probably write the tests to make sure we didn't miss anything
+// note: we need dataloader for session verification because we don't want to hit the database for every authenticated session
 class EnvironmentModel extends Model {
 	constructor(root_config, graphql_config) {
 		super(root_config);
@@ -23,12 +28,10 @@ class EnvironmentModel extends Model {
 		self.schema = schema;
 		self.schema_name = schema_name;
 		self.name = self.__name();
-		/*
 		self.model_loader = new DataLoader(self._model_batch, {
-			cacheMap: new TTLLRUCache(1024, 1024),
+			cacheMap: new TTLLRUCache(1024, 8192),
 		});
 		self.model_loader.model = self;
-		*/
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.constructor:exit`);
 	}
 	static _class_name(schema_name) {
@@ -38,7 +41,6 @@ class EnvironmentModel extends Model {
 		const self = this;
 		return EnvironmentModel._class_name(self.schema_name);
 	}
-	/*
 	_model_batch_key(parameters, realm, method) {
 		// only take operation_name from operation
 		return JSON.stringify({
@@ -80,7 +82,6 @@ class EnvironmentModel extends Model {
 			return results;
 		});
 	}
-	*/
 	_execute(context, operation_source, operation_variables) {
 		const self = this;
 		const { operation, operation_name } = operation_source;
@@ -102,25 +103,45 @@ class EnvironmentModel extends Model {
 			}
 		});
 	}
+	_root_create(context, parameters, realm) {
+		const self = this;
+		const { operation } = realm;
+		return self._execute(context, operation, parameters);
+	}
 	_create(context, parameters, realm) {
+		const self = this;
+		const key = self._model_batch_key(parameters, realm, "create");
+		return self.model_loader.load(context, key);
+	}
+	_root_read(context, parameters, realm) {
 		const self = this;
 		const { operation } = realm;
 		return self._execute(context, operation, parameters);
 	}
 	_read(context, parameters, realm) {
 		const self = this;
+		const key = self._model_batch_key(parameters, realm, "read");
+		return self.model_loader.load(context, key);
+	}
+	_root_update(context, parameters, realm) {
+		const self = this;
 		const { operation } = realm;
 		return self._execute(context, operation, parameters);
 	}
 	_update(context, parameters, realm) {
+		const self = this;
+		const key = self._model_batch_key(parameters, realm, "update");
+		return self.model_loader.load(context, key);
+	}
+	_root_delete(context, parameters, realm) {
 		const self = this;
 		const { operation } = realm;
 		return self._execute(context, operation, parameters);
 	}
 	_delete(context, parameters, realm) {
 		const self = this;
-		const { operation } = realm;
-		return self._execute(context, operation, parameters);
+		const key = self._model_batch_key(parameters, realm, "delete");
+		return self.model_loader.load(context, key);
 	}
 }
 
