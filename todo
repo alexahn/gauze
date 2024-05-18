@@ -532,6 +532,7 @@
 	[ ] errors directory per realm
 		[ ] realms can have their own custom errors, but only for the particular logic they are handling
 			[ ] in all other cases, we should just bubble up the error from below
+		[ ] use GraphQLError from the graphql module to supply an extensions property
 	[ ] think about how to do field validation so that field errors can be abstracted
 		[ ] currently we will just throw hand crafted errors, but we could probably have a structured approach
 [ ] graphql entity types and system integration

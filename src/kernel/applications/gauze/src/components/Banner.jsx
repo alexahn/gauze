@@ -3,10 +3,15 @@ import { useState } from "react";
 
 export default function Banner({ gauze, model, router }) {
 	// conditional links based on auth state
-	const systemSessions = model.systemSessions();
-	const proxySessions = model.proxySessions();
 	const environmentSessions = model.environmentSessions();
-	const authenticated = systemSessions.length || gauze.getSystemJWT() || proxySessions.length || gauze.getProxyJWT();
+	const proxySessions = model.proxySessions();
+	const systemSessions = model.systemSessions();
+	const environmentJWT = gauze.getEnvironmentJWT();
+	const proxyJWT = gauze.getProxyJWT();
+	const systemJWT = gauze.getSystemJWT();
+	const authEnvironment = environmentSessions.length || environmentJWT;
+	const authProxy = proxySessions.length || proxyJWT;
+	const authSystem = systemSessions.length || systemJWT;
 	const signUp = (
 		<div>
 			<a href={router.buildUrl("environment.signup", {})}>Sign Up</a>
@@ -35,11 +40,11 @@ export default function Banner({ gauze, model, router }) {
 	return (
 		<div>
 			<h1>Gauze</h1>
-			{!authenticated ? signIn : null}
-			{!authenticated ? signUp : null}
-			{authenticated ? signOut : null}
-			{authenticated ? proxy : null}
-			{authenticated ? system : null}
+			{!(authProxy || authSystem) ? signIn : null}
+			{!(authProxy || authSystem) ? signUp : null}
+			{authProxy || authSystem ? signOut : null}
+			{authProxy ? proxy : null}
+			{authSystem ? system : null}
 		</div>
 	);
 }

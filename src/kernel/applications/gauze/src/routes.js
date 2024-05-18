@@ -87,17 +87,18 @@ const routes = [
 		onActivate: function (params) {
 			return Promise.resolve(true);
 		},
-		layout: layouts.alligator.default,
+		layout: layouts.anaconda.default,
 		sections: {
-			top: sections.alder.default,
-			bottom: sections.alder.default,
+			left: sections.almond.default,
+			right: sections.alder.default,
 		},
 		units: {
-			top: {
-				body: units.adamite.default,
-			},
-			bottom: {
+			left: {
+				header: units.adamite.default,
 				body: units.ammonite.default,
+			},
+			right: {
+				body: units.azurite.default,
 			},
 		},
 	},
@@ -159,17 +160,18 @@ const routes = [
 		onActivate: function ({ dependencies }) {
 			return Promise.resolve(true);
 		},
-		layout: layouts.alligator.default,
+		layout: layouts.anaconda.default,
 		sections: {
-			top: sections.alder.default,
-			bottom: sections.alder.default,
+			left: sections.almond.default,
+			right: sections.alder.default,
 		},
 		units: {
-			top: {
-				body: units.adamite.default,
-			},
-			bottom: {
+			left: {
+				header: units.adamite.default,
 				body: units.proxies.default,
+			},
+			right: {
+				body: units.azurite.default,
 			},
 		},
 	},

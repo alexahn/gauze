@@ -21,7 +21,7 @@ class ModelService {
 	systemSessions() {
 		const self = this;
 		const sessions = self.all("SESSION").filter(function (session) {
-			return session.gauze__session__realm === "system";
+			return session.gauze__session__realm === "system" && session.gauze__session__agent_type !== "gauze__proxy";
 		});
 		return sessions;
 	}

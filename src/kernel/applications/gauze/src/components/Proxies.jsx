@@ -7,6 +7,13 @@ export default function Proxies({ route, router, gauze, model }) {
 
 	const proxies = model.all("PROXY");
 
+	const readable = {
+		gauze__agent_root: "ROOT",
+		gauze__agent_account: "ACCOUNT",
+		gauze__agent_user: "USER",
+		gauze__agent_person: "PERSON",
+		gauze__agent_character: "CHARACTER",
+	};
 	function handleProxy(proxy) {
 		return function (e) {
 			e.preventDefault();
@@ -62,12 +69,9 @@ export default function Proxies({ route, router, gauze, model }) {
 			<hr />
 			{proxies.map(function (proxy, index) {
 				return (
-					<form key={proxy.gauze__proxy__id} method="post" onSubmit={handleProxy(proxy)}>
-						<label>
-							{proxy.gauze__proxy__agent_type}: {proxy.gauze__proxy__agent_id}
-						</label>
-						<button type="submit" disabled={submitProxy}>
-							Enter
+					<form key={proxy.gauze__proxy__id} method="post" className="mb0" onSubmit={handleProxy(proxy)}>
+						<button type="submit" className="w4 truncate-ns" disabled={submitProxy}>
+							{readable[proxy.gauze__proxy__agent_type]}
 						</button>
 					</form>
 				);
