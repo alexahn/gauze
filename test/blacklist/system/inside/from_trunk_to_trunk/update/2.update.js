@@ -37,8 +37,8 @@ const operation_variables = {
 		gauze__blacklist__agent_role: "root",
 		gauze__blacklist__agent_id: "00000000-0000-0000-0000-000000000002",
 		gauze__blacklist__entity_type: "gauze__entity",
-		gauze__blacklist__entity_id: "45f5266f-1971-4b9a-985d-ac650449b589",
-		gauze__blacklist__method: "create",
+		gauze__blacklist__entity_id: "7f84c508-b714-41c1-b986-2d6ed64fc5e9",
+		gauze__blacklist__method: "read",
 	},
 };
 const expected = `{

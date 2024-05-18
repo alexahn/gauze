@@ -328,10 +328,6 @@ class AccessSystemModel extends SystemModel {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
-		delete input.attributes[self.key_realm];
-		delete input.attributes[self.key_entity_type];
-		delete input.attributes[self.key_entity_id];
-		delete input.attributes[self.key_method];
 		const change_record = input.attributes;
 		if (input && input.where && input.where[self.key_id]) {
 			return self._preread(database, transaction, input.where).then(function (target_records) {
