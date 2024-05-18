@@ -6,6 +6,8 @@ import http from "http";
 
 import * as jose from "jose";
 
+import * as $project from "./../../gauze.js";
+
 class GauzeServer {
 	// note: config takes the command argv structure (src/command/commands/run/server.js)
 	constructor({ $gauze }, config) {
@@ -150,6 +152,7 @@ class GauzeServer {
 		const self = this;
 		return self.database.transaction(function (transaction) {
 			const context = {};
+			context.project = $project;
 			context.database = self.database;
 			context.transaction = transaction;
 			context.agent = agent;

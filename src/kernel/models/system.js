@@ -3,7 +3,7 @@ const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
 import { v4 as uuidv4 } from "uuid";
 
-import * as $project from "./../../gauze.js";
+//import * as $project from "./../../gauze.js";
 import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 
@@ -426,12 +426,16 @@ class SystemModel extends Model {
 	authorized_execute(context, parameters, agent, entity, operation) {
 		const self = this;
 		function agent_is_admin(project, agent) {
-			if (agent.agent_type && agent.agent_id) {
-				if (project.default[process.env.GAUZE_ENV]) {
-					const admin = project.default[process.env.GAUZE_ENV].admins.find(function (admin) {
-						return admin[agent.agent_type] === agent.agent_id;
-					});
-					return Boolean(admin);
+			if (project) {
+				if (agent.agent_type && agent.agent_id) {
+					if (project.default[process.env.GAUZE_ENV]) {
+						const admin = project.default[process.env.GAUZE_ENV].admins.find(function (admin) {
+							return admin[agent.agent_type] === agent.agent_id;
+						});
+						return Boolean(admin);
+					} else {
+						return false;
+					}
 				} else {
 					return false;
 				}
@@ -439,7 +443,7 @@ class SystemModel extends Model {
 				return false;
 			}
 		}
-		if (agent_is_admin($project, agent)) {
+		if (agent_is_admin(context.project, agent)) {
 			return self._execute(context, operation, parameters);
 		} else {
 			return self.authorization_filter(context, "system", agent, entity).then(function (auth) {
