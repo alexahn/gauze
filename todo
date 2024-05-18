@@ -421,14 +421,18 @@
 	[x] come up with a bare bones pattern to define url and routes
 	[x] refactor the server application
 [ ] build an admin management react app to dog food the interface
-	[ ] have an admin method to track objects that have no relationships
-	[ ] have an admin method to track objects that should be one to one but aren't
-	[ ] add a command to create an agent and set it as an admin
-	[ ] src/gauze.json
-		[ ] track admin users by having a field in src/gauze.json called managers or admins that holds the agent root ids
-			[ ] use the config from kernel system model to bypass authorization checks if the agent id is one of the managers
-			[ ] the config will have to be split by environment
-			[ ] this approach seems better than creating a table in sql because the set of managers is in source control
+	[x] list view for entities the agent can access
+	[x] item view for an entity the agent can access
+	[x] create a new entity
+	[x] update an entity
+	[x] delete an entity
+	[ ] add a command to set an agent as an admin for an agent type
+		[ ] should just update the project configuration file
+	[x] src/gauze.json
+		[x] track admin users by having a field in src/gauze.json called managers or admins that holds the agent root ids
+			[x] use the config from kernel system model to bypass authorization checks if the agent id is one of the managers
+			[x] the config will have to be split by environment and agent type
+			[x] this approach seems better than creating a table in sql because the set of managers is in source control
 		[-] track entities by using the project and gauze fields?
 			[x] the entities can just be parsed from $abstract, so maybe just create a method that returns a set of entities
 [x] cached where in and cached where not in exposed to database graphql
@@ -572,6 +576,7 @@
 	[ ] align environment variables with cli commands
 		[ ] ideally have every parameter for a cli command have an equivalent env variable
 	[ ] add gauze.json as a config file for the gauze cli (which will keep track of gauze version and admin users)
+		[ ] add validation for gauze.json to ensure that particular fields exist
 	[ ] commands
 		[ ] read project
 		[ ] update project
@@ -619,6 +624,7 @@
 		[ ] e.g. if we update a record, it should only clear the cache for all read operations on the record
 		[ ] will need to add a new data structure to the lru cache we implemented to keep track of operation association with records
 			[ ] e.g. parse the parameters and construct a tree
+	[x] update all cache lifetimes to 8192 milliseconds
 	[ ] map reduce and data sharding
 		[ ] map reduce for tracing garbage collection
 			[ ] the initiation is based on the shard of data that a node is responsible for

@@ -3,6 +3,7 @@ const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
 import { v4 as uuidv4 } from "uuid";
 
+import * as $project from "./../../gauze.js";
 import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 
@@ -36,7 +37,7 @@ class SystemModel extends Model {
 		}
 		self.name = self.__name();
 		self.auth_loader = new DataLoader(self._auth_batch, {
-			cacheMap: new TTLLRUCache(1024, 1024),
+			cacheMap: new TTLLRUCache(1024, 8192),
 		});
 		self.auth_loader.model = self;
 		self.model_loader = new DataLoader(self._model_batch, {
@@ -424,79 +425,97 @@ class SystemModel extends Model {
 	}
 	authorized_execute(context, parameters, agent, entity, operation) {
 		const self = this;
-		return self.authorization_filter(context, "system", agent, entity).then(function (auth) {
-			if (auth.privacy === "private") {
-				if (auth.scope === "set") {
-					if (auth.status === true) {
-						return self._execute(context, operation, parameters);
-					} else if (auth.status === false) {
-						throw new Error("Agent does not have access to this method");
-					} else {
-						throw new Error("Agent does not have access to this method: internal error: undefined");
-					}
-				} else if (auth.scope === "element") {
-					if (entity.entity_method === "create") {
-						throw new Error("Agent does not have access to this method");
-					} else {
-						const valid_ids = auth.records.map(function (record) {
-							return record.gauze__whitelist__entity_id;
-						});
-						// note: we can avoid a heavy penalty parsing millions of keys in graphql by using an intermediary data store (lru cache) to communicate the values
-						// generate a uuidv4 as a cache key, put the valid ids into the cache using the cache key, and set the value of cache_where_in to the cache key
-						// from the database side, we use the cache key to pull the values from the lru cache
-						const cache_key = String(uuidv4());
-						TIERED_CACHE__LRU__CACHE__KERNEL.set(cache_key, valid_ids, valid_ids.length);
-						parameters.cache_where_in = {
-							[self.entity.primary_key]: cache_key,
-						};
-						/*
-						parameters.where_in = {
-							[self.entity.primary_key]: valid_ids,
-						};
-						*/
-						return self._execute(context, operation, parameters);
-					}
+		function agent_is_admin(project, agent) {
+			if (agent.agent_type && agent.agent_id) {
+				if (project.default[process.env.GAUZE_ENV]) {
+					const admin = project.default[process.env.GAUZE_ENV].admins.find(function (admin) {
+						return admin[agent.agent_type] === agent.agent_id;
+					});
+					return Boolean(admin);
 				} else {
-					throw new Error("Agent does not have access to this method: internal error: invalid scope");
-				}
-			} else if (auth.privacy === "public") {
-				if (auth.scope === "set") {
-					if (auth.status === true) {
-						return self._execute(context, operation, parameters);
-					} else if (auth.status === false) {
-						throw new Error("Agent does not have access to this method");
-					} else {
-						throw new Error("Agent does not have access to this method: internal error: undefined");
-					}
-				} else if (auth.scope === "element") {
-					if (entity.entity_method === "create") {
-						return self._execute(context, operation, parameters);
-					} else {
-						const invalid_ids = auth.records.map(function (record) {
-							return record.gauze__blacklist__entity_id;
-						});
-						// note: we can avoid a heavy penalty parsing millions of keys in graphql by using an intermediary data store (lru cache) to communicate the values
-						// generate a uuidv4 as a cache key, put the invalid ids into the cache using the cache key, and set the value of cache_where_not_in to the cache key
-						// from the database side, we use the cache key to pull the values from the lru cache
-						const cache_key = String(uuidv4());
-						TIERED_CACHE__LRU__CACHE__KERNEL.set(cache_key, invalid_ids, invalid_ids.length);
-						parameters.cache_where_not_in = {
-							[self.entity.primary_key]: cache_key,
-						};
-						/*
-						parameters.where_not_in = {
-							[self.entity.primary_key]: invalid_ids,
-						};
-						*/
-						return self._execute(context, operation, parameters);
-					}
-				} else {
-					throw new Error("Agent does not have access to this method: internal error");
+					return false;
 				}
 			} else {
-				throw new Error("Privacy policy does not exist for this method");
+				return false;
 			}
-		});
+		}
+		if (agent_is_admin($project, agent)) {
+			return self._execute(context, operation, parameters);
+		} else {
+			return self.authorization_filter(context, "system", agent, entity).then(function (auth) {
+				if (auth.privacy === "private") {
+					if (auth.scope === "set") {
+						if (auth.status === true) {
+							return self._execute(context, operation, parameters);
+						} else if (auth.status === false) {
+							throw new Error("Agent does not have access to this method");
+						} else {
+							throw new Error("Agent does not have access to this method: internal error: undefined");
+						}
+					} else if (auth.scope === "element") {
+						if (entity.entity_method === "create") {
+							throw new Error("Agent does not have access to this method");
+						} else {
+							const valid_ids = auth.records.map(function (record) {
+								return record.gauze__whitelist__entity_id;
+							});
+							// note: we can avoid a heavy penalty parsing millions of keys in graphql by using an intermediary data store (lru cache) to communicate the values
+							// generate a uuidv4 as a cache key, put the valid ids into the cache using the cache key, and set the value of cache_where_in to the cache key
+							// from the database side, we use the cache key to pull the values from the lru cache
+							const cache_key = String(uuidv4());
+							TIERED_CACHE__LRU__CACHE__KERNEL.set(cache_key, valid_ids, valid_ids.length);
+							parameters.cache_where_in = {
+								[self.entity.primary_key]: cache_key,
+							};
+							/*
+							parameters.where_in = {
+								[self.entity.primary_key]: valid_ids,
+							};
+							*/
+							return self._execute(context, operation, parameters);
+						}
+					} else {
+						throw new Error("Agent does not have access to this method: internal error: invalid scope");
+					}
+				} else if (auth.privacy === "public") {
+					if (auth.scope === "set") {
+						if (auth.status === true) {
+							return self._execute(context, operation, parameters);
+						} else if (auth.status === false) {
+							throw new Error("Agent does not have access to this method");
+						} else {
+							throw new Error("Agent does not have access to this method: internal error: undefined");
+						}
+					} else if (auth.scope === "element") {
+						if (entity.entity_method === "create") {
+							return self._execute(context, operation, parameters);
+						} else {
+							const invalid_ids = auth.records.map(function (record) {
+								return record.gauze__blacklist__entity_id;
+							});
+							// note: we can avoid a heavy penalty parsing millions of keys in graphql by using an intermediary data store (lru cache) to communicate the values
+							// generate a uuidv4 as a cache key, put the invalid ids into the cache using the cache key, and set the value of cache_where_not_in to the cache key
+							// from the database side, we use the cache key to pull the values from the lru cache
+							const cache_key = String(uuidv4());
+							TIERED_CACHE__LRU__CACHE__KERNEL.set(cache_key, invalid_ids, invalid_ids.length);
+							parameters.cache_where_not_in = {
+								[self.entity.primary_key]: cache_key,
+							};
+							/*
+							parameters.where_not_in = {
+								[self.entity.primary_key]: invalid_ids,
+							};
+							*/
+							return self._execute(context, operation, parameters);
+						}
+					} else {
+						throw new Error("Agent does not have access to this method: internal error");
+					}
+				} else {
+					throw new Error("Privacy policy does not exist for this method");
+				}
+			});
+		}
 	}
 	_validate_agent(agent) {
 		const self = this;
