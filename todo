@@ -548,7 +548,7 @@
 			[-] we can introduce a naming convention, e.g. REALM__SYSTEM, AGENT_ROLE__ROOT, AGENT_ROLE__TRUNK, AGENT_ROLE__LEAF, etc
 				[x] but it is still awkward, and it feels like it would be easier to use if we just left it as a string field but added validation on it
 			[ ] add custom validation for string types that accept a set of values
-	[ ] add a required attribute to fields in abstract entity definitions?
+	[x] add a required attribute to fields in abstract entity definitions?
 		[x] we can use it to create two different attribute types
 			[x] one for attributes (creating, updating and the returned attributes), and another for where (filtering)
 			[x] we cannot do partial updates if we do this, and all updates will require the full set of attributes

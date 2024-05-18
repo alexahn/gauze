@@ -51,7 +51,7 @@ const WHERE_ARRAY__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstrac
 const WHERE_STRING__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne_Mutation__Where_String",
 	description: "Ytitne Mutation Where String",
-	fields: $structure.entities.ytitne.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
+	fields: $structure.entities.ytitne.database.graphql.WHERE_FIELDS_STRING__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
 });
 
 const CREATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE = {

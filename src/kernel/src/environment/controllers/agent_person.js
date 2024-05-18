@@ -98,6 +98,7 @@ class AgentPersonController {
 								gauze__session__id: agent.session_id,
 							};
 							const session_attributes = {
+								...session,
 								gauze__session__data: serialized_data,
 							};
 							const session_parameters = { where: session_where, attributes: session_attributes };
