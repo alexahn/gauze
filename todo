@@ -600,6 +600,8 @@
 	[ ] session management and authentication flow
 		[ ] refresh session method
 		[ ] add _metadata to environment mutation responses?
+		[ ] treat sessions as actual sessions and verify that every jwt exists in the database
+			[ ] verify_session method in the environment session model (that uses dataloader)
 	[ ] whitelist / blacklist symmetry?
 		[ ] should whitelist also only apply at leaf level? currently blacklist only applies at leaf level
 	[ ] granular dataloader cache clearing based on record (nice to have)
@@ -648,3 +650,9 @@
 	[ ] same principle as database sharding
 	[ ] look into bgp to handle destination routing and configuring autonomous systems
 		[ ] probably define an autonomous system for every datacenter
+[ ] dogfood the framework by creating a project that parses the source code of the framework into a navigable ast (maybe)
+	[ ] see how well relationships work in representing abstract data structures
+	[ ] build a canvas ui
+	[ ] bring the project into the kernel as a source code visibility tool, which can maybe later become a representation layer for source control
+		[ ] it would be nice if gauze could be an all in one solution for creating an organic self-contained system (from code to presentation)
+			[ ] we would need to build the monolithic base of the system to use the core data storage to host the source code
