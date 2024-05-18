@@ -51,7 +51,7 @@ const WHERE_ARRAY__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $a
 const WHERE_STRING__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Person_Mutation__Where_String",
 	description: "Agent_Person Mutation Where String",
-	fields: $structure.entities.agent_person.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__AGENT_PERSON__STRUCTURE,
+	fields: $structure.entities.agent_person.database.graphql.WHERE_FIELDS_STRING__GRAPHQL__DATABASE__AGENT_PERSON__STRUCTURE,
 });
 
 const CREATE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = {

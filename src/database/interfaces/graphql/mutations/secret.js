@@ -51,7 +51,7 @@ const WHERE_ARRAY__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstrac
 const WHERE_STRING__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Secret_Mutation__Where_String",
 	description: "Secret Mutation Where String",
-	fields: $structure.entities.secret.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__SECRET__STRUCTURE,
+	fields: $structure.entities.secret.database.graphql.WHERE_FIELDS_STRING__GRAPHQL__DATABASE__SECRET__STRUCTURE,
 });
 
 const CREATE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = {

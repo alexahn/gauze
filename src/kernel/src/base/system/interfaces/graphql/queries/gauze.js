@@ -96,13 +96,13 @@ const READ__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__SYSTEM 
 			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
-	resolve: (_source, query_arguments, context) => {
+	resolve: (source, query_arguments, context) => {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"READ__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
-			"_source",
-			_source,
+			"source",
+			source,
 		);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
@@ -120,7 +120,8 @@ const READ__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__SYSTEM 
 		);
 		return CONTROLLER__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__SYSTEM.read(
 			{
-				source: _source,
+				source: source,
+				project: context.project,
 				database: context.database,
 				transaction: context.transaction,
 				agent: context.agent,
@@ -163,13 +164,13 @@ const COUNT__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__SYSTEM
 			type: WHERE_ARRAY__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 	},
-	resolve: (_source, query_arguments, context) => {
+	resolve: (source, query_arguments, context) => {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"COUNT__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
-			"_source",
-			_source,
+			"source",
+			source,
 		);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
@@ -187,7 +188,8 @@ const COUNT__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__SYSTEM
 		);
 		return CONTROLLER__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__SYSTEM.count(
 			{
-				source: _source,
+				source: source,
+				project: context.project,
 				database: context.database,
 				transaction: context.transaction,
 				agent: context.agent,

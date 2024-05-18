@@ -94,8 +94,8 @@ const READ__AGENT_CHARACTER__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
-	resolve: (_source, query_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__AGENT_CHARACTER__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "_source", _source);
+	resolve: (source, query_arguments, context) => {
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__AGENT_CHARACTER__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "source", source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -112,7 +112,8 @@ const READ__AGENT_CHARACTER__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 		);
 		return CONTROLLER__AGENT_CHARACTER__CONTROLLER__SYSTEM.read(
 			{
-				source: _source,
+				source: source,
+				project: context.project,
 				database: context.database,
 				transaction: context.transaction,
 				agent: context.agent,
@@ -149,8 +150,8 @@ const COUNT__AGENT_CHARACTER__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 			type: WHERE_ARRAY__AGENT_CHARACTER__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 	},
-	resolve: (_source, query_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__AGENT_CHARACTER__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "_source", _source);
+	resolve: (source, query_arguments, context) => {
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__AGENT_CHARACTER__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "source", source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -167,7 +168,8 @@ const COUNT__AGENT_CHARACTER__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 		);
 		return CONTROLLER__AGENT_CHARACTER__CONTROLLER__SYSTEM.count(
 			{
-				source: _source,
+				source: source,
+				project: context.project,
 				database: context.database,
 				transaction: context.transaction,
 				agent: context.agent,

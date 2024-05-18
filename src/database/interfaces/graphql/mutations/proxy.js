@@ -51,7 +51,7 @@ const WHERE_ARRAY__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract
 const WHERE_STRING__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Proxy_Mutation__Where_String",
 	description: "Proxy Mutation Where String",
-	fields: $structure.entities.proxy.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+	fields: $structure.entities.proxy.database.graphql.WHERE_FIELDS_STRING__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 });
 
 const CREATE__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {

@@ -51,7 +51,7 @@ const WHERE_ARRAY__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstra
 const WHERE_STRING__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Session_Mutation__Where_String",
 	description: "Session Mutation Where String",
-	fields: $structure.entities.session.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__SESSION__STRUCTURE,
+	fields: $structure.entities.session.database.graphql.WHERE_FIELDS_STRING__GRAPHQL__DATABASE__SESSION__STRUCTURE,
 });
 
 const CREATE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
