@@ -352,7 +352,8 @@
 		[ ] look into nested schemas, maybe we can avoid the naming problem if we can call schemas using schemas
 			[ ] as an example, we can have a resolver that evaluates another schema (whose type definitions are bound within that schema)
 				[ ] maybe we only need to associate a schema with a domain, as long as we have some domain router
-					[ ] e.g. resolve("http://localhost:4000/graphql/Gauze_Mutation")
+					[ ] e.g. resolve("http://localhost:4000/graphql/Gauze_Mutation") if we want to go through http
+					[ ] e.g. resolve("graphql://localhost:4000/Gauze_Mutation") for a new protocol namespace
 [x] create new tables and entities:
 	[x] secret
 	[x] session
@@ -627,6 +628,8 @@
 			[ ] kernel/interfaces
 				[ ] manage cache, logging, shell, infrastructure, etc
 			[ ] provide a map reduce interface from the kernel, and use the interface from the database realm or system realm
+	[ ] rename the relationships field to "to" or "relationships_to", add a new field called "from" or "relationships_from" to allow bidirectional navigation of relationships
+		[ ] will need to add a "child" field to mirror the metadata proxying we do with the "parent" field
 [ ] unknowns, abnormal behavior, and investigations
 	[ ] look into why router5 doesn't seem to be able to uri encode correctly
 		[ ] manually encoding and decoding seems to work
