@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 
-export default function Input({ field, className, defaultValue, value, onChange, disabled }) {
+export default function Input({ field, className, defaultMode, defaultValue, value, onChange, onKeyDown, disabled }) {
 	const graphQLTypeToInputType = {
 		Date: "datetime-local",
 		String: "text",
@@ -44,13 +44,25 @@ export default function Input({ field, className, defaultValue, value, onChange,
 		// process e.target.value
 		return onChange(e);
 	}
-	return (
+	const valueInput = (
 		<input
 			className={className}
 			type={graphQLTypeToInputType[field.graphql_type.name]}
 			value={initializeValue[field.graphql_type.name](serializeGraphQLTypeToInputType[field.graphql_type.name](value))}
 			onChange={handleChange}
+			onKeyDown={onKeyDown}
 			disabled={disabled}
 		/>
 	);
+	const defaultInput = (
+		<input
+			className={className}
+			type={graphQLTypeToInputType[field.graphql_type.name]}
+			defaultValue={initializeValue[field.graphql_type.name](serializeGraphQLTypeToInputType[field.graphql_type.name](defaultValue))}
+			onChange={handleChange}
+			onKeyDown={onKeyDown}
+			disabled={disabled}
+		/>
+	);
+	return defaultMode ? defaultInput : valueInput;
 }

@@ -38,7 +38,6 @@ export default function TypeListUnit() {
 		if (fieldsParam) {
 			return applyNegation(headerFields, JSON.parse(decodeURIComponent(fieldsParam)));
 		} else {
-			console.log("a", headerFields);
 			return headerFields;
 		}
 	});

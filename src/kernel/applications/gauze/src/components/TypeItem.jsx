@@ -9,7 +9,8 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 	const [submitUpdate, setSubmitUpdate] = useState(false);
 	const [submitDelete, setSubmitDelete] = useState(false);
 	const header = model.read("HEADER", route.params.type);
-	const headerFields = header.attributes.split(" ");
+	//const headerFields = header.attributes.split(" ");
+	const headerFields = header.graphql_attributes_string.split(" ");
 	const item = model.read(header.graphql_meta_type, route.params.id) || {};
 	const [readItem, setReadItem] = useState(item);
 	const [updateItem, setUpdateItem] = useState(item);

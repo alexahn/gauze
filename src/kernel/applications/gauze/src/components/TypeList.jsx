@@ -248,7 +248,9 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 											</span>
 										</td>
 										<td className="mw4 w4 overflow-x-hidden">
-											<input
+											<Input
+												defaultMode={true}
+												field={field}
 												className="mw4"
 												onChange={updateFilter(field.name)}
 												onKeyDown={applyFilter(field.name)}
