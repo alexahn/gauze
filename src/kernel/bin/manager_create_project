@@ -17,3 +17,14 @@ project_root=$2
 
 mkdir -p $project_root
 cp -r $gauze_root/src/* $project_root/
+
+cp $gauze_root/gauze/gauze.json example.json
+cp $gauze_root/env/development.env example.env
+
+echo "Update example.env and rename to .env"
+echo "Update example.json and rename { entity_name }.env"
+echo "Create the migration file for your entity by calling 'npx gauze project $project_root migrate make { entity_name }'"
+echo "Update $project_root/database/migrations/.*{ entity_name }.js"
+echo "Run the migration file by calling 'npx gauze project $project_root migrate run'"
+echo "Create the project code for your entity by calling 'npx gauze project $project_root create entity $project_root { entity_name }.json'"
+echo "Run the server by calling 'npx gauze project $project_root run server --port { port }'"

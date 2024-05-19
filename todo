@@ -572,8 +572,8 @@
 		[ ] ideally this setting should align with a database index
 [ ] cli, commands, and manager application
 	[ ] polish commands and manager application
-	[ ] align environment variables with cli commands
-		[ ] ideally have every parameter for a cli command have an equivalent env variable
+	[x] align environment variables with cli commands
+		[x] ideally have every parameter for a cli command have an equivalent env variable namespace
 	[ ] add gauze.json as a config file for the gauze cli (which will keep track of gauze version and admin users)
 		[ ] add validation for gauze.json to ensure that particular fields exist
 	[ ] commands
@@ -644,9 +644,9 @@
 		[ ] kernel/interfaces
 			[ ] manage cache, logging, shell, infrastructure, etc
 		[ ] provide a map reduce interface from the kernel, and use the interface from the database realm or system realm
-		[ ] allow connecting repl to a live system?
-			[ ] i'm mostly against this idea because it increases the surface area of the interface, and subsequently security risks
-				[ ] i think there should only be one interface
+		[-] allow connecting repl to a live system?
+			[x] i'm mostly against this idea because it increases the surface area of the interface, and subsequently security risks
+				[x] i think there should only be one interface
 	[x] rename the relationships field to "to" or "relationships_to", add a new field called "from" or "relationships_from" to allow bidirectional navigation of relationships
 		[-] will need to add a "child" field to mirror the metadata proxying we do with the "parent" field
 			[x] just add an extra field called direction instead of creating a new field
