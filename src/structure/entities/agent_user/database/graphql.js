@@ -214,11 +214,11 @@ const QUERY__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = new $abstract.gauze.type
 			description: "relationships",
 		},
 		relationships_to: {
-			type: QUERY_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+			type: QUERY_RELATIONSHIPS_TO__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 			description: "relationships to",
 		},
 		relationships_from: {
-			type: QUERY_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+			type: QUERY_RELATIONSHIPS_FROM__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 			description: "relationships from",
 		},
 		query: {
@@ -239,11 +239,11 @@ const MUTATION__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = new $abstract.gauze.t
 			description: "relationships",
 		},
 		relationships_to: {
-			type: MUTATION_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+			type: MUTATION_RELATIONSHIPS_TO__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 			description: "relationships to",
 		},
 		relationships_from: {
-			type: MUTATION_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+			type: MUTATION_RELATIONSHIPS_FROM__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 			description: "relationships from",
 		},
 		mutation: {
