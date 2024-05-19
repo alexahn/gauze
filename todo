@@ -579,9 +579,10 @@
 	[ ] commands
 		[ ] read project
 		[ ] update project
-	[ ] have read command manually construct a list of files and directories and intersect with the results from find
-		[ ] kind of problematic when we just use find because an entity might contain another entity's name inside it
-			[ ] e.g. hello_entity and hello_entity_world
+	[-] have read command manually construct a list of files and directories and intersect with the results from find
+		[x] kind of problematic when we just use find because an entity might contain another entity's name inside it
+			[x] e.g. hello_entity and hello_entity_world
+		[x] use extended regex to enforce exact file name match by prefixing the pattern with / and ending with the file suffix
 	[ ] look into doing ast parsing and some table management data structures to programmatically generate migration files
 [ ] system design
 	[ ] soft delete
