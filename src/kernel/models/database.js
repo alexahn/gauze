@@ -79,18 +79,19 @@ class DatabaseModel extends Model {
 			const subkey = JSON.stringify({
 				method: parsed.method,
 				parameters: parsed.parameters,
-				raw_key: key,
 			});
 			if (subkey_map[subkey]) {
 				subkey_map[subkey].push({
 					index: index,
 					source: parsed.source,
+					raw_key: key,
 				});
 			} else {
 				subkey_map[subkey] = [
 					{
 						index: index,
 						source: parsed.source,
+						raw_key: key,
 					},
 				];
 			}
@@ -107,7 +108,7 @@ class DatabaseModel extends Model {
 						parameters: parsed.parameters,
 						source: item.source,
 						index: item.index,
-						raw_key: parsed.raw_key,
+						raw_key: item.raw_key,
 					};
 				})
 				.filter(function (item) {
@@ -124,7 +125,7 @@ class DatabaseModel extends Model {
 						parameters: parsed.parameters,
 						source: item.source,
 						index: item.index,
-						raw_key: parsed.raw_key,
+						raw_key: item.raw_key,
 					};
 				})
 				.filter(function (item) {
@@ -287,6 +288,19 @@ class DatabaseModel extends Model {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.parse_relationship:enter`, "relationship", relationship);
 		return relationship;
 	}
+	_parse_source(context, parameters) {
+		const self = this;
+		const { source } = context;
+		if (source && source._metadata && source._direction) {
+			return source;
+		} else {
+			if (parameters.source && parameters.source._metadata && parameters.source._direction) {
+				return parameters.source;
+			} else {
+				return null;
+			}
+		}
+	}
 	_root_create(context, parameters) {
 		const self = this;
 		const { source, database, transaction } = context;
@@ -329,8 +343,9 @@ class DatabaseModel extends Model {
 	// create a row
 	_create(context, parameters) {
 		const self = this;
-		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
-		const key = self._batch_key(relationship_metadata, parameters, "create");
+		//const relationship_metadata = self._parse_relationship_metadata(context, parameters);
+		const relationship_source = self._parse_source(context, parameters);
+		const key = self._batch_key(relationship_source, parameters, "create");
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
@@ -352,7 +367,6 @@ class DatabaseModel extends Model {
 			order_nulls = "first",
 		} = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
-		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 		const sql = database(self.table_name)
 			.where(function (builder) {
 				builder.where(where);
@@ -405,13 +419,18 @@ class DatabaseModel extends Model {
 			order_nulls = "first",
 		} = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
-		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
+		//const relationship_metadata = self._parse_relationship_metadata(context, parameters);
+		const relationship_source = self._parse_source(context, parameters);
 		// do join here based on source metadata
 		// use structure resolvers to convert graphql type to table_name name
 		// relationships are one directional, so use from as the parent
-		const PARENT_SQL_ID = relationship_metadata.id;
-		const PARENT_GRAPHQL_TYPE = relationship_metadata.type;
-		const PARENT_SQL_TABLE = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[PARENT_GRAPHQL_TYPE];
+		const SOURCE_SQL_ID = relationship_source._metadata.id;
+		const SOURCE_GRAPHQL_TYPE = relationship_source._metadata.type;
+		const SOURCE_SQL_TABLE = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[SOURCE_GRAPHQL_TYPE];
+
+		//const PARENT_SQL_ID = relationship_metadata.id;
+		//const PARENT_GRAPHQL_TYPE = relationship_metadata.type;
+		//const PARENT_SQL_TABLE = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[PARENT_GRAPHQL_TYPE];
 		// mutate where by prefixing with table_name name
 		var joined_where = {};
 		Object.keys(where).forEach(function (k) {
@@ -437,42 +456,78 @@ class DatabaseModel extends Model {
 			joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[k]).value;
 		});
 		var joined_order = self.table_name + "." + order;
-		const sql = database(self.table_name)
-			.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.id`)
-			.where(`${self.relationship_table_name}.gauze__relationship__from_id`, PARENT_SQL_ID)
-			.where(`${self.relationship_table_name}.gauze__relationship__from_type`, PARENT_SQL_TABLE)
-			.where(function (builder) {
-				builder.where(joined_where);
-				Object.keys(joined_where_in).forEach(function (key) {
-					builder.whereIn(key, joined_where_in[key]);
+		if (relationship_source._direction === "to") {
+			const sql = database(self.table_name)
+				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.id`)
+				.where(`${self.relationship_table_name}.gauze__relationship__from_id`, SOURCE_SQL_ID)
+				.where(`${self.relationship_table_name}.gauze__relationship__from_type`, SOURCE_SQL_TABLE)
+				.where(function (builder) {
+					builder.where(joined_where);
+					Object.keys(joined_where_in).forEach(function (key) {
+						builder.whereIn(key, joined_where_in[key]);
+					});
+					Object.keys(joined_where_not_in).forEach(function (key) {
+						builder.whereNotIn(key, joined_where_not_in[key]);
+					});
+					return builder;
+				})
+				.limit(limit)
+				.offset(offset)
+				.orderBy(joined_order, order_direction, order_nulls)
+				.transacting(transaction);
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
+			}
+			return sql
+				.then(function (data) {
+					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
+					return Promise.resolve(data);
+				})
+				.catch(function (err) {
+					LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.read:failure`, "err", err);
+					throw err;
 				});
-				Object.keys(joined_where_not_in).forEach(function (key) {
-					builder.whereNotIn(key, joined_where_not_in[key]);
+		} else if (relationship_source._direction === "from") {
+			const sql = database(self.table_name)
+				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__from_id`, "=", `${self.table_name}.id`)
+				.where(`${self.relationship_table_name}.gauze__relationship__to_id`, SOURCE_SQL_ID)
+				.where(`${self.relationship_table_name}.gauze__relationship__to_type`, SOURCE_SQL_TABLE)
+				.where(function (builder) {
+					builder.where(joined_where);
+					Object.keys(joined_where_in).forEach(function (key) {
+						builder.whereIn(key, joined_where_in[key]);
+					});
+					Object.keys(joined_where_not_in).forEach(function (key) {
+						builder.whereNotIn(key, joined_where_not_in[key]);
+					});
+					return builder;
+				})
+				.limit(limit)
+				.offset(offset)
+				.orderBy(joined_order, order_direction, order_nulls)
+				.transacting(transaction);
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
+			}
+			return sql
+				.then(function (data) {
+					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
+					return Promise.resolve(data);
+				})
+				.catch(function (err) {
+					LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.read:failure`, "err", err);
+					throw err;
 				});
-				return builder;
-			})
-			.limit(limit)
-			.offset(offset)
-			.orderBy(joined_order, order_direction, order_nulls)
-			.transacting(transaction);
-		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
+		} else {
+			throw new Error("Internal error: invalid direction for relationship");
 		}
-		return sql
-			.then(function (data) {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
-				return Promise.resolve(data);
-			})
-			.catch(function (err) {
-				LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.read:failure`, "err", err);
-				throw err;
-			});
 	}
 	// read a row
 	_read(context, parameters) {
 		const self = this;
-		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
-		const key = self._batch_key(relationship_metadata, parameters, "read");
+		//const relationship_metadata = self._parse_relationship_metadata(context, parameters);
+		const relationship_source = self._parse_source(context, parameters);
+		const key = self._batch_key(relationship_source, parameters, "read");
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
@@ -528,7 +583,6 @@ class DatabaseModel extends Model {
 		const { attributes, where, where_in = {}, where_not_in = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
 		const MAXIMUM_ROWS = 4294967296;
-		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 		// todo: hook up lru cache when dealing with id arrays
 		return self
 			.read(
@@ -571,8 +625,9 @@ class DatabaseModel extends Model {
 	// update a row
 	_update(context, parameters) {
 		const self = this;
-		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
-		const key = self._batch_key(relationship_metadata, parameters, "update");
+		//const relationship_metadata = self._parse_relationship_metadata(context, parameters);
+		const relationship_source = self._parse_source(context, parameters);
+		const key = self._batch_key(relationship_source, parameters, "update");
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
@@ -701,7 +756,6 @@ class DatabaseModel extends Model {
 		const { where, where_in = {}, where_not_in = {}, limit = 128 } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		const MAXIMUM_ROWS = 4294967296;
-		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 		// todo: hook up lru cache when dealing with id arrays
 		return self
 			.read(
@@ -739,8 +793,9 @@ class DatabaseModel extends Model {
 	// delete a row
 	_delete(context, parameters) {
 		const self = this;
-		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
-		const key = self._batch_key(relationship_metadata, parameters, "delete");
+		//const relationship_metadata = self._parse_relationship_metadata(context, parameters);
+		const relationship_source = self._parse_source(context, parameters);
+		const key = self._batch_key(relationship_source, parameters, "delete");
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
@@ -751,7 +806,6 @@ class DatabaseModel extends Model {
 		const { source, database, transaction } = context;
 		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
-		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
 		const reversed = {};
 		if (count_has_key) {
@@ -797,7 +851,8 @@ class DatabaseModel extends Model {
 		const { source, database, transaction } = context;
 		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
-		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
+		//const relationship_metadata = self._parse_relationship_metadata(context, parameters);
+		const relationship_source = self._parse_source(context, parameters);
 
 		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
 		const reversed = {};
@@ -810,9 +865,15 @@ class DatabaseModel extends Model {
 		// do join here based on source metadata
 		// use structure resolvers to convert graphql type to table_name name
 		// relationships are one directional, so use from as the parent
+		const SOURCE_SQL_ID = relationship_source._metadata.id;
+		const SOURCE_GRAPHQL_TYPE = relationship_source._metadata.type;
+		const SOURCE_SQL_TABLE = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[SOURCE_GRAPHQL_TYPE];
+
+		/*
 		const PARENT_SQL_ID = relationship_metadata.id;
 		const PARENT_GRAPHQL_TYPE = relationship_metadata.type;
 		const PARENT_SQL_TABLE = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[PARENT_GRAPHQL_TYPE];
+		*/
 		// mutate where by prefixing with table_name name
 		var joined_where = {};
 		Object.keys(where).forEach(function (k) {
@@ -837,40 +898,75 @@ class DatabaseModel extends Model {
 			var joined_key = self.table_name + "." + k;
 			joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[k]).value;
 		});
-		const sql = database(self.table_name)
-			.count(count_has_key ? reversed : null)
-			.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.id`)
-			.where(`${self.relationship_table_name}.gauze__relationship__from_id`, PARENT_SQL_ID)
-			.where(`${self.relationship_table_name}.gauze__relationship__from_type`, PARENT_SQL_TABLE)
-			.where(function (builder) {
-				builder.where(joined_where);
-				Object.keys(joined_where_in).forEach(function (key) {
-					builder.whereIn(key, joined_where_in[key]);
+		if (relationship_source._direction === "to") {
+			const sql = database(self.table_name)
+				.count(count_has_key ? reversed : null)
+				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.id`)
+				.where(`${self.relationship_table_name}.gauze__relationship__from_id`, SOURCE_SQL_ID)
+				.where(`${self.relationship_table_name}.gauze__relationship__from_type`, SOURCE_SQL_TABLE)
+				.where(function (builder) {
+					builder.where(joined_where);
+					Object.keys(joined_where_in).forEach(function (key) {
+						builder.whereIn(key, joined_where_in[key]);
+					});
+					Object.keys(joined_where_not_in).forEach(function (key) {
+						builder.whereNotIn(key, joined_where_not_in[key]);
+					});
+					return builder;
+				})
+				.first()
+				.transacting(transaction);
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
+			}
+			return sql
+				.then(function (data) {
+					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
+					return Promise.resolve(data);
+				})
+				.catch(function (err) {
+					LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
+					throw err;
 				});
-				Object.keys(joined_where_not_in).forEach(function (key) {
-					builder.whereNotIn(key, joined_where_not_in[key]);
+		} else if (relationship_source._direction === "from") {
+			const sql = database(self.table_name)
+				.count(count_has_key ? reversed : null)
+				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__from_id`, "=", `${self.table_name}.id`)
+				.where(`${self.relationship_table_name}.gauze__relationship__to_id`, SOURCE_SQL_ID)
+				.where(`${self.relationship_table_name}.gauze__relationship__to_type`, SOURCE_SQL_TABLE)
+				.where(function (builder) {
+					builder.where(joined_where);
+					Object.keys(joined_where_in).forEach(function (key) {
+						builder.whereIn(key, joined_where_in[key]);
+					});
+					Object.keys(joined_where_not_in).forEach(function (key) {
+						builder.whereNotIn(key, joined_where_not_in[key]);
+					});
+					return builder;
+				})
+				.first()
+				.transacting(transaction);
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
+			}
+			return sql
+				.then(function (data) {
+					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
+					return Promise.resolve(data);
+				})
+				.catch(function (err) {
+					LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
+					throw err;
 				});
-				return builder;
-			})
-			.first()
-			.transacting(transaction);
-		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
+		} else {
+			throw new Error("Internal error: invalid direction for relationship");
 		}
-		return sql
-			.then(function (data) {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
-				return Promise.resolve(data);
-			})
-			.catch(function (err) {
-				LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
-				throw err;
-			});
 	}
 	_count(context, parameters) {
 		const self = this;
-		const relationship_metadata = self._parse_relationship_metadata(context, parameters);
-		const key = self._batch_key(relationship_metadata, parameters, "count");
+		//const relationship_metadata = self._parse_relationship_metadata(context, parameters);
+		const relationship_source = self._parse_source(context, parameters);
+		const key = self._batch_key(relationship_source, parameters, "count");
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);

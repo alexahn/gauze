@@ -12,12 +12,6 @@ const SERIALIZER__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $structure
 	sql_primary_key: $structure.entities.ezuag.database.sql.PRIMARY_KEY__SQL__DATABASE__EZUAG__STRUCTURE,
 });
 
-const PARENT__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Ezuag_Mutation__Parent",
-	description: "Ezuag Parent",
-	fields: () => $structure.entities.ezuag.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
-});
-
 const ATTRIBUTES__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ezuag_Mutation__Attributes",
 	description: "Ezuag Mutation Attributes",
@@ -57,10 +51,6 @@ const WHERE_STRING__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstrac
 const CREATE__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ezuag.database.graphql.MUTATION__GRAPHQL__DATABASE__EZUAG__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		attributes: {
 			description: "attributes",
 			type: ATTRIBUTES__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -95,10 +85,6 @@ const CREATE__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 const UPDATE__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ezuag.database.graphql.MUTATION__GRAPHQL__DATABASE__EZUAG__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		where: {
 			description: "where",
 			type: WHERE__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -176,10 +162,6 @@ const UPDATE__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 const DELETE__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ezuag.database.graphql.MUTATION__GRAPHQL__DATABASE__EZUAG__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		where: {
 			description: "where",
 			type: WHERE__EZUAG__MUTATION__GRAPHQL__INTERFACE__DATABASE,

@@ -12,12 +12,6 @@ const SERIALIZER__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = new $structure.ga
 	sql_primary_key: $structure.entities.ezuag.database.sql.PRIMARY_KEY__SQL__DATABASE__EZUAG__STRUCTURE,
 });
 
-const PARENT__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Ezuag_Query__Parent",
-	description: "Ezuag Parent",
-	fields: () => $structure.entities.ezuag.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
-});
-
 const ATTRIBUTES__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ezuag_Query__Attributes",
 	description: "Ezuag Query Attributes",
@@ -57,10 +51,6 @@ const WHERE_STRING__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.g
 const READ__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ezuag.database.graphql.QUERY__GRAPHQL__DATABASE__EZUAG__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE,
-		},
 		where: {
 			description: "where",
 			type: WHERE__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE,
@@ -125,10 +115,6 @@ const READ__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 const COUNT__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE,
-		},
 		count: {
 			description: "count",
 			type: WHERE_STRING__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE,

@@ -1,5 +1,6 @@
 query ReadEntity(
 	$parent: Entity_Query__Parent
+	$source: Entity_Query__Source
 	$where: Entity_Query__Where
 	$where_in: Entity_Query__Where_Array
 	$cache_where_in: Entity_Query__Where_String
@@ -13,6 +14,7 @@ query ReadEntity(
 ) {
 	read_entity(
 		parent: $parent
+		source: $source
 		where: $where
 		where_in: $where_in
 		cache_where_in: $cache_where_in
