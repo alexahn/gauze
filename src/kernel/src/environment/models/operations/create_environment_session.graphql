@@ -1,5 +1,5 @@
-mutation CreateEnvironmentSession($parent: Session_Mutation__Parent, $attributes: Session_Mutation__Attributes) {
-	create_session(parent: $parent, attributes: $attributes) {
+mutation CreateEnvironmentSession($attributes: Session_Mutation__Attributes) {
+	create_session(attributes: $attributes) {
 		attributes {
 			gauze__session__id
 			gauze__session__created_at

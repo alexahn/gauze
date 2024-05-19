@@ -10,6 +10,22 @@ function pascal_snake_case(name) {
 	return mapped.join("_");
 }
 
+// turns the to based definition to a from based definition
+function invert_relationships(relationships) {
+	const mapping = {};
+	Object.keys(relationships).forEach(function (entity) {
+		const to = relationships[entity];
+		to.forEach(function (target) {
+			if (mapping[target]) {
+				mapping[target].push(entity);
+			} else {
+				mapping[target] = [entity];
+			}
+		});
+	});
+	return mapping;
+}
+
 function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 	const HEADER__HEADER__STRUCTURE = {
 		type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.header.HEADER_TYPE__HEADER__STRUCTURE),
@@ -98,6 +114,7 @@ function LINK_RELATIONSHIPS__LINKER__KERNEL(entities, methods, relationships) {
 		});
 	});
 	// link relationships from here
+	const inverted_relationships = invert_relationships(relationships);
 
 	// link nested queries and mutations
 	Object.keys(entities).forEach(function (entity) {
