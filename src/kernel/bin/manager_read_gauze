@@ -39,4 +39,4 @@ arg3=$(echo "$arg1" | node $gauze_root/kernel/bin/format_string.js upper_snake_c
 arg4=$(echo "$arg1" | node $gauze_root/kernel/bin/format_string.js pascal_case)
 #echo "arg4: $arg4"
 
-find $project_root -name "*" | grep $arg1
+find $project_root -name "*" | grep -E "(/$arg1.js)|(/$arg1/[^/]*.graphql)"
