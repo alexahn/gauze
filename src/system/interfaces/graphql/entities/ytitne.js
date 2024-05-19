@@ -9,7 +9,11 @@ import {
 
 const CONNECTION__YTITNE__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
 	query_relationships: $structure.entities.ytitne.system.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
+	query_relationships_to: $structure.entities.ytitne.system.graphql.QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
+	query_relationships_from: $structure.entities.ytitne.system.graphql.QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 	mutation_relationships: $structure.entities.ytitne.system.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
+	mutation_relationships_to: $structure.entities.ytitne.system.graphql.MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
+	mutation_relationships_from: $structure.entities.ytitne.system.graphql.MUTATION_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 	query_query: $structure.entities.ytitne.system.graphql.QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 	mutation_mutation: $structure.entities.ytitne.system.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 };
