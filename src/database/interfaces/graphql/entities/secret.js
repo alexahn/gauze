@@ -9,7 +9,11 @@ import {
 
 const CONNECTION__SECRET__ENTITY__GRAPHQL__INTERFACE__DATABASE = {
 	query_relationships: $structure.entities.secret.database.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__SECRET__STRUCTURE,
+	query_relationships_to: $structure.entities.secret.database.graphql.QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__DATABASE__SECRET__STRUCTURE,
+	query_relationships_from: $structure.entities.secret.database.graphql.QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__DATABASE__SECRET__STRUCTURE,
 	mutation_relationships: $structure.entities.secret.database.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__SECRET__STRUCTURE,
+	mutation_relationships_to: $structure.entities.secret.database.graphql.MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__DATABASE__SECRET__STRUCTURE,
+	mutation_relationships_from: $structure.entities.secret.database.graphql.MUTATION_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__DATABASE__SECRET__STRUCTURE,
 	query_query: $structure.entities.secret.database.graphql.QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__SECRET__STRUCTURE,
 	mutation_mutation: $structure.entities.secret.database.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__SECRET__STRUCTURE,
 };

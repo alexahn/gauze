@@ -63,6 +63,42 @@ const QUERY_RELATIONSHIPS__GRAPHQL__DATABASE__PROXY__STRUCTURE = new $abstract.g
 	fields: () => QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 });
 
+const QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+		description: "Proxy Query Relationships To Metadata",
+	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Proxy Query Relationships To Direction",
+	},
+	//read_entity: ENTITY_READ_QUERY
+};
+
+const QUERY_RELATIONSHIPS_TO__GRAPHQL__DATABASE__PROXY__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Proxy_Query__Relationships_To",
+	description: "Proxy Query Relationships_To",
+	fields: () => QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+});
+
+const QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+		description: "Proxy Query Relationships From Metadata",
+	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Proxy Query Relationships From Direction",
+	},
+	//read_entity: ENTITY_READ_QUERY
+};
+
+const QUERY_RELATIONSHIPS_FROM__GRAPHQL__DATABASE__PROXY__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Proxy_Query__Relationships_From",
+	description: "Proxy Query Relationships_From",
+	fields: () => QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+});
+
 const QUERY_SOURCE_METADATA__GRAPHQL__DATABASE__PROXY__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Proxy_Query__Source_Metadata",
 	description: "Proxy Query Source Metadata",
@@ -99,6 +135,10 @@ const MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE = {
 		type: METADATA__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 		description: "Proxy Mutation Metadata",
 	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Proxy Query Source Direction",
+	},
 	//create_entity: ENTITY_CREATE_MUTATION
 };
 
@@ -106,6 +146,42 @@ const MUTATION_RELATIONSHIPS__GRAPHQL__DATABASE__PROXY__STRUCTURE = new $abstrac
 	name: "Proxy_Mutation__Relationships",
 	description: "Proxy Mutation Relationships",
 	fields: () => MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+});
+
+const MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+		description: "Proxy Mutation Relationship To Metadata",
+	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Proxy Mutation Relationship To Direction",
+	},
+	//create_entity: ENTITY_CREATE_MUTATION
+};
+
+const MUTATION_RELATIONSHIPS_TO__GRAPHQL__DATABASE__PROXY__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Proxy_Mutation__Relationships_To",
+	description: "Proxy Mutation Relationships To",
+	fields: () => MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+});
+
+const MUTATION_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+		description: "Proxy Mutation Relationship From Metadata",
+	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Proxy Mutation Relationship From Direction",
+	},
+	//create_entity: ENTITY_CREATE_MUTATION
+};
+
+const MUTATION_RELATIONSHIPS_FROM__GRAPHQL__DATABASE__PROXY__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Proxy_Mutation__Relationships_From",
+	description: "Proxy Mutation Relationships From",
+	fields: () => MUTATION_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 });
 
 const MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE = {};
@@ -162,6 +238,14 @@ const MUTATION__GRAPHQL__DATABASE__PROXY__STRUCTURE = new $abstract.gauze.types.
 			type: MUTATION_RELATIONSHIPS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 			description: "relationships",
 		},
+		relationships_to: {
+			type: MUTATION_RELATIONSHIPS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+			description: "relationships to",
+		},
+		relationships_from: {
+			type: MUTATION_RELATIONSHIPS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+			description: "relationships from",
+		},
 		mutation: {
 			type: MUTATION_MUTATION__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 			description: "mutation",
@@ -185,10 +269,18 @@ export {
 	WHERE_FIELDS_STRING__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 	QUERY_RELATIONSHIPS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 	QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+	QUERY_RELATIONSHIPS_TO__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+	QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+	QUERY_RELATIONSHIPS_FROM__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+	QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 	QUERY_SOURCE__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 	QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 	MUTATION_RELATIONSHIPS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 	MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+	MUTATION_RELATIONSHIPS_TO__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+	MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+	MUTATION_RELATIONSHIPS_FROM__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+	MUTATION_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 	QUERY_QUERY__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 	QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 	MUTATION_MUTATION__GRAPHQL__DATABASE__PROXY__STRUCTURE,
