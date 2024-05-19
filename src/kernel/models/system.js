@@ -655,6 +655,7 @@ class SystemModel extends Model {
 		self._validate_method(agent, method);
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
+			parameters.source = source;
 		}
 		const key = self._model_batch_key(parameters, realm, method);
 		return self.model_loader.load(context, key);
@@ -675,6 +676,7 @@ class SystemModel extends Model {
 		self._validate_method(agent, method);
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
+			parameters.source = source;
 		}
 		const key = self._model_batch_key(parameters, realm, method);
 		return self.model_loader.load(context, key);
@@ -695,6 +697,7 @@ class SystemModel extends Model {
 		self._validate_method(agent, method);
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
+			parameters.source = source;
 		}
 		const key = self._model_batch_key(parameters, realm, method);
 		return self.model_loader.load(context, key);
@@ -715,6 +718,7 @@ class SystemModel extends Model {
 		self._validate_method(agent, method);
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
+			parameters.source = source;
 		}
 		const key = self._model_batch_key(parameters, realm, method);
 		return self.model_loader.load(context, key);
@@ -735,6 +739,7 @@ class SystemModel extends Model {
 		self._validate_method(agent, method);
 		if (source && source._metadata) {
 			parameters.parent = source._metadata;
+			parameters.source = source;
 		}
 		const key = self._model_batch_key(parameters, realm, method);
 		return self.model_loader.load(context, key);

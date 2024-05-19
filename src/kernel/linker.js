@@ -81,6 +81,7 @@ function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 
 // todo: add some existence checks and guards to these loops
 function LINK_RELATIONSHIPS__LINKER__KERNEL(entities, methods, relationships) {
+	// this is linking relationships to
 	Object.keys(relationships).forEach(function (entity) {
 		var entity_relationships = relationships[entity];
 		entity_relationships.forEach(function (related) {
@@ -94,6 +95,9 @@ function LINK_RELATIONSHIPS__LINKER__KERNEL(entities, methods, relationships) {
 			});
 		});
 	});
+	// link relationships from here
+
+	// link nested queries and mutations
 	Object.keys(entities).forEach(function (entity) {
 		Object.keys(methods).forEach(function (entity_method) {
 			Object.keys(methods[entity_method].query).forEach(function (query) {

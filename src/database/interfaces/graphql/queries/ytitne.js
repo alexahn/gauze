@@ -18,6 +18,12 @@ const PARENT__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.
 	fields: () => $structure.entities.ytitne.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
 });
 
+const SOURCE__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Ytitne_Query__Source",
+	description: "Ytitne Source",
+	fields: () => $structure.entities.ytitne.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
+});
+
 const ATTRIBUTES__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne_Query__Attributes",
 	description: "Ytitne Query Attributes",
@@ -60,6 +66,10 @@ const READ__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		parent: {
 			description: "parent",
 			type: PARENT__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where: {
 			description: "where",
@@ -128,6 +138,10 @@ const COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		parent: {
 			description: "parent",
 			type: PARENT__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		count: {
 			description: "count",

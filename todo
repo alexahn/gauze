@@ -648,6 +648,7 @@
 				[ ] i think there should only be one interface
 	[ ] rename the relationships field to "to" or "relationships_to", add a new field called "from" or "relationships_from" to allow bidirectional navigation of relationships
 		[ ] will need to add a "child" field to mirror the metadata proxying we do with the "parent" field
+		[ ] rename parent to source for database graphql methods
 	[ ] add a field called transaction_id (or request_id) to allow busting the cache for segments of a query or mutation?
 [ ] unknowns, abnormal behavior, and investigations
 	[ ] look into why router5 doesn't seem to be able to uri encode correctly
