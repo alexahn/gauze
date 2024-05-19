@@ -214,11 +214,11 @@ const QUERY__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE = new $abstract.gauze.typ
 			description: "relationships",
 		},
 		relationships_to: {
-			type: QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+			type: QUERY_RELATIONSHIPS_TO__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
 			description: "relationships to",
 		},
 		relationships_from: {
-			type: QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+			type: QUERY_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
 			description: "relationships from",
 		},
 		query: {
@@ -239,11 +239,11 @@ const MUTATION__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE = new $abstract.gauze.
 			description: "relationships",
 		},
 		relationships_to: {
-			type: MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+			type: MUTATION_RELATIONSHIPS_TO__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
 			description: "relationships to",
 		},
 		relationships_from: {
-			type: MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+			type: MUTATION_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
 			description: "relationships from",
 		},
 		mutation: {

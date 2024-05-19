@@ -218,11 +218,11 @@ const QUERY__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new 
 			description: "relationships",
 		},
 		relationships_to: {
-			type: QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+			type: QUERY_RELATIONSHIPS_TO__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 			description: "relationships to",
 		},
 		relationships_from: {
-			type: QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+			type: QUERY_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 			description: "relationships from",
 		},
 		query: {
@@ -243,11 +243,11 @@ const MUTATION__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = n
 			description: "relationships",
 		},
 		relationships_to: {
-			type: MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+			type: MUTATION_RELATIONSHIPS_TO__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 			description: "relationships to",
 		},
 		relationships_from: {
-			type: MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+			type: MUTATION_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 			description: "relationships from",
 		},
 		mutation: {
