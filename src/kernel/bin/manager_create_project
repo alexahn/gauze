@@ -18,7 +18,7 @@ project_root=$2
 mkdir -p $project_root
 cp -r $gauze_root/src/* $project_root/
 
-cp $gauze_root/gauze/gauze.json example.js
+cp $gauze_root/gauze/gauze.js example.js
 cp $gauze_root/env/development.env example.env
 
 echo "Update example.env and rename to .env"
