@@ -12,12 +12,6 @@ const SERIALIZER__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $structur
 	sql_primary_key: $structure.entities.ytitne.database.sql.PRIMARY_KEY__SQL__DATABASE__YTITNE__STRUCTURE,
 });
 
-const PARENT__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Ytitne_Mutation__Parent",
-	description: "Ytitne Parent",
-	fields: () => $structure.entities.ytitne.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__YTITNE__STRUCTURE,
-});
-
 const SOURCE__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne_Mutation__Source",
 	description: "Ytitne Source",
@@ -63,10 +57,6 @@ const WHERE_STRING__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstra
 const CREATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ytitne.database.graphql.MUTATION__GRAPHQL__DATABASE__YTITNE__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -105,10 +95,6 @@ const CREATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 const UPDATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ytitne.database.graphql.MUTATION__GRAPHQL__DATABASE__YTITNE__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -190,10 +176,6 @@ const UPDATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 const DELETE__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ytitne.database.graphql.MUTATION__GRAPHQL__DATABASE__YTITNE__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE,

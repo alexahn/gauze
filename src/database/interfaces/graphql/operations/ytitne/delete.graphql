@@ -1,5 +1,4 @@
 mutation DeleteYtitne(
-	$parent: Ytitne_Mutation__Parent
 	$source: Ytitne_Mutation__Source
 	$where: Ytitne_Mutation__Where
 	$where_in: Ytitne_Mutation__Where_Array
@@ -13,7 +12,6 @@ mutation DeleteYtitne(
 	$order_nulls: String
 ) {
 	delete_ytitne(
-		parent: $parent
 		source: $source
 		where: $where
 		where_in: $where_in
