@@ -682,3 +682,6 @@
 	[ ] bring the project into the kernel as a source code visibility tool, which can maybe later become a representation layer for source control
 		[ ] it would be nice if gauze could be an all in one solution for creating an organic self-contained system (from code to presentation)
 			[ ] we would need to build the monolithic base of the system to use the core data storage to host the source code
+[ ] better tests
+	[ ] relationship tests need to actually test that subsets of things can get acted on correctly
+		[ ] imagine if the program misinterprets the method as not being a relationship method, and we need to catch that it acted on the wrong set of items
