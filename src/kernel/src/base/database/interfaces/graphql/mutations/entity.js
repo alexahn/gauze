@@ -12,12 +12,6 @@ const SERIALIZER__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE
 	sql_primary_key: $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.sql.PRIMARY_KEY__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 });
 
-const PARENT__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "ba381b0cc764c4c9a187b716ae94ed96_Mutation__Parent",
-	description: "ba381b0cc764c4c9a187b716ae94ed96 Parent",
-	fields: () => $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
-});
-
 const SOURCE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Mutation__Source",
 	description: "ba381b0cc764c4c9a187b716ae94ed96 Source",
@@ -65,10 +59,6 @@ const CREATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 		$structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.MUTATION__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 	),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -121,10 +111,6 @@ const UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 		$structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.MUTATION__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 	),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -220,10 +206,6 @@ const DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 		$structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.MUTATION__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 	),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,

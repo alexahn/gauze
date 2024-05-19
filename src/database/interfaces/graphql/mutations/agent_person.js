@@ -12,12 +12,6 @@ const SERIALIZER__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $st
 	sql_primary_key: $structure.entities.agent_person.database.sql.PRIMARY_KEY__SQL__DATABASE__AGENT_PERSON__STRUCTURE,
 });
 
-const PARENT__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_Person_Mutation__Parent",
-	description: "Agent_Person Parent",
-	fields: () => $structure.entities.agent_person.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__AGENT_PERSON__STRUCTURE,
-});
-
 const SOURCE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Person_Mutation__Source",
 	description: "Agent_Person Source",
@@ -63,10 +57,6 @@ const WHERE_STRING__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $
 const CREATE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_person.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_PERSON__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -105,10 +95,6 @@ const CREATE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 const UPDATE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_person.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_PERSON__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -190,10 +176,6 @@ const UPDATE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 const DELETE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_person.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_PERSON__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,

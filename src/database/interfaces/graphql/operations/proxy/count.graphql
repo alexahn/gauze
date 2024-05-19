@@ -1,5 +1,4 @@
 query CountProxy(
-	$parent: Proxy_Query__Parent
 	$source: Proxy_Query__Source
 	$count: Proxy_Query__Where_String
 	$where: Proxy_Query__Where
@@ -8,16 +7,7 @@ query CountProxy(
 	$where_not_in: Proxy_Query__Where_Array
 	$cache_where_not_in: Proxy_Query__Where_String
 ) {
-	count_proxy(
-		parent: $parent
-		source: $source
-		count: $count
-		where: $where
-		where_in: $where_in
-		cache_where_in: $cache_where_in
-		where_not_in: $where_not_in
-		cache_where_not_in: $cache_where_not_in
-	) {
+	count_proxy(source: $source, count: $count, where: $where, where_in: $where_in, cache_where_in: $cache_where_in, where_not_in: $where_not_in, cache_where_not_in: $cache_where_not_in) {
 		select
 		count
 	}

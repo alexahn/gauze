@@ -1,5 +1,4 @@
 mutation DeleteProxy(
-	$parent: Proxy_Mutation__Parent
 	$source: Proxy_Mutation__Source
 	$where: Proxy_Mutation__Where
 	$where_in: Proxy_Mutation__Where_Array
@@ -13,7 +12,6 @@ mutation DeleteProxy(
 	$order_nulls: String
 ) {
 	delete_proxy(
-		parent: $parent
 		source: $source
 		where: $where
 		where_in: $where_in

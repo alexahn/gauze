@@ -1,5 +1,4 @@
 mutation CreateAgent_Root(
-	$parent: Agent_Root_Mutation__Parent
 	$source: Agent_Root_Mutation__Source
 	$attributes: Agent_Root_Mutation__Attributes
 	$whitelist_create: Whitelist_Mutation__Attributes
@@ -11,7 +10,7 @@ mutation CreateAgent_Root(
 	$blacklist_update: Blacklist_Mutation__Attributes
 	$blacklist_delete: Blacklist_Mutation__Attributes
 ) {
-	create_agent_root(parent: $parent, source: $source, attributes: $attributes) {
+	create_agent_root(source: $source, attributes: $attributes) {
 		attributes {
 			gauze__agent_root__id
 			gauze__agent_root__created_at

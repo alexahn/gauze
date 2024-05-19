@@ -1,5 +1,4 @@
 mutation UpdateAgent_User(
-	$parent: Agent_User_Mutation__Parent
 	$source: Agent_User_Mutation__Source
 	$attributes: Agent_User_Mutation__Attributes
 	$where: Agent_User_Mutation__Where
@@ -14,7 +13,6 @@ mutation UpdateAgent_User(
 	$order_nulls: String
 ) {
 	update_agent_user(
-		parent: $parent
 		source: $source
 		attributes: $attributes
 		where: $where

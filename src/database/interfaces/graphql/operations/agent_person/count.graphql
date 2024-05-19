@@ -1,5 +1,4 @@
 query CountAgent_Person(
-	$parent: Agent_Person_Query__Parent
 	$source: Agent_Person_Query__Source
 	$count: Agent_Person_Query__Where_String
 	$where: Agent_Person_Query__Where
@@ -9,7 +8,6 @@ query CountAgent_Person(
 	$cache_where_not_in: Agent_Person_Query__Where_String
 ) {
 	count_agent_person(
-		parent: $parent
 		source: $source
 		count: $count
 		where: $where

@@ -1,5 +1,4 @@
 mutation CreateProxy(
-	$parent: Proxy_Mutation__Parent
 	$source: Proxy_Mutation__Source
 	$attributes: Proxy_Mutation__Attributes
 	$whitelist_create: Whitelist_Mutation__Attributes
@@ -11,7 +10,7 @@ mutation CreateProxy(
 	$blacklist_update: Blacklist_Mutation__Attributes
 	$blacklist_delete: Blacklist_Mutation__Attributes
 ) {
-	create_proxy(parent: $parent, source: $source, attributes: $attributes) {
+	create_proxy(source: $source, attributes: $attributes) {
 		attributes {
 			gauze__proxy__id
 			gauze__proxy__created_at

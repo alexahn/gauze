@@ -12,12 +12,6 @@ const SERIALIZER__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE = new $struc
 	sql_primary_key: $structure.entities.agent_person.database.sql.PRIMARY_KEY__SQL__DATABASE__AGENT_PERSON__STRUCTURE,
 });
 
-const PARENT__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_Person_Query__Parent",
-	description: "Agent_Person Parent",
-	fields: () => $structure.entities.agent_person.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__AGENT_PERSON__STRUCTURE,
-});
-
 const SOURCE__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Person_Query__Source",
 	description: "Agent_Person Source",
@@ -63,10 +57,6 @@ const WHERE_STRING__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abs
 const READ__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_person.database.graphql.QUERY__GRAPHQL__DATABASE__AGENT_PERSON__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE,
@@ -141,10 +131,6 @@ const READ__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 const COUNT__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE,

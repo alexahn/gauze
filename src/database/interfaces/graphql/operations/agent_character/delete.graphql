@@ -1,5 +1,4 @@
 mutation DeleteAgent_Character(
-	$parent: Agent_Character_Mutation__Parent
 	$source: Agent_Character_Mutation__Source
 	$where: Agent_Character_Mutation__Where
 	$where_in: Agent_Character_Mutation__Where_Array
@@ -13,7 +12,6 @@ mutation DeleteAgent_Character(
 	$order_nulls: String
 ) {
 	delete_agent_character(
-		parent: $parent
 		source: $source
 		where: $where
 		where_in: $where_in

@@ -12,12 +12,6 @@ const SERIALIZER__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new 
 	sql_primary_key: $structure.entities.agent_character.database.sql.PRIMARY_KEY__SQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 });
 
-const PARENT__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_Character_Mutation__Parent",
-	description: "Agent_Character Parent",
-	fields: () => $structure.entities.agent_character.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
-});
-
 const SOURCE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Character_Mutation__Source",
 	description: "Agent_Character Source",
@@ -65,10 +59,6 @@ const CREATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		$structure.entities.agent_character.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 	),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -109,10 +99,6 @@ const UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		$structure.entities.agent_character.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 	),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -196,10 +182,6 @@ const DELETE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		$structure.entities.agent_character.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 	),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE,

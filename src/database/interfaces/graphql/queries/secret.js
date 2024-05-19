@@ -12,12 +12,6 @@ const SERIALIZER__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = new $structure.g
 	sql_primary_key: $structure.entities.secret.database.sql.PRIMARY_KEY__SQL__DATABASE__SECRET__STRUCTURE,
 });
 
-const PARENT__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Secret_Query__Parent",
-	description: "Secret Parent",
-	fields: () => $structure.entities.secret.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__SECRET__STRUCTURE,
-});
-
 const SOURCE__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Secret_Query__Source",
 	description: "Secret Source",
@@ -63,10 +57,6 @@ const WHERE_STRING__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.
 const READ__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.secret.database.graphql.QUERY__GRAPHQL__DATABASE__SECRET__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE,
@@ -135,10 +125,6 @@ const READ__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 const COUNT__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE,

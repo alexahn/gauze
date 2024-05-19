@@ -1,5 +1,4 @@
 mutation DeleteEntity(
-	$parent: Entity_Mutation__Parent
 	$source: Entity_Mutation__Source
 	$where: Entity_Mutation__Where
 	$where_in: Entity_Mutation__Where_Array
@@ -13,7 +12,6 @@ mutation DeleteEntity(
 	$order_nulls: String
 ) {
 	delete_entity(
-		parent: $parent
 		source: $source
 		where: $where
 		where_in: $where_in

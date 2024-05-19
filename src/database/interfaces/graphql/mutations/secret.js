@@ -12,12 +12,6 @@ const SERIALIZER__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $structur
 	sql_primary_key: $structure.entities.secret.database.sql.PRIMARY_KEY__SQL__DATABASE__SECRET__STRUCTURE,
 });
 
-const PARENT__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Secret_Mutation__Parent",
-	description: "Secret Parent",
-	fields: () => $structure.entities.secret.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__SECRET__STRUCTURE,
-});
-
 const SOURCE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Secret_Mutation__Source",
 	description: "Secret Source",
@@ -63,10 +57,6 @@ const WHERE_STRING__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstra
 const CREATE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.secret.database.graphql.MUTATION__GRAPHQL__DATABASE__SECRET__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -105,10 +95,6 @@ const CREATE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 const UPDATE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.secret.database.graphql.MUTATION__GRAPHQL__DATABASE__SECRET__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -190,10 +176,6 @@ const UPDATE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 const DELETE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.secret.database.graphql.MUTATION__GRAPHQL__DATABASE__SECRET__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE,

@@ -1,5 +1,4 @@
 mutation DeleteAgent_Root(
-	$parent: Agent_Root_Mutation__Parent
 	$source: Agent_Root_Mutation__Source
 	$where: Agent_Root_Mutation__Where
 	$where_in: Agent_Root_Mutation__Where_Array
@@ -13,7 +12,6 @@ mutation DeleteAgent_Root(
 	$order_nulls: String
 ) {
 	delete_agent_root(
-		parent: $parent
 		source: $source
 		where: $where
 		where_in: $where_in

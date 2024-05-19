@@ -1,5 +1,4 @@
 query ReadAgent_Character(
-	$parent: Agent_Character_Query__Parent
 	$source: Agent_Character_Query__Source
 	$where: Agent_Character_Query__Where
 	$where_in: Agent_Character_Query__Where_Array
@@ -13,7 +12,6 @@ query ReadAgent_Character(
 	$order_nulls: String
 ) {
 	read_agent_character(
-		parent: $parent
 		source: $source
 		where: $where
 		where_in: $where_in

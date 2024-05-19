@@ -12,12 +12,6 @@ const SERIALIZER__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $structure
 	sql_primary_key: $structure.entities.proxy.database.sql.PRIMARY_KEY__SQL__DATABASE__PROXY__STRUCTURE,
 });
 
-const PARENT__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Proxy_Mutation__Parent",
-	description: "Proxy Parent",
-	fields: () => $structure.entities.proxy.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
-});
-
 const SOURCE__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Proxy_Mutation__Source",
 	description: "Proxy Source",
@@ -63,10 +57,6 @@ const WHERE_STRING__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstrac
 const CREATE__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.proxy.database.graphql.MUTATION__GRAPHQL__DATABASE__PROXY__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -105,10 +95,6 @@ const CREATE__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 const UPDATE__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.proxy.database.graphql.MUTATION__GRAPHQL__DATABASE__PROXY__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -190,10 +176,6 @@ const UPDATE__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 const DELETE__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.proxy.database.graphql.MUTATION__GRAPHQL__DATABASE__PROXY__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		source: {
 			description: "source",
 			type: SOURCE__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE,
