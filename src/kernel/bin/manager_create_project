@@ -27,4 +27,7 @@ echo "Create the migration file for your entity by calling 'npx gauze project $p
 echo "Update $project_root/database/migrations/.*{ entity_name }.js"
 echo "Run the migration file by calling 'npx gauze project $project_root migrate run'"
 echo "Create the project code for your entity by calling 'npx gauze project $project_root create entity $project_root { entity_name }.json'"
+echo "Update $project_root/database/interfaces/graphql/schema.js to register your entity"
+echo "Update $project_root/system/interfaces/graphql/schema.js to register your entity"
+echo "Update $project_root/structure/relationships.js to define your relationships"
 echo "Run the server by calling 'npx gauze project $project_root run server --port { port }'"
