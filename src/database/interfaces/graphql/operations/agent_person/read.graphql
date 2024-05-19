@@ -1,5 +1,6 @@
 query ReadAgent_Person(
 	$parent: Agent_Person_Query__Parent
+	$source: Agent_Person_Query__Source
 	$where: Agent_Person_Query__Where
 	$where_in: Agent_Person_Query__Where_Array
 	$cache_where_in: Agent_Person_Query__Where_String
@@ -13,6 +14,7 @@ query ReadAgent_Person(
 ) {
 	read_agent_person(
 		parent: $parent
+		source: $source
 		where: $where
 		where_in: $where_in
 		cache_where_in: $cache_where_in

@@ -1,5 +1,6 @@
 query CountAgent_Root(
 	$parent: Agent_Root_Query__Parent
+	$source: Agent_Root_Query__Source
 	$count: Agent_Root_Query__Where_String
 	$where: Agent_Root_Query__Where
 	$where_in: Agent_Root_Query__Where_Array
@@ -9,6 +10,7 @@ query CountAgent_Root(
 ) {
 	count_agent_root(
 		parent: $parent
+		source: $source
 		count: $count
 		where: $where
 		where_in: $where_in

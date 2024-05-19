@@ -1,5 +1,6 @@
 query ReadProxy(
 	$parent: Proxy_Query__Parent
+	$source: Proxy_Query__Source
 	$where: Proxy_Query__Where
 	$where_in: Proxy_Query__Where_Array
 	$cache_where_in: Proxy_Query__Where_String
@@ -13,6 +14,7 @@ query ReadProxy(
 ) {
 	read_proxy(
 		parent: $parent
+		source: $source
 		where: $where
 		where_in: $where_in
 		cache_where_in: $cache_where_in

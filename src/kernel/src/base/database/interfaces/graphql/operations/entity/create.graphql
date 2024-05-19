@@ -1,5 +1,6 @@
 mutation Createba381b0cc764c4c9a187b716ae94ed96(
 	$parent: ba381b0cc764c4c9a187b716ae94ed96_Mutation__Parent
+	$source: ba381b0cc764c4c9a187b716ae94ed96_Mutation__Source
 	$attributes: ba381b0cc764c4c9a187b716ae94ed96_Mutation__Attributes
 	$whitelist_create: Whitelist_Mutation__Attributes
 	$whitelist_read: Whitelist_Mutation__Attributes
@@ -10,7 +11,7 @@ mutation Createba381b0cc764c4c9a187b716ae94ed96(
 	$blacklist_update: Blacklist_Mutation__Attributes
 	$blacklist_delete: Blacklist_Mutation__Attributes
 ) {
-	create_a2b8dbc3427b41a9899e11671c2422c7(parent: $parent, attributes: $attributes) {
+	create_a2b8dbc3427b41a9899e11671c2422c7(parent: $parent, source: $source, attributes: $attributes) {
 		attributes {
 			id
 			created_at

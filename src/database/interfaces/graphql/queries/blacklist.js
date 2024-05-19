@@ -12,12 +12,6 @@ const SERIALIZER__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $structur
 	sql_primary_key: $structure.entities.blacklist.database.sql.PRIMARY_KEY__SQL__DATABASE__BLACKLIST__STRUCTURE,
 });
 
-const PARENT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Blacklist_Query__Parent",
-	description: "Blacklist Parent",
-	fields: () => $structure.entities.blacklist.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
-});
-
 const ATTRIBUTES__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Blacklist_Query__Attributes",
 	description: "Blacklist Query Attributes",
@@ -57,10 +51,6 @@ const WHERE_STRING__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstra
 const READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.blacklist.database.graphql.QUERY__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE,
-		},
 		where: {
 			description: "where",
 			type: WHERE__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE,
@@ -131,10 +121,6 @@ const READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 const COUNT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE,
-		},
 		count: {
 			description: "count",
 			type: WHERE_STRING__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE,

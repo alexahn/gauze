@@ -12,12 +12,6 @@ const SERIALIZER__GAUZE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $structure.ga
 	sql_primary_key: $structure.entities.gauze.database.sql.PRIMARY_KEY__SQL__DATABASE__GAUZE__STRUCTURE,
 });
 
-const PARENT__GAUZE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Gauze_Query__Parent",
-	description: "Gauze Parent",
-	fields: () => $structure.entities.gauze.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__GAUZE__STRUCTURE,
-});
-
 const ATTRIBUTES__GAUZE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Gauze_Query__Attributes",
 	description: "Gauze Query Attributes",
@@ -57,10 +51,6 @@ const WHERE_STRING__GAUZE__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.g
 const READ__GAUZE__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.gauze.database.graphql.QUERY__GRAPHQL__DATABASE__GAUZE__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__GAUZE__QUERY__GRAPHQL__INTERFACE__DATABASE,
-		},
 		where: {
 			description: "where",
 			type: WHERE__GAUZE__QUERY__GRAPHQL__INTERFACE__DATABASE,
@@ -125,10 +115,6 @@ const READ__GAUZE__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 const COUNT__GAUZE__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__GAUZE__QUERY__GRAPHQL__INTERFACE__DATABASE,
-		},
 		count: {
 			description: "count",
 			type: WHERE_STRING__GAUZE__QUERY__GRAPHQL__INTERFACE__DATABASE,

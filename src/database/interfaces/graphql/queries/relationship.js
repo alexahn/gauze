@@ -12,12 +12,6 @@ const SERIALIZER__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = new $struc
 	sql_primary_key: $structure.entities.relationship.database.sql.PRIMARY_KEY__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
 });
 
-const PARENT__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Relationship_Query__Parent",
-	description: "Relationship Parent",
-	fields: () => $structure.entities.relationship.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE,
-});
-
 const ATTRIBUTES__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Relationship_Query__Attributes",
 	description: "Relationship Query Attributes",
@@ -57,10 +51,6 @@ const WHERE_STRING__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abs
 const READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.relationship.database.graphql.QUERY__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE,
-		},
 		where: {
 			description: "where",
 			type: WHERE__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE,
@@ -131,10 +121,6 @@ const READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 const COUNT__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE,
-		},
 		count: {
 			description: "count",
 			type: WHERE_STRING__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE,

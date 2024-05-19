@@ -12,12 +12,6 @@ const SERIALIZER__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $structur
 	sql_primary_key: $structure.entities.whitelist.database.sql.PRIMARY_KEY__SQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
-const PARENT__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Whitelist_Query__Parent",
-	description: "Whitelist Parent",
-	fields: () => $structure.entities.whitelist.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
-});
-
 const ATTRIBUTES__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Query__Attributes",
 	description: "Whitelist Query Attributes",
@@ -57,10 +51,6 @@ const WHERE_STRING__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstra
 const READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.whitelist.database.graphql.QUERY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE,
-		},
 		where: {
 			description: "where",
 			type: WHERE__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE,
@@ -131,10 +121,6 @@ const READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 const COUNT__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE,
-		},
 		count: {
 			description: "count",
 			type: WHERE_STRING__WHITELIST__QUERY__GRAPHQL__INTERFACE__DATABASE,

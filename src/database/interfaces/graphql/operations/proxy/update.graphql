@@ -1,5 +1,6 @@
 mutation UpdateProxy(
 	$parent: Proxy_Mutation__Parent
+	$source: Proxy_Mutation__Source
 	$attributes: Proxy_Mutation__Attributes
 	$where: Proxy_Mutation__Where
 	$where_in: Proxy_Mutation__Where_Array
@@ -14,6 +15,7 @@ mutation UpdateProxy(
 ) {
 	update_proxy(
 		parent: $parent
+		source: $source
 		attributes: $attributes
 		where: $where
 		where_in: $where_in

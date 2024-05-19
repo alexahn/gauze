@@ -1,5 +1,6 @@
 mutation CreateAgent_User(
 	$parent: Agent_User_Mutation__Parent
+	$source: Agent_User_Mutation__Source
 	$attributes: Agent_User_Mutation__Attributes
 	$whitelist_create: Whitelist_Mutation__Attributes
 	$whitelist_read: Whitelist_Mutation__Attributes
@@ -10,7 +11,7 @@ mutation CreateAgent_User(
 	$blacklist_update: Blacklist_Mutation__Attributes
 	$blacklist_delete: Blacklist_Mutation__Attributes
 ) {
-	create_agent_user(parent: $parent, attributes: $attributes) {
+	create_agent_user(parent: $parent, source: $source, attributes: $attributes) {
 		attributes {
 			gauze__agent_user__id
 			gauze__agent_user__created_at

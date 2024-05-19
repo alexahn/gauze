@@ -1,5 +1,6 @@
 query CountSession(
 	$parent: Session_Query__Parent
+	$source: Session_Query__Source
 	$count: Session_Query__Where_String
 	$where: Session_Query__Where
 	$where_in: Session_Query__Where_Array
@@ -7,7 +8,16 @@ query CountSession(
 	$where_not_in: Session_Query__Where_Array
 	$cache_where_not_in: Session_Query__Where_String
 ) {
-	count_session(parent: $parent, count: $count, where: $where, where_in: $where_in, cache_where_in: $cache_where_in, where_not_in: $where_not_in, cache_where_not_in: $cache_where_not_in) {
+	count_session(
+		parent: $parent
+		source: $source
+		count: $count
+		where: $where
+		where_in: $where_in
+		cache_where_in: $cache_where_in
+		where_not_in: $where_not_in
+		cache_where_not_in: $cache_where_not_in
+	) {
 		select
 		count
 	}

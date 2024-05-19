@@ -1,5 +1,6 @@
 query CountAgent_Person(
 	$parent: Agent_Person_Query__Parent
+	$source: Agent_Person_Query__Source
 	$count: Agent_Person_Query__Where_String
 	$where: Agent_Person_Query__Where
 	$where_in: Agent_Person_Query__Where_Array
@@ -9,6 +10,7 @@ query CountAgent_Person(
 ) {
 	count_agent_person(
 		parent: $parent
+		source: $source
 		count: $count
 		where: $where
 		where_in: $where_in

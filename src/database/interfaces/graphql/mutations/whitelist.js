@@ -12,12 +12,6 @@ const SERIALIZER__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $struc
 	sql_primary_key: $structure.entities.whitelist.database.sql.PRIMARY_KEY__SQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
-const PARENT__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Whitelist_Mutation__Parent",
-	description: "Whitelist Parent",
-	fields: () => $structure.entities.whitelist.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
-});
-
 const ATTRIBUTES__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Mutation__Attributes",
 	description: "Whitelist Mutation Attributes",
@@ -57,10 +51,6 @@ const WHERE_STRING__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abs
 const CREATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.whitelist.database.graphql.MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		attributes: {
 			description: "attributes",
 			type: ATTRIBUTES__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -95,10 +85,6 @@ const CREATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 const UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.whitelist.database.graphql.MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		where: {
 			description: "where",
 			type: WHERE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -176,10 +162,6 @@ const UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 const DELETE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.whitelist.database.graphql.MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
-		},
 		where: {
 			description: "where",
 			type: WHERE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,

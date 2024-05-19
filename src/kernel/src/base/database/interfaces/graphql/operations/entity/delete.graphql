@@ -1,5 +1,6 @@
 mutation Deleteba381b0cc764c4c9a187b716ae94ed96(
 	$parent: ba381b0cc764c4c9a187b716ae94ed96_Mutation__Parent
+	$source: ba381b0cc764c4c9a187b716ae94ed96_Mutation__Source
 	$where: ba381b0cc764c4c9a187b716ae94ed96_Mutation__Where
 	$where_in: ba381b0cc764c4c9a187b716ae94ed96_Mutation__Where_Array
 	$cache_where_in: ba381b0cc764c4c9a187b716ae94ed96_Mutation__Where_String
@@ -13,6 +14,7 @@ mutation Deleteba381b0cc764c4c9a187b716ae94ed96(
 ) {
 	delete_a2b8dbc3427b41a9899e11671c2422c7(
 		parent: $parent
+		source: $source
 		where: $where
 		where_in: $where_in
 		cache_where_in: $cache_where_in
