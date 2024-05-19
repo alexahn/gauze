@@ -97,25 +97,38 @@ function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 
 // todo: add some existence checks and guards to these loops
 function LINK_RELATIONSHIPS__LINKER__KERNEL(entities, methods, relationships) {
-	// this is linking relationships to
+	// link to relationships
 	Object.keys(relationships).forEach(function (entity) {
 		var entity_relationships = relationships[entity];
 		entity_relationships.forEach(function (related) {
 			Object.keys(methods[related].query).forEach(function (query) {
 				var query_method = methods[related].query[query];
 				entities[entity].query_relationships[query] = query_method;
-				// entities[entity].query_relationships_to[query]
+				entities[entity].query_relationships_to[query] = query_method;
 			});
 			Object.keys(methods[related].mutation).forEach(function (mutation) {
 				var mutation_method = methods[related].mutation[mutation];
 				entities[entity].mutation_relationships[mutation] = mutation_method;
-				// entities[entity].mutation_relationships_to[mutation]
+				entities[entity].mutation_relationships_to[mutation] = mutation_method;
 			});
 		});
 	});
-	// link relationships from here
+	// link from relationships
 	const inverted_relationships = invert_relationships(relationships);
-
+	console.log("inverted_relationships", inverted_relationships);
+	Object.keys(inverted_relationships).forEach(function (entity) {
+		var entity_relationships = inverted_relationships[entity];
+		entity_relationships.forEach(function (related) {
+			Object.keys(methods[related].query).forEach(function (query) {
+				var query_method = methods[related].query[query];
+				entities[entity].query_relationships_from[query] = query_method;
+			});
+			Object.keys(methods[related].mutation).forEach(function (mutation) {
+				var mutation_method = methods[related].mutation[mutation];
+				entities[entity].mutation_relationships_from[mutation] = mutation_method;
+			});
+		});
+	});
 	// link nested queries and mutations
 	Object.keys(entities).forEach(function (entity) {
 		Object.keys(methods).forEach(function (entity_method) {
