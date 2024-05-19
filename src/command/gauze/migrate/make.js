@@ -15,7 +15,7 @@ export const command = "make <name>";
 export const describe = "Create gauze migration";
 
 export const builder = function (yargs) {
-	return yargs.env("GAUZE_PROJECT").option("name", {
+	return yargs.env("GAUZE_PROJECT_MIGRATE").option("name", {
 		//alias: 'r',
 		describe: "The gauze migration file that will be created",
 		type: "string",

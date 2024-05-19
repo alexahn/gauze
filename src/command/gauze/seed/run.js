@@ -15,7 +15,7 @@ export const command = "run";
 export const describe = "Run gauze seeds";
 
 export const builder = function (yargs) {
-	return yargs.env("GAUZE_PROJECT");
+	return yargs.env("GAUZE_PROJECT_SEED");
 	//.wrap(128)
 };
 

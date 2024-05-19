@@ -16,8 +16,8 @@ export const describe = "Create a gauze builtin entity in a gauze project (for k
 
 export const builder = function (yargs) {
 	return yargs
-		.env("GAUZE_PROJECT")
-		.option("project", {
+		.env("GAUZE_PROJECT_CREATE")
+		.option("directory", {
 			//alias: 'r',
 			describe: "The gauze project directory that the gauze builtin entity will be created in",
 			type: "string",

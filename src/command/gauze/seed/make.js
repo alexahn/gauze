@@ -15,7 +15,7 @@ export const command = "make <name>";
 export const describe = "Create gauze seed";
 
 export const builder = function (yargs) {
-	return yargs.env("GAUZE_PROJECT").option("name", {
+	return yargs.env("GAUZE_PROJECT_SEED").option("name", {
 		//alias: 'r',
 		describe: "The gauze seed file that will be created",
 		type: "string",

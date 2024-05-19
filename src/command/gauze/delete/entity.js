@@ -16,8 +16,8 @@ export const describe = "Delete an entity in a gauze project";
 
 export const builder = function (yargs) {
 	return yargs
-		.env("GAUZE_PROJECT")
-		.option("project", {
+		.env("GAUZE_PROJECT_DELETE")
+		.option("directory", {
 			//alias: 'r',
 			describe: "The gauze project directory that the entity will be deleted in",
 			type: "string",

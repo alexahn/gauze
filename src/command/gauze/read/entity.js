@@ -17,7 +17,7 @@ export const describe = "Read an entity in a gauze project";
 export const builder = function (yargs) {
 	return yargs
 		.env("GAUZE_PROJECT")
-		.option("project", {
+		.option("directory", {
 			//alias: 'r',
 			describe: "The gauze project directory that the entity will be read from",
 			type: "string",

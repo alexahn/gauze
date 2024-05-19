@@ -15,7 +15,7 @@ export const command = "project <directory>";
 export const describe = "Create gauze project";
 
 export const builder = function (yargs) {
-	return yargs.env("GAUZE_PROJECT").option("directory", {
+	return yargs.env("GAUZE_PROJECT_CREATE").option("directory", {
 		//alias: 'r',
 		describe: "The gauze project directory that will be created",
 		type: "string",
