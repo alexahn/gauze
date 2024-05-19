@@ -13,7 +13,7 @@ mutation ${operation_name}(
 					id
 					text
 				}
-				relationships {
+				relationships_to {
 					create_ytitne(attributes: $attributes2) {
 						attributes {
 							id
@@ -53,7 +53,7 @@ const expected = `{
                                 "id": "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
                                 "text": "hello"
                             },
-                            "relationships": {
+                            "relationships_to": {
                                 "create_ytitne": [
                                     {
                                         "attributes": {

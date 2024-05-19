@@ -215,10 +215,6 @@ const QUERY__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = ne
 	fields: () => ({
 		_metadata: FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE.attributes,
-		relationships: {
-			type: QUERY_RELATIONSHIPS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
-			description: "relationships",
-		},
 		relationships_to: {
 			type: QUERY_RELATIONSHIPS_TO__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 			description: "relationships to",
@@ -240,10 +236,6 @@ const MUTATION__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE =
 	fields: () => ({
 		_metadata: FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE.attributes,
-		relationships: {
-			type: MUTATION_RELATIONSHIPS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
-			description: "relationships",
-		},
 		relationships_to: {
 			type: MUTATION_RELATIONSHIPS_TO__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 			description: "relationships to",

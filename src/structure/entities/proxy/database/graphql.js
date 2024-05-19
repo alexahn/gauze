@@ -209,10 +209,6 @@ const QUERY__GRAPHQL__DATABASE__PROXY__STRUCTURE = new $abstract.gauze.types.gra
 	fields: () => ({
 		_metadata: FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE.attributes,
-		relationships: {
-			type: QUERY_RELATIONSHIPS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
-			description: "relationships",
-		},
 		relationships_to: {
 			type: QUERY_RELATIONSHIPS_TO__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 			description: "relationships to",
@@ -234,10 +230,6 @@ const MUTATION__GRAPHQL__DATABASE__PROXY__STRUCTURE = new $abstract.gauze.types.
 	fields: () => ({
 		_metadata: FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE._metadata,
 		attributes: FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE.attributes,
-		relationships: {
-			type: MUTATION_RELATIONSHIPS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
-			description: "relationships",
-		},
 		relationships_to: {
 			type: MUTATION_RELATIONSHIPS_TO__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 			description: "relationships to",

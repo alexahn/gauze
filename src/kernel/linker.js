@@ -103,19 +103,16 @@ function LINK_RELATIONSHIPS__LINKER__KERNEL(entities, methods, relationships) {
 		entity_relationships.forEach(function (related) {
 			Object.keys(methods[related].query).forEach(function (query) {
 				var query_method = methods[related].query[query];
-				entities[entity].query_relationships[query] = query_method;
 				entities[entity].query_relationships_to[query] = query_method;
 			});
 			Object.keys(methods[related].mutation).forEach(function (mutation) {
 				var mutation_method = methods[related].mutation[mutation];
-				entities[entity].mutation_relationships[mutation] = mutation_method;
 				entities[entity].mutation_relationships_to[mutation] = mutation_method;
 			});
 		});
 	});
 	// link from relationships
 	const inverted_relationships = invert_relationships(relationships);
-	console.log("inverted_relationships", inverted_relationships);
 	Object.keys(inverted_relationships).forEach(function (entity) {
 		var entity_relationships = inverted_relationships[entity];
 		entity_relationships.forEach(function (related) {

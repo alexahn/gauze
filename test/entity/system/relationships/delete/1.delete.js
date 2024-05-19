@@ -15,7 +15,7 @@ mutation ${operation_name}($where: Entity_Mutation__Where, $where2: Entity_Mutat
 			id
 			text
 		}
-		relationships {
+		relationships_to {
 			delete_entity(where: $where2) {
 				attributes {
 					id
@@ -42,7 +42,7 @@ const expected = `{
                     "id": "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
                     "text": "hello"
                 },
-                "relationships": {
+                "relationships_to": {
                     "delete_entity": []
                 }
             }

@@ -646,12 +646,12 @@
 		[ ] allow connecting repl to a live system?
 			[ ] i'm mostly against this idea because it increases the surface area of the interface, and subsequently security risks
 				[ ] i think there should only be one interface
-	[ ] rename the relationships field to "to" or "relationships_to", add a new field called "from" or "relationships_from" to allow bidirectional navigation of relationships
+	[x] rename the relationships field to "to" or "relationships_to", add a new field called "from" or "relationships_from" to allow bidirectional navigation of relationships
 		[-] will need to add a "child" field to mirror the metadata proxying we do with the "parent" field
 			[x] just add an extra field called direction instead of creating a new field
 		[x] add source argument for database graphql methods that also contains the relationship direction
 		[x] refactor the kernel database model to use the new source argument
-		[ ] delete the old relationships field
+		[x] delete the old relationships field
 	[ ] add a field called transaction_id (or request_id) to allow busting the cache for segments of a query or mutation?
 [ ] unknowns, abnormal behavior, and investigations
 	[ ] look into why router5 doesn't seem to be able to uri encode correctly

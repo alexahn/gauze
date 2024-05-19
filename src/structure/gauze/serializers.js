@@ -13,10 +13,6 @@ class GraphQLSerializer {
 		const model = {
 			_metadata: metadata,
 			attributes: sql_record,
-			relationships: {
-				_metadata: metadata,
-				_direction: "to",
-			},
 			relationships_to: {
 				_metadata: metadata,
 				_direction: "to",

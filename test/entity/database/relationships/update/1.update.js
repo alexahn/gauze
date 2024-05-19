@@ -12,7 +12,7 @@ mutation ${operation_name}(
 			id
 			text
 		}
-		relationships {
+		relationships_to {
 			update_entity(where: $where2, attributes: $attributes2) {
 				attributes {
 					id
@@ -47,7 +47,7 @@ const expected = `{
                     "id": "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
                     "text": "world"
                 },
-                "relationships": {
+                "relationships_to": {
                     "update_entity": [
                         {
                             "attributes": {
