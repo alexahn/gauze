@@ -9,7 +9,11 @@ import {
 
 const CONNECTION__AGENT_ROOT__ENTITY__GRAPHQL__INTERFACE__SYSTEM = {
 	query_relationships: $structure.entities.agent_root.system.graphql.QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+	query_relationships_to: $structure.entities.agent_root.system.graphql.QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+	query_relationships_from: $structure.entities.agent_root.system.graphql.QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
 	mutation_relationships: $structure.entities.agent_root.system.graphql.MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+	mutation_relationships_to: $structure.entities.agent_root.system.graphql.MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
+	mutation_relationships_from: $structure.entities.agent_root.system.graphql.MUTATION_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
 	query_query: $structure.entities.agent_root.system.graphql.QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
 	mutation_mutation: $structure.entities.agent_root.system.graphql.MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__AGENT_ROOT__STRUCTURE,
 };
