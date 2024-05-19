@@ -15,6 +15,15 @@ class GraphQLSerializer {
 			attributes: sql_record,
 			relationships: {
 				_metadata: metadata,
+				_direction: "to",
+			},
+			relationships_to: {
+				_metadata: metadata,
+				_direction: "to",
+			},
+			relationships_from: {
+				_metadata: metadata,
+				_direction: "from",
 			},
 			// todo: maybe figure out if we want to set _relationship instead of _metadata, because if we set _metadata for query and mutation, it is interpreted as a relationship
 			query: {},

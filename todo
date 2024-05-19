@@ -420,21 +420,6 @@
 [x] server application clean up
 	[x] come up with a bare bones pattern to define url and routes
 	[x] refactor the server application
-[ ] build an admin management react app to dog food the interface
-	[x] list view for entities the agent can access
-	[x] item view for an entity the agent can access
-	[x] create a new entity
-	[x] update an entity
-	[x] delete an entity
-	[ ] add a command to set an agent as an admin for an agent type
-		[ ] should just update the project configuration file
-	[x] src/gauze.json
-		[x] track admin users by having a field in src/gauze.json called managers or admins that holds the agent root ids
-			[x] use the config from kernel system model to bypass authorization checks if the agent id is one of the managers
-			[x] the config will have to be split by environment and agent type
-			[x] this approach seems better than creating a table in sql because the set of managers is in source control
-		[-] track entities by using the project and gauze fields?
-			[x] the entities can just be parsed from $abstract, so maybe just create a method that returns a set of entities
 [x] cached where in and cached where not in exposed to database graphql
 	[x] value is a string key that is a key to a value in cache
 	[x] hook up lru cache to system and database
@@ -479,6 +464,22 @@
 	[x] clear jwts when jwts expire
 [x] update headers method to return field definitions
 	[x] align header response type to look like the abstract definition as much as possible
+[ ] build an admin management react app to dog food the interface
+	[x] list view for entities the agent can access
+	[x] item view for an entity the agent can access
+	[x] create a new entity
+	[x] update an entity
+	[x] delete an entity
+	[ ] show relationships for entity item
+	[ ] add a command to set an agent as an admin for an agent type
+		[ ] should just update the project configuration file
+	[x] src/gauze.json
+		[x] track admin users by having a field in src/gauze.json called managers or admins that holds the agent root ids
+			[x] use the config from kernel system model to bypass authorization checks if the agent id is one of the managers
+			[x] the config will have to be split by environment and agent type
+			[x] this approach seems better than creating a table in sql because the set of managers is in source control
+		[-] track entities by using the project and gauze fields?
+			[x] the entities can just be parsed from $abstract, so maybe just create a method that returns a set of entities
 [ ] data integrity guards and system integrity constraints
 	[x] prevent agents from being deleted by removing delete whitelist in signup logic
 		[x] the root object tied to a session should not be able to be deleted
@@ -514,8 +515,6 @@
 	[ ] consider changing order to accept an array of ordering arguments (e.g. column and direction)
 		[ ] the problem is that it would be a pain to handle in the ui because the order in which the sorts are applied matter
 		[x] for now, let's keep it simple and stick to only one sort order
-[ ] admin ui
-	[ ] show relationships for type item
 [ ] design language and visual consistency
 	[ ] figure out the general structure of layouts and sections
 		[ ] configure all the styles from the root node and downwards in a consistent manner
@@ -638,12 +637,15 @@
 				[ ] not really? it's just a set of ids, so we can increase the frequency of the garbage collection if the set is growing too large
 					[ ] i don't imagine that the set of ids should be over a million, and a million identifiers is nothing for a single server
 			[ ] if we give up consistency then we can have partial commits, but it complicates the data integrity picture
-		[ ] turn kernel into a proper stack
-			[x] kernel/controllers/class.js
-			[x] kernel/models/class.js
-			[ ] kernel/interfaces
-				[ ] manage cache, logging, shell, infrastructure, etc
-			[ ] provide a map reduce interface from the kernel, and use the interface from the database realm or system realm
+	[ ] turn kernel into a proper stack
+		[x] kernel/controllers/class.js
+		[x] kernel/models/class.js
+		[ ] kernel/interfaces
+			[ ] manage cache, logging, shell, infrastructure, etc
+		[ ] provide a map reduce interface from the kernel, and use the interface from the database realm or system realm
+		[ ] allow connecting repl to a live system?
+			[ ] i'm mostly against this idea because it increases the surface area of the interface, and subsequently security risks
+				[ ] i think there should only be one interface
 	[ ] rename the relationships field to "to" or "relationships_to", add a new field called "from" or "relationships_from" to allow bidirectional navigation of relationships
 		[ ] will need to add a "child" field to mirror the metadata proxying we do with the "parent" field
 	[ ] add a field called transaction_id (or request_id) to allow busting the cache for segments of a query or mutation?
