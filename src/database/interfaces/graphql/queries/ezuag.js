@@ -12,6 +12,12 @@ const SERIALIZER__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = new $structure.ga
 	sql_primary_key: $structure.entities.ezuag.database.sql.PRIMARY_KEY__SQL__DATABASE__EZUAG__STRUCTURE,
 });
 
+const SOURCE__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Ezuag_Query__Source",
+	description: "Ezuag Source",
+	fields: () => $structure.entities.ezuag.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
+});
+
 const ATTRIBUTES__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ezuag_Query__Attributes",
 	description: "Ezuag Query Attributes",
@@ -51,6 +57,10 @@ const WHERE_STRING__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.g
 const READ__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ezuag.database.graphql.QUERY__GRAPHQL__DATABASE__EZUAG__STRUCTURE),
 	args: {
+		source: {
+			description: "source",
+			type: SOURCE__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
 		where: {
 			description: "where",
 			type: WHERE__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE,
@@ -92,7 +102,7 @@ const READ__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
-	resolve: (_source, query_arguments, context) => {
+	resolve: (source, query_arguments, context) => {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "query_arguments", query_arguments);
 		if (!query_arguments.where) {
@@ -100,7 +110,7 @@ const READ__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		}
 		return CONTROLLER__EZUAG__CONTROLLER__DATABASE.read(
 			{
-				source: _source,
+				source: source,
 				database: context.database,
 				transaction: context.transaction,
 			},
@@ -115,6 +125,10 @@ const READ__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 const COUNT__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
+		source: {
+			description: "source",
+			type: SOURCE__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
 		count: {
 			description: "count",
 			type: WHERE_STRING__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE,
@@ -140,7 +154,7 @@ const COUNT__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			type: WHERE_STRING__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 	},
-	resolve: (_source, query_arguments, context) => {
+	resolve: (source, query_arguments, context) => {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "query_arguments", query_arguments);
 		if (!query_arguments.where) {
@@ -148,7 +162,7 @@ const COUNT__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		}
 		return CONTROLLER__EZUAG__CONTROLLER__DATABASE.count(
 			{
-				source: _source,
+				source: source,
 				database: context.database,
 				transaction: context.transaction,
 			},
