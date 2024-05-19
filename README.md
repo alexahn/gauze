@@ -16,7 +16,7 @@ A GraphQL server architecture.
 	- TWO_WORDS
 
 ### External Code
-- All external code will follow whatever conventions the source decides to use, which is usually Camel Case. External code will usually be easily identifiable due to the different in conventions.
+- All external code will follow whatever conventions the source decides to use, which is usually Camel Case. External code will usually be easily identifiable due to the difference in conventions.
 	- twoWords
 
 ### Files
