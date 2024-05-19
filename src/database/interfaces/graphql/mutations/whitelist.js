@@ -12,6 +12,12 @@ const SERIALIZER__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $struc
 	sql_primary_key: $structure.entities.whitelist.database.sql.PRIMARY_KEY__SQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
+const SOURCE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Whitelist_Mutation__Source",
+	description: "Whitelist Source",
+	fields: () => $structure.entities.whitelist.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
+});
+
 const ATTRIBUTES__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Mutation__Attributes",
 	description: "Whitelist Mutation Attributes",
@@ -51,13 +57,17 @@ const WHERE_STRING__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abs
 const CREATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.whitelist.database.graphql.MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE),
 	args: {
+		source: {
+			description: "source",
+			type: SOURCE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
 		attributes: {
 			description: "attributes",
 			type: ATTRIBUTES__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 	},
-	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "CREATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
+	resolve: (source, mutation_arguments, context) => {
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "CREATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -70,7 +80,7 @@ const CREATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		}
 		return CONTROLLER__WHITELIST__CONTROLLER__DATABASE.create(
 			{
-				source: _source,
+				source: source,
 				database: context.database,
 				transaction: context.transaction,
 			},
@@ -85,6 +95,10 @@ const CREATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 const UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.whitelist.database.graphql.MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE),
 	args: {
+		source: {
+			description: "source",
+			type: SOURCE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
 		where: {
 			description: "where",
 			type: WHERE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -130,8 +144,8 @@ const UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
-	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
+	resolve: (source, mutation_arguments, context) => {
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -147,7 +161,7 @@ const UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		}
 		return CONTROLLER__WHITELIST__CONTROLLER__DATABASE.update(
 			{
-				source: _source,
+				source: source,
 				database: context.database,
 				transaction: context.transaction,
 			},
@@ -162,6 +176,10 @@ const UPDATE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 const DELETE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.whitelist.database.graphql.MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE),
 	args: {
+		source: {
+			description: "source",
+			type: SOURCE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
 		where: {
 			description: "where",
 			type: WHERE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -203,8 +221,8 @@ const DELETE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
-	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "DELETE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
+	resolve: (source, mutation_arguments, context) => {
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "DELETE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -217,7 +235,7 @@ const DELETE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		}
 		return CONTROLLER__WHITELIST__CONTROLLER__DATABASE.delete(
 			{
-				source: _source,
+				source: source,
 				database: context.database,
 				transaction: context.transaction,
 			},

@@ -12,6 +12,12 @@ const SERIALIZER__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $structur
 	sql_primary_key: $structure.entities.blacklist.database.sql.PRIMARY_KEY__SQL__DATABASE__BLACKLIST__STRUCTURE,
 });
 
+const SOURCE__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Blacklist_Query__Source",
+	description: "Blacklist Source",
+	fields: () => $structure.entities.blacklist.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
+});
+
 const ATTRIBUTES__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Blacklist_Query__Attributes",
 	description: "Blacklist Query Attributes",
@@ -51,6 +57,10 @@ const WHERE_STRING__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstra
 const READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.blacklist.database.graphql.QUERY__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE),
 	args: {
+		source: {
+			description: "source",
+			type: SOURCE__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
 		where: {
 			description: "where",
 			type: WHERE__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE,
@@ -92,8 +102,8 @@ const READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
-	resolve: (_source, query_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
+	resolve: (source, query_arguments, context) => {
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -106,7 +116,7 @@ const READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		}
 		return CONTROLLER__BLACKLIST__CONTROLLER__DATABASE.read(
 			{
-				source: _source,
+				source: source,
 				database: context.database,
 				transaction: context.transaction,
 			},
@@ -121,6 +131,10 @@ const READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 const COUNT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
+		source: {
+			description: "source",
+			type: SOURCE__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
 		count: {
 			description: "count",
 			type: WHERE_STRING__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE,
@@ -146,8 +160,8 @@ const COUNT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			type: WHERE_STRING__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 	},
-	resolve: (_source, query_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
+	resolve: (source, query_arguments, context) => {
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -160,7 +174,7 @@ const COUNT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		}
 		return CONTROLLER__BLACKLIST__CONTROLLER__DATABASE.count(
 			{
-				source: _source,
+				source: source,
 				database: context.database,
 				transaction: context.transaction,
 			},

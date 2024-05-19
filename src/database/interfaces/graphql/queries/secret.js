@@ -102,15 +102,15 @@ const READ__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
-	resolve: (_source, query_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
+	resolve: (source, query_arguments, context) => {
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "query_arguments", query_arguments);
 		if (!query_arguments.where) {
 			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__SECRET__CONTROLLER__DATABASE.read(
 			{
-				source: _source,
+				source: source,
 				database: context.database,
 				transaction: context.transaction,
 			},
@@ -154,15 +154,15 @@ const COUNT__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			type: WHERE_STRING__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 	},
-	resolve: (_source, query_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
+	resolve: (source, query_arguments, context) => {
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "query_arguments", query_arguments);
 		if (!query_arguments.where) {
 			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__SECRET__CONTROLLER__DATABASE.count(
 			{
-				source: _source,
+				source: source,
 				database: context.database,
 				transaction: context.transaction,
 			},

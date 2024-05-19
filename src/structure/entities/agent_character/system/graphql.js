@@ -63,6 +63,65 @@ const QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = new $ab
 	fields: () => QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
 });
 
+const QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+		description: "Agent_Character Query Relationships To Metadata",
+	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Agent_Character Query Relationships To Direction",
+	},
+	//read_entity: ENTITY_READ_QUERY
+};
+
+const QUERY_RELATIONSHIPS_TO__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Character_Query__Relationships_To",
+	description: "Agent_Character Query Relationships_To",
+	fields: () => QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+});
+
+const QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+		description: "Agent_Character Query Relationships From Metadata",
+	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Agent_Character Query Relationships From Direction",
+	},
+	//read_entity: ENTITY_READ_QUERY
+};
+
+const QUERY_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Character_Query__Relationships_From",
+	description: "Agent_Character Query Relationships_From",
+	fields: () => QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+});
+
+const QUERY_SOURCE_METADATA__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Character_Query__Source_Metadata",
+	description: "Agent_Character Query Source Metadata",
+	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+});
+
+const QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = {
+	_metadata: {
+		type: QUERY_SOURCE_METADATA__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+		description: "Agent_Character Query Source Metadata",
+	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Agent_Character Query Source Direction",
+	},
+};
+
+const QUERY_SOURCE__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Character_Query__Source",
+	description: "Agent_Character Query Source",
+	fields: () => QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+});
+
 const QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = {};
 
 const QUERY_QUERY__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -76,6 +135,10 @@ const MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE
 		type: METADATA__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
 		description: "Agent_Character Mutation Metadata",
 	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Agent_Character Query Source Direction",
+	},
 	//create_entity: ENTITY_CREATE_MUTATION
 };
 
@@ -83,6 +146,42 @@ const MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = new 
 	name: "Agent_Character_Mutation__Relationships",
 	description: "Agent_Character Mutation Relationships",
 	fields: () => MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+});
+
+const MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+		description: "Agent_Character Mutation Relationship To Metadata",
+	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Agent_Character Mutation Relationship To Direction",
+	},
+	//create_entity: ENTITY_CREATE_MUTATION
+};
+
+const MUTATION_RELATIONSHIPS_TO__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Character_Mutation__Relationships_To",
+	description: "Agent_Character Mutation Relationships To",
+	fields: () => MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+});
+
+const MUTATION_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+		description: "Agent_Character Mutation Relationship From Metadata",
+	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Agent_Character Mutation Relationship From Direction",
+	},
+	//create_entity: ENTITY_CREATE_MUTATION
+};
+
+const MUTATION_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Character_Mutation__Relationships_From",
+	description: "Agent_Character Mutation Relationships From",
+	fields: () => MUTATION_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
 });
 
 const MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = {};
@@ -139,6 +238,14 @@ const MUTATION__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE = new $abstract.gauz
 			type: MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
 			description: "relationships",
 		},
+		relationships_to: {
+			type: MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+			description: "relationships to",
+		},
+		relationships_from: {
+			type: MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+			description: "relationships from",
+		},
 		mutation: {
 			type: MUTATION_MUTATION__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
 			description: "mutation",
@@ -162,8 +269,18 @@ export {
 	WHERE_FIELDS_STRING__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
 	QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
 	QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+	QUERY_RELATIONSHIPS_TO__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+	QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+	QUERY_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+	QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+	QUERY_SOURCE__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+	QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
 	MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
 	MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+	MUTATION_RELATIONSHIPS_TO__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+	MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+	MUTATION_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+	MUTATION_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
 	QUERY_QUERY__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
 	QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
 	MUTATION_MUTATION__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
