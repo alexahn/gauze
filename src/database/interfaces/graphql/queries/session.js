@@ -18,6 +18,12 @@ const PARENT__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze
 	fields: () => $structure.entities.session.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__SESSION__STRUCTURE,
 });
 
+const SOURCE__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Session_Query__Source",
+	description: "Session Source",
+	fields: () => $structure.entities.session.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__SESSION__STRUCTURE,
+});
+
 const ATTRIBUTES__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Session_Query__Attributes",
 	description: "Session Query Attributes",
@@ -60,6 +66,10 @@ const READ__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		parent: {
 			description: "parent",
 			type: PARENT__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where: {
 			description: "where",
@@ -128,6 +138,10 @@ const COUNT__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		parent: {
 			description: "parent",
 			type: PARENT__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		count: {
 			description: "count",

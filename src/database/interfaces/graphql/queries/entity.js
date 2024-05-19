@@ -18,6 +18,12 @@ const PARENT__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.
 	fields: () => $structure.entities.entity.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
 });
 
+const SOURCE__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Entity_Query__Source",
+	description: "Entity Source",
+	fields: () => $structure.entities.entity.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
+});
+
 const ATTRIBUTES__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity_Query__Attributes",
 	description: "Entity Query Attributes",
@@ -60,6 +66,10 @@ const READ__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		parent: {
 			description: "parent",
 			type: PARENT__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where: {
 			description: "where",
@@ -128,6 +138,10 @@ const COUNT__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		parent: {
 			description: "parent",
 			type: PARENT__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		count: {
 			description: "count",

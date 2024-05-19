@@ -48,9 +48,13 @@ const WHERE__GRAPHQL__SYSTEM__PROXY__STRUCTURE = new $abstract.gauze.types.graph
 const QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__PROXY__STRUCTURE = {
 	_metadata: {
 		type: METADATA__GRAPHQL__SYSTEM__PROXY__STRUCTURE,
-		description: "Proxy Query Metadata",
+		description: "Proxy Query Relationships Metadata",
 	},
-	//read_entity2: ENTITY2_READ_QUERY
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Proxy Query Relationships Direction",
+	},
+	//read_entity: ENTITY_READ_QUERY
 };
 
 const QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__PROXY__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -72,7 +76,7 @@ const MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__SYSTEM__PROXY__STRUCTURE = {
 		type: METADATA__GRAPHQL__SYSTEM__PROXY__STRUCTURE,
 		description: "Proxy Mutation Metadata",
 	},
-	//create_entity2: ENTITY2_CREATE_MUTATION
+	//create_entity: ENTITY_CREATE_MUTATION
 };
 
 const MUTATION_RELATIONSHIPS__GRAPHQL__SYSTEM__PROXY__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -109,6 +113,14 @@ const QUERY__GRAPHQL__SYSTEM__PROXY__STRUCTURE = new $abstract.gauze.types.graph
 		relationships: {
 			type: QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__PROXY__STRUCTURE,
 			description: "relationships",
+		},
+		relationships_to: {
+			type: QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__PROXY__STRUCTURE,
+			description: "relationships to",
+		},
+		relationships_from: {
+			type: QUERY_RELATIONSHIPS__GRAPHQL__SYSTEM__PROXY__STRUCTURE,
+			description: "relationships from",
 		},
 		query: {
 			type: QUERY_QUERY__GRAPHQL__SYSTEM__PROXY__STRUCTURE,

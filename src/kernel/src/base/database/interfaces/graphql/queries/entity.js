@@ -18,6 +18,12 @@ const PARENT__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATAB
 	fields: () => $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 });
 
+const SOURCE__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "ba381b0cc764c4c9a187b716ae94ed96_Query__Source",
+	description: "ba381b0cc764c4c9a187b716ae94ed96 Source",
+	fields: () => $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+});
+
 const ATTRIBUTES__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Query__Attributes",
 	description: "ba381b0cc764c4c9a187b716ae94ed96 Query Attributes",
@@ -62,6 +68,10 @@ const READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABAS
 		parent: {
 			description: "parent",
 			type: PARENT__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where: {
 			description: "where",
@@ -148,6 +158,10 @@ const COUNT__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABA
 		parent: {
 			description: "parent",
 			type: PARENT__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		count: {
 			description: "count",

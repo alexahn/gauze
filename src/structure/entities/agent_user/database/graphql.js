@@ -48,15 +48,42 @@ const WHERE__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = new $abstract.gauze.type
 const QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = {
 	_metadata: {
 		type: METADATA__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
-		description: "Agent_User Query Metadata",
+		description: "Agent_User Query Relationships Metadata",
 	},
-	//read_entity2: ENTITY2_READ_QUERY
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Agent_User Query Relationships Direction",
+	},
+	//read_entity: ENTITY_READ_QUERY
 };
 
 const QUERY_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User_Query__Relationships",
 	description: "Agent_User Query Relationships",
 	fields: () => QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+});
+
+const QUERY_SOURCE_METADATA__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_User_Query__Source_Metadata",
+	description: "Agent_User Query Source Metadata",
+	fields: () => METADATA_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+});
+
+const QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = {
+	_metadata: {
+		type: QUERY_SOURCE_METADATA__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+		description: "Agent_User Query Source Metadata",
+	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Agent_User Query Source Direction",
+	},
+};
+
+const QUERY_SOURCE__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_User_Query__Source",
+	description: "Agent_User Query Source",
+	fields: () => QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 });
 
 const QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = {};
@@ -72,7 +99,7 @@ const MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = 
 		type: METADATA__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 		description: "Agent_User Mutation Metadata",
 	},
-	//create_entity2: ENTITY2_CREATE_MUTATION
+	//create_entity: ENTITY_CREATE_MUTATION
 };
 
 const MUTATION_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -109,6 +136,14 @@ const QUERY__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE = new $abstract.gauze.type
 		relationships: {
 			type: QUERY_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 			description: "relationships",
+		},
+		relationships_to: {
+			type: QUERY_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+			description: "relationships to",
+		},
+		relationships_from: {
+			type: QUERY_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+			description: "relationships from",
 		},
 		query: {
 			type: QUERY_QUERY__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
@@ -150,6 +185,8 @@ export {
 	WHERE_FIELDS_STRING__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 	QUERY_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 	QUERY_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+	QUERY_SOURCE__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+	QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 	MUTATION_RELATIONSHIPS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 	MUTATION_RELATIONSHIPS_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 	QUERY_QUERY__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,

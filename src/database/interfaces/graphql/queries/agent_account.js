@@ -18,6 +18,12 @@ const PARENT__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract
 	fields: () => $structure.entities.agent_account.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
 });
 
+const SOURCE__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Account_Query__Source",
+	description: "Agent_Account Source",
+	fields: () => $structure.entities.agent_account.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
+});
+
 const ATTRIBUTES__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Account_Query__Attributes",
 	description: "Agent_Account Query Attributes",
@@ -60,6 +66,10 @@ const READ__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		parent: {
 			description: "parent",
 			type: PARENT__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where: {
 			description: "where",
@@ -134,6 +144,10 @@ const COUNT__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		parent: {
 			description: "parent",
 			type: PARENT__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		count: {
 			description: "count",

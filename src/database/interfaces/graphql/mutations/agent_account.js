@@ -18,6 +18,12 @@ const PARENT__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstr
 	fields: () => $structure.entities.agent_account.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
 });
 
+const SOURCE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Account_Mutation__Source",
+	description: "Agent_Account Source",
+	fields: () => $structure.entities.agent_account.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
+});
+
 const ATTRIBUTES__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Account_Mutation__Attributes",
 	description: "Agent_Account Mutation Attributes",
@@ -61,13 +67,17 @@ const CREATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			description: "parent",
 			type: PARENT__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
+		source: {
+			description: "source",
+			type: SOURCE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
 		attributes: {
 			description: "attributes",
 			type: ATTRIBUTES__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 	},
-	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "CREATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
+	resolve: (source, mutation_arguments, context) => {
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "CREATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -80,7 +90,7 @@ const CREATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		}
 		return CONTROLLER__AGENT_ACCOUNT__CONTROLLER__DATABASE.create(
 			{
-				source: _source,
+				source: source,
 				database: context.database,
 				transaction: context.transaction,
 			},
@@ -99,6 +109,10 @@ const UPDATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			description: "parent",
 			type: PARENT__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
+		source: {
+			description: "source",
+			type: SOURCE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
 		where: {
 			description: "where",
 			type: WHERE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -144,8 +158,8 @@ const UPDATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
-	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "UPDATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
+	resolve: (source, mutation_arguments, context) => {
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "UPDATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -161,7 +175,7 @@ const UPDATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		}
 		return CONTROLLER__AGENT_ACCOUNT__CONTROLLER__DATABASE.update(
 			{
-				source: _source,
+				source: source,
 				database: context.database,
 				transaction: context.transaction,
 			},
@@ -179,6 +193,10 @@ const DELETE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		parent: {
 			description: "parent",
 			type: PARENT__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where: {
 			description: "where",
@@ -221,8 +239,8 @@ const DELETE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
-	resolve: (_source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "DELETE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "_source", _source);
+	resolve: (source, mutation_arguments, context) => {
+		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "DELETE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -235,7 +253,7 @@ const DELETE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		}
 		return CONTROLLER__AGENT_ACCOUNT__CONTROLLER__DATABASE.delete(
 			{
-				source: _source,
+				source: source,
 				database: context.database,
 				transaction: context.transaction,
 			},

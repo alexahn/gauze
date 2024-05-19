@@ -18,6 +18,12 @@ const PARENT__PROXY__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.t
 	fields: () => $structure.entities.proxy.database.graphql.METADATA_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
 });
 
+const SOURCE__PROXY__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Proxy_Query__Source",
+	description: "Proxy Source",
+	fields: () => $structure.entities.proxy.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__PROXY__STRUCTURE,
+});
+
 const ATTRIBUTES__PROXY__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Proxy_Query__Attributes",
 	description: "Proxy Query Attributes",
@@ -60,6 +66,10 @@ const READ__PROXY__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		parent: {
 			description: "parent",
 			type: PARENT__PROXY__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__PROXY__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		where: {
 			description: "where",
@@ -128,6 +138,10 @@ const COUNT__PROXY__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		parent: {
 			description: "parent",
 			type: PARENT__PROXY__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__PROXY__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 		count: {
 			description: "count",
