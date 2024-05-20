@@ -269,7 +269,7 @@ class GauzeServer {
 				data.push(chunk);
 			});
 			req.on("end", function () {
-				let body
+				let body;
 				try {
 					body = JSON.parse(Buffer.concat(data).toString("utf8"));
 				} catch (err) {

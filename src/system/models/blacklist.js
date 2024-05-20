@@ -10,7 +10,7 @@ class BlacklistSystemModel extends $kernel.models.access.AccessSystemModel {
 	}
 	create(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -29,7 +29,7 @@ class BlacklistSystemModel extends $kernel.models.access.AccessSystemModel {
 	}
 	read(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -48,7 +48,7 @@ class BlacklistSystemModel extends $kernel.models.access.AccessSystemModel {
 	}
 	update(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -67,7 +67,7 @@ class BlacklistSystemModel extends $kernel.models.access.AccessSystemModel {
 	}
 	delete(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -86,7 +86,7 @@ class BlacklistSystemModel extends $kernel.models.access.AccessSystemModel {
 	}
 	count(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {

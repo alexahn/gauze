@@ -10,7 +10,7 @@ class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.models.system.
 	}
 	create(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -30,7 +30,7 @@ class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.models.system.
 	}
 	read(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -49,7 +49,7 @@ class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.models.system.
 	}
 	update(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -69,7 +69,7 @@ class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.models.system.
 	}
 	delete(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -89,7 +89,7 @@ class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.models.system.
 	}
 	count(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
