@@ -10,7 +10,7 @@ class RelationshipEnvironmentModel extends $kernel.models.environment.Environmen
 	}
 	create(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -29,7 +29,7 @@ class RelationshipEnvironmentModel extends $kernel.models.environment.Environmen
 	}
 	read(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -48,7 +48,7 @@ class RelationshipEnvironmentModel extends $kernel.models.environment.Environmen
 	}
 	update(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -67,7 +67,7 @@ class RelationshipEnvironmentModel extends $kernel.models.environment.Environmen
 	}
 	delete(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {

@@ -10,7 +10,7 @@ class AgentCharacterEnvironmentModel extends $kernel.models.environment.Environm
 	}
 	create(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -29,7 +29,7 @@ class AgentCharacterEnvironmentModel extends $kernel.models.environment.Environm
 	}
 	read(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -48,7 +48,7 @@ class AgentCharacterEnvironmentModel extends $kernel.models.environment.Environm
 	}
 	update(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -67,7 +67,7 @@ class AgentCharacterEnvironmentModel extends $kernel.models.environment.Environm
 	}
 	delete(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {

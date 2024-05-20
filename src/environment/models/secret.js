@@ -10,7 +10,7 @@ class SecretEnvironmentModel extends $kernel.models.environment.EnvironmentModel
 	}
 	create(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -29,7 +29,7 @@ class SecretEnvironmentModel extends $kernel.models.environment.EnvironmentModel
 	}
 	read(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -48,7 +48,7 @@ class SecretEnvironmentModel extends $kernel.models.environment.EnvironmentModel
 	}
 	update(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -67,7 +67,7 @@ class SecretEnvironmentModel extends $kernel.models.environment.EnvironmentModel
 	}
 	delete(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {

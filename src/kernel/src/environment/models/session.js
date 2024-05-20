@@ -16,7 +16,7 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 		self.operation_create_environment_session_name = "CreateEnvironmentSession";
 	}
 	parse_data(data) {
-		var parsed_data;
+		let parsed_data;
 		try {
 			parsed_data = JSON.parse(data);
 		} catch (error) {
@@ -180,7 +180,7 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 	}
 	create_environment(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -200,7 +200,7 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 	}
 	create(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -220,7 +220,7 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 	}
 	read(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -239,7 +239,7 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 	}
 	update(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
@@ -259,7 +259,7 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 	}
 	delete(context, parameters) {
 		const self = this;
-		var { agent } = context;
+		const { agent } = context;
 		const realm = {
 			agent: agent,
 			entity: {
