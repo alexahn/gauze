@@ -542,6 +542,7 @@
 		[ ] use GraphQLError from the graphql module to supply an extensions property
 	[ ] think about how to do field validation so that field errors can be abstracted
 		[ ] currently we will just throw hand crafted errors, but we could probably have a structured approach
+	[x] change var to const where we can
 [ ] graphql entity types and system integration
 	[ ] add field to abstract entity definition to exclude from graphql interface
 		[ ] unless we specify the realm, we can't do this without also excluding from the database graphql interface
@@ -686,3 +687,4 @@
 [ ] better tests
 	[ ] relationship tests need to actually test that subsets of things can get acted on correctly
 		[ ] imagine if the program misinterprets the method as not being a relationship method, and we need to catch that it acted on the wrong set of items
+[ ] look into deno, bun, etc

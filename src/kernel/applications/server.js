@@ -262,15 +262,16 @@ class GauzeServer {
 		});
 	}
 	handle_graphql(schema, req, res, agent) {
-		var data = [];
-		var self = this;
+		const self = this;
+		const data = [];
 		if (req.method === "POST") {
 			req.on("data", function (chunk) {
 				data.push(chunk);
 			});
 			req.on("end", function () {
+				let body
 				try {
-					var body = JSON.parse(Buffer.concat(data).toString("utf8"));
+					body = JSON.parse(Buffer.concat(data).toString("utf8"));
 				} catch (err) {
 					res.writeHead(400, "Bad Request", {
 						"content-type": "application/json; charset=utf-8",
