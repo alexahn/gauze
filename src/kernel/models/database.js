@@ -281,13 +281,6 @@ class DatabaseModel extends Model {
 				return result;
 			});
 	}
-	_parse_relationship_metadata(context, parameters) {
-		const self = this;
-		const { source } = context;
-		const relationship = source && source._metadata ? source._metadata : parameters.parent && parameters.parent.id && parameters.parent.type ? parameters.parent : null;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.parse_relationship:enter`, "relationship", relationship);
-		return relationship;
-	}
 	_parse_source(context, parameters) {
 		const self = this;
 		const { source } = context;
@@ -343,7 +336,6 @@ class DatabaseModel extends Model {
 	// create a row
 	_create(context, parameters) {
 		const self = this;
-		//const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 		const relationship_source = self._parse_source(context, parameters);
 		const key = self._batch_key(relationship_source, parameters, "create");
 		// use the batch key as the cache key
@@ -382,6 +374,14 @@ class DatabaseModel extends Model {
 				Object.keys(cache_where_not_in).forEach(function (key) {
 					builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[key]).value);
 				});
+				/*
+				Object.keys(where_greater).forEach(function (key) {
+					builder.where(key, '>', where_greater[key])
+				})
+				Object.keys(where_lesser).forEach(function (key) {
+					builder.where(key, '<', where_lesser[key])
+				})
+				*/
 				return builder;
 			})
 			.limit(limit)
@@ -419,7 +419,6 @@ class DatabaseModel extends Model {
 			order_nulls = "first",
 		} = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
-		//const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 		const relationship_source = self._parse_source(context, parameters);
 		// do join here based on source metadata
 		// use structure resolvers to convert graphql type to table_name name
@@ -428,9 +427,6 @@ class DatabaseModel extends Model {
 		const SOURCE_GRAPHQL_TYPE = relationship_source._metadata.type;
 		const SOURCE_SQL_TABLE = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[SOURCE_GRAPHQL_TYPE];
 
-		//const PARENT_SQL_ID = relationship_metadata.id;
-		//const PARENT_GRAPHQL_TYPE = relationship_metadata.type;
-		//const PARENT_SQL_TABLE = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[PARENT_GRAPHQL_TYPE];
 		// mutate where by prefixing with table_name name
 		var joined_where = {};
 		Object.keys(where).forEach(function (k) {
@@ -525,7 +521,6 @@ class DatabaseModel extends Model {
 	// read a row
 	_read(context, parameters) {
 		const self = this;
-		//const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 		const relationship_source = self._parse_source(context, parameters);
 		const key = self._batch_key(relationship_source, parameters, "read");
 		// use the batch key as the cache key
@@ -583,7 +578,6 @@ class DatabaseModel extends Model {
 		const { attributes, where, where_in = {}, where_not_in = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
 		const MAXIMUM_ROWS = 4294967296;
-		// todo: hook up lru cache when dealing with id arrays
 		return self
 			.read(
 				{
@@ -625,7 +619,6 @@ class DatabaseModel extends Model {
 	// update a row
 	_update(context, parameters) {
 		const self = this;
-		//const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 		const relationship_source = self._parse_source(context, parameters);
 		const key = self._batch_key(relationship_source, parameters, "update");
 		// use the batch key as the cache key
@@ -756,7 +749,6 @@ class DatabaseModel extends Model {
 		const { where, where_in = {}, where_not_in = {}, limit = 128 } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		const MAXIMUM_ROWS = 4294967296;
-		// todo: hook up lru cache when dealing with id arrays
 		return self
 			.read(
 				{
@@ -793,7 +785,6 @@ class DatabaseModel extends Model {
 	// delete a row
 	_delete(context, parameters) {
 		const self = this;
-		//const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 		const relationship_source = self._parse_source(context, parameters);
 		const key = self._batch_key(relationship_source, parameters, "delete");
 		// use the batch key as the cache key
@@ -851,7 +842,6 @@ class DatabaseModel extends Model {
 		const { source, database, transaction } = context;
 		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
-		//const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 		const relationship_source = self._parse_source(context, parameters);
 
 		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
@@ -869,11 +859,6 @@ class DatabaseModel extends Model {
 		const SOURCE_GRAPHQL_TYPE = relationship_source._metadata.type;
 		const SOURCE_SQL_TABLE = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[SOURCE_GRAPHQL_TYPE];
 
-		/*
-		const PARENT_SQL_ID = relationship_metadata.id;
-		const PARENT_GRAPHQL_TYPE = relationship_metadata.type;
-		const PARENT_SQL_TABLE = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[PARENT_GRAPHQL_TYPE];
-		*/
 		// mutate where by prefixing with table_name name
 		var joined_where = {};
 		Object.keys(where).forEach(function (k) {
@@ -964,7 +949,6 @@ class DatabaseModel extends Model {
 	}
 	_count(context, parameters) {
 		const self = this;
-		//const relationship_metadata = self._parse_relationship_metadata(context, parameters);
 		const relationship_source = self._parse_source(context, parameters);
 		const key = self._batch_key(relationship_source, parameters, "count");
 		// use the batch key as the cache key
