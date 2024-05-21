@@ -658,10 +658,14 @@
 	[ ] create a system entity
 		[ ] create a record for every valid server by registering the mac address and cryptographically signing the record using a root certificate
 			[ ] each record should also have a public key for the individual server
-			[ ] a server can verify it is who it says it is by signing any requested message
+				[ ] a server can verify it is who it says it is by signing any requested message
 			[ ] the private key for the server should only live on the server and should be made at the same time as registering the server
 				[ ] there should be no elevated privileges for someone who gains access to the private key, it is mostly used for organizing network topology
+				[ ] or we can create an agent for every server, and create a secret only the server can access
+					[ ] either store the secret to authenticate on the server or set up automatic session refreshing
+					[ ] feels like it might be abusing the concept of an agent though
 		[ ] top down certificate system, add a cli command to generate the root private key (and certificate)
+			[ ] eventually we want to tie every server to a resolvable name address and mirror the certificate structure of the domain name
 		[ ] add an environment variable for the root public key, or add it as a file in a predefined path
 		[ ] virtual machine development environment to test multiple systems running at the same time
 			[ ] precursor work for setting up sharding since we need a way to load in configuration information for each server
