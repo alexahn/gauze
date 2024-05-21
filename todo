@@ -688,3 +688,4 @@
 	[ ] relationship tests need to actually test that subsets of things can get acted on correctly
 		[ ] imagine if the program misinterprets the method as not being a relationship method, and we need to catch that it acted on the wrong set of items
 [ ] look into deno, bun, etc
+[ ] start thinking about making a build system
