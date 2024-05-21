@@ -655,6 +655,28 @@
 		[x] refactor the kernel database model to use the new source argument
 		[x] delete the old relationships field
 	[ ] add a field called transaction_id (or request_id) to allow busting the cache for segments of a query or mutation?
+	[ ] create a system entity
+		[ ] create a record for every valid server by registering the mac address and cryptographically signing the record using a root certificate
+			[ ] each record should also have a public key for the individual server
+			[ ] a server can verify it is who it says it is by signing any requested message
+			[ ] the private key for the server should only live on the server and should be made at the same time as registering the server
+				[ ] there should be no elevated privileges for someone who gains access to the private key, it is mostly used for organizing network topology
+		[ ] top down certificate system, add a cli command to generate the root private key (and certificate)
+		[ ] add an environment variable for the root public key, or add it as a file in a predefined path
+		[ ] virtual machine development environment to test multiple systems running at the same time
+			[ ] precursor work for setting up sharding since we need a way to load in configuration information for each server
+	[ ] create file entity
+		[ ] name (string)
+		[ ] size (integer)
+		[ ] parts (array of strings)
+	[ ] create part entity
+		[ ] identifier (string)
+		[ ] number (integer)
+		[ ] size (integer)
+		[ ] io (string)
+	[ ] create io entity
+		[ ] system (string)
+		[ ] size (integer)
 [ ] unknowns, abnormal behavior, and investigations
 	[ ] look into why router5 doesn't seem to be able to uri encode correctly
 		[ ] manually encoding and decoding seems to work
