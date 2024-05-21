@@ -669,6 +669,8 @@
 		[ ] add an environment variable for the root public key, or add it as a file in a predefined path
 		[ ] virtual machine development environment to test multiple systems running at the same time
 			[ ] precursor work for setting up sharding since we need a way to load in configuration information for each server
+		[ ] investigate neural network architecture for subquery resolution
+			[ ] metadata needs to be stored somewhere
 	[ ] create file entity
 		[ ] name (string)
 		[ ] size (integer)
