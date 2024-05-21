@@ -681,6 +681,17 @@
 	[ ] create io entity
 		[ ] system (string)
 		[ ] size (integer)
+	[ ] kernel observability methods
+		[ ] fs.statfs for disk space (required)
+		[ ] some non-obtrusive way to get processor and memory utilization (nice to have)
+	[ ] change authentication to specify the realm it is authenticating to so we can add kernel sessions
+		[ ] e.g. environment { enter_session { environment } }
+		[ ] e.g. environment { enter_session { system } }
+		[ ] e.g. environment { enter_session { kernel } }
+		[ ] add a field to gauze.js that includes a section for people who can access the kernel interface
+			[ ] we can add allowed_realms to proxy entity if we want to store it in the database (or a binary field for every realm)
+				[ ] read only access to proxy entity for agents (currently the unique constraint is preventing people from spoofing other users)
+			[ ] agents that can access the kernel interface should be deployment environments (e.g. development, staging, production) and infrastructure engineers
 [ ] unknowns, abnormal behavior, and investigations
 	[ ] look into why router5 doesn't seem to be able to uri encode correctly
 		[ ] manually encoding and decoding seems to work
