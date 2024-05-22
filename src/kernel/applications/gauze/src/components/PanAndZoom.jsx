@@ -4,11 +4,15 @@ import React, { useEffect, useRef, useState } from "react";
 
 //import './PanAndZoomImage.css';
 
+// useRef
+// refContainer.current.offsetWidth
+// refContainer.current.offsetHeight
+
 const PanAndZoom = ({ children }) => {
 	const [isPanning, setPanning] = useState(false);
 	const [image, setImage] = useState({
-		width: 200,
-		height: 200,
+		width: 1,
+		height: 1,
 	});
 	const [position, setPosition] = useState({
 		oldX: 0,
@@ -27,10 +31,12 @@ const PanAndZoom = ({ children }) => {
 	const onMouseDown = (e) => {
 		console.log("mousedown target", e.target);
 		//e.preventDefault();
+		/*
 		if (e.target !== containerRef.current) {
 			console.log("ignoring");
 			return;
 		}
+		*/
 		setPanning(true);
 		setPosition({
 			...position,
@@ -82,14 +88,6 @@ const PanAndZoom = ({ children }) => {
 				}}
 			>
 				{children}
-				{/*
-        <img
-          className="PanAndZoomImage-image"
-          alt="panable-and-zoomable"
-          src={src}
-          onLoad={onLoad}
-        />
-		*/}
 			</div>
 		</div>
 	);

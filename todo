@@ -499,6 +499,7 @@
 					[ ] would be kind of a pain to lose transactional certainty and have to manage synchronization between two data sources
 					[ ] just shard the table
 				[ ] will probably need another aggregation table per item, that has the total count of relationships (to any entity) on the item
+	[ ] email serializer to lowercase (or use a graphql scalar type)
 [ ] header data expansion and entity definition display in ui
 	[x] include relationships and method policies
 	[ ] extend type item view to be able to view relationships to the object
