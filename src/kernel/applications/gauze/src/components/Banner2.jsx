@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 
-export default function Banner({ gauze, model, router }) {
+export default function Banner2({ gauze, model, router }) {
 	// conditional links based on auth state
 	const environmentSessions = model.environmentSessions();
 	const proxySessions = model.proxySessions();
@@ -23,34 +23,28 @@ export default function Banner({ gauze, model, router }) {
 		</div>
 	);
 	const signOut = (
-		<div>
+		<div className="w3 pl1">
 			<a href={router.buildUrl("environment.signout", {})}>Sign Out</a>
 		</div>
 	);
 	const proxy = (
-		<div>
+		<div className="w3 pl1">
 			<a href={router.buildUrl("proxy.agents", {})}>Proxy</a>
 		</div>
 	);
-	const system = (
-		<div>
-			<a href={router.buildUrl("system.types", {})}>System</a>
-		</div>
-	);
-	const root = (
-		<div>
-			<a href={router.buildUrl("system.root", {})}>Root</a>
-		</div>
-	);
 	return (
-		<div>
-			<h1>Gauze</h1>
-			{!(authProxy || authSystem) ? signIn : null}
-			{!(authProxy || authSystem) ? signUp : null}
-			{authProxy || authSystem ? signOut : null}
-			{authProxy ? proxy : null}
-			{authSystem ? system : null}
-			{authSystem ? root : null}
+		<div className="flex cf w-100 h-100 items-center ba pa1">
+			<div className="flex fl w-100 justify-center">
+				<div className="f3">
+					<b>Gauze</b>
+				</div>
+			</div>
+			<div className="flex fr items-center">
+				{authProxy ? proxy : null}
+				{!(authProxy || authSystem) ? signIn : null}
+				{!(authProxy || authSystem) ? signUp : null}
+				{authProxy || authSystem ? signOut : null}
+			</div>
 		</div>
 	);
 }

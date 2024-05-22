@@ -515,12 +515,21 @@
 	[ ] consider changing order to accept an array of ordering arguments (e.g. column and direction)
 		[ ] the problem is that it would be a pain to handle in the ui because the order in which the sorts are applied matter
 		[x] for now, let's keep it simple and stick to only one sort order
-[ ] design language and visual consistency
+[ ] ui, design language and visual consistency
 	[ ] figure out the general structure of layouts and sections
 		[ ] configure all the styles from the root node and downwards in a consistent manner
 	[ ] ui forms
 		[x] item route for read, update, and delete
 		[ ] maybe use something like zod for input validation
+	[ ] general graph traversal ui
+		[ ] pannable and zoomable
+		[ ] relationship representation and traversal
+		[ ] expose source field to system interface
+		[ ] it is ideal to have a mapping from the raw data to the presentation but it doesn't seem possible because the interface introduces a semantic layer
+			[ ] it seems the core data to represent the ui will be things that represent objects in the interface (e.g. a table)
+			[ ] because it is not possible to go from the raw data to the presentation, it seems there is no point in having a flat presentation layer (e.g. aggregating all the data in one place)
+				 [ ] the objects that represent the interface will render objects that themselves hold a tree of things inside
+					[ ] it makes the visual model hierarchy kind of ugly because things are not normalized at the highest level, but the logic of handling relationships and so on is made much simpler because they are handled in a relative manner
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages

@@ -214,6 +214,34 @@ const routes = [
 		},
 	},
 	{
+		name: "system.root",
+		path: "/root",
+		canActivate: (router, dependencies) => (toState, fromState, done) => {
+			//onActivate: function ({ dependencies }) {
+			const { services } = dependencies;
+			const { gauze, model } = services;
+			return gauze.default.header().then(function (headers) {
+				headers.forEach(function (header) {
+					model.default.create("HEADER", header.name, header);
+				});
+				return Promise.resolve(true);
+			});
+		},
+		layout: layouts.albatross.default,
+		sections: {
+			top: sections.alder.default,
+			bottom: sections.alder.default,
+		},
+		units: {
+			top: {
+				body: units.banner2.default,
+			},
+			bottom: {
+				body: units.root.default,
+			},
+		},
+	},
+	{
 		name: "system.types",
 		path: "/types",
 		canActivate: (router, dependencies) => (toState, fromState, done) => {
