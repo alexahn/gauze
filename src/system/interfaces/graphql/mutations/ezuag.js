@@ -12,10 +12,10 @@ const SERIALIZER__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $structure.g
 	sql_primary_key: $structure.entities.ezuag.database.sql.PRIMARY_KEY__SQL__DATABASE__EZUAG__STRUCTURE,
 });
 
-const SOURCE__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Ezuag_Query__Source",
+const SOURCE__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Ezuag_Mutation__Source",
 	description: "Ezuag Source",
-	fields: () => $structure.entities.ezuag.system.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
+	fields: () => $structure.entities.ezuag.system.graphql.SOURCE_FIELDS__GRAPHQL__SYSTEM__EZUAG__STRUCTURE,
 });
 
 const ATTRIBUTES__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -47,7 +47,7 @@ const CREATE__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	args: {
 		source: {
 			description: "source",
-			type: SOURCE__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: SOURCE__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		attributes: {
 			description: "attributes",
@@ -94,7 +94,7 @@ const UPDATE__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	args: {
 		source: {
 			description: "source",
-			type: SOURCE__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: SOURCE__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
@@ -176,7 +176,7 @@ const DELETE__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	args: {
 		source: {
 			description: "source",
-			type: SOURCE__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: SOURCE__EZUAG__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",

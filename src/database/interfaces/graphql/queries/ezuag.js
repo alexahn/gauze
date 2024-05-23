@@ -15,7 +15,7 @@ const SERIALIZER__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = new $structure.ga
 const SOURCE__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ezuag_Query__Source",
 	description: "Ezuag Source",
-	fields: () => $structure.entities.ezuag.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
+	fields: () => $structure.entities.ezuag.database.graphql.SOURCE_FIELDS__GRAPHQL__DATABASE__EZUAG__STRUCTURE,
 });
 
 const ATTRIBUTES__EZUAG__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

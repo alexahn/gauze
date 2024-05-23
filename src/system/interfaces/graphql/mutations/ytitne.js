@@ -12,10 +12,10 @@ const SERIALIZER__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $structure.
 	sql_primary_key: $structure.entities.ytitne.database.sql.PRIMARY_KEY__SQL__DATABASE__YTITNE__STRUCTURE,
 });
 
-const SOURCE__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Ytitne_Query__Source",
+const SOURCE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Ytitne_Mutation__Source",
 	description: "Ytitne Source",
-	fields: () => $structure.entities.ytitne.system.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
+	fields: () => $structure.entities.ytitne.system.graphql.SOURCE_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 });
 
 const ATTRIBUTES__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -47,7 +47,7 @@ const CREATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	args: {
 		source: {
 			description: "source",
-			type: SOURCE__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: SOURCE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		attributes: {
 			description: "attributes",
@@ -94,7 +94,7 @@ const UPDATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	args: {
 		source: {
 			description: "source",
-			type: SOURCE__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: SOURCE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
@@ -176,7 +176,7 @@ const DELETE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	args: {
 		source: {
 			description: "source",
-			type: SOURCE__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+			type: SOURCE__YTITNE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",

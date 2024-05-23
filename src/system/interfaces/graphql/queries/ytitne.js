@@ -15,7 +15,7 @@ const SERIALIZER__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.gau
 const SOURCE__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Ytitne_Query__Source",
 	description: "Ytitne Source",
-	fields: () => $structure.entities.ytitne.system.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
+	fields: () => $structure.entities.ytitne.system.graphql.SOURCE_FIELDS__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 });
 
 const ATTRIBUTES__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
