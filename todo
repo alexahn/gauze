@@ -707,6 +707,14 @@
 			[ ] we can add allowed_realms to proxy entity if we want to store it in the database (or a binary field for every realm)
 				[ ] read only access to proxy entity for agents (currently the unique constraint is preventing people from spoofing other users)
 			[ ] agents that can access the kernel interface should be deployment environments (e.g. development, staging, production) and infrastructure engineers
+	[ ] relationship interfaces
+		[ ] update relationship to be able to act on source?
+			[ ] should be able to enable a query like: read_entity { relationships_to { read_relationship() { } } } or read_entity { relationships_from { read_relationship() { } } }
+				[ ] the current relationship methods seem kind of a pain to interact with, it would be ideal to be able to get a list of relationships immediately with entity queries
+		[ ] update relationship to be able to handle where_in and where_not_in?
+		[ ] update relationship with count method
+		[ ] rethink and refactor all of relationship interface to align expectations with entity interface (if possible)
+			[ ] the problem is that relationships are the bridge between types so the access control logic becomes very complex
 [ ] unknowns, abnormal behavior, and investigations
 	[ ] look into why router5 doesn't seem to be able to uri encode correctly
 		[ ] manually encoding and decoding seems to work
