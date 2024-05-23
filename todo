@@ -523,14 +523,17 @@
 		[x] item route for read, update, and delete
 		[ ] maybe use something like zod for input validation
 	[ ] general graph traversal ui
-		[ ] pannable and zoomable
+		[x] pannable and zoomable
 		[ ] relationship representation and traversal
-		[ ] expose source field to system interface
-		[ ] it is ideal to have a mapping from the raw data to the presentation but it doesn't seem possible because the interface introduces a semantic layer
-			[ ] it seems the core data to represent the ui will be things that represent objects in the interface (e.g. a table)
-			[ ] because it is not possible to go from the raw data to the presentation, it seems there is no point in having a flat presentation layer (e.g. aggregating all the data in one place)
-				 [ ] the objects that represent the interface will render objects that themselves hold a tree of things inside
-					[ ] it makes the visual model hierarchy kind of ugly because things are not normalized at the highest level, but the logic of handling relationships and so on is made much simpler because they are handled in a relative manner
+		[x] expose source field to system interface
+		[-] it is ideal to have a mapping from the raw data to the presentation but it doesn't seem possible because the interface introduces a semantic layer
+			[-] it seems the core data to represent the ui will be things that represent objects in the interface (e.g. a table)
+			[-] because it is not possible to go from the raw data to the presentation, it seems there is no point in having a flat presentation layer (e.g. aggregating all the data in one place)
+				 [-] the objects that represent the interface will render objects that themselves hold a tree of things inside
+					[-] it makes the visual model hierarchy kind of ugly because things are not normalized at the highest level, but the logic of handling relationships and so on is made much simpler because they are handled in a relative manner
+			[x] the browser limitations of rendering elements in arbitrary positions prevents us from using a tree to render objects in arbitrary positions because the parent element must always have a dimension greater than the children
+				[x] the only way to allow a child element to be moved anywhere is to grow the dimensions of the parent to the entire viewport, but this causes issues with event handling
+					[x] it is probably possible to set up an elaborate event naming scheme so that we can handle mouse clicks through all the layers but i've opted to flatten the ui for now
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages

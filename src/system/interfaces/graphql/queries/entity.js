@@ -12,10 +12,10 @@ const SERIALIZER__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.gau
 	sql_primary_key: $structure.entities.entity.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY__STRUCTURE,
 });
 
-const PARENT__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Entity_Query__Parent",
-	description: "Entity Parent",
-	fields: () => $structure.entities.entity.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
+const SOURCE__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Entity_Query__Source",
+	description: "Entity Source",
+	fields: () => $structure.entities.entity.system.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
 });
 
 const ATTRIBUTES__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -57,9 +57,9 @@ const WHERE_STRING__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.ga
 const READ__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.entity.system.graphql.QUERY__GRAPHQL__SYSTEM__ENTITY__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
@@ -117,9 +117,9 @@ const READ__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 const COUNT__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__ENTITY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		count: {
 			description: "count",

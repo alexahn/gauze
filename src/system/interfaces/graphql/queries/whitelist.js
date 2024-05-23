@@ -12,10 +12,10 @@ const SERIALIZER__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.
 	sql_primary_key: $structure.entities.whitelist.database.sql.PRIMARY_KEY__SQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
-const PARENT__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Whitelist_Query__Parent",
-	description: "Whitelist Parent",
-	fields: () => $structure.entities.whitelist.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
+const SOURCE__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Whitelist_Query__Source",
+	description: "Whitelist Source",
+	fields: () => $structure.entities.whitelist.system.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
 });
 
 const ATTRIBUTES__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -57,9 +57,9 @@ const WHERE_STRING__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract
 const READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.whitelist.system.graphql.QUERY__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
@@ -117,9 +117,9 @@ const READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 const COUNT__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		count: {
 			description: "count",

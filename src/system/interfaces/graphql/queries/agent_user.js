@@ -12,10 +12,10 @@ const SERIALIZER__AGENT_USER__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure
 	sql_primary_key: $structure.entities.agent_user.database.sql.PRIMARY_KEY__SQL__DATABASE__AGENT_USER__STRUCTURE,
 });
 
-const PARENT__AGENT_USER__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_User_Query__Parent",
-	description: "Agent_User Parent",
-	fields: () => $structure.entities.agent_user.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
+const SOURCE__AGENT_USER__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_User_Query__Source",
+	description: "Agent_User Source",
+	fields: () => $structure.entities.agent_user.system.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
 });
 
 const ATTRIBUTES__AGENT_USER__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -57,9 +57,9 @@ const WHERE_STRING__AGENT_USER__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstrac
 const READ__AGENT_USER__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_user.system.graphql.QUERY__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__AGENT_USER__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__AGENT_USER__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
@@ -123,9 +123,9 @@ const READ__AGENT_USER__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 const COUNT__AGENT_USER__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__AGENT_USER__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__AGENT_USER__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		count: {
 			description: "count",

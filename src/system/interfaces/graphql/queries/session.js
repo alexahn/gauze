@@ -12,10 +12,10 @@ const SERIALIZER__SESSION__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.ga
 	sql_primary_key: $structure.entities.session.database.sql.PRIMARY_KEY__SQL__DATABASE__SESSION__STRUCTURE,
 });
 
-const PARENT__SESSION__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Session_Query__Parent",
-	description: "Session Parent",
-	fields: () => $structure.entities.session.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+const SOURCE__SESSION__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Session_Query__Source",
+	description: "Session Source",
+	fields: () => $structure.entities.session.system.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 });
 
 const ATTRIBUTES__SESSION__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -57,9 +57,9 @@ const WHERE_STRING__SESSION__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.g
 const READ__SESSION__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.session.system.graphql.QUERY__GRAPHQL__SYSTEM__SESSION__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__SESSION__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__SESSION__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
@@ -117,9 +117,9 @@ const READ__SESSION__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 const COUNT__SESSION__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__SESSION__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__SESSION__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		count: {
 			description: "count",

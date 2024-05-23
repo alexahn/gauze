@@ -12,10 +12,10 @@ const SERIALIZER__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.gauz
 	sql_primary_key: $structure.entities.proxy.database.sql.PRIMARY_KEY__SQL__DATABASE__PROXY__STRUCTURE,
 });
 
-const PARENT__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Proxy_Query__Parent",
-	description: "Proxy Parent",
-	fields: () => $structure.entities.proxy.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__PROXY__STRUCTURE,
+const SOURCE__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Proxy_Query__Source",
+	description: "Proxy Source",
+	fields: () => $structure.entities.proxy.system.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__PROXY__STRUCTURE,
 });
 
 const ATTRIBUTES__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -57,9 +57,9 @@ const WHERE_STRING__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gau
 const READ__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.proxy.system.graphql.QUERY__GRAPHQL__SYSTEM__PROXY__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
@@ -117,9 +117,9 @@ const READ__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 const COUNT__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		count: {
 			description: "count",

@@ -12,10 +12,10 @@ const SERIALIZER__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structu
 	sql_primary_key: $structure.entities.relationship.database.sql.PRIMARY_KEY__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
 });
 
-const PARENT__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Relationship_Query__Parent",
-	description: "Relationship Parent",
-	fields: () => $structure.entities.relationship.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
+const SOURCE__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Relationship_Query__Source",
+	description: "Relationship Source",
+	fields: () => $structure.entities.relationship.system.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
 });
 
 const ATTRIBUTES__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -57,9 +57,9 @@ const WHERE_STRING__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstr
 const READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.relationship.system.graphql.QUERY__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
@@ -129,9 +129,9 @@ const READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 const COUNT__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		count: {
 			description: "count",
