@@ -33,6 +33,29 @@ const ATTRIBUTES__GRAPHQL__DATABASE__ENTITY__STRUCTURE = new $abstract.gauze.typ
 	fields: () => ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
 });
 
+const SOURCE_METADATA__GRAPHQL__DATABASE__ENTITY__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Entity__Source_Metadata",
+	description: "Entity Source Metadata",
+	fields: () => METADATA_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
+});
+
+const SOURCE_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE = {
+	_metadata: {
+		type: SOURCE_METADATA__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
+		description: "Entity Source Metadata",
+	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Entity Source Direction",
+	},
+};
+
+const SOURCE__GRAPHQL__DATABASE__ENTITY__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Entity__Source",
+	description: "Entity Source",
+	fields: () => SOURCE_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
+});
+
 const WHERE_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE = $abstract.entities.entity.default($abstract).graphql_where_fields;
 
 const WHERE_FIELDS_ARRAY__GRAPHQL__DATABASE__ENTITY__STRUCTURE = create_fields_array(WHERE_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE);
@@ -79,52 +102,6 @@ const QUERY_RELATIONSHIPS_FROM__GRAPHQL__DATABASE__ENTITY__STRUCTURE = new $abst
 	name: "Entity_Query__Relationships_From",
 	description: "Entity Query Relationships_From",
 	fields: () => QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
-});
-
-const QUERY_SOURCE_METADATA__GRAPHQL__DATABASE__ENTITY__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Entity_Query__Source_Metadata",
-	description: "Entity Query Source Metadata",
-	fields: () => METADATA_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
-});
-
-const QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE = {
-	_metadata: {
-		type: QUERY_SOURCE_METADATA__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
-		description: "Entity Query Source Metadata",
-	},
-	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
-		description: "Entity Query Source Direction",
-	},
-};
-
-const QUERY_SOURCE__GRAPHQL__DATABASE__ENTITY__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Entity_Query__Source",
-	description: "Entity Query Source",
-	fields: () => QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
-});
-
-const SOURCE_METADATA__GRAPHQL__DATABASE__ENTITY__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Entity__Source_Metadata",
-	description: "Entity Source Metadata",
-	fields: () => METADATA_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
-});
-
-const SOURCE_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE = {
-	_metadata: {
-		type: SOURCE_METADATA__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
-		description: "Entity Source Metadata",
-	},
-	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
-		description: "Entity Source Direction",
-	},
-};
-
-const SOURCE__GRAPHQL__DATABASE__ENTITY__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Entity__Source",
-	description: "Entity Source",
-	fields: () => SOURCE_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
 });
 
 const QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE = {};
@@ -252,8 +229,6 @@ export {
 	QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
 	QUERY_RELATIONSHIPS_FROM__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
 	QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
-	QUERY_SOURCE__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
-	QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
 	MUTATION_RELATIONSHIPS_TO__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
 	MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
 	MUTATION_RELATIONSHIPS_FROM__GRAPHQL__DATABASE__ENTITY__STRUCTURE,

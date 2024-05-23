@@ -33,6 +33,29 @@ const ATTRIBUTES__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE = new $abstract.
 	fields: () => ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 });
 
+const SOURCE_METADATA__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Character__Source_Metadata",
+	description: "Agent_Character Source Metadata",
+	fields: () => METADATA_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
+});
+
+const SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE = {
+	_metadata: {
+		type: SOURCE_METADATA__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
+		description: "Agent_Character Source Metadata",
+	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Agent_Character Source Direction",
+	},
+};
+
+const SOURCE__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Character__Source",
+	description: "Agent_Character Source",
+	fields: () => SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
+});
+
 const WHERE_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE = $abstract.entities.agent_character.default($abstract).graphql_where_fields;
 
 const WHERE_FIELDS_ARRAY__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE = create_fields_array(WHERE_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE);
@@ -79,52 +102,6 @@ const QUERY_RELATIONSHIPS_FROM__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE = 
 	name: "Agent_Character_Query__Relationships_From",
 	description: "Agent_Character Query Relationships_From",
 	fields: () => QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
-});
-
-const QUERY_SOURCE_METADATA__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_Character_Query__Source_Metadata",
-	description: "Agent_Character Query Source Metadata",
-	fields: () => METADATA_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
-});
-
-const QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE = {
-	_metadata: {
-		type: QUERY_SOURCE_METADATA__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
-		description: "Agent_Character Query Source Metadata",
-	},
-	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
-		description: "Agent_Character Query Source Direction",
-	},
-};
-
-const QUERY_SOURCE__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_Character_Query__Source",
-	description: "Agent_Character Query Source",
-	fields: () => QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
-});
-
-const SOURCE_METADATA__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_Character__Source_Metadata",
-	description: "Agent_Character Source Metadata",
-	fields: () => METADATA_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
-});
-
-const SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE = {
-	_metadata: {
-		type: SOURCE_METADATA__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
-		description: "Agent_Character Source Metadata",
-	},
-	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
-		description: "Agent_Character Source Direction",
-	},
-};
-
-const SOURCE__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_Character__Source",
-	description: "Agent_Character Source",
-	fields: () => SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 });
 
 const QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE = {};
@@ -252,8 +229,6 @@ export {
 	QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 	QUERY_RELATIONSHIPS_FROM__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 	QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
-	QUERY_SOURCE__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
-	QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 	MUTATION_RELATIONSHIPS_TO__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 	MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 	MUTATION_RELATIONSHIPS_FROM__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
