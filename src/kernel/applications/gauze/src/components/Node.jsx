@@ -1,73 +1,67 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
 
-export default function Node({ x, y, z, initializeNode, updatePosition, gauze, model, router }) {
-	const [isLoaded, setLoaded] = useState(false)
+export default function Node({ x, y, z, dataX, dataY, dataZ, initializePosition, updatePosition, gauze, model, router }) {
+	const containerRef = useRef();
+	const [isLoaded, setLoaded] = useState(false);
 	const [isDragging, setDragging] = useState(false);
 	const [position, setPosition] = useState({
-        oldX: 0,
-        oldY: 0,
-    });
-	const containerRef = useRef();
-    const onMouseDown = (e) => { 
-        if (!containerRef.current.contains(e.target)) { 
-            console.log("ignoring node", e.target, containerRef.current); 
-            return; 
-        } 
-        setDragging(true); 
-        setPosition({ 
-            oldX: e.clientX, 
-            oldY: e.clientY, 
-        }); 
-    };
-    useEffect(() => {
-		if (!isLoaded) {
-			setTimeout(function () {
-				initializeNode({ height: containerRef.current.offsetHeight, width: containerRef.current.offsetWidth })
-			}, 0)
-			console.log('loaded node', containerRef.current.offsetHeight, containerRef.current.offsetWidth)
-			setLoaded(true)
-		}
-        const mouseup = () => {
-            setDragging(false);
-        };
-        const mousemove = (event) => {
-            if (isDragging) {
+		oldX: 0,
+		oldY: 0,
+	});
+	function onMouseDown(e) {
+		if (e.button === 2) {
+		} else if (e.button === 1) {
+		} else if (e.button === 0) {
+			if (containerRef.current.contains(e.target)) {
+				setDragging(true);
 				setPosition({
-					oldX: event.clientX,
-					oldY: event.clientY
-				})
-				updatePosition({
-					x: x + event.clientX - position.oldX,
-					y: y + event.clientY - position.oldY,
-					z: z
-				})
-                /*
-                setPosition({
-                    ...position,
-                    x: position.x + event.clientX - position.oldX,
-                    y: position.y + event.clientY - position.oldY,
-                    oldX: event.clientX,
-                    oldY: event.clientY,
-                });
-                */
-            }
-        };
-        window.addEventListener("mouseup", mouseup);
-        window.addEventListener("mousemove", mousemove);
-        return () => {
-            window.removeEventListener("mouseup", mouseup);
-            window.removeEventListener("mousemove", mousemove);
-        };
-    });
+					oldX: e.clientX,
+					oldY: e.clientY,
+				});
+			} else {
+			}
+		}
+	}
+	function onMouseUp(e) {
+		setDragging(false);
+	}
+	function onMouseMove(e) {
+		if (isDragging) {
+			setPosition({
+				oldX: e.clientX,
+				oldY: e.clientY,
+			});
+			updatePosition({
+				x: x + e.clientX - position.oldX,
+				y: y + e.clientY - position.oldY,
+				z: z,
+			});
+		}
+	}
+	useEffect(() => {
+		if (!isLoaded) {
+			initializePosition({ height: containerRef.current.offsetHeight, width: containerRef.current.offsetWidth });
+			setLoaded(true);
+		}
+		window.addEventListener("mouseup", onMouseUp);
+		window.addEventListener("mousemove", onMouseMove);
+		return function () {
+			window.removeEventListener("mouseup", onMouseUp);
+			window.removeEventListener("mousemove", onMouseMove);
+		};
+	});
 	return (
 		<div
-			className="w4"
+			className="absolute shadow-1"
 			style={{
 				transform: `translate(${x}px, ${y}px) scale(${z})`,
 			}}
 			onMouseDown={onMouseDown}
 			ref={containerRef}
+			data-x={dataX}
+			data-y={dataY}
+			data-z={dataZ}
 		>
 			<h1>Hello</h1>
 		</div>
