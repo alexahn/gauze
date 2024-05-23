@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
+import Node from "./Node.jsx"
+
 // useRef
 // refContainer.current.offsetWidth (the width of the component)
 // refContainer.current.offsetHeight (the height of the component)
@@ -137,7 +139,8 @@ export default function Graph({ nodes }) {
 			{nodes.map(function (node, index) {
 				const absolutePosition = abstractToAbsolute(nodePositions[index][0]);
 				return (
-					<node.component
+					<Node
+						component={node.component}
 						key={index}
 						x={nodePositions[index][0].x}
 						y={nodePositions[index][0].y}
