@@ -6,10 +6,10 @@ import Node from "./Node.jsx";
 
 export default function Root({ gauze, model, router }) {
 	function node1() {
-		return (<h1>Hello</h1>)
+		return <h1>Hello</h1>;
 	}
 	function node2() {
-		return (<h1>Goodbye</h1>)
+		return <h1>Goodbye</h1>;
 	}
 	const nodes = [
 		{

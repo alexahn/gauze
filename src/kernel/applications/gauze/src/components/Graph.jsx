@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import Node from "./Node.jsx"
+import Node from "./Node.jsx";
 
 // useRef
 // refContainer.current.offsetWidth (the width of the component)

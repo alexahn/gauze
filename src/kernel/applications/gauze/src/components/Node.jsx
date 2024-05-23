@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
 
-export default function Node({ x, y, z, dataX, dataY, dataZ, initializePosition, updatePosition, ...props}) {
+export default function Node({ x, y, z, dataX, dataY, dataZ, initializePosition, updatePosition, ...props }) {
 	const containerRef = useRef();
 	const [isLoaded, setLoaded] = useState(false);
 	const [isDragging, setDragging] = useState(false);
