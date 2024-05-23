@@ -15,7 +15,7 @@ const SERIALIZER__GAUZE__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.gauz
 const SOURCE__GAUZE__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Gauze_Query__Source",
 	description: "Gauze Source",
-	fields: () => $structure.entities.gauze.system.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__GAUZE__STRUCTURE,
+	fields: () => $structure.entities.gauze.system.graphql.SOURCE_FIELDS__GRAPHQL__SYSTEM__GAUZE__STRUCTURE,
 });
 
 const ATTRIBUTES__GAUZE__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

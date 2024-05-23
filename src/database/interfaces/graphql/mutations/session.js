@@ -15,7 +15,7 @@ const SERIALIZER__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $structu
 const SOURCE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Session_Mutation__Source",
 	description: "Session Source",
-	fields: () => $structure.entities.session.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__SESSION__STRUCTURE,
+	fields: () => $structure.entities.session.database.graphql.SOURCE_FIELDS__GRAPHQL__DATABASE__SESSION__STRUCTURE,
 });
 
 const ATTRIBUTES__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

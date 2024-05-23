@@ -12,10 +12,10 @@ const SERIALIZER__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $str
 	sql_primary_key: $structure.entities.agent_account.database.sql.PRIMARY_KEY__SQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
 });
 
-const PARENT__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_Account_Mutation__Parent",
-	description: "Agent_Account Parent",
-	fields: () => $structure.entities.agent_account.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
+const SOURCE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Account_Mutation__Source",
+	description: "Agent_Account Source",
+	fields: () => $structure.entities.agent_account.system.graphql.SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE,
 });
 
 const ATTRIBUTES__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -45,9 +45,9 @@ const WHERE_ARRAY__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $ab
 const CREATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_account.system.graphql.MUTATION__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		attributes: {
 			description: "attributes",
@@ -92,9 +92,9 @@ const CREATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 const UPDATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_account.system.graphql.MUTATION__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
@@ -174,9 +174,9 @@ const UPDATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 const DELETE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_account.system.graphql.MUTATION__GRAPHQL__SYSTEM__AGENT_ACCOUNT__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",

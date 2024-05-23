@@ -15,7 +15,7 @@ const SERIALIZER__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__D
 const SOURCE__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "bb95d174a16f4ddd935ff3a802f7c7bc_Query__Source",
 	description: "bb95d174a16f4ddd935ff3a802f7c7bc Source",
-	fields: () => $structure.entities.a543731262804f64adcc0eae1a225acc.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
+	fields: () => $structure.entities.a543731262804f64adcc0eae1a225acc.database.graphql.SOURCE_FIELDS__GRAPHQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
 });
 
 const ATTRIBUTES__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

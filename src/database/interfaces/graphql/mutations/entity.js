@@ -15,7 +15,7 @@ const SERIALIZER__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $structur
 const SOURCE__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity_Mutation__Source",
 	description: "Entity Source",
-	fields: () => $structure.entities.entity.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
+	fields: () => $structure.entities.entity.database.graphql.SOURCE_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
 });
 
 const ATTRIBUTES__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

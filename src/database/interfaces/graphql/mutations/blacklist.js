@@ -15,7 +15,7 @@ const SERIALIZER__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $struc
 const SOURCE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Blacklist_Mutation__Source",
 	description: "Blacklist Source",
-	fields: () => $structure.entities.blacklist.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
+	fields: () => $structure.entities.blacklist.database.graphql.SOURCE_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
 });
 
 const ATTRIBUTES__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

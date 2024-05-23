@@ -15,7 +15,7 @@ const SERIALIZER__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $st
 const SOURCE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Relationship_Mutation__Source",
 	description: "Relationship Source",
-	fields: () => $structure.entities.relationship.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE,
+	fields: () => $structure.entities.relationship.database.graphql.SOURCE_FIELDS__GRAPHQL__DATABASE__RELATIONSHIP__STRUCTURE,
 });
 
 const ATTRIBUTES__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

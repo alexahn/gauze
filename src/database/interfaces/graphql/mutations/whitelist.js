@@ -15,7 +15,7 @@ const SERIALIZER__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $struc
 const SOURCE__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Mutation__Source",
 	description: "Whitelist Source",
-	fields: () => $structure.entities.whitelist.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
+	fields: () => $structure.entities.whitelist.database.graphql.SOURCE_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
 const ATTRIBUTES__WHITELIST__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

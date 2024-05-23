@@ -12,10 +12,10 @@ const SERIALIZER__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $structure.g
 	sql_primary_key: $structure.entities.gauze.database.sql.PRIMARY_KEY__SQL__DATABASE__GAUZE__STRUCTURE,
 });
 
-const PARENT__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Gauze_Mutation__Parent",
-	description: "Gauze Parent",
-	fields: () => $structure.entities.gauze.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__GAUZE__STRUCTURE,
+const SOURCE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Gauze_Mutation__Source",
+	description: "Gauze Source",
+	fields: () => $structure.entities.gauze.system.graphql.SOURCE_FIELDS__GRAPHQL__SYSTEM__GAUZE__STRUCTURE,
 });
 
 const ATTRIBUTES__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -45,9 +45,9 @@ const WHERE_ARRAY__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.g
 const CREATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.gauze.system.graphql.MUTATION__GRAPHQL__SYSTEM__GAUZE__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		attributes: {
 			description: "attributes",
@@ -92,9 +92,9 @@ const CREATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 const UPDATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.gauze.system.graphql.MUTATION__GRAPHQL__SYSTEM__GAUZE__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
@@ -174,9 +174,9 @@ const UPDATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 const DELETE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.gauze.system.graphql.MUTATION__GRAPHQL__SYSTEM__GAUZE__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",

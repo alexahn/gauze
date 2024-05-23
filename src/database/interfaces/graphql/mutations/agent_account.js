@@ -15,7 +15,7 @@ const SERIALIZER__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $s
 const SOURCE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Account_Mutation__Source",
 	description: "Agent_Account Source",
-	fields: () => $structure.entities.agent_account.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
+	fields: () => $structure.entities.agent_account.database.graphql.SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
 });
 
 const ATTRIBUTES__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

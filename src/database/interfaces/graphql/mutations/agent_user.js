@@ -15,7 +15,7 @@ const SERIALIZER__AGENT_USER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $stru
 const SOURCE__AGENT_USER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User_Mutation__Source",
 	description: "Agent_User Source",
-	fields: () => $structure.entities.agent_user.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
+	fields: () => $structure.entities.agent_user.database.graphql.SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE,
 });
 
 const ATTRIBUTES__AGENT_USER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

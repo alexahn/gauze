@@ -15,7 +15,7 @@ const SERIALIZER__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $structur
 const SOURCE__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Secret_Mutation__Source",
 	description: "Secret Source",
-	fields: () => $structure.entities.secret.database.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__DATABASE__SECRET__STRUCTURE,
+	fields: () => $structure.entities.secret.database.graphql.SOURCE_FIELDS__GRAPHQL__DATABASE__SECRET__STRUCTURE,
 });
 
 const ATTRIBUTES__SECRET__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

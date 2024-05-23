@@ -12,10 +12,10 @@ const SERIALIZER__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $structu
 	sql_primary_key: $structure.entities.blacklist.database.sql.PRIMARY_KEY__SQL__DATABASE__BLACKLIST__STRUCTURE,
 });
 
-const PARENT__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Blacklist_Mutation__Parent",
-	description: "Blacklist Parent",
-	fields: () => $structure.entities.blacklist.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE,
+const SOURCE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Blacklist_Mutation__Source",
+	description: "Blacklist Source",
+	fields: () => $structure.entities.blacklist.system.graphql.SOURCE_FIELDS__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE,
 });
 
 const ATTRIBUTES__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -45,9 +45,9 @@ const WHERE_ARRAY__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstra
 const CREATE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.blacklist.system.graphql.MUTATION__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		attributes: {
 			description: "attributes",
@@ -92,9 +92,9 @@ const CREATE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 const UPDATE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.blacklist.system.graphql.MUTATION__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
@@ -174,9 +174,9 @@ const UPDATE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 const DELETE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.blacklist.system.graphql.MUTATION__GRAPHQL__SYSTEM__BLACKLIST__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__BLACKLIST__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",

@@ -12,10 +12,10 @@ const SERIALIZER__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $stru
 	sql_primary_key: $structure.entities.relationship.database.sql.PRIMARY_KEY__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
 });
 
-const PARENT__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Relationship_Mutation__Parent",
-	description: "Relationship Parent",
-	fields: () => $structure.entities.relationship.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
+const SOURCE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Relationship_Mutation__Source",
+	description: "Relationship Source",
+	fields: () => $structure.entities.relationship.system.graphql.SOURCE_FIELDS__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE,
 });
 
 const ATTRIBUTES__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -45,9 +45,9 @@ const WHERE_ARRAY__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abs
 const CREATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.relationship.system.graphql.MUTATION__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		attributes: {
 			description: "attributes",
@@ -92,9 +92,9 @@ const CREATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 const UPDATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.relationship.system.graphql.MUTATION__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
@@ -174,9 +174,9 @@ const UPDATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 const DELETE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.relationship.system.graphql.MUTATION__GRAPHQL__SYSTEM__RELATIONSHIP__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",

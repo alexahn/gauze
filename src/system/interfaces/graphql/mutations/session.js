@@ -12,10 +12,10 @@ const SERIALIZER__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $structure
 	sql_primary_key: $structure.entities.session.database.sql.PRIMARY_KEY__SQL__DATABASE__SESSION__STRUCTURE,
 });
 
-const PARENT__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Session_Mutation__Parent",
-	description: "Session Parent",
-	fields: () => $structure.entities.session.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+const SOURCE__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Session_Mutation__Source",
+	description: "Session Source",
+	fields: () => $structure.entities.session.system.graphql.SOURCE_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 });
 
 const ATTRIBUTES__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -45,9 +45,9 @@ const WHERE_ARRAY__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract
 const CREATE__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.session.system.graphql.MUTATION__GRAPHQL__SYSTEM__SESSION__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		attributes: {
 			description: "attributes",
@@ -92,9 +92,9 @@ const CREATE__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 const UPDATE__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.session.system.graphql.MUTATION__GRAPHQL__SYSTEM__SESSION__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
@@ -174,9 +174,9 @@ const UPDATE__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 const DELETE__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.session.system.graphql.MUTATION__GRAPHQL__SYSTEM__SESSION__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__SESSION__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",

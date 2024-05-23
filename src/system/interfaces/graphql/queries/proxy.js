@@ -15,7 +15,7 @@ const SERIALIZER__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.gauz
 const SOURCE__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Proxy_Query__Source",
 	description: "Proxy Source",
-	fields: () => $structure.entities.proxy.system.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__PROXY__STRUCTURE,
+	fields: () => $structure.entities.proxy.system.graphql.SOURCE_FIELDS__GRAPHQL__SYSTEM__PROXY__STRUCTURE,
 });
 
 const ATTRIBUTES__PROXY__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

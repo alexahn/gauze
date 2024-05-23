@@ -12,10 +12,10 @@ const SERIALIZER__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $structure.
 	sql_primary_key: $structure.entities.entity.database.sql.PRIMARY_KEY__SQL__DATABASE__ENTITY__STRUCTURE,
 });
 
-const PARENT__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Entity_Mutation__Parent",
-	description: "Entity Parent",
-	fields: () => $structure.entities.entity.system.graphql.METADATA_FIELDS__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
+const SOURCE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Entity_Mutation__Source",
+	description: "Entity Source",
+	fields: () => $structure.entities.entity.system.graphql.SOURCE_FIELDS__GRAPHQL__SYSTEM__ENTITY__STRUCTURE,
 });
 
 const ATTRIBUTES__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -45,9 +45,9 @@ const WHERE_ARRAY__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $abstract.
 const CREATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.entity.system.graphql.MUTATION__GRAPHQL__SYSTEM__ENTITY__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		attributes: {
 			description: "attributes",
@@ -92,9 +92,9 @@ const CREATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 const UPDATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.entity.system.graphql.MUTATION__GRAPHQL__SYSTEM__ENTITY__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",
@@ -174,9 +174,9 @@ const UPDATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 const DELETE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.entity.system.graphql.MUTATION__GRAPHQL__SYSTEM__ENTITY__STRUCTURE),
 	args: {
-		parent: {
-			description: "parent",
-			type: PARENT__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		source: {
+			description: "source",
+			type: SOURCE__ENTITY__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		where: {
 			description: "where",

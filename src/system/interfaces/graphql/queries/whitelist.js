@@ -15,7 +15,7 @@ const SERIALIZER__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.
 const SOURCE__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Query__Source",
 	description: "Whitelist Source",
-	fields: () => $structure.entities.whitelist.system.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
+	fields: () => $structure.entities.whitelist.system.graphql.SOURCE_FIELDS__GRAPHQL__SYSTEM__WHITELIST__STRUCTURE,
 });
 
 const ATTRIBUTES__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

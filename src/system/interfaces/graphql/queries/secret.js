@@ -15,7 +15,7 @@ const SERIALIZER__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $structure.gau
 const SOURCE__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Secret_Query__Source",
 	description: "Secret Source",
-	fields: () => $structure.entities.secret.system.graphql.QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__SECRET__STRUCTURE,
+	fields: () => $structure.entities.secret.system.graphql.SOURCE_FIELDS__GRAPHQL__SYSTEM__SECRET__STRUCTURE,
 });
 
 const ATTRIBUTES__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
