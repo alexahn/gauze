@@ -52,15 +52,15 @@ export default function Node({ route, render, index, x, y, z, width, height, dat
 		if (!isLoaded) {
 			// if subscribed already, unsubscribe, and resubscribe
 			// if not subscribe, subscribe
-			render.unsubscribe(route.name, 'NODE', index, index)
-			render.subscribe(route.name, 'NODE', index, index, function (data) {
+			render.unsubscribe(route.name, "NODE", index, index);
+			render.subscribe(route.name, "NODE", index, index, function (data) {
 				setTimeout(function () {
 					//initializeNode(index, { height: containerRef.current.offsetHeight, width: containerRef.current.offsetWidth });
 					initializePosition({ height: containerRef.current.offsetHeight, width: containerRef.current.offsetWidth });
-					render.unsubscribe(route.name, 'NODE', index, subscriptionID)
+					render.unsubscribe(route.name, "NODE", index, subscriptionID);
 					setLoaded(true);
-				}, 0)
-			})
+				}, 0);
+			});
 		}
 		window.addEventListener("mouseup", onMouseUp);
 		window.addEventListener("mousemove", onMouseMove);

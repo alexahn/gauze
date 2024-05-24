@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-export default function Node({ route, render, index, x, y, z, width, height, dataX, dataY, dataZ, initializeNode, updateNode, initializePosition, updatePosition, ...props }) {
+export default function Node({ route, render, index, x, y, z, width, height, dataX, dataY, dataZ, initializeNode, updateNode, createNode, deleteNode, ...props }) {
 	const containerRef = useRef();
 	const [isLoaded, setLoaded] = useState(false);
 	const [isDragging, setDragging] = useState(false);
@@ -12,10 +12,13 @@ export default function Node({ route, render, index, x, y, z, width, height, dat
 	});
 	function onMouseDown(e) {
 		if (e.button === 2) {
+			e.preventDefault();
+			deleteNode(index);
 		} else if (e.button === 1) {
 		} else if (e.button === 0) {
 			if (containerRef.current.contains(e.target)) {
 				setDragging(true);
+				createNode();
 				setPosition({
 					oldX: e.clientX,
 					oldY: e.clientY,
@@ -33,14 +36,7 @@ export default function Node({ route, render, index, x, y, z, width, height, dat
 				oldX: e.clientX,
 				oldY: e.clientY,
 			});
-			/*
 			updateNode(index, {
-				x: x + e.clientX - position.oldX,
-				y: y + e.clientY - position.oldY,
-				z: z,
-			});
-			*/
-			updatePosition({
 				x: x + e.clientX - position.oldX,
 				y: y + e.clientY - position.oldY,
 				z: z,
@@ -52,15 +48,14 @@ export default function Node({ route, render, index, x, y, z, width, height, dat
 		if (!isLoaded) {
 			// if subscribed already, unsubscribe, and resubscribe
 			// if not subscribe, subscribe
-			render.unsubscribe(route.name, 'NODE', index, index)
-			render.subscribe(route.name, 'NODE', index, index, function (data) {
+			render.unsubscribe(route.name, "NODE", index, index);
+			render.subscribe(route.name, "NODE", index, index, function (data) {
 				setTimeout(function () {
-					//initializeNode(index, { height: containerRef.current.offsetHeight, width: containerRef.current.offsetWidth });
-					initializePosition({ height: containerRef.current.offsetHeight, width: containerRef.current.offsetWidth });
-					render.unsubscribe(route.name, 'NODE', index, subscriptionID)
+					initializeNode(index, { height: containerRef.current.offsetHeight, width: containerRef.current.offsetWidth });
+					render.unsubscribe(route.name, "NODE", index, subscriptionID);
 					setLoaded(true);
-				}, 0)
-			})
+				}, 0);
+			});
 		}
 		window.addEventListener("mouseup", onMouseUp);
 		window.addEventListener("mousemove", onMouseMove);

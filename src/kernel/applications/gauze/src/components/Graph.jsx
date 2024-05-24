@@ -26,100 +26,35 @@ function abstractToAbsolute({ x, y, z, width, height }) {
 	};
 }
 
-export default function Graph({ route, render, nodes, setNodes, initializeNode, updateNode }) {
+export default function Graph({ route, render, nodes, setNodes, initializeNode, updateNode, createNode, deleteNode }) {
 	const containerRef = useRef();
 	const [isPanning, setPanning] = useState(false);
-	//const [nodePositions, setNodePositions] = useState(nodes)
-	const [nodePositions, setNodePositions] = useState(function () {
-		return nodes.map(function (node) {
-			return {
-				...node,
-				oldX: 0,
-				oldY: 0,
-				x: null,
-				y: null,
-				z: 1,
-				height: null,
-				width: null,
-			}
-		})
-	})
-	if (nodePositions.length < nodes.length) {
-		const added = nodes.slice(nodePositions.length).map(function (node) {
-			return {
-				...node,
-				oldX: 0,
-				oldY: 0,
-				x: null,
-				y: null,
-				z: nodePositions[0].z,
-				height: null,
-				width: null,
-			}
-		})
-		const updated = [...nodePositions].concat(added)
-		setNodePositions(updated)
-	}
 	function onMouseDown(e) {
 		//e.preventDefault();
 		if (e.button === 2) {
 		} else if (e.button === 1) {
 			setPanning(true);
-			/*
-			nodePositions.forEach(function (value) {
-				const [position, setPosition] = value;
-				setPosition({
-					...position,
-					oldX: e.clientX,
-					oldY: e.clientY,
-				});
-			});
-			*/
-			/*
-			setNodes(nodes.map(function (position) {
-				return {
-					...position,
-					oldX: e.clientX,
-					oldY: e.clientY
-				}
-			}))
-			*/
-			setNodePositions(nodePositions.map(function (position) {
-				return {
-					...position,
-					oldX: e.clientX,
-					oldY: e.clientY
-				}
-			}))
-		} else if (e.button === 0) {
-			if (e.target === containerRef.current) {
-				setPanning(true);
-				/*
-				nodePositions.forEach(function (value) {
-					const [position, setPosition] = value;
-					setPosition({
+			setNodes(
+				nodes.map(function (position) {
+					return {
 						...position,
 						oldX: e.clientX,
 						oldY: e.clientY,
-					});
-				});
-				*/
-				/*
-				setNodes(nodes.map(function (position) {
-					return {
-						...position,
-						oldX: e.clientX,
-						oldY: e.clientY
-					}
-				}))
-				*/
-				setNodePositions(nodePositions.map(function (position) {
-					return {
-						...position,
-						oldX: e.clientX,
-						oldY: e.clientY
-					}
-				}))
+					};
+				}),
+			);
+		} else if (e.button === 0) {
+			if (e.target === containerRef.current) {
+				setPanning(true);
+				setNodes(
+					nodes.map(function (position) {
+						return {
+							...position,
+							oldX: e.clientX,
+							oldY: e.clientY,
+						};
+					}),
+				);
 			} else {
 			}
 		} else {
@@ -130,38 +65,17 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 	}
 	function onMouseMove(e) {
 		if (isPanning) {
-			/*
-			nodePositions.forEach(function (value) {
-				const [position, setPosition] = value;
-				setPosition({
-					...position,
-					x: position.x + e.clientX - position.oldX,
-					y: position.y + e.clientY - position.oldY,
-					oldX: e.clientX,
-					oldY: e.clientY,
-				});
-			});
-			*/
-			/*
-			setNodes(nodes.map(function (position) {
-				return {
-					...position,
-					x: position.x + e.clientX - position.oldX,
-					y: position.y + e.clientY - position.oldY,
-					oldX: e.clientX,
-					oldY: e.clientY,
-				}
-			}))
-			*/
-			setNodePositions(nodePositions.map(function (position) {
-				return {
-					...position,
-					x: position.x + e.clientX - position.oldX,
-					y: position.y + e.clientY - position.oldY,
-					oldX: e.clientX,
-					oldY: e.clientY,
-				}
-			}))
+			setNodes(
+				nodes.map(function (position) {
+					return {
+						...position,
+						x: position.x + e.clientX - position.oldX,
+						y: position.y + e.clientY - position.oldY,
+						oldX: e.clientX,
+						oldY: e.clientY,
+					};
+				}),
+			);
 		}
 	}
 	function onWheel(e) {
@@ -169,41 +83,18 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 			const sign = Math.sign(e.deltaY) / 10;
 			const scale = 1 - sign;
 			const rect = containerRef.current.getBoundingClientRect();
-			/*
-			nodePositions.forEach(function (value) {
-				const [position, setPosition] = value;
-				const x = rect.width / 2 - (rect.width / 2 - position.x) * scale - (position.width / 2) * sign;
-				const y = rect.height / 2 - (rect.height / 2 - position.y) * scale - (position.height / 2) * sign;
-				setPosition({
-					...position,
-					x: x,
-					y: y,
-					z: position.z * scale,
-				});
-			});
-			*/
-			/*
-			setNodes(nodes.map(function (position) {
-				const x = rect.width / 2 - (rect.width / 2 - position.x) * scale - (position.width / 2) * sign;
-				const y = rect.height / 2 - (rect.height / 2 - position.y) * scale - (position.height / 2) * sign;
-				return {
-					...position,
-					x: x,
-					y: y,
-					z: position.z * scale,
-				}
-			}))
-			*/
-			setNodePositions(nodePositions.map(function (position) {
-				const x = rect.width / 2 - (rect.width / 2 - position.x) * scale - (position.width / 2) * sign;
-				const y = rect.height / 2 - (rect.height / 2 - position.y) * scale - (position.height / 2) * sign;
-				return {
-					...position,
-					x: x,
-					y: y,
-					z: position.z * scale,
-				}
-			}))
+			setNodes(
+				nodes.map(function (position) {
+					const x = rect.width / 2 - (rect.width / 2 - position.x) * scale - (position.width / 2) * sign;
+					const y = rect.height / 2 - (rect.height / 2 - position.y) * scale - (position.height / 2) * sign;
+					return {
+						...position,
+						x: x,
+						y: y,
+						z: position.z * scale,
+					};
+				}),
+			);
 		}
 	}
 	useEffect(() => {
@@ -214,64 +105,10 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 			window.removeEventListener("mousemove", onMouseMove);
 		};
 	});
-	function initializePosition(index) {
-		return function ({ height, width }) {
-			console.log('initializePosition', index)
-			/*
-			const [position, setPosition] = nodePositions[index];
-			setPosition({
-				...position,
-				height: height,
-				width: width,
-			});
-			*/
-			const updated = nodePositions.slice()
-			const x = 0 < index ? updated[index-1].x + updated[index-1].width + 10 : 0
-			const y = 0 < index ? updated[index-1].y + updated[index-1].height + 10 : 0
-			updated[index] = {
-				...updated[index],
-				height: height,
-				width: width,
-				x,
-				y,
-			}
-			console.log('updated', updated)
-			setNodePositions(updated)
-		};
-	}
-	function updatePosition(index) {
-		return function ({ x, y, z }) {
-			/*
-			const [position, setPosition] = nodePositions[index];
-			setPosition({
-				...position,
-				x: x,
-				y: y,
-				z: z,
-			});
-			*/
-			const updated = nodePositions.slice()
-			updated[index] = {
-				...updated[index],
-				x: x,
-				y: y,
-				z: z
-			}
-			setNodePositions(updated)
-		};
-	}
-    const initializeStart = nodePositions.findIndex(function (position) {
-        return position.width === null && position.height === null
-    })
-    if (0 <= initializeStart) {
-        setTimeout(function () {
-            render.create(route.name, 'NODE', initializeStart, true)
-        }, 0)
-    }
 	return (
 		<div className="debug-grid relative overflow-hidden mw-100 mh-100 h-100 w-100" ref={containerRef} onMouseDown={onMouseDown} onWheel={onWheel}>
-			{nodePositions.map(function (node, index) {
-				const absolutePosition = abstractToAbsolute(nodePositions[index]);
+			{nodes.map(function (node, index) {
+				const absolutePosition = abstractToAbsolute(nodes[index]);
 				return (
 					<Node
 						key={index}
@@ -279,25 +116,18 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 						render={render}
 						component={nodes[index].component}
 						index={index}
-						/*
 						x={nodes[index].x}
 						y={nodes[index].y}
 						z={nodes[index].z}
 						width={nodes[index].width}
 						height={nodes[index].height}
-						*/
-						x={nodePositions[index].x}
-						y={nodePositions[index].y}
-						z={nodePositions[index].z}
-						width={nodePositions[index].width}
-						height={nodePositions[index].height}
 						dataX={absolutePosition.x}
 						dataY={absolutePosition.y}
 						dataZ={absolutePosition.z}
 						initializeNode={initializeNode}
+						createNode={createNode}
 						updateNode={updateNode}
-						initializePosition={initializePosition(index)}
-						updatePosition={updatePosition(index)}
+						deleteNode={deleteNode}
 						{...nodes[index].props}
 					/>
 				);

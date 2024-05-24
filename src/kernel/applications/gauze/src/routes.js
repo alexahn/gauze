@@ -123,7 +123,7 @@ const routes = [
 						return Promise.resolve(true);
 					});
 			} else if (proxyJWT) {
-				const decoded = jose.decodeProtectedHeader(proxyJWT);
+				const decoded = jose.decodeJwt(proxyJWT);
 				const proxy = {
 					gauze__proxy__id: decoded.proxy_id,
 				};

@@ -299,7 +299,6 @@ mutation enter_session($proxy: Environment_Mutation__Proxy) {
 				operationName: "enter_session",
 			})
 			.then(function (data) {
-				self.session = data.data.environment.enter_session;
 				return data.data.environment.enter_session;
 			});
 	}

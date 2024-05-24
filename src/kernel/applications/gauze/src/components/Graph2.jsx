@@ -41,9 +41,9 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 				z: 1,
 				height: null,
 				width: null,
-			}
-		})
-	})
+			};
+		});
+	});
 	if (nodePositions.length < nodes.length) {
 		const added = nodes.slice(nodePositions.length).map(function (node) {
 			return {
@@ -55,10 +55,10 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 				z: nodePositions[0].z,
 				height: null,
 				width: null,
-			}
-		})
-		const updated = [...nodePositions].concat(added)
-		setNodePositions(updated)
+			};
+		});
+		const updated = [...nodePositions].concat(added);
+		setNodePositions(updated);
 	}
 	function onMouseDown(e) {
 		//e.preventDefault();
@@ -84,13 +84,15 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 				}
 			}))
 			*/
-			setNodePositions(nodePositions.map(function (position) {
-				return {
-					...position,
-					oldX: e.clientX,
-					oldY: e.clientY
-				}
-			}))
+			setNodePositions(
+				nodePositions.map(function (position) {
+					return {
+						...position,
+						oldX: e.clientX,
+						oldY: e.clientY,
+					};
+				}),
+			);
 		} else if (e.button === 0) {
 			if (e.target === containerRef.current) {
 				setPanning(true);
@@ -113,13 +115,15 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 					}
 				}))
 				*/
-				setNodePositions(nodePositions.map(function (position) {
-					return {
-						...position,
-						oldX: e.clientX,
-						oldY: e.clientY
-					}
-				}))
+				setNodePositions(
+					nodePositions.map(function (position) {
+						return {
+							...position,
+							oldX: e.clientX,
+							oldY: e.clientY,
+						};
+					}),
+				);
 			} else {
 			}
 		} else {
@@ -153,15 +157,17 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 				}
 			}))
 			*/
-			setNodePositions(nodePositions.map(function (position) {
-				return {
-					...position,
-					x: position.x + e.clientX - position.oldX,
-					y: position.y + e.clientY - position.oldY,
-					oldX: e.clientX,
-					oldY: e.clientY,
-				}
-			}))
+			setNodePositions(
+				nodePositions.map(function (position) {
+					return {
+						...position,
+						x: position.x + e.clientX - position.oldX,
+						y: position.y + e.clientY - position.oldY,
+						oldX: e.clientX,
+						oldY: e.clientY,
+					};
+				}),
+			);
 		}
 	}
 	function onWheel(e) {
@@ -194,16 +200,18 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 				}
 			}))
 			*/
-			setNodePositions(nodePositions.map(function (position) {
-				const x = rect.width / 2 - (rect.width / 2 - position.x) * scale - (position.width / 2) * sign;
-				const y = rect.height / 2 - (rect.height / 2 - position.y) * scale - (position.height / 2) * sign;
-				return {
-					...position,
-					x: x,
-					y: y,
-					z: position.z * scale,
-				}
-			}))
+			setNodePositions(
+				nodePositions.map(function (position) {
+					const x = rect.width / 2 - (rect.width / 2 - position.x) * scale - (position.width / 2) * sign;
+					const y = rect.height / 2 - (rect.height / 2 - position.y) * scale - (position.height / 2) * sign;
+					return {
+						...position,
+						x: x,
+						y: y,
+						z: position.z * scale,
+					};
+				}),
+			);
 		}
 	}
 	useEffect(() => {
@@ -216,7 +224,7 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 	});
 	function initializePosition(index) {
 		return function ({ height, width }) {
-			console.log('initializePosition', index)
+			console.log("initializePosition", index);
 			/*
 			const [position, setPosition] = nodePositions[index];
 			setPosition({
@@ -225,18 +233,18 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 				width: width,
 			});
 			*/
-			const updated = nodePositions.slice()
-			const x = 0 < index ? updated[index-1].x + updated[index-1].width + 10 : 0
-			const y = 0 < index ? updated[index-1].y + updated[index-1].height + 10 : 0
+			const updated = nodePositions.slice();
+			const x = 0 < index ? updated[index - 1].x + updated[index - 1].width + 10 : 0;
+			const y = 0 < index ? updated[index - 1].y + updated[index - 1].height + 10 : 0;
 			updated[index] = {
 				...updated[index],
 				height: height,
 				width: width,
 				x,
 				y,
-			}
-			console.log('updated', updated)
-			setNodePositions(updated)
+			};
+			console.log("updated", updated);
+			setNodePositions(updated);
 		};
 	}
 	function updatePosition(index) {
@@ -250,24 +258,24 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 				z: z,
 			});
 			*/
-			const updated = nodePositions.slice()
+			const updated = nodePositions.slice();
 			updated[index] = {
 				...updated[index],
 				x: x,
 				y: y,
-				z: z
-			}
-			setNodePositions(updated)
+				z: z,
+			};
+			setNodePositions(updated);
 		};
 	}
-    const initializeStart = nodePositions.findIndex(function (position) {
-        return position.width === null && position.height === null
-    })
-    if (0 <= initializeStart) {
-        setTimeout(function () {
-            render.create(route.name, 'NODE', initializeStart, true)
-        }, 0)
-    }
+	const initializeStart = nodePositions.findIndex(function (position) {
+		return position.width === null && position.height === null;
+	});
+	if (0 <= initializeStart) {
+		setTimeout(function () {
+			render.create(route.name, "NODE", initializeStart, true);
+		}, 0);
+	}
 	return (
 		<div className="debug-grid relative overflow-hidden mw-100 mh-100 h-100 w-100" ref={containerRef} onMouseDown={onMouseDown} onWheel={onWheel}>
 			{nodePositions.map(function (node, index) {

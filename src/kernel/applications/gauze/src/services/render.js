@@ -66,7 +66,6 @@ class RenderService {
 	unsubscribe(route, itemType, itemID, subscriptionID) {
 		const self = this;
 		const key = [route, itemType, itemID, subscriptionID].join(".");
-		console.log('unsub key', key)
 		const existing = self.readField(self.subscriptions, key);
 		if (existing) {
 			self.deleteField(self.subscriptions, key);
@@ -80,7 +79,6 @@ class RenderService {
 		const key = [route, type, id].join(".");
 		const itemIndex = self.readField(self.index, key);
 		const handlers = self.readField(self.subscriptions, key);
-		console.log('trigger', route, type, id)
 		if (handlers) {
 			Object.keys(handlers).forEach(function (subscriptionID) {
 				const item = self.collection[itemIndex];
@@ -96,8 +94,8 @@ class RenderService {
 	}
 	all(route, type) {
 		const self = this;
-		const key = [route, type].join('.')
-		const index = self.readField(self.index, key)
+		const key = [route, type].join(".");
+		const index = self.readField(self.index, key);
 		if (index) {
 			return Object.keys(typeIndex).map(function (id) {
 				const index = typeIndex[id];

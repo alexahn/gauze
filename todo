@@ -534,6 +534,12 @@
 			[x] the browser limitations of rendering elements in arbitrary positions prevents us from using a tree to render objects in arbitrary positions because the parent element must always have a dimension greater than the children
 				[x] the only way to allow a child element to be moved anywhere is to grow the dimensions of the parent to the entire viewport, but this causes issues with event handling
 					[x] it is probably possible to set up an elaborate event naming scheme so that we can handle mouse clicks through all the layers but i've opted to flatten the ui for now
+		[ ] performance refactoring
+			[ ] refactor graph ui to use render service to store data
+			[ ] set up subscriptions per node
+			[ ] maybe we can avoid using the render service if we can throttle the state updates
+				[ ] useCallback with a throttled state update on subscription changes (maybe per 100ms)
+			[ ] find a way to skip mouse event registration if it has already been done (instead of setting up and tearing down on every render)
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages
