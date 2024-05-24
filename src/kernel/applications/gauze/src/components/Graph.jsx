@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 
 import Node from "./Node.jsx";
 
@@ -26,10 +26,14 @@ function abstractToAbsolute({ x, y, z, width, height }) {
 	};
 }
 
-export default function Graph({ nodes }) {
+export default function Graph({ route, render, nodes, setNodes, initializeNode, updateNode }) {
+	console.log('nodes', nodes)
 	const containerRef = useRef();
 	const [isPanning, setPanning] = useState(false);
-	const nodePositions = [];
+	//const nodePositions = [];
+	// nodes
+	// nodePositions
+	/*
 	nodes.map(function (node, index) {
 		nodePositions[index] = useState({
 			oldX: 0,
@@ -41,11 +45,20 @@ export default function Graph({ nodes }) {
 			width: 0,
 		});
 	});
+	*/
+	//const [nodePositions, setNodePositions] = useState(nodes)
+	/*
+	const [nodePositions, setNodePositions] = useState(nodes.map(function (node) {
+
+	}))
+	*/
+	//console.log('nodePositions', nodePositions)
 	function onMouseDown(e) {
 		//e.preventDefault();
 		if (e.button === 2) {
 		} else if (e.button === 1) {
 			setPanning(true);
+			/*
 			nodePositions.forEach(function (value) {
 				const [position, setPosition] = value;
 				setPosition({
@@ -54,9 +67,18 @@ export default function Graph({ nodes }) {
 					oldY: e.clientY,
 				});
 			});
+			*/
+			setNodes(nodes.map(function (position) {
+				return {
+					...position,
+					oldX: e.clientX,
+					oldY: e.clientY
+				}
+			}))
 		} else if (e.button === 0) {
 			if (e.target === containerRef.current) {
 				setPanning(true);
+				/*
 				nodePositions.forEach(function (value) {
 					const [position, setPosition] = value;
 					setPosition({
@@ -65,6 +87,14 @@ export default function Graph({ nodes }) {
 						oldY: e.clientY,
 					});
 				});
+				*/
+				setNodes(nodes.map(function (position) {
+					return {
+						...position,
+						oldX: e.clientX,
+						oldY: e.clientY
+					}
+				}))
 			} else {
 			}
 		} else {
@@ -75,6 +105,7 @@ export default function Graph({ nodes }) {
 	}
 	function onMouseMove(e) {
 		if (isPanning) {
+			/*
 			nodePositions.forEach(function (value) {
 				const [position, setPosition] = value;
 				setPosition({
@@ -85,6 +116,16 @@ export default function Graph({ nodes }) {
 					oldY: e.clientY,
 				});
 			});
+			*/
+			setNodes(nodes.map(function (position) {
+				return {
+					...position,
+					x: position.x + e.clientX - position.oldX,
+					y: position.y + e.clientY - position.oldY,
+					oldX: e.clientX,
+					oldY: e.clientY,
+				}
+			}))
 		}
 	}
 	function onWheel(e) {
@@ -92,6 +133,7 @@ export default function Graph({ nodes }) {
 			const sign = Math.sign(e.deltaY) / 10;
 			const scale = 1 - sign;
 			const rect = containerRef.current.getBoundingClientRect();
+			/*
 			nodePositions.forEach(function (value) {
 				const [position, setPosition] = value;
 				const x = rect.width / 2 - (rect.width / 2 - position.x) * scale - (position.width / 2) * sign;
@@ -103,6 +145,17 @@ export default function Graph({ nodes }) {
 					z: position.z * scale,
 				});
 			});
+			*/
+			setNodes(nodes.map(function (position) {
+				const x = rect.width / 2 - (rect.width / 2 - position.x) * scale - (position.width / 2) * sign;
+				const y = rect.height / 2 - (rect.height / 2 - position.y) * scale - (position.height / 2) * sign;
+				return {
+					...position,
+					x: x,
+					y: y,
+					z: position.z * scale,
+				}
+			}))
 		}
 	}
 	useEffect(() => {
@@ -115,16 +168,28 @@ export default function Graph({ nodes }) {
 	});
 	function initializePosition(index) {
 		return function ({ height, width }) {
+			console.log('initializePosition', index)
+			/*
 			const [position, setPosition] = nodePositions[index];
 			setPosition({
 				...position,
 				height: height,
 				width: width,
 			});
+			*/
+			const updated = nodePositions.slice()
+			updated[index] = {
+				...updated[index],
+				height: height,
+				width: width
+			}
+			console.log('updated', updated)
+			setNodePositions(updated)
 		};
 	}
 	function updatePosition(index) {
 		return function ({ x, y, z }) {
+			/*
 			const [position, setPosition] = nodePositions[index];
 			setPosition({
 				...position,
@@ -132,22 +197,50 @@ export default function Graph({ nodes }) {
 				y: y,
 				z: z,
 			});
+			*/
+			const updated = nodePositions.slice()
+			updated[index] = {
+				...updated[index],
+				x: x,
+				y: y,
+				z: z
+			}
+			setNodePositions(updated)
 		};
 	}
+	/*
+	const initializeStart = nodePositions.findIndex(function (position) {
+		return position.width === null && position.height === null
+	})
+	if (0 <= initializeStart) {
+		setTimeout(function () {
+			console.log('initializing', initializeStart)
+			console.log('initializeStart', initializeStart, nodePositions)
+			render.create(route.name, 'NODE', initializeStart, true)
+		}, 500)
+	}
+	*/
 	return (
 		<div className="debug-grid relative overflow-hidden mw-100 mh-100 h-100 w-100" ref={containerRef} onMouseDown={onMouseDown} onWheel={onWheel}>
 			{nodes.map(function (node, index) {
-				const absolutePosition = abstractToAbsolute(nodePositions[index][0]);
+				const absolutePosition = abstractToAbsolute(nodes[index]);
 				return (
 					<Node
-						component={node.component}
 						key={index}
-						x={nodePositions[index][0].x}
-						y={nodePositions[index][0].y}
-						z={nodePositions[index][0].z}
+						route={route}
+						render={render}
+						component={node.component}
+						index={index}
+						x={nodes[index].x}
+						y={nodes[index].y}
+						z={nodes[index].z}
+						width={nodes[index].width}
+						height={nodes[index].height}
 						dataX={absolutePosition.x}
 						dataY={absolutePosition.y}
 						dataZ={absolutePosition.z}
+						initializeNode={initializeNode}
+						updateNode={updateNode}
 						initializePosition={initializePosition(index)}
 						updatePosition={updatePosition(index)}
 						{...nodes[index].props}

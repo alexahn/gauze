@@ -4,62 +4,139 @@ import { useState } from "react";
 import Graph from "./Graph.jsx";
 import Node from "./Node.jsx";
 
-export default function Root({ gauze, model, router }) {
-	function node1() {
-		return <h1>Hello</h1>;
-	}
-	function node2() {
-		return <h1>Goodbye</h1>;
-	}
-	const nodes = [
+export default function Root({ gauze, model, router, route, render }) {
+	const [nodes, setNodes] = useState(function () {
+		console.log('ONLY CALL ONCE')
+		return [
 		{
 			key: "1",
-			x: 0,
-			y: 0,
+			oldX: 0,
+			oldY: 0,
+			x: null,
+			y: null,
 			z: 1,
+			height: null,
+			width: null,
 			component: node1,
 			props: {},
 		},
 		{
 			key: "2",
-			x: 100,
-			y: 100,
+			oldX: 0,
+			oldY: 0,
+			x: null,
+			y: null,
 			z: 1,
+			height: null,
+			width: null,
 			component: node2,
 			props: {},
 		},
 		{
 			key: "3",
-			x: 100,
-			y: 200,
+			oldX: 0,
+			oldY: 0,
+			x: null,
+			y: null,
 			z: 1,
+			height: null,
+			width: null,
 			component: node1,
 			props: {},
 		},
 		{
 			key: "4",
-			x: 100,
-			y: 300,
+			oldX: 0,
+			oldY: 0,
+			x: null,
+			y: null,
 			z: 1,
+			height: null,
+			width: null,
 			component: node2,
 			props: {},
 		},
 		{
 			key: "5",
-			x: 200,
-			y: 200,
+			oldX: 0,
+			oldY: 0,
+			x: null,
+			y: null,
 			z: 1,
+			height: null,
+			width: null,
 			component: node1,
 			props: {},
 		},
 		{
 			key: "6",
-			x: 200,
-			y: 300,
+			oldX: 0,
+			oldY: 0,
+			x: null,
+			y: null,
 			z: 1,
+			height: null,
+			width: null,
 			component: node2,
 			props: {},
 		},
-	];
-	return <Graph nodes={nodes} />;
+	]})
+	function initializeNode(index, { width, height }) {
+		console.log('initializeNode', index, width, height)
+		const updated = [...nodes]
+		updated[index] = {
+			...updated[index],
+			width,
+			height
+		}
+		console.log('updated', updated)
+		setNodes(updated)
+	}
+	function updateNode(index, { x, y, z }) {
+		const updated = [...nodes]
+		updated[index] = {
+			...updated[index],
+			x,
+			y,
+			z
+		}
+		setNodes(updated)
+	}
+	function node1({text}) {
+		return <h1>Hello {text}</h1>;
+	}
+	function node2({text}) {
+		return <h1>Goodbye {text}</h1>;
+	}
+	/*
+	setTimeout(function () {
+		console.log('NODES MODIFIED')
+		const updated = nodes.map(function (node) {
+			return {
+				...node,
+				props: {
+					text: "begin"
+				}
+			}
+		})
+		updated.push({
+			...updated[0],
+			props: {
+				text: "end"
+			}
+		})
+		setNodes(updated)
+		console.log('nodes', nodes)
+	}, 5000)
+	*/
+    const initializeStart = nodes.findIndex(function (position) {
+        return position.width === null && position.height === null
+    })
+    if (0 <= initializeStart) {
+        setTimeout(function () {
+            console.log('initializing', initializeStart)
+            render.create(route.name, 'NODE', initializeStart, true)
+        }, 0)
+    }
+	return <Graph key={"graph"} route={route} render={render} nodes={nodes} setNodes={setNodes} initializeNode={initializeNode} updateNode={updateNode} />;
 }

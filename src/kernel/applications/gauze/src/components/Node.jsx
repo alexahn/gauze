@@ -1,7 +1,8 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
+import { v4 as uuidv4 } from "uuid";
 
-export default function Node({ x, y, z, dataX, dataY, dataZ, initializePosition, updatePosition, ...props }) {
+export default function Node({ route, render, index, x, y, z, width, height, dataX, dataY, dataZ, initializeNode, updateNode, ...props }) {
 	const containerRef = useRef();
 	const [isLoaded, setLoaded] = useState(false);
 	const [isDragging, setDragging] = useState(false);
@@ -32,7 +33,7 @@ export default function Node({ x, y, z, dataX, dataY, dataZ, initializePosition,
 				oldX: e.clientX,
 				oldY: e.clientY,
 			});
-			updatePosition({
+			updateNode(index, {
 				x: x + e.clientX - position.oldX,
 				y: y + e.clientY - position.oldY,
 				z: z,
@@ -40,9 +41,29 @@ export default function Node({ x, y, z, dataX, dataY, dataZ, initializePosition,
 		}
 	}
 	useEffect(() => {
+		const subscriptionID = uuidv4();
 		if (!isLoaded) {
-			initializePosition({ height: containerRef.current.offsetHeight, width: containerRef.current.offsetWidth });
-			setLoaded(true);
+			// if subscribed already, unsubscribe, and resubscribe
+			// if not subscribe, subscribe
+			console.log('NOT LOADED')
+			render.unsubscribe(route.name, 'NODE', index, index)
+			render.subscribe(route.name, 'NODE', index, index, function (data) {
+				console.log('enter')
+				setTimeout(function () {
+					initializeNode(index, { height: containerRef.current.offsetHeight, width: containerRef.current.offsetWidth });
+					console.log('initialized', index)
+					render.unsubscribe(route.name, 'NODE', index, subscriptionID)
+					setLoaded(true);
+				}, 0)
+			})
+			/*
+			subscription.on(function (data) {
+				setTimeout(function () {
+					initializePosition({ height: containerRef.current.offsetHeight, width: containerRef.current.offsetWidth });
+					subscription.finish()  // triggers the next one
+				}, 0)
+			})
+			*/
 		}
 		window.addEventListener("mouseup", onMouseUp);
 		window.addEventListener("mousemove", onMouseMove);
@@ -62,6 +83,8 @@ export default function Node({ x, y, z, dataX, dataY, dataZ, initializePosition,
 			data-x={dataX}
 			data-y={dataY}
 			data-z={dataZ}
+			data-width={width}
+			data-height={height}
 		>
 			<props.component {...props} />
 		</div>
