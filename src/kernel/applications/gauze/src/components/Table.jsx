@@ -9,7 +9,6 @@ import Pagination from "./Pagination.jsx";
 import { FileTextIcon, TrashIcon, Pencil2Icon } from "@radix-ui/react-icons";
 
 export default function Table({ route, router, gauze, model, type, from, to, variables, data, count }) {
-	console.log("type", type);
 	if (!type) return;
 	const header = model.read("HEADER", type);
 	const [fields, setFields] = useState(header.fields);

@@ -18,6 +18,7 @@ export default function Node({ route, render, index, x, y, z, width, height, dat
 		} else if (e.button === 0) {
 			if (containerRef.current.contains(e.target)) {
 				setDragging(true);
+				//createNode()
 				setPosition({
 					oldX: e.clientX,
 					oldY: e.clientY,
@@ -63,7 +64,6 @@ export default function Node({ route, render, index, x, y, z, width, height, dat
 			window.removeEventListener("mousemove", onMouseMove);
 		};
 	});
-	console.log("props", node.props);
 	return (
 		<div
 			className="absolute shadow-1"

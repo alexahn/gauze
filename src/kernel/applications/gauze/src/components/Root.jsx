@@ -52,7 +52,6 @@ export default function Root({ gauze, model, router, route, render }) {
 		setLoaded(true);
 		// query per node for now, but stitch together a single query later (shouldn't be too hard because we can just create named query (using a hash) for every node
 		nodes.forEach(function (node, index) {
-			console.log(model.all("HEADER"));
 			let header = null;
 			if (node.props.type) {
 				header = model.read("HEADER", node.props.type);
@@ -63,14 +62,12 @@ export default function Root({ gauze, model, router, route, render }) {
 			} else {
 				throw new Error("Invalid node definition");
 			}
-			console.log("header", header);
 			return gauze.read(header, node.props.variables).then(function (data) {
 				if (data && data.length) {
 					data.forEach(function (item) {
 						model.create(item._metadata.type, item._metadata.id, item.attributes);
 					});
 				}
-				console.log("updating");
 				updateNode(index, {
 					...node,
 					props: {
@@ -111,9 +108,6 @@ export default function Root({ gauze, model, router, route, render }) {
 			oldY: 0,
 			width: null,
 			height: null,
-			props: {
-				text: "Goodbye",
-			},
 		});
 		setNodes(updated);
 	}
@@ -142,7 +136,6 @@ export default function Root({ gauze, model, router, route, render }) {
 	if (0 <= initializeStart) {
 		setTimeout(function () {
 			render.create(route.name, "NODE", initializeStart, true);
-			console.log("nodes", nodes);
 		}, 0);
 	}
 	if (initialized) {
