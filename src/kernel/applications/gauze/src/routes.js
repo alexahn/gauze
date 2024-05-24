@@ -215,7 +215,7 @@ const routes = [
 	},
 	{
 		name: "system.root",
-		path: "/root",
+		path: "/root?target",
 		canActivate: (router, dependencies) => (toState, fromState, done) => {
 			//onActivate: function ({ dependencies }) {
 			const { services } = dependencies;

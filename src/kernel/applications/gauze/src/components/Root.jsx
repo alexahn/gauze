@@ -5,11 +5,14 @@ import Graph from "./Graph.jsx";
 import Node from "./Node.jsx";
 
 export default function Root({ gauze, model, router, route, render }) {
+	// create first node based on session type
+
 	const [nodes, setNodes] = useState(function () {
 		console.log('ONLY CALL ONCE')
 		return [
 		{
 			key: "1",
+			/*
 			oldX: 0,
 			oldY: 0,
 			x: null,
@@ -17,11 +20,13 @@ export default function Root({ gauze, model, router, route, render }) {
 			z: 1,
 			height: null,
 			width: null,
+			*/
 			component: node1,
 			props: {},
 		},
 		{
 			key: "2",
+			/*
 			oldX: 0,
 			oldY: 0,
 			x: null,
@@ -29,11 +34,13 @@ export default function Root({ gauze, model, router, route, render }) {
 			z: 1,
 			height: null,
 			width: null,
+			*/
 			component: node2,
 			props: {},
 		},
 		{
 			key: "3",
+			/*
 			oldX: 0,
 			oldY: 0,
 			x: null,
@@ -41,11 +48,13 @@ export default function Root({ gauze, model, router, route, render }) {
 			z: 1,
 			height: null,
 			width: null,
+			*/
 			component: node1,
 			props: {},
 		},
 		{
 			key: "4",
+			/*
 			oldX: 0,
 			oldY: 0,
 			x: null,
@@ -53,11 +62,13 @@ export default function Root({ gauze, model, router, route, render }) {
 			z: 1,
 			height: null,
 			width: null,
+			*/
 			component: node2,
 			props: {},
 		},
 		{
 			key: "5",
+			/*
 			oldX: 0,
 			oldY: 0,
 			x: null,
@@ -65,11 +76,13 @@ export default function Root({ gauze, model, router, route, render }) {
 			z: 1,
 			height: null,
 			width: null,
+			*/
 			component: node1,
 			props: {},
 		},
 		{
 			key: "6",
+			/*
 			oldX: 0,
 			oldY: 0,
 			x: null,
@@ -77,6 +90,7 @@ export default function Root({ gauze, model, router, route, render }) {
 			z: 1,
 			height: null,
 			width: null,
+			*/
 			component: node2,
 			props: {},
 		},
@@ -84,10 +98,14 @@ export default function Root({ gauze, model, router, route, render }) {
 	function initializeNode(index, { width, height }) {
 		console.log('initializeNode', index, width, height)
 		const updated = [...nodes]
+		const x = 0 < index ? updated[index-1].x + updated[index-1].width + 10 : 0
+		const y = 0 < index ? updated[index-1].y + updated[index-1].height + 10 : 0
 		updated[index] = {
 			...updated[index],
 			width,
-			height
+			height,
+			x,
+			y
 		}
 		console.log('updated', updated)
 		setNodes(updated)
@@ -111,14 +129,7 @@ export default function Root({ gauze, model, router, route, render }) {
 	/*
 	setTimeout(function () {
 		console.log('NODES MODIFIED')
-		const updated = nodes.map(function (node) {
-			return {
-				...node,
-				props: {
-					text: "begin"
-				}
-			}
-		})
+		const updated = nodes.slice()
 		updated.push({
 			...updated[0],
 			props: {
@@ -126,9 +137,9 @@ export default function Root({ gauze, model, router, route, render }) {
 			}
 		})
 		setNodes(updated)
-		console.log('nodes', nodes)
 	}, 5000)
 	*/
+	/*
     const initializeStart = nodes.findIndex(function (position) {
         return position.width === null && position.height === null
     })
@@ -138,5 +149,6 @@ export default function Root({ gauze, model, router, route, render }) {
             render.create(route.name, 'NODE', initializeStart, true)
         }, 0)
     }
+	*/
 	return <Graph key={"graph"} route={route} render={render} nodes={nodes} setNodes={setNodes} initializeNode={initializeNode} updateNode={updateNode} />;
 }
