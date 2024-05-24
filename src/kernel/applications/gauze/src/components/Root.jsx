@@ -3,13 +3,19 @@ import { useState } from "react";
 
 import Graph from "./Graph.jsx";
 import Node from "./Node.jsx";
+import Table from "./Table.jsx";
 
 import * as jose from "jose";
 
 export default function Root({ gauze, model, router, route, render }) {
 	// create first node based on session type
-	const [added, setAdded] = useState(false);
-	// load from local storage in the future
+	const [loaded, setLoaded] = useState(false);
+	const [initialized, setInitialized] = useState(false);
+	// note: load from local storage in the future
+	// note: parse all nodes, and stitch together one graphql query
+	// note: refresh the data section for all nodes on load
+	// note: we don't need to wait until the query is done to present data, because we can present the data from local storage
+	const headers = model.all("HEADER");
 	const systemJWT = gauze.getSystemJWT();
 	const systemJWTPayload = jose.decodeJwt(systemJWT);
 	const [nodes, setNodes] = useState(function () {
@@ -24,76 +30,62 @@ export default function Root({ gauze, model, router, route, render }) {
 				z: 1,
 				height: null,
 				width: null,
-				component: node1,
+				component: Table,
 				props: {
-					type: systemJWTPayload.agent_type,
+					gauze: gauze,
+					model: model,
+					router: router,
+					type: null,
+					table_name: systemJWTPayload.agent_type,
 					from: null,
 					to: null,
-					variables: {},
+					variables: {
+						where: {},
+					},
+					data: [],
+					count: 0,
 				},
-			},
-			{
-				key: "2",
-				oldX: 0,
-				oldY: 0,
-				x: null,
-				y: null,
-				z: 1,
-				height: null,
-				width: null,
-				component: node2,
-				props: {},
-			},
-			{
-				key: "3",
-				oldX: 0,
-				oldY: 0,
-				x: null,
-				y: null,
-				z: 1,
-				height: null,
-				width: null,
-				component: node1,
-				props: {},
-			},
-			{
-				key: "4",
-				oldX: 0,
-				oldY: 0,
-				x: null,
-				y: null,
-				z: 1,
-				height: null,
-				width: null,
-				component: node2,
-				props: {},
-			},
-			{
-				key: "5",
-				oldX: 0,
-				oldY: 0,
-				x: null,
-				y: null,
-				z: 1,
-				height: null,
-				width: null,
-				component: node1,
-				props: {},
-			},
-			{
-				key: "6",
-				oldX: 0,
-				oldY: 0,
-				x: null,
-				y: null,
-				z: 1,
-				height: null,
-				width: null,
-				component: node2,
-				props: {},
 			},
 		];
 	});
+	if (!loaded) {
+		setLoaded(true);
+		// query per node for now, but stitch together a single query later (shouldn't be too hard because we can just create named query (using a hash) for every node
+		nodes.forEach(function (node, index) {
+			console.log(model.all("HEADER"));
+			let header = null;
+			if (node.props.type) {
+				header = model.read("HEADER", node.props.type);
+			} else if (node.props.table_name) {
+				header = headers.find(function (header) {
+					return header.table_name === node.props.table_name;
+				});
+			} else {
+				throw new Error("Invalid node definition");
+			}
+			console.log("header", header);
+			return gauze.read(header, node.props.variables).then(function (data) {
+				if (data && data.length) {
+					data.forEach(function (item) {
+						model.create(item._metadata.type, item._metadata.id, item.attributes);
+					});
+				}
+				console.log("updating");
+				updateNode(index, {
+					...node,
+					props: {
+						...node.props,
+						type: header.name,
+						data: data.map(function (item) {
+							return item.attributes;
+						}),
+						count: data.length,
+					},
+				});
+				setInitialized(true);
+			});
+		});
+	}
 	function initializeNode(index, { width, height }) {
 		const updated = [...nodes];
 		const x = 0 < index ? updated[index - 1].x + updated[index - 1].width * updated[index - 1].z + 10 * updated[index - 1].z : 0;
@@ -120,7 +112,7 @@ export default function Root({ gauze, model, router, route, render }) {
 			width: null,
 			height: null,
 			props: {
-				text: "end",
+				text: "Goodbye",
 			},
 		});
 		setNodes(updated);
@@ -150,19 +142,24 @@ export default function Root({ gauze, model, router, route, render }) {
 	if (0 <= initializeStart) {
 		setTimeout(function () {
 			render.create(route.name, "NODE", initializeStart, true);
+			console.log("nodes", nodes);
 		}, 0);
 	}
-	return (
-		<Graph
-			key={"graph"}
-			route={route}
-			render={render}
-			nodes={nodes}
-			setNodes={setNodes}
-			initializeNode={initializeNode}
-			updateNode={updateNode}
-			createNode={createNode}
-			deleteNode={deleteNode}
-		/>
-	);
+	if (initialized) {
+		return (
+			<Graph
+				key={"graph"}
+				route={route}
+				render={render}
+				nodes={nodes}
+				setNodes={setNodes}
+				initializeNode={initializeNode}
+				updateNode={updateNode}
+				createNode={createNode}
+				deleteNode={deleteNode}
+			/>
+		);
+	} else {
+		return <div>Loading</div>;
+	}
 }

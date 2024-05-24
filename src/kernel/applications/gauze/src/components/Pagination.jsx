@@ -110,7 +110,7 @@ export default function Pagination({ page, count, href, reverse }) {
 	});
 	return (
 		<nav>
-			<div className="flex pa1 fr">
+			<div className="flex pa1">
 				{items.map((item, index) => {
 					const { page, type, selected, ...rest } = item;
 					let children = null;

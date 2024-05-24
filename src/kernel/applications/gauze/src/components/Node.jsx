@@ -2,7 +2,7 @@ import React from "react";
 import { useEffect, useState, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-export default function Node({ route, render, index, x, y, z, width, height, dataX, dataY, dataZ, initializeNode, updateNode, createNode, deleteNode, ...props }) {
+export default function Node({ route, render, index, x, y, z, width, height, dataX, dataY, dataZ, initializeNode, updateNode, createNode, deleteNode, node }) {
 	const containerRef = useRef();
 	const [isLoaded, setLoaded] = useState(false);
 	const [isDragging, setDragging] = useState(false);
@@ -13,12 +13,11 @@ export default function Node({ route, render, index, x, y, z, width, height, dat
 	function onMouseDown(e) {
 		if (e.button === 2) {
 			e.preventDefault();
-			deleteNode(index);
+			//deleteNode(index);
 		} else if (e.button === 1) {
 		} else if (e.button === 0) {
 			if (containerRef.current.contains(e.target)) {
 				setDragging(true);
-				createNode();
 				setPosition({
 					oldX: e.clientX,
 					oldY: e.clientY,
@@ -64,6 +63,7 @@ export default function Node({ route, render, index, x, y, z, width, height, dat
 			window.removeEventListener("mousemove", onMouseMove);
 		};
 	});
+	console.log("props", node.props);
 	return (
 		<div
 			className="absolute shadow-1"
@@ -78,7 +78,7 @@ export default function Node({ route, render, index, x, y, z, width, height, dat
 			data-width={width}
 			data-height={height}
 		>
-			<props.component {...props} />
+			<node.component {...node.props} />
 		</div>
 	);
 }

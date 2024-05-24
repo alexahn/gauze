@@ -62,6 +62,7 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 			onChange={handleChange}
 			onKeyDown={onKeyDown}
 			disabled={disabled}
+			style={{ width: "500px" }}
 		/>
 	);
 	return defaultMode ? defaultInput : valueInput;

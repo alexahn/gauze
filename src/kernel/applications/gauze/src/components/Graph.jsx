@@ -114,7 +114,6 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 						key={index}
 						route={route}
 						render={render}
-						component={nodes[index].component}
 						index={index}
 						x={nodes[index].x}
 						y={nodes[index].y}
@@ -128,7 +127,7 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 						createNode={createNode}
 						updateNode={updateNode}
 						deleteNode={deleteNode}
-						{...nodes[index].props}
+						node={node}
 					/>
 				);
 			})}

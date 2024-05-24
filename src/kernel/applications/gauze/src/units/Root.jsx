@@ -11,16 +11,24 @@ export default function RootUnit() {
 	function routeSelector(state) {
 		return state.router.route;
 	}
+	function routerSelector(state) {
+		return state.services.router.default;
+	}
 	function renderSelector(state) {
 		return state.services.render.default;
 	}
+	function modelSelector(state) {
+		return state.services.model.default;
+	}
 	const gauze = useSelector(gauzeSelector);
 	const route = useSelector(routeSelector);
+	const router = useSelector(routerSelector);
 	const render = useSelector(renderSelector);
+	const model = useSelector(modelSelector);
 	return (
 		<div id={id} key={id}>
 			{/* render a pure function component here */}
-			<Root gauze={gauze} route={route} render={render} />
+			<Root gauze={gauze} route={route} router={router} render={render} model={model} />
 		</div>
 	);
 }

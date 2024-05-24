@@ -32,11 +32,3 @@ table .truncate-ns {
 .action {
 	height: 23px;
 }
-
-.PanAndZoomImage-container {
-	overflow: hidden;
-}
-
-.PanAndZoomImage-container div {
-	overflow: hidden;
-}

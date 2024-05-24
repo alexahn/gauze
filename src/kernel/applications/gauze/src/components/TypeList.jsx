@@ -145,12 +145,14 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 		}
 
 		return (
-			<div className="mw-100 w-100">
+			<div className="mw-100 w-100 cf">
 				<h1 align="right">{header.graphql_meta_type}</h1>
 				<div align="right">Type List</div>
 				<hr />
 				<div align="right" className="cf">
-					<Pagination page={page_current} count={page_max} href={href} reverse={true} />
+					<div className="flex fr">
+						<Pagination page={page_current} count={page_max} href={href} reverse={true} />
+					</div>
 				</div>
 				<hr />
 				{/*<div className="mw-100 overflow-x-auto"> */}
