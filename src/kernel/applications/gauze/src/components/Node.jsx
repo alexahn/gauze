@@ -6,6 +6,8 @@ export default function Node({ route, render, index, x, y, z, width, height, dat
 	const containerRef = useRef();
 	const [isLoaded, setLoaded] = useState(false);
 	const [isDragging, setDragging] = useState(false);
+	const [localWidth, setLocalWidth] = useState(width);
+	const [localHeight, setLocalHeight] = useState(height);
 	const [position, setPosition] = useState({
 		oldX: 0,
 		oldY: 0,
@@ -44,15 +46,20 @@ export default function Node({ route, render, index, x, y, z, width, height, dat
 		}
 	}
 	useEffect(() => {
-		const subscriptionID = uuidv4();
-		if (!isLoaded) {
+		//if (!isLoaded) {
+		if (!isLoaded || height === null || width === null) {
 			// if subscribed already, unsubscribe, and resubscribe
 			// if not subscribe, subscribe
 			render.unsubscribe(route.name, "NODE", index, index);
 			render.subscribe(route.name, "NODE", index, index, function (data) {
 				setTimeout(function () {
-					initializeNode(index, { height: containerRef.current.offsetHeight, width: containerRef.current.offsetWidth });
-					render.unsubscribe(route.name, "NODE", index, subscriptionID);
+					const initialized = {
+						...node,
+						height: containerRef.current.offsetHeight,
+						width: containerRef.current.offsetWidth,
+					};
+					initializeNode(index, initialized);
+					render.unsubscribe(route.name, "NODE", index, index);
 					setLoaded(true);
 				}, 0);
 			});
@@ -69,6 +76,7 @@ export default function Node({ route, render, index, x, y, z, width, height, dat
 			className="absolute shadow-1"
 			style={{
 				transform: `translate(${x}px, ${y}px) scale(${z})`,
+				visibility: node.render ? "visible" : "hidden",
 			}}
 			onMouseDown={onMouseDown}
 			ref={containerRef}
@@ -78,7 +86,7 @@ export default function Node({ route, render, index, x, y, z, width, height, dat
 			data-width={width}
 			data-height={height}
 		>
-			<node.component {...node.props} />
+			<node.component node={node} createNode={createNode} updateNode={updateNode} {...node.props} />
 		</div>
 	);
 }

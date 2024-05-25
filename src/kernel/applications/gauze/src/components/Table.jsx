@@ -8,56 +8,141 @@ import Pagination from "./Pagination.jsx";
 
 import { FileTextIcon, TrashIcon, Pencil2Icon } from "@radix-ui/react-icons";
 
-export default function Table({ route, router, gauze, model, type, from, to, variables, data, count }) {
+function read(gauze, model, header, variables) {
+	const transactions = [
+		function () {
+			return gauze.read(header, variables).then(function (data) {
+				data.forEach(function (item) {
+					model.create(item._metadata.type, item._metadata.id, item.attributes);
+				});
+				return data;
+			});
+		},
+		function () {
+			const countVariables = {
+				count: {
+					[header.primary_key]: header.primary_key,
+				},
+				where: variables.where,
+			};
+			return gauze.count(header, countVariables);
+		},
+	];
+	return Promise.all(
+		transactions.map(function (f) {
+			return f();
+		}),
+	);
+}
+
+export default function Table({ route, router, gauze, model, node, createNode, updateNode, type, from, to, variables, data, count }) {
 	if (!type) return;
 	const header = model.read("HEADER", type);
 	const [fields, setFields] = useState(header.fields);
 	const [localWhere, setLocalWhere] = useState(variables.where || {});
 	const [createItem, setCreateItem] = useState({});
 	const [submitCreate, setSubmitCreate] = useState(false);
-
-	//const pagination_key = router.buildUrl(route.name, route.params);
-	//const pagination_set = model.read("PAGINATION_SET", pagination_key);
-	//const pagination_count = model.read("PAGINATION_COUNT", pagination_key);
+	const [syncing, setSyncing] = useState(false);
 
 	const offset = variables.offset ? Number.parseInt(variables.offset) : 0;
 	const limit = variables.limit ? Number.parseInt(variables.limit) : PAGINATION_PAGE_SIZE;
 	const total = count;
-
-	const page_current = Math.floor(Math.max(offset / limit) + 1);
+	const page_current = offset + limit < total ? Math.floor(Math.max(offset / limit) + 1) : Math.ceil(Math.max(total / limit));
 	const page_max_no_skew = Math.ceil(Math.max(total / limit));
 	const page_max = page_max_no_skew < page_current ? page_current : page_max_no_skew;
 
-	function href(item) {
-		var paginate;
-		if (item.type === "previous") {
-			paginate = {
-				limit: limit,
-				offset: Math.max(0, offset - limit),
+	function paginate(item) {
+		return function (e) {
+			var paginate;
+			if (item.type === "previous") {
+				paginate = {
+					limit: limit,
+					offset: Math.max(0, offset - limit),
+				};
+			} else if (item.type === "next") {
+				paginate = {
+					limit: limit,
+					offset: Math.max(0, Math.min((page_max - 1) * limit, offset + limit)),
+				};
+			} else if (item.type === "page") {
+				paginate = {
+					limit: limit,
+					offset: Math.max(0, (item.page - 1) * limit),
+				};
+			} else {
+				paginate = {
+					limit: limit,
+					offset: offset,
+				};
+			}
+			setSyncing(true);
+			const localVariables = {
+				...variables,
+				...paginate,
 			};
-		} else if (item.type === "next") {
-			paginate = {
-				limit: limit,
-				offset: Math.min((page_max - 1) * limit, offset + limit),
-			};
-		} else if (item.type === "page") {
-			paginate = {
-				limit: limit,
-				offset: (item.page - 1) * limit,
-			};
-		} else {
-			paginate = {
-				limit: limit,
-				offset: offset,
-			};
-		}
-		return "";
-		/*
-		return router.buildUrl('', {
-			//...route.params,
-			...paginate,
-		});
-		*/
+			return read(gauze, model, header, localVariables)
+				.then(function (results) {
+					const data = results[0].map(function (item) {
+						return item.attributes;
+					});
+					const count = results[1][0].count;
+					updateNode(node.index, {
+						...node,
+						width: null,
+						height: null,
+						props: {
+							...node.props,
+							data: data,
+							count: count,
+							variables: localVariables,
+						},
+					});
+					setSyncing(false);
+				})
+				.catch(function (err) {
+					setSyncing(false);
+					throw err;
+				});
+		};
+	}
+
+	function traverse(item, to) {
+		return function (e) {
+			console.log("traverse", item, to);
+			// convert graphql to type to name
+			const headers = model.all("HEADER");
+			const toHeader = headers.find(function (header) {
+				return header.graphql_meta_type === to;
+			});
+			console.log("toHeader", toHeader);
+			createNode({
+				oldX: 0,
+				oldY: 0,
+				x: null,
+				y: null,
+				z: 1,
+				height: null,
+				width: null,
+				component: Table,
+				props: {
+					gauze: gauze,
+					model: model,
+					router: router,
+					type: toHeader.name,
+					table_name: null,
+					from: null,
+					to: null,
+					variables: {
+						where: {},
+					},
+					data: [],
+					count: 0,
+				},
+				complete: false,
+				sound: false,
+			});
+			console.log("created");
+		};
 	}
 
 	function updateFilter(field) {
@@ -81,26 +166,57 @@ export default function Table({ route, router, gauze, model, type, from, to, var
 	function applyFilter(field) {
 		return function (e) {
 			if (e.key === "Enter") {
-				router.navigate(route.name, { ...route.params, where: encodeURIComponent(JSON.stringify(localWhere)), offset: 0 });
+				setSyncing(true);
+				const localVariables = {
+					...variables,
+					where: localWhere,
+				};
+				return read(gauze, model, header, localVariables)
+					.then(function (results) {
+						const data = results[0].map(function (item) {
+							return item.attributes;
+						});
+						const count = results[1][0].count;
+						updateNode(node.index, {
+							...node,
+							width: null,
+							height: null,
+							props: {
+								...node.props,
+								data: data,
+								count: count,
+								variables: localVariables,
+							},
+						});
+						setSyncing(false);
+					})
+					.catch(function (err) {
+						setSyncing(false);
+						throw err;
+					});
 			}
 		};
 	}
 
-	function updateFields(field) {
+	function updateFields(name) {
 		return function (e) {
-			const updatedFields = {};
-			header.fields.forEach(function (field) {
-				updatedFields[field.name] = true;
-			});
-			fields.forEach(function (field) {
-				delete updatedFields[field.name];
-			});
 			if (e.target.checked) {
-				delete updatedFields[field];
+				const updatedFields = [...header.fields].filter(function (field) {
+					const exists = fields.find(function (f) {
+						return f.name === field.name;
+					});
+					return exists || field.name === name;
+				});
+				setFields(updatedFields);
 			} else {
-				updatedFields[field] = true;
+				const updatedFields = [...header.fields].filter(function (field) {
+					const exists = fields.find(function (f) {
+						return f.name === field.name;
+					});
+					return exists && field.name !== name;
+				});
+				setFields(updatedFields);
 			}
-			router.navigate(route.name, { ...route.params, fields: encodeURIComponent(JSON.stringify(updatedFields)) });
 		};
 	}
 
@@ -144,7 +260,7 @@ export default function Table({ route, router, gauze, model, type, from, to, var
 			<hr />
 			<div align="left" className="cf">
 				<div className="flex fl">
-					<Pagination page={page_current} count={page_max} href={href} reverse={true} />
+					<Pagination page={page_current} count={page_max} handleClick={paginate} reverse={false} />
 				</div>
 			</div>
 			<hr />
@@ -234,6 +350,7 @@ export default function Table({ route, router, gauze, model, type, from, to, var
 											onChange={updateFilter(field.name)}
 											onKeyDown={applyFilter(field.name)}
 											defaultValue={variables.where ? variables.where[field.name] : null}
+											disabled={syncing}
 										/>
 									</td>
 									<td className="relative mw4 w4 pa1 row" tabIndex="0">
@@ -259,6 +376,39 @@ export default function Table({ route, router, gauze, model, type, from, to, var
 							);
 						})}
 					</tbody>
+					<tfoot className="mw-100">
+						<tr align="right" className="flex flex-wrap">
+							<th align="center" className="mw4 w4">
+								{/*
+								<a href={router.buildUrl(route.name, { ...route.params, where: encodeURIComponent(JSON.stringify(localWhere)) })}>
+									<button>Filter</button>
+								</a>
+								*/}
+							</th>
+							<th className="mw4 w4 pa1 relative row" tabIndex="0">
+								<div className="truncate-ns">RELATIONSHIPS</div>
+								<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">RELATIONSHIPS</span>
+							</th>
+							{data.map(function (item) {
+								return (
+									<th key={item[header.primary_key]} align="center" className="mw4 w4 pa1 relative row" tabIndex="0">
+										<div className="truncate-ns">TRAVERSE</div>
+										<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
+											<div className="pa1">TRAVERSE</div>
+											{header.relationships_to.map(function (to) {
+												return (
+													<div key={to} className="pa1">
+														<button onClick={traverse(item, to)}>{to}</button>
+													</div>
+												);
+											})}
+										</span>
+									</th>
+								);
+							})}
+							<th align="center" className="mw4 w4"></th>
+						</tr>
+					</tfoot>
 				</table>
 			</div>
 		</div>

@@ -29,6 +29,7 @@ export default function Root({ gauze, model, router, route, render }) {
 					gauze: gauze,
 					model: model,
 					router: router,
+					// updateProps
 					type: null,
 					table_name: systemJWTPayload.agent_type,
 					from: null,
@@ -41,6 +42,7 @@ export default function Root({ gauze, model, router, route, render }) {
 				},
 				complete: false,
 				sound: false,
+				render: false,
 			},
 		];
 	});
@@ -119,18 +121,17 @@ export default function Root({ gauze, model, router, route, render }) {
 							return t();
 						}),
 					).then(function (results) {
-						const data = results[0];
-						const count = results[1];
-						console.log("count", count);
+						const data = results[0].map(function (item) {
+							return item.attributes;
+						});
+						const count = results[1][0].count;
 						updateNode(node.index, {
 							...node,
 							props: {
 								...node.props,
 								type: header.name,
-								data: data.map(function (item) {
-									return item.attributes;
-								}),
-								count: count.count,
+								data: data,
+								count: count,
 							},
 							complete: true,
 						});
@@ -139,6 +140,7 @@ export default function Root({ gauze, model, router, route, render }) {
 		)
 			.then(function (results) {
 				setComplete(true);
+				setCompleting(false);
 			})
 			.catch(function (err) {
 				setCompleting(false);
@@ -156,29 +158,51 @@ export default function Root({ gauze, model, router, route, render }) {
 				})
 				.map(function (node) {
 					const header = getNodeHeader(headers, node);
-					return gauze.read(header, node.props.variables).then(function (data) {
-						if (data && data.length) {
-							data.forEach(function (item) {
-								model.create(item._metadata.type, item._metadata.id, item.attributes);
+					const transactions = [
+						function () {
+							return gauze.read(header, node.props.variables).then(function (data) {
+								if (data && data.length) {
+									data.forEach(function (item) {
+										model.create(item._metadata.type, item._metadata.id, item.attributes);
+									});
+								}
+								return data;
 							});
-						}
+						},
+						function () {
+							return gauze.count(header, {
+								count: {
+									[header.primary_key]: header.primary_key,
+								},
+								where: node.props.variables.where,
+							});
+						},
+					];
+					return Promise.all(
+						transactions.map(function (t) {
+							return t();
+						}),
+					).then(function (results) {
+						const data = results[0].map(function (item) {
+							return item.attributes;
+						});
+						const count = results[1][0].count;
 						updateNode(node.index, {
 							...node,
 							props: {
 								...node.props,
 								type: header.name,
-								data: data.map(function (item) {
-									return item.attributes;
-								}),
-								count: data.length,
+								data: data,
+								count: count,
 							},
-							sound: true,
+							complete: true,
 						});
 					});
 				}),
 		)
 			.then(function (results) {
 				setSound(true);
+				setSounding(false);
 			})
 			.catch(function (err) {
 				setSounding(false);
@@ -186,33 +210,37 @@ export default function Root({ gauze, model, router, route, render }) {
 			});
 	}
 
-	function initializeNode(index, { width, height }) {
+	function initializeNode(index, node) {
+		const { width, height } = node;
 		const updated = [...nodes];
-		const x = 0 < index ? updated[index - 1].x + updated[index - 1].width * updated[index - 1].z + 10 * updated[index - 1].z : 0;
-		const y = 0 < index ? updated[index - 1].y + updated[index - 1].height * updated[index - 1].z + 10 * updated[index - 1].z : 0;
-		updated[index] = {
-			...updated[index],
-			width,
-			height,
-			x,
-			y,
-			z: updated[0].z,
-		};
+		// this node has already rendered before, so we only need to update the width and height
+		if (node.render) {
+			updated[index] = {
+				...node,
+				width,
+				height,
+			};
+		} else {
+			const x = 0 < index ? updated[index - 1].x + updated[index - 1].width * updated[index - 1].z + 10 * updated[index - 1].z : 0;
+			const y = 0 < index ? updated[index - 1].y + updated[index - 1].height * updated[index - 1].z + 10 * updated[index - 1].z : 0;
+			updated[index] = {
+				...node,
+				width,
+				height,
+				x,
+				y,
+				z: updated[0].z,
+				render: true,
+			};
+		}
 		setNodes(updated);
 	}
 	function createNode(node) {
 		const updated = [...nodes];
-		updated.push({
-			...updated[0],
-			x: null,
-			y: null,
-			z: null,
-			oldX: 0,
-			oldY: 0,
-			width: null,
-			height: null,
-		});
+		node.index = nodes.length;
+		updated.push(node);
 		setNodes(updated);
+		setComplete(false);
 	}
 	function updateNode(index, node) {
 		const updated = [...nodes];
