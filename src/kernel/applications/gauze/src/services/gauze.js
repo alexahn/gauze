@@ -390,6 +390,8 @@ query header {
         graphql_mutation_attributes_type
         graphql_mutation_where_type
         graphql_mutation_where_string_type
+		relationships_to
+		relationships_from
 	}
 }
 `;

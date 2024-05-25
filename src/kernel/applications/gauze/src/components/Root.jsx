@@ -11,10 +11,20 @@ export default function Root({ gauze, model, router, route, render }) {
 	// create first node based on session type
 	const [loaded, setLoaded] = useState(false);
 	const [initialized, setInitialized] = useState(false);
+	const initializeStart = nodes.findIndex(function (position) {
+		return position.width === null && position.height === null;
+	});
 	// note: load from local storage in the future
 	// note: parse all nodes, and stitch together one graphql query
 	// note: refresh the data section for all nodes on load
 	// note: we don't need to wait until the query is done to present data, because we can present the data from local storage
+	// note: there are four main states for nodes:
+	// note:    incomplete (we don't have all the fields associated with the identifer)
+	// note:    complete (we have all the fields associated with the identifier)
+	// note:    unsound (the fields we have are not the latest values)
+	// note:    sound (the fields we have are the latest values)
+	// note: we can only proceed with rendering once every node is complete (block until we have completeness if necessary)
+	// note: we can proceed with soundness after rendering
 	const headers = model.all("HEADER");
 	const systemJWT = gauze.getSystemJWT();
 	const systemJWTPayload = jose.decodeJwt(systemJWT);
@@ -45,10 +55,12 @@ export default function Root({ gauze, model, router, route, render }) {
 					data: [],
 					count: 0,
 				},
+				complete: false,
+				sound: false
 			},
 		];
 	});
-	if (!loaded) {
+	if (initializeStart === -1 && !loaded) {
 		setLoaded(true);
 		// query per node for now, but stitch together a single query later (shouldn't be too hard because we can just create named query (using a hash) for every node
 		nodes.forEach(function (node, index) {
@@ -62,6 +74,7 @@ export default function Root({ gauze, model, router, route, render }) {
 			} else {
 				throw new Error("Invalid node definition");
 			}
+			console.log('header', header)
 			return gauze.read(header, node.props.variables).then(function (data) {
 				if (data && data.length) {
 					data.forEach(function (item) {
@@ -130,9 +143,6 @@ export default function Root({ gauze, model, router, route, render }) {
 	function node2({ text }) {
 		return <h1>Goodbye {text}</h1>;
 	}
-	const initializeStart = nodes.findIndex(function (position) {
-		return position.width === null && position.height === null;
-	});
 	if (0 <= initializeStart) {
 		setTimeout(function () {
 			render.create(route.name, "NODE", initializeStart, true);
