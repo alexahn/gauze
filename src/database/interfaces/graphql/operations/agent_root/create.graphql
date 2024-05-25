@@ -5,10 +5,12 @@ mutation CreateAgent_Root(
 	$whitelist_read: Whitelist_Mutation__Attributes
 	$whitelist_update: Whitelist_Mutation__Attributes
 	$whitelist_delete: Whitelist_Mutation__Attributes
+	$whitelist_count: Whitelist_Mutation__Attributes
 	$blacklist_create: Blacklist_Mutation__Attributes
 	$blacklist_read: Blacklist_Mutation__Attributes
 	$blacklist_update: Blacklist_Mutation__Attributes
 	$blacklist_delete: Blacklist_Mutation__Attributes
+	$blacklist_count: Blacklist_Mutation__Attributes
 ) {
 	create_agent_root(source: $source, attributes: $attributes) {
 		attributes {
@@ -38,6 +40,11 @@ mutation CreateAgent_Root(
 					id
 				}
 			}
+			count_whitelist: create_whitelist(attributes: $whitelist_count) {
+				_metadata {
+					id
+				}
+			}
 			create_blacklist: create_blacklist(attributes: $blacklist_create) {
 				_metadata {
 					id
@@ -54,6 +61,11 @@ mutation CreateAgent_Root(
 				}
 			}
 			delete_blacklist: create_blacklist(attributes: $blacklist_delete) {
+				_metadata {
+					id
+				}
+			}
+			count_blacklist: create_blacklist(attributes: $blacklist_count) {
 				_metadata {
 					id
 				}
