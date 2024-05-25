@@ -21,8 +21,6 @@ class AgentAccountEnvironmentModel extends $kernel.models.environment.Environmen
 			operation: {
 				operation: $operations.agent_account.CREATE__AGENT_ACCOUNT__OPERATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 				operation_name: $operations.agent_account.CREATE_NAME__AGENT_ACCOUNT__OPERATION__GRAPHQL__INTERFACE__ENVIRONMENT,
-				//operation: $database.interfaces.graphql.operations.agent_account.CREATE__AGENT_ACCOUNT__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-				//operation_name: $database.interfaces.graphql.operations.agent_account.CREATE_NAME__AGENT_ACCOUNT__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
 		return self._create(context, parameters, realm).then(function (data) {

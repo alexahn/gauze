@@ -21,8 +21,6 @@ class SecretEnvironmentModel extends $kernel.models.environment.EnvironmentModel
 			operation: {
 				operation: $operations.secret.CREATE__SECRET__OPERATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 				operation_name: $operations.secret.CREATE_NAME__SECRET__OPERATION__GRAPHQL__INTERFACE__ENVIRONMENT,
-				//operation: $database.interfaces.graphql.operations.secret.CREATE__SECRET__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-				//operation_name: $database.interfaces.graphql.operations.secret.CREATE_NAME__SECRET__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
 		return self._create(context, parameters, realm).then(function (data) {

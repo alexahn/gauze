@@ -21,8 +21,6 @@ class AgentRootEnvironmentModel extends $kernel.models.environment.EnvironmentMo
 			operation: {
 				operation: $operations.agent_root.CREATE__AGENT_ROOT__OPERATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 				operation_name: $operations.agent_root.CREATE_NAME__AGENT_ROOT__OPERATION__GRAPHQL__INTERFACE__ENVIRONMENT,
-				//operation: $database.interfaces.graphql.operations.agent_root.CREATE__AGENT_ROOT__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-				//operation_name: $database.interfaces.graphql.operations.agent_root.CREATE_NAME__AGENT_ROOT__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
 		return self._create(context, parameters, realm).then(function (data) {
