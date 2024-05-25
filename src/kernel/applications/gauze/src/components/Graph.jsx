@@ -109,27 +109,31 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 		<div className="debug-grid relative overflow-hidden mw-100 mh-100 h-100 w-100" ref={containerRef} onMouseDown={onMouseDown} onWheel={onWheel}>
 			{nodes.map(function (node, index) {
 				const absolutePosition = abstractToAbsolute(nodes[index]);
-				return (
-					<Node
-						key={index}
-						route={route}
-						render={render}
-						index={index}
-						x={nodes[index].x}
-						y={nodes[index].y}
-						z={nodes[index].z}
-						width={nodes[index].width}
-						height={nodes[index].height}
-						dataX={absolutePosition.x}
-						dataY={absolutePosition.y}
-						dataZ={absolutePosition.z}
-						initializeNode={initializeNode}
-						createNode={createNode}
-						updateNode={updateNode}
-						deleteNode={deleteNode}
-						node={node}
-					/>
-				);
+				if (node.complete) {
+					return (
+						<Node
+							key={index}
+							route={route}
+							render={render}
+							index={index}
+							x={nodes[index].x}
+							y={nodes[index].y}
+							z={nodes[index].z}
+							width={nodes[index].width}
+							height={nodes[index].height}
+							dataX={absolutePosition.x}
+							dataY={absolutePosition.y}
+							dataZ={absolutePosition.z}
+							initializeNode={initializeNode}
+							createNode={createNode}
+							updateNode={updateNode}
+							deleteNode={deleteNode}
+							node={node}
+						/>
+					);
+				} else {
+					return null;
+				}
 			})}
 		</div>
 	);

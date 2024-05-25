@@ -24,30 +24,40 @@ class GauzeService {
 			method: "POST",
 			headers: headers,
 			body: JSON.stringify(body),
-		}).then(function (res) {
-			if (res.status === 200) {
-				return res.json();
-			}
-			if (res.status === 401) {
-				// destroy this jwt
-				if (self.getEnvironmentJWT() === jwt) {
-					self.deleteEnvironmentJWT();
-				} else if (self.getProxyJWT() === jwt) {
-					self.deleteProxyJWT();
-					self.deleteEnvironmentJWT();
-				} else if (self.getSystemJWT() === jwt) {
-					self.deleteSystemJWT();
-					self.deleteProxyJWT();
-					self.deleteEnvironmentJWT();
-				} else {
-					throw new Error("Internal error: invalid jwt");
+		})
+			.then(function (res) {
+				if (res.status === 200) {
+					return res.json();
 				}
-			} else if (res.status === 400) {
-				return res.json();
-			} else {
-				return res.json();
-			}
-		});
+				if (res.status === 401) {
+					// destroy this jwt
+					if (self.getEnvironmentJWT() === jwt) {
+						self.deleteEnvironmentJWT();
+					} else if (self.getProxyJWT() === jwt) {
+						self.deleteProxyJWT();
+						self.deleteEnvironmentJWT();
+					} else if (self.getSystemJWT() === jwt) {
+						self.deleteSystemJWT();
+						self.deleteProxyJWT();
+						self.deleteEnvironmentJWT();
+					} else {
+						throw new Error("Internal error: invalid jwt");
+					}
+				} else if (res.status === 400) {
+					return res.json();
+				} else {
+					return res.json();
+				}
+			})
+			.then(function (data) {
+				// todo: rethink error flows if we add field validation. for now we don't have any actionable errors from the backend, so this is sufficient.
+				// todo: if we add field validation errors, we need to change this because errors are now part of the user experience.
+				if (data.errors && data.errors.length) {
+					throw new Error(data.errors);
+				} else {
+					return data;
+				}
+			});
 	}
 	environment(body) {
 		const self = this;

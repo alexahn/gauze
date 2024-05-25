@@ -8,31 +8,15 @@ import Table from "./Table.jsx";
 import * as jose from "jose";
 
 export default function Root({ gauze, model, router, route, render }) {
-	// create first node based on session type
-	const [loaded, setLoaded] = useState(false);
-	const [initialized, setInitialized] = useState(false);
-	const initializeStart = nodes.findIndex(function (position) {
-		return position.width === null && position.height === null;
-	});
-	// note: load from local storage in the future
-	// note: parse all nodes, and stitch together one graphql query
-	// note: refresh the data section for all nodes on load
-	// note: we don't need to wait until the query is done to present data, because we can present the data from local storage
-	// note: there are four main states for nodes:
-	// note:    incomplete (we don't have all the fields associated with the identifer)
-	// note:    complete (we have all the fields associated with the identifier)
-	// note:    unsound (the fields we have are not the latest values)
-	// note:    sound (the fields we have are the latest values)
-	// note: we can only proceed with rendering once every node is complete (block until we have completeness if necessary)
-	// note: we can proceed with soundness after rendering
 	const headers = model.all("HEADER");
 	const systemJWT = gauze.getSystemJWT();
 	const systemJWTPayload = jose.decodeJwt(systemJWT);
 	const [nodes, setNodes] = useState(function () {
 		console.log("ONLY CALL ONCE");
+		// structural check to make sure index property aligns with order in array
 		return [
 			{
-				key: "1",
+				index: 0,
 				oldX: 0,
 				oldY: 0,
 				x: null,
@@ -56,46 +40,130 @@ export default function Root({ gauze, model, router, route, render }) {
 					count: 0,
 				},
 				complete: false,
-				sound: false
+				sound: false,
 			},
 		];
 	});
-	if (initializeStart === -1 && !loaded) {
-		setLoaded(true);
-		// query per node for now, but stitch together a single query later (shouldn't be too hard because we can just create named query (using a hash) for every node
-		nodes.forEach(function (node, index) {
-			let header = null;
-			if (node.props.type) {
-				header = model.read("HEADER", node.props.type);
-			} else if (node.props.table_name) {
-				header = headers.find(function (header) {
-					return header.table_name === node.props.table_name;
-				});
-			} else {
-				throw new Error("Invalid node definition");
-			}
-			console.log('header', header)
-			return gauze.read(header, node.props.variables).then(function (data) {
-				if (data && data.length) {
-					data.forEach(function (item) {
-						model.create(item._metadata.type, item._metadata.id, item.attributes);
-					});
-				}
-				updateNode(index, {
-					...node,
-					props: {
-						...node.props,
-						type: header.name,
-						data: data.map(function (item) {
-							return item.attributes;
-						}),
-						count: data.length,
-					},
-				});
-				setInitialized(true);
-			});
+	const [complete, setComplete] = useState(function () {
+		return nodes.every(function (node) {
+			return node.complete;
 		});
+	});
+	const [completing, setCompleting] = useState(complete);
+	const [sound, setSound] = useState(function () {
+		return nodes.every(function (node) {
+			return node.sound;
+		});
+	});
+	const [sounding, setSounding] = useState(sound);
+	const [retry, setRetry] = useState(4);
+
+	// note: load from local storage in the future
+	// note: parse all nodes, and stitch together one graphql query
+	// note: refresh the data section for all nodes on load
+	// note: we don't need to wait until the query is done to present data, because we can present the data from local storage
+	// note: there are four main states for nodes:
+	// note:    incomplete (we don't have all the fields associated with the identifer)
+	// note:    complete (we have all the fields associated with the identifier)
+	// note:    unsound (the fields we have are not the latest values)
+	// note:    sound (the fields we have are the latest values)
+	// note: we can only proceed with rendering once every node is complete
+	// note: we can proceed with soundness after rendering
+
+	function getNodeHeader(headers, node) {
+		let header = null;
+		if (node.props.type) {
+			header = model.read("HEADER", node.props.type);
+		} else if (node.props.table_name) {
+			header = headers.find(function (header) {
+				return header.table_name === node.props.table_name;
+			});
+		} else {
+			throw new Error("Invalid node definition");
+		}
+		return header;
 	}
+
+	// first stage for completeness
+	if (!complete && !completing && 0 < retry) {
+		setCompleting(true);
+		return Promise.all(
+			nodes
+				.filter(function (node) {
+					return !node.complete;
+				})
+				.map(function (node) {
+					const header = getNodeHeader(headers, node);
+					return gauze.read(header, node.props.variables).then(function (data) {
+						if (data && data.length) {
+							data.forEach(function (item) {
+								model.create(item._metadata.type, item._metadata.id, item.attributes);
+							});
+						}
+						updateNode(node.index, {
+							...node,
+							props: {
+								...node.props,
+								type: header.name,
+								data: data.map(function (item) {
+									return item.attributes;
+								}),
+								count: data.length,
+							},
+							complete: true,
+						});
+					});
+				}),
+		)
+			.then(function (results) {
+				setComplete(true);
+			})
+			.catch(function (err) {
+				setCompleting(false);
+				setRetry(retry - 1);
+			});
+	}
+
+	// second stage for soundness
+	if (complete && !sound && !sounding && 0 < retry) {
+		setSounding(true);
+		return Promise.all(
+			nodes
+				.filter(function (node) {
+					return !node.sound;
+				})
+				.map(function (node) {
+					const header = getNodeHeader(headers, node);
+					return gauze.read(header, node.props.variables).then(function (data) {
+						if (data && data.length) {
+							data.forEach(function (item) {
+								model.create(item._metadata.type, item._metadata.id, item.attributes);
+							});
+						}
+						updateNode(node.index, {
+							...node,
+							props: {
+								...node.props,
+								type: header.name,
+								data: data.map(function (item) {
+									return item.attributes;
+								}),
+								count: data.length,
+							},
+							sound: true,
+						});
+					});
+				}),
+		)
+			.then(function (results) {
+				setSound(true);
+			})
+			.catch(function (err) {
+				setSounding(false);
+				setRetry(retry - 1);
+			});
+	}
+
 	function initializeNode(index, { width, height }) {
 		const updated = [...nodes];
 		const x = 0 < index ? updated[index - 1].x + updated[index - 1].width * updated[index - 1].z + 10 * updated[index - 1].z : 0;
@@ -137,32 +205,26 @@ export default function Root({ gauze, model, router, route, render }) {
 		updated.splice(index, 1);
 		setNodes(updated);
 	}
-	function node1({ text }) {
-		return <h1>Hello {text}</h1>;
-	}
-	function node2({ text }) {
-		return <h1>Goodbye {text}</h1>;
-	}
+
+	const initializeStart = nodes.findIndex(function (node) {
+		return node.complete && node.width === null && node.height === null;
+	});
 	if (0 <= initializeStart) {
 		setTimeout(function () {
 			render.create(route.name, "NODE", initializeStart, true);
 		}, 0);
 	}
-	if (initialized) {
-		return (
-			<Graph
-				key={"graph"}
-				route={route}
-				render={render}
-				nodes={nodes}
-				setNodes={setNodes}
-				initializeNode={initializeNode}
-				updateNode={updateNode}
-				createNode={createNode}
-				deleteNode={deleteNode}
-			/>
-		);
-	} else {
-		return <div>Loading</div>;
-	}
+	return (
+		<Graph
+			key={"graph"}
+			route={route}
+			render={render}
+			nodes={nodes}
+			setNodes={setNodes}
+			initializeNode={initializeNode}
+			updateNode={updateNode}
+			createNode={createNode}
+			deleteNode={deleteNode}
+		/>
+	);
 }
