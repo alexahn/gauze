@@ -33,6 +33,29 @@ const ATTRIBUTES__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.t
 	fields: () => ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
 });
 
+const SOURCE_METADATA__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_User__Source_Metadata",
+	description: "Agent_User Source Metadata",
+	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
+});
+
+const SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = {
+	_metadata: {
+		type: SOURCE_METADATA__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
+		description: "Agent_User Source Metadata",
+	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Agent_User Source Direction",
+	},
+};
+
+const SOURCE__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_User__Source",
+	description: "Agent_User Source",
+	fields: () => SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
+});
+
 const WHERE_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = $abstract.entities.agent_user.default($abstract).graphql_where_fields;
 
 const WHERE_FIELDS_ARRAY__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = create_fields_array(WHERE_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE);
@@ -79,52 +102,6 @@ const QUERY_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $ab
 	name: "Agent_User_Query__Relationships_From",
 	description: "Agent_User Query Relationships_From",
 	fields: () => QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
-});
-
-const QUERY_SOURCE_METADATA__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_User_Query__Source_Metadata",
-	description: "Agent_User Query Source Metadata",
-	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
-});
-
-const QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = {
-	_metadata: {
-		type: QUERY_SOURCE_METADATA__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
-		description: "Agent_User Query Source Metadata",
-	},
-	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
-		description: "Agent_User Query Source Direction",
-	},
-};
-
-const QUERY_SOURCE__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_User_Query__Source",
-	description: "Agent_User Query Source",
-	fields: () => QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
-});
-
-const SOURCE_METADATA__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_User__Source_Metadata",
-	description: "Agent_User Source Metadata",
-	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
-});
-
-const SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = {
-	_metadata: {
-		type: SOURCE_METADATA__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
-		description: "Agent_User Source Metadata",
-	},
-	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
-		description: "Agent_User Source Direction",
-	},
-};
-
-const SOURCE__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_User__Source",
-	description: "Agent_User Source",
-	fields: () => SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
 });
 
 const QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = {};
@@ -252,8 +229,6 @@ export {
 	QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
 	QUERY_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
 	QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
-	QUERY_SOURCE__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
-	QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
 	MUTATION_RELATIONSHIPS_TO__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
 	MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
 	MUTATION_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,

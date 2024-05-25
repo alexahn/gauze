@@ -33,6 +33,29 @@ const ATTRIBUTES__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE = new $abstract.gauze
 	fields: () => ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
 });
 
+const SOURCE_METADATA__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Person__Source_Metadata",
+	description: "Agent_Person Source Metadata",
+	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
+});
+
+const SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE = {
+	_metadata: {
+		type: SOURCE_METADATA__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
+		description: "Agent_Person Source Metadata",
+	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Agent_Person Source Direction",
+	},
+};
+
+const SOURCE__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Person__Source",
+	description: "Agent_Person Source",
+	fields: () => SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
+});
+
 const WHERE_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE = $abstract.entities.agent_person.default($abstract).graphql_where_fields;
 
 const WHERE_FIELDS_ARRAY__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE = create_fields_array(WHERE_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE);
@@ -79,52 +102,6 @@ const QUERY_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE = new $
 	name: "Agent_Person_Query__Relationships_From",
 	description: "Agent_Person Query Relationships_From",
 	fields: () => QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
-});
-
-const QUERY_SOURCE_METADATA__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_Person_Query__Source_Metadata",
-	description: "Agent_Person Query Source Metadata",
-	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
-});
-
-const QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE = {
-	_metadata: {
-		type: QUERY_SOURCE_METADATA__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
-		description: "Agent_Person Query Source Metadata",
-	},
-	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
-		description: "Agent_Person Query Source Direction",
-	},
-};
-
-const QUERY_SOURCE__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_Person_Query__Source",
-	description: "Agent_Person Query Source",
-	fields: () => QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
-});
-
-const SOURCE_METADATA__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_Person__Source_Metadata",
-	description: "Agent_Person Source Metadata",
-	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
-});
-
-const SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE = {
-	_metadata: {
-		type: SOURCE_METADATA__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
-		description: "Agent_Person Source Metadata",
-	},
-	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
-		description: "Agent_Person Source Direction",
-	},
-};
-
-const SOURCE__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Agent_Person__Source",
-	description: "Agent_Person Source",
-	fields: () => SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
 });
 
 const QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE = {};
@@ -252,8 +229,6 @@ export {
 	QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
 	QUERY_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
 	QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
-	QUERY_SOURCE__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
-	QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
 	MUTATION_RELATIONSHIPS_TO__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
 	MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,
 	MUTATION_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_PERSON__STRUCTURE,

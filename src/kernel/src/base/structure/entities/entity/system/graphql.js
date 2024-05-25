@@ -37,6 +37,29 @@ const ATTRIBUTES__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE =
 	fields: () => ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 });
 
+const SOURCE_METADATA__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "ba381b0cc764c4c9a187b716ae94ed96__Source_Metadata",
+	description: "ba381b0cc764c4c9a187b716ae94ed96 Source Metadata",
+	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+});
+
+const SOURCE_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = {
+	_metadata: {
+		type: SOURCE_METADATA__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+		description: "ba381b0cc764c4c9a187b716ae94ed96 Source Metadata",
+	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "ba381b0cc764c4c9a187b716ae94ed96 Source Direction",
+	},
+};
+
+const SOURCE__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "ba381b0cc764c4c9a187b716ae94ed96__Source",
+	description: "ba381b0cc764c4c9a187b716ae94ed96 Source",
+	fields: () => SOURCE_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+});
+
 const WHERE_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = $abstract.entities.a2b8dbc3427b41a9899e11671c2422c7.default($abstract).graphql_where_fields;
 
 const WHERE_FIELDS_ARRAY__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = create_fields_array(WHERE_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE);
@@ -83,52 +106,6 @@ const QUERY_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Query__Relationships_From",
 	description: "ba381b0cc764c4c9a187b716ae94ed96 Query Relationships_From",
 	fields: () => QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
-});
-
-const QUERY_SOURCE_METADATA__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "ba381b0cc764c4c9a187b716ae94ed96_Query__Source_Metadata",
-	description: "ba381b0cc764c4c9a187b716ae94ed96 Query Source Metadata",
-	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
-});
-
-const QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = {
-	_metadata: {
-		type: QUERY_SOURCE_METADATA__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
-		description: "ba381b0cc764c4c9a187b716ae94ed96 Query Source Metadata",
-	},
-	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
-		description: "ba381b0cc764c4c9a187b716ae94ed96 Query Source Direction",
-	},
-};
-
-const QUERY_SOURCE__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "ba381b0cc764c4c9a187b716ae94ed96_Query__Source",
-	description: "ba381b0cc764c4c9a187b716ae94ed96 Query Source",
-	fields: () => QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
-});
-
-const SOURCE_METADATA__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "ba381b0cc764c4c9a187b716ae94ed96__Source_Metadata",
-	description: "ba381b0cc764c4c9a187b716ae94ed96 Source Metadata",
-	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
-});
-
-const SOURCE_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = {
-	_metadata: {
-		type: SOURCE_METADATA__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
-		description: "ba381b0cc764c4c9a187b716ae94ed96 Source Metadata",
-	},
-	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
-		description: "ba381b0cc764c4c9a187b716ae94ed96 Source Direction",
-	},
-};
-
-const SOURCE__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "ba381b0cc764c4c9a187b716ae94ed96__Source",
-	description: "ba381b0cc764c4c9a187b716ae94ed96 Source",
-	fields: () => SOURCE_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 });
 
 const QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = {};
@@ -256,8 +233,6 @@ export {
 	QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 	QUERY_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 	QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
-	QUERY_SOURCE__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
-	QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 	MUTATION_RELATIONSHIPS_TO__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 	MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 	MUTATION_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,

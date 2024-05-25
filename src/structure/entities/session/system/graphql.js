@@ -33,6 +33,29 @@ const ATTRIBUTES__GRAPHQL__SYSTEM__SESSION__STRUCTURE = new $abstract.gauze.type
 	fields: () => ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 });
 
+const SOURCE_METADATA__GRAPHQL__SYSTEM__SESSION__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Session__Source_Metadata",
+	description: "Session Source Metadata",
+	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+});
+
+const SOURCE_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE = {
+	_metadata: {
+		type: SOURCE_METADATA__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+		description: "Session Source Metadata",
+	},
+	_direction: {
+		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		description: "Session Source Direction",
+	},
+};
+
+const SOURCE__GRAPHQL__SYSTEM__SESSION__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Session__Source",
+	description: "Session Source",
+	fields: () => SOURCE_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
+});
+
 const WHERE_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE = $abstract.entities.session.default($abstract).graphql_where_fields;
 
 const WHERE_FIELDS_ARRAY__GRAPHQL__SYSTEM__SESSION__STRUCTURE = create_fields_array(WHERE_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE);
@@ -79,52 +102,6 @@ const QUERY_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__SESSION__STRUCTURE = new $abstr
 	name: "Session_Query__Relationships_From",
 	description: "Session Query Relationships_From",
 	fields: () => QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
-});
-
-const QUERY_SOURCE_METADATA__GRAPHQL__SYSTEM__SESSION__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Session_Query__Source_Metadata",
-	description: "Session Query Source Metadata",
-	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
-});
-
-const QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE = {
-	_metadata: {
-		type: QUERY_SOURCE_METADATA__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
-		description: "Session Query Source Metadata",
-	},
-	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
-		description: "Session Query Source Direction",
-	},
-};
-
-const QUERY_SOURCE__GRAPHQL__SYSTEM__SESSION__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Session_Query__Source",
-	description: "Session Query Source",
-	fields: () => QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
-});
-
-const SOURCE_METADATA__GRAPHQL__SYSTEM__SESSION__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Session__Source_Metadata",
-	description: "Session Source Metadata",
-	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
-});
-
-const SOURCE_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE = {
-	_metadata: {
-		type: SOURCE_METADATA__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
-		description: "Session Source Metadata",
-	},
-	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
-		description: "Session Source Direction",
-	},
-};
-
-const SOURCE__GRAPHQL__SYSTEM__SESSION__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-	name: "Session__Source",
-	description: "Session Source",
-	fields: () => SOURCE_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 });
 
 const QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE = {};
@@ -252,8 +229,6 @@ export {
 	QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 	QUERY_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 	QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
-	QUERY_SOURCE__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
-	QUERY_SOURCE_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 	MUTATION_RELATIONSHIPS_TO__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 	MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
 	MUTATION_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__SESSION__STRUCTURE,
