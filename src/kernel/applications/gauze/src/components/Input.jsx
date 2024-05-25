@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 
-export default function Input({ field, className, defaultMode, defaultValue, value, onChange, onKeyDown, disabled }) {
+export default function Input({ field, className, defaultMode, defaultValue, value, onChange, onKeyDown, disabled, cache }) {
 	const graphQLTypeToInputType = {
 		Date: "datetime-local",
 		String: "text",
@@ -52,6 +52,7 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 			onChange={handleChange}
 			onKeyDown={onKeyDown}
 			disabled={disabled}
+			cache={cache}
 		/>
 	);
 	const defaultInput = (
@@ -63,6 +64,7 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 			onKeyDown={onKeyDown}
 			disabled={disabled}
 			style={{ width: "500px" }}
+			cache={cache}
 		/>
 	);
 	return defaultMode ? defaultInput : valueInput;

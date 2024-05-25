@@ -141,7 +141,6 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 				complete: false,
 				sound: false,
 			});
-			console.log("created");
 		};
 	}
 
@@ -343,15 +342,7 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 							return (
 								<tr align="right" key={field.name} className="flex flex-wrap">
 									<td className="mw4 w4 overflow-x-hidden">
-										<Input
-											defaultMode={true}
-											field={field}
-											className="mw4"
-											onChange={updateFilter(field.name)}
-											onKeyDown={applyFilter(field.name)}
-											defaultValue={variables.where ? variables.where[field.name] : null}
-											disabled={syncing}
-										/>
+										<Input defaultMode={true} field={field} className="mw4" onChange={updateFilter(field.name)} onKeyDown={applyFilter(field.name)} disabled={syncing} />
 									</td>
 									<td className="relative mw4 w4 pa1 row" tabIndex="0">
 										<div className="truncate-ns field">

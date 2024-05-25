@@ -247,6 +247,10 @@ export default function Root({ gauze, model, router, route, render }) {
 		updated[index] = {
 			...updated[index],
 			...node,
+			props: {
+				...updated[index].props,
+				...node.props,
+			},
 		};
 		setNodes(updated);
 	}

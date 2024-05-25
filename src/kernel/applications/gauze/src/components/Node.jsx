@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 export default function Node({ route, render, index, x, y, z, width, height, dataX, dataY, dataZ, initializeNode, updateNode, createNode, deleteNode, node }) {
@@ -45,11 +45,8 @@ export default function Node({ route, render, index, x, y, z, width, height, dat
 			});
 		}
 	}
-	useEffect(() => {
-		//if (!isLoaded) {
+	useLayoutEffect(function () {
 		if (!isLoaded || height === null || width === null) {
-			// if subscribed already, unsubscribe, and resubscribe
-			// if not subscribe, subscribe
 			render.unsubscribe(route.name, "NODE", index, index);
 			render.subscribe(route.name, "NODE", index, index, function (data) {
 				setTimeout(function () {
@@ -64,6 +61,8 @@ export default function Node({ route, render, index, x, y, z, width, height, dat
 				}, 0);
 			});
 		}
+	});
+	useEffect(() => {
 		window.addEventListener("mouseup", onMouseUp);
 		window.addEventListener("mousemove", onMouseMove);
 		return function () {
