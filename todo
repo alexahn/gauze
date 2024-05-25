@@ -500,6 +500,8 @@
 					[ ] just shard the table
 				[ ] will probably need another aggregation table per item, that has the total count of relationships (to any entity) on the item
 	[ ] email serializer to lowercase (or use a graphql scalar type)
+	[x] copy agent creation operations and remove delete whitelist for environment sign up
+		[x] creating an agent was broken because it needed the create whitelist
 [ ] header data expansion and entity definition display in ui
 	[x] include relationships and method policies
 	[ ] extend type item view to be able to view relationships to the object

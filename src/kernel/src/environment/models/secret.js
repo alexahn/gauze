@@ -3,6 +3,8 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
+import * as $operations from "./operations/index.js";
+
 class SecretEnvironmentModel extends $kernel.models.environment.EnvironmentModel {
 	constructor(root_config, config) {
 		super(root_config, config);
@@ -17,8 +19,10 @@ class SecretEnvironmentModel extends $kernel.models.environment.EnvironmentModel
 				entity_type: $structure.entities.secret.database.sql.TABLE_NAME__SQL__DATABASE__SECRET__STRUCTURE,
 			},
 			operation: {
-				operation: $database.interfaces.graphql.operations.secret.CREATE__SECRET__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-				operation_name: $database.interfaces.graphql.operations.secret.CREATE_NAME__SECRET__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation: $operations.secret.CREATE__SECRET__OPERATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+				operation_name: $operations.secret.CREATE_NAME__SECRET__OPERATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+				//operation: $database.interfaces.graphql.operations.secret.CREATE__SECRET__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				//operation_name: $database.interfaces.graphql.operations.secret.CREATE_NAME__SECRET__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
 		return self._create(context, parameters, realm).then(function (data) {

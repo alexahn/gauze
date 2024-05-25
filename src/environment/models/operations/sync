@@ -1,0 +1,14 @@
+#cp ../../../../../database/interfaces/graphql/operations/agent_root/create.graphql ./agent_root/create.graphql
+#cp ../../../../../database/interfaces/graphql/operations/agent_root/index.js ./agent_root/index.js
+#cp ../../../../../database/interfaces/graphql/operations/agent_account/create.graphql ./agent_account/create.graphql
+#cp ../../../../../database/interfaces/graphql/operations/agent_account/index.js ./agent_account/index.js
+#cp ../../../../../database/interfaces/graphql/operations/agent_user/create.graphql ./agent_user/create.graphql
+#cp ../../../../../database/interfaces/graphql/operations/agent_user/index.js ./agent_user/index.js
+#cp ../../../../../database/interfaces/graphql/operations/agent_person/create.graphql ./agent_person/create.graphql
+#cp ../../../../../database/interfaces/graphql/operations/agent_person/index.js ./agent_person/index.js
+#cp ../../../../../database/interfaces/graphql/operations/agent_character/create.graphql ./agent_character/create.graphql
+#cp ../../../../../database/interfaces/graphql/operations/agent_character/index.js ./agent_character/index.js
+#cp ../../../../../database/interfaces/graphql/operations/proxy/create.graphql ./proxy/create.graphql
+#cp ../../../../../database/interfaces/graphql/operations/proxy/index.js ./proxy/index.js
+#cp ../../../../../database/interfaces/graphql/operations/secret/create.graphql ./secret/create.graphql
+#cp ../../../../../database/interfaces/graphql/operations/secret/index.js ./secret/index.js

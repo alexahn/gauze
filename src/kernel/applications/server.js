@@ -58,21 +58,30 @@ class GauzeServer {
 						);
 					} else {
 						// parse system jwt
-						return self.$gauze.environment.authentication.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req).then(function (agent) {
-							if (agent) {
-								return self.handle_graphql($gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM, req, res, agent);
-							} else {
+						return self.$gauze.environment.authentication
+							.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req)
+							.then(function (agent) {
+								if (agent) {
+									return self.handle_graphql($gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM, req, res, agent);
+								} else {
+									res.writeHead(401, "Unauthorized", {
+										"content-type": "application/json; charset=utf-8",
+										"Access-Control-Allow-Origin": "*",
+									}).end(
+										JSON.stringify({
+											status: 401,
+											message: "Unauthorized",
+										}),
+									);
+								}
+							})
+							.catch(function (err) {
+								self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, "authentication", "error", err);
 								res.writeHead(401, "Unauthorized", {
 									"content-type": "application/json; charset=utf-8",
 									"Access-Control-Allow-Origin": "*",
-								}).end(
-									JSON.stringify({
-										status: 401,
-										message: "Unauthorized",
-									}),
-								);
-							}
-						});
+								});
+							});
 					}
 				},
 			},
@@ -120,6 +129,13 @@ class GauzeServer {
 							} else {
 								return self.handle_graphql($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
 							}
+						})
+						.catch(function (err) {
+							self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, "authentication", "error", err);
+							res.writeHead(401, "Unauthorized", {
+								"content-type": "application/json; charset=utf-8",
+								"Access-Control-Allow-Origin": "*",
+							});
 						});
 				},
 			},
@@ -173,29 +189,81 @@ class GauzeServer {
 				} else {
 					return resolve(null);
 				}
-			}).then(function () {
-				return self.$gauze.kernel.shell.graphql
-					.EXECUTE__GRAPHQL__SHELL__KERNEL({
-						schema: schema,
-						context: context,
-						operation: body.query,
-						operation_name: body.operationName,
-						operation_variables: body.variables,
-					})
-					.then(function (data) {
-						if (data.errors && data.errors.length) {
-							self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "errors", data.errors);
+			})
+				.then(function () {
+					return self.$gauze.kernel.shell.graphql
+						.EXECUTE__GRAPHQL__SHELL__KERNEL({
+							schema: schema,
+							context: context,
+							operation: body.query,
+							operation_name: body.operationName,
+							operation_variables: body.variables,
+						})
+						.then(function (data) {
+							if (data.errors && data.errors.length) {
+								self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "errors", data.errors);
+								return transaction
+									.rollback()
+									.then(function () {
+										self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION REVERTED");
+										res.writeHead(400, "Bad Request", {
+											"content-type": "application/json; charset=utf-8",
+											"Access-Control-Allow-Origin": "*",
+										}).end(JSON.stringify(data));
+									})
+									.catch(function (err) {
+										self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO REVERT", err);
+										res.writeHead(500, "Internal Server Error", {
+											"content-type": "application/json; charset=utf-8",
+											"Access-Control-Allow-Origin": "*",
+										}).end(
+											JSON.stringify({
+												status: 500,
+												message: "Internal Server Error",
+											}),
+										);
+									});
+							} else {
+								return transaction
+									.commit(data)
+									.then(function () {
+										self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION COMMITTED");
+										res.writeHead(200, "OK", {
+											"content-type": "application/json; charset=utf-8",
+											"Access-Control-Allow-Origin": "*",
+										}).end(JSON.stringify(data));
+									})
+									.catch(function (err) {
+										self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO COMMIT", err);
+										res.writeHead(500, "Internal Server Error", {
+											"content-type": "application/json; charset=utf-8",
+											"Access-Control-Allow-Origin": "*",
+										}).end(
+											JSON.stringify({
+												status: 500,
+												message: "Internal Server Error",
+											}),
+										);
+									});
+							}
+						})
+						.catch(function (err) {
+							self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "internal error", err);
 							return transaction
-								.rollback()
+								.rollback(err)
 								.then(function () {
-									self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION REVERTED");
-									res.writeHead(400, "Bad Request", {
+									res.writeHead(500, "Internal Server Error", {
 										"content-type": "application/json; charset=utf-8",
 										"Access-Control-Allow-Origin": "*",
-									}).end(JSON.stringify(data));
+									}).end(
+										JSON.stringify({
+											status: 500,
+											message: "Internal Server Error",
+										}),
+									);
 								})
 								.catch(function (err) {
-									self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO REVERT", err);
+									self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO ROLLBACK", err);
 									res.writeHead(500, "Internal Server Error", {
 										"content-type": "application/json; charset=utf-8",
 										"Access-Control-Allow-Origin": "*",
@@ -206,59 +274,36 @@ class GauzeServer {
 										}),
 									);
 								});
-						} else {
-							return transaction
-								.commit(data)
-								.then(function () {
-									self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION COMMITTED");
-									res.writeHead(200, "OK", {
-										"content-type": "application/json; charset=utf-8",
-										"Access-Control-Allow-Origin": "*",
-									}).end(JSON.stringify(data));
-								})
-								.catch(function (err) {
-									self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO COMMIT", err);
-									res.writeHead(500, "Internal Server Error", {
-										"content-type": "application/json; charset=utf-8",
-										"Access-Control-Allow-Origin": "*",
-									}).end(
-										JSON.stringify({
-											status: 500,
-											message: "Internal Server Error",
-										}),
-									);
-								});
-						}
-					})
-					.catch(function (err) {
-						self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "internal error", err);
-						return transaction
-							.rollback(err)
-							.then(function () {
-								res.writeHead(500, "Internal Server Error", {
-									"content-type": "application/json; charset=utf-8",
-									"Access-Control-Allow-Origin": "*",
-								}).end(
-									JSON.stringify({
-										status: 500,
-										message: "Internal Server Error",
-									}),
-								);
-							})
-							.catch(function (err) {
-								self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO ROLLBACK", err);
-								res.writeHead(500, "Internal Server Error", {
-									"content-type": "application/json; charset=utf-8",
-									"Access-Control-Allow-Origin": "*",
-								}).end(
-									JSON.stringify({
-										status: 500,
-										message: "Internal Server Error",
-									}),
-								);
-							});
-					});
-			});
+						});
+				})
+				.catch(function (err) {
+					self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "internal error", err);
+					return transaction
+						.rollback()
+						.then(function () {
+							res.writeHead(401, "Unauthorized", {
+								"content-type": "application/json; charset=utf-8",
+								"Access-Control-Allow-Origin": "*",
+							}).end(
+								JSON.stringify({
+									status: 401,
+									message: "Unauthorized",
+								}),
+							);
+						})
+						.catch(function (err) {
+							self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO ROLLBACK", err);
+							res.writeHead(500, "Internal Server Error", {
+								"content-type": "application/json; charset=utf-8",
+								"Access-Control-Allow-Origin": "*",
+							}).end(
+								JSON.stringify({
+									status: 500,
+									message: "Internal Server Error",
+								}),
+							);
+						});
+				});
 		});
 	}
 	handle_graphql(schema, req, res, agent) {

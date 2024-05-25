@@ -3,6 +3,8 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
+import * as $operations from "./operations/index.js";
+
 class AgentRootEnvironmentModel extends $kernel.models.environment.EnvironmentModel {
 	constructor(root_config, config) {
 		super(root_config, config);
@@ -17,8 +19,10 @@ class AgentRootEnvironmentModel extends $kernel.models.environment.EnvironmentMo
 				entity_type: $structure.entities.agent_root.database.sql.TABLE_NAME__SQL__DATABASE__AGENT_ROOT__STRUCTURE,
 			},
 			operation: {
-				operation: $database.interfaces.graphql.operations.agent_root.CREATE__AGENT_ROOT__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-				operation_name: $database.interfaces.graphql.operations.agent_root.CREATE_NAME__AGENT_ROOT__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation: $operations.agent_root.CREATE__AGENT_ROOT__OPERATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+				operation_name: $operations.agent_root.CREATE_NAME__AGENT_ROOT__OPERATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+				//operation: $database.interfaces.graphql.operations.agent_root.CREATE__AGENT_ROOT__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				//operation_name: $database.interfaces.graphql.operations.agent_root.CREATE_NAME__AGENT_ROOT__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
 		return self._create(context, parameters, realm).then(function (data) {

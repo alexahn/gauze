@@ -3,6 +3,8 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
+import * as $operations from "./operations/index.js";
+
 class AgentCharacterEnvironmentModel extends $kernel.models.environment.EnvironmentModel {
 	constructor(root_config, config) {
 		super(root_config, config);
@@ -17,8 +19,10 @@ class AgentCharacterEnvironmentModel extends $kernel.models.environment.Environm
 				entity_type: $structure.entities.agent_character.database.sql.TABLE_NAME__SQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 			},
 			operation: {
-				operation: $database.interfaces.graphql.operations.agent_character.CREATE__AGENT_CHARACTER__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-				operation_name: $database.interfaces.graphql.operations.agent_character.CREATE_NAME__AGENT_CHARACTER__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation: $operations.agent_character.CREATE__AGENT_CHARACTER__OPERATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+				operation_name: $operations.agent_character.CREATE_NAME__AGENT_CHARACTER__OPERATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+				//operation: $database.interfaces.graphql.operations.agent_character.CREATE__AGENT_CHARACTER__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				//operation_name: $database.interfaces.graphql.operations.agent_character.CREATE_NAME__AGENT_CHARACTER__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
 		return self._create(context, parameters, realm).then(function (data) {
