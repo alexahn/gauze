@@ -606,6 +606,15 @@ class SystemModel extends Model {
 			gauze__whitelist__entity_id: parameters.attributes[self.entity.primary_key],
 			gauze__whitelist__method: "delete",
 		};
+		parameters.whitelist_count = {
+			gauze__whitelist__realm: "system",
+			gauze__whitelist__agent_role: "root",
+			gauze__whitelist__agent_type: agent.agent_type,
+			gauze__whitelist__agent_id: agent.agent_id,
+			gauze__whitelist__entity_type: entity.entity_type,
+			gauze__whitelist__entity_id: parameters.attributes[self.entity.primary_key],
+			gauze__whitelist__method: "count",
+		};
 		parameters.blacklist_create = {
 			gauze__blacklist__realm: "system",
 			gauze__blacklist__agent_role: "root",
@@ -641,6 +650,15 @@ class SystemModel extends Model {
 			gauze__blacklist__entity_type: entity.entity_type,
 			gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
 			gauze__blacklist__method: "delete",
+		};
+		parameters.blacklist_count = {
+			gauze__blacklist__realm: "system",
+			gauze__blacklist__agent_role: "root",
+			gauze__blacklist__agent_type: agent.agent_type,
+			gauze__blacklist__agent_id: agent.agent_id,
+			gauze__blacklist__entity_type: entity.entity_type,
+			gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
+			gauze__blacklist__method: "count",
 		};
 		return self.authorized_execute(context, parameters, agent, entity, operation);
 	}

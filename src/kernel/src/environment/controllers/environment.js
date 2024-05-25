@@ -239,6 +239,15 @@ class EnvironmentController {
 			gauze__whitelist__method: "delete",
 		};
 		*/
+		parameters.whitelist_count = {
+			gauze__whitelist__realm: "system",
+			gauze__whitelist__agent_role: "root",
+			gauze__whitelist__agent_type: agent_type,
+			gauze__whitelist__agent_id: agent_id,
+			gauze__whitelist__entity_type: entity_type,
+			gauze__whitelist__entity_id: entity_id,
+			gauze__whitelist__method: "count",
+		};
 		parameters.blacklist_create = {
 			gauze__blacklist__realm: "system",
 			gauze__blacklist__agent_role: "root",
@@ -274,6 +283,24 @@ class EnvironmentController {
 			gauze__blacklist__entity_type: entity_type,
 			gauze__blacklist__entity_id: entity_id,
 			gauze__blacklist__method: "delete",
+		};
+		parameters.blacklist_delete = {
+			gauze__blacklist__realm: "system",
+			gauze__blacklist__agent_role: "root",
+			gauze__blacklist__agent_type: agent_type,
+			gauze__blacklist__agent_id: agent_id,
+			gauze__blacklist__entity_type: entity_type,
+			gauze__blacklist__entity_id: entity_id,
+			gauze__blacklist__method: "delete",
+		};
+		parameters.blacklist_count = {
+			gauze__blacklist__realm: "system",
+			gauze__blacklist__agent_role: "root",
+			gauze__blacklist__agent_type: agent_type,
+			gauze__blacklist__agent_id: agent_id,
+			gauze__blacklist__entity_type: entity_type,
+			gauze__blacklist__entity_id: entity_id,
+			gauze__blacklist__method: "count",
 		};
 		return parameters;
 	}
@@ -315,6 +342,15 @@ class EnvironmentController {
 			gauze__whitelist__entity_id: entity_id,
 			gauze__whitelist__method: "delete",
 		};
+		parameters.whitelist_count = {
+			gauze__whitelist__realm: "system",
+			gauze__whitelist__agent_role: "root",
+			gauze__whitelist__agent_type: agent_type,
+			gauze__whitelist__agent_id: agent_id,
+			gauze__whitelist__entity_type: entity_type,
+			gauze__whitelist__entity_id: entity_id,
+			gauze__whitelist__method: "count",
+		};
 		parameters.blacklist_create = {
 			gauze__blacklist__realm: "system",
 			gauze__blacklist__agent_role: "root",
@@ -350,6 +386,15 @@ class EnvironmentController {
 			gauze__blacklist__entity_type: entity_type,
 			gauze__blacklist__entity_id: entity_id,
 			gauze__blacklist__method: "delete",
+		};
+		parameters.blacklist_count = {
+			gauze__blacklist__realm: "system",
+			gauze__blacklist__agent_role: "root",
+			gauze__blacklist__agent_type: agent_type,
+			gauze__blacklist__agent_id: agent_id,
+			gauze__blacklist__entity_type: entity_type,
+			gauze__blacklist__entity_id: entity_id,
+			gauze__blacklist__method: "count",
 		};
 		return parameters;
 	}

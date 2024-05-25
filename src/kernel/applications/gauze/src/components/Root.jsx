@@ -94,12 +94,34 @@ export default function Root({ gauze, model, router, route, render }) {
 				})
 				.map(function (node) {
 					const header = getNodeHeader(headers, node);
-					return gauze.read(header, node.props.variables).then(function (data) {
-						if (data && data.length) {
-							data.forEach(function (item) {
-								model.create(item._metadata.type, item._metadata.id, item.attributes);
+					const transactions = [
+						function () {
+							return gauze.read(header, node.props.variables).then(function (data) {
+								if (data && data.length) {
+									data.forEach(function (item) {
+										model.create(item._metadata.type, item._metadata.id, item.attributes);
+									});
+								}
+								return data;
 							});
-						}
+						},
+						function () {
+							return gauze.count(header, {
+								count: {
+									[header.primary_key]: header.primary_key,
+								},
+								where: node.props.variables.where,
+							});
+						},
+					];
+					return Promise.all(
+						transactions.map(function (t) {
+							return t();
+						}),
+					).then(function (results) {
+						const data = results[0];
+						const count = results[1];
+						console.log("count", count);
 						updateNode(node.index, {
 							...node,
 							props: {
@@ -108,7 +130,7 @@ export default function Root({ gauze, model, router, route, render }) {
 								data: data.map(function (item) {
 									return item.attributes;
 								}),
-								count: data.length,
+								count: count.count,
 							},
 							complete: true,
 						});
