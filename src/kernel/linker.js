@@ -31,6 +31,18 @@ function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 		type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.header.HEADER_TYPE__HEADER__STRUCTURE),
 		args: {},
 		resolve: function (source, query_arguments, context) {
+			let relationships_to;
+			switch (realm) {
+				case "database":
+					relationships_to = $structure.relationships.DATABASE_RELATIONSHIPS__RELATIONSHIP__STRUCTURE;
+					break;
+				case "system":
+					relationships_to = $structure.relationships.SYSTEM_RELATIONSHIPS__RELATIONSHIP__STRUCTURE;
+					break;
+				default:
+					relationships_to = [];
+			}
+			const relationships_from = invert_relationships(relationships_to);
 			// reverse map from entities, keys are graphql meta types
 			return Object.keys($abstract.entities)
 				.map(function (name) {
@@ -58,14 +70,6 @@ function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 						const graphql_mutation_attributes_type = `${pascal_snake_name}_Mutation__Attributes`;
 						const graphql_mutation_where_type = `${pascal_snake_name}_Mutation__Where`;
 						const graphql_mutation_where_string_type = `${pascal_snake_name}_Mutation__Where_String`;
-						let relationships;
-						if (realm === "database") {
-							relationships = $structure.relationships.DATABASE_RELATIONSHIPS__RELATIONSHIP__STRUCTURE[module.graphql_meta_type] || [];
-						} else if (realm === "system") {
-							relationships = $structure.relationships.SYSTEM_RELATIONSHIPS__RELATIONSHIP__STRUCTURE[module.graphql_meta_type] || [];
-						} else {
-							relationships = [];
-						}
 						return {
 							name: module.name,
 							table_name: module.table_name,
@@ -81,7 +85,8 @@ function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 							graphql_mutation_attributes_type: graphql_mutation_attributes_type,
 							graphql_mutation_where_type: graphql_mutation_where_type,
 							graphql_mutation_where_string_type: graphql_mutation_where_string_type,
-							relationships: relationships,
+							relationships_to: relationships_to[module.graphql_meta_type] || [],
+							relationships_from: relationships_from[module.graphql_meta_type] || [],
 						};
 					} else {
 						return null;
