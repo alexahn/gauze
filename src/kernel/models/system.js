@@ -22,10 +22,10 @@ class SystemModel extends Model {
 	constructor(root_config, graphql_config) {
 		super(root_config);
 		const self = this;
-		const { schema, schema_name, relationship } = graphql_config;
+		const { schema, schema_name, relationship_model } = graphql_config;
 		self.schema = schema;
 		self.schema_name = schema_name;
-		self.relationship = relationship;
+		self.relationship_model = relationship_model;
 		if ($structure.entities.whitelist) {
 			self.whitelist_table = $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE;
 		} else {
