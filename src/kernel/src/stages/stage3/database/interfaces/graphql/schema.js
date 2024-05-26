@@ -4,7 +4,6 @@ import * as $abstract from "./../../../abstract/index.js";
 import * as $structure from "./../../../structure/index.js";
 import * as $kernel from "./../../../kernel/index.js";
 
-
 // relationship
 import { CONNECTION__RELATIONSHIP__ENTITY__GRAPHQL__INTERFACE__DATABASE, METHODS__RELATIONSHIP__ENTITY__GRAPHQL__INTERFACE__DATABASE } from "./entities/relationship.js";
 
