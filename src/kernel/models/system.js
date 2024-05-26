@@ -25,7 +25,7 @@ class SystemModel extends Model {
 		const { schema, schema_name, relationship } = graphql_config;
 		self.schema = schema;
 		self.schema_name = schema_name;
-		self.relationship = relationship
+		self.relationship = relationship;
 		if ($structure.entities.whitelist) {
 			self.whitelist_table = $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE;
 		} else {
@@ -668,7 +668,7 @@ class SystemModel extends Model {
 			})
 		} else {
 		*/
-			return self.authorized_execute(context, parameters, agent, entity, operation);
+		return self.authorized_execute(context, parameters, agent, entity, operation);
 		//}
 	}
 	_create(context, parameters, realm) {

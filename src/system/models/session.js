@@ -3,6 +3,12 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
+/*
+import {
+	MODEL__RELATIONSHIP__MODEL__SYSTEM
+} from "./relationship.js"
+*/
+
 class SessionSystemModel extends $kernel.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
@@ -110,6 +116,7 @@ const ROOT_CONFIG__SESSION__MODEL__SYSTEM = {
 const CONFIG__SESSION__MODEL__SYSTEM = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
+	//relationship: MODEL__RELATIONSHIP__MODEL__SYSTEM
 };
 const MODEL__SESSION__MODEL__SYSTEM = new SessionSystemModel(ROOT_CONFIG__SESSION__MODEL__SYSTEM, CONFIG__SESSION__MODEL__SYSTEM);
 

@@ -118,10 +118,10 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 			const source = {
 				_metadata: {
 					type: header.graphql_meta_type,
-					id: item[header.primary_key]
+					id: item[header.primary_key],
 				},
-				_direction: 'to'
-			}
+				_direction: "to",
+			};
 			createNode({
 				oldX: 0,
 				oldY: 0,
@@ -218,8 +218,8 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 				updateNode(node.index, {
 					...node,
 					width: null,
-					height: null
-				})
+					height: null,
+				});
 			} else {
 				const updatedFields = [...header.fields].filter(function (field) {
 					const exists = fields.find(function (f) {
@@ -231,8 +231,8 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 				updateNode(node.index, {
 					...node,
 					width: null,
-					height: null
-				})
+					height: null,
+				});
 			}
 		};
 	}

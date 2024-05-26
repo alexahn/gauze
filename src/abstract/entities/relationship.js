@@ -17,7 +17,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
-				allowed_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__proxy", "gauze__agent_root", "gauze__agent_account", "gauze__agent_user", "gauze__agent_person", "gauze__agent_character"],
 			},
 			gauze__relationship__created_at: {
 				name: "gauze__relationship__created_at",
@@ -31,7 +31,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [$abstract.gauze.deserializers.CREATED_AT__DESERIALIZER__GAUZE__ABSTRACT("gauze__relationship__created_at")],
 				post_deserialize_middlewares: [],
-				allowed_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__proxy", "gauze__agent_root", "gauze__agent_account", "gauze__agent_user", "gauze__agent_person", "gauze__agent_character"],
 			},
 			gauze__relationship__updated_at: {
 				name: "gauze__relationship__updated_at",
@@ -45,7 +45,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [$abstract.gauze.deserializers.UPDATED_AT__DESERIALIZER__GAUZE__ABSTRACT("gauze__relationship__updated_at")],
 				post_deserialize_middlewares: [],
-				allowed_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__proxy", "gauze__agent_root", "gauze__agent_account", "gauze__agent_user", "gauze__agent_person", "gauze__agent_character"],
 			},
 			gauze__relationship__deleted_at: {
 				name: "gauze__relationship__deleted_at",
@@ -59,7 +59,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [$abstract.gauze.deserializers.DELETED_AT__DESERIALIZER__GAUZE__ABSTRACT("gauze__relationship__deleted_at")],
 				post_deserialize_middlewares: [],
-				allowed_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__proxy", "gauze__agent_root", "gauze__agent_account", "gauze__agent_user", "gauze__agent_person", "gauze__agent_character"],
 			},
 			gauze__relationship__from_type: {
 				name: "gauze__relationship__from_type",
@@ -73,7 +73,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
-				allowed_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__proxy", "gauze__agent_root", "gauze__agent_account", "gauze__agent_user", "gauze__agent_person", "gauze__agent_character"],
 			},
 			gauze__relationship__from_id: {
 				name: "gauze__relationship__from_id",
@@ -87,7 +87,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
-				allowed_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__proxy", "gauze__agent_root", "gauze__agent_account", "gauze__agent_user", "gauze__agent_person", "gauze__agent_character"],
 			},
 			gauze__relationship__to_type: {
 				name: "gauze__relationship__to_type",
@@ -101,7 +101,7 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
-				allowed_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__proxy", "gauze__agent_root", "gauze__agent_account", "gauze__agent_user", "gauze__agent_person", "gauze__agent_character"],
 			},
 			gauze__relationship__to_id: {
 				name: "gauze__relationship__to_id",
@@ -115,34 +115,34 @@ export default function ($abstract) {
 				pre_deserialize_middlewares: [],
 				deserializers: [],
 				post_deserialize_middlewares: [],
-				allowed_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__proxy", "gauze__agent_root", "gauze__agent_account", "gauze__agent_user", "gauze__agent_person", "gauze__agent_character"],
 			},
 		},
 		methods: {
 			create: {
 				name: "create",
 				privacy: "public",
-				allowed_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__proxy", "gauze__agent_root", "gauze__agent_account", "gauze__agent_user", "gauze__agent_person", "gauze__agent_character"],
 			},
 			read: {
 				name: "read",
 				privacy: "private",
-				allowed_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__proxy", "gauze__agent_root", "gauze__agent_account", "gauze__agent_user", "gauze__agent_person", "gauze__agent_character"],
 			},
 			update: {
 				name: "update",
 				privacy: "private",
-				allowed_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__proxy", "gauze__agent_root", "gauze__agent_account", "gauze__agent_user", "gauze__agent_person", "gauze__agent_character"],
 			},
 			delete: {
 				name: "delete",
 				privacy: "private",
-				allowed_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__proxy", "gauze__agent_root", "gauze__agent_account", "gauze__agent_user", "gauze__agent_person", "gauze__agent_character"],
 			},
 			count: {
 				name: "count",
 				privacy: "private",
-				allowed_agent_types: ["gauze__agent_user"],
+				allowed_agent_types: ["gauze__proxy", "gauze__agent_root", "gauze__agent_account", "gauze__agent_user", "gauze__agent_person", "gauze__agent_character"],
 			},
 		},
 	};
