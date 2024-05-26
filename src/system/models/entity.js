@@ -3,11 +3,7 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-/*
-import {
-	MODEL__RELATIONSHIP__MODEL__SYSTEM
-} from "./relationship.js"
-*/
+import { MODEL__RELATIONSHIP__MODEL__SYSTEM } from "./relationship.js";
 
 class EntitySystemModel extends $kernel.models.system.SystemModel {
 	constructor(root_config, config) {
@@ -116,7 +112,7 @@ const ROOT_CONFIG__ENTITY__MODEL__SYSTEM = {
 const CONFIG__ENTITY__MODEL__SYSTEM = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
-	//relationship: MODEL__RELATIONSHIP__MODEL__SYSTEM
+	relationship: MODEL__RELATIONSHIP__MODEL__SYSTEM,
 };
 const MODEL__ENTITY__MODEL__SYSTEM = new EntitySystemModel(ROOT_CONFIG__ENTITY__MODEL__SYSTEM, CONFIG__ENTITY__MODEL__SYSTEM);
 
