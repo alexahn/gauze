@@ -65,9 +65,11 @@ function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 						// todo: we can do this by defining an ATTRIBUTES object in the schema and passing it into this function
 						// todo: the architecture already makes this possible, so for now we are going to do string interpolation just to make things work end to end first
 						const graphql_query_attributes_type = `${pascal_snake_name}_Query__Attributes`;
+						const graphql_query_source_type = `${pascal_snake_name}_Query__Source`;
 						const graphql_query_where_type = `${pascal_snake_name}_Query__Where`;
 						const graphql_query_where_string_type = `${pascal_snake_name}_Query__Where_String`;
 						const graphql_mutation_attributes_type = `${pascal_snake_name}_Mutation__Attributes`;
+						const graphql_mutation_source_type = `${pascal_snake_name}_Mutation__Source`;
 						const graphql_mutation_where_type = `${pascal_snake_name}_Mutation__Where`;
 						const graphql_mutation_where_string_type = `${pascal_snake_name}_Mutation__Where_String`;
 						return {
@@ -80,9 +82,11 @@ function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 							graphql_attributes_string: module.graphql_attributes_string,
 							graphql_where_string: module.graphql_where_string,
 							graphql_query_attributes_type: graphql_query_attributes_type,
+							graphql_query_source_type: graphql_query_source_type,
 							graphql_query_where_type: graphql_query_where_type,
 							graphql_query_where_string_type: graphql_query_where_string_type,
 							graphql_mutation_attributes_type: graphql_mutation_attributes_type,
+							graphql_mutation_source_type: graphql_mutation_source_type,
 							graphql_mutation_where_type: graphql_mutation_where_type,
 							graphql_mutation_where_string_type: graphql_mutation_where_string_type,
 							relationships_to: relationships_to[module.graphql_meta_type] || [],

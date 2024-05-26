@@ -395,9 +395,11 @@ query header {
 		graphql_attributes_string
 		graphql_where_string
 		graphql_query_attributes_type
+		graphql_query_source_type
 		graphql_query_where_type
 		graphql_query_where_string_type
         graphql_mutation_attributes_type
+		graphql_mutation_source_type
         graphql_mutation_where_type
         graphql_mutation_where_string_type
 		relationships_to
@@ -447,13 +449,15 @@ mutation create(
 		const self = this;
 		const query = `
 query read(
-    $where: ${header.graphql_query_where_type}
+	$source: ${header.graphql_query_source_type},
+    $where: ${header.graphql_query_where_type},
     $limit: Int,
     $offset: Int,
     $order: String,
     $order_direction: String
 ) {
     read_${header.name}(
+		source: $source,
         where: $where,
         limit: $limit,
         offset: $offset,
@@ -483,10 +487,12 @@ query read(
 		const self = this;
 		const query = `
 query count(
-	$count: ${header.graphql_query_where_string_type}
+	$source: ${header.graphql_query_source_type},
+	$count: ${header.graphql_query_where_string_type},
     $where: ${header.graphql_query_where_type}
 ) {
     count_${header.name}(
+		source: $source,
 		count: $count,
         where: $where,
     ) {

@@ -22,9 +22,10 @@ class SystemModel extends Model {
 	constructor(root_config, graphql_config) {
 		super(root_config);
 		const self = this;
-		const { schema, schema_name } = graphql_config;
+		const { schema, schema_name, relationship } = graphql_config;
 		self.schema = schema;
 		self.schema_name = schema_name;
+		self.relationship = relationship
 		if ($structure.entities.whitelist) {
 			self.whitelist_table = $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE;
 		} else {
@@ -660,7 +661,15 @@ class SystemModel extends Model {
 			gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
 			gauze__blacklist__method: "count",
 		};
-		return self.authorized_execute(context, parameters, agent, entity, operation);
+		/*
+		if (parameters.source) {
+			return self.authorized_execute(context, parameters, agent, entity, operation).then(function (data) {
+				return self.relationship._create(
+			})
+		} else {
+		*/
+			return self.authorized_execute(context, parameters, agent, entity, operation);
+		//}
 	}
 	_create(context, parameters, realm) {
 		const self = this;

@@ -32,7 +32,15 @@ class GauzeManager {
 		self.$gauze = $gauze;
 		self.config = config;
 
-		self.valid_agent_types = {};
+		self.valid_agent_types = {
+			gauze__proxy: true,
+			gauze__agent_root: true,
+			gauze__agent_account: true,
+			gauze__agent_user: true,
+			gauze__agent_person: true,
+			gauze__agent_character: true,
+		};
+		/*
 		if ($gauze.abstract.entities.agent_root) {
 			const agent_root = $gauze.abstract.entities.agent_root.default($gauze.abstract);
 			self.valid_agent_types[agent_root.table_name] = true;
@@ -57,6 +65,7 @@ class GauzeManager {
 			const proxy = $gauze.abstract.entities.proxy.default($gauze.abstract);
 			self.valid_agent_types[proxy.table_name] = true;
 		}
+		*/
 
 		self.valid_agent_type_exceptions = {
 			gauze__proxy: true,

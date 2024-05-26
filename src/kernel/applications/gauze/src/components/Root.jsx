@@ -108,6 +108,7 @@ export default function Root({ gauze, model, router, route, render }) {
 						},
 						function () {
 							return gauze.count(header, {
+								source: node.props.variables.source,
 								count: {
 									[header.primary_key]: header.primary_key,
 								},

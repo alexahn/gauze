@@ -106,15 +106,22 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 		};
 	}
 
-	function traverse(item, to) {
+	function traverse(from, item, to) {
 		return function (e) {
-			console.log("traverse", item, to);
+			console.log("traverse", from, item, to);
 			// convert graphql to type to name
 			const headers = model.all("HEADER");
 			const toHeader = headers.find(function (header) {
 				return header.graphql_meta_type === to;
 			});
 			console.log("toHeader", toHeader);
+			const source = {
+				_metadata: {
+					type: header.graphql_meta_type,
+					id: item[header.primary_key]
+				},
+				_direction: 'to'
+			}
 			createNode({
 				oldX: 0,
 				oldY: 0,
@@ -130,9 +137,10 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 					router: router,
 					type: toHeader.name,
 					table_name: null,
-					from: null,
+					from: source,
 					to: null,
 					variables: {
+						source: source,
 						where: {},
 					},
 					data: [],
@@ -407,7 +415,7 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 											{header.relationships_to.map(function (to) {
 												return (
 													<div key={to} className="pa1">
-														<button onClick={traverse(item, to)}>{to}</button>
+														<button onClick={traverse(header, item, to)}>{to}</button>
 													</div>
 												);
 											})}
