@@ -1,6 +1,8 @@
 import React from "react";
 import { useState } from "react";
 
+import { PAGINATION_PAGE_SIZE } from "./../constants.js";
+
 import Graph from "./Graph.jsx";
 import Node from "./Node.jsx";
 import Table from "./Table.jsx";
@@ -35,6 +37,7 @@ export default function Root({ gauze, model, router, route, render }) {
 					to: null,
 					variables: {
 						where: {},
+						limit: PAGINATION_PAGE_SIZE,
 					},
 					data: [],
 					count: 0,

@@ -20,6 +20,7 @@ function read(gauze, model, header, variables) {
 		},
 		function () {
 			const countVariables = {
+				source: variables.source,
 				count: {
 					[header.primary_key]: header.primary_key,
 				},
@@ -76,6 +77,7 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 				};
 			}
 			setSyncing(true);
+			console.log("paginate", variables, paginate);
 			const localVariables = {
 				...variables,
 				...paginate,
@@ -142,6 +144,7 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 					variables: {
 						source: source,
 						where: {},
+						limit: PAGINATION_PAGE_SIZE,
 					},
 					data: [],
 					count: 0,
@@ -252,6 +255,7 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 		if (input === expected) {
 			return gauze
 				.create(header, {
+					source: node.props.variables.source,
 					attributes: createItem,
 				})
 				.then(function (results) {
