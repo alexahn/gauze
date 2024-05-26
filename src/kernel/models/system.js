@@ -661,15 +661,36 @@ class SystemModel extends Model {
 			gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
 			gauze__blacklist__method: "count",
 		};
-		/*
-		if (parameters.source) {
+		if (parameters.source && parameters.source._metadata && parameters.source._direction) {
 			return self.authorized_execute(context, parameters, agent, entity, operation).then(function (data) {
-				return self.relationship._create(
-			})
+				let relationship_attributes;
+				const source_type = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[parameters.source._metadata.type];
+				const source_id = parameters.source._metadata.id;
+				if (parameters.source._direction === "to") {
+					relationship_attributes = {
+						gauze__relationship__from_id: source_id,
+						gauze__relationship__from_type: source_type,
+						gauze__relationship__to_id: parameters.attributes[self.entity.primary_key],
+						gauze__relationship__to_type: entity.entity_type,
+					};
+				} else if (parameters.source._direction === "from") {
+					relationship_attributes = {
+						gauze__relationship__from_id: parameters.attributes[self.entity.primary_key],
+						gauze__relationship__from_type: entity.entity_type,
+						gauze__relationship__to_id: source_id,
+						gauze__relationship__to_type: source_type,
+					};
+				} else {
+					throw new Error("Invalid source direction");
+				}
+				const relationship_parameters = { attributes: relationship_attributes };
+				return self.relationship_model.create(context, relationship_parameters).then(function (relationship) {
+					return data;
+				});
+			});
 		} else {
-		*/
-		return self.authorized_execute(context, parameters, agent, entity, operation);
-		//}
+			return self.authorized_execute(context, parameters, agent, entity, operation);
+		}
 	}
 	_create(context, parameters, realm) {
 		const self = this;

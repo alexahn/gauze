@@ -10,7 +10,6 @@ const context = {
 const operation_name = "CreateYtitne";
 const operation_source = `
 mutation ${operation_name}(
-	$relationship: Relationship_Mutation__Attributes
 	$attributes: Ytitne_Mutation__Attributes,
 	$attributes2: Ytitne_Mutation__Attributes
 ) {
@@ -25,25 +24,20 @@ mutation ${operation_name}(
 					id
 					text
 				}
-				mutation {
-					create_relationship(attributes: $relationship) {
-						_metadata {
-							type
-						}
-					}
-				}
 			}
 		}
 	}
 }
 `;
 const operation_variables = {
+	/*
 	relationship: {
 		gauze__relationship__from_id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
 		gauze__relationship__from_type: "gauze__ytitne",
 		gauze__relationship__to_id: "55c29b50-5e24-447d-8505-75e82c2aa8cc",
 		gauze__relationship__to_type: "gauze__ytitne",
 	},
+	*/
 	attributes: {
 		id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
 		text: "hello",
@@ -67,15 +61,6 @@ const expected = `{
                             "attributes": {
                                 "id": "55c29b50-5e24-447d-8505-75e82c2aa8cc",
                                 "text": "world"
-                            },
-                            "mutation": {
-                                "create_relationship": [
-                                    {
-                                        "_metadata": {
-                                            "type": "RELATIONSHIP"
-                                        }
-                                    }
-                                ]
                             }
                         }
                     ]
