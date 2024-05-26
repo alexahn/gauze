@@ -29,7 +29,6 @@ export default function Root({ gauze, model, router, route, render }) {
 					gauze: gauze,
 					model: model,
 					router: router,
-					// updateProps
 					type: null,
 					table_name: systemJWTPayload.agent_type,
 					from: null,

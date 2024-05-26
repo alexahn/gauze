@@ -207,6 +207,11 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 					return exists || field.name === name;
 				});
 				setFields(updatedFields);
+				updateNode(node.index, {
+					...node,
+					width: null,
+					height: null
+				})
 			} else {
 				const updatedFields = [...header.fields].filter(function (field) {
 					const exists = fields.find(function (f) {
@@ -215,6 +220,11 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 					return exists && field.name !== name;
 				});
 				setFields(updatedFields);
+				updateNode(node.index, {
+					...node,
+					width: null,
+					height: null
+				})
 			}
 		};
 	}

@@ -542,6 +542,10 @@
 			[ ] maybe we can avoid using the render service if we can throttle the state updates
 				[ ] useCallback with a throttled state update on subscription changes (maybe per 100ms)
 			[ ] find a way to skip mouse event registration if it has already been done (instead of setting up and tearing down on every render)
+			[ ] dynamically reduce the number of dom elements based on z scale by snapshotting the presentation into a canvas element
+				[ ] use the canvas snapshot when the z scaled element crosses a dimension threshold
+			[ ] dynamically reduce the number of dom elements based on visibility by snapshotting the presentation into a canvas element
+				[ ] use the canvas snapshot when the element is outside the viewing area
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages
