@@ -3,6 +3,9 @@
 // ytitne
 import { TYPE__GRAPHQL__DATABASE__YTITNE__STRUCTURE } from "./entities/ytitne/database/graphql.js";
 
+/*
+	ytitne <-> ytitne
+*/
 const DATABASE_RELATIONSHIPS__RELATIONSHIP__STRUCTURE = {
 	[TYPE__GRAPHQL__DATABASE__YTITNE__STRUCTURE]: [TYPE__GRAPHQL__DATABASE__YTITNE__STRUCTURE],
 };
