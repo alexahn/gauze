@@ -8,16 +8,24 @@ import Node from "./Node.jsx";
 import Table from "./Table.jsx";
 
 import * as jose from "jose";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Root({ gauze, model, router, route, render }) {
 	const headers = model.all("HEADER");
 	const systemJWT = gauze.getSystemJWT();
 	const systemJWTPayload = jose.decodeJwt(systemJWT);
+	const rootID = uuidv4();
+	const [indexNode, setIndexNode] = useState({
+		[rootID]: 0,
+	});
+	const [indexEdge, setIndexEdge] = useState({});
+	const [indexConnection, setIndexConnection] = useState({});
 	const [nodes, setNodes] = useState(function () {
 		console.log("ONLY CALL ONCE");
 		// structural check to make sure index property aligns with order in array
 		return [
 			{
+				id: rootID,
 				index: 0,
 				oldX: 0,
 				oldY: 0,
@@ -48,6 +56,26 @@ export default function Root({ gauze, model, router, route, render }) {
 			},
 		];
 	});
+	const [edges, setEdges] = useState([]);
+	const [connections, setConnections] = useState([]);
+	/*
+	edge = {
+		from_node:
+		from_connection:
+		to_node:
+		to_connection:
+		component:
+		props:
+	}
+	connection = {
+		name:
+		node:
+		x:
+		y:
+		component:
+		props:
+	}
+	*/
 	const [complete, setComplete] = useState(function () {
 		return nodes.every(function (node) {
 			return node.complete;
@@ -250,10 +278,6 @@ export default function Root({ gauze, model, router, route, render }) {
 		updated[index] = {
 			...updated[index],
 			...node,
-			props: {
-				...updated[index].props,
-				...node.props,
-			},
 		};
 		setNodes(updated);
 	}
@@ -262,7 +286,44 @@ export default function Root({ gauze, model, router, route, render }) {
 		updated.splice(index, 1);
 		setNodes(updated);
 	}
-
+	function createEdge(edge) {
+		const updated = [...edges];
+		edge.index = edges.length;
+		updated.push(edge);
+		setEdges(updated);
+	}
+	function updateEdge(index, edge) {
+		const updated = [...edges];
+		updated[index] = {
+			...updated[index],
+			edge,
+		};
+		setNodes(updated);
+	}
+	function deleteEdge(index) {
+		const updated = [...edges];
+		updated.splice(index, 1);
+		setNodes(updated);
+	}
+	function createConnection(connection) {
+		const updated = [...connections];
+		connection.index = connections.length;
+		updated.push(connection);
+		setConnections(updated);
+	}
+	function updateConnection(index, connection) {
+		const updated = [...connections];
+		updated[index] = {
+			...updated[index],
+			connection,
+		};
+		setNodes(updated);
+	}
+	function deleteConnection(index) {
+		const updated = [...connections];
+		updated.splice(index, 1);
+		setNodes(updated);
+	}
 	const initializeStart = nodes.findIndex(function (node) {
 		return node.complete && node.width === null && node.height === null;
 	});

@@ -6,6 +6,8 @@ import { PAGINATION_PAGE_SIZE } from "./../constants.js";
 import Input from "./Input.jsx";
 import Pagination from "./Pagination.jsx";
 
+import Connection from "./Connection.jsx";
+
 import { FileTextIcon, TrashIcon, Pencil2Icon } from "@radix-ui/react-icons";
 
 function read(gauze, model, header, variables) {
@@ -414,6 +416,8 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 								return (
 									<th key={item[header.primary_key]} align="center" className="mw4 w4 pa1 relative row" tabIndex="0">
 										<div className="truncate-ns">TRAVERSE</div>
+										<Connection />
+										{/* connection component? */}
 										<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
 											<div className="pa1">TRAVERSE</div>
 											{header.relationships_to.map(function (to) {
