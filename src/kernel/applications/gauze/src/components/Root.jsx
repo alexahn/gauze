@@ -19,7 +19,6 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 	});
 	const [nodes, setNodes] = useState(function () {
 		console.log("ONLY CALL ONCE");
-		// structural check to make sure index property aligns with order in array
 		return {
 			[rootID]: {
 				id: rootID,
@@ -318,7 +317,7 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 			Object.keys(synced.nodes).forEach(function (key) {
 				nodes[key] = synced.nodes[key];
 			});
-			nodeConnections = nodeConnections.concat(synced.nodeConnection);
+			nodeConnections = nodeConnections.concat(synced.nodeConnections);
 			newConnections = newConnections.concat(synced.newConnections);
 			nodeEdges = nodeEdges.concat(synced.nodeEdges);
 			newEdges = newEdges.concat(synced.newEdges);
@@ -331,6 +330,7 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 			newEdges,
 		};
 	}
+	// todo: move completeness and soundness stages to route handler
 	// first stage for completeness
 	if (!complete && !completing && 0 < retry) {
 		setCompleting(true);
@@ -396,6 +396,7 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 		)
 			.then(function (results) {
 				const synced = syncNodesEdges(results);
+				console.log('synced', synced)
 				createConnections(synced.newConnections);
 				createEdges(synced.newEdges);
 				updateNodes(

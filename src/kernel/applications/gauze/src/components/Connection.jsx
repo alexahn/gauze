@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useLayoutEffect, useRef } from "react";
 
-export default function Connection({ gauze, model, router }) {
+export default function Connection({ gauze, model, router, connection }) {
 	const containerRef = useRef();
 	useLayoutEffect(function () {
 		//console.log("connection", containerRef.current.getClientRects());

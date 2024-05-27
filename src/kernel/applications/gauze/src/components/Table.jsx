@@ -63,7 +63,9 @@ export default function Table({
 }) {
 	if (!type) return;
 	if (connectionIDs && connectionIDs.length) {
-		console.log("connectionIDs", connectionIDs);
+		console.log("connectionIDs", connectionIDs, connections,connectionIDs.map(function (id) {
+			return connections[id]
+		}));
 	}
 	const header = model.read("HEADER", type);
 	const [fields, setFields] = useState(header.fields);
@@ -182,6 +184,7 @@ export default function Table({
 						primary_key: toHeader.primary_key,
 						graphql_meta_type: toHeader.graphql_meta_type,
 						from: source,
+						fromNodeID: node.id,
 						to: null,
 						variables: {
 							source: source,

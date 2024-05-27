@@ -1,0 +1,412 @@
+class GraphService {
+	constructor() {
+		this.nodes = {}
+		this.edges = {}
+		this.connections = {}
+	}
+	root(type) {
+		const self = this
+		return Object.values(self.nodes).find(function (node) {
+			return node.root === true && node.props.type === type
+		})
+	}
+    function syncNodeEdges(node, data) {
+		const self = this
+        const nodes = {};
+        const rawEdges = [];
+        const newEdges = [];
+        let nodeEdges = [];
+        const newConnections = [];
+        let nodeConnections = [];
+        const connectionsArray = Object.values(self.connections);
+        const edgesArray = Object.values(self.edges);
+        if (node.props.from) {
+            data.forEach(function (item) {
+                nodeConnections = nodeConnections.concat(
+                    connectionsArray.filter(function (connection) {
+                        const name = connection.name === "from";
+                        const entityID = connection.entityID === item[node.props.primary_key];
+                        const entityType = connection.entityType === node.props.graphql_meta_type;
+                        return name && entityID && entityType;
+                    }),
+                );
+                const foundFrom = connectionsArray.find(function (connection) {
+                    const nodeID = connection.nodeID === node.props.fromNodeID;
+                    const name = connection.name === "from";
+                    const entityID = connection.entityID === item[node.props.from._metadata.id];
+                    const entityType = connection.entityType === node.props.from._metadata.type;
+                    return nodeID && name && entityID && entityType;
+                });
+                const foundTo = connectionsArray.find(function (connection) {
+                    const nodeID = connection.nodeID === node.id;
+                    const name = connection.name === "to";
+                    const entityID = connection.entityID === item[node.props.primary_key];
+                    const entityType = connection.entityType === node.props.type;
+                    return nodeID && name && entityID && entityType;
+                });
+                const edge = {};
+                if (foundFrom) {
+                    edge.from = foundFrom;
+                    nodeConnections.push(foundFrom);
+                } else {
+                    const newFrom = {
+                        id: uuidv4(),
+                        nodeID: node.props.fromNodeID,
+                        name: "from",
+                        entityID: node.props.from._metadata.id,
+                        entityType: node.props.from._metadata.type,
+                        x: null,
+                        y: null,
+                    };
+                    edge.from = newFrom;
+                    newConnections.push(newFrom);
+                    nodeConnections.push(newFrom);
+                }
+                if (foundTo) {
+                    edge.to = foundTo;
+                    nodeConnections.push(foundTo);
+                } else {
+                    const toFrom = {
+                        id: uuidv4(),
+                        nodeID: node.id,
+                        name: "to",
+                        entityID: item[node.props.primary_key],
+                        entityType: node.props.graphql_meta_type,
+                        x: null,
+                        y: null,
+                    };
+                    edge.to = toFrom;
+                    newConnections.push(toFrom);
+                    nodeConnections.push(toFrom);
+                }
+                const foundEdge = edgesArray.find(function (e) {
+                    const fromNodeID = e.fromNodeID === node.props.fromNodeID;
+                    const fromConnectionID = e.fromConnectionID === e.from.id;
+                    const toNodeID = e.toNodeID === node.id;
+                    const toConnectionID = e.toConnectionID === e.to.id;
+                    return fromNodeID && fromConnectionID && toNodeID && toConnectionID;
+                });
+                if (foundEdge) {
+                    nodeEdges.push(foundEdge);
+                } else {
+                    const newEdge = {
+                        id: uuidv4(),
+                        fromNodeID: node.props.fromNodeID,
+                        fromConnectionID: edge.from.id,
+                        toNodeID: node.id,
+                        toConnectionID: edge.to.id,
+                    };
+                    newEdges.push(newEdge);
+                    nodeEdges.push(newEdge);
+                }
+                rawEdges.push(edge);
+            });
+        } else if (node.props.to) {
+            // ensure connections exist
+            data.forEach(function (item) {
+                nodeConnections = nodeConnections.concat(
+                    connectionsArray.filter(function (connection) {
+                        const name = connection.name === "to";
+                        const entityID = connection.entityID === item[node.props.primary_key];
+                        const entityType = connection.entityType === node.props.graphql_meta_type;
+                        return name && entityID && entityType;
+                    }),
+                );
+                const foundFrom = connectionsArray.find(function (connection) {
+                    const nodeID = connection.nodeID === node.props.fromNodeID;
+                    const name = connection.name === "to";
+                    const entityID = connection.entityID === item[node.props.to._metadata.id];
+                    const entityType = connection.entityType === node.props.to._metadata.type;
+                    return nodeID && name && entityID && entityType;
+                });
+                const foundTo = connectionsArray.find(function (connection) {
+                    const nodeID = connection.nodeID === node.id;
+                    const name = connection.name === "from";
+                    const entityID = connection.entityID === item[node.props.primary_key];
+                    const entityType = connection.entityType === node.props.type;
+                    return nodeID && name && entityID && entityType;
+                });
+                const edge = {};
+                if (foundFrom) {
+                    edge.from = foundFrom;
+                    nodeConnections.push(foundFrom);
+                } else {
+                    const newFrom = {
+                        id: uuidv4(),
+                        nodeID: node.props.fromNodeID,
+                        name: "from",
+                        entityID: item[node.props.primary_key],
+                        entityType: node.props.graphql_meta_type,
+                        x: null,
+                        y: null,
+                    };
+                    edge.from = newFrom;
+                    newConnections.push(newFrom);
+                    nodeConnections.push(newFrom);
+                }
+                if (foundTo) {
+                    edge.to = foundTo;
+                    nodeConnections.push(foundTo);
+                } else {
+                    const toFrom = {
+                        id: uuidv4(),
+                        nodeID: node.id,
+                        name: "to",
+                        entityID: node.props.to._metadata.id,
+                        entityType: node.props.to._metadata.type,
+                        x: null,
+                        y: null,
+                    };
+                    edge.to = toFrom;
+                    newConnections.push(toFrom);
+                    nodeConnections.push(toFrom);
+                }
+                const foundEdge = edgesArray.find(function (e) {
+                    const fromNodeID = e.fromNodeID === node.id;
+                    const fromConnectionID = e.fromConnectionID === e.from.id;
+                    const toNodeID = e.toNodeID === node.props.toNodeID;
+                    const toConnectionID = e.toConnectionID === e.to.id;
+                    return fromNodeID && fromConnectionID && toNodeID && toConnectionID;
+                });
+                if (foundEdge) {
+                    nodeEdges.push(foundEdge);
+                } else {
+                    const newEdge = {
+                        id: uuidv4(),
+                        fromNodeID: node.id,
+                        fromConnectionID: edge.from.id,
+                        toNodeID: node.props.toNodeID,
+                        toConnectionID: edge.to.id,
+                    };
+                    newEdges.push(newEdge);
+                    nodeEdges.push(newEdge);
+                }
+                rawEdges.push(edge);
+            });
+        } else {
+        }
+        nodes[node.id] = {
+            connections: nodeConnections.map(function (connection) {
+                return connection.id;
+            }),
+        };
+        return {
+            nodes: nodes,
+            nodeConnections: nodeConnections,
+            newConnections: newConnections,
+            nodeEdges: nodeEdges,
+            newEdges: newEdges,
+        };
+    }
+    syncNodesEdges(results) {
+		const self = this
+        const mapped = results.map(function (result) {
+            // node, header, data, count
+            return self.syncNodeEdges(result.node, result.data);
+        });
+        // stitch
+        const nodes = {};
+        let nodeConnections = [];
+        let newConnections = [];
+        let nodeEdges = [];
+        let newEdges = [];
+        mapped.forEach(function (synced) {
+            Object.keys(synced.nodes).forEach(function (key) {
+                nodes[key] = synced.nodes[key];
+            });
+            nodeConnections = nodeConnections.concat(synced.nodeConnections);
+            newConnections = newConnections.concat(synced.newConnections);
+            nodeEdges = nodeEdges.concat(synced.nodeEdges);
+            newEdges = newEdges.concat(synced.newEdges);
+        });
+        return {
+            nodes,
+            nodeConnections,
+            newConnections,
+            nodeEdges,
+            newEdges,
+        };
+    }
+    initializeNodes(candidates) {
+		const self = this
+        //const staged = { ...self.nodes };
+		const staged = self.nodes
+        const nodesArray = Object.values(staged);
+        candidates.forEach(function (node) {
+            const { width, height } = node;
+            if (width === null || height === null) throw new Error(`Cannot initialize with null dimensions: width=${width} height=${height}`);
+            if (node.render) {
+                staged[node.id] = node;
+            } else {
+                // get max x in nodes
+                // get max y in nodes
+                const zMax = nodesArray.reduce(function (max, item) {
+                    const candidate = item.z;
+                    if (item.id === rootID && max <= candidate) {
+                        return candidate;
+                    } else if (item.render && max <= candidate) {
+                        return candidate;
+                    } else {
+                        return max;
+                    }
+                }, 0);
+                const xMax = nodesArray.reduce(function (max, item) {
+                    const candidate = item.x + item.width * item.z;
+                    if (max < candidate) {
+                        return candidate;
+                    } else {
+                        return max;
+                    }
+                }, 0);
+                const yMax = nodesArray.reduce(function (max, item) {
+                    const candidate = item.y + item.height * item.z;
+                    if (max < candidate) {
+                        return candidate;
+                    } else {
+                        return max;
+                    }
+                }, 0);
+                const padding = 10;
+                const x = xMax + padding * zMax;
+                const y = yMax + padding * zMax;
+                const z = zMax;
+                staged[node.id] = {
+                    ...node,
+                    x,
+                    y,
+                    z,
+                    render: true,
+                };
+            }
+        });
+		//setNodes(staged);
+		self.nodes = staged
+	}
+    // node methods
+    function readNodes(candidates) {
+		const self = this
+        return candidates.map(function (node) {
+            return self.nodes[node.id];
+        });
+    }
+    function createNodes(candidates) {
+		const self = this
+		const staging = self.nodes
+        //const staging = { ...nodes };
+        candidates.forEach(function (node) {
+            staging[node.id] = node;
+        });
+		self.nodes = staging
+        //setNodes(staging);
+        //setComplete(false);
+    }
+    function updateNodes(candidates) {
+		const self = this
+        //const staging = { ...nodes };
+		const staging = self.nodes
+        candidates.forEach(function (node) {
+            staging[node.id] = node;
+        });
+        //setNodes(staging);
+		self.nodes = staging
+    }
+    function deleteNodes(candidates) {
+		const self = this
+        //const staging = { ...nodes };
+		const staging = self.nodes
+        candidates.forEach(function (node) {
+            delete staging[node.id];
+        });
+        //setNodes(staging);
+		self.nodes = staging
+    }
+    // edge methods
+    function readEdges(candidates) {
+		const self = this
+        return candidates.map(function (edge) {
+            return self.edges[edge.id];
+        });
+    }
+    function createEdges(candidates) {
+		const self = this
+        //const staging = { ...edges };
+		const staging = self.edges
+        candidates.forEach(function (edge) {
+            staging[edge.id] = edge;
+        });
+        //setEdges(staging);
+		self.edges = staging
+    }
+    function updateEdges(candidates) {
+        //const staging = { ...edges };
+		const self = this
+		const staging = self.edges
+        candidates.forEach(function (edge) {
+            staging[edge.id] = edge;
+        });
+        //setEdges(staging);
+		self.edges = staging
+    }
+    function deleteEdges(candidates) {
+        //const staging = { ...edges };
+		const self = this
+		const staging = self.edges
+        candidates.forEach(function (edge) {
+            delete staging[edge.id];
+        });
+        //setEdges(staging);
+		self.edges = staging
+    }
+    // connection methods
+    function initializeConnections(candidates) {
+		const self = this
+        //const staged = { ...connections };
+		const staged = self.connections
+        const connectionsArray = Object.values(staged);
+        candidates.forEach(function (connection) {
+            const { width, height } = node;
+            if (width === null || height === null) throw new Error(`Cannot initialize with null dimensions: width=${width} height=${height}`);
+            staged[connection.id] = connection;
+        });
+        //setConnections(staged);
+		self.connections = staged
+    }
+    function readConnections(candidates) {
+		const self = this
+        return candidates.map(function (connection) {
+            return self.connections[connection.id];
+        });
+    }
+    function createConnections(candidates) {
+		const self = this
+        //const staging = { ...connections };
+		const staging = self.connections
+        candidates.forEach(function (connection) {
+            staging[connection.id] = connection;
+        });
+        //setConnections(staging);
+		self.connections = staging
+    }
+    function updateConnections(candidates) {
+		const self = this
+        //const staging = { ...connections };
+		const staging = self.connections
+        candidates.forEach(function (connection) {
+            staging[connection.id] = connection;
+        });
+        //setConnections(staging);
+		self.connections = staging
+    }
+    function deleteConnections(candidates) {
+        //const staging = { ...connections };
+		const self = this
+		const staging = self.connections
+        candidates.forEach(function (connection) {
+            delete staging[connection.id];
+        });
+        //setConnections(staging);
+		self.connections = staging
+    }
+}
+
+export default new GraphService();

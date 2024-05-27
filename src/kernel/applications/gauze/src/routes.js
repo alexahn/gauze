@@ -6,6 +6,8 @@ import * as jose from "jose";
 
 import { PAGINATION_PAGE_SIZE } from "./constants.js";
 
+import * as components from "./components/index.js"
+
 const routes = [
 	{
 		name: "environment",
@@ -215,7 +217,7 @@ const routes = [
 	},
 	{
 		name: "system.root",
-		path: "/root?target",
+		path: "/root",
 		canActivate: (router, dependencies) => (toState, fromState, done) => {
 			//onActivate: function ({ dependencies }) {
 			const { services } = dependencies;
@@ -224,6 +226,7 @@ const routes = [
 				headers.forEach(function (header) {
 					model.default.create("HEADER", header.name, header);
 				});
+				// completeness and soundness checks
 				return Promise.resolve(true);
 			});
 		},
