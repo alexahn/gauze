@@ -162,7 +162,6 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 		return node.complete && node.width === null && node.height === null;
 	});
 	if (initializeStart) {
-		console.log("initializeStart", initializeStart);
 		setTimeout(function () {
 			render.create(route.name, "NODE", initializeStart.id, true);
 		}, 0);

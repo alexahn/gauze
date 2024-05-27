@@ -216,11 +216,11 @@ export default function Table({
 					return item.attributes;
 				});
 				const count = results[1][0].count;
-				const synced = graph.syncNodeEdges(node, data);
+				const synced = graph.syncNodeEdges(creating, data);
+				console.log("synced", synced);
 				creating.props.data = data;
 				creating.props.count = count;
-				creating.props.connectionIDs = synced.nodes[node.id].connection;
-				console.log("synced", synced);
+				creating.props.connectionIDs = synced.nodes[creating.id].connections;
 				// sync to service
 				graph.updateNodes(Object.values(nodes));
 				graph.updateEdges(Object.values(edges));
@@ -233,10 +233,6 @@ export default function Table({
 				updateNodes(Object.values(graph.nodes));
 				updateEdges(Object.values(graph.edges));
 				updateConnections(Object.values(graph.connections));
-
-				// note: render dispatch does not cause the local state to update, so we have to update the state manually
-				//dispatch({type: "RENDER"})
-				//router.navigate(route.name, { tx: uuidv4() })
 			});
 			//]);
 			// note: it seems we cannot create the connections without knowing the contents of the data
