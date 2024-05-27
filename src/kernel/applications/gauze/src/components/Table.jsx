@@ -59,8 +59,12 @@ export default function Table({
 	variables,
 	data,
 	count,
+	connectionIDs,
 }) {
 	if (!type) return;
+	if (connectionIDs && connectionIDs.length) {
+		console.log("connectionIDs", connectionIDs);
+	}
 	const header = model.read("HEADER", type);
 	const [fields, setFields] = useState(header.fields);
 	const [localWhere, setLocalWhere] = useState(variables.where || {});
@@ -320,7 +324,6 @@ export default function Table({
 			setSubmitCreate(false);
 		}
 	}
-
 	return (
 		<div className="mw-100 w-100">
 			<h1 align="center">{header.graphql_meta_type}</h1>

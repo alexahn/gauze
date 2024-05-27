@@ -19,6 +19,7 @@ export default function Node({
 	readNodes,
 	updateNodes,
 	deleteNodes,
+	syncNodeEdges,
 	connections,
 	createConnections,
 	readConnections,
@@ -111,6 +112,7 @@ export default function Node({
 				readNodes={readNodes}
 				updateNodes={updateNodes}
 				deleteNodes={deleteNodes}
+				syncNodeEdges={syncNodeEdges}
 				connections={connections}
 				createConnections={createConnections}
 				readConnections={readConnections}

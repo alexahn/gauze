@@ -35,6 +35,7 @@ export default function Graph({
 	readNodes,
 	updateNodes,
 	deleteNodes,
+	syncNodeEdges,
 	edges,
 	createEdges,
 	readEdges,
@@ -149,6 +150,7 @@ export default function Graph({
 							readNodes={readNodes}
 							updateNodes={updateNodes}
 							deleteNodes={deleteNodes}
+							syncNodeEdges={syncNodeEdges}
 							connections={connections}
 							createConnections={createConnections}
 							readConnections={readConnections}

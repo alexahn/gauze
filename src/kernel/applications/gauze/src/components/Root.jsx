@@ -124,6 +124,7 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 		const newConnections = [];
 		let nodeConnections = [];
 		const connectionsArray = Object.values(connections);
+		const edgesArray = Object.values(edges);
 		if (node.props.from) {
 			data.forEach(function (item) {
 				nodeConnections = nodeConnections.concat(
@@ -183,7 +184,7 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 					newConnections.push(toFrom);
 					nodeConnections.push(toFrom);
 				}
-				const foundEdge = edges.find(function (e) {
+				const foundEdge = edgesArray.find(function (e) {
 					const fromNodeID = e.fromNodeID === node.props.fromNodeID;
 					const fromConnectionID = e.fromConnectionID === e.from.id;
 					const toNodeID = e.toNodeID === node.id;
@@ -265,7 +266,7 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 					newConnections.push(toFrom);
 					nodeConnections.push(toFrom);
 				}
-				const foundEdge = edges.find(function (e) {
+				const foundEdge = edgesArray.find(function (e) {
 					const fromNodeID = e.fromNodeID === node.id;
 					const fromConnectionID = e.fromConnectionID === e.from.id;
 					const toNodeID = e.toNodeID === node.props.toNodeID;
@@ -405,7 +406,7 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 								...result.node.props,
 								data: result.data,
 								count: result.count,
-								connections: synced.nodes[result.node.id].connections,
+								connectionIDs: synced.nodes[result.node.id].connections,
 							},
 							complete: true,
 						};
@@ -415,6 +416,7 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 				setCompleting(false);
 			})
 			.catch(function (err) {
+				console.error(err);
 				setCompleting(false);
 				setRetry(retry - 1);
 			});
@@ -494,7 +496,7 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 								...result.node.props,
 								data: result.data,
 								count: result.count,
-								connections: synced.nodes[result.node.id].connections,
+								connectionIDs: synced.nodes[result.node.id].connections,
 							},
 							sound: true,
 						};
@@ -504,6 +506,7 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 				setSounding(false);
 			})
 			.catch(function (err) {
+				console.error(err);
 				setSounding(false);
 				setRetry(retry - 1);
 			});
@@ -617,6 +620,16 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 		setEdges(staging);
 	}
 	// connection methods
+	function initializeConnections(candidates) {
+		const staged = { ...connections };
+		const connectionsArray = Object.values(staged);
+		candidates.forEach(function (connection) {
+			const { width, height } = node;
+			if (width === null || height === null) throw new Error(`Cannot initialize with null dimensions: width=${width} height=${height}`);
+			staged[connection.id] = connection;
+		});
+		setConnections(staged);
+	}
 	function readConnections(candidates) {
 		return candidates.map(function (connection) {
 			return connections[connection.id];
@@ -663,6 +676,7 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 			readNodes={readNodes}
 			updateNodes={updateNodes}
 			deleteNodes={deleteNodes}
+			syncNodeEdges={syncNodeEdges}
 			edges={edges}
 			createEdges={createEdges}
 			readEdges={readEdges}
