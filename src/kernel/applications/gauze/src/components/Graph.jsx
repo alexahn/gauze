@@ -41,6 +41,7 @@ export default function Graph({
 	updateEdges,
 	deleteEdges,
 	connections,
+	initializeConnections,
 	createConnections,
 	readConnections,
 	updateConnections,
@@ -156,6 +157,7 @@ export default function Graph({
 							updateEdges={updateEdges}
 							deleteEdges={deleteEdges}
 							connections={connections}
+							initializeConnections={initializeConnections}
 							createConnections={createConnections}
 							readConnections={readConnections}
 							updateConnections={updateConnections}

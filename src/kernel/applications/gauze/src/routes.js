@@ -244,8 +244,8 @@ const routes = [
 							index: 0,
 							oldX: 0,
 							oldY: 0,
-							x: null,
-							y: null,
+							x: 0,
+							y: 0,
 							z: 1,
 							height: null,
 							width: null,
@@ -270,8 +270,8 @@ const routes = [
 								data: [],
 								count: 0,
 							},
-							complete: true,
-							sound: true,
+							complete: false,
+							sound: false,
 							render: false,
 						},
 					]);
@@ -333,20 +333,6 @@ const routes = [
 									data: data,
 									count: count,
 								};
-								/*
-								updateNodes([
-									{
-										...node,
-										props: {
-											...node.props,
-											type: header.name,
-											data: data,
-											count: count,
-										},
-										complete: true,
-									},
-								]);
-								*/
 							});
 						}),
 				)
@@ -370,8 +356,6 @@ const routes = [
 							}),
 						);
 						return results;
-						//setComplete(true);
-						//setCompleting(false);
 					})
 					.catch(function (err) {
 						console.error(err);

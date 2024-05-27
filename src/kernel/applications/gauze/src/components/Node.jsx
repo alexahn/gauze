@@ -26,6 +26,7 @@ export default function Node({
 	updateEdges,
 	deleteEdges,
 	connections,
+	initializeConnections,
 	createConnections,
 	readConnections,
 	updateConnections,
@@ -96,6 +97,7 @@ export default function Node({
 			window.removeEventListener("mousemove", onMouseMove);
 		};
 	});
+	// todo: remove render from here and define it inside of the connection props
 	return (
 		<div
 			className="absolute shadow-1"
@@ -113,8 +115,10 @@ export default function Node({
 		>
 			<node.component
 				route={route}
+				render={render}
 				node={node}
 				nodes={nodes}
+				initializeNodes={initializeNodes}
 				createNodes={createNodes}
 				readNodes={readNodes}
 				updateNodes={updateNodes}
@@ -125,6 +129,7 @@ export default function Node({
 				updateEdges={updateEdges}
 				deleteEdges={deleteEdges}
 				connections={connections}
+				initializeConnections={initializeConnections}
 				createConnections={createConnections}
 				readConnections={readConnections}
 				updateConnections={updateConnections}

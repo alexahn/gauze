@@ -14,6 +14,8 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 	const [edges, setEdges] = useState(graph.edges);
 	const [connections, setConnections] = useState(graph.connections);
 
+	// todo: split this function so that we only change coordinates for new components
+	// todo: we want to differentiate between loading from pre-existing coordinates to finding a place for a new component (otherwise the padding will cause a drift on every load)
 	function initializeNodes(candidates) {
 		const staged = { ...nodes };
 		const nodesArray = Object.values(staged);
@@ -125,7 +127,7 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 		const staged = { ...connections };
 		const connectionsArray = Object.values(staged);
 		candidates.forEach(function (connection) {
-			const { width, height } = node;
+			const { width, height } = connection;
 			if (width === null || height === null) throw new Error(`Cannot initialize with null dimensions: width=${width} height=${height}`);
 			staged[connection.id] = connection;
 		});

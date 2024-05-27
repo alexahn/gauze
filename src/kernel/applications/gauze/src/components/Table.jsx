@@ -40,6 +40,7 @@ function read(gauze, model, header, variables) {
 
 export default function Table({
 	route,
+	render,
 	node,
 	nodes,
 	createNodes,
@@ -52,6 +53,7 @@ export default function Table({
 	updateEdges,
 	deleteEdges,
 	connections,
+	initializeConnections,
 	createConnections,
 	readConnections,
 	updateConnections,
@@ -70,6 +72,7 @@ export default function Table({
 	connectionIDs,
 }) {
 	if (!type) return;
+	/*
 	if (connectionIDs && connectionIDs.length) {
 		console.log(
 			"connectionIDs",
@@ -80,6 +83,7 @@ export default function Table({
 			}),
 		);
 	}
+	*/
 	const header = model.read("HEADER", type);
 	const [fields, setFields] = useState(header.fields);
 	const [localWhere, setLocalWhere] = useState(variables.where || {});
@@ -226,6 +230,7 @@ export default function Table({
 				graph.updateEdges(Object.values(edges));
 				graph.updateConnections(Object.values(connections));
 				// create new edges, connections, and nodes using service
+				// todo: map synced.newConnections to include component and props
 				graph.createConnections(synced.newConnections);
 				graph.createEdges(synced.newEdges);
 				graph.createNodes([creating]);
@@ -503,7 +508,16 @@ export default function Table({
 								return (
 									<th key={item[header.primary_key]} align="center" className="mw4 w4 pa1 relative row" tabIndex="0">
 										<div className="truncate-ns">TRAVERSE</div>
-										<Connection />
+										{node.props.connectionIDs.map(function (id) {
+											const connection = connections[id];
+											if (connection.entityID === item[header.primary_key] && connection.entityType === header.graphql_meta_type) {
+												return (
+													<Connection key={id} route={route} node={node} render={render} connection={connection} initializeConnections={initializeConnections} />
+												);
+											} else {
+												return null;
+											}
+										})}
 										{/* connection component? */}
 										<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
 											<div className="pa1">TRAVERSE</div>

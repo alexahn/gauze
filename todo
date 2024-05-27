@@ -532,6 +532,11 @@
 			[x] creating items in a table should also create a relationship tied to the parent/child
 			[ ] x button to close a table
 			[ ] paginating a table should show parent/children for the current set of results and hide the others
+		[ ] connection component to track where to draw svg paths
+			[x] connection initialization to set coordinates
+			[x] piping to enable connections to be defined
+			[ ] fix connection updates so that the parent gets the source connections
+			[ ] update connection definition to include component and props
 		[x] expose source field to system interface
 		[-] it is ideal to have a mapping from the raw data to the presentation but it doesn't seem possible because the interface introduces a semantic layer
 			[-] it seems the core data to represent the ui will be things that represent objects in the interface (e.g. a table)
