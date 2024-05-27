@@ -14,7 +14,9 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 	const headers = model.all("HEADER");
 	const systemJWT = gauze.getSystemJWT();
 	const systemJWTPayload = jose.decodeJwt(systemJWT);
-	//const rootID = uuidv4();
+	const agentHeader = headers.find(function (header) {
+		return header.table_name === systemJWTPayload.agent_type;
+	});
 	const [nodes, setNodes] = useState(function () {
 		console.log("ONLY CALL ONCE");
 		// structural check to make sure index property aligns with order in array
@@ -34,8 +36,12 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 					gauze: gauze,
 					model: model,
 					router: router,
-					type: null,
-					table_name: systemJWTPayload.agent_type,
+					type: agentHeader.name,
+					table_name: agentHeader.table_name,
+					primary_key: agentHeader.primary_key,
+					graphql_meta_type: agentHeader.graphql_meta_type,
+					fromNodeID: null,
+					toNodeID: null,
 					from: null,
 					to: null,
 					variables: {
@@ -110,7 +116,220 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 		}
 		return header;
 	}
-
+	function syncNodeEdges(node, data) {
+		const nodes = {};
+		const rawEdges = [];
+		const newEdges = [];
+		let nodeEdges = [];
+		const newConnections = [];
+		let nodeConnections = [];
+		const connectionsArray = Object.values(connections);
+		if (node.props.from) {
+			data.forEach(function (item) {
+				nodeConnections = nodeConnections.concat(
+					connectionsArray.filter(function (connection) {
+						const name = connection.name === "from";
+						const entityID = connection.entityID === item[node.props.primary_key];
+						const entityType = connection.entityType === node.props.graphql_meta_type;
+						return name && entityID && entityType;
+					}),
+				);
+				const foundFrom = connectionsArray.find(function (connection) {
+					const nodeID = connection.nodeID === node.props.fromNodeID;
+					const name = connection.name === "from";
+					const entityID = connection.entityID === item[node.props.from._metadata.id];
+					const entityType = connection.entityType === node.props.from._metadata.type;
+					return nodeID && name && entityID && entityType;
+				});
+				const foundTo = connectionsArray.find(function (connection) {
+					const nodeID = connection.nodeID === node.id;
+					const name = connection.name === "to";
+					const entityID = connection.entityID === item[node.props.primary_key];
+					const entityType = connection.entityType === node.props.type;
+					return nodeID && name && entityID && entityType;
+				});
+				const edge = {};
+				if (foundFrom) {
+					edge.from = foundFrom;
+					nodeConnections.push(foundFrom);
+				} else {
+					const newFrom = {
+						id: uuidv4(),
+						nodeID: node.props.fromNodeID,
+						name: "from",
+						entityID: node.props.from._metadata.id,
+						entityType: node.props.from._metadata.type,
+						x: null,
+						y: null,
+					};
+					edge.from = newFrom;
+					newConnections.push(newFrom);
+					nodeConnections.push(newFrom);
+				}
+				if (foundTo) {
+					edge.to = foundTo;
+					nodeConnections.push(foundTo);
+				} else {
+					const toFrom = {
+						id: uuidv4(),
+						nodeID: node.id,
+						name: "to",
+						entityID: item[node.props.primary_key],
+						entityType: node.props.graphql_meta_type,
+						x: null,
+						y: null,
+					};
+					edge.to = toFrom;
+					newConnections.push(toFrom);
+					nodeConnections.push(toFrom);
+				}
+				const foundEdge = edges.find(function (e) {
+					const fromNodeID = e.fromNodeID === node.props.fromNodeID;
+					const fromConnectionID = e.fromConnectionID === e.from.id;
+					const toNodeID = e.toNodeID === node.id;
+					const toConnectionID = e.toConnectionID === e.to.id;
+					return fromNodeID && fromConnectionID && toNodeID && toConnectionID;
+				});
+				if (foundEdge) {
+					nodeEdges.push(foundEdge);
+				} else {
+					const newEdge = {
+						id: uuidv4(),
+						fromNodeID: node.props.fromNodeID,
+						fromConnectionID: edge.from.id,
+						toNodeID: node.id,
+						toConnectionID: edge.to.id,
+					};
+					newEdges.push(newEdge);
+					nodeEdges.push(newEdge);
+				}
+				rawEdges.push(edge);
+			});
+		} else if (node.props.to) {
+			// ensure connections exist
+			data.forEach(function (item) {
+				nodeConnections = nodeConnections.concat(
+					connectionsArray.filter(function (connection) {
+						const name = connection.name === "to";
+						const entityID = connection.entityID === item[node.props.primary_key];
+						const entityType = connection.entityType === node.props.graphql_meta_type;
+						return name && entityID && entityType;
+					}),
+				);
+				const foundFrom = connectionsArray.find(function (connection) {
+					const nodeID = connection.nodeID === node.props.fromNodeID;
+					const name = connection.name === "to";
+					const entityID = connection.entityID === item[node.props.to._metadata.id];
+					const entityType = connection.entityType === node.props.to._metadata.type;
+					return nodeID && name && entityID && entityType;
+				});
+				const foundTo = connectionsArray.find(function (connection) {
+					const nodeID = connection.nodeID === node.id;
+					const name = connection.name === "from";
+					const entityID = connection.entityID === item[node.props.primary_key];
+					const entityType = connection.entityType === node.props.type;
+					return nodeID && name && entityID && entityType;
+				});
+				const edge = {};
+				if (foundFrom) {
+					edge.from = foundFrom;
+					nodeConnections.push(foundFrom);
+				} else {
+					const newFrom = {
+						id: uuidv4(),
+						nodeID: node.props.fromNodeID,
+						name: "from",
+						entityID: item[node.props.primary_key],
+						entityType: node.props.graphql_meta_type,
+						x: null,
+						y: null,
+					};
+					edge.from = newFrom;
+					newConnections.push(newFrom);
+					nodeConnections.push(newFrom);
+				}
+				if (foundTo) {
+					edge.to = foundTo;
+					nodeConnections.push(foundTo);
+				} else {
+					const toFrom = {
+						id: uuidv4(),
+						nodeID: node.id,
+						name: "to",
+						entityID: node.props.to._metadata.id,
+						entityType: node.props.to._metadata.type,
+						x: null,
+						y: null,
+					};
+					edge.to = toFrom;
+					newConnections.push(toFrom);
+					nodeConnections.push(toFrom);
+				}
+				const foundEdge = edges.find(function (e) {
+					const fromNodeID = e.fromNodeID === node.id;
+					const fromConnectionID = e.fromConnectionID === e.from.id;
+					const toNodeID = e.toNodeID === node.props.toNodeID;
+					const toConnectionID = e.toConnectionID === e.to.id;
+					return fromNodeID && fromConnectionID && toNodeID && toConnectionID;
+				});
+				if (foundEdge) {
+					nodeEdges.push(foundEdge);
+				} else {
+					const newEdge = {
+						id: uuidv4(),
+						fromNodeID: node.id,
+						fromConnectionID: edge.from.id,
+						toNodeID: node.props.toNodeID,
+						toConnectionID: edge.to.id,
+					};
+					newEdges.push(newEdge);
+					nodeEdges.push(newEdge);
+				}
+				rawEdges.push(edge);
+			});
+		} else {
+		}
+		nodes[node.id] = {
+			connections: nodeConnections.map(function (connection) {
+				return connection.id;
+			}),
+		};
+		return {
+			nodes: nodes,
+			nodeConnections: nodeConnections,
+			newConnections: newConnections,
+			nodeEdges: nodeEdges,
+			newEdges: newEdges,
+		};
+	}
+	function syncNodesEdges(results) {
+		const mapped = results.map(function (result) {
+			// node, header, data, count
+			return syncNodeEdges(result.node, result.data);
+		});
+		// stitch
+		const nodes = {};
+		let nodeConnections = [];
+		let newConnections = [];
+		let nodeEdges = [];
+		let newEdges = [];
+		mapped.forEach(function (synced) {
+			Object.keys(synced.nodes).forEach(function (key) {
+				nodes[key] = synced.nodes[key];
+			});
+			nodeConnections = nodeConnections.concat(synced.nodeConnection);
+			newConnections = newConnections.concat(synced.newConnections);
+			nodeEdges = nodeEdges.concat(synced.nodeEdges);
+			newEdges = newEdges.concat(synced.newEdges);
+		});
+		return {
+			nodes,
+			nodeConnections,
+			newConnections,
+			nodeEdges,
+			newEdges,
+		};
+	}
 	// first stage for completeness
 	if (!complete && !completing && 0 < retry) {
 		setCompleting(true);
@@ -151,6 +370,13 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 							return item.attributes;
 						});
 						const count = results[1][0].count;
+						return {
+							node: node,
+							header: header,
+							data: data,
+							count: count,
+						};
+						/*
 						updateNodes([
 							{
 								...node,
@@ -163,22 +389,28 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 								complete: true,
 							},
 						]);
-						/*
-						updateNode(node.index, {
-							...node,
-							props: {
-								...node.props,
-								type: header.name,
-								data: data,
-								count: count,
-							},
-							complete: true,
-						});
 						*/
 					});
 				}),
 		)
 			.then(function (results) {
+				const synced = syncNodesEdges(results);
+				createConnections(synced.newConnections);
+				createEdges(synced.newEdges);
+				updateNodes(
+					results.map(function (result) {
+						return {
+							...result.node,
+							props: {
+								...result.node.props,
+								data: result.data,
+								count: result.count,
+								connections: synced.nodes[result.node.id].connections,
+							},
+							complete: true,
+						};
+					}),
+				);
 				setComplete(true);
 				setCompleting(false);
 			})
@@ -227,6 +459,13 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 							return item.attributes;
 						});
 						const count = results[1][0].count;
+						return {
+							node: node,
+							header: header,
+							data: data,
+							count: count,
+						};
+						/*
 						updateNodes([
 							{
 								...node,
@@ -239,22 +478,28 @@ export default function Root({ gauze, model, router, route, render, rootID }) {
 								sound: true,
 							},
 						]);
-						/*
-						updateNode(node.index, {
-							...node,
-							props: {
-								...node.props,
-								type: header.name,
-								data: data,
-								count: count,
-							},
-							complete: true,
-						});
 						*/
 					});
 				}),
 		)
 			.then(function (results) {
+				const synced = syncNodesEdges(results);
+				createConnections(synced.newConnections);
+				createEdges(synced.newEdges);
+				updateNodes(
+					results.map(function (result) {
+						return {
+							...result.node,
+							props: {
+								...result.node.props,
+								data: result.data,
+								count: result.count,
+								connections: synced.nodes[result.node.id].connections,
+							},
+							sound: true,
+						};
+					}),
+				);
 				setSound(true);
 				setSounding(false);
 			})

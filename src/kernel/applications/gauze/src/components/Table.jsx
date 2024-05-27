@@ -111,6 +111,15 @@ export default function Table({
 						return item.attributes;
 					});
 					const count = results[1][0].count;
+					if (node.from) {
+						// ensure connections exist
+						// if they don't, then create them, and also create an edge
+					} else if (node.to) {
+						// ensure connections exist
+						// if they don't, then create them, and also create an edge
+					} else {
+					}
+					// set the connections prop on the node
 					updateNodes([
 						{
 							...node,
@@ -165,7 +174,9 @@ export default function Table({
 						model: model,
 						router: router,
 						type: toHeader.name,
-						table_name: null,
+						table_name: toHeader.table_name,
+						primary_key: toHeader.primary_key,
+						graphql_meta_type: toHeader.graphql_meta_type,
 						from: source,
 						to: null,
 						variables: {
@@ -180,6 +191,7 @@ export default function Table({
 					sound: false,
 				},
 			]);
+			// note: it seems we cannot create the connections without knowing the contents of the data
 		};
 	}
 
