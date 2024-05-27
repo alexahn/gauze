@@ -181,7 +181,6 @@ export default function Table({
 				},
 				_direction: "to",
 			};
-			//createNodes([
 			const creating = {
 				id: uuidv4(),
 				oldX: 0,
@@ -245,11 +244,24 @@ export default function Table({
 				});
 				graph.updateNodes(connectedNodes);
 				// sync from service
-				updateNodes(Object.values(graph.nodes));
+				updateNodes(
+					Object.values(graph.nodes).map(function (n) {
+						// reinitialize the source
+						if (n.id === node.id) {
+							return {
+								...n,
+								width: null,
+								height: null,
+							};
+						} else {
+							return n;
+						}
+					}),
+				);
 				updateEdges(Object.values(graph.edges));
 				updateConnections(Object.values(graph.connections));
+				// reinitialize node
 			});
-			//]);
 			// note: it seems we cannot create the connections without knowing the contents of the data
 		};
 	}
