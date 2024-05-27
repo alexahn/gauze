@@ -10,21 +10,16 @@ import Table from "./Table.jsx";
 import * as jose from "jose";
 import { v4 as uuidv4 } from "uuid";
 
-export default function Root({ gauze, model, router, route, render }) {
+export default function Root({ gauze, model, router, route, render, rootID }) {
 	const headers = model.all("HEADER");
 	const systemJWT = gauze.getSystemJWT();
 	const systemJWTPayload = jose.decodeJwt(systemJWT);
-	const rootID = uuidv4();
-	const [indexNode, setIndexNode] = useState({
-		[rootID]: 0,
-	});
-	const [indexEdge, setIndexEdge] = useState({});
-	const [indexConnection, setIndexConnection] = useState({});
+	//const rootID = uuidv4();
 	const [nodes, setNodes] = useState(function () {
 		console.log("ONLY CALL ONCE");
 		// structural check to make sure index property aligns with order in array
-		return [
-			{
+		return {
+			[rootID]: {
 				id: rootID,
 				index: 0,
 				oldX: 0,
@@ -54,10 +49,10 @@ export default function Root({ gauze, model, router, route, render }) {
 				sound: false,
 				render: false,
 			},
-		];
+		};
 	});
-	const [edges, setEdges] = useState([]);
-	const [connections, setConnections] = useState([]);
+	const [edges, setEdges] = useState({});
+	const [connections, setConnections] = useState({});
 	/*
 	edge = {
 		from_node:
@@ -77,13 +72,13 @@ export default function Root({ gauze, model, router, route, render }) {
 	}
 	*/
 	const [complete, setComplete] = useState(function () {
-		return nodes.every(function (node) {
+		return Object.values(nodes).every(function (node) {
 			return node.complete;
 		});
 	});
 	const [completing, setCompleting] = useState(complete);
 	const [sound, setSound] = useState(function () {
-		return nodes.every(function (node) {
+		return Object.values(nodes).every(function (node) {
 			return node.sound;
 		});
 	});
@@ -120,7 +115,7 @@ export default function Root({ gauze, model, router, route, render }) {
 	if (!complete && !completing && 0 < retry) {
 		setCompleting(true);
 		return Promise.all(
-			nodes
+			Object.values(nodes)
 				.filter(function (node) {
 					return !node.complete;
 				})
@@ -156,6 +151,19 @@ export default function Root({ gauze, model, router, route, render }) {
 							return item.attributes;
 						});
 						const count = results[1][0].count;
+						updateNodes([
+							{
+								...node,
+								props: {
+									...node.props,
+									type: header.name,
+									data: data,
+									count: count,
+								},
+								complete: true,
+							},
+						]);
+						/*
 						updateNode(node.index, {
 							...node,
 							props: {
@@ -166,6 +174,7 @@ export default function Root({ gauze, model, router, route, render }) {
 							},
 							complete: true,
 						});
+						*/
 					});
 				}),
 		)
@@ -183,7 +192,7 @@ export default function Root({ gauze, model, router, route, render }) {
 	if (complete && !sound && !sounding && 0 < retry) {
 		setSounding(true);
 		return Promise.all(
-			nodes
+			Object.values(nodes)
 				.filter(function (node) {
 					return !node.sound;
 				})
@@ -218,6 +227,19 @@ export default function Root({ gauze, model, router, route, render }) {
 							return item.attributes;
 						});
 						const count = results[1][0].count;
+						updateNodes([
+							{
+								...node,
+								props: {
+									...node.props,
+									type: header.name,
+									data: data,
+									count: count,
+								},
+								sound: true,
+							},
+						]);
+						/*
 						updateNode(node.index, {
 							...node,
 							props: {
@@ -228,6 +250,7 @@ export default function Root({ gauze, model, router, route, render }) {
 							},
 							complete: true,
 						});
+						*/
 					});
 				}),
 		)
@@ -241,95 +264,147 @@ export default function Root({ gauze, model, router, route, render }) {
 			});
 	}
 
-	function initializeNode(index, node) {
-		const { width, height } = node;
-		const updated = [...nodes];
-		// this node has already rendered before, so we only need to update the width and height
-		if (node.render) {
-			updated[index] = {
-				...node,
-				width,
-				height,
-			};
-		} else {
-			const x = 0 < index ? updated[index - 1].x + updated[index - 1].width * updated[index - 1].z + 10 * updated[index - 1].z : 0;
-			const y = 0 < index ? updated[index - 1].y + updated[index - 1].height * updated[index - 1].z + 10 * updated[index - 1].z : 0;
-			updated[index] = {
-				...node,
-				width,
-				height,
-				x,
-				y,
-				z: updated[0].z,
-				render: true,
-			};
-		}
-		setNodes(updated);
+	function initializeNodes(candidates) {
+		const staged = { ...nodes };
+		const nodesArray = Object.values(staged);
+		candidates.forEach(function (node) {
+			const { width, height } = node;
+			if (width === null || height === null) throw new Error(`Cannot initialize with null dimensions: width=${width} height=${height}`);
+			if (node.render) {
+				staged[node.id] = node;
+			} else {
+				// get max x in nodes
+				// get max y in nodes
+				const zMax = nodesArray.reduce(function (max, item) {
+					const candidate = item.z;
+					if (item.id === rootID && max <= candidate) {
+						return candidate;
+					} else if (item.render && max <= candidate) {
+						return candidate;
+					} else {
+						return max;
+					}
+				}, 0);
+				const xMax = nodesArray.reduce(function (max, item) {
+					const candidate = item.x + item.width * item.z;
+					if (max < candidate) {
+						return candidate;
+					} else {
+						return max;
+					}
+				}, 0);
+				const yMax = nodesArray.reduce(function (max, item) {
+					const candidate = item.y + item.height * item.z;
+					if (max < candidate) {
+						return candidate;
+					} else {
+						return max;
+					}
+				}, 0);
+				const padding = 10;
+				const x = xMax + padding * zMax;
+				const y = yMax + padding * zMax;
+				const z = zMax;
+				staged[node.id] = {
+					...node,
+					x,
+					y,
+					z,
+					render: true,
+				};
+			}
+		});
+		setNodes(staged);
 	}
-	function createNode(node) {
-		const updated = [...nodes];
-		node.index = nodes.length;
-		updated.push(node);
-		setNodes(updated);
+	// node methods
+	function readNodes(candidates) {
+		return candidates.map(function (node) {
+			return nodes[node.id];
+		});
+	}
+	function createNodes(candidates) {
+		const staging = { ...nodes };
+		candidates.forEach(function (node) {
+			staging[node.id] = node;
+		});
+		setNodes(staging);
 		setComplete(false);
 	}
-	function updateNode(index, node) {
-		const updated = [...nodes];
-		updated[index] = {
-			...updated[index],
-			...node,
-		};
-		setNodes(updated);
+	function updateNodes(candidates) {
+		const staging = { ...nodes };
+		candidates.forEach(function (node) {
+			staging[node.id] = node;
+		});
+		setNodes(staging);
 	}
-	function deleteNode(index) {
-		const updated = [...nodes];
-		updated.splice(index, 1);
-		setNodes(updated);
+	function deleteNodes(candidates) {
+		const staging = { ...nodes };
+		candidates.forEach(function (node) {
+			delete staging[node.id];
+		});
+		setNodes(staging);
 	}
-	function createEdge(edge) {
-		const updated = [...edges];
-		edge.index = edges.length;
-		updated.push(edge);
-		setEdges(updated);
+	// edge methods
+	function readEdges(candidates) {
+		return candidates.map(function (edge) {
+			return edges[edge.id];
+		});
 	}
-	function updateEdge(index, edge) {
-		const updated = [...edges];
-		updated[index] = {
-			...updated[index],
-			edge,
-		};
-		setNodes(updated);
+	function createEdges(candidates) {
+		const staging = { ...edges };
+		candidates.forEach(function (edge) {
+			staging[edge.id] = edge;
+		});
+		setEdges(staging);
 	}
-	function deleteEdge(index) {
-		const updated = [...edges];
-		updated.splice(index, 1);
-		setNodes(updated);
+	function updateEdges(candidates) {
+		const staging = { ...edges };
+		candidates.forEach(function (edge) {
+			staging[edge.id] = edge;
+		});
+		setEdges(staging);
 	}
-	function createConnection(connection) {
-		const updated = [...connections];
-		connection.index = connections.length;
-		updated.push(connection);
-		setConnections(updated);
+	function deleteEdges(candidates) {
+		const staging = { ...edges };
+		candidates.forEach(function (edge) {
+			delete staging[edge.id];
+		});
+		setEdges(staging);
 	}
-	function updateConnection(index, connection) {
-		const updated = [...connections];
-		updated[index] = {
-			...updated[index],
-			connection,
-		};
-		setNodes(updated);
+	// connection methods
+	function readConnections(candidates) {
+		return candidates.map(function (connection) {
+			return connections[connection.id];
+		});
 	}
-	function deleteConnection(index) {
-		const updated = [...connections];
-		updated.splice(index, 1);
-		setNodes(updated);
+	function createConnections(candidates) {
+		const staging = { ...connections };
+		candidates.forEach(function (connection) {
+			staging[connection.id] = connection;
+		});
+		setConnections(staging);
 	}
-	const initializeStart = nodes.findIndex(function (node) {
+	function updateConnections(candidates) {
+		const staging = { ...connections };
+		candidates.forEach(function (connection) {
+			staging[connection.id] = connection;
+		});
+		setConnections(staging);
+	}
+	function deleteConnections(candidates) {
+		const staging = { ...connections };
+		candidates.forEach(function (connection) {
+			delete staging[connection.id];
+		});
+		setConnections(staging);
+	}
+
+	const initializeStart = Object.values(nodes).find(function (node) {
 		return node.complete && node.width === null && node.height === null;
 	});
-	if (0 <= initializeStart) {
+	if (initializeStart) {
 		setTimeout(function () {
-			render.create(route.name, "NODE", initializeStart, true);
+			render.create(route.name, "NODE", initializeStart.id, true);
 		}, 0);
 	}
 	return (
@@ -338,11 +413,21 @@ export default function Root({ gauze, model, router, route, render }) {
 			route={route}
 			render={render}
 			nodes={nodes}
-			setNodes={setNodes}
-			initializeNode={initializeNode}
-			updateNode={updateNode}
-			createNode={createNode}
-			deleteNode={deleteNode}
+			initializeNodes={initializeNodes}
+			createNodes={createNodes}
+			readNodes={readNodes}
+			updateNodes={updateNodes}
+			deleteNodes={deleteNodes}
+			edges={edges}
+			createEdges={createEdges}
+			readEdges={readEdges}
+			updateEdges={updateEdges}
+			deleteEdges={deleteEdges}
+			connections={connections}
+			createConnections={createConnections}
+			readConnections={readConnections}
+			updateConnections={updateConnections}
+			deleteConnections={deleteConnections}
 		/>
 	);
 }

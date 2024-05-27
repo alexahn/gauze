@@ -26,16 +26,36 @@ function abstractToAbsolute({ x, y, z, width, height }) {
 	};
 }
 
-export default function Graph({ route, render, nodes, setNodes, initializeNode, updateNode, createNode, deleteNode }) {
+export default function Graph({
+	route,
+	render,
+	nodes,
+	initializeNodes,
+	createNodes,
+	readNodes,
+	updateNodes,
+	deleteNodes,
+	edges,
+	createEdges,
+	readEdges,
+	updateEdges,
+	deleteEdges,
+	connections,
+	createConnections,
+	readConnections,
+	updateConnections,
+	deleteConnections,
+}) {
 	const containerRef = useRef();
+	const nodesArray = Object.values(nodes);
 	const [isPanning, setPanning] = useState(false);
 	function onMouseDown(e) {
 		//e.preventDefault();
 		if (e.button === 2) {
 		} else if (e.button === 1) {
 			setPanning(true);
-			setNodes(
-				nodes.map(function (position) {
+			updateNodes(
+				nodesArray.map(function (position) {
 					return {
 						...position,
 						oldX: e.clientX,
@@ -46,8 +66,8 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 		} else if (e.button === 0) {
 			if (e.target === containerRef.current) {
 				setPanning(true);
-				setNodes(
-					nodes.map(function (position) {
+				updateNodes(
+					nodesArray.map(function (position) {
 						return {
 							...position,
 							oldX: e.clientX,
@@ -65,8 +85,8 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 	}
 	function onMouseMove(e) {
 		if (isPanning) {
-			setNodes(
-				nodes.map(function (position) {
+			updateNodes(
+				nodesArray.map(function (position) {
 					return {
 						...position,
 						x: position.x + e.clientX - position.oldX,
@@ -83,8 +103,8 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 			const sign = Math.sign(e.deltaY) / 10;
 			const scale = 1 - sign;
 			const rect = containerRef.current.getBoundingClientRect();
-			setNodes(
-				nodes.map(function (position) {
+			updateNodes(
+				nodesArray.map(function (position) {
 					const x = rect.width / 2 - (rect.width / 2 - position.x) * scale - (position.width / 2) * sign;
 					const y = rect.height / 2 - (rect.height / 2 - position.y) * scale - (position.height / 2) * sign;
 					return {
@@ -107,30 +127,42 @@ export default function Graph({ route, render, nodes, setNodes, initializeNode, 
 	});
 	return (
 		<div className="debug-grid relative overflow-hidden mw-100 mh-100 h-100 w-100" ref={containerRef} onMouseDown={onMouseDown} onWheel={onWheel}>
-			{nodes.map(function (node, index) {
-				const absolutePosition = abstractToAbsolute(nodes[index]);
+			{nodesArray.map(function (node, index) {
+				const absolutePosition = abstractToAbsolute(node);
 				if (node.complete) {
 					return (
 						<Node
-							key={index}
+							key={node.id}
 							route={route}
 							render={render}
-							index={index}
-							x={nodes[index].x}
-							y={nodes[index].y}
-							z={nodes[index].z}
-							width={nodes[index].width}
-							height={nodes[index].height}
+							x={node.x}
+							y={node.y}
+							z={node.z}
+							width={node.width}
+							height={node.height}
 							dataX={absolutePosition.x}
 							dataY={absolutePosition.y}
 							dataZ={absolutePosition.z}
-							initializeNode={initializeNode}
-							createNode={createNode}
-							updateNode={updateNode}
-							deleteNode={deleteNode}
 							node={node}
+							initializeNodes={initializeNodes}
+							createNodes={createNodes}
+							readNodes={readNodes}
+							updateNodes={updateNodes}
+							deleteNodes={deleteNodes}
+							connections={connections}
+							createConnections={createConnections}
+							readConnections={readConnections}
+							updateConnections={updateConnections}
+							deleteConnections={deleteConnections}
 						/>
 					);
+				} else {
+					return null;
+				}
+			})}
+			{Object.values(edges).map(function (edge) {
+				if (edge.complete) {
+					return <div>{edge.id}</div>;
 				} else {
 					return null;
 				}

@@ -3,11 +3,11 @@ import { useState } from "react";
 
 import { PAGINATION_PAGE_SIZE } from "./../constants.js";
 
+import Connection from "./Connection.jsx";
 import Input from "./Input.jsx";
 import Pagination from "./Pagination.jsx";
 
-import Connection from "./Connection.jsx";
-
+import { v4 as uuidv4 } from "uuid";
 import { FileTextIcon, TrashIcon, Pencil2Icon } from "@radix-ui/react-icons";
 
 function read(gauze, model, header, variables) {
@@ -38,7 +38,28 @@ function read(gauze, model, header, variables) {
 	);
 }
 
-export default function Table({ route, router, gauze, model, node, createNode, updateNode, type, from, to, variables, data, count }) {
+export default function Table({
+	node,
+	createNodes,
+	readNodes,
+	updateNodes,
+	deleteNodes,
+	connections,
+	createConnections,
+	readConnections,
+	updateConnections,
+	deleteConnections,
+	gauze,
+	model,
+	router,
+	type,
+	table_name,
+	from,
+	to,
+	variables,
+	data,
+	count,
+}) {
 	if (!type) return;
 	const header = model.read("HEADER", type);
 	const [fields, setFields] = useState(header.fields);
@@ -90,17 +111,19 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 						return item.attributes;
 					});
 					const count = results[1][0].count;
-					updateNode(node.index, {
-						...node,
-						width: null,
-						height: null,
-						props: {
-							...node.props,
-							data: data,
-							count: count,
-							variables: localVariables,
+					updateNodes([
+						{
+							...node,
+							width: null,
+							height: null,
+							props: {
+								...node.props,
+								data: data,
+								count: count,
+								variables: localVariables,
+							},
 						},
-					});
+					]);
 					setSyncing(false);
 				})
 				.catch(function (err) {
@@ -126,34 +149,37 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 				},
 				_direction: "to",
 			};
-			createNode({
-				oldX: 0,
-				oldY: 0,
-				x: null,
-				y: null,
-				z: 1,
-				height: null,
-				width: null,
-				component: Table,
-				props: {
-					gauze: gauze,
-					model: model,
-					router: router,
-					type: toHeader.name,
-					table_name: null,
-					from: source,
-					to: null,
-					variables: {
-						source: source,
-						where: {},
-						limit: PAGINATION_PAGE_SIZE,
+			createNodes([
+				{
+					id: uuidv4(),
+					oldX: 0,
+					oldY: 0,
+					x: null,
+					y: null,
+					z: 1,
+					height: null,
+					width: null,
+					component: Table,
+					props: {
+						gauze: gauze,
+						model: model,
+						router: router,
+						type: toHeader.name,
+						table_name: null,
+						from: source,
+						to: null,
+						variables: {
+							source: source,
+							where: {},
+							limit: PAGINATION_PAGE_SIZE,
+						},
+						data: [],
+						count: 0,
 					},
-					data: [],
-					count: 0,
+					complete: false,
+					sound: false,
 				},
-				complete: false,
-				sound: false,
-			});
+			]);
 		};
 	}
 
@@ -189,17 +215,19 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 							return item.attributes;
 						});
 						const count = results[1][0].count;
-						updateNode(node.index, {
-							...node,
-							width: null,
-							height: null,
-							props: {
-								...node.props,
-								data: data,
-								count: count,
-								variables: localVariables,
+						updateNodes([
+							{
+								...node,
+								width: null,
+								height: null,
+								props: {
+									...node.props,
+									data: data,
+									count: count,
+									variables: localVariables,
+								},
 							},
-						});
+						]);
 						setSyncing(false);
 					})
 					.catch(function (err) {
@@ -220,11 +248,13 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 					return exists || field.name === name;
 				});
 				setFields(updatedFields);
-				updateNode(node.index, {
-					...node,
-					width: null,
-					height: null,
-				});
+				updateNodes([
+					{
+						...node,
+						width: null,
+						height: null,
+					},
+				]);
 			} else {
 				const updatedFields = [...header.fields].filter(function (field) {
 					const exists = fields.find(function (f) {
@@ -233,11 +263,13 @@ export default function Table({ route, router, gauze, model, node, createNode, u
 					return exists && field.name !== name;
 				});
 				setFields(updatedFields);
-				updateNode(node.index, {
-					...node,
-					width: null,
-					height: null,
-				});
+				updateNodes([
+					{
+						...node,
+						width: null,
+						height: null,
+					},
+				]);
 			}
 		};
 	}

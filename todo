@@ -518,7 +518,7 @@
 	[ ] consider changing order to accept an array of ordering arguments (e.g. column and direction)
 		[ ] the problem is that it would be a pain to handle in the ui because the order in which the sorts are applied matter
 		[x] for now, let's keep it simple and stick to only one sort order
-	[ ] act on source for create methods to also create a relationship (nice to have)
+	[x] act on source for create methods to also create a relationship
 [ ] ui, design language and visual consistency
 	[ ] figure out the general structure of layouts and sections
 		[ ] configure all the styles from the root node and downwards in a consistent manner
@@ -528,8 +528,8 @@
 	[ ] general graph traversal ui
 		[x] pannable and zoomable
 		[ ] relationship representation and traversal
-			[ ] filter results by parent/child
-			[ ] creating items in a table should also create a relationship tied to the parent/child
+			[x] filter results by parent/child
+			[x] creating items in a table should also create a relationship tied to the parent/child
 			[ ] x button to close a table
 			[ ] paginating a table should show parent/children for the current set of results and hide the others
 		[x] expose source field to system interface
