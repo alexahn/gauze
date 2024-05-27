@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Root from "./../components/Root.jsx";
 
-import { v4 as uuidv4 } from "uuid";
-
 export default function RootUnit() {
 	const id = "unit:root";
 	function gauzeSelector(state) {
@@ -22,16 +20,19 @@ export default function RootUnit() {
 	function modelSelector(state) {
 		return state.services.model.default;
 	}
+	function graphSelector(state) {
+		return state.services.graph.default;
+	}
 	const gauze = useSelector(gauzeSelector);
 	const route = useSelector(routeSelector);
 	const router = useSelector(routerSelector);
 	const render = useSelector(renderSelector);
 	const model = useSelector(modelSelector);
-	const rootID = uuidv4();
+	const graph = useSelector(graphSelector);
 	return (
 		<div id={id} key={id}>
 			{/* render a pure function component here */}
-			<Root gauze={gauze} route={route} router={router} render={render} model={model} rootID={rootID} />
+			<Root gauze={gauze} route={route} router={router} render={render} model={model} graph={graph} />
 		</div>
 	);
 }

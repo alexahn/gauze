@@ -39,11 +39,18 @@ function read(gauze, model, header, variables) {
 }
 
 export default function Table({
+	route,
 	node,
+	nodes,
 	createNodes,
 	readNodes,
 	updateNodes,
 	deleteNodes,
+	edges,
+	createEdges,
+	readEdges,
+	updateEdges,
+	deleteEdges,
 	connections,
 	createConnections,
 	readConnections,
@@ -52,6 +59,7 @@ export default function Table({
 	gauze,
 	model,
 	router,
+	graph,
 	type,
 	table_name,
 	from,
@@ -63,9 +71,14 @@ export default function Table({
 }) {
 	if (!type) return;
 	if (connectionIDs && connectionIDs.length) {
-		console.log("connectionIDs", connectionIDs, connections,connectionIDs.map(function (id) {
-			return connections[id]
-		}));
+		console.log(
+			"connectionIDs",
+			connectionIDs,
+			connections,
+			connectionIDs.map(function (id) {
+				return connections[id];
+			}),
+		);
 	}
 	const header = model.read("HEADER", type);
 	const [fields, setFields] = useState(header.fields);
@@ -164,40 +177,68 @@ export default function Table({
 				},
 				_direction: "to",
 			};
-			createNodes([
-				{
-					id: uuidv4(),
-					oldX: 0,
-					oldY: 0,
-					x: null,
-					y: null,
-					z: 1,
-					height: null,
-					width: null,
-					component: Table,
-					props: {
-						gauze: gauze,
-						model: model,
-						router: router,
-						type: toHeader.name,
-						table_name: toHeader.table_name,
-						primary_key: toHeader.primary_key,
-						graphql_meta_type: toHeader.graphql_meta_type,
-						from: source,
-						fromNodeID: node.id,
-						to: null,
-						variables: {
-							source: source,
-							where: {},
-							limit: PAGINATION_PAGE_SIZE,
-						},
-						data: [],
-						count: 0,
+			//createNodes([
+			const creating = {
+				id: uuidv4(),
+				oldX: 0,
+				oldY: 0,
+				x: null,
+				y: null,
+				z: 1,
+				height: null,
+				width: null,
+				component: Table,
+				props: {
+					gauze: gauze,
+					model: model,
+					router: router,
+					graph: graph,
+					type: toHeader.name,
+					table_name: toHeader.table_name,
+					primary_key: toHeader.primary_key,
+					graphql_meta_type: toHeader.graphql_meta_type,
+					from: source,
+					fromNodeID: node.id,
+					to: null,
+					variables: {
+						source: source,
+						where: {},
+						limit: PAGINATION_PAGE_SIZE,
 					},
-					complete: false,
-					sound: false,
+					data: [],
+					count: 0,
 				},
-			]);
+				complete: true,
+				sound: false,
+			};
+			return read(gauze, model, toHeader, creating.props.variables).then(function (results) {
+				const data = results[0].map(function (item) {
+					return item.attributes;
+				});
+				const count = results[1][0].count;
+				const synced = graph.syncNodeEdges(node, data);
+				creating.props.data = data;
+				creating.props.count = count;
+				creating.props.connectionIDs = synced.nodes[node.id].connection;
+				console.log("synced", synced);
+				// sync to service
+				graph.updateNodes(Object.values(nodes));
+				graph.updateEdges(Object.values(edges));
+				graph.updateConnections(Object.values(connections));
+				// create new edges, connections, and nodes using service
+				graph.createConnections(synced.newConnections);
+				graph.createEdges(synced.newEdges);
+				graph.createNodes([creating]);
+				// sync from service
+				updateNodes(Object.values(graph.nodes));
+				updateEdges(Object.values(graph.edges));
+				updateConnections(Object.values(graph.connections));
+
+				// note: render dispatch does not cause the local state to update, so we have to update the state manually
+				//dispatch({type: "RENDER"})
+				//router.navigate(route.name, { tx: uuidv4() })
+			});
+			//]);
 			// note: it seems we cannot create the connections without knowing the contents of the data
 		};
 	}

@@ -3,10 +3,11 @@ import * as sections from "./sections/index.js";
 import * as units from "./units/index.js";
 
 import * as jose from "jose";
+import { v4 as uuidv4 } from "uuid";
 
 import { PAGINATION_PAGE_SIZE } from "./constants.js";
 
-import * as components from "./components/index.js"
+import * as components from "./components/index.js";
 
 const routes = [
 	{
@@ -217,17 +218,165 @@ const routes = [
 	},
 	{
 		name: "system.root",
-		path: "/root",
+		path: "/root?tx",
 		canActivate: (router, dependencies) => (toState, fromState, done) => {
 			//onActivate: function ({ dependencies }) {
 			const { services } = dependencies;
-			const { gauze, model } = services;
+			const { gauze, model, graph, router } = services;
 			return gauze.default.header().then(function (headers) {
 				headers.forEach(function (header) {
 					model.default.create("HEADER", header.name, header);
 				});
 				// completeness and soundness checks
-				return Promise.resolve(true);
+				const systemJWT = gauze.default.getSystemJWT();
+				const systemJWTPayload = jose.decodeJwt(systemJWT);
+				const agentHeader = headers.find(function (header) {
+					return header.table_name === systemJWTPayload.agent_type;
+				});
+				const root = graph.default.root(agentHeader.name);
+				if (root) {
+				} else {
+					const rootID = uuidv4();
+					graph.default.createNodes([
+						{
+							id: rootID,
+							root: true,
+							index: 0,
+							oldX: 0,
+							oldY: 0,
+							x: null,
+							y: null,
+							z: 1,
+							height: null,
+							width: null,
+							component: components.table.default,
+							props: {
+								gauze: gauze.default,
+								model: model.default,
+								router: router.default,
+								graph: graph.default,
+								type: agentHeader.name,
+								table_name: agentHeader.table_name,
+								primary_key: agentHeader.primary_key,
+								graphql_meta_type: agentHeader.graphql_meta_type,
+								fromNodeID: null,
+								toNodeID: null,
+								from: null,
+								to: null,
+								variables: {
+									where: {},
+									limit: PAGINATION_PAGE_SIZE,
+								},
+								data: [],
+								count: 0,
+							},
+							complete: true,
+							sound: true,
+							render: false,
+						},
+					]);
+				}
+				// note: load from local storage in the future
+				// note: parse all nodes, and stitch together one graphql query
+				// note: refresh the data section for all nodes on load
+				// note: we don't need to wait until the query is done to present data, because we can present the data from local storage
+				// note: there are four main states for nodes:
+				// note:    incomplete (we don't have all the fields associated with the identifer)
+				// note:    complete (we have all the fields associated with the identifier)
+				// note:    unsound (the fields we have are not the latest values)
+				// note:    sound (the fields we have are the latest values)
+				// note: we can only proceed with rendering once every node is complete
+				// note: we can proceed with soundness after rendering
+				return Promise.all(
+					Object.values(graph.default.nodes)
+						/*
+						.filter(function (node) {
+							return !node.complete;
+						})
+						*/
+						.map(function (node) {
+							//const header = getNodeHeader(headers, node);
+							const header = model.default.read("HEADER", node.props.type);
+							const transactions = [
+								function () {
+									return gauze.default.read(header, node.props.variables).then(function (data) {
+										if (data && data.length) {
+											data.forEach(function (item) {
+												model.default.create(item._metadata.type, item._metadata.id, item.attributes);
+											});
+										}
+										return data;
+									});
+								},
+								function () {
+									return gauze.default.count(header, {
+										source: node.props.variables.source,
+										count: {
+											[header.primary_key]: header.primary_key,
+										},
+										where: node.props.variables.where,
+									});
+								},
+							];
+							return Promise.all(
+								transactions.map(function (t) {
+									return t();
+								}),
+							).then(function (results) {
+								const data = results[0].map(function (item) {
+									return item.attributes;
+								});
+								const count = results[1][0].count;
+								return {
+									node: node,
+									header: header,
+									data: data,
+									count: count,
+								};
+								/*
+								updateNodes([
+									{
+										...node,
+										props: {
+											...node.props,
+											type: header.name,
+											data: data,
+											count: count,
+										},
+										complete: true,
+									},
+								]);
+								*/
+							});
+						}),
+				)
+					.then(function (results) {
+						const synced = graph.default.syncNodesEdges(results);
+						console.log("synced", synced);
+						graph.default.createConnections(synced.newConnections);
+						graph.default.createEdges(synced.newEdges);
+						graph.default.updateNodes(
+							results.map(function (result) {
+								return {
+									...result.node,
+									props: {
+										...result.node.props,
+										data: result.data,
+										count: result.count,
+										connectionIDs: synced.nodes[result.node.id].connections,
+									},
+									complete: true,
+								};
+							}),
+						);
+						return results;
+						//setComplete(true);
+						//setCompleting(false);
+					})
+					.catch(function (err) {
+						console.error(err);
+						throw err;
+					});
 			});
 		},
 		layout: layouts.albatross.default,

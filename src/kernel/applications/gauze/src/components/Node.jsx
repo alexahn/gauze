@@ -14,12 +14,17 @@ export default function Node({
 	dataY,
 	dataZ,
 	node,
+	nodes,
 	initializeNodes,
 	createNodes,
 	readNodes,
 	updateNodes,
 	deleteNodes,
-	syncNodeEdges,
+	edges,
+	createEdges,
+	readEdges,
+	updateEdges,
+	deleteEdges,
 	connections,
 	createConnections,
 	readConnections,
@@ -107,12 +112,18 @@ export default function Node({
 			data-height={height}
 		>
 			<node.component
+				route={route}
 				node={node}
+				nodes={nodes}
 				createNodes={createNodes}
 				readNodes={readNodes}
 				updateNodes={updateNodes}
 				deleteNodes={deleteNodes}
-				syncNodeEdges={syncNodeEdges}
+				edges={edges}
+				createEdges={createEdges}
+				readEdges={readEdges}
+				updateEdges={updateEdges}
+				deleteEdges={deleteEdges}
 				connections={connections}
 				createConnections={createConnections}
 				readConnections={readConnections}
