@@ -224,7 +224,6 @@ export default function Table({
 				console.log("synced", synced);
 				creating.props.data = data;
 				creating.props.count = count;
-				creating.props.connectionIDs = synced.nodes[creating.id].connections;
 				// sync to service
 				graph.updateNodes(Object.values(nodes));
 				graph.updateEdges(Object.values(edges));
@@ -234,6 +233,17 @@ export default function Table({
 				graph.createConnections(synced.newConnections);
 				graph.createEdges(synced.newEdges);
 				graph.createNodes([creating]);
+				const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
+				const connectedNodes = Object.keys(syncedConnections).map(function (id) {
+					return {
+						...graph.nodes[id],
+						props: {
+							...graph.nodes[id].props,
+							connectionIDs: syncedConnections[id].connections,
+						},
+					};
+				});
+				graph.updateNodes(connectedNodes);
 				// sync from service
 				updateNodes(Object.values(graph.nodes));
 				updateEdges(Object.values(graph.edges));

@@ -14,7 +14,6 @@ class GraphService {
 	}
 	syncNodeEdges(node, data) {
 		const self = this;
-		const nodes = {};
 		const rawEdges = [];
 		const newEdges = [];
 		let nodeEdges = [];
@@ -68,7 +67,7 @@ class GraphService {
 					edge.to = foundTo;
 					nodeConnections.push(foundTo);
 				} else {
-					const toFrom = {
+					const newTo = {
 						id: uuidv4(),
 						nodeID: node.id,
 						name: "to",
@@ -77,9 +76,9 @@ class GraphService {
 						x: null,
 						y: null,
 					};
-					edge.to = toFrom;
-					newConnections.push(toFrom);
-					nodeConnections.push(toFrom);
+					edge.to = newTo;
+					newConnections.push(newTo);
+					nodeConnections.push(newTo);
 				}
 				const foundEdge = edgesArray.find(function (e) {
 					const fromNodeID = e.fromNodeID === node.props.fromNodeID;
@@ -104,11 +103,10 @@ class GraphService {
 				rawEdges.push(edge);
 			});
 		} else if (node.props.to) {
-			// ensure connections exist
 			data.forEach(function (item) {
 				nodeConnections = nodeConnections.concat(
 					connectionsArray.filter(function (connection) {
-						const name = connection.name === "to";
+						const name = connection.name === "from";
 						const entityID = connection.entityID === item[node.props.primary_key];
 						const entityType = connection.entityType === node.props.graphql_meta_type;
 						return name && entityID && entityType;
@@ -150,7 +148,7 @@ class GraphService {
 					edge.to = foundTo;
 					nodeConnections.push(foundTo);
 				} else {
-					const toFrom = {
+					const newTo = {
 						id: uuidv4(),
 						nodeID: node.id,
 						name: "to",
@@ -159,9 +157,9 @@ class GraphService {
 						x: null,
 						y: null,
 					};
-					edge.to = toFrom;
-					newConnections.push(toFrom);
-					nodeConnections.push(toFrom);
+					edge.to = newTo;
+					newConnections.push(newTo);
+					nodeConnections.push(newTo);
 				}
 				const foundEdge = edgesArray.find(function (e) {
 					const fromNodeID = e.fromNodeID === node.id;
@@ -187,13 +185,7 @@ class GraphService {
 			});
 		} else {
 		}
-		nodes[node.id] = {
-			connections: nodeConnections.map(function (connection) {
-				return connection.id;
-			}),
-		};
 		return {
-			nodes: nodes,
 			nodeConnections: nodeConnections,
 			newConnections: newConnections,
 			nodeEdges: nodeEdges,
@@ -207,27 +199,60 @@ class GraphService {
 			return self.syncNodeEdges(result.node, result.data);
 		});
 		// stitch
-		const nodes = {};
 		let nodeConnections = [];
 		let newConnections = [];
 		let nodeEdges = [];
 		let newEdges = [];
 		mapped.forEach(function (synced) {
-			Object.keys(synced.nodes).forEach(function (key) {
-				nodes[key] = synced.nodes[key];
-			});
 			nodeConnections = nodeConnections.concat(synced.nodeConnections);
 			newConnections = newConnections.concat(synced.newConnections);
 			nodeEdges = nodeEdges.concat(synced.nodeEdges);
 			newEdges = newEdges.concat(synced.newEdges);
 		});
 		return {
-			nodes,
 			nodeConnections,
 			newConnections,
 			nodeEdges,
 			newEdges,
 		};
+	}
+	syncNodeConnections(nodes, edges, connections) {
+		const index = {};
+		const edgesArray = Object.values(edges);
+		edgesArray.forEach(function (edge) {
+			const fromNode = nodes[edge.fromNodeID];
+			const toNode = nodes[edge.toNodeID];
+			const fromConnection = connections[edge.fromConnectionID];
+			const toConnection = connections[edge.toConnectionID];
+			const from = fromNode.props.data.find(function (item) {
+				const entityID = fromConnection.entityID === item[fromNode.props.primary_key];
+				const entityType = fromConnection.entityType === fromNode.props.graphql_meta_type;
+				return entityID && entityType;
+			});
+			const to = toNode.props.data.find(function (item) {
+				const entityID = toConnection.entityID === item[toNode.props.primary_key];
+				const entityType = toConnection.entityType === toNode.props.graphql_meta_type;
+				return entityID && entityType;
+			});
+			if (from && to) {
+				// valid edge
+				if (index[fromNode.id]) {
+					index[fromNode.id].connections.push(fromConnection.id);
+				} else {
+					index[fromNode.id] = {
+						connections: [fromConnection.id],
+					};
+				}
+				if (index[toNode.id]) {
+					index[toNode.id].connections.push(toConnection.id);
+				} else {
+					index[toNode.id] = {
+						connections: [toConnection.id],
+					};
+				}
+			}
+		});
+		return index;
 	}
 	initializeNodes(candidates) {
 		const self = this;

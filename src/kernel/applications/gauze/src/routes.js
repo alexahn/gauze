@@ -341,6 +341,7 @@ const routes = [
 						console.log("synced", synced);
 						graph.default.createConnections(synced.newConnections);
 						graph.default.createEdges(synced.newEdges);
+						const syncedConnections = graph.default.syncNodeConnections(graph.default.nodes, graph.default.edges, graph.default.connections);
 						graph.default.updateNodes(
 							results.map(function (result) {
 								return {
@@ -349,12 +350,22 @@ const routes = [
 										...result.node.props,
 										data: result.data,
 										count: result.count,
-										connectionIDs: synced.nodes[result.node.id].connections,
+										connectionIDs: [],
 									},
 									complete: true,
 								};
 							}),
 						);
+						const connectedNodes = Object.keys(syncedConnections).map(function (id) {
+							return {
+								...graph.default.nodes[id],
+								props: {
+									...graph.default.nodes[id].props,
+									connectionIDs: syncedConnections[id].connections,
+								},
+							};
+						});
+						graph.default.updateNodes(connectedNodes);
 						return results;
 					})
 					.catch(function (err) {
