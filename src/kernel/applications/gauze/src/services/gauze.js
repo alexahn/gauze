@@ -1,5 +1,7 @@
 import { GAUZE_PROTOCOL, GAUZE_HOST, GAUZE_PORT } from "env";
 
+import * as jose from "jose";
+
 class GauzeService {
 	constructor() {
 		const self = this;
@@ -116,6 +118,16 @@ class GauzeService {
 		const self = this;
 		self.proxyJWT = null;
 		localStorage.removeItem("proxyJWT");
+	}
+	getSystemAgentHeader(model) {
+		const self = this;
+		const headers = model.all("HEADER");
+		const systemJWT = self.getSystemJWT();
+		const systemJWTPayload = jose.decodeJwt(systemJWT);
+		const agentHeader = headers.find(function (header) {
+			return header.table_name === systemJWTPayload.agent_type;
+		});
+		return agentHeader;
 	}
 	// centralize environment queries here for convenience
 	personAssert(person) {

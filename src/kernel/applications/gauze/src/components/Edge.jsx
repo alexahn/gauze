@@ -32,11 +32,12 @@ export default function Edge({
 	const toX = connections[edge.toConnectionID].x;
 	const toY = connections[edge.toConnectionID].y;
 	//console.log('edge', edge.id, fromX, fromY, toX, toY)
+	// todo: change the stroke width to be the z value from a connection later (for now it is useful to see the lines converge to the center)
 	if (fromX && fromY && toX && toY) {
 		return (
 			<div style={{ zIndex: -1 }} className="relative top-0 left-0">
 				<svg className="absolute top-0 left-0" viewBox={`0 0 ${window.screen.width} ${window.screen.height}`} xmlns="http://www.w3.org/2000/svg">
-					<line x1={fromX} y1={fromY} x2={toX} y2={toY} stroke="black" />
+					<line x1={fromX} y1={fromY} x2={toX} y2={toY} stroke="black" strokeWidth={1} />
 				</svg>
 			</div>
 		);

@@ -236,10 +236,186 @@ class GraphService {
 		});
 		return index;
 	}
-	validEdges(nodes, edges, connections) {
+	activeNodes(rootType, nodes, edges, connections, map) {
+		const self = this;
+		const activeNodesArray = self.activeNodesArray(rootType, nodes, edges, connections, map);
+		const activeNodes = {};
+		activeNodesArray.forEach(function (node) {
+			activeNodes[node.id] = node;
+		});
+		return activeNodes;
+	}
+	activeNodesArray(rootType, nodes, edges, connections, map) {
+		const reachedInside = {};
+		const reachedOutside = {};
+		const nodesArray = Object.values(nodes);
+		nodesArray.forEach(function (node) {
+			if (node.root === true && node.props.type === rootType) {
+				if (reachedOutside[node.id]) {
+					reachedInside[node.id] = reachedOutside[node.id];
+				} else {
+					if (reachedInside[node.id]) {
+						reachedInside[node.id].push(node.id);
+					} else {
+						reachedInside[node.id] = [node.id];
+					}
+				}
+			} else {
+				if (node.props.from) {
+					if (reachedInside[node.props.fromNodeID]) {
+						if (reachedOutside[node.props.fromNodeID]) {
+							reachedInside[node.props.fromNodeID] = reachedInside[node.props.fromNodeID].concat(reachedOutside[node.props.fromNodeID]);
+							reachedInside[node.props.fromNodeID].push(node.id);
+						} else {
+							reachedInside[node.props.fromNodeID].push(node.id);
+							reachedInside[node.props.fromNodeID].push(node.props.fromNodeID);
+						}
+						if (reachedOutside[node.id]) {
+							reachedInside[node.props.fromNodeID] = reachedInside[node.props.fromNodeID].concat(reachedOutside[node.id]);
+							reachedInside[node.props.fromNodeID].push(node.props.fromNodeID);
+						} else {
+							reachedInside[node.props.fromNodeID].push(node.id);
+							reachedInside[node.props.fromNodeID].push(node.props.fromNodeID);
+						}
+						if (reachedInside[node.id]) {
+							reachedInside[node.id].push(node.props.fromNodeID);
+						} else {
+							reachedInside[node.id] = [node.id, node.props.fromNodeID];
+						}
+					} else {
+						if (reachedOutside[node.props.fromNodeID]) {
+							reachedOutside[node.props.fromNodeID].push(node.id);
+						} else {
+							reachedOutside[node.props.fromNodeID] = [node.id, node.props.fromNodeID];
+						}
+						if (reachedOutside[node.id]) {
+							reachedOutside[node.id].push(node.props.fromNodeID);
+						} else {
+							reachedOutside[node.id] = [node.props.fromNodeID, node.ID];
+						}
+					}
+					if (reachedInside[node.id]) {
+						if (reachedOutside[node.id]) {
+							reachedInside[node.id] = reachedInside[node.id].concat(reachedOutside[node.id]);
+							reachedInside[node.id].push(node.props.fromNodeID);
+						} else {
+							reachedInside[node.id].push(node.props.fromNodeID);
+							reachedInside[node.id].push(node.id);
+						}
+						if (reachedOutside[node.props.fromNodeID]) {
+							reachedInside[node.id] = reachedInside[node.id].concat(reachedOutside[node.props.fromNodeID]);
+							reachedInside[node.id].push(node.id);
+						} else {
+							reachedInside[node.id].push(node.props.fromNodeID);
+							reachedInside[node.id].push(node.id);
+						}
+					} else {
+						if (reachedOutside[node.id]) {
+							reachedOutside[node.id].push(node.props.fromNodeID);
+						} else {
+							reachedOutside[node.id] = [node.props.fromNodeID, node.id];
+						}
+						if (reachedOutside[node.props.fromNodeID]) {
+							reachedOutside[node.props.fromNodeID].push(node.id);
+						} else {
+							reachedOutside[node.props.fromNodeID] = [node.id, node.props.fromNodeID];
+						}
+					}
+				} else if (node.props.to) {
+					if (reachedInside[node.props.toNodeID]) {
+						if (reachedOutside[node.props.toNodeID]) {
+							reachedInside[node.props.toNodeID] = reachedInside[node.props.toNodeID].concat(reachedOutside[node.props.toNodeID]);
+							reachedInside[node.props.toNodeID].push(node.id);
+						} else {
+							reachedInside[node.props.toNodeID].push(node.id);
+							reachedInside[node.props.toNodeID].push(node.props.toNodeID);
+						}
+						if (reachedOutside[node.id]) {
+							reachedInside[node.props.toNodeID] = reachedInside[node.props.toNodeID].concat(reachedOutside[node.id]);
+							reachedInside[node.props.toNodeID].push(node.props.toNodeID);
+						} else {
+							reachedInside[node.props.toNodeID].push(node.id);
+							reachedInside[node.props.toNodeID].push(node.props.toNodeID);
+						}
+						if (reachedInside[node.id]) {
+							reachedInside[node.id].push(node.props.toNodeID);
+						} else {
+							reachedInside[node.id] = [node.id, node.props.toNodeID];
+						}
+					} else {
+						if (reachedOutside[node.props.toNodeID]) {
+							reachedOutside[node.props.toNodeID].push(node.id);
+						} else {
+							reachedOutside[node.props.toNodeID] = [node.props.toNodeID, node.id];
+						}
+						if (reachedOutside[node.id]) {
+							reachedOutside[node.id].push(node.props.toNodeID);
+						} else {
+							reachedOutside[node.id] = [node.props.toNodeID, node.id];
+						}
+					}
+					if (reachedInside[node.id]) {
+						if (reachedOutside[node.id]) {
+							reachedInside[node.id] = reachedInside[node.id].concat(reachedOutside[node.id]);
+							reachedInside[node.id].push(node.props.toNodeID);
+						} else {
+							reachedInside[node.id].push(node.props.toNodeID);
+							reachedInside[node.id].push(node.id);
+						}
+						if (reachedOutside[node.props.toNodeID]) {
+							reachedInside[node.id] = reachedInside[node.props.id].concat(reachedOutside[node.props.toNodeID]);
+							reachedInside[node.id].push(node.id);
+						} else {
+							reachedInside[node.id].push(node.props.toNodeID);
+							reachedInside[node.id].push(node.id);
+						}
+					} else {
+						if (reachedOutside[node.id]) {
+							reachedOutside[node.id].push(node.props.toNodeID);
+						} else {
+							reachedOutside[node.id] = [node.props.toNodeID, node.id];
+						}
+						if (reachedOutside[node.props.toNodeID]) {
+							reachedOutside[node.props.toNodeID].push(node.id);
+						} else {
+							reachedOutside[node.props.toNodeID] = [node.id, node.props.toNodeID];
+						}
+					}
+				} else {
+				}
+			}
+		});
+		// flatten reachedInside
+		const activeNodesIndex = {};
+		Object.keys(reachedInside).forEach(function (key) {
+			activeNodesIndex[key] = true;
+			const reached = reachedInside[key];
+			reached.forEach(function (id) {
+				activeNodesIndex[id] = true;
+			});
+		});
+		const activeNodesArray = Object.keys(activeNodesIndex).map(function (id) {
+			return nodes[id];
+		});
+		if (map) {
+			return activeNodesArray.map(map);
+		} else {
+			return activeNodesArray;
+		}
+	}
+	activeEdges(nodes, edges, connections, map) {
+		const self = this;
+		const activeEdgesArray = self.activeEdgesArray(nodes, edges, connections, map);
+		const activeEdges = {};
+		activeEdgesArray.forEach(function (edge) {
+			activeEdges[edge.id] = edge;
+		});
+		return activeEdges;
+	}
+	activeEdgesArray(nodes, edges, connections, map) {
 		const index = {};
 		const edgesArray = Object.values(edges);
-		const validEdges = edgesArray.filter(function (edge) {
+		const activeEdgesArray = edgesArray.filter(function (edge) {
 			const fromNode = nodes[edge.fromNodeID];
 			const toNode = nodes[edge.toNodeID];
 			const fromConnection = connections[edge.fromConnectionID];
@@ -256,20 +432,33 @@ class GraphService {
 			});
 			return from && to;
 		});
-		const obj = {};
-		validEdges.forEach(function (edge) {
-			obj[edge.id] = edge;
-		});
-		return obj;
+		if (map) {
+			return activeEdgesArray.map(map);
+		} else {
+			return activeEdgesArray;
+		}
 	}
-	validConnections(nodes, edges, connections) {
+	activeConnections(nodes, edges, connections, map) {
 		const self = this;
-		const validEdges = self.validEdges(nodes, edges, connections);
-		let valid = [];
-		Object.values(validEdges).forEach(function (edge) {
-			valid = valid.concat([connections[edge.fromConnectionID], connections[edge.toConnectionID]]);
+		const activeConnectionsArray = self.activeConnectionsArray(nodes, edges, connections, map);
+		const activeConnections = {};
+		activeConnectionsArray.forEach(function (connection) {
+			activeConnections[connection.id] = connection;
 		});
-		return valid;
+		return activeConnections;
+	}
+	activeConnectionsArray(nodes, edges, connections, map) {
+		const self = this;
+		const activeEdgesArray = self.activeEdgesArray(nodes, edges, connections);
+		let activeConnectionsArray = [];
+		activeEdgesArray.forEach(function (edge) {
+			activeConnectionsArray = activeConnectionsArray.concat([connections[edge.fromConnectionID], connections[edge.toConnectionID]]);
+		});
+		if (map) {
+			return activeConnectionsArray.map(map);
+		} else {
+			return activeConnectionsArray;
+		}
 	}
 	initializeNodes(candidates) {
 		const self = this;

@@ -143,7 +143,7 @@ export default function Graph({
 				}),
 			);
 			updateConnections(
-				graph.validConnections(nodes, edges, connections).map(function (connection) {
+				connectionsArray.map(function (connection) {
 					const x = rect.width / 2 - (rect.width / 2 - connection.x) * scale;
 					const y = rect.height / 2 - (rect.height / 2 - connection.y) * scale;
 					return {
@@ -154,8 +154,6 @@ export default function Graph({
 					};
 				}),
 			);
-			//updateConnections(stagedConnections)
-			//graph.updateConnections(stagedConnections)
 		}
 	}
 	useEffect(() => {

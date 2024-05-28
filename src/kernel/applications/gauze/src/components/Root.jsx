@@ -8,15 +8,11 @@ import Node from "./Node.jsx";
 import Table from "./Table.jsx";
 
 export default function Root({ gauze, model, router, route, render, graph }) {
-	// todo: either use the model service to have an equivalent of the PAGINATION type entry to select the accessable nodes or filter the nodes here based on the root
-	// todo: could have a GRAPH type entry in model that holds an array of node ids (we would need to initialize it in the route just like we do for PAGINATION)
-	//console.log('graph.nodes', graph.nodes)
-	const [nodes, setNodes] = useState(graph.nodes);
-	const [edges, setEdges] = useState(graph.validEdges(graph.nodes, graph.edges, graph.connections));
-	const [connections, setConnections] = useState(graph.connections);
+	const agentHeader = gauze.getSystemAgentHeader(model);
+	const [nodes, setNodes] = useState(graph.activeNodes(agentHeader.name, graph.nodes, graph.edges, graph.connections));
+	const [edges, setEdges] = useState(graph.activeEdges(graph.nodes, graph.edges, graph.connections));
+	const [connections, setConnections] = useState(graph.activeConnections(graph.nodes, graph.edges, graph.connections));
 
-	// todo: split this function so that we only change coordinates for new components
-	// todo: we want to differentiate between loading from pre-existing coordinates to finding a place for a new component (otherwise the padding will cause a drift on every load)
 	function initializeNodes(candidates) {
 		const staged = { ...nodes };
 		const nodesArray = Object.values(staged);
@@ -137,14 +133,13 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 			const { width, height } = connection;
 			if (width === null || height === null) throw new Error(`Cannot initialize with null dimensions: width=${width} height=${height}`);
 			const z = nodesArray[0].z;
-			console.log("z", z);
 			staged[connection.id] = {
 				...connection,
 				z: z,
 			};
 		});
 		setConnections(staged);
-		graph.updateConnections(Object.values(staged))
+		graph.updateConnections(Object.values(staged));
 	}
 	function readConnections(candidates) {
 		return candidates.map(function (connection) {
@@ -178,7 +173,6 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 	});
 	if (initializeNode) {
 		setTimeout(function () {
-			console.log("initializeNode", initializeNode);
 			render.create(route.name, "NODE", initializeNode.id, true);
 		}, 0);
 	}
@@ -191,8 +185,6 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 		}, 0);
 	}
 	// todo: useEffect to set up a setInterval to sync with service
-	//const validEdges = graph.validEdges(nodes, edges, connections)
-	//console.log('validEdges', validEdges)
 	//console.log('connections', connections, nodes)
 	return (
 		<Graph

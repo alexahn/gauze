@@ -77,18 +77,6 @@ export default function Table({
 	connectionIDs,
 }) {
 	if (!type) return;
-	/*
-	if (connectionIDs && connectionIDs.length) {
-		console.log(
-			"connectionIDs",
-			connectionIDs,
-			connections,
-			connectionIDs.map(function (id) {
-				return connections[id];
-			}),
-		);
-	}
-	*/
 	const header = model.read("HEADER", type);
 	const [fields, setFields] = useState(header.fields);
 	const [localWhere, setLocalWhere] = useState(variables.where || {});
@@ -102,6 +90,66 @@ export default function Table({
 	const page_current = offset + limit < total ? Math.floor(Math.max(offset / limit) + 1) : Math.ceil(Math.max(total / limit));
 	const page_max_no_skew = Math.ceil(Math.max(total / limit));
 	const page_max = page_max_no_skew < page_current ? page_current : page_max_no_skew;
+
+	function synchronize(targetNode, variables, data, count, method) {
+		const synced = graph.syncNodeEdges(targetNode, data);
+		console.log("synced", synced, connections, graph.connections);
+		targetNode.props.data = data;
+		targetNode.props.count = count;
+		targetNode.props.variables = variables;
+		// sync to service
+		graph.updateNodes(Object.values(nodes));
+		graph.updateEdges(Object.values(edges));
+		graph.updateConnections(Object.values(connections));
+		// create new edges, connections, and nodes using service
+		const newConnections = synced.newConnections.map(function (connection) {
+			return {
+				...connection,
+				component: Relationship,
+				props: {
+					gauze: gauze,
+					model: model,
+					router: router,
+				},
+			};
+		});
+		const newEdges = synced.newEdges;
+		graph.createConnections(newConnections);
+		graph.createEdges(newEdges);
+		method(targetNode);
+		const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
+		const connectedNodes = Object.keys(syncedConnections).map(function (id) {
+			return {
+				...graph.nodes[id],
+				props: {
+					...graph.nodes[id].props,
+					connectionIDs: syncedConnections[id].connections,
+				},
+			};
+		});
+		graph.updateNodes(connectedNodes);
+		// sync from service
+		const agentHeader = gauze.getSystemAgentHeader(model);
+		setNodes(
+			graph.activeNodes(agentHeader.name, graph.nodes, graph.edges, graph.connections, function (node) {
+				return {
+					...node,
+					width: null,
+					height: null,
+				};
+			}),
+		);
+		setConnections(
+			graph.activeConnections(graph.nodes, graph.edges, graph.connections, function (connection) {
+				return {
+					...connection,
+					x: null,
+					y: null,
+				};
+			}),
+		);
+		setEdges(graph.activeEdges(graph.nodes, graph.edges, graph.connections));
+	}
 
 	function paginate(item) {
 		return function (e) {
@@ -140,91 +188,9 @@ export default function Table({
 					});
 					const count = results[1][0].count;
 					const targetNode = node;
-					// set the connections prop on the node
-					/*
-					updateNodes([
-						{
-							...node,
-							width: null,
-							height: null,
-							props: {
-								...node.props,
-								data: data,
-								count: count,
-								variables: localVariables,
-							},
-						},
-					]);
-					*/
-					const synced = graph.syncNodeEdges(targetNode, data);
-					console.log("synced", synced, connections, graph.connections);
-					targetNode.props.data = data;
-					targetNode.props.count = count;
-					targetNode.props.variables = localVariables;
-					// sync to service
-					graph.updateNodes(Object.values(nodes));
-					graph.updateEdges(Object.values(edges));
-					graph.updateConnections(Object.values(connections));
-					// create new edges, connections, and nodes using service
-					// todo: map synced.newConnections to include component and props
-					graph.createConnections(
-						synced.newConnections.map(function (connection) {
-							return {
-								...connection,
-								component: Relationship,
-								props: {
-									gauze: gauze,
-									model: model,
-									router: router,
-								},
-							};
-						}),
-					);
-					graph.createEdges(synced.newEdges);
-					graph.updateNodes([targetNode]);
-					const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
-					const connectedNodes = Object.keys(syncedConnections).map(function (id) {
-						return {
-							...graph.nodes[id],
-							props: {
-								...graph.nodes[id].props,
-								connectionIDs: syncedConnections[id].connections,
-							},
-						};
+					synchronize(targetNode, localVariables, data, count, function (targetNode) {
+						graph.updateNodes([targetNode]);
 					});
-					graph.updateNodes(connectedNodes);
-					// sync from service
-					updateNodes(
-						Object.values(graph.nodes).map(function (n) {
-							// reinitialize the source
-							if (n.id === node.id) {
-								return {
-									...n,
-									width: null,
-									height: null,
-								};
-							} else {
-								//return n
-								return {
-									...n,
-									width: null,
-									height: null,
-								};
-							}
-						}),
-					);
-					updateConnections(
-						graph.validConnections(graph.nodes, graph.edges, graph.connections).map(function (connection) {
-							return {
-								...connection,
-								x: null,
-								y: null,
-							};
-						}),
-					);
-					//updateEdges(Object.values(graph.edges));
-					setEdges(graph.validEdges(graph.nodes, graph.edges, graph.connections));
-					//updateConnections(Object.values(graph.connections));
 					setSyncing(false);
 				})
 				.catch(function (err) {
@@ -236,81 +202,22 @@ export default function Table({
 
 	function traverse(targetHeader, targetNode) {
 		console.log("targetNode", targetNode);
-		return read(gauze, model, targetHeader, targetNode.props.variables).then(function (results) {
-			const data = results[0].map(function (item) {
-				return item.attributes;
+		setSyncing(true);
+		return read(gauze, model, targetHeader, targetNode.props.variables)
+			.then(function (results) {
+				const data = results[0].map(function (item) {
+					return item.attributes;
+				});
+				const count = results[1][0].count;
+				synchronize(targetNode, targetNode.props.variables, data, count, function (targetNode) {
+					graph.createNodes([targetNode]);
+				});
+				setSyncing(false);
+			})
+			.catch(function (err) {
+				setSyncing(false);
+				throw err;
 			});
-			const count = results[1][0].count;
-			const synced = graph.syncNodeEdges(targetNode, data);
-			console.log("synced", synced);
-			targetNode.props.data = data;
-			targetNode.props.count = count;
-			// sync to service
-			graph.updateNodes(Object.values(nodes));
-			graph.updateEdges(Object.values(edges));
-			graph.updateConnections(Object.values(connections));
-			// create new edges, connections, and nodes using service
-			// todo: map synced.newConnections to include component and props
-			graph.createConnections(
-				synced.newConnections.map(function (connection) {
-					return {
-						...connection,
-						component: Relationship,
-						props: {
-							gauze: gauze,
-							model: model,
-							router: router,
-						},
-					};
-				}),
-			);
-			graph.createEdges(synced.newEdges);
-			graph.createNodes([targetNode]);
-			const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
-			const connectedNodes = Object.keys(syncedConnections).map(function (id) {
-				return {
-					...graph.nodes[id],
-					props: {
-						...graph.nodes[id].props,
-						connectionIDs: syncedConnections[id].connections,
-					},
-				};
-			});
-			graph.updateNodes(connectedNodes);
-			// sync from service
-			updateNodes(
-				Object.values(graph.nodes).map(function (n) {
-					// reinitialize the source
-					if (n.id === node.id) {
-						return {
-							...n,
-							width: null,
-							height: null,
-						};
-					} else {
-						return {
-							...n,
-							width: null,
-							height: null,
-						};
-					}
-				}),
-			);
-			//updateEdges(Object.values(graph.edges));
-			setEdges(graph.validEdges(graph.nodes, graph.edges, graph.connections));
-			//updateConnections(Object.values(graph.connections));
-			updateConnections(
-				graph.validConnections(graph.nodes, graph.edges, graph.connections).map(function (connection) {
-					return {
-						...connection,
-						x: null,
-						y: null,
-					};
-				}),
-			);
-			// reinitialize node
-		});
-		// note: it seems we cannot create the connections without knowing the contents of the data
 	}
 
 	function traverseTo(sourceHeader, item, targetType) {
@@ -446,6 +353,7 @@ export default function Table({
 				const localVariables = {
 					...variables,
 					where: localWhere,
+					offset: 0,
 				};
 				return read(gauze, model, header, localVariables)
 					.then(function (results) {
@@ -453,19 +361,10 @@ export default function Table({
 							return item.attributes;
 						});
 						const count = results[1][0].count;
-						updateNodes([
-							{
-								...node,
-								width: null,
-								height: null,
-								props: {
-									...node.props,
-									data: data,
-									count: count,
-									variables: localVariables,
-								},
-							},
-						]);
+						const targetNode = node;
+						synchronize(targetNode, localVariables, data, count, function (targetNode) {
+							graph.updateNodes([targetNode]);
+						});
 						setSyncing(false);
 					})
 					.catch(function (err) {
@@ -509,6 +408,15 @@ export default function Table({
 					},
 				]);
 			}
+			updateConnections(
+				Object.values(connections).map(function (connection) {
+					return {
+						...connection,
+						x: null,
+						y: null,
+					};
+				}),
+			);
 		};
 	}
 
@@ -799,7 +707,6 @@ export default function Table({
 												return null;
 											}
 										})}
-										{/* connection component? */}
 										<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
 											<div className="pa1">TO</div>
 											{header.relationships_to.map(function (to) {

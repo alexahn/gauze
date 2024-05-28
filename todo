@@ -544,7 +544,8 @@
 		[ ] edge component to draw svg paths
 			[x] use connection coordinates to display an svg element
 			[ ] update edge definition to include component and props (which render at the center of the path)
-		[ ] refactor all graph ui code to follow a strict state management, synchronization, and rendering lifecycle
+		[x] refactor all graph ui code to follow a strict state management, synchronization, and rendering lifecycle
+			[x] fix ui bugs that cause panning and zooming issues after changing routes
 		[x] expose source field to system interface
 		[-] it is ideal to have a mapping from the raw data to the presentation but it doesn't seem possible because the interface introduces a semantic layer
 			[-] it seems the core data to represent the ui will be things that represent objects in the interface (e.g. a table)

@@ -218,21 +218,15 @@ const routes = [
 	},
 	{
 		name: "system.root",
-		path: "/root?tx",
+		path: "/root",
 		canActivate: (router, dependencies) => (toState, fromState, done) => {
-			//onActivate: function ({ dependencies }) {
 			const { services } = dependencies;
 			const { gauze, model, graph, router } = services;
 			return gauze.default.header().then(function (headers) {
 				headers.forEach(function (header) {
 					model.default.create("HEADER", header.name, header);
 				});
-				// completeness and soundness checks
-				const systemJWT = gauze.default.getSystemJWT();
-				const systemJWTPayload = jose.decodeJwt(systemJWT);
-				const agentHeader = headers.find(function (header) {
-					return header.table_name === systemJWTPayload.agent_type;
-				});
+				const agentHeader = gauze.default.getSystemAgentHeader(model.default);
 				const root = graph.default.root(agentHeader.name);
 				if (root) {
 					console.log("root found!");
@@ -288,60 +282,67 @@ const routes = [
 				// note:    sound (the fields we have are the latest values)
 				// note: we can only proceed with rendering once every node is complete
 				// note: we can proceed with soundness after rendering
+				const activeNodesArray = graph.default.activeNodesArray(agentHeader.name, graph.default.nodes, graph.default.edges, graph.default.connections);
 				return Promise.all(
-					Object.values(graph.default.nodes)
-						/*
-						.filter(function (node) {
-							return !node.complete;
-						})
-						*/
-						.map(function (node) {
-							//const header = getNodeHeader(headers, node);
-							const header = model.default.read("HEADER", node.props.type);
-							const transactions = [
-								function () {
-									return gauze.default.read(header, node.props.variables).then(function (data) {
-										if (data && data.length) {
-											data.forEach(function (item) {
-												model.default.create(item._metadata.type, item._metadata.id, item.attributes);
-											});
-										}
-										return data;
-									});
-								},
-								function () {
-									return gauze.default.count(header, {
-										source: node.props.variables.source,
-										count: {
-											[header.primary_key]: header.primary_key,
-										},
-										where: node.props.variables.where,
-									});
-								},
-							];
-							return Promise.all(
-								transactions.map(function (t) {
-									return t();
-								}),
-							).then(function (results) {
-								const data = results[0].map(function (item) {
-									return item.attributes;
+					activeNodesArray.map(function (node) {
+						const header = model.default.read("HEADER", node.props.type);
+						const transactions = [
+							function () {
+								return gauze.default.read(header, node.props.variables).then(function (data) {
+									if (data && data.length) {
+										data.forEach(function (item) {
+											model.default.create(item._metadata.type, item._metadata.id, item.attributes);
+										});
+									}
+									return data;
 								});
-								const count = results[1][0].count;
-								return {
-									node: node,
-									header: header,
-									data: data,
-									count: count,
-								};
+							},
+							function () {
+								return gauze.default.count(header, {
+									source: node.props.variables.source,
+									count: {
+										[header.primary_key]: header.primary_key,
+									},
+									where: node.props.variables.where,
+								});
+							},
+						];
+						return Promise.all(
+							transactions.map(function (t) {
+								return t();
+							}),
+						).then(function (results) {
+							const data = results[0].map(function (item) {
+								return item.attributes;
 							});
-						}),
+							const count = results[1][0].count;
+							return {
+								node: node,
+								header: header,
+								data: data,
+								count: count,
+							};
+						});
+					}),
 				)
 					.then(function (results) {
 						const synced = graph.default.syncNodesEdges(results);
-						console.log("synced", synced);
-						graph.default.createConnections(synced.newConnections);
-						graph.default.createEdges(synced.newEdges);
+						console.log("route synced", synced);
+						const newConnections = synced.newConnections.map(function (connection) {
+							return {
+								...connection,
+								component: component.relationship.default,
+								props: {
+									gauze: gauze.default,
+									model: model.default,
+									router: router.default,
+									graph: graph.default,
+								},
+							};
+						});
+						const newEdges = synced.newEdges;
+						graph.default.createConnections(newConnections);
+						graph.default.createEdges(newEdges);
 						const syncedConnections = graph.default.syncNodeConnections(graph.default.nodes, graph.default.edges, graph.default.connections);
 						graph.default.updateNodes(
 							results.map(function (result) {
