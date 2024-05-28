@@ -177,6 +177,8 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 		}, 0);
 	}
 	// todo: useEffect to set up a setInterval to sync with service
+	//const validEdges = graph.validEdges(nodes, edges, connections)
+	//console.log('validEdges', validEdges)
 	return (
 		<Graph
 			key={"graph"}
@@ -184,17 +186,20 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 			render={render}
 			graph={graph}
 			nodes={nodes}
+			setNodes={setNodes}
 			initializeNodes={initializeNodes}
 			createNodes={createNodes}
 			readNodes={readNodes}
 			updateNodes={updateNodes}
 			deleteNodes={deleteNodes}
 			edges={edges}
+			setEdges={setEdges}
 			createEdges={createEdges}
 			readEdges={readEdges}
 			updateEdges={updateEdges}
 			deleteEdges={deleteEdges}
 			connections={connections}
+			setConnections={setConnections}
 			initializeConnections={initializeConnections}
 			createConnections={createConnections}
 			readConnections={readConnections}

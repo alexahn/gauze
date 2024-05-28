@@ -35,6 +35,9 @@ export default function Connection({
 			render.unsubscribe(route.name, "CONNECTION", connection.id, connection.id);
 			render.subscribe(route.name, "CONNECTION", connection.id, connection.id, function (data) {
 				setTimeout(function () {
+					if (!containerRef || !containerRef.current) {
+						console.log("missing", connections[connection.id].entityID, connections[connection.id].entityType, connection.name);
+					}
 					const containerRects = containerRef.current.getClientRects()[0];
 					const initialized = {
 						...connection,

@@ -15,17 +15,20 @@ export default function Node({
 	dataZ,
 	node,
 	nodes,
+	setNodes,
 	initializeNodes,
 	createNodes,
 	readNodes,
 	updateNodes,
 	deleteNodes,
 	edges,
+	setEdges,
 	createEdges,
 	readEdges,
 	updateEdges,
 	deleteEdges,
 	connections,
+	setConnections,
 	initializeConnections,
 	createConnections,
 	readConnections,
@@ -141,17 +144,20 @@ export default function Node({
 				route={route}
 				render={render}
 				nodes={nodes}
+				setNodes={setNodes}
 				initializeNodes={initializeNodes}
 				createNodes={createNodes}
 				readNodes={readNodes}
 				updateNodes={updateNodes}
 				deleteNodes={deleteNodes}
 				edges={edges}
+				setEdges={setEdges}
 				createEdges={createEdges}
 				readEdges={readEdges}
 				updateEdges={updateEdges}
 				deleteEdges={deleteEdges}
 				connections={connections}
+				setConnections={setConnections}
 				initializeConnections={initializeConnections}
 				createConnections={createConnections}
 				readConnections={readConnections}

@@ -23,33 +23,39 @@ class GraphService {
 		const edgesArray = Object.values(self.edges);
 		if (node.props.from) {
 			data.forEach(function (item) {
-				nodeConnections = nodeConnections.concat(
-					connectionsArray.filter(function (connection) {
-						const name = connection.name === "from";
-						const entityID = connection.entityID === item[node.props.primary_key];
-						const entityType = connection.entityType === node.props.graphql_meta_type;
-						return name && entityID && entityType;
-					}),
-				);
-				const foundFrom = connectionsArray.find(function (connection) {
-					const nodeID = connection.nodeID === node.props.fromNodeID;
-					const name = connection.name === "from";
-					const entityID = connection.entityID === item[node.props.from._metadata.id];
-					const entityType = connection.entityType === node.props.from._metadata.type;
-					return nodeID && name && entityID && entityType;
-				});
-				const foundTo = connectionsArray.find(function (connection) {
-					const nodeID = connection.nodeID === node.id;
-					const name = connection.name === "to";
-					const entityID = connection.entityID === item[node.props.primary_key];
-					const entityType = connection.entityType === node.props.type;
-					return nodeID && name && entityID && entityType;
-				});
 				const edge = {};
-				if (foundFrom) {
-					edge.from = foundFrom;
-					nodeConnections.push(foundFrom);
+				const foundEdge = edgesArray.find(function (e) {
+					const fromNodeID = e.fromNodeID === node.props.fromNodeID;
+					const fromEntityID = self.connections[e.fromConnectionID].entityID === node.props.from._metadata.id;
+					const fromEntityType = self.connections[e.fromConnectionID].entityType === node.props.from._metadata.type;
+					const fromConnectionID = fromEntityID && fromEntityType;
+					const toNodeID = e.toNodeID === node.id;
+					const toEntityID = self.connections[e.toConnectionID].entityID === item[node.props.primary_key];
+					const toEntityType = self.connections[e.toConnectionID].entityType === node.props.graphql_meta_type;
+					const toConnectionID = toEntityID && toEntityType;
+					return fromNodeID && fromConnectionID && toNodeID && toConnectionID;
+				});
+				console.log("foundEdge", foundEdge);
+				if (foundEdge) {
+					nodeConnections = nodeConnections.concat(
+						connectionsArray.filter(function (connection) {
+							const entityID = connection.entityID === item[node.props.primary_key];
+							const entityType = connection.entityType === node.props.graphql_meta_type;
+							return entityID && entityType;
+						}),
+					);
+					edge.from = self.connections[foundEdge.fromConnectionID];
+					edge.to = self.connections[foundEdge.toConnectionID];
+					nodeEdges.push(foundEdge);
 				} else {
+					nodeConnections = nodeConnections.concat(
+						connectionsArray.filter(function (connection) {
+							const name = connection.name === "from";
+							const entityID = connection.entityID === item[node.props.primary_key];
+							const entityType = connection.entityType === node.props.graphql_meta_type;
+							return name && entityID && entityType;
+						}),
+					);
 					const newFrom = {
 						id: uuidv4(),
 						nodeID: node.props.fromNodeID,
@@ -62,11 +68,6 @@ class GraphService {
 					edge.from = newFrom;
 					newConnections.push(newFrom);
 					nodeConnections.push(newFrom);
-				}
-				if (foundTo) {
-					edge.to = foundTo;
-					nodeConnections.push(foundTo);
-				} else {
 					const newTo = {
 						id: uuidv4(),
 						nodeID: node.id,
@@ -79,17 +80,6 @@ class GraphService {
 					edge.to = newTo;
 					newConnections.push(newTo);
 					nodeConnections.push(newTo);
-				}
-				const foundEdge = edgesArray.find(function (e) {
-					const fromNodeID = e.fromNodeID === node.props.fromNodeID;
-					const fromConnectionID = e.fromConnectionID === edge.from.id;
-					const toNodeID = e.toNodeID === node.id;
-					const toConnectionID = e.toConnectionID === edge.to.id;
-					return fromNodeID && fromConnectionID && toNodeID && toConnectionID;
-				});
-				if (foundEdge) {
-					nodeEdges.push(foundEdge);
-				} else {
 					const newEdge = {
 						id: uuidv4(),
 						fromNodeID: node.props.fromNodeID,
@@ -104,33 +94,38 @@ class GraphService {
 			});
 		} else if (node.props.to) {
 			data.forEach(function (item) {
-				nodeConnections = nodeConnections.concat(
-					connectionsArray.filter(function (connection) {
-						const name = connection.name === "from";
-						const entityID = connection.entityID === item[node.props.primary_key];
-						const entityType = connection.entityType === node.props.graphql_meta_type;
-						return name && entityID && entityType;
-					}),
-				);
-				const foundFrom = connectionsArray.find(function (connection) {
-					const nodeID = connection.nodeID === node.props.fromNodeID;
-					const name = connection.name === "to";
-					const entityID = connection.entityID === item[node.props.to._metadata.id];
-					const entityType = connection.entityType === node.props.to._metadata.type;
-					return nodeID && name && entityID && entityType;
-				});
-				const foundTo = connectionsArray.find(function (connection) {
-					const nodeID = connection.nodeID === node.id;
-					const name = connection.name === "from";
-					const entityID = connection.entityID === item[node.props.primary_key];
-					const entityType = connection.entityType === node.props.type;
-					return nodeID && name && entityID && entityType;
-				});
 				const edge = {};
-				if (foundFrom) {
-					edge.from = foundFrom;
-					nodeConnections.push(foundFrom);
+				const foundEdge = edgesArray.find(function (e) {
+					const fromNodeID = e.fromNodeID === node.id;
+					const fromEntityID = self.connections[e.fromConnectionID].entityID === item[node.props.primary_key];
+					const fromEntityType = self.connections[e.fromConnectionID].entityType === node.props.graphql_meta_type;
+					const fromConnectionID = fromEntityID && fromEntityType;
+					const toNodeID = e.toNodeID === node.props.toNodeID;
+					const toEntityID = self.connections[e.toConnectionID].entityID === node.props.to._metadata.id;
+					const toEntityType = self.connections[e.toConnectionID].entityType === node.props.to._metadata.type;
+					const toConnectionID = toEntityID && toEntityType;
+					return fromNodeID && fromConnectionID && toNodeID && toConnectionID;
+				});
+				if (foundEdge) {
+					nodeConnections = nodeConnections.concat(
+						connectionsArray.filter(function (connection) {
+							const entityID = connection.entityID === item[node.props.primary_key];
+							const entityType = connection.entityType === node.props.graphql_meta_type;
+							return entityID && entityType;
+						}),
+					);
+					edge.from = self.connections[foundEdge.fromConnectionID];
+					edge.to = self.connections[foundEdge.toConnectionID];
+					nodeEdges.push(foundEdge);
 				} else {
+					nodeConnections = nodeConnections.concat(
+						connectionsArray.filter(function (connection) {
+							const name = connection.name === "from";
+							const entityID = connection.entityID === item[node.props.primary_key];
+							const entityType = connection.entityType === node.props.graphql_meta_type;
+							return name && entityID && entityType;
+						}),
+					);
 					const newFrom = {
 						id: uuidv4(),
 						nodeID: node.id,
@@ -143,11 +138,6 @@ class GraphService {
 					edge.from = newFrom;
 					newConnections.push(newFrom);
 					nodeConnections.push(newFrom);
-				}
-				if (foundTo) {
-					edge.to = foundTo;
-					nodeConnections.push(foundTo);
-				} else {
 					const newTo = {
 						id: uuidv4(),
 						nodeID: node.props.toNodeID,
@@ -160,17 +150,6 @@ class GraphService {
 					edge.to = newTo;
 					newConnections.push(newTo);
 					nodeConnections.push(newTo);
-				}
-				const foundEdge = edgesArray.find(function (e) {
-					const fromNodeID = e.fromNodeID === node.id;
-					const fromConnectionID = e.fromConnectionID === edge.from.id;
-					const toNodeID = e.toNodeID === node.props.toNodeID;
-					const toConnectionID = e.toConnectionID === edge.to.id;
-					return fromNodeID && fromConnectionID && toNodeID && toConnectionID;
-				});
-				if (foundEdge) {
-					nodeEdges.push(foundEdge);
-				} else {
 					const newEdge = {
 						id: uuidv4(),
 						fromNodeID: node.id,
@@ -253,6 +232,32 @@ class GraphService {
 			}
 		});
 		return index;
+	}
+	validEdges(nodes, edges, connections) {
+		const index = {};
+		const edgesArray = Object.values(edges);
+		const validEdges = edgesArray.filter(function (edge) {
+			const fromNode = nodes[edge.fromNodeID];
+			const toNode = nodes[edge.toNodeID];
+			const fromConnection = connections[edge.fromConnectionID];
+			const toConnection = connections[edge.toConnectionID];
+			const from = fromNode.props.data.find(function (item) {
+				const entityID = fromConnection.entityID === item[fromNode.props.primary_key];
+				const entityType = fromConnection.entityType === fromNode.props.graphql_meta_type;
+				return entityID && entityType;
+			});
+			const to = toNode.props.data.find(function (item) {
+				const entityID = toConnection.entityID === item[toNode.props.primary_key];
+				const entityType = toConnection.entityType === toNode.props.graphql_meta_type;
+				return entityID && entityType;
+			});
+			return from && to;
+		});
+		const obj = {};
+		validEdges.forEach(function (edge) {
+			obj[edge.id] = edge;
+		});
+		return obj;
 	}
 	initializeNodes(candidates) {
 		const self = this;

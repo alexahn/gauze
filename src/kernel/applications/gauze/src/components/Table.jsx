@@ -43,17 +43,20 @@ export default function Table({
 	route,
 	render,
 	nodes,
+	setNodes,
 	initializeNodes,
 	createNodes,
 	readNodes,
 	updateNodes,
 	deleteNodes,
 	edges,
+	setEdges,
 	createEdges,
 	readEdges,
 	updateEdges,
 	deleteEdges,
 	connections,
+	setConnections,
 	initializeConnections,
 	createConnections,
 	readConnections,
@@ -136,15 +139,9 @@ export default function Table({
 						return item.attributes;
 					});
 					const count = results[1][0].count;
-					if (node.from) {
-						// ensure connections exist
-						// if they don't, then create them, and also create an edge
-					} else if (node.to) {
-						// ensure connections exist
-						// if they don't, then create them, and also create an edge
-					} else {
-					}
+					const targetNode = node;
 					// set the connections prop on the node
+					/*
 					updateNodes([
 						{
 							...node,
@@ -158,6 +155,62 @@ export default function Table({
 							},
 						},
 					]);
+					*/
+					const synced = graph.syncNodeEdges(targetNode, data);
+					console.log("synced", synced, connections, graph.connections);
+					targetNode.props.data = data;
+					targetNode.props.count = count;
+					targetNode.props.variables = localVariables;
+					// sync to service
+					graph.updateNodes(Object.values(nodes));
+					graph.updateEdges(Object.values(edges));
+					graph.updateConnections(Object.values(connections));
+					// create new edges, connections, and nodes using service
+					// todo: map synced.newConnections to include component and props
+					graph.createConnections(
+						synced.newConnections.map(function (connection) {
+							return {
+								...connection,
+								component: Relationship,
+								props: {
+									gauze: gauze,
+									model: model,
+									router: router,
+								},
+							};
+						}),
+					);
+					graph.createEdges(synced.newEdges);
+					graph.updateNodes([targetNode]);
+					const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
+					const connectedNodes = Object.keys(syncedConnections).map(function (id) {
+						return {
+							...graph.nodes[id],
+							props: {
+								...graph.nodes[id].props,
+								connectionIDs: syncedConnections[id].connections,
+							},
+						};
+					});
+					graph.updateNodes(connectedNodes);
+					// sync from service
+					updateNodes(
+						Object.values(graph.nodes).map(function (n) {
+							// reinitialize the source
+							if (n.id === node.id) {
+								return {
+									...n,
+									width: null,
+									height: null,
+								};
+							} else {
+								return n;
+							}
+						}),
+					);
+					//updateEdges(Object.values(graph.edges));
+					setEdges(graph.validEdges(graph.nodes, graph.edges, graph.connections));
+					updateConnections(Object.values(graph.connections));
 					setSyncing(false);
 				})
 				.catch(function (err) {
@@ -225,7 +278,8 @@ export default function Table({
 					}
 				}),
 			);
-			updateEdges(Object.values(graph.edges));
+			//updateEdges(Object.values(graph.edges));
+			setEdges(graph.validEdges(graph.nodes, graph.edges, graph.connections));
 			updateConnections(Object.values(graph.connections));
 			// reinitialize node
 		});
@@ -688,7 +742,7 @@ export default function Table({
 												//const absolutePosition = absoluteToAbstract(connection);
 												return (
 													<Connection
-														key={id}
+														key={connection.id}
 														route={route}
 														render={render}
 														dataX={connection.x}

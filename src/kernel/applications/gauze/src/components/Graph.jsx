@@ -32,17 +32,20 @@ export default function Graph({
 	render,
 	graph,
 	nodes,
+	setNodes,
 	initializeNodes,
 	createNodes,
 	readNodes,
 	updateNodes,
 	deleteNodes,
 	edges,
+	setEdges,
 	createEdges,
 	readEdges,
 	updateEdges,
 	deleteEdges,
 	connections,
+	setConnections,
 	initializeConnections,
 	createConnections,
 	readConnections,
@@ -185,17 +188,20 @@ export default function Graph({
 							dataY={absolutePosition.y}
 							dataZ={absolutePosition.z}
 							nodes={nodes}
+							setNodes={setNodes}
 							initializeNodes={initializeNodes}
 							createNodes={createNodes}
 							readNodes={readNodes}
 							updateNodes={updateNodes}
 							deleteNodes={deleteNodes}
 							edges={edges}
+							setEdges={setEdges}
 							createEdges={createEdges}
 							readEdges={readEdges}
 							updateEdges={updateEdges}
 							deleteEdges={deleteEdges}
 							connections={connections}
+							setConnections={setConnections}
 							initializeConnections={initializeConnections}
 							createConnections={createConnections}
 							readConnections={readConnections}
