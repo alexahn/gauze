@@ -1,6 +1,7 @@
 import path from "path";
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
+import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 
 import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
@@ -426,6 +427,7 @@ class DatabaseModel extends Model {
 		const SOURCE_SQL_ID = relationship_source._metadata.id;
 		const SOURCE_GRAPHQL_TYPE = relationship_source._metadata.type;
 		const SOURCE_SQL_TABLE = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[SOURCE_GRAPHQL_TYPE];
+		//const SOURCE_PRIMARY_KEY = $abstract.entities[$structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[SOURCE_SQL_TABLE]].default($abstract).primary_key
 
 		// mutate where by prefixing with table_name name
 		var joined_where = {};
@@ -454,7 +456,7 @@ class DatabaseModel extends Model {
 		var joined_order = self.table_name + "." + order;
 		if (relationship_source._direction === "to") {
 			const sql = database(self.table_name)
-				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.id`)
+				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.${self.primary_key}`)
 				.where(`${self.relationship_table_name}.gauze__relationship__from_id`, SOURCE_SQL_ID)
 				.where(`${self.relationship_table_name}.gauze__relationship__from_type`, SOURCE_SQL_TABLE)
 				.where(function (builder) {
@@ -485,7 +487,7 @@ class DatabaseModel extends Model {
 				});
 		} else if (relationship_source._direction === "from") {
 			const sql = database(self.table_name)
-				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__from_id`, "=", `${self.table_name}.id`)
+				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__from_id`, "=", `${self.table_name}.${self.primary_key}`)
 				.where(`${self.relationship_table_name}.gauze__relationship__to_id`, SOURCE_SQL_ID)
 				.where(`${self.relationship_table_name}.gauze__relationship__to_type`, SOURCE_SQL_TABLE)
 				.where(function (builder) {
@@ -886,7 +888,7 @@ class DatabaseModel extends Model {
 		if (relationship_source._direction === "to") {
 			const sql = database(self.table_name)
 				.count(count_has_key ? reversed : null)
-				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.id`)
+				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.${self.primary_key}`)
 				.where(`${self.relationship_table_name}.gauze__relationship__from_id`, SOURCE_SQL_ID)
 				.where(`${self.relationship_table_name}.gauze__relationship__from_type`, SOURCE_SQL_TABLE)
 				.where(function (builder) {
@@ -916,7 +918,7 @@ class DatabaseModel extends Model {
 		} else if (relationship_source._direction === "from") {
 			const sql = database(self.table_name)
 				.count(count_has_key ? reversed : null)
-				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__from_id`, "=", `${self.table_name}.id`)
+				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__from_id`, "=", `${self.table_name}.${self.primary_key}`)
 				.where(`${self.relationship_table_name}.gauze__relationship__to_id`, SOURCE_SQL_ID)
 				.where(`${self.relationship_table_name}.gauze__relationship__to_type`, SOURCE_SQL_TABLE)
 				.where(function (builder) {

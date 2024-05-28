@@ -163,9 +163,9 @@ class GraphService {
 				}
 				const foundEdge = edgesArray.find(function (e) {
 					const fromNodeID = e.fromNodeID === node.id;
-					const fromConnectionID = e.fromConnectionID === e.from.id;
+					const fromConnectionID = e.fromConnectionID === edge.from.id;
 					const toNodeID = e.toNodeID === node.props.toNodeID;
-					const toConnectionID = e.toConnectionID === e.to.id;
+					const toConnectionID = e.toConnectionID === edge.to.id;
 					return fromNodeID && fromConnectionID && toNodeID && toConnectionID;
 				});
 				if (foundEdge) {
