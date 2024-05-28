@@ -1,7 +1,32 @@
 import React from "react";
 import { useState, useLayoutEffect, useRef } from "react";
 
-export default function Connection({ route, gauze, model, router, render, node, connection, initializeConnections }) {
+export default function Connection({
+	route,
+	render,
+	nodes,
+	initializeNodes,
+	createNodes,
+	readNodes,
+	updateNodes,
+	deleteNodes,
+	edges,
+	createEdges,
+	readEdges,
+	updateEdges,
+	deleteEdges,
+	connections,
+	initializeConnections,
+	createConnections,
+	readConnections,
+	updateConnections,
+	deleteConnections,
+	node,
+	connection,
+	gauze,
+	model,
+	router,
+}) {
 	const containerRef = useRef();
 	useLayoutEffect(function () {
 		//console.log('connection', connection)
@@ -24,5 +49,33 @@ export default function Connection({ route, gauze, model, router, render, node, 
 		}
 		//console.log("connection", containerRef.current.getClientRects()[0]);
 	});
-	return <div ref={containerRef}>Connection</div>;
+	/*<div ref={containerRef} className="absolute top-0 pa1" style={{"visibility": "hidden"}}>*/
+	return (
+		<div ref={containerRef} className="">
+			<connection.component
+				route={route}
+				render={render}
+				nodes={nodes}
+				initializeNodes={initializeNodes}
+				createNodes={createNodes}
+				readNodes={readNodes}
+				updateNodes={updateNodes}
+				deleteNodes={deleteNodes}
+				edges={edges}
+				createEdges={createEdges}
+				readEdges={readEdges}
+				updateEdges={updateEdges}
+				deleteEdges={deleteEdges}
+				connections={connections}
+				initializeConnections={initializeConnections}
+				createConnections={createConnections}
+				readConnections={readConnections}
+				updateConnections={updateConnections}
+				deleteConnections={deleteConnections}
+				node={node}
+				connection={connection}
+				{...connection.props}
+			/>
+		</div>
+	);
 }

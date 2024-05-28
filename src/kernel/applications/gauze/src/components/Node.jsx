@@ -116,7 +116,6 @@ export default function Node({
 			<node.component
 				route={route}
 				render={render}
-				node={node}
 				nodes={nodes}
 				initializeNodes={initializeNodes}
 				createNodes={createNodes}
@@ -134,6 +133,7 @@ export default function Node({
 				readConnections={readConnections}
 				updateConnections={updateConnections}
 				deleteConnections={deleteConnections}
+				node={node}
 				{...node.props}
 			/>
 		</div>

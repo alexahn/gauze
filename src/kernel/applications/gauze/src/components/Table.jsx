@@ -4,6 +4,7 @@ import { useState } from "react";
 import { PAGINATION_PAGE_SIZE } from "./../constants.js";
 
 import Connection from "./Connection.jsx";
+import Relationship from "./Relationship.jsx";
 import Input from "./Input.jsx";
 import Pagination from "./Pagination.jsx";
 
@@ -41,8 +42,8 @@ function read(gauze, model, header, variables) {
 export default function Table({
 	route,
 	render,
-	node,
 	nodes,
+	initializeNodes,
 	createNodes,
 	readNodes,
 	updateNodes,
@@ -58,6 +59,7 @@ export default function Table({
 	readConnections,
 	updateConnections,
 	deleteConnections,
+	node,
 	gauze,
 	model,
 	router,
@@ -165,15 +167,80 @@ export default function Table({
 		};
 	}
 
-	function traverse(from, item, to) {
+	function traverse(targetHeader, targetNode) {
+		console.log("targetNode", targetNode);
+		return read(gauze, model, targetHeader, targetNode.props.variables).then(function (results) {
+			const data = results[0].map(function (item) {
+				return item.attributes;
+			});
+			const count = results[1][0].count;
+			const synced = graph.syncNodeEdges(targetNode, data);
+			console.log("synced", synced);
+			targetNode.props.data = data;
+			targetNode.props.count = count;
+			// sync to service
+			graph.updateNodes(Object.values(nodes));
+			graph.updateEdges(Object.values(edges));
+			graph.updateConnections(Object.values(connections));
+			// create new edges, connections, and nodes using service
+			// todo: map synced.newConnections to include component and props
+			graph.createConnections(
+				synced.newConnections.map(function (connection) {
+					return {
+						...connection,
+						component: Relationship,
+						props: {
+							gauze: gauze,
+							model: model,
+							router: router,
+						},
+					};
+				}),
+			);
+			graph.createEdges(synced.newEdges);
+			graph.createNodes([targetNode]);
+			const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
+			const connectedNodes = Object.keys(syncedConnections).map(function (id) {
+				return {
+					...graph.nodes[id],
+					props: {
+						...graph.nodes[id].props,
+						connectionIDs: syncedConnections[id].connections,
+					},
+				};
+			});
+			graph.updateNodes(connectedNodes);
+			// sync from service
+			updateNodes(
+				Object.values(graph.nodes).map(function (n) {
+					// reinitialize the source
+					if (n.id === node.id) {
+						return {
+							...n,
+							width: null,
+							height: null,
+						};
+					} else {
+						return n;
+					}
+				}),
+			);
+			updateEdges(Object.values(graph.edges));
+			updateConnections(Object.values(graph.connections));
+			// reinitialize node
+		});
+		// note: it seems we cannot create the connections without knowing the contents of the data
+	}
+
+	function traverseTo(sourceHeader, item, targetType) {
 		return function (e) {
-			console.log("traverse", from, item, to);
+			console.log("traverseTo", sourceHeader, item, targetType);
 			// convert graphql to type to name
 			const headers = model.all("HEADER");
-			const toHeader = headers.find(function (header) {
-				return header.graphql_meta_type === to;
+			const targetHeader = headers.find(function (header) {
+				return header.graphql_meta_type === targetType;
 			});
-			console.log("toHeader", toHeader);
+			console.log("targetHeader", targetHeader);
 			const source = {
 				_metadata: {
 					type: header.graphql_meta_type,
@@ -181,7 +248,7 @@ export default function Table({
 				},
 				_direction: "to",
 			};
-			const creating = {
+			const targetNode = {
 				id: uuidv4(),
 				oldX: 0,
 				oldY: 0,
@@ -196,13 +263,14 @@ export default function Table({
 					model: model,
 					router: router,
 					graph: graph,
-					type: toHeader.name,
-					table_name: toHeader.table_name,
-					primary_key: toHeader.primary_key,
-					graphql_meta_type: toHeader.graphql_meta_type,
+					type: targetHeader.name,
+					table_name: targetHeader.table_name,
+					primary_key: targetHeader.primary_key,
+					graphql_meta_type: targetHeader.graphql_meta_type,
 					from: source,
 					fromNodeID: node.id,
 					to: null,
+					toNodeID: null,
 					variables: {
 						source: source,
 						where: {},
@@ -214,7 +282,9 @@ export default function Table({
 				complete: true,
 				sound: false,
 			};
-			return read(gauze, model, toHeader, creating.props.variables).then(function (results) {
+			return traverse(targetHeader, targetNode);
+			/*
+			return read(gauze, model, targetHeader, creating.props.variables).then(function (results) {
 				const data = results[0].map(function (item) {
 					return item.attributes;
 				});
@@ -229,7 +299,17 @@ export default function Table({
 				graph.updateConnections(Object.values(connections));
 				// create new edges, connections, and nodes using service
 				// todo: map synced.newConnections to include component and props
-				graph.createConnections(synced.newConnections);
+				graph.createConnections(synced.newConnections.map(function (connection) {
+					return {
+						...connection,
+						component: Relationship,
+						props: {
+							gauze: gauze,
+							model: model,
+							router: router
+						}
+					}
+				}));
 				graph.createEdges(synced.newEdges);
 				graph.createNodes([creating]);
 				const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
@@ -262,7 +342,121 @@ export default function Table({
 				updateConnections(Object.values(graph.connections));
 				// reinitialize node
 			});
-			// note: it seems we cannot create the connections without knowing the contents of the data
+			*/
+		};
+	}
+
+	function traverseFrom(sourceHeader, item, targetType) {
+		return function (e) {
+			console.log("traverse", sourceHeader, item, targetType);
+			// convert graphql to type to name
+			const headers = model.all("HEADER");
+			const targetHeader = headers.find(function (header) {
+				return header.graphql_meta_type === targetType;
+			});
+			console.log("targetHeader", targetHeader);
+			const source = {
+				_metadata: {
+					type: header.graphql_meta_type,
+					id: item[header.primary_key],
+				},
+				_direction: "from",
+			};
+			const targetNode = {
+				id: uuidv4(),
+				oldX: 0,
+				oldY: 0,
+				x: null,
+				y: null,
+				z: 1,
+				height: null,
+				width: null,
+				component: Table,
+				props: {
+					gauze: gauze,
+					model: model,
+					router: router,
+					graph: graph,
+					type: targetHeader.name,
+					table_name: targetHeader.table_name,
+					primary_key: targetHeader.primary_key,
+					graphql_meta_type: targetHeader.graphql_meta_type,
+					from: null,
+					fromNodeID: null,
+					to: source,
+					toNodeID: node.id,
+					variables: {
+						source: source,
+						where: {},
+						limit: PAGINATION_PAGE_SIZE,
+					},
+					data: [],
+					count: 0,
+				},
+				complete: true,
+				sound: false,
+			};
+			return traverse(targetHeader, targetNode);
+			/*
+			return read(gauze, model, toHeader, creating.props.variables).then(function (results) {
+				const data = results[0].map(function (item) {
+					return item.attributes;
+				});
+				const count = results[1][0].count;
+				const synced = graph.syncNodeEdges(creating, data);
+				console.log("synced", synced);
+				creating.props.data = data;
+				creating.props.count = count;
+				// sync to service
+				graph.updateNodes(Object.values(nodes));
+				graph.updateEdges(Object.values(edges));
+				graph.updateConnections(Object.values(connections));
+				// create new edges, connections, and nodes using service
+				// todo: map synced.newConnections to include component and props
+				graph.createConnections(synced.newConnections.map(function (connection) {
+					return {
+						...connection,
+						component: Relationship,
+						props: {
+							gauze: gauze,
+							model: model,
+							router: router
+						}
+					}
+				}));
+				graph.createEdges(synced.newEdges);
+				graph.createNodes([creating]);
+				const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
+				const connectedNodes = Object.keys(syncedConnections).map(function (id) {
+					return {
+						...graph.nodes[id],
+						props: {
+							...graph.nodes[id].props,
+							connectionIDs: syncedConnections[id].connections,
+						},
+					};
+				});
+				graph.updateNodes(connectedNodes);
+				// sync from service
+				updateNodes(
+					Object.values(graph.nodes).map(function (n) {
+						// reinitialize the source
+						if (n.id === node.id) {
+							return {
+								...n,
+								width: null,
+								height: null,
+							};
+						} else {
+							return n;
+						}
+					}),
+				);
+				updateEdges(Object.values(graph.edges));
+				updateConnections(Object.values(graph.connections));
+				// reinitialize node
+			});
+			*/
 		};
 	}
 
@@ -413,6 +607,74 @@ export default function Table({
 								*/}
 							</th>
 							<th className="mw4 w4 pa1 relative row" tabIndex="0">
+								<div className="truncate-ns">RELATIONSHIPS</div>
+								<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">RELATIONSHIPS</span>
+							</th>
+							{data.map(function (item) {
+								return (
+									<th key={item[header.primary_key]} align="center" className="mw4 w4 pa1 relative row" tabIndex="0">
+										<div className="truncate-ns">FROM</div>
+										{node.props.connectionIDs.map(function (id) {
+											const connection = connections[id];
+											if (connection.name === "to" && connection.entityID === item[header.primary_key] && connection.entityType === header.graphql_meta_type) {
+												//const absolutePosition = absoluteToAbstract(connection);
+												return (
+													<Connection
+														key={id}
+														route={route}
+														render={render}
+														dataX={connection.x}
+														dataY={connection.y}
+														nodes={nodes}
+														createNodes={createNodes}
+														initializeNodes={initializeNodes}
+														readNodes={readNodes}
+														updateNodes={updateNodes}
+														deleteNodes={deleteNodes}
+														edges={edges}
+														createEdges={createEdges}
+														readEdges={readEdges}
+														updateEdges={updateEdges}
+														deleteEdges={deleteEdges}
+														connections={connections}
+														initializeConnections={initializeConnections}
+														createConnections={createConnections}
+														readConnections={readConnections}
+														updateConnections={updateConnections}
+														deleteConnections={deleteConnections}
+														node={node}
+														connection={connection}
+													/>
+												);
+											} else {
+												return null;
+											}
+										})}
+										{/* connection component? */}
+										<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
+											<div className="pa1">FROM</div>
+											{header.relationships_from.map(function (from) {
+												return (
+													<div key={from} className="pa1">
+														<button onClick={traverseFrom(header, item, from)}>{from}</button>
+													</div>
+												);
+											})}
+										</span>
+									</th>
+								);
+							})}
+							<th align="center" className="mw4 w4"></th>
+						</tr>
+						<tr align="right" className="flex flex-wrap">
+							<th align="center" className="mw4 w4">
+								{/*
+								<a href={router.buildUrl(route.name, { ...route.params, where: encodeURIComponent(JSON.stringify(localWhere)) })}>
+									<button>Filter</button>
+								</a>
+								*/}
+							</th>
+							<th className="mw4 w4 pa1 relative row" tabIndex="0">
 								<div>FIELDS</div>
 								<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
 									{header.fields.map(function (field) {
@@ -529,12 +791,38 @@ export default function Table({
 							{data.map(function (item) {
 								return (
 									<th key={item[header.primary_key]} align="center" className="mw4 w4 pa1 relative row" tabIndex="0">
-										<div className="truncate-ns">TRAVERSE</div>
+										<div className="truncate-ns">TO</div>
 										{node.props.connectionIDs.map(function (id) {
 											const connection = connections[id];
-											if (connection.entityID === item[header.primary_key] && connection.entityType === header.graphql_meta_type) {
+											if (connection.name === "from" && connection.entityID === item[header.primary_key] && connection.entityType === header.graphql_meta_type) {
+												//const absolutePosition = absoluteToAbstract(connection);
 												return (
-													<Connection key={id} route={route} node={node} render={render} connection={connection} initializeConnections={initializeConnections} />
+													<Connection
+														key={id}
+														route={route}
+														render={render}
+														dataX={connection.x}
+														dataY={connection.y}
+														nodes={nodes}
+														createNodes={createNodes}
+														initializeNodes={initializeNodes}
+														readNodes={readNodes}
+														updateNodes={updateNodes}
+														deleteNodes={deleteNodes}
+														edges={edges}
+														createEdges={createEdges}
+														readEdges={readEdges}
+														updateEdges={updateEdges}
+														deleteEdges={deleteEdges}
+														connections={connections}
+														initializeConnections={initializeConnections}
+														createConnections={createConnections}
+														readConnections={readConnections}
+														updateConnections={updateConnections}
+														deleteConnections={deleteConnections}
+														node={node}
+														connection={connection}
+													/>
 												);
 											} else {
 												return null;
@@ -542,11 +830,11 @@ export default function Table({
 										})}
 										{/* connection component? */}
 										<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
-											<div className="pa1">TRAVERSE</div>
+											<div className="pa1">TO</div>
 											{header.relationships_to.map(function (to) {
 												return (
 													<div key={to} className="pa1">
-														<button onClick={traverse(header, item, to)}>{to}</button>
+														<button onClick={traverseTo(header, item, to)}>{to}</button>
 													</div>
 												);
 											})}

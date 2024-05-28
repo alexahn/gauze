@@ -144,7 +144,6 @@ export default function Graph({
 							dataX={absolutePosition.x}
 							dataY={absolutePosition.y}
 							dataZ={absolutePosition.z}
-							node={node}
 							nodes={nodes}
 							initializeNodes={initializeNodes}
 							createNodes={createNodes}
@@ -162,6 +161,7 @@ export default function Graph({
 							readConnections={readConnections}
 							updateConnections={updateConnections}
 							deleteConnections={deleteConnections}
+							node={node}
 						/>
 					);
 				} else {
