@@ -258,6 +258,7 @@ const routes = [
 								toNodeID: null,
 								from: null,
 								to: null,
+								fields: agentHeader.fields,
 								variables: {
 									where: {},
 									limit: PAGINATION_PAGE_SIZE,

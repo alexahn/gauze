@@ -71,6 +71,7 @@ export default function Table({
 	table_name,
 	from,
 	to,
+	fields,
 	variables,
 	data,
 	count,
@@ -78,7 +79,7 @@ export default function Table({
 }) {
 	if (!type) return;
 	const header = model.read("HEADER", type);
-	const [fields, setFields] = useState(header.fields);
+	const [localFields, setLocalFields] = useState(fields);
 	const [localWhere, setLocalWhere] = useState(variables.where || {});
 	const [createItem, setCreateItem] = useState({});
 	const [submitCreate, setSubmitCreate] = useState(false);
@@ -259,6 +260,7 @@ export default function Table({
 					fromNodeID: node.id,
 					to: null,
 					toNodeID: null,
+					fields: targetHeader.fields,
 					variables: {
 						source: source,
 						where: {},
@@ -313,6 +315,7 @@ export default function Table({
 					fromNodeID: null,
 					to: source,
 					toNodeID: node.id,
+					fields: targetHeader.fields,
 					variables: {
 						source: source,
 						where: {},
@@ -379,32 +382,40 @@ export default function Table({
 		return function (e) {
 			if (e.target.checked) {
 				const updatedFields = [...header.fields].filter(function (field) {
-					const exists = fields.find(function (f) {
+					const exists = localFields.find(function (f) {
 						return f.name === field.name;
 					});
 					return exists || field.name === name;
 				});
-				setFields(updatedFields);
+				setLocalFields(updatedFields);
 				updateNodes([
 					{
 						...node,
 						width: null,
 						height: null,
+						props: {
+							...node.props,
+							fields: updatedFields,
+						},
 					},
 				]);
 			} else {
 				const updatedFields = [...header.fields].filter(function (field) {
-					const exists = fields.find(function (f) {
+					const exists = localFields.find(function (f) {
 						return f.name === field.name;
 					});
 					return exists && field.name !== name;
 				});
-				setFields(updatedFields);
+				setLocalFields(updatedFields);
 				updateNodes([
 					{
 						...node,
 						width: null,
 						height: null,
+						props: {
+							...node.props,
+							fields: updatedFields,
+						},
 					},
 				]);
 			}
@@ -558,8 +569,8 @@ export default function Table({
 												<input
 													type="checkbox"
 													defaultChecked={
-														fields
-															? fields.find(function (v) {
+														localFields
+															? localFields.find(function (v) {
 																	return v.name === field.name;
 																})
 															: true
@@ -612,7 +623,7 @@ export default function Table({
 						</tr>
 					</thead>
 					<tbody align="right" className="mw-100">
-						{fields.map(function (field) {
+						{localFields.map(function (field) {
 							return (
 								<tr align="right" key={field.name} className="flex flex-wrap">
 									<td className="mw4 w4 overflow-x-hidden">
