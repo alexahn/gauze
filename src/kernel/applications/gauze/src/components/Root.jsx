@@ -10,8 +10,9 @@ import Table from "./Table.jsx";
 export default function Root({ gauze, model, router, route, render, graph }) {
 	// todo: either use the model service to have an equivalent of the PAGINATION type entry to select the accessable nodes or filter the nodes here based on the root
 	// todo: could have a GRAPH type entry in model that holds an array of node ids (we would need to initialize it in the route just like we do for PAGINATION)
+	//console.log('graph.nodes', graph.nodes)
 	const [nodes, setNodes] = useState(graph.nodes);
-	const [edges, setEdges] = useState(graph.edges);
+	const [edges, setEdges] = useState(graph.validEdges(graph.nodes, graph.edges, graph.connections));
 	const [connections, setConnections] = useState(graph.connections);
 
 	// todo: split this function so that we only change coordinates for new components
@@ -39,7 +40,9 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 				}, 0);
 				const xMax = nodesArray.reduce(function (max, item) {
 					const candidate = item.x + item.width * item.z;
-					if (max < candidate) {
+					if (node.root === true && max < candidate) {
+						return item.x;
+					} else if (max < candidate) {
 						return candidate;
 					} else {
 						return max;
@@ -47,13 +50,15 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 				}, 0);
 				const yMax = nodesArray.reduce(function (max, item) {
 					const candidate = item.y + item.height * item.z;
-					if (max < candidate) {
+					if (node.root === true && max < candidate) {
+						return item.y;
+					} else if (max < candidate) {
 						return candidate;
 					} else {
 						return max;
 					}
 				}, 0);
-				const padding = 10;
+				const padding = 0;
 				const x = xMax + padding * zMax;
 				const y = yMax + padding * zMax;
 				const z = zMax;
@@ -67,6 +72,7 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 			}
 		});
 		setNodes(staged);
+		graph.updateNodes(Object.values(staged));
 	}
 	// node methods
 	function readNodes(candidates) {
@@ -126,10 +132,16 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 	function initializeConnections(candidates) {
 		const staged = { ...connections };
 		const connectionsArray = Object.values(staged);
+		const nodesArray = Object.values(nodes);
 		candidates.forEach(function (connection) {
 			const { width, height } = connection;
 			if (width === null || height === null) throw new Error(`Cannot initialize with null dimensions: width=${width} height=${height}`);
-			staged[connection.id] = connection;
+			const z = nodesArray[0].z;
+			console.log("z", z);
+			staged[connection.id] = {
+				...connection,
+				z: z,
+			};
 		});
 		setConnections(staged);
 	}
@@ -165,6 +177,7 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 	});
 	if (initializeNode) {
 		setTimeout(function () {
+			console.log("initializeNode", initializeNode);
 			render.create(route.name, "NODE", initializeNode.id, true);
 		}, 0);
 	}
@@ -179,6 +192,8 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 	// todo: useEffect to set up a setInterval to sync with service
 	//const validEdges = graph.validEdges(nodes, edges, connections)
 	//console.log('validEdges', validEdges)
+	//console.log('connections', connections, nodes)
+	console.log("nodes", nodes);
 	return (
 		<Graph
 			key={"graph"}

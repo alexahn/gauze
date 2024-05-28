@@ -39,12 +39,14 @@ export default function Connection({
 						console.log("missing", connections[connection.id].entityID, connections[connection.id].entityType, connection.name);
 					}
 					const containerRects = containerRef.current.getClientRects()[0];
+					//console.log('containerRects', connection.id, containerRects)
 					const initialized = {
 						...connection,
 						height: containerRef.current.offsetHeight,
 						width: containerRef.current.offsetWidth,
 						x: containerRects.x,
 						y: containerRects.y,
+						z: 1,
 					};
 					initializeConnections([initialized]);
 					render.unsubscribe(route.name, "CONNECTION", connection.id, connection.id);

@@ -204,13 +204,27 @@ export default function Table({
 									height: null,
 								};
 							} else {
-								return n;
+								//return n
+								return {
+									...n,
+									width: null,
+									height: null,
+								};
 							}
+						}),
+					);
+					updateConnections(
+						graph.validConnections(graph.nodes, graph.edges, graph.connections).map(function (connection) {
+							return {
+								...connection,
+								x: null,
+								y: null,
+							};
 						}),
 					);
 					//updateEdges(Object.values(graph.edges));
 					setEdges(graph.validEdges(graph.nodes, graph.edges, graph.connections));
-					updateConnections(Object.values(graph.connections));
+					//updateConnections(Object.values(graph.connections));
 					setSyncing(false);
 				})
 				.catch(function (err) {
@@ -274,13 +288,26 @@ export default function Table({
 							height: null,
 						};
 					} else {
-						return n;
+						return {
+							...n,
+							width: null,
+							height: null,
+						};
 					}
 				}),
 			);
 			//updateEdges(Object.values(graph.edges));
 			setEdges(graph.validEdges(graph.nodes, graph.edges, graph.connections));
-			updateConnections(Object.values(graph.connections));
+			//updateConnections(Object.values(graph.connections));
+			updateConnections(
+				graph.validConnections(graph.nodes, graph.edges, graph.connections).map(function (connection) {
+					return {
+						...connection,
+						x: null,
+						y: null,
+					};
+				}),
+			);
 			// reinitialize node
 		});
 		// note: it seems we cannot create the connections without knowing the contents of the data

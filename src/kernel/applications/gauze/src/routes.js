@@ -235,6 +235,7 @@ const routes = [
 				});
 				const root = graph.default.root(agentHeader.name);
 				if (root) {
+					console.log("root found!");
 				} else {
 					const rootID = uuidv4();
 					graph.default.createNodes([

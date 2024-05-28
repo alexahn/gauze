@@ -35,7 +35,6 @@ class GraphService {
 					const toConnectionID = toEntityID && toEntityType;
 					return fromNodeID && fromConnectionID && toNodeID && toConnectionID;
 				});
-				console.log("foundEdge", foundEdge);
 				if (foundEdge) {
 					nodeConnections = nodeConnections.concat(
 						connectionsArray.filter(function (connection) {
@@ -64,6 +63,7 @@ class GraphService {
 						entityType: node.props.from._metadata.type,
 						x: null,
 						y: null,
+						z: 1,
 					};
 					edge.from = newFrom;
 					newConnections.push(newFrom);
@@ -76,6 +76,7 @@ class GraphService {
 						entityType: node.props.graphql_meta_type,
 						x: null,
 						y: null,
+						z: 1,
 					};
 					edge.to = newTo;
 					newConnections.push(newTo);
@@ -134,6 +135,7 @@ class GraphService {
 						entityType: node.props.graphql_meta_type,
 						x: null,
 						y: null,
+						z: 1,
 					};
 					edge.from = newFrom;
 					newConnections.push(newFrom);
@@ -146,6 +148,7 @@ class GraphService {
 						entityType: node.props.to._metadata.type,
 						x: null,
 						y: null,
+						z: 1,
 					};
 					edge.to = newTo;
 					newConnections.push(newTo);

@@ -142,34 +142,20 @@ export default function Graph({
 					};
 				}),
 			);
-			/*
 			updateConnections(
-				connectionsArray.map(function (connection, index) {
-					//const x = rect.width / 2 - (rect.width / 2 - connection.x) * scale - (nodes[connection.nodeID].width / 2) * sign;
-					//const y = rect.height / 2 - (rect.height / 2 - connection.y) * scale - (nodes[connection.nodeID].height / 2) * sign;
-					//const x = graph.nodes[connection.nodeID].x + offsets[index].x * scale
-					//const y = graph.nodes[connection.nodeID].y + offsets[index].y * scale
-					//const x = connection.x * scale
-					//const y = connection.y * scale
-					//const x = rect.width / 2 - (rect.width / 2 - connection.x) * scale - ((connection.x - nodes[connection.nodeID].x) / 2) * sign;
-					//const y = rect.height / 2 - (rect.height / 2 - connection.y) * scale - ((connection.y - nodes[connection.nodeID].y) / 2) * sign;
+				graph.validConnections(nodes, edges, connections).map(function (connection) {
+					const x = rect.width / 2 - (rect.width / 2 - connection.x) * scale;
+					const y = rect.height / 2 - (rect.height / 2 - connection.y) * scale;
 					return {
 						...connection,
-						x: null,
-						y: null,
+						x: x,
+						y: y,
+						z: connection.z * scale,
 					};
 				}),
 			);
-			*/
-			updateConnections(
-				graph.validConnections(graph.nodes, graph.edges, graph.connections).map(function (connection) {
-					return {
-						...connection,
-						x: null,
-						y: null,
-					};
-				}),
-			);
+			//updateConnections(stagedConnections)
+			//graph.updateConnections(stagedConnections)
 		}
 	}
 	useEffect(() => {
