@@ -4,6 +4,8 @@ import { useState, useLayoutEffect, useRef } from "react";
 export default function Connection({
 	route,
 	render,
+	dataX,
+	dataY,
 	nodes,
 	initializeNodes,
 	createNodes,
@@ -29,10 +31,9 @@ export default function Connection({
 }) {
 	const containerRef = useRef();
 	useLayoutEffect(function () {
-		//console.log('connection', connection)
-		if (node.height === null || node.width === null) {
-			render.unsubscribe(route.name, "NODE", node.id, connection.id);
-			render.subscribe(route.name, "NODE", node.id, connection.id, function (data) {
+		if (connection.x === null || connection.y === null) {
+			render.unsubscribe(route.name, "CONNECTION", connection.id, connection.id);
+			render.subscribe(route.name, "CONNECTION", connection.id, connection.id, function (data) {
 				setTimeout(function () {
 					const containerRects = containerRef.current.getClientRects()[0];
 					const initialized = {
@@ -43,15 +44,14 @@ export default function Connection({
 						y: containerRects.y,
 					};
 					initializeConnections([initialized]);
-					render.unsubscribe(route.name, "NODE", node.id, connection.id);
+					render.unsubscribe(route.name, "CONNECTION", connection.id, connection.id);
 				}, 0);
 			});
 		}
-		//console.log("connection", containerRef.current.getClientRects()[0]);
 	});
 	/*<div ref={containerRef} className="absolute top-0 pa1" style={{"visibility": "hidden"}}>*/
 	return (
-		<div ref={containerRef} className="">
+		<div ref={containerRef} className="connection" data-id={connection.id} data-x={connection.x} data-y={connection.y}>
 			<connection.component
 				route={route}
 				render={render}

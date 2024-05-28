@@ -37,6 +37,9 @@ export default function Node({
 	const [isDragging, setDragging] = useState(false);
 	const [localWidth, setLocalWidth] = useState(width);
 	const [localHeight, setLocalHeight] = useState(height);
+	const nodeConnections = Object.values(connections).filter(function (connection) {
+		return connection.nodeID === node.id;
+	});
 	function onMouseDown(e) {
 		if (e.button === 2) {
 			e.preventDefault();
@@ -51,6 +54,15 @@ export default function Node({
 						oldY: e.clientY,
 					},
 				]);
+				updateConnections(
+					nodeConnections.map(function (connection) {
+						return {
+							...connection,
+							oldX: e.clientX,
+							oldY: e.clientY,
+						};
+					}),
+				);
 			} else {
 			}
 		}
@@ -70,6 +82,17 @@ export default function Node({
 					z: z,
 				},
 			]);
+			updateConnections(
+				nodeConnections.map(function (connection) {
+					return {
+						...connection,
+						oldX: e.clientX,
+						oldY: e.clientY,
+						x: connection.x + e.clientX - connection.oldX,
+						y: connection.y + e.clientY - connection.oldY,
+					};
+				}),
+			);
 		}
 	}
 	useLayoutEffect(function () {
@@ -100,13 +123,14 @@ export default function Node({
 	// todo: remove render from here and define it inside of the connection props
 	return (
 		<div
-			className="absolute shadow-1"
+			className="node absolute shadow-1"
 			style={{
 				transform: `translate(${x}px, ${y}px) scale(${z})`,
 				visibility: node.render ? "visible" : "hidden",
 			}}
 			ref={containerRef}
 			onMouseDown={onMouseDown}
+			data-id={node.id}
 			data-x={dataX}
 			data-y={dataY}
 			data-z={dataZ}

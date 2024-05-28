@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 
 import Node from "./Node.jsx";
+import Edge from "./Edge.jsx";
 
 // useRef
 // refContainer.current.offsetWidth (the width of the component)
@@ -29,6 +30,7 @@ function abstractToAbsolute({ x, y, z, width, height }) {
 export default function Graph({
 	route,
 	render,
+	graph,
 	nodes,
 	initializeNodes,
 	createNodes,
@@ -49,6 +51,7 @@ export default function Graph({
 }) {
 	const containerRef = useRef();
 	const nodesArray = Object.values(nodes);
+	const connectionsArray = Object.values(connections);
 	const [isPanning, setPanning] = useState(false);
 	function onMouseDown(e) {
 		//e.preventDefault();
@@ -76,6 +79,15 @@ export default function Graph({
 						};
 					}),
 				);
+				updateConnections(
+					connectionsArray.map(function (connection) {
+						return {
+							...connection,
+							oldX: e.clientX,
+							oldY: e.clientY,
+						};
+					}),
+				);
 			} else {
 			}
 		} else {
@@ -92,6 +104,17 @@ export default function Graph({
 						...position,
 						x: position.x + e.clientX - position.oldX,
 						y: position.y + e.clientY - position.oldY,
+						oldX: e.clientX,
+						oldY: e.clientY,
+					};
+				}),
+			);
+			updateConnections(
+				connectionsArray.map(function (connection) {
+					return {
+						...connection,
+						x: connection.x + e.clientX - connection.oldX,
+						y: connection.y + e.clientY - connection.oldY,
 						oldX: e.clientX,
 						oldY: e.clientY,
 					};
@@ -116,6 +139,23 @@ export default function Graph({
 					};
 				}),
 			);
+			updateConnections(
+				connectionsArray.map(function (connection, index) {
+					//const x = rect.width / 2 - (rect.width / 2 - connection.x) * scale - (nodes[connection.nodeID].width / 2) * sign;
+					//const y = rect.height / 2 - (rect.height / 2 - connection.y) * scale - (nodes[connection.nodeID].height / 2) * sign;
+					//const x = graph.nodes[connection.nodeID].x + offsets[index].x * scale
+					//const y = graph.nodes[connection.nodeID].y + offsets[index].y * scale
+					//const x = connection.x * scale
+					//const y = connection.y * scale
+					//const x = rect.width / 2 - (rect.width / 2 - connection.x) * scale - ((connection.x - nodes[connection.nodeID].x) / 2) * sign;
+					//const y = rect.height / 2 - (rect.height / 2 - connection.y) * scale - ((connection.y - nodes[connection.nodeID].y) / 2) * sign;
+					return {
+						...connection,
+						x: null,
+						y: null,
+					};
+				}),
+			);
 		}
 	}
 	useEffect(() => {
@@ -127,7 +167,7 @@ export default function Graph({
 		};
 	});
 	return (
-		<div className="debug-grid relative overflow-hidden mw-100 mh-100 h-100 w-100" ref={containerRef} onMouseDown={onMouseDown} onWheel={onWheel}>
+		<div className="graph debug-grid relative overflow-hidden mw-100 mh-100 h-100 w-100" ref={containerRef} onMouseDown={onMouseDown} onWheel={onWheel}>
 			{nodesArray.map(function (node, index) {
 				const absolutePosition = abstractToAbsolute(node);
 				if (node.complete) {
@@ -169,8 +209,33 @@ export default function Graph({
 				}
 			})}
 			{Object.values(edges).map(function (edge) {
-				if (edge.complete) {
-					return <div>{edge.id}</div>;
+				if (edge.id) {
+					//return <div>{edge.id}</div>;
+					return (
+						<Edge
+							key={edge.id}
+							route={route}
+							render={render}
+							nodes={nodes}
+							initializeNodes={initializeNodes}
+							createNodes={createNodes}
+							readNodes={readNodes}
+							updateNodes={updateNodes}
+							deleteNodes={deleteNodes}
+							edges={edges}
+							createEdges={createEdges}
+							readEdges={readEdges}
+							updateEdges={updateEdges}
+							deleteEdges={deleteEdges}
+							connections={connections}
+							initializeConnections={initializeConnections}
+							createConnections={createConnections}
+							readConnections={readConnections}
+							updateConnections={updateConnections}
+							deleteConnections={deleteConnections}
+							edge={edge}
+						/>
+					);
 				} else {
 					return null;
 				}

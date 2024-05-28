@@ -283,66 +283,6 @@ export default function Table({
 				sound: false,
 			};
 			return traverse(targetHeader, targetNode);
-			/*
-			return read(gauze, model, targetHeader, creating.props.variables).then(function (results) {
-				const data = results[0].map(function (item) {
-					return item.attributes;
-				});
-				const count = results[1][0].count;
-				const synced = graph.syncNodeEdges(creating, data);
-				console.log("synced", synced);
-				creating.props.data = data;
-				creating.props.count = count;
-				// sync to service
-				graph.updateNodes(Object.values(nodes));
-				graph.updateEdges(Object.values(edges));
-				graph.updateConnections(Object.values(connections));
-				// create new edges, connections, and nodes using service
-				// todo: map synced.newConnections to include component and props
-				graph.createConnections(synced.newConnections.map(function (connection) {
-					return {
-						...connection,
-						component: Relationship,
-						props: {
-							gauze: gauze,
-							model: model,
-							router: router
-						}
-					}
-				}));
-				graph.createEdges(synced.newEdges);
-				graph.createNodes([creating]);
-				const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
-				const connectedNodes = Object.keys(syncedConnections).map(function (id) {
-					return {
-						...graph.nodes[id],
-						props: {
-							...graph.nodes[id].props,
-							connectionIDs: syncedConnections[id].connections,
-						},
-					};
-				});
-				graph.updateNodes(connectedNodes);
-				// sync from service
-				updateNodes(
-					Object.values(graph.nodes).map(function (n) {
-						// reinitialize the source
-						if (n.id === node.id) {
-							return {
-								...n,
-								width: null,
-								height: null,
-							};
-						} else {
-							return n;
-						}
-					}),
-				);
-				updateEdges(Object.values(graph.edges));
-				updateConnections(Object.values(graph.connections));
-				// reinitialize node
-			});
-			*/
 		};
 	}
 
@@ -397,66 +337,6 @@ export default function Table({
 				sound: false,
 			};
 			return traverse(targetHeader, targetNode);
-			/*
-			return read(gauze, model, toHeader, creating.props.variables).then(function (results) {
-				const data = results[0].map(function (item) {
-					return item.attributes;
-				});
-				const count = results[1][0].count;
-				const synced = graph.syncNodeEdges(creating, data);
-				console.log("synced", synced);
-				creating.props.data = data;
-				creating.props.count = count;
-				// sync to service
-				graph.updateNodes(Object.values(nodes));
-				graph.updateEdges(Object.values(edges));
-				graph.updateConnections(Object.values(connections));
-				// create new edges, connections, and nodes using service
-				// todo: map synced.newConnections to include component and props
-				graph.createConnections(synced.newConnections.map(function (connection) {
-					return {
-						...connection,
-						component: Relationship,
-						props: {
-							gauze: gauze,
-							model: model,
-							router: router
-						}
-					}
-				}));
-				graph.createEdges(synced.newEdges);
-				graph.createNodes([creating]);
-				const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
-				const connectedNodes = Object.keys(syncedConnections).map(function (id) {
-					return {
-						...graph.nodes[id],
-						props: {
-							...graph.nodes[id].props,
-							connectionIDs: syncedConnections[id].connections,
-						},
-					};
-				});
-				graph.updateNodes(connectedNodes);
-				// sync from service
-				updateNodes(
-					Object.values(graph.nodes).map(function (n) {
-						// reinitialize the source
-						if (n.id === node.id) {
-							return {
-								...n,
-								width: null,
-								height: null,
-							};
-						} else {
-							return n;
-						}
-					}),
-				);
-				updateEdges(Object.values(graph.edges));
-				updateConnections(Object.values(graph.connections));
-				// reinitialize node
-			});
-			*/
 		};
 	}
 
@@ -616,7 +496,12 @@ export default function Table({
 										<div className="truncate-ns">FROM</div>
 										{node.props.connectionIDs.map(function (id) {
 											const connection = connections[id];
-											if (connection.name === "to" && connection.entityID === item[header.primary_key] && connection.entityType === header.graphql_meta_type) {
+											if (
+												connection.nodeID === node.id &&
+												connection.name === "to" &&
+												connection.entityID === item[header.primary_key] &&
+												connection.entityType === header.graphql_meta_type
+											) {
 												//const absolutePosition = absoluteToAbstract(connection);
 												return (
 													<Connection
@@ -794,7 +679,12 @@ export default function Table({
 										<div className="truncate-ns">TO</div>
 										{node.props.connectionIDs.map(function (id) {
 											const connection = connections[id];
-											if (connection.name === "from" && connection.entityID === item[header.primary_key] && connection.entityType === header.graphql_meta_type) {
+											if (
+												connection.nodeID === node.id &&
+												connection.name === "from" &&
+												connection.entityID === item[header.primary_key] &&
+												connection.entityType === header.graphql_meta_type
+											) {
 												//const absolutePosition = absoluteToAbstract(connection);
 												return (
 													<Connection

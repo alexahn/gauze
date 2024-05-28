@@ -160,12 +160,20 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 		setConnections(staging);
 	}
 
-	const initializeStart = Object.values(nodes).find(function (node) {
+	const initializeNode = Object.values(nodes).find(function (node) {
 		return node.complete && node.width === null && node.height === null;
 	});
-	if (initializeStart) {
+	if (initializeNode) {
 		setTimeout(function () {
-			render.create(route.name, "NODE", initializeStart.id, true);
+			render.create(route.name, "NODE", initializeNode.id, true);
+		}, 0);
+	}
+	const initializeConnection = Object.values(connections).find(function (connection) {
+		return connection.x === null && connection.y === null;
+	});
+	if (!initializeNode && initializeConnection) {
+		setTimeout(function () {
+			render.create(route.name, "CONNECTION", initializeConnection.id, true);
 		}, 0);
 	}
 	// todo: useEffect to set up a setInterval to sync with service
@@ -174,6 +182,7 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 			key={"graph"}
 			route={route}
 			render={render}
+			graph={graph}
 			nodes={nodes}
 			initializeNodes={initializeNodes}
 			createNodes={createNodes}

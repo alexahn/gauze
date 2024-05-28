@@ -133,7 +133,7 @@ class GraphService {
 				} else {
 					const newFrom = {
 						id: uuidv4(),
-						nodeID: node.props.fromNodeID,
+						nodeID: node.id,
 						name: "from",
 						entityID: item[node.props.primary_key],
 						entityType: node.props.graphql_meta_type,
@@ -150,7 +150,7 @@ class GraphService {
 				} else {
 					const newTo = {
 						id: uuidv4(),
-						nodeID: node.id,
+						nodeID: node.props.toNodeID,
 						name: "to",
 						entityID: node.props.to._metadata.id,
 						entityType: node.props.to._metadata.type,
