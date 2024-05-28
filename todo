@@ -540,10 +540,11 @@
 			[x] proper initialization order
 			[x] update connection coordinates on pan, zoom, and scale
 				[x] zoom is currently just forcing a recalculation of coordinates, which sometimes makes the ui look weird
-				[ ] look into a discrete function to calculate new coordinates on zoom
+				[x] look into a discrete function to calculate new coordinates on zoom
 		[ ] edge component to draw svg paths
 			[x] use connection coordinates to display an svg element
 			[ ] update edge definition to include component and props (which render at the center of the path)
+		[ ] refactor all graph ui code to follow a strict state management, synchronization, and rendering lifecycle
 		[x] expose source field to system interface
 		[-] it is ideal to have a mapping from the raw data to the presentation but it doesn't seem possible because the interface introduces a semantic layer
 			[-] it seems the core data to represent the ui will be things that represent objects in the interface (e.g. a table)

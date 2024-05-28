@@ -144,6 +144,7 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 			};
 		});
 		setConnections(staged);
+		graph.updateConnections(Object.values(staged))
 	}
 	function readConnections(candidates) {
 		return candidates.map(function (connection) {
@@ -193,7 +194,6 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 	//const validEdges = graph.validEdges(nodes, edges, connections)
 	//console.log('validEdges', validEdges)
 	//console.log('connections', connections, nodes)
-	console.log("nodes", nodes);
 	return (
 		<Graph
 			key={"graph"}
