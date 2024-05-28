@@ -496,7 +496,10 @@ export default function Table({
 										<div className="truncate-ns">FROM</div>
 										{node.props.connectionIDs.map(function (id) {
 											const connection = connections[id];
+											// note: for some reason we need an existence check here. maybe double check our rendering logic?
+											// note: possibly related to scaling the window?
 											if (
+												connection &&
 												connection.nodeID === node.id &&
 												connection.name === "to" &&
 												connection.entityID === item[header.primary_key] &&
@@ -680,6 +683,7 @@ export default function Table({
 										{node.props.connectionIDs.map(function (id) {
 											const connection = connections[id];
 											if (
+												connection &&
 												connection.nodeID === node.id &&
 												connection.name === "from" &&
 												connection.entityID === item[header.primary_key] &&

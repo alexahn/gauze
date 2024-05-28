@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { PAGINATION_PAGE_SIZE } from "./../constants.js";
 
@@ -184,7 +184,20 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 			render.create(route.name, "CONNECTION", initializeConnection.id, true);
 		}, 0);
 	}
+
 	// todo: useEffect to set up a setInterval to sync with service
+	useEffect(function () {
+		const timer = setInterval(function () {
+			if (!initializeNode && !initializeConnection) {
+				// note: do we need to pass in a timestamp to these methods?
+				graph.updateNodes(Object.values(nodes));
+				graph.updateConnections(Object.values(connections));
+			}
+		}, 256);
+		return function () {
+			clearInterval(timer);
+		};
+	});
 	//console.log('connections', connections, nodes)
 	return (
 		<Graph
