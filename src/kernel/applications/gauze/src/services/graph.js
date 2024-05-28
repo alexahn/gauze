@@ -259,6 +259,15 @@ class GraphService {
 		});
 		return obj;
 	}
+	validConnections(nodes, edges, connections) {
+		const self = this;
+		const validEdges = self.validEdges(nodes, edges, connections);
+		let valid = [];
+		Object.values(validEdges).forEach(function (edge) {
+			valid = valid.concat([connections[edge.fromConnectionID], connections[edge.toConnectionID]]);
+		});
+		return valid;
+	}
 	initializeNodes(candidates) {
 		const self = this;
 		//const staged = { ...self.nodes };

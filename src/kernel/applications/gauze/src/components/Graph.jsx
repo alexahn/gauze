@@ -142,6 +142,7 @@ export default function Graph({
 					};
 				}),
 			);
+			/*
 			updateConnections(
 				connectionsArray.map(function (connection, index) {
 					//const x = rect.width / 2 - (rect.width / 2 - connection.x) * scale - (nodes[connection.nodeID].width / 2) * sign;
@@ -152,6 +153,16 @@ export default function Graph({
 					//const y = connection.y * scale
 					//const x = rect.width / 2 - (rect.width / 2 - connection.x) * scale - ((connection.x - nodes[connection.nodeID].x) / 2) * sign;
 					//const y = rect.height / 2 - (rect.height / 2 - connection.y) * scale - ((connection.y - nodes[connection.nodeID].y) / 2) * sign;
+					return {
+						...connection,
+						x: null,
+						y: null,
+					};
+				}),
+			);
+			*/
+			updateConnections(
+				graph.validConnections(graph.nodes, graph.edges, graph.connections).map(function (connection) {
 					return {
 						...connection,
 						x: null,
