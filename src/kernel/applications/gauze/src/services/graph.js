@@ -556,30 +556,6 @@ class GraphService {
 		const self = this;
 		return self.edges[key];
 	}
-	/*
-	activeConnections(nodes, edges, connections, map) {
-		const self = this;
-		const activeConnectionsArray = self.activeConnectionsArray(nodes, edges, connections, map);
-		const activeConnections = {};
-		activeConnectionsArray.forEach(function (connection) {
-			activeConnections[connection.id] = connection;
-		});
-		return activeConnections;
-	}
-	activeConnectionsArray(nodes, edges, connections, map) {
-		const self = this;
-		const activeEdgesArray = self.activeEdgesArray(nodes, edges, connections);
-		let activeConnectionsArray = [];
-		activeEdgesArray.forEach(function (edge) {
-			activeConnectionsArray = activeConnectionsArray.concat([connections[edge.fromConnectionID], connections[edge.toConnectionID]]);
-		});
-		if (map) {
-			return activeConnectionsArray.map(map);
-		} else {
-			return activeConnectionsArray;
-		}
-	}
-	*/
 	initializeNodes(candidates) {
 		const self = this;
 		const staged = self.nodes;
