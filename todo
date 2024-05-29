@@ -550,10 +550,11 @@
 			[ ] causing weird issues when resizing the window
 		[x] service synchronization loop
 			[x] set it up in the root component
-		[ ] parallelize initialization of nodes and connections
-			[ ] takes too much time when the number of nodes and connections goes up
-			[ ] new state variable to track when things are initializing
-				[ ] when there are no more things initializing and the state is toggled, then we untoggle it and sync from service
+		[x] parallelize initialization of nodes and connections
+			[x] takes too much time when the number of nodes and connections goes up
+			[-] new state variable to track when things are initializing
+				[-] when there are no more things initializing and the state is toggled, then we untoggle it and sync from service
+				[x] parallelized all initiation so we don't need to keep track of any order
 		[x] expose source field to system interface
 		[-] it is ideal to have a mapping from the raw data to the presentation but it doesn't seem possible because the interface introduces a semantic layer
 			[-] it seems the core data to represent the ui will be things that represent objects in the interface (e.g. a table)
@@ -564,8 +565,10 @@
 				[x] the only way to allow a child element to be moved anywhere is to grow the dimensions of the parent to the entire viewport, but this causes issues with event handling
 					[x] it is probably possible to set up an elaborate event naming scheme so that we can handle mouse clicks through all the layers but i've opted to flatten the ui for now
 		[ ] performance refactoring
-			[ ] refactor graph ui to use render service to store data
-			[ ] set up subscriptions per node
+			[-] refactor graph ui to use render service to store data
+				[x] refactored graph ui to use graph service to store data
+			[-] set up subscriptions per node
+				[x] set up a main synchronization loop at the root
 			[ ] maybe we can avoid using the render service if we can throttle the state updates
 				[ ] useCallback with a throttled state update on subscription changes (maybe per 100ms)
 			[ ] find a way to skip mouse event registration if it has already been done (instead of setting up and tearing down on every render)
@@ -573,9 +576,10 @@
 				[ ] use the canvas snapshot when the z scaled element crosses a dimension threshold
 			[ ] dynamically reduce the number of dom elements based on visibility by snapshotting the presentation into a canvas element
 				[ ] use the canvas snapshot when the element is outside the viewing area
-			[ ] memoized states by timestamp?
-				[ ] graph service should have a memoized interface
-				[ ] cpu usage should be close to zero when doing nothing even with a low interval rate
+			[x] memoized states by timestamp or last changed
+				[x] graph service should have a memoized interface
+					[x] set up a basic cache system for activeNodes, activeConnections, activeEdges methods
+				[x] cpu usage should be close to zero when doing nothing even with a low interval rate
 		[ ] sharing links or structured identifiers for loading in pieces of data
 			[ ] drag and drop linking to create relationships once the item is loaded
 		[ ] whitelist and blacklist management

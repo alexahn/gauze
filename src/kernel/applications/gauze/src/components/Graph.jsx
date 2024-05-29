@@ -35,25 +35,10 @@ export default function Graph({ agentHeader, route, graph, nodes, edges, connect
 	const activeNodes = graph.activeNodes(agentHeader.name);
 	const activeConnections = graph.activeConnections(agentHeader.name);
 	const activeEdges = graph.activeEdges(agentHeader.name);
-	/*
-	const activeNodesArray = graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections);
-	const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
-	const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
-	*/
-	/*
-	const activeNodesArray = Object.values(activeNodes)
-	const activeEdgesArray = Object.values(activeEdges)
-	const activeConnectionsArray = Object.values(activeConnections)
-	*/
 	function onMouseDown(e) {
 		if (e.button === 2) {
 		} else if (e.button === 1) {
 			setPanning(true);
-			/*
-			const activeNodesArray = graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections);
-			const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
-			const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
-			*/
 			graph.updateNodes(
 				graph.selectNodes(activeNodes.keys).map(function (position) {
 					return {
@@ -74,13 +59,8 @@ export default function Graph({ agentHeader, route, graph, nodes, edges, connect
 			);
 		} else if (e.button === 0) {
 			if (e.target === containerRef.current) {
-				//e.preventDefault();
+				e.preventDefault();
 				setPanning(true);
-				/*
-				const activeNodesArray = graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections);
-				const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
-				const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
-				*/
 				graph.updateNodes(
 					graph.selectNodes(activeNodes.keys).map(function (position) {
 						return {
@@ -109,11 +89,6 @@ export default function Graph({ agentHeader, route, graph, nodes, edges, connect
 	}
 	function onMouseMove(e) {
 		if (isPanning) {
-			/*
-			const activeNodesArray = graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections);
-			const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
-			const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
-			*/
 			graph.updateNodes(
 				graph.selectNodes(activeNodes.keys).map(function (node) {
 					return {
@@ -143,11 +118,6 @@ export default function Graph({ agentHeader, route, graph, nodes, edges, connect
 			const sign = Math.sign(e.deltaY) / 10;
 			const scale = 1 - sign;
 			const rect = containerRef.current.getBoundingClientRect();
-			/*
-			const activeNodesArray = graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections);
-			const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
-			const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
-			*/
 			graph.updateNodes(
 				graph.selectNodes(activeNodes.keys).map(function (node) {
 					const x = rect.width / 2 - (rect.width / 2 - node.x) * scale - (node.width / 2) * sign;
