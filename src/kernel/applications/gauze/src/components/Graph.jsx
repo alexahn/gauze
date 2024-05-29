@@ -57,7 +57,6 @@ export default function Graph({
 	const connectionsArray = Object.values(connections);
 	const [isPanning, setPanning] = useState(false);
 	function onMouseDown(e) {
-		//e.preventDefault();
 		if (e.button === 2) {
 		} else if (e.button === 1) {
 			setPanning(true);
@@ -72,6 +71,7 @@ export default function Graph({
 			);
 		} else if (e.button === 0) {
 			if (e.target === containerRef.current) {
+				//e.preventDefault();
 				setPanning(true);
 				updateNodes(
 					nodesArray.map(function (position) {

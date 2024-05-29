@@ -553,7 +553,7 @@
 		[ ] parallelize initialization of nodes and connections
 			[ ] takes too much time when the number of nodes and connections goes up
 			[ ] new state variable to track when things are initializing
-				[ ] when there are no more things initializing and the state is toggled, then we untoggle it and sync to service
+				[ ] when there are no more things initializing and the state is toggled, then we untoggle it and sync from service
 		[x] expose source field to system interface
 		[-] it is ideal to have a mapping from the raw data to the presentation but it doesn't seem possible because the interface introduces a semantic layer
 			[-] it seems the core data to represent the ui will be things that represent objects in the interface (e.g. a table)
@@ -573,6 +573,8 @@
 				[ ] use the canvas snapshot when the z scaled element crosses a dimension threshold
 			[ ] dynamically reduce the number of dom elements based on visibility by snapshotting the presentation into a canvas element
 				[ ] use the canvas snapshot when the element is outside the viewing area
+		[ ] sharing links or structured identifiers for loading in pieces of data
+			[ ] drag and drop linking to create relationships once the item is loaded
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages
@@ -754,6 +756,11 @@
 		[ ] update relationship with count method
 		[ ] rethink and refactor all of relationship interface to align expectations with entity interface (if possible)
 			[ ] the problem is that relationships are the bridge between types so the access control logic becomes very complex
+	[ ] pgp or user level jwt for signing payloads that can be shared with other users to verify identity
+		[ ] need a way to share agent identifiers to allow whitelist and blacklist management
+			[ ] kind of problematic for blacklist though because people cannot be blacklisted if they don't share their identifier?
+				[ ] maybe we need a user level identifier and a system level identifier?
+				[ ] might need to add a method to get the owner for something?
 [ ] unknowns, abnormal behavior, and investigations
 	[ ] look into why router5 doesn't seem to be able to uri encode correctly
 		[ ] manually encoding and decoding seems to work
