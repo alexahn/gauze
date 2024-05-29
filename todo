@@ -575,6 +575,10 @@
 				[ ] use the canvas snapshot when the element is outside the viewing area
 		[ ] sharing links or structured identifiers for loading in pieces of data
 			[ ] drag and drop linking to create relationships once the item is loaded
+		[ ] whitelist and blacklist management
+			[ ] show whitelist and blacklist entries for items
+			[ ] convenient way to manage access control via the graph ui
+				[ ] requires some preliminary work around sharing and verifying identities
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages
