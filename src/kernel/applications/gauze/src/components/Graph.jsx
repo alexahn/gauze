@@ -27,14 +27,19 @@ function abstractToAbsolute({ x, y, z, width, height }) {
 	};
 }
 
-export default function Graph({ agentHeader, route, graph, activeNodes, activeEdges, activeConnections, nodes, edges, connections }) {
+export default function Graph({ agentHeader, route, graph, nodes, edges, connections }) {
 	const containerRef = useRef();
 	const nodesArray = Object.values(nodes);
 	const connectionsArray = Object.values(connections);
 	const [isPanning, setPanning] = useState(false);
+	const activeNodes = graph.activeNodes(agentHeader.name);
+	const activeConnections = graph.activeConnections(agentHeader.name);
+	const activeEdges = graph.activeEdges(agentHeader.name);
+	/*
 	const activeNodesArray = graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections);
 	const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
 	const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
+	*/
 	/*
 	const activeNodesArray = Object.values(activeNodes)
 	const activeEdgesArray = Object.values(activeEdges)
@@ -44,11 +49,13 @@ export default function Graph({ agentHeader, route, graph, activeNodes, activeEd
 		if (e.button === 2) {
 		} else if (e.button === 1) {
 			setPanning(true);
+			/*
 			const activeNodesArray = graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections);
 			const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
 			const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
+			*/
 			graph.updateNodes(
-				activeNodesArray.map(function (position) {
+				graph.selectNodes(activeNodes.keys).map(function (position) {
 					return {
 						...position,
 						oldX: e.clientX,
@@ -57,7 +64,7 @@ export default function Graph({ agentHeader, route, graph, activeNodes, activeEd
 				}),
 			);
 			graph.updateConnections(
-				activeConnectionsArray.map(function (connection) {
+				graph.selectConnections(activeConnections.keys).map(function (connection) {
 					return {
 						...connection,
 						oldX: e.clientX,
@@ -65,35 +72,17 @@ export default function Graph({ agentHeader, route, graph, activeNodes, activeEd
 					};
 				}),
 			);
-			/*
-			updateNodes(
-				nodesArray.map(function (position) {
-					return {
-						...position,
-						oldX: e.clientX,
-						oldY: e.clientY,
-					};
-				}),
-			);
-			updateConnections(
-				connectionsArray.map(function (connection) {
-					return {
-						...connection,
-						oldX: e.clientX,
-						oldY: e.clientY,
-					};
-				}),
-			);
-			*/
 		} else if (e.button === 0) {
 			if (e.target === containerRef.current) {
 				//e.preventDefault();
 				setPanning(true);
+				/*
 				const activeNodesArray = graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections);
 				const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
 				const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
+				*/
 				graph.updateNodes(
-					activeNodesArray.map(function (position) {
+					graph.selectNodes(activeNodes.keys).map(function (position) {
 						return {
 							...position,
 							oldX: e.clientX,
@@ -102,7 +91,7 @@ export default function Graph({ agentHeader, route, graph, activeNodes, activeEd
 					}),
 				);
 				graph.updateConnections(
-					activeConnectionsArray.map(function (connection) {
+					graph.selectConnections(activeConnections.keys).map(function (connection) {
 						return {
 							...connection,
 							oldX: e.clientX,
@@ -110,26 +99,6 @@ export default function Graph({ agentHeader, route, graph, activeNodes, activeEd
 						};
 					}),
 				);
-				/*
-				updateNodes(
-					nodesArray.map(function (position) {
-						return {
-							...position,
-							oldX: e.clientX,
-							oldY: e.clientY,
-						};
-					}),
-				);
-				updateConnections(
-					connectionsArray.map(function (connection) {
-						return {
-							...connection,
-							oldX: e.clientX,
-							oldY: e.clientY,
-						};
-					}),
-				);
-				*/
 			} else {
 			}
 		} else {
@@ -140,11 +109,13 @@ export default function Graph({ agentHeader, route, graph, activeNodes, activeEd
 	}
 	function onMouseMove(e) {
 		if (isPanning) {
+			/*
 			const activeNodesArray = graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections);
 			const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
 			const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
+			*/
 			graph.updateNodes(
-				activeNodesArray.map(function (node) {
+				graph.selectNodes(activeNodes.keys).map(function (node) {
 					return {
 						...node,
 						x: node.x + e.clientX - node.oldX,
@@ -155,7 +126,7 @@ export default function Graph({ agentHeader, route, graph, activeNodes, activeEd
 				}),
 			);
 			graph.updateConnections(
-				activeConnectionsArray.map(function (connection) {
+				graph.selectConnections(activeConnections.keys).map(function (connection) {
 					return {
 						...connection,
 						x: connection.x + e.clientX - connection.oldX,
@@ -165,30 +136,6 @@ export default function Graph({ agentHeader, route, graph, activeNodes, activeEd
 					};
 				}),
 			);
-			/*
-			updateNodes(
-				nodesArray.map(function (position) {
-					return {
-						...position,
-						x: position.x + e.clientX - position.oldX,
-						y: position.y + e.clientY - position.oldY,
-						oldX: e.clientX,
-						oldY: e.clientY,
-					};
-				}),
-			);
-			updateConnections(
-				connectionsArray.map(function (connection) {
-					return {
-						...connection,
-						x: connection.x + e.clientX - connection.oldX,
-						y: connection.y + e.clientY - connection.oldY,
-						oldX: e.clientX,
-						oldY: e.clientY,
-					};
-				}),
-			);
-			*/
 		}
 	}
 	function onWheel(e) {
@@ -196,11 +143,13 @@ export default function Graph({ agentHeader, route, graph, activeNodes, activeEd
 			const sign = Math.sign(e.deltaY) / 10;
 			const scale = 1 - sign;
 			const rect = containerRef.current.getBoundingClientRect();
+			/*
 			const activeNodesArray = graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections);
 			const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
 			const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
+			*/
 			graph.updateNodes(
-				activeNodesArray.map(function (node) {
+				graph.selectNodes(activeNodes.keys).map(function (node) {
 					const x = rect.width / 2 - (rect.width / 2 - node.x) * scale - (node.width / 2) * sign;
 					const y = rect.height / 2 - (rect.height / 2 - node.y) * scale - (node.height / 2) * sign;
 					return {
@@ -212,7 +161,7 @@ export default function Graph({ agentHeader, route, graph, activeNodes, activeEd
 				}),
 			);
 			graph.updateConnections(
-				activeConnectionsArray.map(function (connection) {
+				graph.selectConnections(activeConnections.keys).map(function (connection) {
 					const x = rect.width / 2 - (rect.width / 2 - connection.x) * scale;
 					const y = rect.height / 2 - (rect.height / 2 - connection.y) * scale;
 					return {
@@ -223,32 +172,6 @@ export default function Graph({ agentHeader, route, graph, activeNodes, activeEd
 					};
 				}),
 			);
-			/*
-			updateNodes(
-				nodesArray.map(function (position) {
-					const x = rect.width / 2 - (rect.width / 2 - position.x) * scale - (position.width / 2) * sign;
-					const y = rect.height / 2 - (rect.height / 2 - position.y) * scale - (position.height / 2) * sign;
-					return {
-						...position,
-						x: x,
-						y: y,
-						z: position.z * scale,
-					};
-				}),
-			);
-			updateConnections(
-				connectionsArray.map(function (connection) {
-					const x = rect.width / 2 - (rect.width / 2 - connection.x) * scale;
-					const y = rect.height / 2 - (rect.height / 2 - connection.y) * scale;
-					return {
-						...connection,
-						x: x,
-						y: y,
-						z: connection.z * scale,
-					};
-				}),
-			);
-			*/
 		}
 	}
 	useEffect(() => {

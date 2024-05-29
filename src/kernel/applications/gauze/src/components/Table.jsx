@@ -68,10 +68,9 @@ export default function Table({
 	const [submitCreate, setSubmitCreate] = useState(false);
 	const [syncing, setSyncing] = useState(false);
 
-	const activeNodes = graph.activeNodes(agentHeader.name, graph.nodes, graph.edges, graph.connections);
-	const activeNodesArray = Object.values(activeNodes);
-	const activeNode = activeNodes[node.id];
-	const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
+	const activeNodes = graph.activeNodes(agentHeader.name);
+	const activeConnections = graph.activeConnections(agentHeader.name);
+	const activeEdges = graph.activeEdges(agentHeader.name);
 
 	const offset = variables.offset ? Number.parseInt(variables.offset) : 0;
 	const limit = variables.limit ? Number.parseInt(variables.limit) : PAGINATION_PAGE_SIZE;
@@ -86,12 +85,6 @@ export default function Table({
 		targetNode.props.data = data;
 		targetNode.props.count = count;
 		targetNode.props.variables = variables;
-		// sync to service
-		/*
-		graph.updateNodes(Object.values(nodes));
-		graph.updateEdges(Object.values(edges));
-		graph.updateConnections(Object.values(connections));
-		*/
 		// create new edges, connections, and nodes using service
 		const newConnections = synced.newConnections.map(function (connection) {
 			return {
@@ -112,9 +105,9 @@ export default function Table({
 		console.log("syncedConnections", syncedConnections);
 		const connectedNodes = Object.keys(syncedConnections).map(function (id) {
 			return {
-				...graph.nodes[id],
+				...graph.selectNode(id),
 				props: {
-					...graph.nodes[id].props,
+					...graph.selectNode(id).props,
 					connectionIDs: syncedConnections[id].connections,
 				},
 			};
@@ -123,7 +116,7 @@ export default function Table({
 		graph.updateNodes(connectedNodes);
 		console.log("graph.nodes0", graph.nodes);
 		graph.updateNodes(
-			graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections).map(function (node) {
+			graph.activeNodes(agentHeader.name).values.map(function (node) {
 				return {
 					...node,
 					oldWidth: node.width,
@@ -135,7 +128,7 @@ export default function Table({
 		);
 		console.log("graph.nodes1", graph.nodes);
 		graph.updateConnections(
-			activeConnectionsArray.map(function (connection) {
+			graph.activeConnections(agentHeader.name).values.map(function (connection) {
 				return {
 					...connection,
 					x: null,
@@ -143,29 +136,6 @@ export default function Table({
 				};
 			}),
 		);
-		// sync from service
-		/*
-		const agentHeader = gauze.getSystemAgentHeader(model);
-		setNodes(
-			graph.activeNodes(agentHeader.name, graph.nodes, graph.edges, graph.connections, function (node) {
-				return {
-					...node,
-					width: null,
-					height: null,
-				};
-			}),
-		);
-		setConnections(
-			graph.activeConnections(graph.nodes, graph.edges, graph.connections, function (connection) {
-				return {
-					...connection,
-					x: null,
-					y: null,
-				};
-			}),
-		);
-		setEdges(graph.activeEdges(graph.nodes, graph.edges, graph.connections));
-		*/
 	}
 
 	function paginate(item) {
@@ -406,7 +376,7 @@ export default function Table({
 				setLocalFields(updatedFields);
 				graph.updateNodes([
 					{
-						...node,
+						...graph.selectNode(node.id),
 						width: null,
 						height: null,
 						props: {
@@ -425,7 +395,7 @@ export default function Table({
 				setLocalFields(updatedFields);
 				graph.updateNodes([
 					{
-						...node,
+						...graph.selectNode(node.id),
 						width: null,
 						height: null,
 						props: {
@@ -435,8 +405,8 @@ export default function Table({
 					},
 				]);
 			}
-			updateConnections(
-				Object.values(connections).map(function (connection) {
+			graph.updateConnections(
+				graph.activeConnections(agentHeader.name).values.map(function (connection) {
 					return {
 						...connection,
 						x: null,

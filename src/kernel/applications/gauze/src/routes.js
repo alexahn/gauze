@@ -283,9 +283,10 @@ const routes = [
 				// note:    sound (the fields we have are the latest values)
 				// note: we can only proceed with rendering once every node is complete
 				// note: we can proceed with soundness after rendering
-				const activeNodesArray = graph.default.activeNodesArray(agentHeader.name, graph.default.nodes, graph.default.edges, graph.default.connections);
+				//const activeNodesArray = graph.default.activeNodesArray(agentHeader.name, graph.default.nodes, graph.default.edges, graph.default.connections);
+				const activeNodes = graph.default.activeNodes(agentHeader.name);
 				return Promise.all(
-					activeNodesArray.map(function (node) {
+					activeNodes.values.map(function (node) {
 						const header = model.default.read("HEADER", node.props.type);
 						const transactions = [
 							function () {

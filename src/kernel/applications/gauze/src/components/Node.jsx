@@ -8,18 +8,10 @@ export default function Node({ agentHeader, route, x, y, z, width, height, dataX
 	const [isDragging, setDragging] = useState(false);
 	const [localWidth, setLocalWidth] = useState(width);
 	const [localHeight, setLocalHeight] = useState(height);
-	/*
-	const nodeConnections = Object.values(connections).filter(function (connection) {
-		return connection.nodeID === node.id;
-	});
-	*/
-	const activeNodes = graph.activeNodes(agentHeader.name, graph.nodes, graph.edges, graph.connections);
-	const activeNode = activeNodes[node.id];
-	const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
-	const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
-	const activeNodeConnections = activeConnectionsArray.filter(function (connection) {
-		return connection.nodeID === node.id;
-	});
+	const activeNodes = graph.activeNodes(agentHeader.name);
+	const activeConnections = graph.activeConnections(agentHeader.name);
+	const activeEdges = graph.activeEdges(agentHeader.name);
+	const nodeConnections = graph.nodeConnections(node.id);
 	function onMouseDown(e) {
 		if (e.button === 2) {
 			e.preventDefault();
@@ -29,13 +21,13 @@ export default function Node({ agentHeader, route, x, y, z, width, height, dataX
 				setDragging(true);
 				graph.updateNodes([
 					{
-						...activeNode,
+						...graph.selectNode(node.id),
 						oldX: e.clientX,
 						oldY: e.clientY,
 					},
 				]);
 				graph.updateConnections(
-					activeNodeConnections.map(function (connection) {
+					graph.selectConnections(nodeConnections.keys).map(function (connection) {
 						return {
 							...connection,
 							oldX: e.clientX,
@@ -43,24 +35,6 @@ export default function Node({ agentHeader, route, x, y, z, width, height, dataX
 						};
 					}),
 				);
-				/*
-				updateNodes([
-					{
-						...node,
-						oldX: e.clientX,
-						oldY: e.clientY,
-					},
-				]);
-				updateConnections(
-					nodeConnections.map(function (connection) {
-						return {
-							...connection,
-							oldX: e.clientX,
-							oldY: e.clientY,
-						};
-					}),
-				);
-				*/
 			} else {
 			}
 		}
@@ -70,6 +44,7 @@ export default function Node({ agentHeader, route, x, y, z, width, height, dataX
 	}
 	function onMouseMove(e) {
 		if (isDragging) {
+			const activeNode = graph.selectNode(node.id);
 			graph.updateNodes([
 				{
 					...activeNode,
@@ -81,7 +56,7 @@ export default function Node({ agentHeader, route, x, y, z, width, height, dataX
 				},
 			]);
 			graph.updateConnections(
-				activeNodeConnections.map(function (connection) {
+				graph.selectConnections(nodeConnections.keys).map(function (connection) {
 					return {
 						...connection,
 						oldX: e.clientX,
@@ -91,29 +66,6 @@ export default function Node({ agentHeader, route, x, y, z, width, height, dataX
 					};
 				}),
 			);
-			/*
-			updateNodes([
-				{
-					...node,
-					oldX: e.clientX,
-					oldY: e.clientY,
-					x: x + e.clientX - node.oldX,
-					y: y + e.clientY - node.oldY,
-					z: z,
-				},
-			]);
-			updateConnections(
-				nodeConnections.map(function (connection) {
-					return {
-						...connection,
-						oldX: e.clientX,
-						oldY: e.clientY,
-						x: connection.x + e.clientX - connection.oldX,
-						y: connection.y + e.clientY - connection.oldY,
-					};
-				}),
-			);
-			*/
 		}
 	}
 	useLayoutEffect(function () {
