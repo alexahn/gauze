@@ -2,45 +2,22 @@ import React from "react";
 import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-export default function Node({
-	route,
-	render,
-	x,
-	y,
-	z,
-	width,
-	height,
-	dataX,
-	dataY,
-	dataZ,
-	node,
-	nodes,
-	setNodes,
-	initializeNodes,
-	createNodes,
-	readNodes,
-	updateNodes,
-	deleteNodes,
-	edges,
-	setEdges,
-	createEdges,
-	readEdges,
-	updateEdges,
-	deleteEdges,
-	connections,
-	setConnections,
-	initializeConnections,
-	createConnections,
-	readConnections,
-	updateConnections,
-	deleteConnections,
-}) {
+export default function Node({ agentHeader, route, x, y, z, width, height, dataX, dataY, dataZ, graph, node, nodes, edges, connections }) {
 	const containerRef = useRef();
 	const [isLoaded, setLoaded] = useState(false);
 	const [isDragging, setDragging] = useState(false);
 	const [localWidth, setLocalWidth] = useState(width);
 	const [localHeight, setLocalHeight] = useState(height);
+	/*
 	const nodeConnections = Object.values(connections).filter(function (connection) {
+		return connection.nodeID === node.id;
+	});
+	*/
+	const activeNodes = graph.activeNodes(agentHeader.name, graph.nodes, graph.edges, graph.connections);
+	const activeNode = activeNodes[node.id];
+	const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
+	const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
+	const activeNodeConnections = activeConnectionsArray.filter(function (connection) {
 		return connection.nodeID === node.id;
 	});
 	function onMouseDown(e) {
@@ -50,6 +27,23 @@ export default function Node({
 		} else if (e.button === 0) {
 			if (containerRef.current.contains(e.target)) {
 				setDragging(true);
+				graph.updateNodes([
+					{
+						...activeNode,
+						oldX: e.clientX,
+						oldY: e.clientY,
+					},
+				]);
+				graph.updateConnections(
+					activeNodeConnections.map(function (connection) {
+						return {
+							...connection,
+							oldX: e.clientX,
+							oldY: e.clientY,
+						};
+					}),
+				);
+				/*
 				updateNodes([
 					{
 						...node,
@@ -66,6 +60,7 @@ export default function Node({
 						};
 					}),
 				);
+				*/
 			} else {
 			}
 		}
@@ -75,6 +70,28 @@ export default function Node({
 	}
 	function onMouseMove(e) {
 		if (isDragging) {
+			graph.updateNodes([
+				{
+					...activeNode,
+					oldX: e.clientX,
+					oldY: e.clientY,
+					x: activeNode.x + e.clientX - activeNode.oldX,
+					y: activeNode.y + e.clientY - activeNode.oldY,
+					z: activeNode.z,
+				},
+			]);
+			graph.updateConnections(
+				activeNodeConnections.map(function (connection) {
+					return {
+						...connection,
+						oldX: e.clientX,
+						oldY: e.clientY,
+						x: connection.x + e.clientX - connection.oldX,
+						y: connection.y + e.clientY - connection.oldY,
+					};
+				}),
+			);
+			/*
 			updateNodes([
 				{
 					...node,
@@ -96,23 +113,18 @@ export default function Node({
 					};
 				}),
 			);
+			*/
 		}
 	}
 	useLayoutEffect(function () {
 		if (!isLoaded || height === null || width === null) {
-			render.unsubscribe(route.name, "NODE", node.id, node.id);
-			render.subscribe(route.name, "NODE", node.id, node.id, function (data) {
-				setTimeout(function () {
-					const initialized = {
-						...node,
-						height: containerRef.current.offsetHeight,
-						width: containerRef.current.offsetWidth,
-					};
-					initializeNodes([initialized]);
-					render.unsubscribe(route.name, "NODE", node.id, node.id);
-					setLoaded(true);
-				}, 0);
-			});
+			const initialized = {
+				...node,
+				height: containerRef.current.offsetHeight,
+				width: containerRef.current.offsetWidth,
+			};
+			graph.initializeNodes([initialized]);
+			setLoaded(true);
 		}
 	});
 	useEffect(() => {
@@ -140,32 +152,7 @@ export default function Node({
 			data-width={width}
 			data-height={height}
 		>
-			<node.component
-				route={route}
-				render={render}
-				nodes={nodes}
-				setNodes={setNodes}
-				initializeNodes={initializeNodes}
-				createNodes={createNodes}
-				readNodes={readNodes}
-				updateNodes={updateNodes}
-				deleteNodes={deleteNodes}
-				edges={edges}
-				setEdges={setEdges}
-				createEdges={createEdges}
-				readEdges={readEdges}
-				updateEdges={updateEdges}
-				deleteEdges={deleteEdges}
-				connections={connections}
-				setConnections={setConnections}
-				initializeConnections={initializeConnections}
-				createConnections={createConnections}
-				readConnections={readConnections}
-				updateConnections={updateConnections}
-				deleteConnections={deleteConnections}
-				node={node}
-				{...node.props}
-			/>
+			<node.component agentHeader={agentHeader} route={route} nodes={nodes} edges={edges} connections={connections} node={node} {...node.props} />
 		</div>
 	);
 }

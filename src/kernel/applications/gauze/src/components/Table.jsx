@@ -40,28 +40,11 @@ function read(gauze, model, header, variables) {
 }
 
 export default function Table({
+	agentHeader,
 	route,
-	render,
 	nodes,
-	setNodes,
-	initializeNodes,
-	createNodes,
-	readNodes,
-	updateNodes,
-	deleteNodes,
 	edges,
-	setEdges,
-	createEdges,
-	readEdges,
-	updateEdges,
-	deleteEdges,
 	connections,
-	setConnections,
-	initializeConnections,
-	createConnections,
-	readConnections,
-	updateConnections,
-	deleteConnections,
 	node,
 	gauze,
 	model,
@@ -85,6 +68,11 @@ export default function Table({
 	const [submitCreate, setSubmitCreate] = useState(false);
 	const [syncing, setSyncing] = useState(false);
 
+	const activeNodes = graph.activeNodes(agentHeader.name, graph.nodes, graph.edges, graph.connections);
+	const activeNodesArray = Object.values(activeNodes);
+	const activeNode = activeNodes[node.id];
+	const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
+
 	const offset = variables.offset ? Number.parseInt(variables.offset) : 0;
 	const limit = variables.limit ? Number.parseInt(variables.limit) : PAGINATION_PAGE_SIZE;
 	const total = count;
@@ -99,9 +87,11 @@ export default function Table({
 		targetNode.props.count = count;
 		targetNode.props.variables = variables;
 		// sync to service
+		/*
 		graph.updateNodes(Object.values(nodes));
 		graph.updateEdges(Object.values(edges));
 		graph.updateConnections(Object.values(connections));
+		*/
 		// create new edges, connections, and nodes using service
 		const newConnections = synced.newConnections.map(function (connection) {
 			return {
@@ -119,6 +109,7 @@ export default function Table({
 		graph.createEdges(newEdges);
 		method(targetNode);
 		const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
+		console.log("syncedConnections", syncedConnections);
 		const connectedNodes = Object.keys(syncedConnections).map(function (id) {
 			return {
 				...graph.nodes[id],
@@ -128,8 +119,32 @@ export default function Table({
 				},
 			};
 		});
+		console.log("connectedNodes", connectedNodes);
 		graph.updateNodes(connectedNodes);
+		console.log("graph.nodes0", graph.nodes);
+		graph.updateNodes(
+			graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections).map(function (node) {
+				return {
+					...node,
+					oldWidth: node.width,
+					oldHeight: node.height,
+					width: null,
+					height: null,
+				};
+			}),
+		);
+		console.log("graph.nodes1", graph.nodes);
+		graph.updateConnections(
+			activeConnectionsArray.map(function (connection) {
+				return {
+					...connection,
+					x: null,
+					y: null,
+				};
+			}),
+		);
 		// sync from service
+		/*
 		const agentHeader = gauze.getSystemAgentHeader(model);
 		setNodes(
 			graph.activeNodes(agentHeader.name, graph.nodes, graph.edges, graph.connections, function (node) {
@@ -150,6 +165,7 @@ export default function Table({
 			}),
 		);
 		setEdges(graph.activeEdges(graph.nodes, graph.edges, graph.connections));
+		*/
 	}
 
 	function paginate(item) {
@@ -388,7 +404,7 @@ export default function Table({
 					return exists || field.name === name;
 				});
 				setLocalFields(updatedFields);
-				updateNodes([
+				graph.updateNodes([
 					{
 						...node,
 						width: null,
@@ -407,7 +423,7 @@ export default function Table({
 					return exists && field.name !== name;
 				});
 				setLocalFields(updatedFields);
-				updateNodes([
+				graph.updateNodes([
 					{
 						...node,
 						width: null,
@@ -510,26 +526,12 @@ export default function Table({
 													<Connection
 														key={id}
 														route={route}
-														render={render}
 														dataX={connection.x}
 														dataY={connection.y}
+														graph={graph}
 														nodes={nodes}
-														createNodes={createNodes}
-														initializeNodes={initializeNodes}
-														readNodes={readNodes}
-														updateNodes={updateNodes}
-														deleteNodes={deleteNodes}
 														edges={edges}
-														createEdges={createEdges}
-														readEdges={readEdges}
-														updateEdges={updateEdges}
-														deleteEdges={deleteEdges}
 														connections={connections}
-														initializeConnections={initializeConnections}
-														createConnections={createConnections}
-														readConnections={readConnections}
-														updateConnections={updateConnections}
-														deleteConnections={deleteConnections}
 														node={node}
 														connection={connection}
 													/>
@@ -694,26 +696,12 @@ export default function Table({
 													<Connection
 														key={connection.id}
 														route={route}
-														render={render}
 														dataX={connection.x}
 														dataY={connection.y}
+														graph={graph}
 														nodes={nodes}
-														createNodes={createNodes}
-														initializeNodes={initializeNodes}
-														readNodes={readNodes}
-														updateNodes={updateNodes}
-														deleteNodes={deleteNodes}
 														edges={edges}
-														createEdges={createEdges}
-														readEdges={readEdges}
-														updateEdges={updateEdges}
-														deleteEdges={deleteEdges}
 														connections={connections}
-														initializeConnections={initializeConnections}
-														createConnections={createConnections}
-														readConnections={readConnections}
-														updateConnections={updateConnections}
-														deleteConnections={deleteConnections}
 														node={node}
 														connection={connection}
 													/>

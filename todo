@@ -573,6 +573,9 @@
 				[ ] use the canvas snapshot when the z scaled element crosses a dimension threshold
 			[ ] dynamically reduce the number of dom elements based on visibility by snapshotting the presentation into a canvas element
 				[ ] use the canvas snapshot when the element is outside the viewing area
+			[ ] memoized states by timestamp?
+				[ ] graph service should have a memoized interface
+				[ ] cpu usage should be close to zero when doing nothing even with a low interval rate
 		[ ] sharing links or structured identifiers for loading in pieces of data
 			[ ] drag and drop linking to create relationships once the item is loaded
 		[ ] whitelist and blacklist management

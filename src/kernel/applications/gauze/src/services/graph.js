@@ -475,7 +475,7 @@ class GraphService {
 				// get max y in nodes
 				const zMax = nodesArray.reduce(function (max, item) {
 					const candidate = item.z;
-					if (item.id === rootID && max <= candidate) {
+					if (item.root === true && max <= candidate) {
 						return candidate;
 					} else if (item.render && max <= candidate) {
 						return candidate;
@@ -484,22 +484,26 @@ class GraphService {
 					}
 				}, 0);
 				const xMax = nodesArray.reduce(function (max, item) {
-					const candidate = item.x + item.width * item.z;
-					if (max < candidate) {
+					const candidate = item.x + item.oldWidth * item.z;
+					if (node.root === true && max < candidate) {
+						return item.x;
+					} else if (max < candidate) {
 						return candidate;
 					} else {
 						return max;
 					}
 				}, 0);
 				const yMax = nodesArray.reduce(function (max, item) {
-					const candidate = item.y + item.height * item.z;
-					if (max < candidate) {
+					const candidate = item.y + item.oldHeight * item.z;
+					if (node.root === true && max < candidate) {
+						return item.y;
+					} else if (max < candidate) {
 						return candidate;
 					} else {
 						return max;
 					}
 				}, 0);
-				const padding = 10;
+				const padding = 0;
 				const x = xMax + padding * zMax;
 				const y = yMax + padding * zMax;
 				const z = zMax;
@@ -596,10 +600,15 @@ class GraphService {
 		//const staged = { ...connections };
 		const staged = self.connections;
 		const connectionsArray = Object.values(staged);
+		const nodesArray = Object.values(self.nodes);
 		candidates.forEach(function (connection) {
-			const { width, height } = node;
+			const { width, height } = connection;
 			if (width === null || height === null) throw new Error(`Cannot initialize with null dimensions: width=${width} height=${height}`);
-			staged[connection.id] = connection;
+			const z = nodesArray[0].z;
+			staged[connection.id] = {
+				...connection,
+				z: z,
+			};
 		});
 		//setConnections(staged);
 		self.connections = staged;

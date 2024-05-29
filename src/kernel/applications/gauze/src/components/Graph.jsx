@@ -27,39 +27,45 @@ function abstractToAbsolute({ x, y, z, width, height }) {
 	};
 }
 
-export default function Graph({
-	route,
-	render,
-	graph,
-	nodes,
-	setNodes,
-	initializeNodes,
-	createNodes,
-	readNodes,
-	updateNodes,
-	deleteNodes,
-	edges,
-	setEdges,
-	createEdges,
-	readEdges,
-	updateEdges,
-	deleteEdges,
-	connections,
-	setConnections,
-	initializeConnections,
-	createConnections,
-	readConnections,
-	updateConnections,
-	deleteConnections,
-}) {
+export default function Graph({ agentHeader, route, graph, activeNodes, activeEdges, activeConnections, nodes, edges, connections }) {
 	const containerRef = useRef();
 	const nodesArray = Object.values(nodes);
 	const connectionsArray = Object.values(connections);
 	const [isPanning, setPanning] = useState(false);
+	const activeNodesArray = graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections);
+	const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
+	const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
+	/*
+	const activeNodesArray = Object.values(activeNodes)
+	const activeEdgesArray = Object.values(activeEdges)
+	const activeConnectionsArray = Object.values(activeConnections)
+	*/
 	function onMouseDown(e) {
 		if (e.button === 2) {
 		} else if (e.button === 1) {
 			setPanning(true);
+			const activeNodesArray = graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections);
+			const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
+			const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
+			graph.updateNodes(
+				activeNodesArray.map(function (position) {
+					return {
+						...position,
+						oldX: e.clientX,
+						oldY: e.clientY,
+					};
+				}),
+			);
+			graph.updateConnections(
+				activeConnectionsArray.map(function (connection) {
+					return {
+						...connection,
+						oldX: e.clientX,
+						oldY: e.clientY,
+					};
+				}),
+			);
+			/*
 			updateNodes(
 				nodesArray.map(function (position) {
 					return {
@@ -69,10 +75,42 @@ export default function Graph({
 					};
 				}),
 			);
+			updateConnections(
+				connectionsArray.map(function (connection) {
+					return {
+						...connection,
+						oldX: e.clientX,
+						oldY: e.clientY,
+					};
+				}),
+			);
+			*/
 		} else if (e.button === 0) {
 			if (e.target === containerRef.current) {
 				//e.preventDefault();
 				setPanning(true);
+				const activeNodesArray = graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections);
+				const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
+				const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
+				graph.updateNodes(
+					activeNodesArray.map(function (position) {
+						return {
+							...position,
+							oldX: e.clientX,
+							oldY: e.clientY,
+						};
+					}),
+				);
+				graph.updateConnections(
+					activeConnectionsArray.map(function (connection) {
+						return {
+							...connection,
+							oldX: e.clientX,
+							oldY: e.clientY,
+						};
+					}),
+				);
+				/*
 				updateNodes(
 					nodesArray.map(function (position) {
 						return {
@@ -91,6 +129,7 @@ export default function Graph({
 						};
 					}),
 				);
+				*/
 			} else {
 			}
 		} else {
@@ -101,6 +140,32 @@ export default function Graph({
 	}
 	function onMouseMove(e) {
 		if (isPanning) {
+			const activeNodesArray = graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections);
+			const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
+			const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
+			graph.updateNodes(
+				activeNodesArray.map(function (node) {
+					return {
+						...node,
+						x: node.x + e.clientX - node.oldX,
+						y: node.y + e.clientY - node.oldY,
+						oldX: e.clientX,
+						oldY: e.clientY,
+					};
+				}),
+			);
+			graph.updateConnections(
+				activeConnectionsArray.map(function (connection) {
+					return {
+						...connection,
+						x: connection.x + e.clientX - connection.oldX,
+						y: connection.y + e.clientY - connection.oldY,
+						oldX: e.clientX,
+						oldY: e.clientY,
+					};
+				}),
+			);
+			/*
 			updateNodes(
 				nodesArray.map(function (position) {
 					return {
@@ -123,6 +188,7 @@ export default function Graph({
 					};
 				}),
 			);
+			*/
 		}
 	}
 	function onWheel(e) {
@@ -130,6 +196,34 @@ export default function Graph({
 			const sign = Math.sign(e.deltaY) / 10;
 			const scale = 1 - sign;
 			const rect = containerRef.current.getBoundingClientRect();
+			const activeNodesArray = graph.activeNodesArray(agentHeader.name, graph.nodes, graph.edges, graph.connections);
+			const activeEdgesArray = graph.activeEdgesArray(graph.nodes, graph.edges, graph.connections);
+			const activeConnectionsArray = graph.activeConnectionsArray(graph.nodes, graph.edges, graph.connections);
+			graph.updateNodes(
+				activeNodesArray.map(function (node) {
+					const x = rect.width / 2 - (rect.width / 2 - node.x) * scale - (node.width / 2) * sign;
+					const y = rect.height / 2 - (rect.height / 2 - node.y) * scale - (node.height / 2) * sign;
+					return {
+						...node,
+						x: x,
+						y: y,
+						z: node.z * scale,
+					};
+				}),
+			);
+			graph.updateConnections(
+				activeConnectionsArray.map(function (connection) {
+					const x = rect.width / 2 - (rect.width / 2 - connection.x) * scale;
+					const y = rect.height / 2 - (rect.height / 2 - connection.y) * scale;
+					return {
+						...connection,
+						x: x,
+						y: y,
+						z: connection.z * scale,
+					};
+				}),
+			);
+			/*
 			updateNodes(
 				nodesArray.map(function (position) {
 					const x = rect.width / 2 - (rect.width / 2 - position.x) * scale - (position.width / 2) * sign;
@@ -154,6 +248,7 @@ export default function Graph({
 					};
 				}),
 			);
+			*/
 		}
 	}
 	useEffect(() => {
@@ -172,8 +267,8 @@ export default function Graph({
 					return (
 						<Node
 							key={node.id}
+							agentHeader={agentHeader}
 							route={route}
-							render={render}
 							x={node.x}
 							y={node.y}
 							z={node.z}
@@ -182,26 +277,10 @@ export default function Graph({
 							dataX={absolutePosition.x}
 							dataY={absolutePosition.y}
 							dataZ={absolutePosition.z}
+							graph={graph}
 							nodes={nodes}
-							setNodes={setNodes}
-							initializeNodes={initializeNodes}
-							createNodes={createNodes}
-							readNodes={readNodes}
-							updateNodes={updateNodes}
-							deleteNodes={deleteNodes}
 							edges={edges}
-							setEdges={setEdges}
-							createEdges={createEdges}
-							readEdges={readEdges}
-							updateEdges={updateEdges}
-							deleteEdges={deleteEdges}
 							connections={connections}
-							setConnections={setConnections}
-							initializeConnections={initializeConnections}
-							createConnections={createConnections}
-							readConnections={readConnections}
-							updateConnections={updateConnections}
-							deleteConnections={deleteConnections}
 							node={node}
 						/>
 					);
@@ -212,31 +291,7 @@ export default function Graph({
 			{Object.values(edges).map(function (edge) {
 				if (edge.id) {
 					//return <div>{edge.id}</div>;
-					return (
-						<Edge
-							key={edge.id}
-							route={route}
-							render={render}
-							nodes={nodes}
-							initializeNodes={initializeNodes}
-							createNodes={createNodes}
-							readNodes={readNodes}
-							updateNodes={updateNodes}
-							deleteNodes={deleteNodes}
-							edges={edges}
-							createEdges={createEdges}
-							readEdges={readEdges}
-							updateEdges={updateEdges}
-							deleteEdges={deleteEdges}
-							connections={connections}
-							initializeConnections={initializeConnections}
-							createConnections={createConnections}
-							readConnections={readConnections}
-							updateConnections={updateConnections}
-							deleteConnections={deleteConnections}
-							edge={edge}
-						/>
-					);
+					return <Edge key={edge.id} agentHeader={agentHeader} route={route} graph={graph} nodes={nodes} edges={edges} connections={connections} edge={edge} />;
 				} else {
 					return null;
 				}
