@@ -456,18 +456,20 @@ export default function Table({
 		setSubmitCreate(true);
 		const expected = "create";
 		const input = prompt(`Confirm create by entering '${expected}'`, "");
+		const attributes = { ...createItem };
+		// for convenience to avoid backend issues
+		delete attributes[node.props.primary_key];
 		if (input === expected) {
 			return gauze
 				.create(header, {
 					source: node.props.variables.source,
-					attributes: createItem,
+					attributes: attributes,
 				})
 				.then(function (results) {
 					if (results && results.length) {
 						const created = results[0];
 						model.create(header.graphql_meta_type, created.attributes[header.primary_key], created.attributes);
 						setSubmitCreate(false);
-						//page.push(created.attributes)
 						setCreateItem(created.attributes);
 						setSyncing(true);
 						return read(gauze, model, header, node.props.variables)
@@ -492,6 +494,10 @@ export default function Table({
 						// alert the user that something went wrong
 						setSubmitCreate(false);
 					}
+				})
+				.catch(function (err) {
+					setSubmitCreate(false);
+					throw err;
 				});
 		} else {
 			setSubmitCreate(false);
