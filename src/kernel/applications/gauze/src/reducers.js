@@ -1,4 +1,4 @@
-import { router5Reducer, actions, actionTypes as router5ActionTypes } from "redux-router5";
+import { router5Reducer, actions, actionTypes as router5ActionTypes } from "./redux-router5/dist/index.es.js";
 import { createStore, applyMiddleware, combineReducers } from "redux";
 
 import routes from "./routes.js";
