@@ -516,6 +516,7 @@
 		[x] update entity definitions to add default_order and default_order direction
 		[x] update migrations to add index on created_at, updated_at, deleted_at
 	[ ] add an indexed attribute to fields in abstract entity definitions
+		[x] update entity definitions to add indexed to field properties
 		[ ] only allow ordering and where selection on fields that have indexed set to true
 		[ ] ideally this setting should align with a database index
 [ ] query and mutation argument extensions (aligned with database semantics)
