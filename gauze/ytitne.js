@@ -9,6 +9,7 @@ export default function ($abstract) {
 		fields: {
 			id: {
 				name: "id",
+				indexed: true,
 				required: false,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -23,6 +24,7 @@ export default function ($abstract) {
 			},
 			created_at: {
 				name: "created_at",
+				indexed: true,
 				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -37,6 +39,7 @@ export default function ($abstract) {
 			},
 			updated_at: {
 				name: "updated_at",
+				indexed: true,
 				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -51,6 +54,7 @@ export default function ($abstract) {
 			},
 			deleted_at: {
 				name: "deleted_at",
+				indexed: true,
 				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -65,6 +69,7 @@ export default function ($abstract) {
 			},
 			text: {
 				name: "text",
+				indexed: true,
 				required: false,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,

@@ -23,6 +23,9 @@ const up = function (knex) {
 			table.index("gauze__secret__realm");
 			table.index("gauze__secret__agent_type");
 			table.index("gauze__secret__agent_id");
+			table.index("gauze__secret__value");
+			table.index("gauze__secret__kind");
+			table.index("gauze__secret__name");
 
 			table.unique(["gauze__secret__realm", "gauze__secret__agent_type", "gauze__secret__agent_id", "gauze__secret__value"], {
 				useConstraint: true,

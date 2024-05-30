@@ -141,6 +141,7 @@ class GauzeManager {
 
 		const valid_field_keys = {
 			name: true,
+			indexed: true,
 			required: true,
 			sql_type: true,
 			graphql_type: true,
@@ -243,6 +244,9 @@ class GauzeManager {
 					const name = field[key];
 					if (name !== field_key) throw new Error(`Entity property '${path}' must align with the path key ${field_key}, ${name} !== ${field_key}`);
 					if (typeof name !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${name} is not of type 'string'`);
+				} else if (key === "indexed") {
+					const indexed = field[key];
+					if (typeof indexed !== "boolean") throw new Error(`Entity property '${path}' must be of type 'boolean', ${indexed} is not of type 'boolean'`);
 				} else if (key === "required") {
 					const required = field[key];
 					if (typeof required !== "boolean") throw new Error(`Entity property '${path}' must be of type 'boolean', ${required} is not of type 'boolean'`);

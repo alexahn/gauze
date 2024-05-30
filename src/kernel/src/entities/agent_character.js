@@ -9,6 +9,7 @@ export default function ($abstract) {
 		fields: {
 			gauze__agent_character__id: {
 				name: "gauze__agent_character__id",
+				indexed: true,
 				required: false,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -23,6 +24,7 @@ export default function ($abstract) {
 			},
 			gauze__agent_character__created_at: {
 				name: "gauze__agent_character__created_at",
+				indexed: true,
 				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -37,6 +39,7 @@ export default function ($abstract) {
 			},
 			gauze__agent_character__updated_at: {
 				name: "gauze__agent_character__updated_at",
+				indexed: true,
 				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -51,6 +54,7 @@ export default function ($abstract) {
 			},
 			gauze__agent_character__deleted_at: {
 				name: "gauze__agent_character__deleted_at",
+				indexed: true,
 				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,

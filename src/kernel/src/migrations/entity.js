@@ -15,6 +15,7 @@ const up = function (knex) {
 			table.index("created_at");
 			table.index("updated_at");
 			table.index("deleted_at");
+			table.index("text");
 		}),
 	]);
 };

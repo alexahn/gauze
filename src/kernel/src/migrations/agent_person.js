@@ -15,6 +15,7 @@ const up = function (knex) {
 			table.index("gauze__agent_person__created_at");
 			table.index("gauze__agent_person__updated_at");
 			table.index("gauze__agent_person__deleted_at");
+			table.index("gauze__agent_person__email");
 
 			table.unique(["gauze__agent_person__email"], {
 				useConstraint: true,

@@ -24,6 +24,9 @@ const up = function (knex) {
 			table.index("gauze__session__realm");
 			table.index("gauze__session__agent_type");
 			table.index("gauze__session__agent_id");
+			table.index("gauze__session__value");
+			table.index("gauze__session__kind");
+			table.index("gauze__session__seed");
 
 			table.unique(["gauze__session__realm", "gauze__session__agent_type", "gauze__session__agent_id", "gauze__session__value"], {
 				useConstraint: true,
