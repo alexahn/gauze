@@ -77,6 +77,8 @@ function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 							table_name: module.table_name,
 							primary_key: module.primary_key,
 							graphql_meta_type: module.graphql_meta_type,
+							default_order: module.default_order,
+							default_order_direction: module.default_order_direction,
 							fields: fields,
 							methods: methods,
 							graphql_attributes_string: module.graphql_attributes_string,

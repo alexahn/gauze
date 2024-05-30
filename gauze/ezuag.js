@@ -5,7 +5,7 @@ export default function ($abstract) {
 		primary_key: "gauze__ezuag__id",
 		graphql_meta_type: "EZUAG",
 		default_order: "gauze__ezuag__created_at",
-		default_order_direction: "desc",
+		default_order_direction: "asc",
 		fields: {
 			gauze__ezuag__id: {
 				name: "gauze__ezuag__id",

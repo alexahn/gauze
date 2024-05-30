@@ -355,8 +355,8 @@ class DatabaseModel extends Model {
 			cache_where_not_in = {},
 			limit = 64,
 			offset = 0,
-			order = this.primary_key,
-			order_direction = "asc",
+			order = self.entity.default_order || self.primary_key,
+			order_direction = self.entity.default_order_direction || "asc",
 			order_nulls = "first",
 		} = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
@@ -415,8 +415,8 @@ class DatabaseModel extends Model {
 			cache_where_not_in = {},
 			limit = 64,
 			offset = 0,
-			order = this.primary_key,
-			order_direction = "asc",
+			order = self.entity.default_order || self.primary_key,
+			order_direction = self.entity.default_order_direction || "asc",
 			order_nulls = "first",
 		} = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);

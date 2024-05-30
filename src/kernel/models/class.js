@@ -10,9 +10,9 @@ class Model {
 	constructor(config) {
 		const self = this;
 		const { entity, entity_name } = config;
-		this.entity = entity;
-		this.entity_name = entity_name;
-		this.name = this._name();
+		self.entity = entity;
+		self.entity_name = entity_name;
+		self.name = self._name();
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
 	}
 	static _class_name(entity_name) {

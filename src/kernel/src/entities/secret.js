@@ -5,7 +5,7 @@ export default function ($abstract) {
 		primary_key: "gauze__secret__id",
 		graphql_meta_type: "SECRET",
 		default_order: "gauze__secret__created_at",
-		default_order_direction: "desc",
+		default_order_direction: "asc",
 		fields: {
 			gauze__secret__id: {
 				name: "gauze__secret__id",
