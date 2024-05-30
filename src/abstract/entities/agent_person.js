@@ -5,7 +5,7 @@ export default function ($abstract) {
 		primary_key: "gauze__agent_person__id",
 		graphql_meta_type: "AGENT_PERSON",
 		default_order: "gauze__agent_person__created_at",
-		default_order_direction: "desc",
+		default_order_direction: "asc",
 		fields: {
 			gauze__agent_person__id: {
 				name: "gauze__agent_person__id",

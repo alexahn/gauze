@@ -5,7 +5,7 @@ export default function ($abstract) {
 		primary_key: "id",
 		graphql_meta_type: "ENTITY",
 		default_order: "created_at",
-		default_order_direction: "desc",
+		default_order_direction: "asc",
 		fields: {
 			id: {
 				name: "id",

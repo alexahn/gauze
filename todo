@@ -512,7 +512,7 @@
 	[x] add allowed_agent_types definitions to individual fields
 		[x] filter returned fields according to agent type
 		[x] update manager to enforce new constraints
-	[ ] add default order key to entity definitions
+	[x] add default order key to entity definitions
 		[x] update entity definitions to add default_order and default_order direction
 		[x] update migrations to add index on created_at, updated_at, deleted_at
 	[ ] add an indexed attribute to fields in abstract entity definitions

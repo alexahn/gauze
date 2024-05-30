@@ -5,7 +5,7 @@ export default function ($abstract) {
 		primary_key: "gauze__blacklist__id",
 		graphql_meta_type: "BLACKLIST",
 		default_order: "gauze__blacklist__created_at",
-		default_order_direction: "desc",
+		default_order_direction: "asc",
 		fields: {
 			gauze__blacklist__id: {
 				name: "gauze__blacklist__id",
