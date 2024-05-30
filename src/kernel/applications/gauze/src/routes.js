@@ -328,24 +328,7 @@ const routes = [
 					}),
 				)
 					.then(function (results) {
-						const synced = graph.default.syncNodesEdges(results);
-						console.log("route synced", synced);
-						const newConnections = synced.newConnections.map(function (connection) {
-							return {
-								...connection,
-								component: component.relationship.default,
-								props: {
-									gauze: gauze.default,
-									model: model.default,
-									router: router.default,
-									graph: graph.default,
-								},
-							};
-						});
-						const newEdges = synced.newEdges;
-						graph.default.createConnections(newConnections);
-						graph.default.createEdges(newEdges);
-						const syncedConnections = graph.default.syncNodeConnections(graph.default.nodes, graph.default.edges, graph.default.connections);
+						// update data and count
 						graph.default.updateNodes(
 							results.map(function (result) {
 								return {
@@ -360,6 +343,25 @@ const routes = [
 								};
 							}),
 						);
+						const synced = graph.default.syncNodesEdges(results);
+						console.log("route synced", synced);
+						const newConnections = synced.newConnections.map(function (connection) {
+							return {
+								...connection,
+								component: components.relationship.default,
+								props: {
+									gauze: gauze.default,
+									model: model.default,
+									router: router.default,
+									graph: graph.default,
+								},
+							};
+						});
+						const newEdges = synced.newEdges;
+						graph.default.createConnections(newConnections);
+						graph.default.createEdges(newEdges);
+						const syncedConnections = graph.default.syncNodeConnections(graph.default.nodes, graph.default.edges, graph.default.connections);
+						console.log("route syncedConnections", syncedConnections);
 						const connectedNodes = Object.keys(syncedConnections).map(function (id) {
 							return {
 								...graph.default.nodes[id],
@@ -370,6 +372,28 @@ const routes = [
 							};
 						});
 						graph.default.updateNodes(connectedNodes);
+						// reinitialize
+						graph.default.updateNodes(
+							graph.default.activeNodes(agentHeader.name).values.map(function (node) {
+								return {
+									...node,
+									oldWidth: node.width,
+									oldHeight: node.height,
+									width: null,
+									height: null,
+								};
+							}),
+						);
+						// reinitialize connections
+						graph.default.updateConnections(
+							graph.default.activeConnections(agentHeader.name).values.map(function (connection) {
+								return {
+									...connection,
+									x: null,
+									y: null,
+								};
+							}),
+						);
 						return results;
 					})
 					.catch(function (err) {

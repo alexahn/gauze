@@ -469,6 +469,25 @@ export default function Table({
 						setSubmitCreate(false);
 						//page.push(created.attributes)
 						setCreateItem(created.attributes);
+						setSyncing(true);
+						return read(gauze, model, header, node.props.variables)
+							.then(function (results) {
+								const data = results[0].map(function (item) {
+									return item.attributes;
+								});
+								const count = results[1][0].count;
+								const targetNode = { ...node };
+								targetNode.props.data = data;
+								targetNode.props.count = count;
+								synchronize(targetNode, function (targetNode) {
+									graph.updateNodes([targetNode]);
+								});
+								setSyncing(false);
+							})
+							.catch(function (err) {
+								setSyncing(false);
+								throw err;
+							});
 					} else {
 						// alert the user that something went wrong
 						setSubmitCreate(false);
