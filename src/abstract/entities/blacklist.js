@@ -9,6 +9,7 @@ export default function ($abstract) {
 		fields: {
 			gauze__blacklist__id: {
 				name: "gauze__blacklist__id",
+				indexed: true,
 				required: false,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -23,6 +24,7 @@ export default function ($abstract) {
 			},
 			gauze__blacklist__created_at: {
 				name: "gauze__blacklist__created_at",
+				indexed: true,
 				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -37,6 +39,7 @@ export default function ($abstract) {
 			},
 			gauze__blacklist__updated_at: {
 				name: "gauze__blacklist__updated_at",
+				indexed: true,
 				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -51,6 +54,7 @@ export default function ($abstract) {
 			},
 			gauze__blacklist__deleted_at: {
 				name: "gauze__blacklist__deleted_at",
+				indexed: true,
 				required: false,
 				sql_type: "datetime",
 				graphql_type: $abstract.gauze.types.graphql.DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -65,6 +69,7 @@ export default function ($abstract) {
 			},
 			gauze__blacklist__realm: {
 				name: "gauze__blacklist__realm",
+				indexed: true,
 				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -79,6 +84,7 @@ export default function ($abstract) {
 			},
 			gauze__blacklist__agent_role: {
 				name: "gauze__blacklist__agent_role",
+				indexed: true,
 				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -93,6 +99,7 @@ export default function ($abstract) {
 			},
 			gauze__blacklist__agent_id: {
 				name: "gauze__blacklist__agent_id",
+				indexed: true,
 				required: true,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -107,6 +114,7 @@ export default function ($abstract) {
 			},
 			gauze__blacklist__agent_type: {
 				name: "gauze__blacklist__agent_type",
+				indexed: true,
 				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -121,6 +129,7 @@ export default function ($abstract) {
 			},
 			gauze__blacklist__entity_id: {
 				name: "gauze__blacklist__entity_id",
+				indexed: true,
 				required: false,
 				sql_type: "uuid",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -135,6 +144,7 @@ export default function ($abstract) {
 			},
 			gauze__blacklist__entity_type: {
 				name: "gauze__blacklist__entity_type",
+				indexed: true,
 				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -149,6 +159,7 @@ export default function ($abstract) {
 			},
 			gauze__blacklist__method: {
 				name: "gauze__blacklist__method",
+				indexed: true,
 				required: true,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
