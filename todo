@@ -527,11 +527,12 @@
 		[ ] maybe use something like zod for input validation
 	[ ] general graph traversal ui
 		[x] pannable and zoomable
-		[ ] relationship representation and traversal
+		[x] relationship representation and traversal
 			[x] filter results by parent/child
 			[x] creating items in a table should also create a relationship tied to the parent/child
-			[ ] x button to close a table
-			[ ] paginating a table should show parent/children for the current set of results and hide the others?
+			[x] x button to close a table
+			[-] paginating a table should show parent/children for the current set of results and hide the others?
+				[x] just keep showing the node even though it may not have any relationships to the parent results
 		[x] connection component to track where to draw svg paths
 			[x] connection initialization to set coordinates
 			[x] piping to enable connections to be defined
@@ -546,8 +547,8 @@
 			[ ] update edge definition to include component and props (which render at the center of the path)
 		[x] refactor all graph ui code to follow a strict state management, synchronization, and rendering lifecycle
 			[x] fix ui bugs that cause panning and zooming issues after changing routes
-		[ ] disable flexbox for graph tables
-			[ ] causing weird issues when resizing the window
+		[x] disable flexbox wrap for graph tables
+			[x] causing weird issues when resizing the window
 		[x] service synchronization loop
 			[x] set it up in the root component
 		[x] parallelize initialization of nodes and connections

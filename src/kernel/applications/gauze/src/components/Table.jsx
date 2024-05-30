@@ -9,7 +9,7 @@ import Input from "./Input.jsx";
 import Pagination from "./Pagination.jsx";
 
 import { v4 as uuidv4 } from "uuid";
-import { FileTextIcon, TrashIcon, Pencil2Icon } from "@radix-ui/react-icons";
+import { FileTextIcon, TrashIcon, Pencil2Icon, Cross1Icon } from "@radix-ui/react-icons";
 
 function read(gauze, model, header, variables) {
 	const transactions = [
@@ -79,30 +79,42 @@ export default function Table({
 	const page_max_no_skew = Math.ceil(Math.max(total / limit));
 	const page_max = page_max_no_skew < page_current ? page_current : page_max_no_skew;
 
-	function synchronize(targetNode, variables, data, count, method) {
-		const synced = graph.syncNodeEdges(targetNode, data);
-		console.log("synced", synced, connections, graph.connections);
-		targetNode.props.data = data;
-		targetNode.props.count = count;
-		targetNode.props.variables = variables;
-		// create new edges, connections, and nodes using service
-		const newConnections = synced.newConnections.map(function (connection) {
-			return {
-				...connection,
-				component: Relationship,
-				props: {
-					gauze: gauze,
-					model: model,
-					router: router,
-				},
-			};
-		});
-		const newEdges = synced.newEdges;
-		graph.createConnections(newConnections);
-		graph.createEdges(newEdges);
-		method(targetNode);
+	function synchronize(targetNode, callback) {
+		if (targetNode) {
+			const synced = graph.syncNodeEdges(targetNode, targetNode.props.data);
+			console.log("synced", synced);
+			// create new edges, connections, and nodes using service
+			const newConnections = synced.newConnections.map(function (connection) {
+				return {
+					...connection,
+					component: Relationship,
+					props: {
+						gauze: gauze,
+						model: model,
+						router: router,
+					},
+				};
+			});
+			const newEdges = synced.newEdges;
+			graph.createConnections(newConnections);
+			graph.createEdges(newEdges);
+			callback(targetNode);
+		}
+		// syncedConnections is the total set of connections for all nodes
 		const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
-		console.log("syncedConnections", syncedConnections);
+		// wipe connections for all active nodes
+		graph.updateNodes(
+			graph.activeNodes(agentHeader.name).values.map(function (node) {
+				return {
+					...node,
+					props: {
+						...node.props,
+						connectionIDs: [],
+					},
+				};
+			}),
+		);
+		// apply synced connections for all nodes
 		const connectedNodes = Object.keys(syncedConnections).map(function (id) {
 			return {
 				...graph.selectNode(id),
@@ -112,9 +124,8 @@ export default function Table({
 				},
 			};
 		});
-		console.log("connectedNodes", connectedNodes);
 		graph.updateNodes(connectedNodes);
-		console.log("graph.nodes0", graph.nodes);
+		// reinitialize nodes
 		graph.updateNodes(
 			graph.activeNodes(agentHeader.name).values.map(function (node) {
 				return {
@@ -126,7 +137,7 @@ export default function Table({
 				};
 			}),
 		);
-		console.log("graph.nodes1", graph.nodes);
+		// reinitialize connections
 		graph.updateConnections(
 			graph.activeConnections(agentHeader.name).values.map(function (connection) {
 				return {
@@ -174,8 +185,11 @@ export default function Table({
 						return item.attributes;
 					});
 					const count = results[1][0].count;
-					const targetNode = node;
-					synchronize(targetNode, localVariables, data, count, function (targetNode) {
+					const targetNode = { ...node };
+					targetNode.props.variables = localVariables;
+					targetNode.props.data = data;
+					targetNode.props.count = count;
+					synchronize(targetNode, function (targetNode) {
 						graph.updateNodes([targetNode]);
 					});
 					setSyncing(false);
@@ -196,7 +210,9 @@ export default function Table({
 					return item.attributes;
 				});
 				const count = results[1][0].count;
-				synchronize(targetNode, targetNode.props.variables, data, count, function (targetNode) {
+				targetNode.props.data = data;
+				targetNode.props.count = count;
+				synchronize(targetNode, function (targetNode) {
 					graph.createNodes([targetNode]);
 				});
 				setSyncing(false);
@@ -350,8 +366,11 @@ export default function Table({
 							return item.attributes;
 						});
 						const count = results[1][0].count;
-						const targetNode = node;
-						synchronize(targetNode, localVariables, data, count, function (targetNode) {
+						const targetNode = { ...node };
+						targetNode.props.variables = localVariables;
+						targetNode.props.data = data;
+						targetNode.props.count = count;
+						synchronize(targetNode, function (targetNode) {
 							graph.updateNodes([targetNode]);
 						});
 						setSyncing(false);
@@ -451,9 +470,23 @@ export default function Table({
 			setSubmitCreate(false);
 		}
 	}
+	function handleClose(e) {
+		if (!node.root) {
+			graph.deleteNodes([node]);
+			synchronize(null);
+		}
+	}
+
 	return (
 		<div className="mw-100 w-100">
 			<h1 align="center">{header.graphql_meta_type}</h1>
+			<div className="absolute top-0 right-0 pa1">
+				{node.root ? null : (
+					<button onClick={handleClose}>
+						<Cross1Icon />
+					</button>
+				)}
+			</div>
 			<hr />
 			<div align="left" className="cf">
 				<div className="flex fl">
@@ -464,7 +497,7 @@ export default function Table({
 			<div className="flex fr">
 				<table>
 					<thead className="mw-100">
-						<tr align="right" className="flex flex-wrap">
+						<tr align="right" className="flex">
 							<th align="center" className="mw4 w4">
 								{/*
 								<a href={router.buildUrl(route.name, { ...route.params, where: encodeURIComponent(JSON.stringify(localWhere)) })}>
@@ -526,7 +559,7 @@ export default function Table({
 							})}
 							<th align="center" className="mw4 w4"></th>
 						</tr>
-						<tr align="right" className="flex flex-wrap">
+						<tr align="right" className="flex">
 							<th align="center" className="mw4 w4">
 								{/*
 								<a href={router.buildUrl(route.name, { ...route.params, where: encodeURIComponent(JSON.stringify(localWhere)) })}>
@@ -571,7 +604,7 @@ export default function Table({
 							</th>
 							{data.map(function (item) {
 								return (
-									<th key={item[header.primary_key]} align="left" className="mw4 w4 pt1 flex flex-wrap justify-center">
+									<th key={item[header.primary_key]} align="left" className="mw4 w4 pt1 flex justify-center">
 										<a href={router.buildUrl("system.types.item.type.id", { type: type, id: item[header.primary_key], mode: "view" })}>
 											<button className="f5 ml1 mr1">
 												<FileTextIcon />
@@ -600,7 +633,7 @@ export default function Table({
 					<tbody align="right" className="mw-100">
 						{localFields.map(function (field) {
 							return (
-								<tr align="right" key={field.name} className="flex flex-wrap">
+								<tr align="right" key={field.name} className="flex">
 									<td className="mw4 w4 overflow-x-hidden">
 										<Input
 											defaultMode={true}
@@ -636,7 +669,7 @@ export default function Table({
 						})}
 					</tbody>
 					<tfoot className="mw-100">
-						<tr align="right" className="flex flex-wrap">
+						<tr align="right" className="flex">
 							<th align="center" className="mw4 w4">
 								{/*
 								<a href={router.buildUrl(route.name, { ...route.params, where: encodeURIComponent(JSON.stringify(localWhere)) })}>

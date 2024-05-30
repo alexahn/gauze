@@ -231,31 +231,33 @@ class GraphService {
 			const toNode = nodes[edge.toNodeID];
 			const fromConnection = connections[edge.fromConnectionID];
 			const toConnection = connections[edge.toConnectionID];
-			const from = fromNode.props.data.find(function (item) {
-				const entityID = fromConnection.entityID === item[fromNode.props.primary_key];
-				const entityType = fromConnection.entityType === fromNode.props.graphql_meta_type;
-				return entityID && entityType;
-			});
-			const to = toNode.props.data.find(function (item) {
-				const entityID = toConnection.entityID === item[toNode.props.primary_key];
-				const entityType = toConnection.entityType === toNode.props.graphql_meta_type;
-				return entityID && entityType;
-			});
-			if (from && to) {
-				// valid edge
-				if (index[fromNode.id]) {
-					index[fromNode.id].connections.push(fromConnection.id);
-				} else {
-					index[fromNode.id] = {
-						connections: [fromConnection.id],
-					};
-				}
-				if (index[toNode.id]) {
-					index[toNode.id].connections.push(toConnection.id);
-				} else {
-					index[toNode.id] = {
-						connections: [toConnection.id],
-					};
+			if (fromNode && fromConnection && toNode && toConnection) {
+				const from = fromNode.props.data.find(function (item) {
+					const entityID = fromConnection.entityID === item[fromNode.props.primary_key];
+					const entityType = fromConnection.entityType === fromNode.props.graphql_meta_type;
+					return entityID && entityType;
+				});
+				const to = toNode.props.data.find(function (item) {
+					const entityID = toConnection.entityID === item[toNode.props.primary_key];
+					const entityType = toConnection.entityType === toNode.props.graphql_meta_type;
+					return entityID && entityType;
+				});
+				if (from && to) {
+					// valid edge
+					if (index[fromNode.id]) {
+						index[fromNode.id].connections.push(fromConnection.id);
+					} else {
+						index[fromNode.id] = {
+							connections: [fromConnection.id],
+						};
+					}
+					if (index[toNode.id]) {
+						index[toNode.id].connections.push(toConnection.id);
+					} else {
+						index[toNode.id] = {
+							connections: [toConnection.id],
+						};
+					}
 				}
 			}
 		});

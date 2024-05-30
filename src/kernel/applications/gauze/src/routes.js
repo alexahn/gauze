@@ -472,8 +472,8 @@ const routes = [
 							return Promise.resolve(true);
 						})
 						.catch(function (err) {
-							console.log(err);
-							// throw?
+							console.error(err);
+							// todo: figure out control flow for failed calls
 						});
 				},
 				function () {
@@ -489,6 +489,10 @@ const routes = [
 							const pagination_key = router.default.buildUrl(toState.name, toState.params);
 							model.default.create("PAGINATION_COUNT", pagination_key, counts);
 							return Promise.resolve(true);
+						})
+						.catch(function (err) {
+							console.error(err);
+							// todo: figure out control flow for failed calls
 						});
 				},
 			];
