@@ -261,7 +261,10 @@ const routes = [
 								fields: agentHeader.fields,
 								variables: {
 									where: {},
+									offset: 0,
 									limit: PAGINATION_PAGE_SIZE,
+									order: agentHeader.default_order,
+									order_direction: "desc",
 								},
 								data: [],
 								count: 0,

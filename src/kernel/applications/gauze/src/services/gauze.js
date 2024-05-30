@@ -395,6 +395,8 @@ query header {
 		table_name
 		primary_key
 		graphql_meta_type
+		default_order
+		default_order_direction
 		fields {
 			name
 			sql_type

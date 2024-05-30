@@ -388,6 +388,7 @@ class DatabaseModel extends Model {
 			.limit(limit)
 			.offset(offset)
 			// todo: figure out how to get order_nulls working without breaking the query
+			// note: sqlite cannot handle order nulls, it seems to break the query: order by ({table_name}.{order_column} is not null) vs order by {table_name}.{order_column}
 			//.orderBy(order, order_direction, order_nulls)
 			.orderBy(order, order_direction)
 			.transacting(transaction);
@@ -454,6 +455,8 @@ class DatabaseModel extends Model {
 			joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[k]).value;
 		});
 		var joined_order = self.table_name + "." + order;
+		//const joined_order = order
+		console.log("joined_order", joined_order);
 		if (relationship_source._direction === "to") {
 			const sql = database(self.table_name)
 				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.${self.primary_key}`)
@@ -471,7 +474,9 @@ class DatabaseModel extends Model {
 				})
 				.limit(limit)
 				.offset(offset)
-				.orderBy(joined_order, order_direction, order_nulls)
+				// note: sqlite cannot handle order nulls, it seems to break the query: order by ({table_name}.{order_column} is not null) vs order by {table_name}.{order_column}
+				//.orderBy(joined_order, order_direction, order_nulls)
+				.orderBy(joined_order, order_direction)
 				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
@@ -502,7 +507,9 @@ class DatabaseModel extends Model {
 				})
 				.limit(limit)
 				.offset(offset)
-				.orderBy(joined_order, order_direction, order_nulls)
+				// note: sqlite cannot handle order nulls, it seems to break the query: order by ({table_name}.{order_column} is not null) vs order by {table_name}.{order_column}
+				//.orderBy(joined_order, order_direction, order_nulls)
+				.orderBy(joined_order, order_direction)
 				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());

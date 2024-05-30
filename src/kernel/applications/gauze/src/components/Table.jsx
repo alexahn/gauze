@@ -266,7 +266,10 @@ export default function Table({
 					variables: {
 						source: source,
 						where: {},
+						offset: 0,
 						limit: PAGINATION_PAGE_SIZE,
+						order: targetHeader.default_order,
+						order_direction: "desc",
 					},
 					data: [],
 					count: 0,
@@ -321,7 +324,10 @@ export default function Table({
 					variables: {
 						source: source,
 						where: {},
+						offset: 0,
 						limit: PAGINATION_PAGE_SIZE,
+						order: targetHeader.default_order,
+						order_direction: "desc",
 					},
 					data: [],
 					count: 0,
