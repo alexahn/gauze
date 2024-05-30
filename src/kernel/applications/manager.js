@@ -124,12 +124,19 @@ class GauzeManager {
 			table_name: true,
 			primary_key: true,
 			graphql_meta_type: true,
+			default_order: true,
+			default_order_direction: true,
 			fields: true,
 			methods: true,
 			graphql_attributes_fields: true,
 			graphql_attributes_string: true,
 			graphql_where_fields: true,
 			graphql_where_string: true,
+		};
+
+		const valid_default_order_directions = {
+			asc: true,
+			desc: true,
 		};
 
 		const valid_field_keys = {
@@ -334,6 +341,16 @@ class GauzeManager {
 			} else if (key === "graphql_meta_type") {
 				const graphql_meta_type = config[key];
 				if (typeof graphql_meta_type !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${graphql_meta_type} is not of type 'string'`);
+			} else if (key === "default_order") {
+				const default_order = config[key];
+				if (typeof default_order !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${default_order} is not of type 'string'`);
+			} else if (key === "default_order_direction") {
+				const default_order_direction = config[key];
+				if (typeof default_order_direction !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${default_order_direction} is not of type 'string'`);
+				if (!valid_default_order_directions[default_order_direction])
+					throw new Error(
+						`Entity property '${path}' must contain string values from (${Object.keys(valid_default_order_directions)}): ${default_order_direction} is not contained`,
+					);
 			} else if (key === "fields") {
 				const fields = config[key];
 				validate_fields(path, fields);
