@@ -75,7 +75,7 @@ export default function Node({ agentHeader, route, x, y, z, width, height, dataX
 				height: containerRef.current.offsetHeight,
 				width: containerRef.current.offsetWidth,
 			};
-			graph.initializeNodes([initialized]);
+			graph.initializeNodes(agentHeader.name, [initialized]);
 			setLoaded(true);
 		}
 	});

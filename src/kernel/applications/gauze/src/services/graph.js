@@ -558,10 +558,10 @@ class GraphService {
 		const self = this;
 		return self.edges[key];
 	}
-	initializeNodes(candidates) {
+	initializeNodes(rootType, candidates) {
 		const self = this;
-		const staged = self.nodes;
-		const nodesArray = Object.values(staged);
+		const staged = self.activeNodes(rootType).object;
+		const activeNodes = self.activeNodes(rootType);
 		candidates.forEach(function (node) {
 			const { width, height } = node;
 			if (width === null || height === null) throw new Error(`Cannot initialize with null dimensions: width=${width} height=${height}`);
@@ -570,7 +570,7 @@ class GraphService {
 			} else {
 				// get max x in nodes
 				// get max y in nodes
-				const zMax = nodesArray.reduce(function (max, item) {
+				const zMax = activeNodes.values.reduce(function (max, item) {
 					const candidate = item.z;
 					if (item.root === true && max <= candidate) {
 						return candidate;
@@ -580,7 +580,7 @@ class GraphService {
 						return max;
 					}
 				}, 0);
-				const xMax = nodesArray.reduce(function (max, item) {
+				const xMax = activeNodes.values.reduce(function (max, item) {
 					const candidate = item.x + item.oldWidth * item.z;
 					if (node.root === true && max < candidate) {
 						return item.x;
@@ -590,7 +590,7 @@ class GraphService {
 						return max;
 					}
 				}, 0);
-				const yMax = nodesArray.reduce(function (max, item) {
+				const yMax = activeNodes.values.reduce(function (max, item) {
 					const candidate = item.y + item.oldHeight * item.z;
 					if (node.root === true && max < candidate) {
 						return item.y;
@@ -613,7 +613,7 @@ class GraphService {
 				};
 			}
 		});
-		self.nodes = staged;
+		self.updateNodes(Object.values(staged));
 		self.clearCacheNodes();
 	}
 	// node methods
