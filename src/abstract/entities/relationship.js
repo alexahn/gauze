@@ -4,6 +4,8 @@ export default function ($abstract) {
 		table_name: "gauze__relationship",
 		primary_key: "gauze__relationship__id",
 		graphql_meta_type: "RELATIONSHIP",
+		default_order: "gauze__relationship__created_at",
+		default_order_direction: "desc",
 		fields: {
 			gauze__relationship__id: {
 				name: "gauze__relationship__id",

@@ -4,6 +4,8 @@ export default function ($abstract) {
 		table_name: "gauze__entity",
 		primary_key: "id",
 		graphql_meta_type: "ENTITY",
+		default_order: "created_at",
+		default_order_direction: "desc",
 		fields: {
 			id: {
 				name: "id",

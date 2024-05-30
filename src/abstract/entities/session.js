@@ -4,6 +4,8 @@ export default function ($abstract) {
 		table_name: "gauze__session",
 		primary_key: "gauze__session__id",
 		graphql_meta_type: "SESSION",
+		default_order: "gauze__session__created_at",
+		default_order_direction: "desc",
 		fields: {
 			gauze__session__id: {
 				name: "gauze__session__id",
