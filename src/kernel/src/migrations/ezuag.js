@@ -12,6 +12,10 @@ const up = function (knex) {
 			// fields
 			table.string("gauze__ezuag__text1").notNullable();
 			table.string("gauze__ezuag__text2").notNullable();
+
+			table.index("gauze__ezuag__created_at");
+			table.index("gauze__ezuag__updated_at");
+			table.index("gauze__ezuag__deleted_at");
 		}),
 	]);
 };

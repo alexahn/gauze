@@ -11,6 +11,10 @@ const up = function (knex) {
 			table.date("deleted_at");
 
 			table.string("text");
+
+			table.index("created_at");
+			table.index("updated_at");
+			table.index("deleted_at");
 		}),
 	]);
 };

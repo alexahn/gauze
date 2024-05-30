@@ -4,6 +4,8 @@ export default function ($abstract) {
 		table_name: "gauze__secret",
 		primary_key: "gauze__secret__id",
 		graphql_meta_type: "SECRET",
+		default_order: "gauze__secret__created_at",
+		default_order_direction: "desc",
 		fields: {
 			gauze__secret__id: {
 				name: "gauze__secret__id",

@@ -4,6 +4,8 @@ export default function ($abstract) {
 		table_name: "gauze__ytitne",
 		primary_key: "id",
 		graphql_meta_type: "YTITNE",
+		default_order: "created_at",
+		default_order_direction: "desc",
 		fields: {
 			id: {
 				name: "id",

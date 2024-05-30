@@ -4,6 +4,8 @@ export default function ($abstract) {
 		table_name: "gauze__proxy",
 		primary_key: "gauze__proxy__id",
 		graphql_meta_type: "PROXY",
+		default_order: "gauze__proxy__created_at",
+		default_order_direction: "desc",
 		fields: {
 			gauze__proxy__id: {
 				name: "gauze__proxy__id",

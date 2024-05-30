@@ -11,6 +11,10 @@ const up = function (knex) {
 			table.date("gauze__agent_account__deleted_at");
 
 			table.string("gauze__agent_account__password", 2);
+
+			table.index("gauze__agent_account__created_at");
+			table.index("gauze__agent_account__updated_at");
+			table.index("gauze__agent_account__deleted_at");
 		}),
 	]);
 };

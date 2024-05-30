@@ -4,6 +4,8 @@ export default function ($abstract) {
 		table_name: "gauze__agent_account",
 		primary_key: "gauze__agent_account__id",
 		graphql_meta_type: "AGENT_ACCOUNT",
+		default_order: "gauze__agent_account__created_at",
+		default_order_direction: "desc",
 		fields: {
 			gauze__agent_account__id: {
 				name: "gauze__agent_account__id",

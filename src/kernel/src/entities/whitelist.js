@@ -4,6 +4,8 @@ export default function ($abstract) {
 		table_name: "gauze__whitelist",
 		primary_key: "gauze__whitelist__id",
 		graphql_meta_type: "WHITELIST",
+		default_order: "gauze__whitelist__created_at",
+		default_order_direction: "desc",
 		fields: {
 			gauze__whitelist__id: {
 				name: "gauze__whitelist__id",

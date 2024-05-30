@@ -17,6 +17,9 @@ const up = function (knex) {
 			table.string("gauze__secret__kind", 16).notNullable();
 			table.string("gauze__secret__name", 32).notNullable();
 
+			table.index("gauze__secret__created_at");
+			table.index("gauze__secret__updated_at");
+			table.index("gauze__secret__deleted_at");
 			table.index("gauze__secret__realm");
 			table.index("gauze__secret__agent_type");
 			table.index("gauze__secret__agent_id");

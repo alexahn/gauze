@@ -506,13 +506,18 @@
 	[x] include relationships and method policies
 	[ ] extend type item view to be able to view relationships to the object
 [ ] abstract entity and field definition extensions (aligned with database semantics)
-	[ ] add default order key to entity definitions
 	[ ] add min and max value to field definitions
 		[ ] we would need to choose whether or not we act on pre-parsed values or parsed graphql types
 		[ ] would also need to include a comparison function that would need to be defined in $abstract
 	[x] add allowed_agent_types definitions to individual fields
 		[x] filter returned fields according to agent type
 		[x] update manager to enforce new constraints
+	[ ] add default order key to entity definitions
+		[x] update entity definitions to add default_order and default_order direction
+		[x] update migrations to add index on created_at, updated_at, deleted_at
+	[ ] add an indexed attribute to fields in abstract entity definitions
+		[ ] only allow ordering and where selection on fields that have indexed set to true
+		[ ] ideally this setting should align with a database index
 [ ] query and mutation argument extensions (aligned with database semantics)
 	[ ] add where_greater and where_lesser
 	[ ] consider changing order to accept an array of ordering arguments (e.g. column and direction)
@@ -634,9 +639,6 @@
 		[x] create new graphql structures to align with the new properties
 		[x] update header graphql query to return the new properties
 		[x] remove graphql_fields from entity definition
-	[ ] add an indexed attribute to fields in abstract entity definitions
-		[ ] only allow ordering on fields that have indexed set to true
-		[ ] ideally this setting should align with a database index
 [ ] cli, commands, and manager application
 	[ ] polish commands and manager application
 	[x] align environment variables with cli commands

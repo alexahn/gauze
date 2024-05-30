@@ -18,6 +18,9 @@ const up = function (knex) {
 			table.uuid("gauze__blacklist__entity_id");
 			table.string("gauze__blacklist__method").notNullable();
 
+			table.index("gauze__blacklist__created_at");
+			table.index("gauze__blacklist__updated_at");
+			table.index("gauze__blacklist__deleted_at");
 			table.index("gauze__blacklist__realm");
 			table.index("gauze__blacklist__agent_type");
 			table.index("gauze__blacklist__agent_id");
