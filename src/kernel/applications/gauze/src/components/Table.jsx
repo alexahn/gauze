@@ -333,6 +333,34 @@ export default function Table({
 		};
 	}
 
+	function filter() {
+		setSyncing(true);
+		const localVariables = {
+			...variables,
+			where: localWhere,
+			offset: 0,
+		};
+		return read(gauze, model, header, localVariables)
+			.then(function (results) {
+				const data = results[0].map(function (item) {
+					return item.attributes;
+				});
+				const count = results[1][0].count;
+				const targetNode = { ...node };
+				targetNode.props.variables = localVariables;
+				targetNode.props.data = data;
+				targetNode.props.count = count;
+				synchronize(targetNode, function (targetNode) {
+					graph.updateNodes([targetNode]);
+				});
+				setSyncing(false);
+			})
+			.catch(function (err) {
+				setSyncing(false);
+				throw err;
+			});
+	}
+
 	function updateFilter(field) {
 		return function (e) {
 			if (e.target.value !== "") {
@@ -351,36 +379,16 @@ export default function Table({
 		};
 	}
 
-	function applyFilter(field) {
+	function applyFilterEnter(field) {
 		return function (e) {
 			if (e.key === "Enter") {
-				setSyncing(true);
-				const localVariables = {
-					...variables,
-					where: localWhere,
-					offset: 0,
-				};
-				return read(gauze, model, header, localVariables)
-					.then(function (results) {
-						const data = results[0].map(function (item) {
-							return item.attributes;
-						});
-						const count = results[1][0].count;
-						const targetNode = { ...node };
-						targetNode.props.variables = localVariables;
-						targetNode.props.data = data;
-						targetNode.props.count = count;
-						synchronize(targetNode, function (targetNode) {
-							graph.updateNodes([targetNode]);
-						});
-						setSyncing(false);
-					})
-					.catch(function (err) {
-						setSyncing(false);
-						throw err;
-					});
+				filter();
 			}
 		};
+	}
+
+	function applyFilterButton(e) {
+		filter();
 	}
 
 	function updateFields(name) {
@@ -470,6 +478,7 @@ export default function Table({
 			setSubmitCreate(false);
 		}
 	}
+
 	function handleClose(e) {
 		if (!node.root) {
 			graph.deleteNodes([node]);
@@ -498,13 +507,7 @@ export default function Table({
 				<table>
 					<thead className="mw-100">
 						<tr align="right" className="flex">
-							<th align="center" className="mw4 w4">
-								{/*
-								<a href={router.buildUrl(route.name, { ...route.params, where: encodeURIComponent(JSON.stringify(localWhere)) })}>
-									<button>Filter</button>
-								</a>
-								*/}
-							</th>
+							<th align="center" className="mw4 w4"></th>
 							<th className="mw4 w4 pa1 relative row" tabIndex="0">
 								<div className="truncate-ns">RELATIONSHIPS</div>
 								<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">RELATIONSHIPS</span>
@@ -561,11 +564,7 @@ export default function Table({
 						</tr>
 						<tr align="right" className="flex">
 							<th align="center" className="mw4 w4">
-								{/*
-								<a href={router.buildUrl(route.name, { ...route.params, where: encodeURIComponent(JSON.stringify(localWhere)) })}>
-									<button>Filter</button>
-								</a>
-								*/}
+								<button onClick={applyFilterButton}>Filter</button>
 							</th>
 							<th className="mw4 w4 pa1 relative row" tabIndex="0">
 								<div>FIELDS</div>
@@ -641,7 +640,7 @@ export default function Table({
 											className="mw4"
 											defaultValue={variables.where ? variables.where[field.name] : null}
 											onChange={updateFilter(field.name)}
-											onKeyDown={applyFilter(field.name)}
+											onKeyDown={applyFilterEnter(field.name)}
 											disabled={syncing}
 										/>
 									</td>
@@ -670,13 +669,7 @@ export default function Table({
 					</tbody>
 					<tfoot className="mw-100">
 						<tr align="right" className="flex">
-							<th align="center" className="mw4 w4">
-								{/*
-								<a href={router.buildUrl(route.name, { ...route.params, where: encodeURIComponent(JSON.stringify(localWhere)) })}>
-									<button>Filter</button>
-								</a>
-								*/}
-							</th>
+							<th align="center" className="mw4 w4"></th>
 							<th className="mw4 w4 pa1 relative row" tabIndex="0">
 								<div className="truncate-ns">RELATIONSHIPS</div>
 								<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">RELATIONSHIPS</span>
