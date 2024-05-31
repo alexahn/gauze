@@ -57,6 +57,36 @@ class GauzeServer {
 							}),
 						);
 					} else {
+						// size checks
+						// todo: move these to the reverse proxy later
+						if (req.headers["content-length"]) {
+							console.log("content-length type", typeof req.headers["content-length"]);
+							const contentLength = parseInt(req.headers["content-length"], 10);
+							const maxHTTPSize = parseInt(process.env.GAUZE_HTTP_MAX_SIZE, 10);
+							if (maxHTTPSize < contentLength) {
+								res.writeHead(413, "Content Too Large", {
+									"Access-Control-Allow-Origin": "*",
+									"Access-Control-Allow-Headers": "*",
+								}).end(
+									JSON.stringify({
+										status: 413,
+										message: "Content Too Large",
+									}),
+								);
+								return;
+							}
+						} else {
+							res.writeHead(411, "Length Required", {
+								"Access-Control-Allow-Origin": "*",
+								"Access-Control-Allow-Headers": "*",
+							}).end(
+								JSON.stringify({
+									status: 411,
+									message: "Length Required",
+								}),
+							);
+							return;
+						}
 						// parse system jwt
 						return self.$gauze.environment.authentication
 							.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req)
@@ -88,55 +118,97 @@ class GauzeServer {
 			{
 				url: new RegExp("^/environment/graphql"),
 				handler: function (req, res) {
-					// parse environment and system jwt
-					const auth_transactions = [
-						function () {
-							return self.$gauze.environment.authentication.AUTHENTICATE_ENVIRONMENT__AUTHENTICATION__ENVIRONMENT(req);
-						},
-						function () {
-							return self.$gauze.environment.authentication.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req);
-						},
-					];
-					return Promise.all(
-						auth_transactions.map(function (f) {
-							return f();
-						}),
-					)
-						.then(function (agents) {
-							if (agents[0]) {
-								return agents[0];
-							} else if (agents[1]) {
-								return agents[1];
-							} else {
-								return null;
+					if (req.method === "OPTIONS") {
+						res.writeHead(200, "OK", {
+							"Access-Control-Allow-Origin": "*",
+							"Access-Control-Allow-Headers": "*",
+						}).end(
+							JSON.stringify({
+								status: 200,
+								message: "OK",
+							}),
+						);
+					} else {
+						// size checks
+						// todo: move these to the reverse proxy later
+						if (req.headers["content-length"]) {
+							console.log("content-length type", typeof req.headers["content-length"]);
+							const contentLength = parseInt(req.headers["content-length"], 10);
+							const maxHTTPSize = parseInt(process.env.GAUZE_HTTP_MAX_SIZE, 10);
+							if (maxHTTPSize < contentLength) {
+								res.writeHead(413, "Content Too Large", {
+									"Access-Control-Allow-Origin": "*",
+									"Access-Control-Allow-Headers": "*",
+								}).end(
+									JSON.stringify({
+										status: 413,
+										message: "Content Too Large",
+									}),
+								);
+								return;
 							}
-						})
-						.then(function (agent) {
-							if (req.headers.authorization) {
-								if (agent) {
-									return self.handle_graphql($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
-								} else {
-									res.writeHead(401, "Unauthorized", {
-										"content-type": "application/json; charset=utf-8",
-										"Access-Control-Allow-Origin": "*",
-									}).end(
-										JSON.stringify({
-											status: 401,
-											message: "Unauthorized",
-										}),
-									);
-								}
-							} else {
-								return self.handle_graphql($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
-							}
-						})
-						.catch(function (err) {
-							self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, "authentication", "error", err);
-							res.writeHead(401, "Unauthorized", {
-								"content-type": "application/json; charset=utf-8",
+						} else {
+							res.writeHead(411, "Length Required", {
 								"Access-Control-Allow-Origin": "*",
+								"Access-Control-Allow-Headers": "*",
+							}).end(
+								JSON.stringify({
+									status: 411,
+									message: "Length Required",
+								}),
+							);
+							return;
+						}
+						// parse environment and system jwt
+						const auth_transactions = [
+							function () {
+								return self.$gauze.environment.authentication.AUTHENTICATE_ENVIRONMENT__AUTHENTICATION__ENVIRONMENT(req);
+							},
+							function () {
+								return self.$gauze.environment.authentication.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req);
+							},
+						];
+						return Promise.all(
+							auth_transactions.map(function (f) {
+								return f();
+							}),
+						)
+							.then(function (agents) {
+								if (agents[0]) {
+									return agents[0];
+								} else if (agents[1]) {
+									return agents[1];
+								} else {
+									return null;
+								}
+							})
+							.then(function (agent) {
+								if (req.headers.authorization) {
+									if (agent) {
+										return self.handle_graphql($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
+									} else {
+										res.writeHead(401, "Unauthorized", {
+											"content-type": "application/json; charset=utf-8",
+											"Access-Control-Allow-Origin": "*",
+										}).end(
+											JSON.stringify({
+												status: 401,
+												message: "Unauthorized",
+											}),
+										);
+									}
+								} else {
+									return self.handle_graphql($gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT, req, res, agent);
+								}
+							})
+							.catch(function (err) {
+								self.$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, "authentication", "error", err);
+								res.writeHead(401, "Unauthorized", {
+									"content-type": "application/json; charset=utf-8",
+									"Access-Control-Allow-Origin": "*",
+								});
 							});
-						});
+					}
 				},
 			},
 			{

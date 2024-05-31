@@ -5,25 +5,32 @@ class GraphQLSerializer {
 		this.serialize = this.serialize.bind(this);
 	}
 	// sql record to graphql fragment
+	// todo: extend to accept source argument so we can calculate depth
 	serialize(sql_record) {
 		const metadata = {
 			id: sql_record[this.sql_primary_key],
 			type: this.graphql_type,
+			//depth: source._metadata.depth ? source._metadata.depth + 1 : 1
 		};
 		const model = {
 			_metadata: metadata,
 			attributes: sql_record,
 			relationships_to: {
+				// _metadata and _direction is interpreted as relationship
 				_metadata: metadata,
 				_direction: "to",
 			},
 			relationships_from: {
+				// _metadata and _direction is interpreted as relationship
 				_metadata: metadata,
 				_direction: "from",
 			},
-			// todo: maybe figure out if we want to set _relationship instead of _metadata, because if we set _metadata for query and mutation, it is interpreted as a relationship
-			query: {},
-			mutation: {},
+			query: {
+				_metadata: metadata,
+			},
+			mutation: {
+				_metadata: metadata,
+			},
 		};
 		return model;
 	}

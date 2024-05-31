@@ -13,6 +13,11 @@ const METADATA_FIELDS__GRAPHQL__DATABASE__GAUZE__STRUCTURE = {
 		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "type",
 	},
+	depth: {
+		//type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		description: "depth",
+	},
 };
 
 const METADATA__GRAPHQL__DATABASE__GAUZE__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

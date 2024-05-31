@@ -353,7 +353,7 @@ class DatabaseModel extends Model {
 			cache_where_in = {},
 			where_not_in = {},
 			cache_where_not_in = {},
-			limit = 64,
+			limit = 16,
 			offset = 0,
 			order = self.entity.default_order || self.primary_key,
 			order_direction = self.entity.default_order_direction || "asc",
@@ -414,7 +414,7 @@ class DatabaseModel extends Model {
 			cache_where_in = {},
 			where_not_in = {},
 			cache_where_not_in = {},
-			limit = 64,
+			limit = 16,
 			offset = 0,
 			order = self.entity.default_order || self.primary_key,
 			order_direction = self.entity.default_order_direction || "asc",
@@ -697,7 +697,7 @@ class DatabaseModel extends Model {
 	_root_delete(context, parameters) {
 		const self = this;
 		const { source, database, transaction } = context;
-		const { where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, limit = 128 } = parameters;
+		const { where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, limit = 16 } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		const MAXIMUM_ROWS = 4294967296;
 		// todo: use attributes and update deleted_at instead of deleting the row
@@ -755,7 +755,7 @@ class DatabaseModel extends Model {
 	_relationship_delete(context, parameters) {
 		const self = this;
 		const { source, database, transaction } = context;
-		const { where, where_in = {}, where_not_in = {}, limit = 128 } = parameters;
+		const { where, where_in = {}, where_not_in = {}, limit = 16 } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		const MAXIMUM_ROWS = 4294967296;
 		return self
