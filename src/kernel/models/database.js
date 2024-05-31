@@ -22,7 +22,7 @@ class DatabaseModel extends Model {
 		self.primary_key = primary_key;
 		self.limit_max = parseInt(process.env.GAUZE_SQL_MAX_LIMIT, 10);
 		self.breadth_max = parseInt(process.env.GAUZE_SQL_MAX_BREADTH, 10);
-		console.log("self.breadth_max", self.breadth_max);
+		self.transactions_max = parseInt(process.env.GAUZE_SQL_MAX_TRANSACTIONS, 10);
 		if ($structure.entities.relationship) {
 			this.relationship_table_name = $structure.entities.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE;
 		} else {
@@ -344,6 +344,8 @@ class DatabaseModel extends Model {
 		const relationship_source = self._parse_source(scope, parameters);
 		const key = self._batch_key(relationship_source, parameters, "create");
 		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
+		if (self.transactions_max < context.transactions) throw new Error("Maximum transactions exceeded");
+		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
@@ -541,6 +543,8 @@ class DatabaseModel extends Model {
 		const relationship_source = self._parse_source(scope, parameters);
 		const key = self._batch_key(relationship_source, parameters, "read");
 		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
+		if (self.transactions_max < context.transactions) throw new Error("Maximum transactions exceeded");
+		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
@@ -624,6 +628,8 @@ class DatabaseModel extends Model {
 		const relationship_source = self._parse_source(scope, parameters);
 		const key = self._batch_key(relationship_source, parameters, "update");
 		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
+		if (self.transactions_max < context.transactions) throw new Error("Maximum transactions exceeded");
+		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
@@ -782,6 +788,8 @@ class DatabaseModel extends Model {
 		const relationship_source = self._parse_source(scope, parameters);
 		const key = self._batch_key(relationship_source, parameters, "delete");
 		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
+		if (self.transactions_max < context.transactions) throw new Error("Maximum transactions exceeded");
+		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
@@ -950,8 +958,9 @@ class DatabaseModel extends Model {
 		const self = this;
 		const relationship_source = self._parse_source(scope, parameters);
 		const key = self._batch_key(relationship_source, parameters, "count");
-		console.log("context.breadth", context.breadth);
 		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
+		if (self.transactions_max < context.transactions) throw new Error("Maximum transactions exceeded");
+		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
