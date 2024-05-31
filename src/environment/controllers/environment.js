@@ -146,7 +146,7 @@ class EnvironmentController {
 						if (collection) {
 							const { proxies } = collection;
 							const transactions = proxies.map(function (proxy) {
-								return self.exit_session(context, { proxy: proxy });
+								return self.exit_session(context, scope, { proxy: proxy });
 							});
 							return Promise.all(transactions).then(function (results) {
 								const proxy_sessions = results.reduce(function (prev, next) {
