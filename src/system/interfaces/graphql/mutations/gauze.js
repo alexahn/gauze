@@ -80,6 +80,7 @@ const CREATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 				database: context.database,
 				transaction: context.transaction,
 				agent: context.agent,
+				breadth: context.breadth,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -162,6 +163,7 @@ const UPDATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 				database: context.database,
 				transaction: context.transaction,
 				agent: context.agent,
+				breadth: context.breadth,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -237,6 +239,7 @@ const DELETE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 				database: context.database,
 				transaction: context.transaction,
 				agent: context.agent,
+				breadth: context.breadth,
 			},
 			mutation_arguments,
 		).then(function (data) {

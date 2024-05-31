@@ -113,6 +113,7 @@ const READ__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 				source: source,
 				database: context.database,
 				transaction: context.transaction,
+				breadth: context.breadth,
 			},
 			query_arguments,
 		).then(function (data) {
@@ -165,6 +166,7 @@ const COUNT__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 				source: source,
 				database: context.database,
 				transaction: context.transaction,
+				breadth: context.breadth,
 			},
 			query_arguments,
 		).then(function (data) {

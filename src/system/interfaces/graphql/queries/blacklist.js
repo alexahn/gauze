@@ -105,6 +105,7 @@ const READ__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 				database: context.database,
 				transaction: context.transaction,
 				agent: context.agent,
+				breadth: context.breadth,
 			},
 			query_arguments,
 		).then(function (data) {
@@ -155,6 +156,7 @@ const COUNT__BLACKLIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 				database: context.database,
 				transaction: context.transaction,
 				agent: context.agent,
+				breadth: context.breadth,
 			},
 			query_arguments,
 		).then(function (data) {

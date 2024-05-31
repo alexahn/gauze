@@ -113,7 +113,7 @@ const READ__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 				source: source,
 				database: context.database,
 				transaction: context.transaction,
-				breadth: context.breadth
+				breadth: context.breadth,
 			},
 			query_arguments,
 		).then(function (data) {
@@ -166,7 +166,7 @@ const COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 				source: source,
 				database: context.database,
 				transaction: context.transaction,
-				breadth: context.breadth
+				breadth: context.breadth,
 			},
 			query_arguments,
 		).then(function (data) {

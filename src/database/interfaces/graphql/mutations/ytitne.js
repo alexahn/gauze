@@ -83,7 +83,7 @@ const CREATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 				source: source,
 				database: context.database,
 				transaction: context.transaction,
-				breadth: context.breadth
+				breadth: context.breadth,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -165,7 +165,7 @@ const UPDATE__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 				source: source,
 				database: context.database,
 				transaction: context.transaction,
-				context: context.breadth
+				context: context.breadth,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -240,7 +240,7 @@ const DELETE__YTITNE__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 				source: source,
 				database: context.database,
 				transaction: context.transaction,
-				breadth: context.breadth
+				breadth: context.breadth,
 			},
 			mutation_arguments,
 		).then(function (data) {

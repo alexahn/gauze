@@ -125,6 +125,7 @@ const READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__SYSTEM 
 				database: context.database,
 				transaction: context.transaction,
 				agent: context.agent,
+				breadth: context.breadth,
 			},
 			query_arguments,
 		).then(function (data) {
@@ -193,6 +194,7 @@ const COUNT__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__SYSTEM
 				database: context.database,
 				transaction: context.transaction,
 				agent: context.agent,
+				breadth: context.breadth,
 			},
 			query_arguments,
 		).then(function (data) {
