@@ -22,7 +22,7 @@ const ASSERT__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Grap
 					context,
 					{
 						source
-					}
+					},
 					args,
 				);
 			},

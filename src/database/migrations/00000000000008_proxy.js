@@ -14,6 +14,9 @@ const up = function (knex) {
 			table.uuid("gauze__proxy__agent_id").notNullable();
 			table.uuid("gauze__proxy__root_id").notNullable();
 
+			table.index("gauze__proxy__created_at");
+			table.index("gauze__proxy__updated_at");
+			table.index("gauze__proxy__deleted_at");
 			table.index("gauze__proxy__agent_type");
 			table.index("gauze__proxy__agent_id");
 			table.index("gauze__proxy__root_id");

@@ -9,6 +9,10 @@ const up = function (knex) {
 			table.date("gauze__agent_character__created_at").notNullable();
 			table.date("gauze__agent_character__updated_at").notNullable();
 			table.date("gauze__agent_character__deleted_at");
+
+			table.index("gauze__agent_character__created_at");
+			table.index("gauze__agent_character__updated_at");
+			table.index("gauze__agent_character__deleted_at");
 		}),
 	]);
 };

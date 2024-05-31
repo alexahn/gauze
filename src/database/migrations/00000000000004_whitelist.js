@@ -18,11 +18,16 @@ const up = function (knex) {
 			table.uuid("gauze__whitelist__entity_id");
 			table.string("gauze__whitelist__method").notNullable();
 
+			table.index("gauze__whitelist__created_at");
+			table.index("gauze__whitelist__updated_at");
+			table.index("gauze__whitelist__deleted_at");
 			table.index("gauze__whitelist__realm");
+			table.index("gauze__whitelist__agent_role");
 			table.index("gauze__whitelist__agent_type");
 			table.index("gauze__whitelist__agent_id");
 			table.index("gauze__whitelist__entity_type");
 			table.index("gauze__whitelist__entity_id");
+			table.index("gauze__whitelist__method");
 
 			table.unique(
 				[

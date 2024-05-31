@@ -9,7 +9,7 @@ class AgentPersonController {
 		const self = this;
 		self.person_type = $abstract.entities.agent_person.default($abstract).table_name;
 	}
-	assert_email(context, parameters) {
+	assert_email(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		if (agent) {
@@ -27,7 +27,7 @@ class AgentPersonController {
 				}
 				const attributes = parameters.agent_person;
 				const agent_parameters = { where: attributes };
-				return MODEL__AGENT_PERSON__MODEL__ENVIRONMENT.read(context, agent_parameters)
+				return MODEL__AGENT_PERSON__MODEL__ENVIRONMENT.read(context, scope, agent_parameters)
 					.then(function (persons) {
 						if (persons && persons.length) {
 							const person = persons[0];
@@ -46,7 +46,7 @@ class AgentPersonController {
 								gauze__proxy__agent_id: person.gauze__agent_person__id,
 							};
 							const proxy_parameters = { where: proxy_attributes };
-							return MODEL__PROXY__MODEL__ENVIRONMENT.read(context, proxy_parameters).then(function (proxies) {
+							return MODEL__PROXY__MODEL__ENVIRONMENT.read(context, scope, proxy_parameters).then(function (proxies) {
 								if (proxies && proxies.length) {
 									const proxy = proxies[0];
 									return {
@@ -68,7 +68,7 @@ class AgentPersonController {
 								gauze__session__id: agent.session_id,
 							};
 							const session_parameters = { where: session_attributes };
-							return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, session_parameters).then(function (sessions) {
+							return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, scope, session_parameters).then(function (sessions) {
 								if (sessions && sessions.length) {
 									const session = sessions[0];
 									return {
@@ -102,7 +102,7 @@ class AgentPersonController {
 								gauze__session__data: serialized_data,
 							};
 							const session_parameters = { where: session_where, attributes: session_attributes };
-							return MODEL__SESSION__MODEL__ENVIRONMENT.update(context, session_parameters).then(function (sessions) {
+							return MODEL__SESSION__MODEL__ENVIRONMENT.update(context, scope, session_parameters).then(function (sessions) {
 								if (sessions && sessions.length) {
 									const session = sessions[0];
 									return {

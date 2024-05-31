@@ -5,12 +5,10 @@ class GraphQLSerializer {
 		this.serialize = this.serialize.bind(this);
 	}
 	// sql record to graphql fragment
-	// todo: extend to accept source argument so we can calculate depth
 	serialize(sql_record) {
 		const metadata = {
 			id: sql_record[this.sql_primary_key],
 			type: this.graphql_type,
-			//depth: source._metadata.depth ? source._metadata.depth + 1 : 1
 		};
 		const model = {
 			_metadata: metadata,
@@ -26,10 +24,8 @@ class GraphQLSerializer {
 				_direction: "from",
 			},
 			query: {
-				_metadata: metadata,
 			},
 			mutation: {
-				_metadata: metadata,
 			},
 		};
 		return model;

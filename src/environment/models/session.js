@@ -178,7 +178,7 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 			}
 		});
 	}
-	create_environment(context, parameters) {
+	create_environment(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -192,13 +192,13 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 			},
 		};
 		self.validate_environment_data(parameters.attributes.gauze__session__data);
-		return self._create(context, parameters, realm).then(function (data) {
+		return self._create(context, scope, parameters, realm).then(function (data) {
 			return data.data.create_session.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	create(context, parameters) {
+	create(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -212,13 +212,13 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 			},
 		};
 		self.validate_environment_data(parameters.attributes.gauze__session__data);
-		return self._create(context, parameters, realm).then(function (data) {
+		return self._create(context, scope, parameters, realm).then(function (data) {
 			return data.data.create_session.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	read(context, parameters) {
+	read(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -231,13 +231,13 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 				operation_name: $database.interfaces.graphql.operations.session.READ_NAME__SESSION__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._read(context, parameters, realm).then(function (data) {
+		return self._read(context, scope, parameters, realm).then(function (data) {
 			return data.data.read_session.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	update(context, parameters) {
+	update(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -251,13 +251,13 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 			},
 		};
 		self.validate_environment_data(parameters.attributes.gauze__session__data);
-		return self._update(context, parameters, realm).then(function (data) {
+		return self._update(context, scope, parameters, realm).then(function (data) {
 			return data.data.update_session.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	delete(context, parameters) {
+	delete(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -270,7 +270,7 @@ class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentMode
 				operation_name: $database.interfaces.graphql.operations.session.DELETE_NAME__SESSION__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._delete(context, parameters, realm).then(function (data) {
+		return self._delete(context, scope, parameters, realm).then(function (data) {
 			return data.data.delete_session.map(function (row) {
 				return row.attributes;
 			});

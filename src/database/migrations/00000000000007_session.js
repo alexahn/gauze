@@ -18,9 +18,15 @@ const up = function (knex) {
 			table.string("gauze__session__seed", 256).notNullable();
 			table.string("gauze__session__data", 512).notNullable();
 
+			table.index("gauze__session__created_at");
+			table.index("gauze__session__updated_at");
+			table.index("gauze__session__deleted_at");
 			table.index("gauze__session__realm");
 			table.index("gauze__session__agent_type");
 			table.index("gauze__session__agent_id");
+			table.index("gauze__session__value");
+			table.index("gauze__session__kind");
+			table.index("gauze__session__seed");
 
 			table.unique(["gauze__session__realm", "gauze__session__agent_type", "gauze__session__agent_id", "gauze__session__value"], {
 				useConstraint: true,

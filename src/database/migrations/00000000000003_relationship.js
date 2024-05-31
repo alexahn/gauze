@@ -15,6 +15,10 @@ const up = function (knex) {
 			// change to uuid later
 			table.bigint("gauze__relationship__to_id").notNullable();
 			table.string("gauze__relationship__to_type").notNullable();
+
+			table.index("gauze__relationship__created_at");
+			table.index("gauze__relationship__updated_at");
+			table.index("gauze__relationship__deleted_at");
 			table.index("gauze__relationship__from_id");
 			table.index("gauze__relationship__from_type");
 			table.index("gauze__relationship__to_id");

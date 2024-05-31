@@ -43,10 +43,10 @@ cp -r ./src/kernel/src/seeds/test ./src/database/seeds/test
 
 # working space
 
-cp ./src/system/models/ezuag.js ./src/system/models/ytitne.js
-sed -i '' 's/ezuag/ytitne/g' ./src/system/models/ytitne.js
-sed -i '' 's/Ezuag/Ytitne/g' ./src/system/models/ytitne.js
-sed -i '' 's/EZUAG/YTITNE/g' ./src/system/models/ytitne.js
+#cp ./src/system/models/ezuag.js ./src/system/models/ytitne.js
+#sed -i '' 's/ezuag/ytitne/g' ./src/system/models/ytitne.js
+#sed -i '' 's/Ezuag/Ytitne/g' ./src/system/models/ytitne.js
+#sed -i '' 's/EZUAG/YTITNE/g' ./src/system/models/ytitne.js
 
 cp ./src/database/models/ezuag.js ./src/database/models/ytitne.js
 sed -i '' 's/ezuag/ytitne/g' ./src/database/models/ytitne.js
