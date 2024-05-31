@@ -22,18 +22,13 @@ class SystemController extends Controller {
 		const self = this;
 		return SystemController._class_name(self.model_name);
 	}
-	_create(context, input) {
+	_create(context, scope, input) {
 		const self = this;
-		const { source, project, database, transaction, agent } = context;
-		const model_context = {
-			source,
-			project,
-			database,
-			transaction,
-			agent,
+		const model_scope = {
+			source: scope.source,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.create:enter`, "input", input);
-		return self.model.create(model_context, input).then(function (rows) {
+		return self.model.create(context, model_scope, input).then(function (rows) {
 			return rows.map(function (row) {
 				row = self.model.deserialize(row, "create");
 				row = self.model.agent_filter(agent, row);
@@ -43,16 +38,11 @@ class SystemController extends Controller {
 	}
 	_read(context, input) {
 		const self = this;
-		const { source, project, database, transaction, agent } = context;
-		const model_context = {
-			source,
-			project,
-			database,
-			transaction,
-			agent,
+		const model_scope = {
+			source: scope.source,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.read:enter`, "input", input);
-		return self.model.read(model_context, input).then(function (rows) {
+		return self.model.read(context, model_scope, input).then(function (rows) {
 			return rows.map(function (row) {
 				row = self.model.deserialize(row, "read");
 				row = self.model.agent_filter(agent, row);
@@ -62,16 +52,11 @@ class SystemController extends Controller {
 	}
 	_update(context, input) {
 		const self = this;
-		const { source, project, database, transaction, agent } = context;
-		const model_context = {
-			source,
-			project,
-			database,
-			transaction,
-			agent,
+		const model_scope = {
+			source: scope.source,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.update:enter`, "input", input);
-		return self.model.update(model_context, input).then(function (rows) {
+		return self.model.update(context, model_scope, input).then(function (rows) {
 			return rows.map(function (row) {
 				row = self.model.deserialize(row, "update");
 				row = self.model.agent_filter(agent, row);
@@ -81,16 +66,11 @@ class SystemController extends Controller {
 	}
 	_delete(context, input) {
 		const self = this;
-		const { source, project, database, transaction, agent } = context;
-		const model_context = {
-			source,
-			project,
-			database,
-			transaction,
-			agent,
+		const model_scope = {
+			source: scope.source,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.delete:enter`, "input", input);
-		return self.model.delete(model_context, input).then(function (rows) {
+		return self.model.delete(context, model_scope, input).then(function (rows) {
 			return rows.map(function (row) {
 				row = self.model.deserialize(row, "delete");
 				row = self.model.agent_filter(agent, row);
@@ -100,16 +80,11 @@ class SystemController extends Controller {
 	}
 	_count(context, input) {
 		const self = this;
-		const { source, project, database, transaction, agent } = context;
-		const model_context = {
-			source,
-			project,
-			database,
-			transaction,
-			agent,
+		const model_scope = {
+			source: scope.source,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.count:enter`, "input", input);
-		return self.model.count(model_context, input);
+		return self.model.count(context, model_scope, input);
 	}
 }
 

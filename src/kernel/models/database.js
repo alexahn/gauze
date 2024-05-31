@@ -339,9 +339,9 @@ class DatabaseModel extends Model {
 		return self._root_create(context, parameters);
 	}
 	// create a row
-	_create(context, parameters) {
+	_create(context, scope, parameters) {
 		const self = this;
-		const relationship_source = self._parse_source(context, parameters);
+		const relationship_source = self._parse_source(scope, parameters);
 		const key = self._batch_key(relationship_source, parameters, "create");
 		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
 		// use the batch key as the cache key
@@ -534,9 +534,9 @@ class DatabaseModel extends Model {
 		}
 	}
 	// read a row
-	_read(context, parameters) {
+	_read(context, scope, parameters) {
 		const self = this;
-		const relationship_source = self._parse_source(context, parameters);
+		const relationship_source = self._parse_source(scope, parameters);
 		const key = self._batch_key(relationship_source, parameters, "read");
 		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
 		// use the batch key as the cache key
@@ -636,9 +636,9 @@ class DatabaseModel extends Model {
 			});
 	}
 	// update a row
-	_update(context, parameters) {
+	_update(context, scope, parameters) {
 		const self = this;
-		const relationship_source = self._parse_source(context, parameters);
+		const relationship_source = self._parse_source(scope, parameters);
 		const key = self._batch_key(relationship_source, parameters, "update");
 		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
 		// use the batch key as the cache key
@@ -806,9 +806,9 @@ class DatabaseModel extends Model {
 			});
 	}
 	// delete a row
-	_delete(context, parameters) {
+	_delete(context, scope, parameters) {
 		const self = this;
-		const relationship_source = self._parse_source(context, parameters);
+		const relationship_source = self._parse_source(scope, parameters);
 		const key = self._batch_key(relationship_source, parameters, "delete");
 		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
 		// use the batch key as the cache key
@@ -973,9 +973,9 @@ class DatabaseModel extends Model {
 			throw new Error("Internal error: invalid direction for relationship");
 		}
 	}
-	_count(context, parameters) {
+	_count(context, scope, parameters) {
 		const self = this;
-		const relationship_source = self._parse_source(context, parameters);
+		const relationship_source = self._parse_source(scope, parameters);
 		const key = self._batch_key(relationship_source, parameters, "count");
 		console.log("context.breadth", context.breadth);
 		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
