@@ -81,20 +81,20 @@ class SystemModel extends Model {
 			method: method,
 		});
 	}
-	_auth_batch(contexts, keys) {
+	_auth_batch(contexts, scopes, keys) {
 		// this is the dataloader instance
 		const self = this;
 		return Promise.all(
 			keys.map(function (key, index) {
 				const parsed = JSON.parse(key);
 				if (parsed.method === "authorization") {
-					return self.model._authorization(contexts[index], parsed.realm, parsed.agent, parsed.entity);
+					return self.model._authorization(contexts[index], scopes[index], parsed.realm, parsed.agent, parsed.entity);
 				} else if (parsed.method === "authorization_element") {
-					return self.model._authorization_element(contexts[index], parsed.realm, parsed.agent, parsed.entity);
+					return self.model._authorization_element(contexts[index], scopes[index], parsed.realm, parsed.agent, parsed.entity);
 				} else if (parsed.method === "authorization_set") {
-					return self.model._authorization_set(contexts[index], parsed.realm, parsed.agent, parsed.entity);
+					return self.model._authorization_set(contexts[index], scopes[index], parsed.realm, parsed.agent, parsed.entity);
 				} else if (parsed.method === "authorization_filter") {
-					return self.model._authorization_filter(contexts[index], parsed.realm, parsed.agent, parsed.entity);
+					return self.model._authorization_filter(contexts[index], scopes[index], parsed.realm, parsed.agent, parsed.entity);
 				} else {
 					throw new Error("Internal error: invalid batch operation");
 				}
@@ -115,30 +115,30 @@ class SystemModel extends Model {
 			method: method,
 		});
 	}
-	_model_batch(contexts, keys) {
+	_model_batch(contexts, scopes, keys) {
 		const self = this;
 		return Promise.all(
 			keys.map(function (key, index) {
 				const parsed = JSON.parse(key);
 				if (parsed.method === "create") {
-					return self.model._root_create(contexts[index], parsed.parameters, parsed.realm).then(function (data) {
+					return self.model._root_create(contexts[index], scopes[index], parsed.parameters, parsed.realm).then(function (data) {
 						self.clearAll();
 						return data;
 					});
 				} else if (parsed.method === "read") {
-					return self.model._root_read(contexts[index], parsed.parameters, parsed.realm);
+					return self.model._root_read(contexts[index], scopes[index], parsed.parameters, parsed.realm);
 				} else if (parsed.method === "update") {
-					return self.model._root_update(contexts[index], parsed.parameters, parsed.realm).then(function (data) {
+					return self.model._root_update(contexts[index], scopes[index], parsed.parameters, parsed.realm).then(function (data) {
 						self.clearAll();
 						return data;
 					});
 				} else if (parsed.method === "delete") {
-					return self.model._root_delete(contexts[index], parsed.parameters, parsed.realm).then(function (data) {
+					return self.model._root_delete(contexts[index], scopes[index], parsed.parameters, parsed.realm).then(function (data) {
 						self.clearAll();
 						return data;
 					});
 				} else if (parsed.method === "count") {
-					return self.model._root_count(contexts[index], parsed.parameters, parsed.realm);
+					return self.model._root_count(contexts[index], scopes[index], parsed.parameters, parsed.realm);
 				} else {
 					throw new Error("Internal error: invalid batch operation");
 				}
@@ -173,43 +173,43 @@ class SystemModel extends Model {
 	}
 	// both agent and entity must be fully formed
 	// authorization will check for authorization on both set and element scopes
-	authorization(context, realm, agent, entity) {
+	authorization(context, scope, realm, agent, entity) {
 		const self = this;
 		const key = self._auth_batch_key(realm, agent, entity, "authorization");
-		return self.auth_loader.load(context, key);
+		return self.auth_loader.load(context, scope, key);
 	}
-	_authorization(context, realm, agent, entity) {
+	_authorization(context, scope, realm, agent, entity) {
 		const self = this;
 		const entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity.entity_type];
 		const entity_module = $abstract.entities[entity_module_name].default($abstract);
 		const method_privacy = entity_module.methods[entity.entity_method].privacy;
-		return self.authorization_set(context, realm, agent, entity).then(function (set_authorization) {
+		return self.authorization_set(context, scope, realm, agent, entity).then(function (set_authorization) {
 			if (method_privacy === "private") {
 				if (set_authorization.status === true) {
 					return set_authorization;
 				} else {
-					return self.authorization_element(context, realm, agent, entity);
+					return self.authorization_element(context, scope, realm, agent, entity);
 				}
 			} else if (method_privacy === "public") {
 				if (set_authorization.status === false) {
 					return set_authorization;
 				} else {
-					return self.authorization_element(context, realm, agent, entity);
+					return self.authorization_element(context, scope, realm, agent, entity);
 				}
 			} else {
 				new Error("Authorization failed: privacy policy does not exist for this method");
 			}
 		});
 	}
-	authorization_element(context, realm, agent, entity) {
+	authorization_element(context, scope, realm, agent, entity) {
 		const self = this;
 		self._validate_agent(agent);
 		self._validate_entity(entity);
 		const key = self._auth_batch_key(realm, agent, entity, "authorization_element");
-		return self.auth_loader.load(context, key);
+		return self.auth_loader.load(context, scope, key);
 	}
 	// only checks element authorization (e.g. entity id cannot be null)
-	_authorization_element(context, realm, agent, entity) {
+	_authorization_element(context, scope, realm, agent, entity) {
 		const self = this;
 		const { database, transaction } = context;
 		const entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity.entity_type];
@@ -273,15 +273,15 @@ class SystemModel extends Model {
 			new Error("Authorization failed: privacy policy does not exist for this method");
 		}
 	}
-	authorization_set(context, realm, agent, entity) {
+	authorization_set(context, scope, realm, agent, entity) {
 		const self = this;
 		self._validate_agent(agent);
 		self._validate_entity(entity);
 		const key = self._auth_batch_key(realm, agent, entity, "authorization_set");
-		return self.auth_loader.load(context, key);
+		return self.auth_loader.load(context, scope, key);
 	}
 	// only checks set authorization (e.g. entity_id must be null)
-	_authorization_set(context, realm, agent, entity) {
+	_authorization_set(context, scope, realm, agent, entity) {
 		const self = this;
 		const { database, transaction } = context;
 		const entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity.entity_type];
@@ -344,22 +344,22 @@ class SystemModel extends Model {
 			new Error("Authorization failed: privacy policy does not exist for this method");
 		}
 	}
-	authorization_filter(context, realm, agent, entity) {
+	authorization_filter(context, scope, realm, agent, entity) {
 		const self = this;
 		self._validate_agent(agent);
 		self._validate_entity(entity);
 		const key = self._auth_batch_key(realm, agent, entity, "authorization_filter");
-		return self.auth_loader.load(context, key);
+		return self.auth_loader.load(context, scope, key);
 	}
 	// method and entity_type must be set
 	// this function is used to set where in and where not in
-	_authorization_filter(context, realm, agent, entity) {
+	_authorization_filter(context, scope, realm, agent, entity) {
 		const self = this;
 		const { database, transaction } = context;
 		const entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity.entity_type];
 		const entity_module = $abstract.entities[entity_module_name].default($abstract);
 		const method_privacy = entity_module.methods[entity.entity_method].privacy;
-		return self.authorization_set(context, realm, agent, entity).then(function (set_authorization) {
+		return self.authorization_set(context, scope, realm, agent, entity).then(function (set_authorization) {
 			if (method_privacy === "private") {
 				if (set_authorization.status === true) {
 					return set_authorization;
@@ -424,7 +424,7 @@ class SystemModel extends Model {
 			}
 		});
 	}
-	authorized_execute(context, parameters, agent, entity, operation) {
+	authorized_execute(context, scope, parameters, agent, entity, operation) {
 		const self = this;
 		function agent_is_admin(project, agent) {
 			if (project) {
@@ -447,7 +447,7 @@ class SystemModel extends Model {
 		if (agent_is_admin(context.project, agent)) {
 			return self._execute(context, operation, parameters);
 		} else {
-			return self.authorization_filter(context, "system", agent, entity).then(function (auth) {
+			return self.authorization_filter(context, scope, "system", agent, entity).then(function (auth) {
 				if (auth.privacy === "private") {
 					if (auth.scope === "set") {
 						if (auth.status === true) {
@@ -564,7 +564,7 @@ class SystemModel extends Model {
 			return filtered;
 		}
 	}
-	_root_create(context, parameters, realm) {
+	_root_create(context, scope, parameters, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
 		// note: our architecture requires that the key is a uuid
@@ -662,7 +662,7 @@ class SystemModel extends Model {
 			gauze__blacklist__method: "count",
 		};
 		if (parameters.source && parameters.source._metadata && parameters.source._direction) {
-			return self.authorized_execute(context, parameters, agent, entity, operation).then(function (data) {
+			return self.authorized_execute(context, scope, parameters, agent, entity, operation).then(function (data) {
 				let relationship_attributes;
 				const source_type = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[parameters.source._metadata.type];
 				const source_id = parameters.source._metadata.id;
@@ -684,12 +684,12 @@ class SystemModel extends Model {
 					throw new Error("Invalid source direction");
 				}
 				const relationship_parameters = { attributes: relationship_attributes };
-				return self.relationship_model.create(context, relationship_parameters).then(function (relationship) {
+				return self.relationship_model.create(context, scope, relationship_parameters).then(function (relationship) {
 					return data;
 				});
 			});
 		} else {
-			return self.authorized_execute(context, parameters, agent, entity, operation);
+			return self.authorized_execute(context, scope, parameters, agent, entity, operation);
 		}
 	}
 	_create(context, scope, parameters, realm) {
@@ -705,12 +705,12 @@ class SystemModel extends Model {
 			parameters.source = source;
 		}
 		const key = self._model_batch_key(parameters, realm, method);
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
-	_root_read(context, parameters, realm) {
+	_root_read(context, scope, parameters, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
-		return self.authorized_execute(context, parameters, agent, entity, operation);
+		return self.authorized_execute(context, scope, parameters, agent, entity, operation);
 	}
 	_read(context, scope, parameters, realm) {
 		const self = this;
@@ -725,12 +725,12 @@ class SystemModel extends Model {
 			parameters.source = source;
 		}
 		const key = self._model_batch_key(parameters, realm, method);
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
-	_root_update(context, parameters, realm) {
+	_root_update(context, scope, parameters, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
-		return self.authorized_execute(context, parameters, agent, entity, operation);
+		return self.authorized_execute(context, scope, parameters, agent, entity, operation);
 	}
 	_update(context, scope, parameters, realm) {
 		const self = this;
@@ -745,12 +745,12 @@ class SystemModel extends Model {
 			parameters.source = source;
 		}
 		const key = self._model_batch_key(parameters, realm, method);
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
-	_root_delete(context, parameters, realm) {
+	_root_delete(context, scope, parameters, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
-		return self.authorized_execute(context, parameters, agent, entity, operation);
+		return self.authorized_execute(context, scope, parameters, agent, entity, operation);
 	}
 	_delete(context, scope, parameters, realm) {
 		const self = this;
@@ -765,12 +765,12 @@ class SystemModel extends Model {
 			parameters.source = source;
 		}
 		const key = self._model_batch_key(parameters, realm, method);
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
-	_root_count(context, parameters, realm) {
+	_root_count(context, scope, parameters, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
-		return self.authorized_execute(context, parameters, agent, entity, operation);
+		return self.authorized_execute(context, scope, parameters, agent, entity, operation);
 	}
 	_count(context, scope, parameters, realm) {
 		const self = this;
@@ -785,7 +785,7 @@ class SystemModel extends Model {
 			parameters.source = source;
 		}
 		const key = self._model_batch_key(parameters, realm, method);
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
 }
 

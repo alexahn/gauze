@@ -60,7 +60,7 @@ class DatabaseModel extends Model {
 		};
 		return JSON.stringify(key);
 	}
-	_batch(contexts, keys) {
+	_batch(contexts, scopes, keys) {
 		const self = this;
 		// group keys according to operation and params
 		// e.g. 1:1:1, 2:1:1 1:2:2:, 3:2:2, 4:2:2 will become [1:1:1, 2:1:1], [1:2:2, 3:2:2, 4:2:2]
@@ -145,7 +145,7 @@ class DatabaseModel extends Model {
 							// rich typed parameters (post graphql parsing) pulled from cache
 							const parameters = TIERED_CACHE__LRU__CACHE__KERNEL.get(key.raw_key).value;
 							if (key.method === "create") {
-								return self.model._root_create(contexts[key.index], parameters).then(function (data) {
+								return self.model._root_create(contexts[key.index], scopes[key.index], parameters).then(function (data) {
 									self.clearAll();
 									return {
 										index: key.index,
@@ -153,14 +153,14 @@ class DatabaseModel extends Model {
 									};
 								});
 							} else if (key.method === "read") {
-								return self.model._root_read(contexts[key.index], parameters).then(function (data) {
+								return self.model._root_read(contexts[key.index], scopes[key.index], parameters).then(function (data) {
 									return {
 										index: key.index,
 										data: data,
 									};
 								});
 							} else if (key.method === "update") {
-								return self.model._root_update(contexts[key.index], parameters).then(function (data) {
+								return self.model._root_update(contexts[key.index], scopes[key.index], parameters).then(function (data) {
 									self.clearAll();
 									return {
 										index: key.index,
@@ -168,7 +168,7 @@ class DatabaseModel extends Model {
 									};
 								});
 							} else if (key.method === "delete") {
-								return self.model._root_delete(contexts[key.index], parameters).then(function (data) {
+								return self.model._root_delete(contexts[key.index], scopes[key.index], parameters).then(function (data) {
 									self.clearAll();
 									return {
 										index: key.index,
@@ -176,7 +176,7 @@ class DatabaseModel extends Model {
 									};
 								});
 							} else if (key.method === "count") {
-								return self.model._root_count(contexts[key.index], parameters).then(function (data) {
+								return self.model._root_count(contexts[key.index], scopes[key.index], parameters).then(function (data) {
 									self.clearAll();
 									return {
 										index: key.index,
@@ -214,7 +214,7 @@ class DatabaseModel extends Model {
 								// rich typed parameters (post graphql parsing) pulled from cache
 								const parameters = TIERED_CACHE__LRU__CACHE__KERNEL.get(key.raw_key).value;
 								if (key.method === "create") {
-									return self.model._relationship_create(contexts[key.index], parameters).then(function (data) {
+									return self.model._relationship_create(contexts[key.index], scopes[key.index], parameters).then(function (data) {
 										self.clearAll();
 										return {
 											index: key.index,
@@ -222,14 +222,14 @@ class DatabaseModel extends Model {
 										};
 									});
 								} else if (key.method === "read") {
-									return self.model._relationship_read(contexts[key.index], parameters).then(function (data) {
+									return self.model._relationship_read(contexts[key.index], scopes[key.index], parameters).then(function (data) {
 										return {
 											index: key.index,
 											data: data,
 										};
 									});
 								} else if (key.method === "update") {
-									return self.model._relationship_update(contexts[key.index], parameters).then(function (data) {
+									return self.model._relationship_update(contexts[key.index], scopes[key.index], parameters).then(function (data) {
 										self.clearAll();
 										return {
 											index: key.index,
@@ -237,7 +237,7 @@ class DatabaseModel extends Model {
 										};
 									});
 								} else if (key.method === "delete") {
-									return self.model._relationship_delete(contexts[key.index], parameters).then(function (data) {
+									return self.model._relationship_delete(contexts[key.index], scopes[key.index], parameters).then(function (data) {
 										self.clearAll();
 										return {
 											index: key.index,
@@ -245,7 +245,7 @@ class DatabaseModel extends Model {
 										};
 									});
 								} else if (key.method === "count") {
-									return self.model._relationship_count(contexts[key.index], parameters).then(function (data) {
+									return self.model._relationship_count(contexts[key.index], scopes[key.index], parameters).then(function (data) {
 										self.clearAll();
 										return {
 											index: key.index,
@@ -298,9 +298,10 @@ class DatabaseModel extends Model {
 			}
 		}
 	}
-	_root_create(context, parameters) {
+	_root_create(context, scope, parameters) {
 		const self = this;
-		const { source, database, transaction } = context;
+		const { database, transaction } = context;
+		//const { source } = scope
 		const { attributes } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.create.enter`, "parameters", parameters);
 		const sql = database(self.table_name).insert(attributes, [self.primary_key]).transacting(transaction);
@@ -312,10 +313,9 @@ class DatabaseModel extends Model {
 				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.create:success`, "data", data);
 				context.breadth += data.length;
 				return self.read(
+					context,
 					{
-						source: undefined,
-						database,
-						transaction,
+						source: undefined
 					},
 					{
 						where: {
@@ -334,9 +334,9 @@ class DatabaseModel extends Model {
 				throw err;
 			});
 	}
-	_relationship_create(context, parameters) {
+	_relationship_create(context, scope, parameters) {
 		const self = this;
-		return self._root_create(context, parameters);
+		return self._root_create(context, scope, parameters);
 	}
 	// create a row
 	_create(context, scope, parameters) {
@@ -347,11 +347,12 @@ class DatabaseModel extends Model {
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
-		return self.loader.load(context, key);
+		return self.loader.load(context, scope, key);
 	}
-	_root_read(context, parameters) {
+	_root_read(context, scope, parameters) {
 		const self = this;
-		const { source, database, transaction } = context;
+		const { database, transaction } = context;
+		//const { source } = scope
 		const {
 			where = {},
 			where_in = {},
@@ -411,9 +412,10 @@ class DatabaseModel extends Model {
 				throw err;
 			});
 	}
-	_relationship_read(context, parameters) {
+	_relationship_read(context, scope, parameters) {
 		const self = this;
-		const { source, database, transaction } = context;
+		const { database, transaction } = context;
+		//const { source } = scope
 		const {
 			where = {},
 			where_in = {},
@@ -427,7 +429,7 @@ class DatabaseModel extends Model {
 			order_nulls = "first",
 		} = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
-		const relationship_source = self._parse_source(context, parameters);
+		const relationship_source = self._parse_source(scope, parameters);
 		// do join here based on source metadata
 		// use structure resolvers to convert graphql type to table_name name
 		// relationships are one directional, so use from as the parent
@@ -542,11 +544,12 @@ class DatabaseModel extends Model {
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
-		return self.loader.load(context, key);
+		return self.loader.load(context, scope, key);
 	}
-	_root_update(context, parameters) {
+	_root_update(context, scope, parameters) {
 		var self = this;
-		const { source, database, transaction } = context;
+		const { database, transaction } = context;
+		//const { source } = scope
 		var { attributes, where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
 		const sql = database(self.table_name)
@@ -576,11 +579,8 @@ class DatabaseModel extends Model {
 				LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
 				context.breadth += data.length;
 				return self.read(
-					{
-						source,
-						database,
-						transaction,
-					},
+					context,
+					scope,
 					parameters,
 				);
 			})
@@ -589,20 +589,18 @@ class DatabaseModel extends Model {
 				throw err;
 			});
 	}
-	_relationship_update(context, parameters) {
+	_relationship_update(context, scope, parameters) {
 		const self = this;
-		const { source, database, transaction } = context;
+		const { database, transaction } = context;
+		//const { source } = scope
 		const { attributes, where, where_in = {}, where_not_in = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
 		// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
 		const MAXIMUM_ROWS = 4294967296;
 		return self
 			.read(
-				{
-					source,
-					database,
-					transaction,
-				},
+				context,
+				scope,
 				{
 					...parameters,
 					limit: MAXIMUM_ROWS,
@@ -621,11 +619,8 @@ class DatabaseModel extends Model {
 				return sql.then(function (data) {
 					LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
 					return self.read(
-						{
-							source,
-							database,
-							transaction,
-						},
+						context,
+						scope,
 						parameters,
 					);
 				});
@@ -644,7 +639,7 @@ class DatabaseModel extends Model {
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
-		return self.loader.load(context, key);
+		return self.loader.load(context, scope, key);
 	}
 	_cleanup_delete(context, valid_ids) {
 		const self = this;
@@ -705,9 +700,10 @@ class DatabaseModel extends Model {
 			}),
 		);
 	}
-	_root_delete(context, parameters) {
+	_root_delete(context, scope, parameters) {
 		const self = this;
-		const { source, database, transaction } = context;
+		const { database, transaction } = context;
+		// const { source } = scope
 		const { where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, limit = 16 } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
@@ -716,11 +712,8 @@ class DatabaseModel extends Model {
 		// do a read first
 		return self
 			.read(
-				{
-					source,
-					database,
-					transaction,
-				},
+				context,
+				scope,
 				{
 					...parameters,
 					limit: MAXIMUM_ROWS,
@@ -765,19 +758,17 @@ class DatabaseModel extends Model {
 				throw err;
 			});
 	}
-	_relationship_delete(context, parameters) {
+	_relationship_delete(context, scope, parameters) {
 		const self = this;
-		const { source, database, transaction } = context;
+		const { database, transaction } = context;
+		// const { source } = scope
 		const { where, where_in = {}, where_not_in = {}, limit = 16 } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		const MAXIMUM_ROWS = 4294967296;
 		return self
 			.read(
-				{
-					source,
-					database,
-					transaction,
-				},
+				context,
+				scope,
 				{
 					...parameters,
 					limit: MAXIMUM_ROWS,
@@ -814,11 +805,12 @@ class DatabaseModel extends Model {
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
-		return self.loader.load(context, key);
+		return self.loader.load(context, scope, key);
 	}
-	_root_count(context, parameters) {
+	_root_count(context, scope, parameters) {
 		const self = this;
-		const { source, database, transaction } = context;
+		const { database, transaction } = context;
+		// const { source } = scope
 		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
 		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
@@ -862,12 +854,13 @@ class DatabaseModel extends Model {
 				throw err;
 			});
 	}
-	_relationship_count(context, parameters) {
+	_relationship_count(context, scope, parameters) {
 		const self = this;
-		const { source, database, transaction } = context;
+		const { database, transaction } = context;
+		// const { source } = scope
 		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
-		const relationship_source = self._parse_source(context, parameters);
+		const relationship_source = self._parse_source(scope, parameters);
 
 		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
 		const reversed = {};
@@ -982,7 +975,7 @@ class DatabaseModel extends Model {
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
-		return self.loader.load(context, key);
+		return self.loader.load(context, scope, key);
 	}
 }
 

@@ -46,7 +46,7 @@ var DataLoader =
 		/**
 		 * Loads a key, returning a `Promise` for the value represented by that key.
 		 */
-		_proto.load = function load(context, key) {
+		_proto.load = function load(context, scope, key) {
 			if (key === null || key === undefined) {
 				throw new TypeError("The loader.load() function must be called with a value, " + ("but got: " + String(key) + "."));
 			}
@@ -72,6 +72,7 @@ var DataLoader =
 
 			batch.keys.push(key);
 			batch.contexts.push(context);
+			batch.scopes.push(scope);
 			var promise = new Promise(function (resolve, reject) {
 				batch.callbacks.push({
 					resolve: resolve,
@@ -257,6 +258,7 @@ function getCurrentBatch(loader) {
 		hasDispatched: false,
 		keys: [],
 		contexts: [],
+		scopes: [],
 		callbacks: [],
 	}; // Store it on the loader so it may be reused.
 
@@ -282,7 +284,7 @@ function dispatchBatch(loader, batch) {
 	var batchPromise;
 
 	try {
-		batchPromise = loader._batchLoadFn(batch.contexts, batch.keys);
+		batchPromise = loader._batchLoadFn(batch.contexts, batch.scopes, batch.keys);
 	} catch (e) {
 		return failedDispatch(
 			loader,

@@ -24,6 +24,7 @@ class SystemController extends Controller {
 	}
 	_create(context, scope, input) {
 		const self = this;
+		const { agent } = context
 		const model_scope = {
 			source: scope.source,
 		};
@@ -36,8 +37,9 @@ class SystemController extends Controller {
 			});
 		});
 	}
-	_read(context, input) {
+	_read(context, scope, input) {
 		const self = this;
+		const { agent } = context
 		const model_scope = {
 			source: scope.source,
 		};
@@ -50,8 +52,9 @@ class SystemController extends Controller {
 			});
 		});
 	}
-	_update(context, input) {
+	_update(context, scope, input) {
 		const self = this;
+		const { agent } = context
 		const model_scope = {
 			source: scope.source,
 		};
@@ -64,8 +67,9 @@ class SystemController extends Controller {
 			});
 		});
 	}
-	_delete(context, input) {
+	_delete(context, scope, input) {
 		const self = this;
+		const { agent } = context
 		const model_scope = {
 			source: scope.source,
 		};
@@ -78,7 +82,7 @@ class SystemController extends Controller {
 			});
 		});
 	}
-	_count(context, input) {
+	_count(context, scope, input) {
 		const self = this;
 		const model_scope = {
 			source: scope.source,

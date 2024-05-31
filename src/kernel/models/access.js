@@ -215,7 +215,7 @@ class AccessSystemModel extends SystemModel {
 		}
 	}
 	// requires a valid record
-	_root_create(context, input, realm) {
+	_root_create(context, scope, input, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
 		const target_record = input.attributes;
@@ -227,7 +227,7 @@ class AccessSystemModel extends SystemModel {
 	_create(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "create");
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
 	_read_agent(context, input, realm) {
 		const self = this;
@@ -292,7 +292,7 @@ class AccessSystemModel extends SystemModel {
 		});
 	}
 	// requires where.id or where.agent_id or (where.entity_id and where.entity_type and where.method)
-	_root_read(context, input, realm) {
+	_root_read(context, scope, input, realm) {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
@@ -321,10 +321,10 @@ class AccessSystemModel extends SystemModel {
 	_read(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "read");
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
 	// requires where.id
-	_root_update(context, input, realm) {
+	_root_update(context, scope, input, realm) {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
@@ -351,10 +351,10 @@ class AccessSystemModel extends SystemModel {
 	_update(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "update");
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
 	// requires where.id
-	_root_delete(context, input, realm) {
+	_root_delete(context, scope, input, realm) {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
@@ -376,7 +376,7 @@ class AccessSystemModel extends SystemModel {
 	_delete(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "delete");
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
 }
 

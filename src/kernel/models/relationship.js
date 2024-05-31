@@ -40,7 +40,7 @@ class RelationshipSystemModel extends SystemModel {
 		});
 		return map;
 	}
-	_authorized_relationship(context, relationship, agent, method) {
+	_authorized_relationship(context, scope, relationship, agent, method) {
 		const self = this;
 		const from_entity = {
 			entity_type: relationship.gauze__relationship__from_type,
@@ -55,7 +55,7 @@ class RelationshipSystemModel extends SystemModel {
 		const targets = [from_entity, to_entity];
 		return Promise.all(
 			targets.map(function (target) {
-				return self.authorization_element(context, "system", agent, target);
+				return self.authorization_element(context, scope, "system", agent, target);
 			}),
 		).then(function (authorizations) {
 			const passed = authorizations.filter(function (auth) {
@@ -107,12 +107,12 @@ class RelationshipSystemModel extends SystemModel {
 		}
 		return sql;
 	}
-	_root_create(context, parameters, realm) {
+	_root_create(context, scope, parameters, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
 		const access = { ...agent, ...entity };
 		self._connected_relationship(parameters.attributes);
-		return self._authorized_relationship(context, parameters.attributes, agent, "create").then(function () {
+		return self._authorized_relationship(context, scope, parameters.attributes, agent, "create").then(function () {
 			return self._execute(context, operation, parameters);
 		});
 	}
@@ -121,9 +121,9 @@ class RelationshipSystemModel extends SystemModel {
 		const { attributes } = parameters;
 		self._validate_relationship(attributes);
 		const key = self._model_batch_key(parameters, realm, "create");
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
-	_read_from(context, parameters, realm) {
+	_read_from(context, scope, parameters, realm) {
 		// check that from policy aligns
 		// get list of relationship
 		// intersect with agent whitelist or blacklist based on policy by doing a where in query (this could work if we leverage the fact that uuids rarely have collisions)
@@ -141,7 +141,7 @@ class RelationshipSystemModel extends SystemModel {
 		const from_entity_method_privacy = from_entity_module.methods[method].privacy;
 
 		return self
-			.authorization_element(context, "system", agent, {
+			.authorization_element(context, scope, "system", agent, {
 				entity_id: parameters.where.gauze__relationship__from_id,
 				entity_type: parameters.where.gauze__relationship__from_type,
 				entity_method: method,
@@ -275,7 +275,7 @@ class RelationshipSystemModel extends SystemModel {
 	// note: for private methods, user will have to use the whitelist methods to see what entities they have read access to
 	// note: for public methods, user will need to have exposure to an entity before they can explore its relationships
 	// requires where.id or where.from_id and where.from_type
-	_root_read(context, parameters, realm) {
+	_root_read(context, scope, parameters, realm) {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
@@ -284,7 +284,7 @@ class RelationshipSystemModel extends SystemModel {
 			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
-					return self._authorized_relationship(context, relationship, agent, "read").then(function () {
+					return self._authorized_relationship(context, scope, relationship, agent, "read").then(function () {
 						// note: should we just return the relationship here instead of executing a graphql query?
 						return self._execute(context, operation, parameters);
 					});
@@ -307,10 +307,10 @@ class RelationshipSystemModel extends SystemModel {
 	_read(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "read");
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
 	// requires where.id
-	_root_update(context, parameters, realm) {
+	_root_update(context, scope, parameters, realm) {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
@@ -321,8 +321,8 @@ class RelationshipSystemModel extends SystemModel {
 					const relationship = relationships[0];
 					const staged = { ...relationship, ...parameters.attributes };
 					self._connected_relationship(staged);
-					return self._authorized_relationship(context, relationship, agent, "update").then(function () {
-						return self._authorized_relationship(context, staged, agent, "update").then(function () {
+					return self._authorized_relationship(context, scope, relationship, agent, "update").then(function () {
+						return self._authorized_relationship(context, scope, staged, agent, "update").then(function () {
 							return self._execute(context, operation, parameters);
 						});
 					});
@@ -341,10 +341,10 @@ class RelationshipSystemModel extends SystemModel {
 	_update(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "update");
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
 	// requires where.id
-	_root_delete(context, parameters, realm) {
+	_root_delete(context, scope, parameters, realm) {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
@@ -353,7 +353,7 @@ class RelationshipSystemModel extends SystemModel {
 			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
-					return self._authorized_relationship(context, relationship, agent, "delete").then(function () {
+					return self._authorized_relationship(context, scope, relationship, agent, "delete").then(function () {
 						return self._execute(context, operation, parameters);
 					});
 				} else {
@@ -371,7 +371,7 @@ class RelationshipSystemModel extends SystemModel {
 	_delete(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "delete");
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
 }
 
