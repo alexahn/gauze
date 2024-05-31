@@ -776,7 +776,7 @@
 		[ ] need a way to share agent identifiers to allow whitelist and blacklist management
 			[ ] kind of problematic for blacklist though because people cannot be blacklisted if they don't share their identifier?
 				[ ] maybe we need a user level identifier and a system level identifier?
-				[ ] might need to add a method to get the owner for something?
+				[ ] might need to add a method to get the owner for something
 [ ] unknowns, abnormal behavior, and investigations
 	[ ] look into why router5 doesn't seem to be able to uri encode correctly
 		[ ] manually encoding and decoding seems to work

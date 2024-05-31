@@ -20,6 +20,9 @@ class DatabaseModel extends Model {
 		const { table_name, primary_key } = database_config;
 		self.table_name = table_name;
 		self.primary_key = primary_key;
+		self.limit_max = parseInt(process.env.GAUZE_SQL_MAX_LIMIT, 10)
+		self.breadth_max = parseInt(process.env.GAUZE_SQL_MAX_BREADTH, 10)
+		console.log('self.breadth_max', self.breadth_max)
 		if ($structure.entities.relationship) {
 			this.relationship_table_name = $structure.entities.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE;
 		} else {
@@ -307,6 +310,7 @@ class DatabaseModel extends Model {
 		return sql
 			.then(function (data) {
 				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.create:success`, "data", data);
+				context.breadth += data.length
 				return self.read(
 					{
 						source: undefined,
@@ -339,6 +343,7 @@ class DatabaseModel extends Model {
 		const self = this;
 		const relationship_source = self._parse_source(context, parameters);
 		const key = self._batch_key(relationship_source, parameters, "create");
+		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded")
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
@@ -385,7 +390,7 @@ class DatabaseModel extends Model {
 				*/
 				return builder;
 			})
-			.limit(limit)
+			.limit(Math.min(limit, self.limit_max))
 			.offset(offset)
 			// todo: figure out how to get order_nulls working without breaking the query
 			// note: sqlite cannot handle order nulls, it seems to break the query: order by ({table_name}.{order_column} is not null) vs order by {table_name}.{order_column}
@@ -398,6 +403,7 @@ class DatabaseModel extends Model {
 		return sql
 			.then(function (data) {
 				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
+				context.breadth += data.length
 				return Promise.resolve(data);
 			})
 			.catch(function (err) {
@@ -454,9 +460,7 @@ class DatabaseModel extends Model {
 			var joined_key = self.table_name + "." + k;
 			joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[k]).value;
 		});
-		var joined_order = self.table_name + "." + order;
-		//const joined_order = order
-		console.log("joined_order", joined_order);
+		const joined_order = self.table_name + "." + order;
 		if (relationship_source._direction === "to") {
 			const sql = database(self.table_name)
 				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.${self.primary_key}`)
@@ -472,7 +476,7 @@ class DatabaseModel extends Model {
 					});
 					return builder;
 				})
-				.limit(limit)
+				.limit(Math.min(limit, self.limit_max))
 				.offset(offset)
 				// note: sqlite cannot handle order nulls, it seems to break the query: order by ({table_name}.{order_column} is not null) vs order by {table_name}.{order_column}
 				//.orderBy(joined_order, order_direction, order_nulls)
@@ -484,6 +488,7 @@ class DatabaseModel extends Model {
 			return sql
 				.then(function (data) {
 					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
+					context.breadth += data.length
 					return Promise.resolve(data);
 				})
 				.catch(function (err) {
@@ -505,7 +510,7 @@ class DatabaseModel extends Model {
 					});
 					return builder;
 				})
-				.limit(limit)
+				.limit(Math.min(limit, self.limit_max))
 				.offset(offset)
 				// note: sqlite cannot handle order nulls, it seems to break the query: order by ({table_name}.{order_column} is not null) vs order by {table_name}.{order_column}
 				//.orderBy(joined_order, order_direction, order_nulls)
@@ -517,6 +522,7 @@ class DatabaseModel extends Model {
 			return sql
 				.then(function (data) {
 					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
+					context.breadth += data.length
 					return Promise.resolve(data);
 				})
 				.catch(function (err) {
@@ -532,6 +538,7 @@ class DatabaseModel extends Model {
 		const self = this;
 		const relationship_source = self._parse_source(context, parameters);
 		const key = self._batch_key(relationship_source, parameters, "read");
+		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded")
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
@@ -567,6 +574,7 @@ class DatabaseModel extends Model {
 		return sql
 			.then(function (data) {
 				LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
+				context.breadth += data.length
 				return self.read(
 					{
 						source,
@@ -586,6 +594,7 @@ class DatabaseModel extends Model {
 		const { source, database, transaction } = context;
 		const { attributes, where, where_in = {}, where_not_in = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
+		// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
 		const MAXIMUM_ROWS = 4294967296;
 		return self
 			.read(
@@ -608,6 +617,7 @@ class DatabaseModel extends Model {
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
 				}
+				context.breadth += data.length
 				return sql.then(function (data) {
 					LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
 					return self.read(
@@ -630,6 +640,7 @@ class DatabaseModel extends Model {
 		const self = this;
 		const relationship_source = self._parse_source(context, parameters);
 		const key = self._batch_key(relationship_source, parameters, "update");
+		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded")
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
@@ -699,6 +710,7 @@ class DatabaseModel extends Model {
 		const { source, database, transaction } = context;
 		const { where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, limit = 16 } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
+		// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
 		const MAXIMUM_ROWS = 4294967296;
 		// todo: use attributes and update deleted_at instead of deleting the row
 		// do a read first
@@ -742,8 +754,9 @@ class DatabaseModel extends Model {
 				}
 				return sql.then(function (delete_data) {
 					LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
+					context.breadth += read_data.length
 					return self._cleanup_delete(context, valid_ids).then(function () {
-						return read_data.slice(0, limit);
+						return read_data.slice(0, Math.min(limit, self.limit_max));
 					});
 				});
 			})
@@ -782,6 +795,7 @@ class DatabaseModel extends Model {
 				return sql.then(function (delete_data) {
 					LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
 					return self._cleanup_delete(context, valid_ids).then(function () {
+						context.breadth += read_data.length
 						return read_data.slice(0, limit);
 					});
 				});
@@ -796,6 +810,7 @@ class DatabaseModel extends Model {
 		const self = this;
 		const relationship_source = self._parse_source(context, parameters);
 		const key = self._batch_key(relationship_source, parameters, "delete");
+		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded")
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
@@ -839,6 +854,7 @@ class DatabaseModel extends Model {
 		return sql
 			.then(function (data) {
 				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
+				context.breadth += data.length
 				return Promise.resolve(data);
 			})
 			.catch(function (err) {
@@ -946,6 +962,7 @@ class DatabaseModel extends Model {
 			return sql
 				.then(function (data) {
 					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
+					context.breadth += data.length
 					return Promise.resolve(data);
 				})
 				.catch(function (err) {
@@ -960,6 +977,8 @@ class DatabaseModel extends Model {
 		const self = this;
 		const relationship_source = self._parse_source(context, parameters);
 		const key = self._batch_key(relationship_source, parameters, "count");
+		console.log('context.breadth', context.breadth)
+		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded")
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);

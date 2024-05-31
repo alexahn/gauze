@@ -7,7 +7,7 @@ const EXECUTE__GRAPHQL__SHELL__KERNEL = function ({ schema, context, operation, 
 		operation_name,
 		operation_variables,
 	});
-	context.breadth = 1;
+	context.breadth = 0;
 	return graphql({
 		schema: schema,
 		contextValue: context,
