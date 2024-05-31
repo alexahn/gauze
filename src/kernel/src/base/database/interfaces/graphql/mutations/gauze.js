@@ -268,11 +268,9 @@ const DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DA
 			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE.delete(
+			context,
 			{
-				source: source,
-				database: context.database,
-				transaction: context.transaction,
-				breadth: context.breadth,
+				source,
 			},
 			mutation_arguments,
 		).then(function (data) {

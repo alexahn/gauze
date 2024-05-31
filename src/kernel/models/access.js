@@ -224,7 +224,7 @@ class AccessSystemModel extends SystemModel {
 			return self._execute(context, operation, input);
 		});
 	}
-	_create(context, parameters, realm) {
+	_create(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "create");
 		return self.model_loader.load(context, key);
@@ -318,7 +318,7 @@ class AccessSystemModel extends SystemModel {
 			);
 		}
 	}
-	_read(context, parameters, realm) {
+	_read(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "read");
 		return self.model_loader.load(context, key);
@@ -348,7 +348,7 @@ class AccessSystemModel extends SystemModel {
 			throw new Error(`Field 'where.${self.key_id}' is required`);
 		}
 	}
-	_update(context, parameters, realm) {
+	_update(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "update");
 		return self.model_loader.load(context, key);
@@ -373,7 +373,7 @@ class AccessSystemModel extends SystemModel {
 			throw new Error(`Field 'where.${self.key_id}' is required`);
 		}
 	}
-	_delete(context, parameters, realm) {
+	_delete(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "delete");
 		return self.model_loader.load(context, key);

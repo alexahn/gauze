@@ -285,9 +285,9 @@ class DatabaseModel extends Model {
 				return result;
 			});
 	}
-	_parse_source(context, parameters) {
+	_parse_source(scope, parameters) {
 		const self = this;
-		const { source } = context;
+		const { source } = scope;
 		if (source && source._metadata && source._direction) {
 			return source;
 		} else {

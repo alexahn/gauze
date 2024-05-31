@@ -232,11 +232,9 @@ const DELETE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__GAUZE__CONTROLLER__DATABASE.delete(
+			context,
 			{
-				source: source,
-				database: context.database,
-				transaction: context.transaction,
-				breadth: context.breadth,
+				source,
 			},
 			mutation_arguments,
 		).then(function (data) {
