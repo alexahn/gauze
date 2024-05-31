@@ -10,7 +10,7 @@ class AgentUserSystemModel extends $kernel.models.system.SystemModel {
 		super(root_config, config);
 		const self = this;
 	}
-	create(context, parameters) {
+	create(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -23,13 +23,13 @@ class AgentUserSystemModel extends $kernel.models.system.SystemModel {
 				operation_name: $database.interfaces.graphql.operations.agent_user.CREATE_NAME__AGENT_USER__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._create(context, parameters, realm).then(function (data) {
+		return self._create(context, scope, parameters, realm).then(function (data) {
 			return data.data.create_agent_user.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	read(context, parameters) {
+	read(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -42,13 +42,13 @@ class AgentUserSystemModel extends $kernel.models.system.SystemModel {
 				operation_name: $database.interfaces.graphql.operations.agent_user.READ_NAME__AGENT_USER__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._read(context, parameters, realm).then(function (data) {
+		return self._read(context, scope, parameters, realm).then(function (data) {
 			return data.data.read_agent_user.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	update(context, parameters) {
+	update(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -61,13 +61,13 @@ class AgentUserSystemModel extends $kernel.models.system.SystemModel {
 				operation_name: $database.interfaces.graphql.operations.agent_user.UPDATE_NAME__AGENT_USER__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._update(context, parameters, realm).then(function (data) {
+		return self._update(context, scope, parameters, realm).then(function (data) {
 			return data.data.update_agent_user.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	delete(context, parameters) {
+	delete(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -80,13 +80,13 @@ class AgentUserSystemModel extends $kernel.models.system.SystemModel {
 				operation_name: $database.interfaces.graphql.operations.agent_user.DELETE_NAME__AGENT_USER__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._delete(context, parameters, realm).then(function (data) {
+		return self._delete(context, scope, parameters, realm).then(function (data) {
 			return data.data.delete_agent_user.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	count(context, parameters) {
+	count(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -99,7 +99,7 @@ class AgentUserSystemModel extends $kernel.models.system.SystemModel {
 				operation_name: $database.interfaces.graphql.operations.agent_user.COUNT_NAME__AGENT_USER__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._count(context, parameters, realm).then(function (data) {
+		return self._count(context, scope, parameters, realm).then(function (data) {
 			return data.data.count_agent_user;
 		});
 	}

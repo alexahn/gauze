@@ -123,11 +123,9 @@ const READ__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABAS
 			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE.read(
+			context,
 			{
-				source: source,
-				database: context.database,
-				transaction: context.transaction,
-				breadth: context.breadth,
+				source,
 			},
 			query_arguments,
 		).then(function (data) {
@@ -194,11 +192,9 @@ const COUNT__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABA
 			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE.count(
+			context,
 			{
-				source: source,
-				database: context.database,
-				transaction: context.transaction,
-				breadth: context.breadth,
+				source,
 			},
 			query_arguments,
 		).then(function (data) {

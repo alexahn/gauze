@@ -79,11 +79,9 @@ const CREATE__AGENT_USER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			throw new Error("Field 'attributes' is required");
 		}
 		return CONTROLLER__AGENT_USER__CONTROLLER__DATABASE.create(
+			context,
 			{
-				source: source,
-				database: context.database,
-				transaction: context.transaction,
-				breadth: context.breadth,
+				source,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -161,11 +159,9 @@ const UPDATE__AGENT_USER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__AGENT_USER__CONTROLLER__DATABASE.update(
+			context,
 			{
-				source: source,
-				database: context.database,
-				transaction: context.transaction,
-				context: context.breadth,
+				source,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -236,11 +232,9 @@ const DELETE__AGENT_USER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__AGENT_USER__CONTROLLER__DATABASE.delete(
+			context,
 			{
-				source: source,
-				database: context.database,
-				transaction: context.transaction,
-				breadth: context.breadth,
+				source,
 			},
 			mutation_arguments,
 		).then(function (data) {

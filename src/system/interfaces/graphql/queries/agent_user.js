@@ -105,13 +105,9 @@ const READ__AGENT_USER__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 			context.agent_id,
 		);
 		return CONTROLLER__AGENT_USER__CONTROLLER__SYSTEM.read(
+			context,
 			{
-				source: source,
-				project: context.project,
-				database: context.database,
-				transaction: context.transaction,
-				agent: context.agent,
-				breadth: context.breadth,
+				source,
 			},
 			query_arguments,
 		).then(function (data) {
@@ -162,13 +158,9 @@ const COUNT__AGENT_USER__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 			context.agent_id,
 		);
 		return CONTROLLER__AGENT_USER__CONTROLLER__SYSTEM.count(
+			context,
 			{
-				source: source,
-				project: context.project,
-				database: context.database,
-				transaction: context.transaction,
-				agent: context.agent,
-				breadth: context.breadth,
+				source,
 			},
 			query_arguments,
 		).then(function (data) {

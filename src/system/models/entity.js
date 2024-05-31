@@ -10,7 +10,7 @@ class EntitySystemModel extends $kernel.models.system.SystemModel {
 		super(root_config, config);
 		const self = this;
 	}
-	create(context, parameters) {
+	create(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -23,13 +23,13 @@ class EntitySystemModel extends $kernel.models.system.SystemModel {
 				operation_name: $database.interfaces.graphql.operations.entity.CREATE_NAME__ENTITY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._create(context, parameters, realm).then(function (data) {
+		return self._create(context, scope, parameters, realm).then(function (data) {
 			return data.data.create_entity.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	read(context, parameters) {
+	read(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -42,13 +42,13 @@ class EntitySystemModel extends $kernel.models.system.SystemModel {
 				operation_name: $database.interfaces.graphql.operations.entity.READ_NAME__ENTITY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._read(context, parameters, realm).then(function (data) {
+		return self._read(context, scope, parameters, realm).then(function (data) {
 			return data.data.read_entity.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	update(context, parameters) {
+	update(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -61,13 +61,13 @@ class EntitySystemModel extends $kernel.models.system.SystemModel {
 				operation_name: $database.interfaces.graphql.operations.entity.UPDATE_NAME__ENTITY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._update(context, parameters, realm).then(function (data) {
+		return self._update(context, scope, parameters, realm).then(function (data) {
 			return data.data.update_entity.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	delete(context, parameters) {
+	delete(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -80,13 +80,13 @@ class EntitySystemModel extends $kernel.models.system.SystemModel {
 				operation_name: $database.interfaces.graphql.operations.entity.DELETE_NAME__ENTITY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._delete(context, parameters, realm).then(function (data) {
+		return self._delete(context, scope, parameters, realm).then(function (data) {
 			return data.data.delete_entity.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	count(context, parameters) {
+	count(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -99,7 +99,7 @@ class EntitySystemModel extends $kernel.models.system.SystemModel {
 				operation_name: $database.interfaces.graphql.operations.entity.COUNT_NAME__ENTITY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._count(context, parameters, realm).then(function (data) {
+		return self._count(context, scope, parameters, realm).then(function (data) {
 			return data.data.count_entity;
 		});
 	}

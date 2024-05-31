@@ -99,13 +99,9 @@ const READ__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "query_arguments", query_arguments);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "access:agent_id", context.agent_id);
 		return CONTROLLER__SECRET__CONTROLLER__SYSTEM.read(
+			context,
 			{
-				source: source,
-				project: context.project,
-				database: context.database,
-				transaction: context.transaction,
-				agent: context.agent,
-				breadth: context.breadth,
+				source,
 			},
 			query_arguments,
 		).then(function (data) {
@@ -144,13 +140,9 @@ const COUNT__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "query_arguments", query_arguments);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "access:agent_id", context.agent_id);
 		return CONTROLLER__SECRET__CONTROLLER__SYSTEM.count(
+			context,
 			{
-				source: source,
-				project: context.project,
-				database: context.database,
-				transaction: context.transaction,
-				agent: context.agent,
-				breadth: context.breadth,
+				source,
 			},
 			query_arguments,
 		).then(function (data) {

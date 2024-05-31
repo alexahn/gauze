@@ -82,12 +82,9 @@ const CREATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SY
 			throw new Error("Field 'attributes' is required");
 		}
 		return CONTROLLER__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__SYSTEM.create(
+			context,
 			{
-				source: source,
-				project: context.project,
-				database: context.database,
-				transaction: context.transaction,
-				agent: context.agent,
+				source,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -178,12 +175,9 @@ const UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SY
 			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__SYSTEM.update(
+			context,
 			{
-				source: source,
-				project: context.project,
-				database: context.database,
-				transaction: context.transaction,
-				agent: context.agent,
+				source,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -267,12 +261,9 @@ const DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SY
 			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__SYSTEM.delete(
+			context,
 			{
-				source: source,
-				project: context.project,
-				database: context.database,
-				transaction: context.transaction,
-				agent: context.agent,
+				source,
 			},
 			mutation_arguments,
 		).then(function (data) {

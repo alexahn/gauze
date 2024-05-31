@@ -7,25 +7,25 @@ class dd6fb00f485c4397add38780939d6923SystemController extends $kernel.controlle
 		super(root_config, config);
 		const self = this;
 	}
-	create(context, input) {
+	create(context, scope, input) {
 		const self = this;
-		return self._create(context, input);
+		return self._create(context, scope, input);
 	}
-	read(context, input) {
+	read(context, scope, input) {
 		const self = this;
-		return self._read(context, input);
+		return self._read(context, scope, input);
 	}
-	update(context, input) {
+	update(context, scope, input) {
 		const self = this;
-		return self._update(context, input);
+		return self._update(context, scope, input);
 	}
-	delete(context, input) {
+	delete(context, scope, input) {
 		const self = this;
-		return self._delete(context, input);
+		return self._delete(context, scope, input);
 	}
-	count(context, input) {
+	count(context, scope, input) {
 		const self = this;
-		return self._count(context, input);
+		return self._count(context, scope, input);
 	}
 }
 

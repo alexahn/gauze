@@ -7,25 +7,25 @@ class WhitelistDatabaseModel extends $kernel.models.database.DatabaseModel {
 		super(root_config, config);
 		const self = this;
 	}
-	create(context, parameters) {
+	create(context, scope, parameters) {
 		const self = this;
-		return self._create(context, parameters);
+		return self._create(context, scope, parameters);
 	}
-	read(context, parameters) {
+	read(context, scope, parameters) {
 		const self = this;
-		return self._read(context, parameters);
+		return self._read(context, scope, parameters);
 	}
-	update(context, parameters) {
+	update(context, scope, parameters) {
 		const self = this;
-		return self._update(context, parameters);
+		return self._update(context, scope, parameters);
 	}
-	delete(context, parameters) {
+	delete(context, scope, parameters) {
 		const self = this;
-		return self._delete(context, parameters);
+		return self._delete(context, scope, parameters);
 	}
-	count(context, parameters) {
+	count(context, scope, parameters) {
 		const self = this;
-		return self._count(context, parameters);
+		return self._count(context, scope, parameters);
 	}
 }
 

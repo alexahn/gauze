@@ -79,11 +79,9 @@ const CREATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			throw new Error("Field 'attributes' is required");
 		}
 		return CONTROLLER__ENTITY__CONTROLLER__DATABASE.create(
+			context,
 			{
-				source: source,
-				database: context.database,
-				transaction: context.transaction,
-				breadth: context.breadth,
+				source,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -161,11 +159,9 @@ const UPDATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__ENTITY__CONTROLLER__DATABASE.update(
+			context,
 			{
-				source: source,
-				database: context.database,
-				transaction: context.transaction,
-				context: context.breadth,
+				source,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -236,11 +232,9 @@ const DELETE__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__ENTITY__CONTROLLER__DATABASE.delete(
+			context,
 			{
-				source: source,
-				database: context.database,
-				transaction: context.transaction,
-				breadth: context.breadth,
+				source,
 			},
 			mutation_arguments,
 		).then(function (data) {

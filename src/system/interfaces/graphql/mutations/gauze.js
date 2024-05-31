@@ -74,13 +74,9 @@ const CREATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			throw new Error("Field 'attributes' is required");
 		}
 		return CONTROLLER__GAUZE__CONTROLLER__SYSTEM.create(
+			context,
 			{
-				source: source,
-				project: context.project,
-				database: context.database,
-				transaction: context.transaction,
-				agent: context.agent,
-				breadth: context.breadth,
+				source,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -157,13 +153,9 @@ const UPDATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__GAUZE__CONTROLLER__SYSTEM.update(
+			context,
 			{
-				source: source,
-				project: context.project,
-				database: context.database,
-				transaction: context.transaction,
-				agent: context.agent,
-				breadth: context.breadth,
+				source,
 			},
 			mutation_arguments,
 		).then(function (data) {
@@ -233,13 +225,9 @@ const DELETE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__GAUZE__CONTROLLER__SYSTEM.delete(
+			context,
 			{
-				source: source,
-				project: context.project,
-				database: context.database,
-				transaction: context.transaction,
-				agent: context.agent,
-				breadth: context.breadth,
+				source,
 			},
 			mutation_arguments,
 		).then(function (data) {

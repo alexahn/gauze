@@ -115,11 +115,9 @@ const READ__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__AGENT_ACCOUNT__CONTROLLER__DATABASE.read(
+			context,
 			{
-				source: source,
-				database: context.database,
-				transaction: context.transaction,
-				breadth: context.breadth,
+				source,
 			},
 			query_arguments,
 		).then(function (data) {
@@ -174,11 +172,9 @@ const COUNT__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__AGENT_ACCOUNT__CONTROLLER__DATABASE.count(
+			context,
 			{
-				source: source,
-				database: context.database,
-				transaction: context.transaction,
-				breadth: context.breadth,
+				source,
 			},
 			query_arguments,
 		).then(function (data) {

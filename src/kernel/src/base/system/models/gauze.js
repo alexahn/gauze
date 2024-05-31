@@ -8,7 +8,7 @@ class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.models.system.
 		super(root_config, config);
 		const self = this;
 	}
-	create(context, parameters) {
+	create(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -22,13 +22,13 @@ class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.models.system.
 					$database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.CREATE_NAME__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._create(context, parameters, realm).then(function (data) {
+		return self._create(context, scope, parameters, realm).then(function (data) {
 			return data.data.create_a543731262804f64adcc0eae1a225acc.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	read(context, parameters) {
+	read(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -41,13 +41,13 @@ class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.models.system.
 				operation_name: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.READ_NAME__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._read(context, parameters, realm).then(function (data) {
+		return self._read(context, scope, parameters, realm).then(function (data) {
 			return data.data.read_a543731262804f64adcc0eae1a225acc.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	update(context, parameters) {
+	update(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -61,13 +61,13 @@ class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.models.system.
 					$database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.UPDATE_NAME__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._update(context, parameters, realm).then(function (data) {
+		return self._update(context, scope, parameters, realm).then(function (data) {
 			return data.data.update_a543731262804f64adcc0eae1a225acc.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	delete(context, parameters) {
+	delete(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -81,13 +81,13 @@ class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.models.system.
 					$database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.DELETE_NAME__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._delete(context, parameters, realm).then(function (data) {
+		return self._delete(context, scope, parameters, realm).then(function (data) {
 			return data.data.delete_a543731262804f64adcc0eae1a225acc.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	count(context, parameters) {
+	count(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -101,7 +101,7 @@ class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.models.system.
 					$database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.COUNT_NAME__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._count(context, parameters, realm).then(function (data) {
+		return self._count(context, scope, parameters, realm).then(function (data) {
 			return data.data.count_a543731262804f64adcc0eae1a225acc;
 		});
 	}

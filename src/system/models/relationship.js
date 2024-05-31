@@ -8,7 +8,7 @@ class RelationshipSystemModel extends $kernel.models.relationship.RelationshipSy
 		super(root_config, config);
 		const self = this;
 	}
-	create(context, parameters) {
+	create(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -21,13 +21,13 @@ class RelationshipSystemModel extends $kernel.models.relationship.RelationshipSy
 				operation_name: $database.interfaces.graphql.operations.relationship.CREATE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._create(context, parameters, realm).then(function (data) {
+		return self._create(context, scope, parameters, realm).then(function (data) {
 			return data.data.create_relationship.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	read(context, parameters) {
+	read(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -40,13 +40,13 @@ class RelationshipSystemModel extends $kernel.models.relationship.RelationshipSy
 				operation_name: $database.interfaces.graphql.operations.relationship.READ_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._read(context, parameters, realm).then(function (data) {
+		return self._read(context, scope, parameters, realm).then(function (data) {
 			return data.data.read_relationship.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	update(context, parameters) {
+	update(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -59,13 +59,13 @@ class RelationshipSystemModel extends $kernel.models.relationship.RelationshipSy
 				operation_name: $database.interfaces.graphql.operations.relationship.UPDATE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._update(context, parameters, realm).then(function (data) {
+		return self._update(context, scope, parameters, realm).then(function (data) {
 			return data.data.update_relationship.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	delete(context, parameters) {
+	delete(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -78,13 +78,13 @@ class RelationshipSystemModel extends $kernel.models.relationship.RelationshipSy
 				operation_name: $database.interfaces.graphql.operations.relationship.DELETE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._delete(context, parameters, realm).then(function (data) {
+		return self._delete(context, scope, parameters, realm).then(function (data) {
 			return data.data.delete_relationship.map(function (row) {
 				return row.attributes;
 			});
 		});
 	}
-	count(context, parameters) {
+	count(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const realm = {
@@ -97,7 +97,7 @@ class RelationshipSystemModel extends $kernel.models.relationship.RelationshipSy
 				operation_name: $database.interfaces.graphql.operations.relationship.COUNT_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._count(context, parameters, realm).then(function (data) {
+		return self._count(context, scope, parameters, realm).then(function (data) {
 			return data.data.count_relationship;
 		});
 	}
