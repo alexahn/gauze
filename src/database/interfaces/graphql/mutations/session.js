@@ -87,9 +87,7 @@ const CREATE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "CREATE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(function (record) {
-				return SERIALIZER__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize(source, record);
-			});
+			return data.map(SERIALIZER__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize);
 		});
 	},
 };
@@ -170,9 +168,7 @@ const UPDATE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "UPDATE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(function (record) {
-				return SERIALIZER__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize(source, record);
-			});
+			return data.map(SERIALIZER__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize);
 		});
 	},
 };
@@ -246,9 +242,7 @@ const DELETE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "DELETE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(function (record) {
-				return SERIALIZER__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize(source, record);
-			});
+			return data.map(SERIALIZER__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize);
 		});
 	},
 };

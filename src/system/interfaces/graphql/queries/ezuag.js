@@ -110,7 +110,7 @@ const READ__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "READ__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
 			return data.map(function (record) {
-				return SERIALIZER__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM.serialize(source, record);
+				return SERIALIZER__EZUAG__QUERY__GRAPHQL__INTERFACE__SYSTEM.serialize(source, record)
 			});
 		});
 	},
