@@ -109,7 +109,9 @@ const READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 			query_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(SERIALIZER__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.serialize);
+			return data.map(function (source, record) {
+				return SERIALIZER__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.serialize(source, record)
+			});
 		});
 	},
 };
