@@ -10,7 +10,7 @@ class GraphQLSerializer {
 		const metadata = {
 			id: sql_record[this.sql_primary_key],
 			type: this.graphql_type,
-			depth: source._metadata.depth ? source._metadata.depth + 1 : 1
+			depth: source ? (source._metadata ? source._metadata.depth + 1 : 1) : 1,
 		};
 		const model = {
 			_metadata: metadata,

@@ -84,7 +84,9 @@ const CREATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "CREATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(SERIALIZER__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
+			return data.map(function (record) {
+				return SERIALIZER__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize(source, record);
+			});
 		});
 	},
 };
@@ -166,7 +168,9 @@ const UPDATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "UPDATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(SERIALIZER__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
+			return data.map(function (record) {
+				return SERIALIZER__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize(source, record);
+			});
 		});
 	},
 };
@@ -241,7 +245,9 @@ const DELETE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "DELETE__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(SERIALIZER__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
+			return data.map(function (record) {
+				return SERIALIZER__GAUZE__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize(source, record);
+			});
 		});
 	},
 };

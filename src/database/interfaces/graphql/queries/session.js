@@ -117,7 +117,9 @@ const READ__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			query_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "READ__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(SERIALIZER__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE.serialize);
+			return data.map(function (record) {
+				return SERIALIZER__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE.serialize(source, record);
+			});
 		});
 	},
 };

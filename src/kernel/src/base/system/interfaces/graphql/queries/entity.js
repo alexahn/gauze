@@ -135,7 +135,9 @@ const READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__SYSTEM 
 				"data",
 				data,
 			);
-			return data.map(SERIALIZER__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__SYSTEM.serialize);
+			return data.map(function (record) {
+				return SERIALIZER__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__SYSTEM.serialize(source, record);
+			});
 		});
 	},
 };

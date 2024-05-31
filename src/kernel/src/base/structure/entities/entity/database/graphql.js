@@ -13,6 +13,11 @@ const METADATA_FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRU
 		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "type",
 	},
+	depth: {
+		//type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		description: "depth",
+	},
 };
 
 const METADATA__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -110,7 +115,12 @@ const QUERY_RELATIONSHIPS_FROM__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3d
 	fields: () => QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 });
 
-const QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = {};
+const QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+		description: "ba381b0cc764c4c9a187b716ae94ed96 Query Query Metadata",
+	},
+};
 
 const QUERY_QUERY__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Query__Query",
@@ -154,7 +164,12 @@ const MUTATION_RELATIONSHIPS_FROM__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396
 	fields: () => MUTATION_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 });
 
-const MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = {};
+const MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = {
+	_metadata: {
+		type: METADATA__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
+		description: "ba381b0cc764c4c9a187b716ae94ed96 Mutation Mutation Metadata",
+	},
+};
 
 const MUTATION_MUTATION__GRAPHQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "ba381b0cc764c4c9a187b716ae94ed96_Mutation__Mutation",

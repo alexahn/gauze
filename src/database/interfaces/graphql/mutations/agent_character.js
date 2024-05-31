@@ -89,7 +89,9 @@ const CREATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "CREATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(SERIALIZER__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize);
+			return data.map(function (record) {
+				return SERIALIZER__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize(source, record);
+			});
 		});
 	},
 };
@@ -172,7 +174,9 @@ const UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(SERIALIZER__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize);
+			return data.map(function (record) {
+				return SERIALIZER__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize(source, record);
+			});
 		});
 	},
 };
@@ -248,7 +252,9 @@ const DELETE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			mutation_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "DELETE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
-			return data.map(SERIALIZER__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize);
+			return data.map(function (record) {
+				return SERIALIZER__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize(source, record);
+			});
 		});
 	},
 };

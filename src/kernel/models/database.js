@@ -130,7 +130,7 @@ class DatabaseModel extends Model {
 					};
 				})
 				.filter(function (item) {
-					return item.source !== null;
+					return item.source !== null && item.source._direction;
 				});
 		});
 		function handle_groups_without_source(groups) {
@@ -454,9 +454,7 @@ class DatabaseModel extends Model {
 			var joined_key = self.table_name + "." + k;
 			joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[k]).value;
 		});
-		var joined_order = self.table_name + "." + order;
-		//const joined_order = order
-		console.log("joined_order", joined_order);
+		const joined_order = self.table_name + "." + order;
 		if (relationship_source._direction === "to") {
 			const sql = database(self.table_name)
 				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.${self.primary_key}`)

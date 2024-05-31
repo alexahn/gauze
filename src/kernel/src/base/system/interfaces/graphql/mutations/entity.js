@@ -98,7 +98,9 @@ const CREATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SY
 				"data",
 				data,
 			);
-			return data.map(SERIALIZER__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
+			return data.map(function (record) {
+				return SERIALIZER__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize(source, record);
+			});
 		});
 	},
 };
@@ -194,7 +196,9 @@ const UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SY
 				"data",
 				data,
 			);
-			return data.map(SERIALIZER__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
+			return data.map(function (record) {
+				return SERIALIZER__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize(source, record);
+			});
 		});
 	},
 };
@@ -283,7 +287,9 @@ const DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SY
 				"data",
 				data,
 			);
-			return data.map(SERIALIZER__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
+			return data.map(function (record) {
+				return SERIALIZER__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize(source, record);
+			});
 		});
 	},
 };

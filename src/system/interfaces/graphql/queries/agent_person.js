@@ -121,7 +121,9 @@ const READ__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 			query_arguments,
 		).then(function (data) {
 			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "READ__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
-			return data.map(SERIALIZER__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__SYSTEM.serialize);
+			return data.map(function (record) {
+				return SERIALIZER__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__SYSTEM.serialize(source, record);
+			});
 		});
 	},
 };
