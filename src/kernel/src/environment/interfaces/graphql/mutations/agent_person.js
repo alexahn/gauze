@@ -19,12 +19,10 @@ const ASSERT__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Grap
 			},
 			resolve: function (source, args, context) {
 				return CONTROLLER__AGENT_PERSON__CONTROLLER__ENVIRONMENT.assert_email(
+					context,
 					{
-						source: source,
-						database: context.database,
-						transaction: context.transaction,
-						agent: context.agent,
-					},
+						source
+					}
 					args,
 				);
 			},

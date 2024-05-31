@@ -37,7 +37,7 @@ class EnvironmentController {
 			});
 		return passed.length === requirements.length;
 	}
-	sign_in(context, parameters) {
+	sign_in(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		if (agent) {
@@ -58,7 +58,7 @@ class EnvironmentController {
 					gauze__session__id: agent.session_id,
 				};
 				const session_parameters = { where: session_attributes };
-				return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, session_parameters)
+				return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, scope, session_parameters)
 					.then(function (sessions) {
 						if (sessions && sessions.length) {
 							const session = sessions[0];
@@ -96,7 +96,7 @@ class EnvironmentController {
 								const session_id = uuidv4();
 								const proxy_root_id = parsed_data.assert;
 								const proxy_type = self.proxy_type;
-								return self._create_system_session(context, session_id, proxy_root_id, proxy_root_id, proxy_type).then(function (system_session) {
+								return self._create_system_session(context, scope, session_id, proxy_root_id, proxy_root_id, proxy_type).then(function (system_session) {
 									return {
 										...collection,
 										system_session: system_session,
@@ -122,7 +122,7 @@ class EnvironmentController {
 			throw new Error("Session is required to sign in");
 		}
 	}
-	sign_out(context, parameters) {
+	sign_out(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		if (agent) {
@@ -132,7 +132,7 @@ class EnvironmentController {
 					gauze__proxy__root_id: agent.proxy_id,
 				};
 				const proxy_parameters = { where: proxy_attributes };
-				return MODEL__PROXY__MODEL__ENVIRONMENT.read(context, proxy_parameters)
+				return MODEL__PROXY__MODEL__ENVIRONMENT.read(context, scope, proxy_parameters)
 					.then(function (proxies) {
 						if (proxies && proxies.length) {
 							return {
@@ -169,7 +169,7 @@ class EnvironmentController {
 								gauze__session__id: agent.session_id,
 							};
 							const session_parameters = { where: session_attributes };
-							return MODEL__SESSION__MODEL__ENVIRONMENT.delete(context, session_parameters).then(function (sessions) {
+							return MODEL__SESSION__MODEL__ENVIRONMENT.delete(context, scope, session_parameters).then(function (sessions) {
 								if (sessions && sessions.length) {
 									const session = sessions[0];
 									return {
@@ -471,7 +471,7 @@ class EnvironmentController {
 						};
 						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, secret_salt_id, secret_type);
 						const parameters = { attributes, ...access_parameters };
-						return MODEL__SECRET__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__SECRET__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 					function () {
 						const attributes = {
@@ -485,34 +485,34 @@ class EnvironmentController {
 						};
 						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, secret_hash_id, secret_type);
 						const parameters = { attributes, ...access_parameters };
-						return MODEL__SECRET__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__SECRET__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 				];
 				const agent_transactions = [
 					function () {
 						const access_parameters = self.create_access_control(agent_root_id, agent_root_type, agent_root_id, agent_root_type);
 						const agent_parameters = { attributes: parameters.agent_root, ...access_parameters };
-						return MODEL__AGENT_ROOT__MODEL__ENVIRONMENT.create(context, agent_parameters);
+						return MODEL__AGENT_ROOT__MODEL__ENVIRONMENT.create(context, scope, agent_parameters);
 					},
 					function () {
 						const access_parameters = self.create_access_control(agent_account_id, agent_account_type, agent_account_id, agent_account_type);
 						const agent_parameters = { attributes: parameters.agent_account, ...access_parameters };
-						return MODEL__AGENT_ACCOUNT__MODEL__ENVIRONMENT.create(context, agent_parameters);
+						return MODEL__AGENT_ACCOUNT__MODEL__ENVIRONMENT.create(context, scope, agent_parameters);
 					},
 					function () {
 						const access_parameters = self.create_access_control(agent_user_id, agent_user_type, agent_user_id, agent_user_type);
 						const agent_parameters = { attributes: parameters.agent_user, ...access_parameters };
-						return MODEL__AGENT_USER__MODEL__ENVIRONMENT.create(context, agent_parameters);
+						return MODEL__AGENT_USER__MODEL__ENVIRONMENT.create(context, scope, agent_parameters);
 					},
 					function () {
 						const access_parameters = self.create_access_control(agent_person_id, agent_person_type, agent_person_id, agent_person_type);
 						const agent_parameters = { attributes: parameters.agent_person, ...access_parameters };
-						return MODEL__AGENT_PERSON__MODEL__ENVIRONMENT.create(context, agent_parameters);
+						return MODEL__AGENT_PERSON__MODEL__ENVIRONMENT.create(context, scope, agent_parameters);
 					},
 					function () {
 						const access_parameters = self.create_access_control(agent_character_id, agent_character_type, agent_character_id, agent_character_type);
 						const agent_parameters = { attributes: parameters.agent_character, ...access_parameters };
-						return MODEL__AGENT_CHARACTER__MODEL__ENVIRONMENT.create(context, agent_parameters);
+						return MODEL__AGENT_CHARACTER__MODEL__ENVIRONMENT.create(context, scope, agent_parameters);
 					},
 				];
 				const proxy_transactions = [
@@ -525,7 +525,7 @@ class EnvironmentController {
 						};
 						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_root_id, proxy_type);
 						const parameters = { attributes, ...access_parameters };
-						return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 					function () {
 						const attributes = {
@@ -536,7 +536,7 @@ class EnvironmentController {
 						};
 						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_account_id, proxy_type);
 						const parameters = { attributes, ...access_parameters };
-						return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 					function () {
 						const attributes = {
@@ -547,7 +547,7 @@ class EnvironmentController {
 						};
 						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_user_id, proxy_type);
 						const parameters = { attributes, ...access_parameters };
-						return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 					function () {
 						const attributes = {
@@ -558,7 +558,7 @@ class EnvironmentController {
 						};
 						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_person_id, proxy_type);
 						const parameters = { attributes, ...access_parameters };
-						return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 					function () {
 						const attributes = {
@@ -569,7 +569,7 @@ class EnvironmentController {
 						};
 						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_character_id, proxy_type);
 						const parameters = { attributes, ...access_parameters };
-						return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__PROXY__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 				];
 				const link_transactions = [
@@ -582,7 +582,7 @@ class EnvironmentController {
 							gauze__relationship__to_id: proxy_account_id,
 						};
 						const parameters = { attributes };
-						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 					function () {
 						const attributes = {
@@ -592,7 +592,7 @@ class EnvironmentController {
 							gauze__relationship__to_id: proxy_root_id,
 						};
 						const parameters = { attributes };
-						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 					function () {
 						const attributes = {
@@ -602,7 +602,7 @@ class EnvironmentController {
 							gauze__relationship__to_id: proxy_person_id,
 						};
 						const parameters = { attributes };
-						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 					function () {
 						const attributes = {
@@ -612,7 +612,7 @@ class EnvironmentController {
 							gauze__relationship__to_id: proxy_root_id,
 						};
 						const parameters = { attributes };
-						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 					function () {
 						const attributes = {
@@ -622,7 +622,7 @@ class EnvironmentController {
 							gauze__relationship__to_id: proxy_user_id,
 						};
 						const parameters = { attributes };
-						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 					function () {
 						const attributes = {
@@ -632,7 +632,7 @@ class EnvironmentController {
 							gauze__relationship__to_id: proxy_account_id,
 						};
 						const parameters = { attributes };
-						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 					function () {
 						const attributes = {
@@ -642,7 +642,7 @@ class EnvironmentController {
 							gauze__relationship__to_id: proxy_character_id,
 						};
 						const parameters = { attributes };
-						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 					function () {
 						const attributes = {
@@ -652,7 +652,7 @@ class EnvironmentController {
 							gauze__relationship__to_id: proxy_person_id,
 						};
 						const parameters = { attributes };
-						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 					// secret
 					function () {
@@ -663,7 +663,7 @@ class EnvironmentController {
 							gauze__relationship__to_id: secret_salt_id,
 						};
 						const parameters = { attributes };
-						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 					function () {
 						const attributes = {
@@ -673,7 +673,7 @@ class EnvironmentController {
 							gauze__relationship__to_id: proxy_root_id,
 						};
 						const parameters = { attributes };
-						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 					function () {
 						const attributes = {
@@ -683,7 +683,7 @@ class EnvironmentController {
 							gauze__relationship__to_id: secret_hash_id,
 						};
 						const parameters = { attributes };
-						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 					function () {
 						const attributes = {
@@ -693,7 +693,7 @@ class EnvironmentController {
 							gauze__relationship__to_id: proxy_root_id,
 						};
 						const parameters = { attributes };
-						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+						return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, scope, parameters);
 					},
 				];
 				const transactions = secret_transactions.concat(agent_transactions, proxy_transactions, link_transactions);
@@ -703,11 +703,11 @@ class EnvironmentController {
 					}),
 				).then(function (results) {
 					// create a session now for the proxy root
-					return self._create_system_session(context, session_id, proxy_root_id, proxy_root_id, proxy_type);
+					return self._create_system_session(context, scope, session_id, proxy_root_id, proxy_root_id, proxy_type);
 				});
 			});
 	}
-	_create_system_session(context, session_id, proxy_id, agent_id, agent_type) {
+	_create_system_session(context, scope, session_id, proxy_id, agent_id, agent_type) {
 		const self = this;
 		const session_realm = "system";
 		const seed = randomBytes(64).toString("hex");
@@ -735,7 +735,7 @@ class EnvironmentController {
 					};
 					const access_parameters = self.create_session_access_control(proxy_id, self.proxy_type, session_id, self.session_type);
 					const parameters = { attributes, ...access_parameters };
-					return MODEL__SESSION__MODEL__ENVIRONMENT.create_environment(context, { attributes }).then(function (data) {
+					return MODEL__SESSION__MODEL__ENVIRONMENT.create(context, scope, parameters).then(function (data) {
 						return data[0];
 					});
 				},
@@ -748,7 +748,7 @@ class EnvironmentController {
 						gauze__relationship__to_id: session_id,
 					};
 					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, scope, parameters);
 				},
 				function () {
 					const attributes = {
@@ -758,7 +758,7 @@ class EnvironmentController {
 						gauze__relationship__to_id: proxy_id,
 					};
 					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, parameters);
+					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, scope, parameters);
 				},
 			];
 			return Promise.all(
@@ -770,7 +770,7 @@ class EnvironmentController {
 			});
 		});
 	}
-	_create_environment_session(context) {
+	_create_environment_session(context, scope) {
 		const session_id = uuidv4();
 		const session_realm = "environment";
 		const seed = randomBytes(64).toString("hex");
@@ -792,7 +792,7 @@ class EnvironmentController {
 				gauze__session__data: "",
 				gauze__session__seed: seed,
 			};
-			return MODEL__SESSION__MODEL__ENVIRONMENT.create_environment(context, { attributes }).then(function (data) {
+			return MODEL__SESSION__MODEL__ENVIRONMENT.create_environment(context, scope, { attributes }).then(function (data) {
 				return data[0];
 			});
 		});
@@ -815,7 +815,7 @@ class EnvironmentController {
 							gauze__session__id: agent.session_id,
 						};
 						const session_parameters = { where: session_attributes };
-						return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, session_parameters)
+						return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, scope, session_parameters)
 							.then(function (sessions) {
 								if (sessions && sessions.length) {
 									const session = sessions[0];
@@ -837,7 +837,7 @@ class EnvironmentController {
 											gauze__proxy__root_id: agent.proxy_id,
 										};
 										const proxy_parameters = { where: proxy_attributes };
-										return MODEL__PROXY__MODEL__ENVIRONMENT.read(context, proxy_parameters).then(function (proxies) {
+										return MODEL__PROXY__MODEL__ENVIRONMENT.read(context, scope, proxy_parameters).then(function (proxies) {
 											if (proxies && proxies.length) {
 												const proxy = proxies[0];
 												return {
@@ -862,7 +862,7 @@ class EnvironmentController {
 									const proxy_root_id = agent.proxy_id;
 									const agent_id = proxy.gauze__proxy__agent_id;
 									const agent_type = proxy.gauze__proxy__agent_type;
-									return self._create_system_session(context, session_id, proxy_root_id, agent_id, agent_type).then(function (system_session) {
+									return self._create_system_session(context, scope, session_id, proxy_root_id, agent_id, agent_type).then(function (system_session) {
 										return {
 											...collection,
 											system_session: system_session,
@@ -904,11 +904,11 @@ class EnvironmentController {
 				throw new Error("Session is required to enter a proxy session");
 			} else {
 				// enter
-				return self._create_environment_session(context);
+				return self._create_environment_session(context, scope);
 			}
 		}
 	}
-	exit_session(context, parameters) {
+	exit_session(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const target_agent = parameters.proxy;
@@ -926,7 +926,7 @@ class EnvironmentController {
 						gauze__proxy__agent_type: target_agent.gauze__proxy__agent_type,
 					};
 					const proxy_parameters = { where: proxy_attributes };
-					return MODEL__PROXY__MODEL__ENVIRONMENT.read(context, proxy_parameters)
+					return MODEL__PROXY__MODEL__ENVIRONMENT.read(context, scope, proxy_parameters)
 						.then(function (proxies) {
 							if (proxies && proxies.length) {
 								const proxy = proxies[0];
@@ -948,7 +948,7 @@ class EnvironmentController {
 								const session_parameters = {
 									where: session_attributes,
 								};
-								return MODEL__SESSION__MODEL__ENVIRONMENT.delete(context, session_parameters).then(function (sessions) {
+								return MODEL__SESSION__MODEL__ENVIRONMENT.delete(context, scope, session_parameters).then(function (sessions) {
 									return {
 										...collection,
 										sessions: sessions,
@@ -983,7 +983,7 @@ class EnvironmentController {
 					const session_parameters = {
 						where: session_attributes,
 					};
-					return MODEL__SESSION__MODEL__ENVIRONMENT.delete(context, session_parameters);
+					return MODEL__SESSION__MODEL__ENVIRONMENT.delete(context, scope, session_parameters);
 				}
 			}
 		} else {

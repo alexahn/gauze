@@ -49,25 +49,25 @@ class EnvironmentModel extends Model {
 			method: method,
 		});
 	}
-	_model_batch(contexts, keys) {
+	_model_batch(contexts, scopes, keys) {
 		const self = this;
 		return Promise.all(
 			keys.map(function (key, index) {
 				const parsed = JSON.parse(key);
 				if (parsed.method === "create") {
-					return self.model._root_create(contexts[index], parsed.parameters, parsed.realm).then(function (data) {
+					return self.model._root_create(contexts[index], scopes[index], parsed.parameters, parsed.realm).then(function (data) {
 						self.clearAll();
 						return data;
 					});
 				} else if (parsed.method === "read") {
-					return self.model._root_read(contexts[index], parsed.parameters, parsed.realm);
+					return self.model._root_read(contexts[index], scopes[index], parsed.parameters, parsed.realm);
 				} else if (parsed.method === "update") {
-					return self.model._root_update(contexts[index], parsed.parameters, parsed.realm).then(function (data) {
+					return self.model._root_update(contexts[index], scopes[index], parsed.parameters, parsed.realm).then(function (data) {
 						self.clearAll();
 						return data;
 					});
 				} else if (parsed.method === "delete") {
-					return self.model._root_delete(contexts[index], parsed.parameters, parsed.realm).then(function (data) {
+					return self.model._root_delete(contexts[index], scopes[index], parsed.parameters, parsed.realm).then(function (data) {
 						self.clearAll();
 						return data;
 					});
@@ -103,45 +103,45 @@ class EnvironmentModel extends Model {
 			}
 		});
 	}
-	_root_create(context, parameters, realm) {
+	_root_create(context, scope, parameters, realm) {
 		const self = this;
 		const { operation } = realm;
 		return self._execute(context, operation, parameters);
 	}
-	_create(context, parameters, realm) {
+	_create(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "create");
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
-	_root_read(context, parameters, realm) {
+	_root_read(context, scope, parameters, realm) {
 		const self = this;
 		const { operation } = realm;
-		return self._execute(context, operation, parameters);
+		return self._execute(context, operation, scope, parameters);
 	}
-	_read(context, parameters, realm) {
+	_read(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "read");
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
-	_root_update(context, parameters, realm) {
+	_root_update(context, scope, parameters, realm) {
 		const self = this;
 		const { operation } = realm;
 		return self._execute(context, operation, parameters);
 	}
-	_update(context, parameters, realm) {
+	_update(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "update");
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
-	_root_delete(context, parameters, realm) {
+	_root_delete(context, scope, parameters, realm) {
 		const self = this;
 		const { operation } = realm;
 		return self._execute(context, operation, parameters);
 	}
-	_delete(context, parameters, realm) {
+	_delete(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "delete");
-		return self.model_loader.load(context, key);
+		return self.model_loader.load(context, scope, key);
 	}
 }
 

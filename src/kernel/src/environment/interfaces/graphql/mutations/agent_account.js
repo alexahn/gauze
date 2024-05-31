@@ -43,11 +43,9 @@ const VERIFY__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 			},
 			resolve: function (source, args, context) {
 				return CONTROLLER__AGENT_ACCOUNT__CONTROLLER__ENVIRONMENT.verify_password(
+					context,
 					{
-						source: source,
-						database: context.database,
-						transaction: context.transaction,
-						agent: context.agent,
+						source
 					},
 					args,
 				);

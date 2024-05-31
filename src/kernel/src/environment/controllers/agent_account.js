@@ -10,7 +10,7 @@ class AgentAccountController {
 		const self = this;
 		self.proxy_type = $abstract.entities.proxy.default($abstract).table_name;
 	}
-	verify_password(context, parameters) {
+	verify_password(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		if (agent) {
@@ -30,7 +30,7 @@ class AgentAccountController {
 					gauze__session__id: agent.session_id,
 				};
 				const session_parameters = { where: session_attributes };
-				return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, session_parameters)
+				return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, scope, session_parameters)
 					.then(function (sessions) {
 						if (sessions && sessions.length) {
 							const session = sessions[0];
@@ -53,7 +53,7 @@ class AgentAccountController {
 								gauze__secret__name: "password",
 							};
 							const secret_parameters = { where: secret_attributes };
-							return MODEL__SECRET__MODEL__ENVIRONMENT.read(context, secret_parameters).then(function (secrets) {
+							return MODEL__SECRET__MODEL__ENVIRONMENT.read(context, scope, secret_parameters).then(function (secrets) {
 								if (secrets && secrets.length) {
 									// filter by hash and filter by salt
 									const salt = secrets.find(function (secret) {
@@ -118,7 +118,7 @@ class AgentAccountController {
 								gauze__session__data: serialized_data,
 							};
 							const session_parameters = { where: session_where, attributes: session_attributes };
-							return MODEL__SESSION__MODEL__ENVIRONMENT.update(context, session_parameters).then(function (sessions) {
+							return MODEL__SESSION__MODEL__ENVIRONMENT.update(context, scope, session_parameters).then(function (sessions) {
 								if (sessions && sessions.length) {
 									const updated_session = sessions[0];
 									return {

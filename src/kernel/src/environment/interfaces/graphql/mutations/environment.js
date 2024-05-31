@@ -22,11 +22,9 @@ const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 			args: {},
 			resolve: function (source, args, context) {
 				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.sign_in(
+					context,
 					{
-						source: source,
-						database: context.database,
-						transaction: context.transaction,
-						agent: context.agent,
+						source
 					},
 					args,
 				);
@@ -37,11 +35,9 @@ const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 			args: {},
 			resolve: function (source, args, context) {
 				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.sign_out(
+					context,
 					{
-						source: source,
-						database: context.database,
-						transaction: context.transaction,
-						agent: context.agent,
+						source
 					},
 					args,
 				);
@@ -73,11 +69,9 @@ const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 			},
 			resolve: function (source, args, context) {
 				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.sign_up(
+					context,
 					{
-						source: source,
-						database: context.database,
-						transaction: context.transaction,
-						agent: context.agent,
+						source
 					},
 					args,
 				);
@@ -93,11 +87,9 @@ const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 			},
 			resolve: function (source, args, context) {
 				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.enter_session(
+					context,
 					{
-						source: source,
-						database: context.database,
-						transaction: context.transaction,
-						agent: context.agent,
+						source
 					},
 					args,
 				);
@@ -113,11 +105,9 @@ const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 			},
 			resolve: function (source, args, context) {
 				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.exit_session(
+					context,
 					{
-						source: source,
-						database: context.database,
-						transaction: context.transaction,
-						agent: context.agent,
+						source
 					},
 					args,
 				);
