@@ -6,11 +6,11 @@ class GraphQLSerializer {
 	}
 	// sql record to graphql fragment
 	// todo: extend to accept source argument so we can calculate depth
-	serialize(source, sql_record) {
+	serialize(sql_record) {
 		const metadata = {
 			id: sql_record[this.sql_primary_key],
 			type: this.graphql_type,
-			depth: source._metadata.depth ? source._metadata.depth + 1 : 1
+			//depth: source._metadata.depth ? source._metadata.depth + 1 : 1
 		};
 		const model = {
 			_metadata: metadata,
