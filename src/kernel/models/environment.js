@@ -116,7 +116,7 @@ class EnvironmentModel extends Model {
 	_root_read(context, scope, parameters, realm) {
 		const self = this;
 		const { operation } = realm;
-		return self._execute(context, operation, scope, parameters);
+		return self._execute(context, operation, parameters);
 	}
 	_read(context, scope, parameters, realm) {
 		const self = this;

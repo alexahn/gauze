@@ -60,7 +60,6 @@ class GauzeServer {
 						// size checks
 						// todo: move these to the reverse proxy later
 						if (req.headers["content-length"]) {
-							console.log("content-length type", typeof req.headers["content-length"]);
 							const contentLength = parseInt(req.headers["content-length"], 10);
 							const maxHTTPSize = parseInt(process.env.GAUZE_HTTP_MAX_SIZE, 10);
 							if (maxHTTPSize < contentLength) {
@@ -132,7 +131,6 @@ class GauzeServer {
 						// size checks
 						// todo: move these to the reverse proxy later
 						if (req.headers["content-length"]) {
-							console.log("content-length type", typeof req.headers["content-length"]);
 							const contentLength = parseInt(req.headers["content-length"], 10);
 							const maxHTTPSize = parseInt(process.env.GAUZE_HTTP_MAX_SIZE, 10);
 							if (maxHTTPSize < contentLength) {

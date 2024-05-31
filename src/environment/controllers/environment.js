@@ -398,7 +398,7 @@ class EnvironmentController {
 		};
 		return parameters;
 	}
-	sign_up(context, parameters) {
+	sign_up(context, scope, parameters) {
 		const self = this;
 		if (!parameters.agent_account || !parameters.agent_account.gauze__agent_account__password) throw new Error("Field 'agent_account.password' is required");
 
@@ -797,7 +797,7 @@ class EnvironmentController {
 			});
 		});
 	}
-	enter_session(context, parameters) {
+	enter_session(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const target_agent = parameters.proxy;

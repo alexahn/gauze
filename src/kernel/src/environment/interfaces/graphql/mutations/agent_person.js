@@ -43,11 +43,9 @@ const REQUEST__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 			},
 			resolve: function (source, args, context) {
 				return CONTROLLER__AGENT_PERSON__CONTROLLER__ENVIRONMENT.request_email(
+					context,
 					{
-						source: source,
-						database: context.database,
-						transaction: context.transaction,
-						agent: context.agent,
+						source
 					},
 					args,
 				);
@@ -63,11 +61,9 @@ const REQUEST__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 			},
 			resolve: function (source, args, context) {
 				return CONTROLLER__AGENT_PERSON__CONTROLLER__ENVIRONMENT.request_signup_email(
+					context,
 					{
-						source: source,
-						database: context.database,
-						transaction: context.transaction,
-						agent: context.agent,
+						source
 					},
 					args,
 				);
@@ -89,11 +85,9 @@ const VERIFY__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Grap
 			},
 			resolve: function (source, args, context) {
 				return CONTROLLER__AGENT_PERSON__CONTROLLER__ENVIRONMENT.verify_email(
+					context,
 					{
-						source: source,
-						database: context.database,
-						transaction: context.transaction,
-						agent: context.agent,
+						source
 					},
 					args,
 				);
@@ -109,11 +103,9 @@ const VERIFY__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Grap
 			},
 			resolve: function (source, args, context) {
 				return CONTROLLER__AGENT_PERSON__CONTROLLER__ENVIRONMENT.verify_signup_email(
+					context,
 					{
-						source: source,
-						database: context.database,
-						transaction: context.transaction,
-						agent: context.agent,
+						source
 					},
 					args,
 				);

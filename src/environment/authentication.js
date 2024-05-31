@@ -13,7 +13,7 @@ const VERIFY_JWT_PAYLOAD = function (context, payload) {
 		gauze__session__seed: payload.seed,
 	};
 	const session_parameters = { where: session_attributes };
-	return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, session_parameters).then(function (sessions) {
+	return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, null, session_parameters).then(function (sessions) {
 		if (sessions && sessions.length) {
 			return sessions[0];
 		} else {
