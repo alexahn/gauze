@@ -24,7 +24,7 @@ const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.sign_in(
 					context,
 					{
-						source
+						source,
 					},
 					args,
 				);
@@ -37,7 +37,7 @@ const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.sign_out(
 					context,
 					{
-						source
+						source,
 					},
 					args,
 				);
@@ -71,7 +71,7 @@ const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.sign_up(
 					context,
 					{
-						source
+						source,
 					},
 					args,
 				);
@@ -89,7 +89,7 @@ const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.enter_session(
 					context,
 					{
-						source
+						source,
 					},
 					args,
 				);
@@ -107,7 +107,7 @@ const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.exit_session(
 					context,
 					{
-						source
+						source,
 					},
 					args,
 				);

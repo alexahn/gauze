@@ -23,10 +23,8 @@ class GraphQLSerializer {
 				_metadata: metadata,
 				_direction: "from",
 			},
-			query: {
-			},
-			mutation: {
-			},
+			query: {},
+			mutation: {},
 		};
 		return model;
 	}

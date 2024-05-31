@@ -45,7 +45,7 @@ const VERIFY__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 				return CONTROLLER__AGENT_ACCOUNT__CONTROLLER__ENVIRONMENT.verify_password(
 					context,
 					{
-						source
+						source,
 					},
 					args,
 				);

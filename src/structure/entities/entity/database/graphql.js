@@ -13,11 +13,6 @@ const METADATA_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE = {
 		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "type",
 	},
-	depth: {
-		//type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT),
-		type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "depth",
-	},
 };
 
 const METADATA__GRAPHQL__DATABASE__ENTITY__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
@@ -109,12 +104,7 @@ const QUERY_RELATIONSHIPS_FROM__GRAPHQL__DATABASE__ENTITY__STRUCTURE = new $abst
 	fields: () => QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
 });
 
-const QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE = {
-	_metadata: {
-		type: METADATA__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
-		description: "Entity Query Query Metadata",
-	},
-};
+const QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE = {};
 
 const QUERY_QUERY__GRAPHQL__DATABASE__ENTITY__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity_Query__Query",
@@ -158,12 +148,7 @@ const MUTATION_RELATIONSHIPS_FROM__GRAPHQL__DATABASE__ENTITY__STRUCTURE = new $a
 	fields: () => MUTATION_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
 });
 
-const MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE = {
-	_metadata: {
-		type: METADATA__GRAPHQL__DATABASE__ENTITY__STRUCTURE,
-		description: "Entity Mutation Mutation Metadata",
-	},
-};
+const MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__ENTITY__STRUCTURE = {};
 
 const MUTATION_MUTATION__GRAPHQL__DATABASE__ENTITY__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Entity_Mutation__Mutation",
