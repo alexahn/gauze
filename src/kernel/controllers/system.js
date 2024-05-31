@@ -24,7 +24,7 @@ class SystemController extends Controller {
 	}
 	_create(context, scope, input) {
 		const self = this;
-		const { agent } = context
+		const { agent } = context;
 		const model_scope = {
 			source: scope.source,
 		};
@@ -39,7 +39,7 @@ class SystemController extends Controller {
 	}
 	_read(context, scope, input) {
 		const self = this;
-		const { agent } = context
+		const { agent } = context;
 		const model_scope = {
 			source: scope.source,
 		};
@@ -54,7 +54,7 @@ class SystemController extends Controller {
 	}
 	_update(context, scope, input) {
 		const self = this;
-		const { agent } = context
+		const { agent } = context;
 		const model_scope = {
 			source: scope.source,
 		};
@@ -69,7 +69,7 @@ class SystemController extends Controller {
 	}
 	_delete(context, scope, input) {
 		const self = this;
-		const { agent } = context
+		const { agent } = context;
 		const model_scope = {
 			source: scope.source,
 		};

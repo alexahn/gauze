@@ -315,7 +315,7 @@ class DatabaseModel extends Model {
 				return self.read(
 					context,
 					{
-						source: undefined
+						source: undefined,
 					},
 					{
 						where: {
@@ -578,11 +578,7 @@ class DatabaseModel extends Model {
 			.then(function (data) {
 				LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
 				context.breadth += data.length;
-				return self.read(
-					context,
-					scope,
-					parameters,
-				);
+				return self.read(context, scope, parameters);
 			})
 			.catch(function (err) {
 				LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.update:failure`, "err", err);
@@ -598,14 +594,10 @@ class DatabaseModel extends Model {
 		// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
 		const MAXIMUM_ROWS = 4294967296;
 		return self
-			.read(
-				context,
-				scope,
-				{
-					...parameters,
-					limit: MAXIMUM_ROWS,
-				},
-			)
+			.read(context, scope, {
+				...parameters,
+				limit: MAXIMUM_ROWS,
+			})
 			.then(function (data) {
 				const valid_ids = data.map(function (item) {
 					return item[self.primary_key];
@@ -618,11 +610,7 @@ class DatabaseModel extends Model {
 				context.breadth += data.length;
 				return sql.then(function (data) {
 					LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
-					return self.read(
-						context,
-						scope,
-						parameters,
-					);
+					return self.read(context, scope, parameters);
 				});
 			})
 			.catch(function (err) {
@@ -711,14 +699,10 @@ class DatabaseModel extends Model {
 		// todo: use attributes and update deleted_at instead of deleting the row
 		// do a read first
 		return self
-			.read(
-				context,
-				scope,
-				{
-					...parameters,
-					limit: MAXIMUM_ROWS,
-				},
-			)
+			.read(context, scope, {
+				...parameters,
+				limit: MAXIMUM_ROWS,
+			})
 			.then(function (read_data) {
 				const valid_ids = read_data.map(function (item) {
 					return item[self.primary_key];
@@ -766,14 +750,10 @@ class DatabaseModel extends Model {
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		const MAXIMUM_ROWS = 4294967296;
 		return self
-			.read(
-				context,
-				scope,
-				{
-					...parameters,
-					limit: MAXIMUM_ROWS,
-				},
-			)
+			.read(context, scope, {
+				...parameters,
+				limit: MAXIMUM_ROWS,
+			})
 			.then(function (read_data) {
 				const valid_ids = read_data.map(function (item) {
 					return item[self.primary_key];
