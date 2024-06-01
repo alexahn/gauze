@@ -347,7 +347,12 @@ class GauzeManager {
 				if (typeof graphql_meta_type !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${graphql_meta_type} is not of type 'string'`);
 			} else if (key === "default_order") {
 				const default_order = config[key];
-				const valid_default_orders = config.fields;
+				const valid_default_orders = {};
+				const indexed_fields = Object.values(config.fields).forEach(function (field) {
+					if (field.indexed) {
+						valid_default_orders[field.name] = true;
+					}
+				});
 				if (typeof default_order !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${default_order} is not of type 'string'`);
 				if (!valid_default_orders[default_order])
 					throw new Error(`Entity property '${path}' must contain string values from (${Object.keys(valid_default_orders)}): ${default_order} is not contained`);

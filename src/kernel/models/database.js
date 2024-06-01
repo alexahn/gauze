@@ -285,6 +285,25 @@ class DatabaseModel extends Model {
 				return result;
 			});
 	}
+	_validate_parameters(parameters) {
+		const self = this;
+		if (parameters.where) {
+			Object.keys(parameters.where).forEach(function (key) {
+				if (!self.entity.fields[key].indexed) {
+					throw new Error(`Input argument 'where.${key}' is invalid: ${key} is not an indexed field`);
+				}
+			});
+		}
+		if (parameters.order) {
+			if (self.entity.fields[parameters.order]) {
+				if (!self.entity.fields[parameters.order].indexed) {
+					throw new Error(`Input argument 'order' is invalid: ${parameters.order} is not an indexed field`);
+				}
+			} else {
+				throw new Error(`Input argument 'order' is invalid: ${parameters.order} is not a valid field`);
+			}
+		}
+	}
 	_parse_source(scope, parameters) {
 		const self = this;
 		const { source } = scope;
@@ -354,7 +373,6 @@ class DatabaseModel extends Model {
 	_root_read(context, scope, parameters) {
 		const self = this;
 		const { database, transaction } = context;
-		//const { source } = scope
 		const {
 			where = {},
 			where_in = {},
@@ -417,7 +435,6 @@ class DatabaseModel extends Model {
 	_relationship_read(context, scope, parameters) {
 		const self = this;
 		const { database, transaction } = context;
-		//const { source } = scope
 		const {
 			where = {},
 			where_in = {},
@@ -544,6 +561,7 @@ class DatabaseModel extends Model {
 		const key = self._batch_key(relationship_source, parameters, "read");
 		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
 		if (self.transactions_max < context.transactions) throw new Error("Maximum transactions exceeded");
+		self._validate_parameters(parameters);
 		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
@@ -553,7 +571,6 @@ class DatabaseModel extends Model {
 	_root_update(context, scope, parameters) {
 		var self = this;
 		const { database, transaction } = context;
-		//const { source } = scope
 		var { attributes, where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
 		const sql = database(self.table_name)
@@ -592,7 +609,6 @@ class DatabaseModel extends Model {
 	_relationship_update(context, scope, parameters) {
 		const self = this;
 		const { database, transaction } = context;
-		//const { source } = scope
 		const { attributes, where, where_in = {}, where_not_in = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
 		// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
@@ -629,6 +645,7 @@ class DatabaseModel extends Model {
 		const key = self._batch_key(relationship_source, parameters, "update");
 		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
 		if (self.transactions_max < context.transactions) throw new Error("Maximum transactions exceeded");
+		self._validate_parameters(parameters);
 		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
@@ -697,7 +714,6 @@ class DatabaseModel extends Model {
 	_root_delete(context, scope, parameters) {
 		const self = this;
 		const { database, transaction } = context;
-		// const { source } = scope
 		const { where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, limit = 16 } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
@@ -751,7 +767,6 @@ class DatabaseModel extends Model {
 	_relationship_delete(context, scope, parameters) {
 		const self = this;
 		const { database, transaction } = context;
-		// const { source } = scope
 		const { where, where_in = {}, where_not_in = {}, limit = 16 } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		const MAXIMUM_ROWS = 4294967296;
@@ -789,6 +804,7 @@ class DatabaseModel extends Model {
 		const key = self._batch_key(relationship_source, parameters, "delete");
 		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
 		if (self.transactions_max < context.transactions) throw new Error("Maximum transactions exceeded");
+		self._validate_parameters(parameters);
 		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
@@ -798,7 +814,6 @@ class DatabaseModel extends Model {
 	_root_count(context, scope, parameters) {
 		const self = this;
 		const { database, transaction } = context;
-		// const { source } = scope
 		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
 		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
@@ -845,7 +860,6 @@ class DatabaseModel extends Model {
 	_relationship_count(context, scope, parameters) {
 		const self = this;
 		const { database, transaction } = context;
-		// const { source } = scope
 		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
 		const relationship_source = self._parse_source(scope, parameters);
@@ -960,6 +974,7 @@ class DatabaseModel extends Model {
 		const key = self._batch_key(relationship_source, parameters, "count");
 		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
 		if (self.transactions_max < context.transactions) throw new Error("Maximum transactions exceeded");
+		self._validate_parameters(parameters);
 		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
