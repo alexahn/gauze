@@ -406,6 +406,11 @@ query header {
 			}
 			description
 		}
+		methods {
+			name
+			privacy
+			allowed_agent_types
+		}
 		graphql_attributes_string
 		graphql_where_string
 		graphql_query_attributes_type

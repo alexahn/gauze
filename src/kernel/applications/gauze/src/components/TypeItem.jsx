@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { FileTextIcon, TrashIcon, Pencil2Icon } from "@radix-ui/react-icons";
+import { FileTextIcon, TrashIcon, Pencil2Icon, BookmarkIcon, BookmarkFilledIcon } from "@radix-ui/react-icons";
 
 import Input from "./Input.jsx";
 
@@ -107,6 +107,26 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 			setSubmitUpdate(false);
 		}
 	}
+	function whitelistWhere(method) {
+		const whitelistWhere = encodeURIComponent(
+			JSON.stringify({
+				gauze__whitelist__entity_id: item[header.primary_key],
+				gauze__whitelist__entity_type: header.table_name,
+				gauze__whitelist__method: method,
+			}),
+		);
+		return whitelistWhere;
+	}
+	function blacklistWhere(method) {
+		const blacklistWhere = encodeURIComponent(
+			JSON.stringify({
+				gauze__blacklist__entity_id: item[header.primary_key],
+				gauze__blacklist__entity_type: header.table_name,
+				gauze__blacklist__method: method,
+			}),
+		);
+		return blacklistWhere;
+	}
 	return (
 		<div className="mw-100 w-100">
 			<h1 align="right">{header.graphql_meta_type}</h1>
@@ -115,6 +135,34 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 			<div align="right" className="cf">
 				<nav>
 					<div className="flex pa1 fr">
+						<div className="relative row" tabIndex="0">
+							<button>
+								<BookmarkFilledIcon />
+							</button>
+							<span className="dn bg-light-green mw4 w4 top-0 right-0 pa1 absolute f4 tooltip">
+								{header.methods.map(function (method) {
+									return (
+										<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "blacklist", where: blacklistWhere(method.name) })}>
+											<button className="mw4 w4">{method.name}</button>
+										</a>
+									);
+								})}
+							</span>
+						</div>
+						<div className="relative row" tabIndex="0">
+							<button>
+								<BookmarkIcon />
+							</button>
+							<span className="dn bg-light-green mw4 w4 top-0 right-0 pa1 absolute f4 tooltip">
+								{header.methods.map(function (method) {
+									return (
+										<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "whitelist", where: whitelistWhere(method.name) })}>
+											<button className="mw4 w4">{method.name}</button>
+										</a>
+									);
+								})}
+							</span>
+						</div>
 						<a href={router.buildUrl(route.name, { ...route.params, mode: "remove" })}>
 							<button className="action" type="button" disabled={route.params.mode === "remove"}>
 								<TrashIcon />

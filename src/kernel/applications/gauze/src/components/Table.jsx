@@ -9,7 +9,7 @@ import Input from "./Input.jsx";
 import Pagination from "./Pagination.jsx";
 
 import { v4 as uuidv4 } from "uuid";
-import { FileTextIcon, TrashIcon, Pencil2Icon, Cross1Icon } from "@radix-ui/react-icons";
+import { Pencil2Icon, Cross1Icon, BookmarkIcon, BookmarkFilledIcon } from "@radix-ui/react-icons";
 
 function read(gauze, model, header, variables) {
 	const transactions = [
@@ -633,23 +633,61 @@ export default function Table({
 								</span>
 							</th>
 							{data.map(function (item) {
+								function whitelistWhere(method) {
+									const whitelistWhere = encodeURIComponent(
+										JSON.stringify({
+											gauze__whitelist__entity_id: item[header.primary_key],
+											gauze__whitelist__entity_type: header.table_name,
+											gauze__whitelist__method: method,
+										}),
+									);
+									return whitelistWhere;
+								}
+								function blacklistWhere(method) {
+									const blacklistWhere = encodeURIComponent(
+										JSON.stringify({
+											gauze__blacklist__entity_id: item[header.primary_key],
+											gauze__blacklist__entity_type: header.table_name,
+											gauze__blacklist__method: method,
+										}),
+									);
+									return blacklistWhere;
+								}
 								return (
 									<th key={item[header.primary_key]} align="left" className="mw4 w4 pt1 flex justify-center">
-										<a href={router.buildUrl("system.types.item.type.id", { type: type, id: item[header.primary_key], mode: "view" })}>
-											<button className="f5 ml1 mr1">
-												<FileTextIcon />
-											</button>
-										</a>
 										<a href={router.buildUrl("system.types.item.type.id", { type: type, id: item[header.primary_key], mode: "edit" })}>
-											<button className="f5 ml1 mr1">
+											<button className="ml1 mr1">
 												<Pencil2Icon />
 											</button>
 										</a>
-										<a href={router.buildUrl("system.types.item.type.id", { type: type, id: item[header.primary_key], mode: "remove" })}>
-											<button className="f5 ml1 mr1">
-												<TrashIcon />
+										<div className="relative row mw4 w4" tabIndex="0">
+											<button className="ml1 mr1">
+												<BookmarkIcon />
 											</button>
-										</a>
+											<span className="dn bg-light-green mw4 w4 top-0 right-0 pa1 absolute f4 tooltip">
+												{header.methods.map(function (method) {
+													return (
+														<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "whitelist", where: whitelistWhere(method.name) })}>
+															<button className="mw4 w4">{method.name}</button>
+														</a>
+													);
+												})}
+											</span>
+										</div>
+										<div className="relative row mw4 w4" tabIndex="0">
+											<button className="ml1 mr1">
+												<BookmarkFilledIcon />
+											</button>
+											<span className="dn bg-light-green mw4 w4 top-0 right-0 pa1 absolute f4 tooltip">
+												{header.methods.map(function (method) {
+													return (
+														<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "blacklist", where: blacklistWhere(method.name) })}>
+															<button className="mw4 w4">{method.name}</button>
+														</a>
+													);
+												})}
+											</span>
+										</div>
 									</th>
 								);
 							})}

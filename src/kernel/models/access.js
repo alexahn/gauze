@@ -130,7 +130,11 @@ class AccessSystemModel extends SystemModel {
 		if (initiator_role === "root") {
 			// root can create trunk or leaf
 			if (target_role === "root") {
-				throw new Error("Target agent's role cannot be root");
+				if (method === "read" && (initiator_record[self.key_id] === target_record[self.key_id])) {
+					return true
+				} else {
+					throw new Error("Target agent's role cannot be root");
+				}
 			} else if (target_role === "trunk") {
 				return true;
 			} else if (target_role === "leaf") {
@@ -242,6 +246,7 @@ class AccessSystemModel extends SystemModel {
 	}
 	_read_entity(context, input, realm) {
 		const self = this;
+		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		// get highest record for initiator
 		// get list of records based on entity_id, entity_type, and method
@@ -308,9 +313,9 @@ class AccessSystemModel extends SystemModel {
 				}
 			});
 		} else if (input.where && input.where[self.key_agent_id]) {
-			return self._read_agent(context, input, agent, operation);
+			return self._read_agent(context, input, realm);
 		} else if (input.where && input.where[self.key_entity_id] && input.where[self.key_entity_type] && input.where[self.key_method]) {
-			return self._read_entity(context, input, agent, operation);
+			return self._read_entity(context, input, realm);
 		} else {
 			// todo: move this to system interface
 			throw new Error(
