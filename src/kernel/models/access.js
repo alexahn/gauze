@@ -130,8 +130,8 @@ class AccessSystemModel extends SystemModel {
 		if (initiator_role === "root") {
 			// root can create trunk or leaf
 			if (target_role === "root") {
-				if (method === "read" && (initiator_record[self.key_id] === target_record[self.key_id])) {
-					return true
+				if (method === "read" && initiator_record[self.key_id] === target_record[self.key_id]) {
+					return true;
 				} else {
 					throw new Error("Target agent's role cannot be root");
 				}

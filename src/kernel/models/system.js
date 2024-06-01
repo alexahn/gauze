@@ -568,6 +568,7 @@ class SystemModel extends Model {
 		const self = this;
 		const { agent, entity, operation } = realm;
 		// note: our architecture requires that the key is a uuid
+		// todo: move this to a middleware
 		if (!parameters.attributes[self.entity.primary_key]) {
 			parameters.attributes[self.entity.primary_key] = uuidv4();
 		}

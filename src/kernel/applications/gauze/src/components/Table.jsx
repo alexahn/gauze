@@ -9,7 +9,7 @@ import Input from "./Input.jsx";
 import Pagination from "./Pagination.jsx";
 
 import { v4 as uuidv4 } from "uuid";
-import { Pencil2Icon, Cross1Icon, BookmarkIcon, BookmarkFilledIcon } from "@radix-ui/react-icons";
+import { Share1Icon, Pencil2Icon, Cross1Icon, BookmarkIcon, BookmarkFilledIcon } from "@radix-ui/react-icons";
 
 function read(gauze, model, header, variables) {
 	const transactions = [
@@ -579,7 +579,7 @@ export default function Table({
 										})}
 										{/* connection component? */}
 										<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
-											<div className="pa1">FROM</div>
+											<div className="pa1 from">FROM</div>
 											{header.relationships_from.map(function (from) {
 												return (
 													<div key={from} className="pa1">
@@ -653,15 +653,19 @@ export default function Table({
 									);
 									return blacklistWhere;
 								}
+								const share = {
+									entity_id: item[header.primary_key],
+									entity_type: header.table_name,
+								};
 								return (
 									<th key={item[header.primary_key]} align="left" className="mw4 w4 pt1 flex justify-center">
 										<a href={router.buildUrl("system.types.item.type.id", { type: type, id: item[header.primary_key], mode: "edit" })}>
-											<button className="ml1 mr1">
+											<button className="">
 												<Pencil2Icon />
 											</button>
 										</a>
 										<div className="relative row mw4 w4" tabIndex="0">
-											<button className="ml1 mr1">
+											<button className="">
 												<BookmarkIcon />
 											</button>
 											<span className="dn bg-light-green mw4 w4 top-0 right-0 pa1 absolute f4 tooltip">
@@ -675,7 +679,7 @@ export default function Table({
 											</span>
 										</div>
 										<div className="relative row mw4 w4" tabIndex="0">
-											<button className="ml1 mr1">
+											<button className="">
 												<BookmarkFilledIcon />
 											</button>
 											<span className="dn bg-light-green mw4 w4 top-0 right-0 pa1 absolute f4 tooltip">
@@ -687,6 +691,12 @@ export default function Table({
 													);
 												})}
 											</span>
+										</div>
+										<div className="relative row mw4 w4" tabIndex="0">
+											<button>
+												<Share1Icon />
+											</button>
+											<span className="dn bg-light-green mw6 w6 top-0 right-0 pa1 absolute f9 tooltip">{JSON.stringify(share, null, 4)}</span>
 										</div>
 									</th>
 								);
