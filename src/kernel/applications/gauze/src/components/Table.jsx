@@ -234,8 +234,8 @@ export default function Table({
 			console.log("targetHeader", targetHeader);
 			const source = {
 				_metadata: {
-					type: header.graphql_meta_type,
-					id: item[header.primary_key],
+					type: sourceHeader.graphql_meta_type,
+					id: item[sourceHeader.primary_key],
 				},
 				_direction: "to",
 			};
@@ -292,8 +292,8 @@ export default function Table({
 			console.log("targetHeader", targetHeader);
 			const source = {
 				_metadata: {
-					type: header.graphql_meta_type,
-					id: item[header.primary_key],
+					type: sourceHeader.graphql_meta_type,
+					id: item[sourceHeader.primary_key],
 				},
 				_direction: "from",
 			};
