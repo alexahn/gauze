@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { FileTextIcon, TrashIcon, Pencil2Icon, BookmarkIcon, BookmarkFilledIcon } from "@radix-ui/react-icons";
+import { FileTextIcon, TrashIcon, Pencil2Icon, BookmarkIcon, BookmarkFilledIcon, Share1Icon } from "@radix-ui/react-icons";
 
 import Input from "./Input.jsx";
 
@@ -127,6 +127,10 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 		);
 		return blacklistWhere;
 	}
+	const share = {
+		entity_id: item[header.primary_key],
+		entity_type: header.table_name,
+	};
 	return (
 		<div className="mw-100 w-100">
 			<h1 align="right">{header.graphql_meta_type}</h1>
@@ -135,6 +139,12 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 			<div align="right" className="cf">
 				<nav>
 					<div className="flex pa1 fr">
+						<div className="relative row mw4 w4" tabIndex="0">
+							<button>
+								<Share1Icon />
+							</button>
+							<span className="dn bg-light-green mw6 w6 top-0 right-0 pa1 absolute f9 tooltip">{JSON.stringify(share, null, 4)}</span>
+						</div>
 						<div className="relative row" tabIndex="0">
 							<button>
 								<BookmarkFilledIcon />

@@ -7,7 +7,7 @@ import Graph from "./Graph.jsx";
 import Node from "./Node.jsx";
 import Table from "./Table.jsx";
 
-import { GearIcon } from "@radix-ui/react-icons";
+import { GearIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 
 export default function Root({ gauze, model, router, route, render, graph }) {
 	const agentHeader = gauze.getSystemAgentHeader(model);
@@ -61,6 +61,9 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 						<br />
 					</span>
 				</div>
+			</div>
+			<div className="fixed top-1 left-1" style={{ zIndex: 1}}>
+				<PlusCircledIcon width={30} height={30}/>
 			</div>
 			<Graph key={"graph"} agentHeader={agentHeader} route={route} graph={graph} nodes={nodes} edges={edges} connections={connections} />
 		</div>
