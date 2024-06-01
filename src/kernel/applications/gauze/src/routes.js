@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import { PAGINATION_PAGE_SIZE } from "./constants.js";
 
 import * as components from "./components/index.js";
+import * as orchestrate from "./orchestrate.js";
 
 const routes = [
 	{
@@ -222,6 +223,12 @@ const routes = [
 		canActivate: (router, dependencies) => (toState, fromState, done) => {
 			const { services } = dependencies;
 			const { gauze, model, graph, router } = services;
+			const orchestrateServices = {
+				gauze: gauze.default,
+				model: model.default,
+				graph: graph.default,
+				router: router.default,
+			};
 			return gauze.default.header().then(function (headers) {
 				headers.forEach(function (header) {
 					model.default.create("HEADER", header.name, header);
@@ -230,179 +237,21 @@ const routes = [
 				const root = graph.default.root(agentHeader.name);
 				if (root) {
 					console.log("root found!");
-				} else {
-					const rootID = uuidv4();
-					graph.default.createNodes([
-						{
-							id: rootID,
-							root: true,
-							index: 0,
-							oldX: 0,
-							oldY: 0,
-							x: 0,
-							y: 0,
-							z: 1,
-							height: null,
-							width: null,
-							component: components.table.default,
-							props: {
-								gauze: gauze.default,
-								model: model.default,
-								router: router.default,
-								graph: graph.default,
-								type: agentHeader.name,
-								table_name: agentHeader.table_name,
-								primary_key: agentHeader.primary_key,
-								graphql_meta_type: agentHeader.graphql_meta_type,
-								fromNodeID: null,
-								toNodeID: null,
-								from: null,
-								to: null,
-								fields: agentHeader.fields,
-								variables: {
-									where: {},
-									offset: 0,
-									limit: PAGINATION_PAGE_SIZE,
-									order: agentHeader.default_order,
-									order_direction: "desc",
-								},
-								data: [],
-								count: 0,
-							},
-							complete: false,
-							sound: false,
-							render: false,
-						},
-					]);
-				}
-				// note: load from local storage in the future
-				// note: parse all nodes, and stitch together one graphql query
-				// note: refresh the data section for all nodes on load
-				// note: we don't need to wait until the query is done to present data, because we can present the data from local storage
-				// note: there are four main states for nodes:
-				// note:    incomplete (we don't have all the fields associated with the identifer)
-				// note:    complete (we have all the fields associated with the identifier)
-				// note:    unsound (the fields we have are not the latest values)
-				// note:    sound (the fields we have are the latest values)
-				// note: we can only proceed with rendering once every node is complete
-				// note: we can proceed with soundness after rendering
-				//const activeNodesArray = graph.default.activeNodesArray(agentHeader.name, graph.default.nodes, graph.default.edges, graph.default.connections);
-				const activeNodes = graph.default.activeNodes(agentHeader.name);
-				return Promise.all(
-					activeNodes.values.map(function (node) {
-						const header = model.default.read("HEADER", node.props.type);
-						const transactions = [
-							function () {
-								return gauze.default.read(header, node.props.variables).then(function (data) {
-									if (data && data.length) {
-										data.forEach(function (item) {
-											model.default.create(item._metadata.type, item._metadata.id, item.attributes);
-										});
-									}
-									return data;
-								});
-							},
-							function () {
-								return gauze.default.count(header, {
-									source: node.props.variables.source,
-									count: {
-										[header.primary_key]: header.primary_key,
-									},
-									where: node.props.variables.where,
-								});
-							},
-						];
-						return Promise.all(
-							transactions.map(function (t) {
-								return t();
-							}),
-						).then(function (results) {
-							const data = results[0].map(function (item) {
-								return item.attributes;
-							});
-							const count = results[1][0].count;
-							return {
-								node: node,
-								header: header,
-								data: data,
-								count: count,
-							};
-						});
-					}),
-				)
-					.then(function (results) {
-						// update data and count
-						graph.default.updateNodes(
-							results.map(function (result) {
-								return {
-									...result.node,
-									props: {
-										...result.node.props,
-										data: result.data,
-										count: result.count,
-										connectionIDs: [],
-									},
-									complete: true,
-								};
-							}),
-						);
-						const synced = graph.default.syncNodesEdges(results);
-						console.log("route synced", synced);
-						const newConnections = synced.newConnections.map(function (connection) {
-							return {
-								...connection,
-								component: components.relationship.default,
-								props: {
-									gauze: gauze.default,
-									model: model.default,
-									router: router.default,
-									graph: graph.default,
-								},
-							};
-						});
-						const newEdges = synced.newEdges;
-						graph.default.createConnections(newConnections);
-						graph.default.createEdges(newEdges);
-						const syncedConnections = graph.default.syncNodeConnections(graph.default.nodes, graph.default.edges, graph.default.connections);
-						console.log("route syncedConnections", syncedConnections);
-						const connectedNodes = Object.keys(syncedConnections).map(function (id) {
-							return {
-								...graph.default.nodes[id],
-								props: {
-									...graph.default.nodes[id].props,
-									connectionIDs: syncedConnections[id].connections,
-								},
-							};
-						});
-						graph.default.updateNodes(connectedNodes);
-						// reinitialize
-						graph.default.updateNodes(
-							graph.default.activeNodes(agentHeader.name).values.map(function (node) {
-								return {
-									...node,
-									oldWidth: node.width,
-									oldHeight: node.height,
-									width: null,
-									height: null,
-								};
-							}),
-						);
-						// reinitialize connections
-						graph.default.updateConnections(
-							graph.default.activeConnections(agentHeader.name).values.map(function (connection) {
-								return {
-									...connection,
-									x: null,
-									y: null,
-								};
-							}),
-						);
-						return results;
-					})
-					.catch(function (err) {
+					return orchestrate.reload(orchestrateServices, agentHeader).catch(function (err) {
 						console.error(err);
 						throw err;
 					});
+				} else {
+					return orchestrate
+						.createNode(orchestrateServices, agentHeader)
+						.then(function () {
+							return orchestrate.reload(orchestrateServices, agentHeader);
+						})
+						.catch(function (err) {
+							console.error(err);
+							throw err;
+						});
+				}
 			});
 		},
 		layout: layouts.albatross.default,

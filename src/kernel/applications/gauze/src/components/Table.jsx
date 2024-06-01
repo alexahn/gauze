@@ -3,6 +3,8 @@ import { useState } from "react";
 
 import { PAGINATION_PAGE_SIZE } from "./../constants.js";
 
+import * as orchestrate from "./../orchestrate.js";
+
 import Connection from "./Connection.jsx";
 import Relationship from "./Relationship.jsx";
 import Input from "./Input.jsx";
@@ -10,34 +12,6 @@ import Pagination from "./Pagination.jsx";
 
 import { v4 as uuidv4 } from "uuid";
 import { Share1Icon, Pencil2Icon, Cross1Icon, BookmarkIcon, BookmarkFilledIcon } from "@radix-ui/react-icons";
-
-function read(gauze, model, header, variables) {
-	const transactions = [
-		function () {
-			return gauze.read(header, variables).then(function (data) {
-				data.forEach(function (item) {
-					model.create(item._metadata.type, item._metadata.id, item.attributes);
-				});
-				return data;
-			});
-		},
-		function () {
-			const countVariables = {
-				source: variables.source,
-				count: {
-					[header.primary_key]: header.primary_key,
-				},
-				where: variables.where,
-			};
-			return gauze.count(header, countVariables);
-		},
-	];
-	return Promise.all(
-		transactions.map(function (f) {
-			return f();
-		}),
-	);
-}
 
 export default function Table({
 	agentHeader,
@@ -79,76 +53,6 @@ export default function Table({
 	const page_max_no_skew = Math.ceil(Math.max(total / limit));
 	const page_max = page_max_no_skew < page_current ? page_current : page_max_no_skew;
 
-	function synchronize(targetNode, callback) {
-		if (targetNode) {
-			const synced = graph.syncNodeEdges(targetNode, targetNode.props.data);
-			console.log("synced", synced);
-			// create new edges, connections, and nodes using service
-			const newConnections = synced.newConnections.map(function (connection) {
-				return {
-					...connection,
-					component: Relationship,
-					props: {
-						gauze: gauze,
-						model: model,
-						router: router,
-					},
-				};
-			});
-			const newEdges = synced.newEdges;
-			graph.createConnections(newConnections);
-			graph.createEdges(newEdges);
-			callback(targetNode);
-		}
-		// syncedConnections is the total set of connections for all nodes
-		const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
-		// wipe connections for all active nodes
-		graph.updateNodes(
-			graph.activeNodes(agentHeader.name).values.map(function (node) {
-				return {
-					...node,
-					props: {
-						...node.props,
-						connectionIDs: [],
-					},
-				};
-			}),
-		);
-		// apply synced connections for all nodes
-		const connectedNodes = Object.keys(syncedConnections).map(function (id) {
-			return {
-				...graph.selectNode(id),
-				props: {
-					...graph.selectNode(id).props,
-					connectionIDs: syncedConnections[id].connections,
-				},
-			};
-		});
-		graph.updateNodes(connectedNodes);
-		// reinitialize nodes
-		graph.updateNodes(
-			graph.activeNodes(agentHeader.name).values.map(function (node) {
-				return {
-					...node,
-					oldWidth: node.width,
-					oldHeight: node.height,
-					width: null,
-					height: null,
-				};
-			}),
-		);
-		// reinitialize connections
-		graph.updateConnections(
-			graph.activeConnections(agentHeader.name).values.map(function (connection) {
-				return {
-					...connection,
-					x: null,
-					y: null,
-				};
-			}),
-		);
-	}
-
 	function paginate(item) {
 		return function (e) {
 			var paginate;
@@ -179,7 +83,8 @@ export default function Table({
 				...variables,
 				...paginate,
 			};
-			return read(gauze, model, header, localVariables)
+			return orchestrate
+				.read({ gauze, model }, header, localVariables)
 				.then(function (results) {
 					const data = results[0].map(function (item) {
 						return item.attributes;
@@ -189,9 +94,38 @@ export default function Table({
 					targetNode.props.variables = localVariables;
 					targetNode.props.data = data;
 					targetNode.props.count = count;
-					synchronize(targetNode, function (targetNode) {
-						graph.updateNodes([targetNode]);
-					});
+					return orchestrate
+						.synchronize({ gauze, model, graph }, agentHeader, targetNode, function (targetNode) {
+							graph.updateNodes([targetNode]);
+						})
+						.then(function () {
+							setSyncing(false);
+						});
+				})
+				.catch(function (err) {
+					setSyncing(false);
+					throw err;
+				});
+		};
+	}
+
+	function traverseTo(sourceHeader, item, targetType) {
+		return function (e) {
+			setSyncing(true);
+			return orchestrate
+				.traverseTo(
+					{
+						gauze,
+						model,
+						router,
+						graph,
+					},
+					agentHeader,
+					node,
+					item,
+					targetType,
+				)
+				.then(function () {
 					setSyncing(false);
 				})
 				.catch(function (err) {
@@ -201,141 +135,29 @@ export default function Table({
 		};
 	}
 
-	function traverse(targetHeader, targetNode) {
-		console.log("targetNode", targetNode);
-		setSyncing(true);
-		return read(gauze, model, targetHeader, targetNode.props.variables)
-			.then(function (results) {
-				const data = results[0].map(function (item) {
-					return item.attributes;
-				});
-				const count = results[1][0].count;
-				targetNode.props.data = data;
-				targetNode.props.count = count;
-				synchronize(targetNode, function (targetNode) {
-					graph.createNodes([targetNode]);
-				});
-				setSyncing(false);
-			})
-			.catch(function (err) {
-				setSyncing(false);
-				throw err;
-			});
-	}
-
-	function traverseTo(sourceHeader, item, targetType) {
-		return function (e) {
-			console.log("traverseTo", sourceHeader, item, targetType);
-			// convert graphql to type to name
-			const headers = model.all("HEADER");
-			const targetHeader = headers.find(function (header) {
-				return header.graphql_meta_type === targetType;
-			});
-			console.log("targetHeader", targetHeader);
-			const source = {
-				_metadata: {
-					type: sourceHeader.graphql_meta_type,
-					id: item[sourceHeader.primary_key],
-				},
-				_direction: "to",
-			};
-			const targetNode = {
-				id: uuidv4(),
-				oldX: 0,
-				oldY: 0,
-				x: null,
-				y: null,
-				z: 1,
-				height: null,
-				width: null,
-				component: Table,
-				props: {
-					gauze: gauze,
-					model: model,
-					router: router,
-					graph: graph,
-					type: targetHeader.name,
-					table_name: targetHeader.table_name,
-					primary_key: targetHeader.primary_key,
-					graphql_meta_type: targetHeader.graphql_meta_type,
-					from: source,
-					fromNodeID: node.id,
-					to: null,
-					toNodeID: null,
-					fields: targetHeader.fields,
-					variables: {
-						source: source,
-						where: {},
-						offset: 0,
-						limit: PAGINATION_PAGE_SIZE,
-						order: targetHeader.default_order,
-						order_direction: "desc",
-					},
-					data: [],
-					count: 0,
-				},
-				complete: true,
-				sound: false,
-			};
-			return traverse(targetHeader, targetNode);
-		};
-	}
-
 	function traverseFrom(sourceHeader, item, targetType) {
 		return function (e) {
-			console.log("traverse", sourceHeader, item, targetType);
-			// convert graphql to type to name
-			const headers = model.all("HEADER");
-			const targetHeader = headers.find(function (header) {
-				return header.graphql_meta_type === targetType;
-			});
-			console.log("targetHeader", targetHeader);
-			const source = {
-				_metadata: {
-					type: sourceHeader.graphql_meta_type,
-					id: item[sourceHeader.primary_key],
-				},
-				_direction: "from",
-			};
-			const targetNode = {
-				id: uuidv4(),
-				oldX: 0,
-				oldY: 0,
-				x: null,
-				y: null,
-				z: 1,
-				height: null,
-				width: null,
-				component: Table,
-				props: {
-					gauze: gauze,
-					model: model,
-					router: router,
-					graph: graph,
-					type: targetHeader.name,
-					table_name: targetHeader.table_name,
-					primary_key: targetHeader.primary_key,
-					graphql_meta_type: targetHeader.graphql_meta_type,
-					from: null,
-					fromNodeID: null,
-					to: source,
-					toNodeID: node.id,
-					fields: targetHeader.fields,
-					variables: {
-						source: source,
-						where: {},
-						offset: 0,
-						limit: PAGINATION_PAGE_SIZE,
-						order: targetHeader.default_order,
-						order_direction: "desc",
+			setSyncing(true);
+			return orchestrate
+				.traverseFrom(
+					{
+						gauze,
+						model,
+						router,
+						graph,
 					},
-					data: [],
-					count: 0,
-				},
-				complete: true,
-				sound: false,
-			};
-			return traverse(targetHeader, targetNode);
+					agentHeader,
+					node,
+					item,
+					targetType,
+				)
+				.then(function () {
+					setSyncing(false);
+				})
+				.catch(function (err) {
+					setSyncing(false);
+					throw err;
+				});
 		};
 	}
 
@@ -346,7 +168,8 @@ export default function Table({
 			where: localWhere,
 			offset: 0,
 		};
-		return read(gauze, model, header, localVariables)
+		return orchestrate
+			.read({ gauze, model }, header, localVariables)
 			.then(function (results) {
 				const data = results[0].map(function (item) {
 					return item.attributes;
@@ -356,10 +179,13 @@ export default function Table({
 				targetNode.props.variables = localVariables;
 				targetNode.props.data = data;
 				targetNode.props.count = count;
-				synchronize(targetNode, function (targetNode) {
-					graph.updateNodes([targetNode]);
-				});
-				setSyncing(false);
+				return orchestrate
+					.synchronize({ gauze, model, graph }, agentHeader, targetNode, function (targetNode) {
+						graph.updateNodes([targetNode]);
+					})
+					.then(function () {
+						setSyncing(false);
+					});
 			})
 			.catch(function (err) {
 				setSyncing(false);
@@ -478,7 +304,8 @@ export default function Table({
 						setSubmitCreate(false);
 						setCreateItem(created.attributes);
 						setSyncing(true);
-						return read(gauze, model, header, node.props.variables)
+						return orchestrate
+							.read({ gauze, model }, header, node.props.variables)
 							.then(function (results) {
 								const data = results[0].map(function (item) {
 									return item.attributes;
@@ -487,7 +314,7 @@ export default function Table({
 								const targetNode = { ...node };
 								targetNode.props.data = data;
 								targetNode.props.count = count;
-								synchronize(targetNode, function (targetNode) {
+								orchestrate.synchronize({ gauze, model, graph }, agentHeader, targetNode, function (targetNode) {
 									graph.updateNodes([targetNode]);
 								});
 								setSyncing(false);

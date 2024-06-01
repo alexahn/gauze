@@ -18,16 +18,16 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 	const [edges, setEdges] = useState(activeEdges.object);
 	const [connections, setConnections] = useState(activeConnections.object);
 	const [performance, setPerformance] = useState(4);
-	const [share, setShare] = useState()
-	const [displayShare, setDisplayShare] = useState(false)
+	const [share, setShare] = useState();
+	const [displayShare, setDisplayShare] = useState(false);
 	function toggleShare(e) {
-		setDisplayShare(!displayShare)
+		setDisplayShare(!displayShare);
 	}
 	function updateShare(e) {
-		setShare(e.target.value)
+		setShare(e.target.value);
 	}
 	function handleShare(e) {
-		setShare('')
+		setShare("");
 	}
 	function handlePerformance(e) {
 		if (e.target.value === "high") {
@@ -73,11 +73,11 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 					</span>
 				</div>
 			</div>
-			<div className="fixed top-1 left-1" style={{ zIndex: 1}}>
+			<div className="fixed top-1 left-1" style={{ zIndex: 1 }}>
 				<div className="relative">
-					<PlusCircledIcon width={30} height={30} onClick={toggleShare}/>
-					<span className="dn bg-light-green w6 top-0 left-0 pa1 absolute f4" style={{display: displayShare ? 'block' : 'none'}}>
-						<textarea value={share} onChange={updateShare} rows="4" cols="30" autoFocus={true}/>
+					<PlusCircledIcon width={30} height={30} onClick={toggleShare} />
+					<span className="dn bg-light-green w6 top-0 left-0 pa1 absolute f4" style={{ display: displayShare ? "block" : "none" }}>
+						<textarea value={share} onChange={updateShare} rows="4" cols="30" autoFocus={true} />
 						<button onClick={handleShare}>Add</button>
 						<button onClick={toggleShare}>Cancel</button>
 					</span>
