@@ -414,7 +414,9 @@ export default function Table({
 										})}
 										{/* connection component? */}
 										<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
-											<div className="pa1 from">FROM</div>
+											<div className="pa1 from" data-node-id={node.id} data-entity-id={item[header.primary_key]} data-entity-type={header.table_name}>
+												FROM
+											</div>
 											{header.relationships_from.map(function (from) {
 												return (
 													<div key={from} className="pa1">

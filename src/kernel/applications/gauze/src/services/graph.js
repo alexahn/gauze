@@ -24,6 +24,7 @@ class GraphService {
 			}
 		*/
 		this.connections = {};
+		this.interaction = null;
 		this.cache = {
 			activeNodes: {},
 			activeConnections: {},
@@ -734,6 +735,25 @@ class GraphService {
 		});
 		self.edges = staging;
 		self.clearCacheEdges();
+	}
+	createInteraction(interaction) {
+		const self = this;
+		self.interaction = interaction;
+		return self.interaction;
+	}
+	readInteraction() {
+		const self = this;
+		return self.interaction;
+	}
+	updateInteraction(interaction) {
+		const self = this;
+		self.interaction = interaction;
+		return self.interaction;
+	}
+	deleteInteraction() {
+		const self = this;
+		delete self.interaction;
+		return self.interaction;
 	}
 }
 

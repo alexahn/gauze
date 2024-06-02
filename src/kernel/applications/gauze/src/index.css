@@ -32,3 +32,11 @@ table .truncate-ns {
 .action {
 	height: 23px;
 }
+
+.from:hover {
+	cursor: pointer;
+}
+
+button:hover {
+	cursor: pointer;
+}

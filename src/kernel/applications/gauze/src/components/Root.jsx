@@ -19,6 +19,7 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 	const [nodes, setNodes] = useState(activeNodes.object);
 	const [edges, setEdges] = useState(activeEdges.object);
 	const [connections, setConnections] = useState(activeConnections.object);
+	const [interaction, setInteraction] = useState(graph.readInteraction());
 	const [performance, setPerformance] = useState(4);
 	const [share, setShare] = useState();
 	const [displayShare, setDisplayShare] = useState(false);
@@ -74,9 +75,11 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 			const activeNodes = graph.activeNodes(agentHeader.name);
 			const activeConnections = graph.activeConnections(agentHeader.name);
 			const activeEdges = graph.activeEdges(agentHeader.name);
+			const interaction = graph.readInteraction();
 			setNodes(activeNodes.object);
 			setConnections(activeConnections.object);
 			setEdges(activeEdges.object);
+			setInteraction(interaction);
 		}, performance);
 		return function () {
 			clearInterval(timer);
@@ -112,7 +115,7 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 					</span>
 				</div>
 			</div>
-			<Graph key={"graph"} agentHeader={agentHeader} route={route} graph={graph} nodes={nodes} edges={edges} connections={connections} />
+			<Graph key={"graph"} agentHeader={agentHeader} route={route} graph={graph} nodes={nodes} edges={edges} connections={connections} interaction={interaction} />
 		</div>
 	);
 }

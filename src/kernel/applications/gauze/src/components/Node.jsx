@@ -6,8 +6,10 @@ export default function Node({ agentHeader, route, x, y, z, width, height, dataX
 	const containerRef = useRef();
 	const [isLoaded, setLoaded] = useState(false);
 	const [isDragging, setDragging] = useState(false);
+	const [isConnecting, setConnecting] = useState(false);
 	const [localWidth, setLocalWidth] = useState(width);
 	const [localHeight, setLocalHeight] = useState(height);
+	const [connect, setConnect] = useState({});
 	const activeNodes = graph.activeNodes(agentHeader.name);
 	const activeConnections = graph.activeConnections(agentHeader.name);
 	const activeEdges = graph.activeEdges(agentHeader.name);
@@ -21,35 +23,89 @@ export default function Node({ agentHeader, route, x, y, z, width, height, dataX
 			if (containerRef.current.contains(e.target)) {
 				// note: is there a way to do this elegantly?
 				if (e.target.classList.contains("from")) {
+					setConnecting(true);
+					// create two interaction connections
+					// create interaction
+					const startID = uuidv4();
+					const endID = uuidv4();
+					graph.createConnections([
+						{
+							id: startID,
+							name: "relationship_start",
+							nodeID: e.target.dataset.nodeId,
+							entityID: e.target.dataset.entityId,
+							entityType: e.target.dataset.entityType,
+							x: e.clientX,
+							y: e.clientY,
+							z: node.z,
+						},
+						{
+							id: endID,
+							name: "relationship_end",
+							nodeID: e.target.dataset.nodeId,
+							entityID: e.target.dataset.entityId,
+							entityType: e.target.dataset.entityType,
+							x: e.clientX,
+							y: e.clientY,
+							z: node.z,
+						},
+					]);
+					graph.createInteraction({
+						fromNodeID: node.id,
+						fromConnectionID: startID,
+						toNodeID: node.id,
+						toConnectionID: endID,
+					});
 					e.preventDefault();
-					return;
-				}
-				setDragging(true);
-				graph.updateNodes([
-					{
-						...graph.selectNode(node.id),
-						oldX: e.clientX,
-						oldY: e.clientY,
-					},
-				]);
-				graph.updateConnections(
-					graph.selectConnections(nodeConnections.keys).map(function (connection) {
-						return {
-							...connection,
+					console.log("FROM", e.target.dataset);
+				} else {
+					setDragging(true);
+					graph.updateNodes([
+						{
+							...graph.selectNode(node.id),
 							oldX: e.clientX,
 							oldY: e.clientY,
-						};
-					}),
-				);
+						},
+					]);
+					graph.updateConnections(
+						graph.selectConnections(nodeConnections.keys).map(function (connection) {
+							return {
+								...connection,
+								oldX: e.clientX,
+								oldY: e.clientY,
+							};
+						}),
+					);
+				}
 			} else {
 			}
 		}
 	}
 	function onMouseUp(e) {
-		setDragging(false);
+		const interaction = graph.readInteraction();
+		if (interaction) {
+			// check if an edge exists for this combination
+			// if it does not, create a relationship, create the connections, and create the edge
+			graph.deleteConnections([connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
+			graph.deleteInteraction();
+			setConnecting(false);
+		} else if (isDragging) {
+			setDragging(false);
+		} else {
+		}
 	}
 	function onMouseMove(e) {
-		if (isDragging) {
+		const interaction = graph.readInteraction();
+		if (interaction) {
+			// update the relationship_end connection
+			const endConnection = {
+				...connections[interaction.toConnectionID],
+				x: e.clientX,
+				y: e.clientY,
+			};
+			//console.log('updating end connection', endConnection)
+			graph.updateConnections([endConnection]);
+		} else if (isDragging) {
 			const activeNode = graph.selectNode(node.id);
 			graph.updateNodes([
 				{
