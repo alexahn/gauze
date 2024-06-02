@@ -174,11 +174,14 @@ const UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DA
 			"mutation_arguments",
 			mutation_arguments,
 		);
+		const where = mutation_arguments.where && Object.keys(mutation_arguments.where).length;
+		const where_in = mutation_arguments.where_in && Object.keys(mutation_arguments.where_in).length;
+		const where_not_in = mutation_arguments.where_not_in && Object.keys(mutation_arguments.where_not_in).length;
+		if (!where && !where_in && !where_not_in) {
+			throw new Error("Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required");
+		}
 		if (!mutation_arguments.attributes) {
 			throw new Error("Field 'attributes' is required");
-		}
-		if (!mutation_arguments.where) {
-			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE.update(
 			context,
@@ -264,8 +267,11 @@ const DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DA
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		if (!mutation_arguments.where) {
-			throw new Error("Field 'where' is required");
+		const where = mutation_arguments.where && Object.keys(mutation_arguments.where).length;
+		const where_in = mutation_arguments.where_in && Object.keys(mutation_arguments.where_in).length;
+		const where_not_in = mutation_arguments.where_not_in && Object.keys(mutation_arguments.where_not_in).length;
+		if (!where && !where_in && !where_not_in) {
+			throw new Error("Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required");
 		}
 		return CONTROLLER__caf5342ac38d41a6a02bb81d2d2b21a4__CONTROLLER__DATABASE.delete(
 			context,

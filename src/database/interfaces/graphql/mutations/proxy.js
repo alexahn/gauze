@@ -152,11 +152,14 @@ const UPDATE__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
+		const where = mutation_arguments.where && Object.keys(mutation_arguments.where).length;
+		const where_in = mutation_arguments.where_in && Object.keys(mutation_arguments.where_in).length;
+		const where_not_in = mutation_arguments.where_not_in && Object.keys(mutation_arguments.where_not_in).length;
+		if (!where && !where_in && !where_not_in) {
+			throw new Error("Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required");
+		}
 		if (!mutation_arguments.attributes) {
 			throw new Error("Field 'attributes' is required");
-		}
-		if (!mutation_arguments.where) {
-			throw new Error("Field 'where' is required");
 		}
 		return CONTROLLER__PROXY__CONTROLLER__DATABASE.update(
 			context,
@@ -228,8 +231,11 @@ const DELETE__PROXY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		if (!mutation_arguments.where) {
-			throw new Error("Field 'where' is required");
+		const where = mutation_arguments.where && Object.keys(mutation_arguments.where).length;
+		const where_in = mutation_arguments.where_in && Object.keys(mutation_arguments.where_in).length;
+		const where_not_in = mutation_arguments.where_not_in && Object.keys(mutation_arguments.where_not_in).length;
+		if (!where && !where_in && !where_not_in) {
+			throw new Error("Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required");
 		}
 		return CONTROLLER__PROXY__CONTROLLER__DATABASE.delete(
 			context,

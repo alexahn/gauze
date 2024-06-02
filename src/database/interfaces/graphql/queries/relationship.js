@@ -111,8 +111,11 @@ const READ__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			"query_arguments",
 			query_arguments,
 		);
-		if (!query_arguments.where) {
-			throw new Error("Field 'where' is required");
+		const where = query_arguments.where && Object.keys(query_arguments.where).length;
+		const where_in = query_arguments.where_in && Object.keys(query_arguments.where_in).length;
+		const where_not_in = query_arguments.where_not_in && Object.keys(query_arguments.where_not_in).length;
+		if (!where && !where_in && !where_not_in) {
+			throw new Error("Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required");
 		}
 		return CONTROLLER__RELATIONSHIP__CONTROLLER__DATABASE.read(
 			context,
@@ -168,8 +171,11 @@ const COUNT__RELATIONSHIP__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			"query_arguments",
 			query_arguments,
 		);
-		if (!query_arguments.where) {
-			throw new Error("Field 'where' is required");
+		const where = query_arguments.where && Object.keys(query_arguments.where).length;
+		const where_in = query_arguments.where_in && Object.keys(query_arguments.where_in).length;
+		const where_not_in = query_arguments.where_not_in && Object.keys(query_arguments.where_not_in).length;
+		if (!where && !where_in && !where_not_in) {
+			throw new Error("Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required");
 		}
 		return CONTROLLER__RELATIONSHIP__CONTROLLER__DATABASE.count(
 			context,

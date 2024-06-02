@@ -105,8 +105,11 @@ const READ__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	resolve: (source, query_arguments, context) => {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "query_arguments", query_arguments);
-		if (!query_arguments.where) {
-			throw new Error("Field 'where' is required");
+		const where = query_arguments.where && Object.keys(query_arguments.where).length;
+		const where_in = query_arguments.where_in && Object.keys(query_arguments.where_in).length;
+		const where_not_in = query_arguments.where_not_in && Object.keys(query_arguments.where_not_in).length;
+		if (!where && !where_in && !where_not_in) {
+			throw new Error("Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required");
 		}
 		return CONTROLLER__SECRET__CONTROLLER__DATABASE.read(
 			context,
@@ -156,8 +159,11 @@ const COUNT__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	resolve: (source, query_arguments, context) => {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__SECRET__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "query_arguments", query_arguments);
-		if (!query_arguments.where) {
-			throw new Error("Field 'where' is required");
+		const where = query_arguments.where && Object.keys(query_arguments.where).length;
+		const where_in = query_arguments.where_in && Object.keys(query_arguments.where_in).length;
+		const where_not_in = query_arguments.where_not_in && Object.keys(query_arguments.where_not_in).length;
+		if (!where && !where_in && !where_not_in) {
+			throw new Error("Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required");
 		}
 		return CONTROLLER__SECRET__CONTROLLER__DATABASE.count(
 			context,
