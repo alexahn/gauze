@@ -22,6 +22,7 @@ class SystemController extends Controller {
 		const self = this;
 		return SystemController._class_name(self.model_name);
 	}
+	// todo: figure out if we need to serialize here
 	_create(context, scope, input) {
 		const self = this;
 		const { agent } = context;
