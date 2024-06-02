@@ -588,13 +588,17 @@
 				[x] graph service should have a memoized interface
 					[x] set up a basic cache system for activeNodes, activeConnections, activeEdges methods
 				[x] cpu usage should be close to zero when doing nothing even with a low interval rate
-		[ ] sharing links or structured identifiers for loading in pieces of data
-			[ ] drag and drop linking to create relationships once the item is loaded
-		[ ] whitelist and blacklist management
-			[ ] show whitelist and blacklist entries for items
-			[ ] convenient way to manage access control via the graph ui
-				[ ] requires some preliminary work around sharing and verifying identities
-		[ ] extend type item view to be able to view relationships to the object
+		[x] sharing links or structured identifiers for loading in pieces of data
+			[x] drag and drop linking to create relationships once the item is loaded
+			[ ] editing links to manage relationships between entities
+		[x] whitelist and blacklist management
+			[x] show whitelist and blacklist entries for items
+			[x] convenient way to manage access control via the graph ui
+				[ ] add a way to verify the integrity of agent ids before creating whitelist or blacklist entries
+					[ ] maybe some button from the root graph ui that allows someone to generate a signed message that represents the agent, and a button to verify a signed message
+		[x] extend type item view to be able to view relationships to the object
+		[x] load relationships from server
+			[x] extend relationship read query to be able to accept an array of from entity ids and to entity ids
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages
