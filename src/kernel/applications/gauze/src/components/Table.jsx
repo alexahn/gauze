@@ -340,7 +340,15 @@ export default function Table({
 	function handleClose(e) {
 		if (!node.root) {
 			graph.deleteNodes([node]);
-			synchronize(null);
+			orchestrate.synchronize(
+				{
+					gauze,
+					model,
+					graph,
+				},
+				agentHeader,
+				null,
+			);
 		}
 	}
 
