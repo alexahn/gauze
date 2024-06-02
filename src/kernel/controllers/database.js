@@ -46,9 +46,11 @@ class DatabaseController extends Controller {
 			source: scope.source,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.read:enter`, "input", input);
-		input.where = self.model.pre_serialize_middleware(input.where, "read");
-		input.where = self.model.serialize(input.where, "read");
-		input.where = self.model.post_serialize_middleware(input.where, "read");
+		// todo: run serializers and middleware through where_in and where_not_in
+		// todo: update all other controllers to also have a default object
+		input.where = self.model.pre_serialize_middleware(input.where || {}, "read");
+		input.where = self.model.serialize(input.where || {}, "read");
+		input.where = self.model.post_serialize_middleware(input.where || {}, "read");
 		return self.model.read(context, model_scope, input).then(function (rows) {
 			return rows.map(function (row) {
 				row = self.model.pre_deserialize_middleware(row, "read");

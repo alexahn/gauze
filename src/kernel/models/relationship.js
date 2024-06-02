@@ -215,6 +215,7 @@ class RelationshipSystemModel extends SystemModel {
 								blacklist_row.gauze__blacklist__agent_id === agent_id &&
 								blacklist_row.gauze__blacklist__entity_type === entity_type &&
 								blacklist_row.gauze__blacklist__entity_id === entity_id &&
+								blacklist_row.gauze__blacklist__agent_role === "leaf" &&
 								method === method
 							) {
 								return false;
@@ -266,7 +267,6 @@ class RelationshipSystemModel extends SystemModel {
 			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_entity:debug_sql`, sql.toString());
 		}
 		return sql.then(function (relationship_rows) {
-			console.log("reached", relationship_rows);
 			return self._filter_access(context, scope, parameters, realm, relationship_rows, "read").then(function (valid_ids) {
 				parameters.where_in = {
 					[self.entity.primary_key]: valid_ids,
