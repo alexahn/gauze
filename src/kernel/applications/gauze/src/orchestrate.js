@@ -479,24 +479,75 @@ function createRelationship(services, agentHeader, relationship) {
 		if (edge) {
 			console.log("edge", edge);
 		} else {
-			alert(JSON.stringify(relationship, null, 4));
-			const headers = model.all("HEADER")
+			//alert(JSON.stringify(relationship, null, 4));
+			const headers = model.all("HEADER");
 			const relationshipHeader = headers.find(function (header) {
-				return header.name === 'relationship'
-			})
-			console.log('relationshipHeader', relationshipHeader)
+				return header.name === "relationship";
+			});
+			const fromHeader = headers.find(function (header) {
+				return header.graphql_meta_type === relationship.fromEntityType;
+			});
+			const toHeader = headers.find(function (header) {
+				return header.graphql_meta_type === relationship.toEntityType;
+			});
 			const attributes = {
 				gauze__relationship__from_id: relationship.fromEntityID,
-				gauze__relationship__from_type: relationship.fromEntityType,
+				gauze__relationship__from_type: fromHeader.table_name,
 				gauze__relationship__to_id: relationship.toEntityID,
-				gauze__relationship__to_type: relationship.toEntityType
-			}
-			return gauze.create(relationshipHeader, {
-				attributes: attributes
-			}).then(function (data) {
-				console.log("RELATIONSHIP CREATED", data)
-			})
-			// create a relationship, create the connections, create the edge
+				gauze__relationship__to_type: toHeader.table_name,
+			};
+			return gauze
+				.create(relationshipHeader, {
+					attributes: attributes,
+				})
+				.then(function (data) {
+					// create a relationship, create the connections, create the edge
+					const fromConnectionID = uuidv4();
+					const fromConnection = {
+						id: fromConnectionID,
+						name: "from",
+						nodeID: relationship.fromNodeID,
+						entityID: relationship.fromEntityID,
+						entityType: relationship.fromEntityType,
+						x: null,
+						y: null,
+						z: 1,
+						component: component.default,
+						props: {
+							gauze: gauze,
+							model: model,
+							router: router,
+						},
+					};
+					const toConnectionID = uuidv4();
+					const toConnection = {
+						id: toConnectionID,
+						name: "to",
+						nodeID: relationship.toNodeID,
+						entityID: relationship.toEntityID,
+						entityType: relationship.toEntityType,
+						x: null,
+						y: null,
+						z: 1,
+						component: component.default,
+						props: {
+							gauze: gauze,
+							model: model,
+							router: router,
+						},
+					};
+					const edgeID = uuidv4();
+					const edge = {
+						id: edgeID,
+						fromNodeID: relationship.fromNodeID,
+						fromConnectionID: fromConnectionID,
+						toNodeID: relationship.toNodeID,
+						toConnectionID: toConnectionID,
+					};
+					graph.createConnections([fromConnection, toConnection]);
+					graph.createEdges([edge]);
+					synchronize(services, agentHeader, null);
+				});
 		}
 	});
 }

@@ -128,8 +128,10 @@ export default function Node({ agentHeader, route, gauze, model, router, graph, 
 				if (source.name === "from_start") {
 					if (target.interaction === "to_end") {
 						return orchestrate.createRelationship({ gauze, model, graph }, agentHeader, {
+							fromNodeID: target.nodeId,
 							fromEntityID: target.entityId,
 							fromEntityType: target.entityType,
+							toNodeID: source.nodeID,
 							toEntityID: source.entityID,
 							toEntityType: source.entityType,
 						});
@@ -137,8 +139,10 @@ export default function Node({ agentHeader, route, gauze, model, router, graph, 
 				} else if (source.name === "to_start") {
 					if (target.interaction === "from_end") {
 						return orchestrate.createRelationship({ gauze, model, graph }, agentHeader, {
+							fromNodeID: source.nodeID,
 							fromEntityID: source.entityID,
 							fromEntityType: source.entityType,
+							toNodeID: target.nodeId,
 							toEntityID: target.entityId,
 							toEntityType: target.entityType,
 						});
