@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 
 import { PAGINATION_PAGE_SIZE } from "./../constants.js";
 
+import * as orchestrate from "./../orchestrate.js";
+
 import Graph from "./Graph.jsx";
 import Node from "./Node.jsx";
 import Table from "./Table.jsx";
@@ -24,10 +26,37 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 		setDisplayShare(!displayShare);
 	}
 	function updateShare(e) {
-		setShare(e.target.value);
+		setShare(e.target.value.replace("\n", ""));
 	}
 	function handleShare(e) {
-		setShare("");
+		let parsed;
+		try {
+			parsed = JSON.parse(share);
+			const headers = model.all("HEADER");
+			const targetHeader = headers.find(function (header) {
+				return header.table_name === parsed.entity_type;
+			});
+			return orchestrate
+				.traverseRoot(
+					{
+						gauze,
+						model,
+						router,
+						graph,
+					},
+					agentHeader,
+					{
+						[targetHeader.primary_key]: parsed.entity_id,
+					},
+					targetHeader.graphql_meta_type,
+				)
+				.then(function () {
+					setShare("");
+					setDisplayShare(!displayShare);
+				});
+		} catch (e) {
+			console.error(e);
+		}
 	}
 	function handlePerformance(e) {
 		if (e.target.value === "high") {

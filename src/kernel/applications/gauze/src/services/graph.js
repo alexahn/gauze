@@ -272,7 +272,7 @@ class GraphService {
 			const reachedOutside = {};
 			const nodesArray = Object.values(self.nodes);
 			nodesArray.forEach(function (node) {
-				if (node.root === true && node.props.type === rootType) {
+				if ((node.root === true && node.props.type === rootType) || node.workspace === rootType) {
 					if (reachedOutside[node.id]) {
 						reachedInside[node.id] = reachedOutside[node.id];
 					} else {

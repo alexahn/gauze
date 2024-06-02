@@ -293,17 +293,18 @@ function traverseFrom(services, agentHeader, node, item, targetType) {
 	});
 }
 
-function traverseRoot(services, agentHeader, where, item, targetType) {
+function traverseRoot(services, agentHeader, where, targetType) {
 	return import("./components/Table.jsx").then(function (table) {
+		const { gauze, model, router, graph } = services;
 		const headers = model.all("HEADER");
-		const sourceHeader = model.read("HEADER", node.props.type);
 		const targetHeader = headers.find(function (header) {
 			return header.graphql_meta_type === targetType;
 		});
-		console.log("traverse", sourceHeader, item, targetType);
+		console.log("traverse", where, targetType);
 		console.log("targetHeader", targetHeader);
 		const targetNode = {
 			id: uuidv4(),
+			workspace: agentHeader.name,
 			oldX: 0,
 			oldY: 0,
 			x: null,

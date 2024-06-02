@@ -523,7 +523,7 @@ export default function Table({
 											<button>
 												<Share1Icon />
 											</button>
-											<span className="dn bg-light-green mw6 w6 top-0 right-0 pa1 absolute f9 tooltip">{JSON.stringify(share, null, 4)}</span>
+											<span className="dn bg-light-green mw6 w6 top-0 right-0 pa1 absolute f9 tooltip">{JSON.stringify(share)}</span>
 										</div>
 									</th>
 								);
