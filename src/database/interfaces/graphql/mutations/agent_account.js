@@ -152,10 +152,7 @@ const UPDATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		const where = mutation_arguments.where && Object.keys(mutation_arguments.where).length;
-		const where_in = mutation_arguments.where_in && Object.keys(mutation_arguments.where_in).length;
-		const where_not_in = mutation_arguments.where_not_in && Object.keys(mutation_arguments.where_not_in).length;
-		if (!where && !where_in && !where_not_in) {
+		if (!mutation_arguments.where && !mutation_arguments.where_in && !mutation_arguments.where_not_in) {
 			throw new Error("Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required");
 		}
 		if (!mutation_arguments.attributes) {
@@ -231,10 +228,7 @@ const DELETE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		const where = mutation_arguments.where && Object.keys(mutation_arguments.where).length;
-		const where_in = mutation_arguments.where_in && Object.keys(mutation_arguments.where_in).length;
-		const where_not_in = mutation_arguments.where_not_in && Object.keys(mutation_arguments.where_not_in).length;
-		if (!where && !where_in && !where_not_in) {
+		if (!mutation_arguments.where && !mutation_arguments.where_in && !mutation_arguments.where_not_in) {
 			throw new Error("Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required");
 		}
 		return CONTROLLER__AGENT_ACCOUNT__CONTROLLER__DATABASE.delete(
