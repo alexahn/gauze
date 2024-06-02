@@ -285,12 +285,41 @@ class DatabaseModel extends Model {
 				return result;
 			});
 	}
+	// todo: see if we can remove the conditional checks before we unwrap the keys (the default value might always be an empty object)
 	_validate_parameters(parameters) {
 		const self = this;
 		if (parameters.where) {
 			Object.keys(parameters.where).forEach(function (key) {
 				if (!self.entity.fields[key].indexed) {
 					throw new Error(`Input argument 'where.${key}' is invalid: ${key} is not an indexed field`);
+				}
+			});
+		}
+		if (parameters.where_in) {
+			Object.keys(parameters.where_in).forEach(function (key) {
+				if (!self.entity.fields[key].indexed) {
+					throw new Error(`Input argument 'where_in.${key}' is invalid: ${key} is not an indexed field`);
+				}
+			});
+		}
+		if (parameters.where_not_in) {
+			Object.keys(parameters.where_not_in).forEach(function (key) {
+				if (!self.entity.fields[key].indexed) {
+					throw new Error(`Input argument 'where_not_in.${key}' is invalid: ${key} is not an indexed field`);
+				}
+			});
+		}
+		if (parameters.cache_where_in) {
+			Object.keys(parameters.cache_where_in).forEach(function (key) {
+				if (!self.entity.fields[key].indexed) {
+					throw new Error(`Input argument 'cache_where_in.${key}' is invalid: ${key} is not an indexed field`);
+				}
+			});
+		}
+		if (parameters.cache_where_not_in) {
+			Object.keys(parameters.cache_where_not_in).forEach(function (key) {
+				if (!self.entity.fields[key].indexed) {
+					throw new Error(`Input argument 'cache_where_not_in.${key}' is invalid: ${key} is not an indexed field`);
 				}
 			});
 		}
