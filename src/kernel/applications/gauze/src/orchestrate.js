@@ -237,6 +237,7 @@ function traverseTo(services, agentHeader, node, item, targetType) {
 
 function traverseFrom(services, agentHeader, node, item, targetType) {
 	return import("./components/Table.jsx").then(function (table) {
+		const { gauze, model, router, graph } = services;
 		const headers = model.all("HEADER");
 		const sourceHeader = model.read("HEADER", node.props.type);
 		const targetHeader = headers.find(function (header) {
@@ -461,4 +462,29 @@ function reload(services, agentHeader) {
 	});
 }
 
-export { createNode, read, reload, synchronize, traverse, traverseTo, traverseFrom, traverseRoot };
+function createRelationship(services, agentHeader, relationship) {
+	return import("./components/Relationship.jsx").then(function (component) {
+		const { gauze, model, router, graph } = services;
+		const activeEdges = graph.activeEdges(agentHeader.name);
+		const activeConnections = graph.activeConnections(agentHeader.name);
+		const edge = activeEdges.values.find(function (edge) {
+			const fromConnection = activeConnections.object[edge.fromConnectionID];
+			const toConnection = activeConnections.object[edge.toConnectionID];
+			const fromEntityID = fromConnection.entityID === relationship.fromEntityID;
+			const fromEntityType = fromConnection.entityType === relationship.fromEntityType;
+			const toEntityID = toConnection.entityID === relationship.toEntityID;
+			const toEntityType = toConnection.entityType === relationship.toEntityType;
+			return fromEntityID && fromEntityType && toEntityID && toEntityType;
+		});
+		if (edge) {
+			console.log("edge", edge);
+		} else {
+			alert(JSON.stringify(relationship, null, 4));
+			// create a relationship, create the connections, create the edge
+			// note: the relationship call might fail here, because it already exists (we aren't currently constructing an accurate representation of relationships in the graph ui yet)
+			// note: ignore errors from the graphql mutation and create the connections and create the edge for now
+		}
+	});
+}
+
+export { createNode, read, reload, synchronize, traverse, traverseTo, traverseFrom, traverseRoot, createRelationship };

@@ -2,7 +2,9 @@ import React from "react";
 import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-export default function Node({ agentHeader, route, x, y, z, width, height, dataX, dataY, dataZ, graph, node, nodes, edges, connections }) {
+import * as orchestrate from "./../orchestrate.js";
+
+export default function Node({ agentHeader, route, gauze, model, router, graph, x, y, z, width, height, dataX, dataY, dataZ, node, nodes, edges, connections }) {
 	const containerRef = useRef();
 	const [isLoaded, setLoaded] = useState(false);
 	const [isDragging, setDragging] = useState(false);
@@ -22,7 +24,7 @@ export default function Node({ agentHeader, route, x, y, z, width, height, dataX
 			console.log("e.target", e.target);
 			if (containerRef.current.contains(e.target)) {
 				// note: is there a way to do this elegantly?
-				if (e.target.classList.contains("from")) {
+				if (e.target.classList.contains("from-start")) {
 					setConnecting(true);
 					// create two interaction connections
 					// create interaction
@@ -31,7 +33,7 @@ export default function Node({ agentHeader, route, x, y, z, width, height, dataX
 					graph.createConnections([
 						{
 							id: startID,
-							name: "relationship_start",
+							name: "from_start",
 							nodeID: e.target.dataset.nodeId,
 							entityID: e.target.dataset.entityId,
 							entityType: e.target.dataset.entityType,
@@ -41,7 +43,7 @@ export default function Node({ agentHeader, route, x, y, z, width, height, dataX
 						},
 						{
 							id: endID,
-							name: "relationship_end",
+							name: "from_end",
 							nodeID: e.target.dataset.nodeId,
 							entityID: e.target.dataset.entityId,
 							entityType: e.target.dataset.entityType,
@@ -57,7 +59,41 @@ export default function Node({ agentHeader, route, x, y, z, width, height, dataX
 						toConnectionID: endID,
 					});
 					e.preventDefault();
-					console.log("FROM", e.target.dataset);
+				} else if (e.target.classList.contains("to-start")) {
+					setConnecting(true);
+					// create two interaction connections
+					// create interaction
+					const startID = uuidv4();
+					const endID = uuidv4();
+					graph.createConnections([
+						{
+							id: startID,
+							name: "to_start",
+							nodeID: e.target.dataset.nodeId,
+							entityID: e.target.dataset.entityId,
+							entityType: e.target.dataset.entityType,
+							x: e.clientX,
+							y: e.clientY,
+							z: node.z,
+						},
+						{
+							id: endID,
+							name: "to_end",
+							nodeID: e.target.dataset.nodeId,
+							entityID: e.target.dataset.entityId,
+							entityType: e.target.dataset.entityType,
+							x: e.clientX,
+							y: e.clientY,
+							z: node.z,
+						},
+					]);
+					graph.createInteraction({
+						fromNodeID: node.id,
+						fromConnectionID: startID,
+						toNodeID: node.id,
+						toConnectionID: endID,
+					});
+					e.preventDefault();
 				} else {
 					setDragging(true);
 					graph.updateNodes([
@@ -84,11 +120,40 @@ export default function Node({ agentHeader, route, x, y, z, width, height, dataX
 	function onMouseUp(e) {
 		const interaction = graph.readInteraction();
 		if (interaction) {
-			// check if an edge exists for this combination
-			// if it does not, create a relationship, create the connections, and create the edge
-			graph.deleteConnections([connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
-			graph.deleteInteraction();
-			setConnecting(false);
+			if (e.target.classList.contains("from-end") || e.target.classList.contains("to-end")) {
+				const target = e.target.dataset;
+				const source = connections[interaction.fromConnectionID];
+				graph.deleteConnections([connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
+				graph.deleteInteraction();
+				setConnecting(false);
+				if (source.name === "from_start") {
+					if (target.interaction === "to_end") {
+						return orchestrate.createRelationship({ gauze, model, graph }, agentHeader, {
+							fromEntityID: target.entityId,
+							fromEntityType: target.entityType,
+							toEntityID: source.entityID,
+							toEntityType: source.entityType,
+						});
+					}
+				} else if (source.name === "to_start") {
+					if (target.interaction === "from_end") {
+						return orchestrate.createRelationship({ gauze, model, graph }, agentHeader, {
+							fromEntityID: source.entityID,
+							fromEntityType: source.entityType,
+							toEntityID: target.entityId,
+							toEntityType: target.entityType,
+						});
+					}
+				} else {
+					graph.deleteConnections([connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
+					graph.deleteInteraction();
+					setConnecting(false);
+				}
+			} else {
+				graph.deleteConnections([connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
+				graph.deleteInteraction();
+				setConnecting(false);
+			}
 		} else if (isDragging) {
 			setDragging(false);
 		} else {

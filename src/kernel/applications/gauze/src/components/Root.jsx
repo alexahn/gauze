@@ -115,7 +115,19 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 					</span>
 				</div>
 			</div>
-			<Graph key={"graph"} agentHeader={agentHeader} route={route} graph={graph} nodes={nodes} edges={edges} connections={connections} interaction={interaction} />
+			<Graph
+				key={"graph"}
+				agentHeader={agentHeader}
+				route={route}
+				gauze={gauze}
+				model={model}
+				router={router}
+				graph={graph}
+				nodes={nodes}
+				edges={edges}
+				connections={connections}
+				interaction={interaction}
+			/>
 		</div>
 	);
 }

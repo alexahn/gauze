@@ -381,7 +381,15 @@ export default function Table({
 							{data.map(function (item) {
 								return (
 									<th key={item[header.primary_key]} align="center" className="mw4 w4 pa1 relative row" tabIndex="0">
-										<div className="truncate-ns">FROM</div>
+										<div
+											className="truncate-ns from-end"
+											data-interaction="from_end"
+											data-node-id={node.id}
+											data-entity-id={item[header.primary_key]}
+											data-entity-type={header.graphql_meta_type}
+										>
+											FROM
+										</div>
 										{node.props.connectionIDs.map(function (id) {
 											const connection = connections[id];
 											// note: for some reason we need an existence check here. maybe double check our rendering logic?
@@ -414,7 +422,13 @@ export default function Table({
 										})}
 										{/* connection component? */}
 										<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
-											<div className="pa1 from" data-node-id={node.id} data-entity-id={item[header.primary_key]} data-entity-type={header.table_name}>
+											<div
+												className="pa1 from-start"
+												data-interaction="from_start"
+												data-node-id={node.id}
+												data-entity-id={item[header.primary_key]}
+												data-entity-type={header.graphql_meta_type}
+											>
 												FROM
 											</div>
 											{header.relationships_from.map(function (from) {
@@ -593,7 +607,15 @@ export default function Table({
 							{data.map(function (item) {
 								return (
 									<th key={item[header.primary_key]} align="center" className="mw4 w4 pa1 relative row" tabIndex="0">
-										<div className="truncate-ns">TO</div>
+										<div
+											className="truncate-ns to-end"
+											data-interaction="to_end"
+											data-node-id={node.id}
+											data-entity-id={item[header.primary_key]}
+											data-entity-type={header.graphql_meta_type}
+										>
+											TO
+										</div>
 										{node.props.connectionIDs.map(function (id) {
 											const connection = connections[id];
 											if (
@@ -623,7 +645,15 @@ export default function Table({
 											}
 										})}
 										<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
-											<div className="pa1">TO</div>
+											<div
+												className="pa1 to-start"
+												data-interaction="to_start"
+												data-node-id={node.id}
+												data-entity-id={item[header.primary_key]}
+												data-entity-type={header.graphql_meta_type}
+											>
+												TO
+											</div>
 											{header.relationships_to.map(function (to) {
 												return (
 													<div key={to} className="pa1">
