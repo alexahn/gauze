@@ -89,8 +89,12 @@ class RelationshipSystemModel extends SystemModel {
 		const self = this;
 		const from_type = $structure.gauze.resolvers.SQL_TABLE_TO_GRAPHQL_TYPE__RESOLVER__STRUCTURE[attributes.gauze__relationship__from_type];
 		const to_type = $structure.gauze.resolvers.SQL_TABLE_TO_GRAPHQL_TYPE__RESOLVER__STRUCTURE[attributes.gauze__relationship__to_type];
-		if (self.relations_map[from_type][to_type]) {
-			return true;
+		if (self.relations_map[from_type]) {
+			if (self.relations_map[from_type][to_type]) {
+				return true;
+			} else {
+				throw new Error("Entities are not configured to have relationships to each other");
+			}
 		} else {
 			throw new Error("Entities are not configured to have relationships to each other");
 		}

@@ -21,7 +21,6 @@ export default function Node({ agentHeader, route, gauze, model, router, graph, 
 			e.preventDefault();
 		} else if (e.button === 1) {
 		} else if (e.button === 0) {
-			console.log("e.target", e.target);
 			if (containerRef.current.contains(e.target)) {
 				// note: is there a way to do this elegantly?
 				if (e.target.classList.contains("from-start")) {

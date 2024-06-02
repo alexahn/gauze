@@ -480,9 +480,23 @@ function createRelationship(services, agentHeader, relationship) {
 			console.log("edge", edge);
 		} else {
 			alert(JSON.stringify(relationship, null, 4));
+			const headers = model.all("HEADER")
+			const relationshipHeader = headers.find(function (header) {
+				return header.name === 'relationship'
+			})
+			console.log('relationshipHeader', relationshipHeader)
+			const attributes = {
+				gauze__relationship__from_id: relationship.fromEntityID,
+				gauze__relationship__from_type: relationship.fromEntityType,
+				gauze__relationship__to_id: relationship.toEntityID,
+				gauze__relationship__to_type: relationship.toEntityType
+			}
+			return gauze.create(relationshipHeader, {
+				attributes: attributes
+			}).then(function (data) {
+				console.log("RELATIONSHIP CREATED", data)
+			})
 			// create a relationship, create the connections, create the edge
-			// note: the relationship call might fail here, because it already exists (we aren't currently constructing an accurate representation of relationships in the graph ui yet)
-			// note: ignore errors from the graphql mutation and create the connections and create the edge for now
 		}
 	});
 }
