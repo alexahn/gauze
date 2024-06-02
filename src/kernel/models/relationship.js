@@ -252,7 +252,6 @@ class RelationshipSystemModel extends SystemModel {
 		const { agent_id } = agent;
 		const method = "read";
 		const { where_in = {}, where_not_in = {} } = parameters;
-		console.log("REACHED");
 		const sql = database(self.entity.table_name)
 			.where(function (builder) {
 				Object.keys(where_in).forEach(function (key) {

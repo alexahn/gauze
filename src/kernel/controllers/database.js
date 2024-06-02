@@ -52,58 +52,82 @@ class DatabaseController extends Controller {
 		input.where = self.model.post_serialize_middleware(input.where || {}, "read");
 		if (input.where_in) {
 			Object.keys(input.where_in).forEach(function (field) {
-				input.where_in[field] = input.where_in[field].map(function (value, index) {
-					return self.model.pre_serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
-				input.where_in[field] = input.where_in[field].map(function (value, index) {
-					return self.model.serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
-				input.where_in[field] = input.where_in[field].map(function (value, index) {
-					return self.model.post_serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
+				input.where_in[field] = input.where_in[field]
+					.map(function (value, index) {
+						return self.model.pre_serialize_middleware(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
+				input.where_in[field] = input.where_in[field]
+					.map(function (value, index) {
+						return self.model.serialize(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
+				input.where_in[field] = input.where_in[field]
+					.map(function (value, index) {
+						return self.model.post_serialize_middleware(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
 			});
 		}
 		if (input.where_not_in) {
 			Object.keys(input.where_in).forEach(function (field) {
-				input.where_not_in[field] = input.where_not_in[field].map(function (value, index) {
-					return self.model.pre_serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
-				input.where_not_in[field] = input.where_not_in[field].map(function (value, index) {
-					return self.model.serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
-				input.where_not_in[field] = input.where_not_in[field].map(function (value, index) {
-					return self.model.post_serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
+				input.where_not_in[field] = input.where_not_in[field]
+					.map(function (value, index) {
+						return self.model.pre_serialize_middleware(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
+				input.where_not_in[field] = input.where_not_in[field]
+					.map(function (value, index) {
+						return self.model.serialize(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
+				input.where_not_in[field] = input.where_not_in[field]
+					.map(function (value, index) {
+						return self.model.post_serialize_middleware(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
 			});
 		}
 		return self.model.read(context, model_scope, input).then(function (rows) {
@@ -129,58 +153,82 @@ class DatabaseController extends Controller {
 		input.where = self.model.post_serialize_middleware(input.where || {}, "read");
 		if (input.where_in) {
 			Object.keys(input.where_in).forEach(function (field) {
-				input.where_in[field] = input.where_in[field].map(function (value, index) {
-					return self.model.pre_serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
-				input.where_in[field] = input.where_in[field].map(function (value, index) {
-					return self.model.serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
-				input.where_in[field] = input.where_in[field].map(function (value, index) {
-					return self.model.post_serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
+				input.where_in[field] = input.where_in[field]
+					.map(function (value, index) {
+						return self.model.pre_serialize_middleware(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
+				input.where_in[field] = input.where_in[field]
+					.map(function (value, index) {
+						return self.model.serialize(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
+				input.where_in[field] = input.where_in[field]
+					.map(function (value, index) {
+						return self.model.post_serialize_middleware(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
 			});
 		}
 		if (input.where_not_in) {
 			Object.keys(input.where_in).forEach(function (field) {
-				input.where_not_in[field] = input.where_not_in[field].map(function (value, index) {
-					return self.model.pre_serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
-				input.where_not_in[field] = input.where_not_in[field].map(function (value, index) {
-					return self.model.serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
-				input.where_not_in[field] = input.where_not_in[field].map(function (value, index) {
-					return self.model.post_serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
+				input.where_not_in[field] = input.where_not_in[field]
+					.map(function (value, index) {
+						return self.model.pre_serialize_middleware(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
+				input.where_not_in[field] = input.where_not_in[field]
+					.map(function (value, index) {
+						return self.model.serialize(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
+				input.where_not_in[field] = input.where_not_in[field]
+					.map(function (value, index) {
+						return self.model.post_serialize_middleware(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
 			});
 		}
 		return self.model.update(context, model_scope, input).then(function (rows) {
@@ -203,58 +251,82 @@ class DatabaseController extends Controller {
 		input.where = self.model.post_serialize_middleware(input.where || {}, "read");
 		if (input.where_in) {
 			Object.keys(input.where_in).forEach(function (field) {
-				input.where_in[field] = input.where_in[field].map(function (value, index) {
-					return self.model.pre_serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
-				input.where_in[field] = input.where_in[field].map(function (value, index) {
-					return self.model.serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
-				input.where_in[field] = input.where_in[field].map(function (value, index) {
-					return self.model.post_serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
+				input.where_in[field] = input.where_in[field]
+					.map(function (value, index) {
+						return self.model.pre_serialize_middleware(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
+				input.where_in[field] = input.where_in[field]
+					.map(function (value, index) {
+						return self.model.serialize(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
+				input.where_in[field] = input.where_in[field]
+					.map(function (value, index) {
+						return self.model.post_serialize_middleware(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
 			});
 		}
 		if (input.where_not_in) {
 			Object.keys(input.where_in).forEach(function (field) {
-				input.where_not_in[field] = input.where_not_in[field].map(function (value, index) {
-					return self.model.pre_serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
-				input.where_not_in[field] = input.where_not_in[field].map(function (value, index) {
-					return self.model.serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
-				input.where_not_in[field] = input.where_not_in[field].map(function (value, index) {
-					return self.model.post_serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
+				input.where_not_in[field] = input.where_not_in[field]
+					.map(function (value, index) {
+						return self.model.pre_serialize_middleware(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
+				input.where_not_in[field] = input.where_not_in[field]
+					.map(function (value, index) {
+						return self.model.serialize(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
+				input.where_not_in[field] = input.where_not_in[field]
+					.map(function (value, index) {
+						return self.model.post_serialize_middleware(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
 			});
 		}
 		return self.model.delete(context, model_scope, input).then(function (rows) {
@@ -277,58 +349,82 @@ class DatabaseController extends Controller {
 		input.where = self.model.post_serialize_middleware(input.where, "read");
 		if (input.where_in) {
 			Object.keys(input.where_in).forEach(function (field) {
-				input.where_in[field] = input.where_in[field].map(function (value, index) {
-					return self.model.pre_serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
-				input.where_in[field] = input.where_in[field].map(function (value, index) {
-					return self.model.serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
-				input.where_in[field] = input.where_in[field].map(function (value, index) {
-					return self.model.post_serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
+				input.where_in[field] = input.where_in[field]
+					.map(function (value, index) {
+						return self.model.pre_serialize_middleware(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
+				input.where_in[field] = input.where_in[field]
+					.map(function (value, index) {
+						return self.model.serialize(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
+				input.where_in[field] = input.where_in[field]
+					.map(function (value, index) {
+						return self.model.post_serialize_middleware(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
 			});
 		}
 		if (input.where_not_in) {
 			Object.keys(input.where_in).forEach(function (field) {
-				input.where_not_in[field] = input.where_not_in[field].map(function (value, index) {
-					return self.model.pre_serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
-				input.where_not_in[field] = input.where_not_in[field].map(function (value, index) {
-					return self.model.serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
-				input.where_not_in[field] = input.where_not_in[field].map(function (value, index) {
-					return self.model.post_serialize_middleware(
-						{
-							[field]: value,
-						},
-						"read",
-					);
-				});
+				input.where_not_in[field] = input.where_not_in[field]
+					.map(function (value, index) {
+						return self.model.pre_serialize_middleware(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
+				input.where_not_in[field] = input.where_not_in[field]
+					.map(function (value, index) {
+						return self.model.serialize(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
+				input.where_not_in[field] = input.where_not_in[field]
+					.map(function (value, index) {
+						return self.model.post_serialize_middleware(
+							{
+								[field]: value,
+							},
+							"read",
+						);
+					})
+					.map(function (attributes) {
+						return attributes[field];
+					});
 			});
 		}
 		return self.model.count(context, scope, input).then(function (results) {
