@@ -67,10 +67,12 @@ function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 						const graphql_query_attributes_type = `${pascal_snake_name}_Query__Attributes`;
 						const graphql_query_source_type = `${pascal_snake_name}_Query__Source`;
 						const graphql_query_where_type = `${pascal_snake_name}_Query__Where`;
+						const graphql_query_where_array_type = `${pascal_snake_name}_Query__Where_Array`;
 						const graphql_query_where_string_type = `${pascal_snake_name}_Query__Where_String`;
 						const graphql_mutation_attributes_type = `${pascal_snake_name}_Mutation__Attributes`;
 						const graphql_mutation_source_type = `${pascal_snake_name}_Mutation__Source`;
 						const graphql_mutation_where_type = `${pascal_snake_name}_Mutation__Where`;
+						const graphql_mutation_where_array_type = `${pascal_snake_name}_Mutation__Where_Array`;
 						const graphql_mutation_where_string_type = `${pascal_snake_name}_Mutation__Where_String`;
 						return {
 							name: module.name,
@@ -86,10 +88,12 @@ function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 							graphql_query_attributes_type: graphql_query_attributes_type,
 							graphql_query_source_type: graphql_query_source_type,
 							graphql_query_where_type: graphql_query_where_type,
+							graphql_query_where_array_type: graphql_query_where_array_type,
 							graphql_query_where_string_type: graphql_query_where_string_type,
 							graphql_mutation_attributes_type: graphql_mutation_attributes_type,
 							graphql_mutation_source_type: graphql_mutation_source_type,
 							graphql_mutation_where_type: graphql_mutation_where_type,
+							graphql_mutation_where_array_type: graphql_mutation_where_array_type,
 							graphql_mutation_where_string_type: graphql_mutation_where_string_type,
 							relationships_to: relationships_to[module.graphql_meta_type] || [],
 							relationships_from: relationships_from[module.graphql_meta_type] || [],

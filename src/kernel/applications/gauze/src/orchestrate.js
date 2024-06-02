@@ -390,75 +390,100 @@ function reload(services, agentHeader) {
 					};
 				});
 			}),
-		).then(function (results) {
-			// update data and count
-			graph.updateNodes(
-				results.map(function (result) {
-					return {
-						...result.node,
-						props: {
-							...result.node.props,
-							data: result.data,
-							count: result.count,
-							connectionIDs: [],
-						},
-						complete: true,
-					};
-				}),
-			);
-			const synced = graph.syncNodesEdges(results);
-			console.log("reload synced", synced);
-			const newConnections = synced.newConnections.map(function (connection) {
-				return {
-					...connection,
-					component: relationship.default,
-					props: {
-						gauze: gauze,
-						model: model,
-						router: router,
-						graph: graph,
-					},
-				};
-			});
-			const newEdges = synced.newEdges;
-			graph.createConnections(newConnections);
-			graph.createEdges(newEdges);
-			const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
-			console.log("reload syncedConnections", syncedConnections);
-			const connectedNodes = Object.keys(syncedConnections).map(function (id) {
-				return {
-					...graph.nodes[id],
-					props: {
-						...graph.nodes[id].props,
-						connectionIDs: syncedConnections[id].connections,
-					},
-				};
-			});
-			graph.updateNodes(connectedNodes);
-			// reinitialize
-			graph.updateNodes(
-				graph.activeNodes(agentHeader.name).values.map(function (node) {
-					return {
-						...node,
-						oldWidth: node.width,
-						oldHeight: node.height,
-						width: null,
-						height: null,
-					};
-				}),
-			);
-			// reinitialize connections
-			graph.updateConnections(
-				graph.activeConnections(agentHeader.name).values.map(function (connection) {
+		)
+			.then(function (results) {
+				// update data and count
+				graph.updateNodes(
+					results.map(function (result) {
+						return {
+							...result.node,
+							props: {
+								...result.node.props,
+								data: result.data,
+								count: result.count,
+								connectionIDs: [],
+							},
+							complete: true,
+						};
+					}),
+				);
+				const synced = graph.syncNodesEdges(results);
+				console.log("reload synced", synced);
+				const newConnections = synced.newConnections.map(function (connection) {
 					return {
 						...connection,
-						x: null,
-						y: null,
+						component: relationship.default,
+						props: {
+							gauze: gauze,
+							model: model,
+							router: router,
+							graph: graph,
+						},
 					};
-				}),
-			);
-			return results;
-		});
+				});
+				const newEdges = synced.newEdges;
+				graph.createConnections(newConnections);
+				graph.createEdges(newEdges);
+				const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
+				console.log("reload syncedConnections", syncedConnections);
+				const connectedNodes = Object.keys(syncedConnections).map(function (id) {
+					return {
+						...graph.nodes[id],
+						props: {
+							...graph.nodes[id].props,
+							connectionIDs: syncedConnections[id].connections,
+						},
+					};
+				});
+				graph.updateNodes(connectedNodes);
+				// reinitialize
+				graph.updateNodes(
+					graph.activeNodes(agentHeader.name).values.map(function (node) {
+						return {
+							...node,
+							oldWidth: node.width,
+							oldHeight: node.height,
+							width: null,
+							height: null,
+						};
+					}),
+				);
+				// reinitialize connections
+				graph.updateConnections(
+					graph.activeConnections(agentHeader.name).values.map(function (connection) {
+						return {
+							...connection,
+							x: null,
+							y: null,
+						};
+					}),
+				);
+				return results;
+			})
+			.then(function () {
+				const activeNodes = graph.activeNodes(agentHeader.name);
+				const activeEntityIDs = activeNodes.values
+					.map(function (node) {
+						return node.props.data.map(function (entity) {
+							return entity[node.props.primary_key];
+						});
+					})
+					.flat();
+				// there should be at least one id if we fetched the root
+				const headers = model.all("HEADER");
+				const relationshipHeader = headers.find(function (header) {
+					return header.name === "relationship";
+				});
+				const parameters = {
+					where_in: {
+						gauze__relationship__from_id: activeEntityIDs,
+						gauze__relationship__to_id: activeEntityIDs,
+					},
+				};
+				return gauze.read(relationshipHeader, parameters).then(function (relationships) {
+					console.log("relationships", relationships);
+				});
+			});
 	});
 }
 

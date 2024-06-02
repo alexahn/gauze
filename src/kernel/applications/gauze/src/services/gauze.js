@@ -416,10 +416,12 @@ query header {
 		graphql_query_attributes_type
 		graphql_query_source_type
 		graphql_query_where_type
+		graphql_query_where_array_type
 		graphql_query_where_string_type
 		graphql_mutation_attributes_type
 		graphql_mutation_source_type
 		graphql_mutation_where_type
+		graphql_mutation_where_array_type
 		graphql_mutation_where_string_type
 		relationships_to
 		relationships_from
@@ -472,6 +474,8 @@ mutation create(
 query read(
 	$source: ${header.graphql_query_source_type},
 	$where: ${header.graphql_query_where_type},
+	$where_in: ${header.graphql_query_where_array_type},
+	$where_not_in: ${header.graphql_query_where_array_type},
 	$limit: Int,
 	$offset: Int,
 	$order: String,
@@ -480,6 +484,8 @@ query read(
 	read_${header.name}(
 		source: $source,
 		where: $where,
+		where_in: $where_in,
+		where_not_in: $where_not_in,
 		limit: $limit,
 		offset: $offset,
 		order: $order,
