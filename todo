@@ -602,6 +602,8 @@
 		[ ] editing mode for the entire graph
 			[ ] show and hide button to close a table based on editing mode
 			[ ] show and hide buttons to create and delete relationships based on editing mode
+		[ ] personal description for table
+			[ ] or allow them to rename the title
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages

@@ -11,7 +11,7 @@ import Input from "./Input.jsx";
 import Pagination from "./Pagination.jsx";
 
 import { v4 as uuidv4 } from "uuid";
-import { Share1Icon, Pencil2Icon, Cross1Icon, BookmarkIcon, BookmarkFilledIcon } from "@radix-ui/react-icons";
+import { Share1Icon, Pencil2Icon, Cross1Icon, BookmarkIcon, BookmarkFilledIcon, PlusIcon, MinusIcon } from "@radix-ui/react-icons";
 
 export default function Table({
 	agentHeader,
@@ -380,15 +380,43 @@ export default function Table({
 							</th>
 							{data.map(function (item) {
 								return (
-									<th key={item[header.primary_key]} align="center" className="mw4 w4 pa1 relative row" tabIndex="0">
-										<div
-											className="truncate-ns from-end"
-											data-interaction="from_end"
-											data-node-id={node.id}
-											data-entity-id={item[header.primary_key]}
-											data-entity-type={header.graphql_meta_type}
-										>
-											FROM
+									<th key={item[header.primary_key]} align="center" className="mw4 w4 pa1">
+										<div className="flex justify-center">
+											{/*
+											<div
+												className="flex from-end"
+												data-interaction="from_end"
+												data-node-id={node.id}
+												data-entity-id={item[header.primary_key]}
+												data-entity-type={header.graphql_meta_type}
+											>
+												<button className="truncate-ns">FROM</button>
+											</div>
+											*/}
+											<div className="flex relative row" tabIndex="0">
+												<button className="truncate-ns">FROM</button>
+												<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
+													<div className="pa1">FROM</div>
+													{header.relationships_from.map(function (from) {
+														return (
+															<div key={from} className="pa1">
+																<button onClick={traverseFrom(header, item, from)}>{from}</button>
+															</div>
+														);
+													})}
+												</span>
+											</div>
+											<div
+												className="flex from-start from-end"
+												data-interaction="from_end"
+												data-node-id={node.id}
+												data-entity-id={item[header.primary_key]}
+												data-entity-type={header.graphql_meta_type}
+											>
+												<button>
+													<PlusIcon />
+												</button>
+											</div>
 										</div>
 										{node.props.connectionIDs.map(function (id) {
 											const connection = connections[id];
@@ -421,24 +449,6 @@ export default function Table({
 											}
 										})}
 										{/* connection component? */}
-										<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
-											<div
-												className="pa1 from-start"
-												data-interaction="from_start"
-												data-node-id={node.id}
-												data-entity-id={item[header.primary_key]}
-												data-entity-type={header.graphql_meta_type}
-											>
-												FROM
-											</div>
-											{header.relationships_from.map(function (from) {
-												return (
-													<div key={from} className="pa1">
-														<button onClick={traverseFrom(header, item, from)}>{from}</button>
-													</div>
-												);
-											})}
-										</span>
 									</th>
 								);
 							})}
@@ -606,15 +616,32 @@ export default function Table({
 							</th>
 							{data.map(function (item) {
 								return (
-									<th key={item[header.primary_key]} align="center" className="mw4 w4 pa1 relative row" tabIndex="0">
-										<div
-											className="truncate-ns to-end"
-											data-interaction="to_end"
-											data-node-id={node.id}
-											data-entity-id={item[header.primary_key]}
-											data-entity-type={header.graphql_meta_type}
-										>
-											TO
+									<th key={item[header.primary_key]} align="center" className="mw4 w4 pa1">
+										<div className="flex justify-center">
+											<div className="flex relative row" tabIndex="0">
+												<button className="truncate-ns">TO</button>
+												<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
+													<div className="pa1">TO</div>
+													{header.relationships_to.map(function (to) {
+														return (
+															<div key={to} className="pa1">
+																<button onClick={traverseTo(header, item, to)}>{to}</button>
+															</div>
+														);
+													})}
+												</span>
+											</div>
+											<div
+												className="flex to-start to-end"
+												data-interaction="to_end"
+												data-node-id={node.id}
+												data-entity-id={item[header.primary_key]}
+												data-entity-type={header.graphql_meta_type}
+											>
+												<button>
+													<PlusIcon />
+												</button>
+											</div>
 										</div>
 										{node.props.connectionIDs.map(function (id) {
 											const connection = connections[id];
@@ -644,6 +671,7 @@ export default function Table({
 												return null;
 											}
 										})}
+										{/*
 										<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
 											<div
 												className="pa1 to-start"
@@ -662,6 +690,7 @@ export default function Table({
 												);
 											})}
 										</span>
+										*/}
 									</th>
 								);
 							})}

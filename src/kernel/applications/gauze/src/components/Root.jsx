@@ -9,7 +9,7 @@ import Graph from "./Graph.jsx";
 import Node from "./Node.jsx";
 import Table from "./Table.jsx";
 
-import { GearIcon, PlusCircledIcon } from "@radix-ui/react-icons";
+import { GearIcon, PlusCircledIcon, Link2Icon, LinkBreak2Icon } from "@radix-ui/react-icons";
 
 export default function Root({ gauze, model, router, route, render, graph }) {
 	const agentHeader = gauze.getSystemAgentHeader(model);
@@ -23,6 +23,7 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 	const [performance, setPerformance] = useState(4);
 	const [share, setShare] = useState();
 	const [displayShare, setDisplayShare] = useState(false);
+	const [link, setLink] = useState(false);
 	function toggleShare(e) {
 		setDisplayShare(!displayShare);
 	}
@@ -58,6 +59,9 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 		} catch (e) {
 			console.error(e);
 		}
+	}
+	function handleLink(e) {
+		setLink(!link);
 	}
 	function handlePerformance(e) {
 		if (e.target.value === "high") {
@@ -115,6 +119,9 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 					</span>
 				</div>
 			</div>
+			<div className="fixed bottom-1 right-1" style={{ zIndex: 1 }}>
+				{link ? <LinkBreak2Icon width={30} height={30} onClick={handleLink} /> : <Link2Icon width={30} height={30} onClick={handleLink} />}
+			</div>
 			<Graph
 				key={"graph"}
 				agentHeader={agentHeader}
@@ -122,6 +129,7 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 				gauze={gauze}
 				model={model}
 				router={router}
+				link={link}
 				graph={graph}
 				nodes={nodes}
 				edges={edges}

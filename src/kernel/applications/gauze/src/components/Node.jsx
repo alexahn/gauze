@@ -23,7 +23,9 @@ export default function Node({ agentHeader, route, gauze, model, router, graph, 
 		} else if (e.button === 0) {
 			if (containerRef.current.contains(e.target)) {
 				// note: is there a way to do this elegantly?
-				if (e.target.classList.contains("from-start")) {
+				const fromTarget = e.target.closest(".from-start");
+				const toTarget = e.target.closest(".to-start");
+				if (fromTarget) {
 					setConnecting(true);
 					// create two interaction connections
 					// create interaction
@@ -33,9 +35,9 @@ export default function Node({ agentHeader, route, gauze, model, router, graph, 
 						{
 							id: startID,
 							name: "from_start",
-							nodeID: e.target.dataset.nodeId,
-							entityID: e.target.dataset.entityId,
-							entityType: e.target.dataset.entityType,
+							nodeID: fromTarget.dataset.nodeId,
+							entityID: fromTarget.dataset.entityId,
+							entityType: fromTarget.dataset.entityType,
 							x: e.clientX,
 							y: e.clientY,
 							z: node.z,
@@ -43,9 +45,9 @@ export default function Node({ agentHeader, route, gauze, model, router, graph, 
 						{
 							id: endID,
 							name: "from_end",
-							nodeID: e.target.dataset.nodeId,
-							entityID: e.target.dataset.entityId,
-							entityType: e.target.dataset.entityType,
+							nodeID: fromTarget.dataset.nodeId,
+							entityID: fromTarget.dataset.entityId,
+							entityType: fromTarget.dataset.entityType,
 							x: e.clientX,
 							y: e.clientY,
 							z: node.z,
@@ -58,7 +60,7 @@ export default function Node({ agentHeader, route, gauze, model, router, graph, 
 						toConnectionID: endID,
 					});
 					e.preventDefault();
-				} else if (e.target.classList.contains("to-start")) {
+				} else if (toTarget) {
 					setConnecting(true);
 					// create two interaction connections
 					// create interaction
@@ -68,9 +70,9 @@ export default function Node({ agentHeader, route, gauze, model, router, graph, 
 						{
 							id: startID,
 							name: "to_start",
-							nodeID: e.target.dataset.nodeId,
-							entityID: e.target.dataset.entityId,
-							entityType: e.target.dataset.entityType,
+							nodeID: toTarget.dataset.nodeId,
+							entityID: toTarget.dataset.entityId,
+							entityType: toTarget.dataset.entityType,
 							x: e.clientX,
 							y: e.clientY,
 							z: node.z,
@@ -78,9 +80,9 @@ export default function Node({ agentHeader, route, gauze, model, router, graph, 
 						{
 							id: endID,
 							name: "to_end",
-							nodeID: e.target.dataset.nodeId,
-							entityID: e.target.dataset.entityId,
-							entityType: e.target.dataset.entityType,
+							nodeID: toTarget.dataset.nodeId,
+							entityID: toTarget.dataset.entityId,
+							entityType: toTarget.dataset.entityType,
 							x: e.clientX,
 							y: e.clientY,
 							z: node.z,
@@ -119,8 +121,10 @@ export default function Node({ agentHeader, route, gauze, model, router, graph, 
 	function onMouseUp(e) {
 		const interaction = graph.readInteraction();
 		if (interaction) {
-			if (e.target.classList.contains("from-end") || e.target.classList.contains("to-end")) {
-				const target = e.target.dataset;
+			const fromTarget = e.target.closest(".from-start");
+			const toTarget = e.target.closest(".to-start");
+			if (fromTarget || toTarget) {
+				const target = fromTarget ? fromTarget.dataset : toTarget.dataset;
 				const source = connections[interaction.fromConnectionID];
 				graph.deleteConnections([connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
 				graph.deleteInteraction();
