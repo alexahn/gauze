@@ -788,6 +788,8 @@
 				[ ] might need to add a method to get the owner for something
 	[ ] implement time sharing scheme to track how much time an agent uses
 		[ ] rate limit based on time share
+	[ ] create tag entity
+		[ ] allow agents to tag entities
 [ ] unknowns, abnormal behavior, and investigations
 	[ ] look into why router5 doesn't seem to be able to uri encode correctly
 		[ ] manually encoding and decoding seems to work
