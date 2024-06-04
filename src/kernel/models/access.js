@@ -222,7 +222,7 @@ class AccessSystemModel extends SystemModel {
 	_root_create(context, scope, input, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
-		const method = "create"
+		const method = "create";
 		const target_record = input.attributes;
 		self._validate_model(target_record);
 		return self._valid_access(context, agent, method, target_record).then(function () {
@@ -302,7 +302,7 @@ class AccessSystemModel extends SystemModel {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
-		const method = "read"
+		const method = "read";
 		if (input.where && input.where[self.key_id]) {
 			return self._preread(database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
@@ -335,7 +335,7 @@ class AccessSystemModel extends SystemModel {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
-		const method = "update"
+		const method = "update";
 		const change_record = input.attributes;
 		if (input && input.where && input.where[self.key_id]) {
 			return self._preread(database, transaction, input.where).then(function (target_records) {
@@ -366,7 +366,7 @@ class AccessSystemModel extends SystemModel {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
-		const method = "delete"
+		const method = "delete";
 		if (input && input.where && input.where[self.key_id]) {
 			return self._preread(database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
@@ -444,7 +444,7 @@ class AccessSystemModel extends SystemModel {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
-		const method = "count"
+		const method = "count";
 		if (input.where && input.where[self.key_id]) {
 			return self._preread(database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
@@ -467,7 +467,7 @@ class AccessSystemModel extends SystemModel {
 			);
 		}
 	}
-	_read(context, scope, parameters, realm) {
+	_count(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "read");
 		return self.model_loader.load(context, scope, key);
