@@ -36,7 +36,7 @@ const DELETED_AT__DESERIALIZER__GAUZE__ABSTRACT = function (field) {
 		read: convert,
 		update: convert,
 		delete: convert,
-		count: convert
+		count: convert,
 	};
 };
 

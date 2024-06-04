@@ -344,9 +344,9 @@ class DatabaseController extends Controller {
 			source: scope.source,
 		};
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.count:enter`, "input", input);
-		input.where = self.model.pre_serialize_middleware(input.where || {}, "read");
-		input.where = self.model.serialize(input.where || {}, "read");
-		input.where = self.model.post_serialize_middleware(input.where || {}, "read");
+		input.where = self.model.pre_serialize_middleware(input.where || {}, "count");
+		input.where = self.model.serialize(input.where || {}, "count");
+		input.where = self.model.post_serialize_middleware(input.where || {}, "count");
 		if (input.where_in) {
 			Object.keys(input.where_in).forEach(function (field) {
 				input.where_in[field] = input.where_in[field]
@@ -355,7 +355,7 @@ class DatabaseController extends Controller {
 							{
 								[field]: value,
 							},
-							"read",
+							"count",
 						);
 					})
 					.map(function (attributes) {
@@ -367,7 +367,7 @@ class DatabaseController extends Controller {
 							{
 								[field]: value,
 							},
-							"read",
+							"count",
 						);
 					})
 					.map(function (attributes) {
@@ -379,7 +379,7 @@ class DatabaseController extends Controller {
 							{
 								[field]: value,
 							},
-							"read",
+							"count",
 						);
 					})
 					.map(function (attributes) {
@@ -395,7 +395,7 @@ class DatabaseController extends Controller {
 							{
 								[field]: value,
 							},
-							"read",
+							"count",
 						);
 					})
 					.map(function (attributes) {
@@ -407,7 +407,7 @@ class DatabaseController extends Controller {
 							{
 								[field]: value,
 							},
-							"read",
+							"count",
 						);
 					})
 					.map(function (attributes) {
@@ -419,7 +419,7 @@ class DatabaseController extends Controller {
 							{
 								[field]: value,
 							},
-							"read",
+							"count",
 						);
 					})
 					.map(function (attributes) {
