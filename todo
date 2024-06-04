@@ -599,9 +599,9 @@
 		[x] extend type item view to be able to view relationships to the object
 		[x] load relationships from server
 			[x] extend relationship read query to be able to accept an array of from entity ids and to entity ids
-		[ ] editing mode for the entire graph
-			[ ] show and hide button to close a table based on editing mode
-			[ ] show and hide buttons to create and delete relationships based on editing mode
+		[x] editing mode for the entire graph
+			[x] show and hide button to close a table based on editing mode
+			[x] show and hide buttons to create and delete relationships based on editing mode
 		[ ] personal description for table
 			[ ] or allow them to rename the title
 [ ] naming, organization, error consistency and code quality
