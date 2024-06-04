@@ -118,10 +118,18 @@ table .truncate-ns {
 	color: #eeeeee;
 }
 
+.window-content-1 {
+	background-color: #b02013;
+}
+
 .small-window-2 {
 	grid-column: 4 / span 2;
 	grid-row: 1 / span 1;
 	color: #e8d7a4;
+}
+
+.window-content-2 {
+	background-color: #ca6702;
 }
 
 .small-window-3 {
@@ -130,10 +138,18 @@ table .truncate-ns {
 	color: #888888;
 }
 
+.window-content-3 {
+	border: 2px solid #888888;
+}
+
 .small-window-4 {
 	grid-column: 8 / span 2;
 	grid-row: 1 / span 1;
 	color: #e8d7a4;
+}
+
+.window-content-4 {
+	background-color: #099396;
 }
 
 .small-window-5 {
@@ -142,6 +158,10 @@ table .truncate-ns {
 	color: #eeeeee;
 }
 
+.window-content-5 {
+	background-color: #01121a;
+}
+
 .athelas {
-    font-family: athelas, georgia, serif;
+	font-family: athelas, georgia, serif;
 }
