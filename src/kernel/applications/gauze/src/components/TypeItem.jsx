@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { FileTextIcon, TrashIcon, Pencil2Icon, BookmarkIcon, BookmarkFilledIcon, Share1Icon } from "@radix-ui/react-icons";
+import { FileTextIcon, TrashIcon, Pencil2Icon, BookmarkIcon, BookmarkFilledIcon, Share1Icon, Link2Icon } from "@radix-ui/react-icons";
 
 import Input from "./Input.jsx";
 
@@ -127,6 +127,12 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 		);
 		return blacklistWhere;
 	}
+	const relationshipWhere = encodeURIComponent(
+		JSON.stringify({
+			gauze__relationship__from_id: item[header.primary_key],
+			gauze__relationship__from_type: header.table_name,
+		}),
+	);
 	const share = {
 		entity_id: item[header.primary_key],
 		entity_type: header.table_name,
@@ -139,16 +145,27 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 			<div align="right" className="cf">
 				<nav>
 					<div className="flex pa1 fr">
-						<div className="relative row mw4 w4" tabIndex="0">
-							<button>
-								<Share1Icon />
-							</button>
+						<div className="relative">
+							<a href={router.buildUrl("system.types.list.type", { type: "relationship", where: relationshipWhere })}>
+								<button>
+									<Link2Icon />
+								</button>
+							</a>
+						</div>
+						<div className="relative row" tabIndex="0">
+							<a>
+								<button>
+									<Share1Icon />
+								</button>
+							</a>
 							<span className="dn bg-light-green mw6 w6 top-0 right-0 pa1 absolute f9 tooltip">{JSON.stringify(share)}</span>
 						</div>
 						<div className="relative row" tabIndex="0">
-							<button>
-								<BookmarkFilledIcon />
-							</button>
+							<a>
+								<button>
+									<BookmarkFilledIcon />
+								</button>
+							</a>
 							<span className="dn bg-light-green mw4 w4 top-0 right-0 pa1 absolute f4 tooltip">
 								{header.methods.map(function (method) {
 									return (
@@ -160,9 +177,11 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 							</span>
 						</div>
 						<div className="relative row" tabIndex="0">
-							<button>
-								<BookmarkIcon />
-							</button>
+							<a>
+								<button>
+									<BookmarkIcon />
+								</button>
+							</a>
 							<span className="dn bg-light-green mw4 w4 top-0 right-0 pa1 absolute f4 tooltip">
 								{header.methods.map(function (method) {
 									return (
@@ -173,21 +192,27 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 								})}
 							</span>
 						</div>
-						<a href={router.buildUrl(route.name, { ...route.params, mode: "remove" })}>
-							<button className="action" type="button" disabled={route.params.mode === "remove"}>
-								<TrashIcon />
-							</button>
-						</a>
-						<a href={router.buildUrl(route.name, { ...route.params, mode: "edit" })}>
-							<button className="action" type="button" disabled={route.params.mode === "edit"}>
-								<Pencil2Icon />
-							</button>
-						</a>
-						<a href={router.buildUrl(route.name, { ...route.params, mode: "view" })}>
-							<button className="action" type="button" disabled={route.params.mode === "view"}>
-								<FileTextIcon />
-							</button>
-						</a>
+						<div>
+							<a href={router.buildUrl(route.name, { ...route.params, mode: "remove" })}>
+								<button className="action" type="button" disabled={route.params.mode === "remove"}>
+									<TrashIcon />
+								</button>
+							</a>
+						</div>
+						<div>
+							<a href={router.buildUrl(route.name, { ...route.params, mode: "edit" })}>
+								<button className="action" type="button" disabled={route.params.mode === "edit"}>
+									<Pencil2Icon />
+								</button>
+							</a>
+						</div>
+						<div>
+							<a href={router.buildUrl(route.name, { ...route.params, mode: "view" })}>
+								<button className="action" type="button" disabled={route.params.mode === "view"}>
+									<FileTextIcon />
+								</button>
+							</a>
+						</div>
 					</div>
 				</nav>
 			</div>

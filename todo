@@ -471,7 +471,7 @@
 	[x] create a new entity
 	[x] update an entity
 	[x] delete an entity
-	[ ] show relationships for entity item
+	[x] show relationships for entity item
 	[ ] add a command to set an agent as an admin for an agent type
 		[ ] should just update the project configuration file
 	[x] src/gauze.json
