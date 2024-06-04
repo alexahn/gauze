@@ -222,9 +222,10 @@ class AccessSystemModel extends SystemModel {
 	_root_create(context, scope, input, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
+		const method = "create"
 		const target_record = input.attributes;
 		self._validate_model(target_record);
-		return self._valid_access(context, agent, "create", target_record).then(function () {
+		return self._valid_access(context, agent, method, target_record).then(function () {
 			return self._execute(context, operation, input);
 		});
 	}
@@ -301,11 +302,12 @@ class AccessSystemModel extends SystemModel {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
+		const method = "read"
 		if (input.where && input.where[self.key_id]) {
 			return self._preread(database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
-					return self._valid_access(context, agent, "read", target_record).then(function () {
+					return self._valid_access(context, agent, method, target_record).then(function () {
 						return self._execute(context, operation, input);
 					});
 				} else {
@@ -333,15 +335,16 @@ class AccessSystemModel extends SystemModel {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
+		const method = "update"
 		const change_record = input.attributes;
 		if (input && input.where && input.where[self.key_id]) {
 			return self._preread(database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
-					return self._valid_access(context, agent, "update", target_record).then(function () {
+					return self._valid_access(context, agent, method, target_record).then(function () {
 						const staged = { ...target_record, ...change_record };
 						self._validate_model(staged);
-						return self._valid_access(context, agent, "update", staged).then(function () {
+						return self._valid_access(context, agent, method, staged).then(function () {
 							return self._execute(context, operation, input);
 						});
 					});
@@ -363,11 +366,12 @@ class AccessSystemModel extends SystemModel {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
+		const method = "delete"
 		if (input && input.where && input.where[self.key_id]) {
 			return self._preread(database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
-					return self._valid_access(context, agent, "delete", target_record).then(function () {
+					return self._valid_access(context, agent, method, target_record).then(function () {
 						return self._execute(context, operation, input);
 					});
 				} else {
@@ -381,6 +385,91 @@ class AccessSystemModel extends SystemModel {
 	_delete(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "delete");
+		return self.model_loader.load(context, scope, key);
+	}
+	_count_entity(context, input, realm) {
+		const self = this;
+		const { database, transaction } = context;
+		const { agent, entity, operation } = realm;
+		// get highest record for initiator
+		// get list of records based on entity_id, entity_type, and method
+		// filter list of records based on role hierarchy
+		// root initiator can see everything, trunk can see trunk and leaf, leaf can only see itself
+		return self._initiator_records(context, input.where, agent).then(function (access_records) {
+			if (access_records && access_records.length) {
+				// get record for the highest role
+				const highest_record = self._highest_record(access_records);
+				return self._preread(database, transaction, input.where).then(function (target_records) {
+					const highest_id = highest_record[self.key_id];
+					const highest_role = highest_record[self.key_agent_role];
+					const filtered = target_records.filter(function (record) {
+						const target_id = record[self.key_id];
+						const target_role = record[self.key_agent_role];
+						if (highest_role === "root") {
+							return true;
+						} else if (highest_role === "trunk") {
+							if (target_role === "trunk") {
+								return true;
+							} else if (target_role === "leaf") {
+								return true;
+							} else {
+								return false;
+							}
+						} else if (highest_role === "leaf") {
+							if (target_id == highest_id) {
+								return true;
+							} else {
+								return false;
+							}
+						} else {
+							return false;
+						}
+					});
+					const valid_ids = filtered.map(function (record) {
+						return record[self.key_id];
+					});
+					input.where_in = {
+						[self.key_id]: valid_ids,
+					};
+					// we could manually construct the response from the filtered object here instead?
+					return self._execute(context, operation, input);
+				});
+			} else {
+				throw new Error("Agent does not have access to this method");
+			}
+		});
+	}
+	// requires where.id or where.agent_id or (where.entity_id and where.entity_type and where.method)
+	_count_read(context, scope, input, realm) {
+		const self = this;
+		const { database, transaction } = context;
+		const { agent, entity, operation } = realm;
+		const method = "count"
+		if (input.where && input.where[self.key_id]) {
+			return self._preread(database, transaction, input.where).then(function (target_records) {
+				if (target_records && target_records.length) {
+					const target_record = target_records[0];
+					return self._valid_access(context, agent, method, target_record).then(function () {
+						return self._execute(context, operation, input);
+					});
+				} else {
+					return self.empty_read_response;
+				}
+			});
+		} else if (input.where && input.where[self.key_agent_id]) {
+			return self._count_agent(context, input, realm);
+		} else if (input.where && input.where[self.key_entity_id] && input.where[self.key_entity_type] && input.where[self.key_method]) {
+			return self._count_entity(context, input, realm);
+		} else {
+			// todo: move this to system interface
+			throw new Error(
+				`Field 'where.${self.key_id}' or 'where.${self.key_agent_id}' or ('where.${self.key_entity_id}' and 'where.${self.key_entity_type}' and 'where.${self.key_method}') are required`,
+			);
+		}
+	}
+	_read(context, scope, parameters, realm) {
+		const self = this;
+		const key = self._model_batch_key(parameters, realm, "read");
 		return self.model_loader.load(context, scope, key);
 	}
 }
