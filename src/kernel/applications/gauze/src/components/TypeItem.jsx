@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { FileTextIcon, TrashIcon, Pencil2Icon, BookmarkIcon, BookmarkFilledIcon, Share1Icon, Link2Icon } from "@radix-ui/react-icons";
+import { FileTextIcon, TrashIcon, Pencil2Icon, BookmarkIcon, BookmarkFilledIcon, Share1Icon, Link2Icon, ChevronUpIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 
 import Input from "./Input.jsx";
 
@@ -127,10 +127,16 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 		);
 		return blacklistWhere;
 	}
-	const relationshipWhere = encodeURIComponent(
+	const relationshipFromWhere = encodeURIComponent(
 		JSON.stringify({
 			gauze__relationship__from_id: item[header.primary_key],
 			gauze__relationship__from_type: header.table_name,
+		}),
+	);
+	const relationshipToWhere = encodeURIComponent(
+		JSON.stringify({
+			gauze__relationship__to_id: item[header.primary_key],
+			gauze__relationship__to_type: header.table_name,
 		}),
 	);
 	const share = {
@@ -146,9 +152,16 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 				<nav>
 					<div className="flex pa1 fr">
 						<div className="relative">
-							<a href={router.buildUrl("system.types.list.type", { type: "relationship", where: relationshipWhere })}>
+							<a href={router.buildUrl("system.types.list.type", { type: "relationship", where: relationshipToWhere })}>
 								<button>
-									<Link2Icon />
+									<ChevronUpIcon />
+								</button>
+							</a>
+						</div>
+						<div className="relative">
+							<a href={router.buildUrl("system.types.list.type", { type: "relationship", where: relationshipFromWhere })}>
+								<button>
+									<ChevronDownIcon />
 								</button>
 							</a>
 						</div>

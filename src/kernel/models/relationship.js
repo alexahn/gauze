@@ -371,10 +371,6 @@ class RelationshipSystemModel extends SystemModel {
 		const { agent_id } = agent;
 		const method = "read";
 
-		const from_entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[parameters.where.gauze__relationship__from_type];
-		const from_entity_module = $abstract.entities[from_entity_module_name].default($abstract);
-		const from_entity_method_privacy = from_entity_module.methods[method].privacy;
-
 		return self
 			.authorization_element(context, scope, "system", agent, {
 				entity_id: parameters.where.gauze__relationship__from_id,
@@ -391,6 +387,50 @@ class RelationshipSystemModel extends SystemModel {
 						.transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_from:debug_sql`, sql.toString());
+					}
+					return sql.then(function (relationship_rows) {
+						return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
+							parameters.where_in = {
+								[self.entity.primary_key]: valid_ids,
+							};
+							// note: should we just return the relationships here instead of executing a graphql query?
+							return self._execute(context, operation, parameters);
+						});
+					});
+				} else {
+					throw new Error("Agent does not have access to target method");
+				}
+			});
+	}
+	_read_to(context, scope, parameters, realm) {
+		// check that from policy aligns
+		// get list of relationship
+		// intersect with agent whitelist or blacklist based on policy by doing a where in query (this could work if we leverage the fact that uuids rarely have collisions)
+		// the problem is that every to target has its own policy
+		// do an in memory join basically
+		// final set of relationships the user has access to
+		const self = this;
+		const { database, transaction } = context;
+		const { agent, entity, operation } = realm;
+		const { agent_id } = agent;
+		const method = "read";
+
+		return self
+			.authorization_element(context, scope, "system", agent, {
+				entity_id: parameters.where.gauze__relationship__to_id,
+				entity_type: parameters.where.gauze__relationship__to_type,
+				entity_method: method,
+			})
+			.then(function (auth) {
+				if (auth.status === true) {
+					const sql = database(self.entity.table_name)
+						.where({
+							gauze__relationship__to_type: parameters.where.gauze__relationship__to_type,
+							gauze__relationship__to_id: parameters.where.gauze__relationship__to_id,
+						})
+						.transacting(transaction);
+					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_to:debug_sql`, sql.toString());
 					}
 					return sql.then(function (relationship_rows) {
 						return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
@@ -446,9 +486,11 @@ class RelationshipSystemModel extends SystemModel {
 			return self._read_entity_in(context, scope, parameters, realm);
 		} else if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__from_type) {
 			return self._read_from(context, scope, parameters, realm);
+		} else if (parameters.where && parameters.where.gauze__relationship__to_id && parameters.where.gauze__relationship__to_type) {
+			return self._read_to(context, scope, parameters, realm);
 		} else {
 			throw new Error(
-				"Field 'where.gauze__relationship__id' is required or (Field 'where_in.gauze__relationship__from_id' and where_in.gauze__relationship__to_id' are required) or (Field 'where.gauze__relationship__from_id' and 'where.gauze__relationship__from_type' are required)",
+				"Field 'where.gauze__relationship__id' is required or (Field 'where_in.gauze__relationship__from_id' and where_in.gauze__relationship__to_id' are required) or (Field 'where.gauze__relationship__from_id' and 'where.gauze__relationship__from_type' are required) or (Field 'where.gauze__relationship__to_id' and 'where.gauze__relationship__to_type' are required)",
 			);
 		}
 	}
@@ -586,11 +628,6 @@ class RelationshipSystemModel extends SystemModel {
 		const { agent, entity, operation } = realm;
 		const { agent_id } = agent;
 		const method = "count";
-
-		const from_entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[parameters.where.gauze__relationship__from_type];
-		const from_entity_module = $abstract.entities[from_entity_module_name].default($abstract);
-		const from_entity_method_privacy = from_entity_module.methods[method].privacy;
-
 		return self
 			.authorization_element(context, scope, "system", agent, {
 				entity_id: parameters.where.gauze__relationship__from_id,
@@ -607,6 +644,49 @@ class RelationshipSystemModel extends SystemModel {
 						.transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._count_from:debug_sql`, sql.toString());
+					}
+					return sql.then(function (relationship_rows) {
+						return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
+							parameters.where_in = {
+								[self.entity.primary_key]: valid_ids,
+							};
+							// note: should we just return the relationships here instead of executing a graphql query?
+							return self._execute(context, operation, parameters);
+						});
+					});
+				} else {
+					throw new Error("Agent does not have access to target method");
+				}
+			});
+	}
+	_count_to(context, scope, parameters, realm) {
+		// check that from policy aligns
+		// get list of relationship
+		// intersect with agent whitelist or blacklist based on policy by doing a where in query (this could work if we leverage the fact that uuids rarely have collisions)
+		// the problem is that every to target has its own policy
+		// do an in memory join basically
+		// final set of relationships the user has access to
+		const self = this;
+		const { database, transaction } = context;
+		const { agent, entity, operation } = realm;
+		const { agent_id } = agent;
+		const method = "count";
+		return self
+			.authorization_element(context, scope, "system", agent, {
+				entity_id: parameters.where.gauze__relationship__to_id,
+				entity_type: parameters.where.gauze__relationship__to_type,
+				entity_method: method,
+			})
+			.then(function (auth) {
+				if (auth.status === true) {
+					const sql = database(self.entity.table_name)
+						.where({
+							gauze__relationship__to_type: parameters.where.gauze__relationship__to_type,
+							gauze__relationship__to_id: parameters.where.gauze__relationship__to_id,
+						})
+						.transacting(transaction);
+					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._count_to:debug_sql`, sql.toString());
 					}
 					return sql.then(function (relationship_rows) {
 						return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
@@ -658,9 +738,11 @@ class RelationshipSystemModel extends SystemModel {
 			return self._read_entity_in(context, scope, parameters, realm);
 		} else if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__from_type) {
 			return self._count_from(context, scope, parameters, realm);
+		} else if (parameters.where && parameters.where.gauze__relationship__to_id && parameters.where.gauze__relationship__to_type) {
+			return self._count_to(context, scope, parameters, realm);
 		} else {
 			throw new Error(
-				"Field 'where.gauze__relationship__id' is required or (Field 'where_in.gauze__relationship__from_id' and where_in.gauze__relationship__to_id' are required) or (Field 'where.gauze__relationship__from_id' and 'where.gauze__relationship__from_type' are required)",
+				"Field 'where.gauze__relationship__id' is required or (Field 'where_in.gauze__relationship__from_id' and where_in.gauze__relationship__to_id' are required) or (Field 'where.gauze__relationship__from_id' and 'where.gauze__relationship__from_type' are required) or (Field 'where.gauze__relationship__to_id' and 'where.gauze__relationship__to_type' are required)",
 			);
 		}
 	}
