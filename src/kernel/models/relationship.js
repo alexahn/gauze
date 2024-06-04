@@ -414,7 +414,8 @@ class RelationshipSystemModel extends SystemModel {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
-		entity.entity_method = "read";
+		const method = "read";
+		entity.entity_method = method;
 		if (parameters.where && parameters.where.gauze__relationship__id) {
 			self._validate_entity_types(parameters.where);
 			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {

@@ -16,6 +16,12 @@ const CREATED_AT__SERIALIZER__GAUZE__ABSTRACT = function (field) {
 		},
 		update: preserve,
 		delete: preserve,
+		count: function (attributes) {
+			if (attributes[field]) {
+				attributes[field] = new Date(attributes[field]);
+			}
+			return attributes;
+		},
 	};
 };
 
@@ -36,6 +42,12 @@ const UPDATED_AT__SERIALIZER__GAUZE__ABSTRACT = function (field) {
 			return attributes;
 		},
 		delete: preserve,
+		count: function (attributes) {
+			if (attributes[field]) {
+				attributes[field] = new Date(attributes[field]);
+			}
+			return attributes;
+		},
 	};
 };
 
@@ -51,6 +63,12 @@ const DELETED_AT__SERIALIZER__GAUZE__ABSTRACT = function (field) {
 		update: preserve,
 		delete: function (attributes) {
 			attributes[field] = new Date();
+			return attributes;
+		},
+		count: function (attributes) {
+			if (attributes[field]) {
+				attributes[field] = new Date(attributes[field]);
+			}
 			return attributes;
 		},
 	};

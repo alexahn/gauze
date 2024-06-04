@@ -8,6 +8,7 @@ const CREATED_AT__DESERIALIZER__GAUZE__ABSTRACT = function (field) {
 		read: convert,
 		update: convert,
 		delete: convert,
+		count: convert,
 	};
 };
 
@@ -21,6 +22,7 @@ const UPDATED_AT__DESERIALIZER__GAUZE__ABSTRACT = function (field) {
 		read: convert,
 		update: convert,
 		delete: convert,
+		count: convert,
 	};
 };
 
@@ -34,6 +36,7 @@ const DELETED_AT__DESERIALIZER__GAUZE__ABSTRACT = function (field) {
 		read: convert,
 		update: convert,
 		delete: convert,
+		count: convert
 	};
 };
 
