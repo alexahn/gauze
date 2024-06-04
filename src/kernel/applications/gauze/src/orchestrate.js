@@ -570,7 +570,7 @@ function reloadRelationships(services, agentHeader) {
 							graph.createEdges([edge]);
 						}
 					});
-				synchronize(services, agentHeader, null);
+				return synchronize(services, agentHeader, null);
 			});
 		})
 		.catch(function (err) {
@@ -663,10 +663,67 @@ function createRelationship(services, agentHeader, relationship) {
 					};
 					graph.createConnections([fromConnection, toConnection]);
 					graph.createEdges([edge]);
-					synchronize(services, agentHeader, null);
+					return synchronize(services, agentHeader, null);
 				});
 		}
 	});
 }
 
-export { createNode, read, reload, synchronize, traverse, traverseTo, traverseFrom, traverseRoot, createRelationship };
+function deleteRelationship(services, agentHeader, relationship) {
+	const { gauze, model, graph } = services;
+	const activeEdges = graph.activeEdges(agentHeader.name);
+	const activeConnections = graph.activeConnections(agentHeader.name);
+	const headers = model.all("HEADER");
+	const relationshipHeader = headers.find(function (header) {
+		return header.name === "relationship";
+	});
+	const fromHeader = headers.find(function (header) {
+		return header.graphql_meta_type === relationship.fromEntityType;
+	});
+	const toHeader = headers.find(function (header) {
+		return header.graphql_meta_type === relationship.toEntityType;
+	});
+	const attributes = {
+		gauze__relationship__from_id: relationship.fromEntityID,
+		gauze__relationship__from_type: fromHeader.table_name,
+		gauze__relationship__to_id: relationship.toEntityID,
+		gauze__relationship__to_type: toHeader.table_name,
+	};
+	return gauze
+		.read(relationshipHeader, {
+			where: attributes,
+		})
+		.then(function (read) {
+			if (read && read.length) {
+				const found = read[0];
+				const where = {
+					[relationshipHeader.primary_key]: found.attributes[relationshipHeader.primary_key],
+				};
+				return gauze
+					.delete(relationshipHeader, {
+						where: where,
+					})
+					.then(function (deleted) {
+						const edge = activeEdges.values.find(function (edge) {
+							const fromConnection = activeConnections.object[edge.fromConnectionID];
+							const toConnection = activeConnections.object[edge.toConnectionID];
+							const fromEntityID = fromConnection.entityID === relationship.fromEntityID;
+							const fromEntityType = fromConnection.entityType === relationship.fromEntityType;
+							const toEntityID = toConnection.entityID === relationship.toEntityID;
+							const toEntityType = toConnection.entityType === relationship.toEntityType;
+							return fromEntityID && fromEntityType && toEntityID && toEntityType;
+						});
+						if (edge) {
+							// delete the connections and then delete the edge and then synchronize
+							const fromConnection = activeConnections.object[edge.fromConnectionID];
+							const toConnection = activeConnections.object[edge.toConnectionID];
+							graph.deleteConnections([fromConnection, toConnection]);
+							graph.deleteEdges([edge]);
+							return synchronize(services, agentHeader, null);
+						}
+					});
+			}
+		});
+}
+
+export { createNode, read, reload, synchronize, traverse, traverseTo, traverseFrom, traverseRoot, createRelationship, deleteRelationship, reloadRelationships };

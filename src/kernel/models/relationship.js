@@ -17,6 +17,7 @@ class RelationshipSystemModel extends SystemModel {
 		const self = this;
 		self.name = self.__name();
 		self.relations_map = self._create_relations_map();
+		self.types_map = self._create_types_map();
 	}
 	static _class_name(schema_name) {
 		return schema_name ? `(${schema_name})[${super._class_name()}]RelationshipSystemModel` : `[${super._class_name()}]RelationshipSystemModel`;
@@ -40,6 +41,15 @@ class RelationshipSystemModel extends SystemModel {
 		});
 		return map;
 	}
+	_create_types_map() {
+		const self = this;
+		const map = {};
+		Object.keys($abstract.entities).forEach(function (name) {
+			const module = $abstract.entities[name].default($abstract);
+			map[module.table_name] = true;
+		});
+		return map;
+	}
 	_authorized_relationship(context, scope, relationship, agent, method) {
 		const self = this;
 		const from_entity = {
@@ -52,21 +62,55 @@ class RelationshipSystemModel extends SystemModel {
 			entity_id: relationship.gauze__relationship__to_id,
 			entity_method: method,
 		};
-		const targets = [from_entity, to_entity];
-		return Promise.all(
-			targets.map(function (target) {
-				return self.authorization_element(context, scope, "system", agent, target);
-			}),
-		).then(function (authorizations) {
-			const passed = authorizations.filter(function (auth) {
-				return auth.status === true;
+		if (relationship.gauze__relationship__from_type === agent.agent_type && relationship.gauze__relationship__from_id === agent.agent_id) {
+			const targets = [to_entity];
+			return Promise.all(
+				targets.map(function (target) {
+					return self.authorization_element(context, scope, "system", agent, target);
+				}),
+			).then(function (authorizations) {
+				const passed = authorizations.filter(function (auth) {
+					return auth.status === true;
+				});
+				if (passed.length === authorizations.length) {
+					return authorizations;
+				} else {
+					throw new Error("Agent does not have access to target method");
+				}
 			});
-			if (passed.length === authorizations.length) {
-				return authorizations;
-			} else {
-				throw new Error("Agent does not have access to target method");
-			}
-		});
+		} else if (relationship.gauze__relationship__to_type === agent.agent_type && relationship.gauze__relationship__to_id === agent.agent_id) {
+			const targets = [from_entity];
+			return Promise.all(
+				targets.map(function (target) {
+					return self.authorization_element(context, scope, "system", agent, target);
+				}),
+			).then(function (authorizations) {
+				const passed = authorizations.filter(function (auth) {
+					return auth.status === true;
+				});
+				if (passed.length === authorizations.length) {
+					return authorizations;
+				} else {
+					throw new Error("Agent does not have access to target method");
+				}
+			});
+		} else {
+			const targets = [from_entity, to_entity];
+			return Promise.all(
+				targets.map(function (target) {
+					return self.authorization_element(context, scope, "system", agent, target);
+				}),
+			).then(function (authorizations) {
+				const passed = authorizations.filter(function (auth) {
+					return auth.status === true;
+				});
+				if (passed.length === authorizations.length) {
+					return authorizations;
+				} else {
+					throw new Error("Agent does not have access to target method");
+				}
+			});
+		}
 	}
 	_validate_relationship(attributes) {
 		if (!attributes) {
@@ -83,6 +127,19 @@ class RelationshipSystemModel extends SystemModel {
 		}
 		if (!attributes.gauze__relationship__to_type) {
 			throw new Error("Field 'attributes.gauze__relationship__to_type' is required");
+		}
+	}
+	_validate_entity_types(attributes) {
+		const self = this;
+		if (attributes.gauze__relationship__from_type) {
+			if (!self.types_map[attributes.gauze__relationship__from_type]) {
+				throw new Error(`Field 'gauze__relationship__from_type' must be one of: ${Object.keys(self.types_map)}`);
+			}
+		}
+		if (attributes.gauze__relationship__to_type) {
+			if (!self.types_map[attributes.gauze__relationship__to_type]) {
+				throw new Error(`Field 'gauze__relationship__to_type' must be one of: ${Object.keys(self.types_map)}`);
+			}
 		}
 	}
 	_connected_relationship(attributes) {
@@ -115,6 +172,7 @@ class RelationshipSystemModel extends SystemModel {
 		const self = this;
 		const { agent, entity, operation } = realm;
 		const access = { ...agent, ...entity };
+		self._validate_entity_types(parameters.attributes);
 		self._connected_relationship(parameters.attributes);
 		return self._authorized_relationship(context, scope, parameters.attributes, agent, "create").then(function () {
 			return self._execute(context, operation, parameters);
@@ -175,7 +233,7 @@ class RelationshipSystemModel extends SystemModel {
 					if (modules[row.gauze__relationship_from_type]) {
 						// skip
 					} else {
-						const module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[row.gauze__relationship__to_type];
+						const module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[row.gauze__relationship__from_type];
 						const module = $abstract.entities[module_name].default($abstract);
 						modules[row.gauze__relationship__from_type] = module;
 					}
@@ -246,6 +304,27 @@ class RelationshipSystemModel extends SystemModel {
 		});
 	}
 	_read_entity(context, scope, parameters, realm) {
+		const self = this;
+		const { database, transaction } = context;
+		const { agent, entity, operation } = realm;
+		const { agent_id } = agent;
+		const method = "read";
+		const { where = {} } = parameters;
+		const sql = database(self.entity.table_name).where(where).transacting(transaction);
+		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_entity:debug_sql`, sql.toString());
+		}
+		return sql.then(function (relationship_rows) {
+			return self._filter_access(context, scope, parameters, realm, relationship_rows, "read").then(function (valid_ids) {
+				parameters.where_in = {
+					[self.entity.primary_key]: valid_ids,
+				};
+				// note: should we just return the relationships here instead of executing a graphql query?
+				return self._execute(context, operation, parameters);
+			});
+		});
+	}
+	_read_entity_in(context, scope, parameters, realm) {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
@@ -332,8 +411,8 @@ class RelationshipSystemModel extends SystemModel {
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		entity.entity_method = "read";
-		// todo: where_in.from_id and where_in.to_id
 		if (parameters.where && parameters.where.gauze__relationship__id) {
+			self._validate_entity_types(parameters.where);
 			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
@@ -349,6 +428,9 @@ class RelationshipSystemModel extends SystemModel {
 					};
 				}
 			});
+		} else if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__to_id) {
+			self._validate_entity_types(parameters.where);
+			return self._read_entity(context, scope, parameters, realm);
 		} else if (
 			parameters.where_in &&
 			parameters.where_in.gauze__relationship__from_id &&
@@ -356,7 +438,7 @@ class RelationshipSystemModel extends SystemModel {
 			parameters.where_in.gauze__relationship__to_id &&
 			parameters.where_in.gauze__relationship__to_id.length
 		) {
-			return self._read_entity(context, scope, parameters, realm);
+			return self._read_entity_in(context, scope, parameters, realm);
 		} else if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__from_type) {
 			return self._read_from(context, scope, parameters, realm);
 		} else {

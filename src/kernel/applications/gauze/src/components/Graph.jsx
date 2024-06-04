@@ -27,7 +27,7 @@ function abstractToAbsolute({ x, y, z, width, height }) {
 	};
 }
 
-export default function Graph({ agentHeader, route, gauze, model, router, graph, nodes, edges, connections, interaction }) {
+export default function Graph({ agentHeader, route, gauze, model, router, link, graph, nodes, edges, connections, interaction }) {
 	const containerRef = useRef();
 	const nodesArray = Object.values(nodes);
 	const connectionsArray = Object.values(connections);
@@ -165,6 +165,7 @@ export default function Graph({ agentHeader, route, gauze, model, router, graph,
 							gauze={gauze}
 							model={model}
 							router={router}
+							link={link}
 							graph={graph}
 							x={node.x}
 							y={node.y}

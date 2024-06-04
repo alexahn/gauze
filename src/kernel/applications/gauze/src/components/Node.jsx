@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import * as orchestrate from "./../orchestrate.js";
 
-export default function Node({ agentHeader, route, gauze, model, router, graph, x, y, z, width, height, dataX, dataY, dataZ, node, nodes, edges, connections }) {
+export default function Node({ agentHeader, route, gauze, model, router, link, graph, x, y, z, width, height, dataX, dataY, dataZ, node, nodes, edges, connections }) {
 	const containerRef = useRef();
 	const [isLoaded, setLoaded] = useState(false);
 	const [isDragging, setDragging] = useState(false);
@@ -238,7 +238,7 @@ export default function Node({ agentHeader, route, gauze, model, router, graph, 
 			data-width={width}
 			data-height={height}
 		>
-			<node.component agentHeader={agentHeader} route={route} nodes={nodes} edges={edges} connections={connections} node={node} {...node.props} />
+			<node.component agentHeader={agentHeader} route={route} link={link} nodes={nodes} edges={edges} connections={connections} node={node} {...node.props} />
 		</div>
 	);
 }

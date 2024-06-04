@@ -16,6 +16,7 @@ import { Share1Icon, Pencil2Icon, Cross1Icon, BookmarkIcon, BookmarkFilledIcon, 
 export default function Table({
 	agentHeader,
 	route,
+	link,
 	nodes,
 	edges,
 	connections,
@@ -53,6 +54,13 @@ export default function Table({
 	const page_max_no_skew = Math.ceil(Math.max(total / limit));
 	const page_max = page_max_no_skew < page_current ? page_current : page_max_no_skew;
 
+	const services = {
+		gauze,
+		model,
+		router,
+		graph,
+	};
+
 	function paginate(item) {
 		return function (e) {
 			var paginate;
@@ -84,7 +92,7 @@ export default function Table({
 				...paginate,
 			};
 			return orchestrate
-				.read({ gauze, model }, header, localVariables)
+				.read(services, header, localVariables)
 				.then(function (results) {
 					const data = results[0].map(function (item) {
 						return item.attributes;
@@ -99,7 +107,9 @@ export default function Table({
 							graph.updateNodes([targetNode]);
 						})
 						.then(function () {
-							setSyncing(false);
+							return orchestrate.reloadRelationships({ gauze, model, graph }, agentHeader).then(function () {
+								setSyncing(false);
+							});
 						});
 				})
 				.catch(function (err) {
@@ -113,18 +123,7 @@ export default function Table({
 		return function (e) {
 			setSyncing(true);
 			return orchestrate
-				.traverseTo(
-					{
-						gauze,
-						model,
-						router,
-						graph,
-					},
-					agentHeader,
-					node,
-					item,
-					targetType,
-				)
+				.traverseTo(services, agentHeader, node, item, targetType)
 				.then(function () {
 					setSyncing(false);
 				})
@@ -139,18 +138,7 @@ export default function Table({
 		return function (e) {
 			setSyncing(true);
 			return orchestrate
-				.traverseFrom(
-					{
-						gauze,
-						model,
-						router,
-						graph,
-					},
-					agentHeader,
-					node,
-					item,
-					targetType,
-				)
+				.traverseFrom(services, agentHeader, node, item, targetType)
 				.then(function () {
 					setSyncing(false);
 				})
@@ -180,11 +168,13 @@ export default function Table({
 				targetNode.props.data = data;
 				targetNode.props.count = count;
 				return orchestrate
-					.synchronize({ gauze, model, graph }, agentHeader, targetNode, function (targetNode) {
+					.synchronize(services, agentHeader, targetNode, function (targetNode) {
 						graph.updateNodes([targetNode]);
 					})
 					.then(function () {
-						setSyncing(false);
+						return orchestrate.reloadRelationships({ gauze, model, graph }, agentHeader).then(function () {
+							setSyncing(false);
+						});
 					});
 			})
 			.catch(function (err) {
@@ -305,7 +295,7 @@ export default function Table({
 						setCreateItem(created.attributes);
 						setSyncing(true);
 						return orchestrate
-							.read({ gauze, model }, header, node.props.variables)
+							.read(services, header, node.props.variables)
 							.then(function (results) {
 								const data = results[0].map(function (item) {
 									return item.attributes;
@@ -340,27 +330,42 @@ export default function Table({
 	function handleClose(e) {
 		if (!node.root) {
 			graph.deleteNodes([node]);
-			orchestrate.synchronize(
-				{
-					gauze,
-					model,
-					graph,
-				},
-				agentHeader,
-				null,
-			);
+			orchestrate.synchronize(services, agentHeader, null);
 		}
+	}
+
+	function handleDeleteRelationship(connection) {
+		return function (e) {
+			// find the edge, there should only be one
+			const edge = activeEdges.values.find(function (edge) {
+				return edge.fromConnectionID === connection.id || edge.toConnectionID === connection.id;
+			});
+
+			if (edge) {
+				const fromConnection = activeConnections.object[edge.fromConnectionID];
+				const toConnection = activeConnections.object[edge.toConnectionID];
+				return orchestrate.deleteRelationship(services, agentHeader, {
+					fromEntityID: fromConnection.entityID,
+					fromEntityType: fromConnection.entityType,
+					toEntityID: toConnection.entityID,
+					toEntityType: toConnection.entityType,
+				});
+			} else {
+				// should be impossible
+				throw new Error("Edge could not be found");
+			}
+		};
 	}
 
 	return (
 		<div className="mw-100 w-100">
 			<h1 align="center">{header.graphql_meta_type}</h1>
 			<div className="absolute top-0 right-0 pa1">
-				{node.root ? null : (
+				{node.root ? null : link ? (
 					<button onClick={handleClose}>
 						<Cross1Icon />
 					</button>
-				)}
+				) : null}
 			</div>
 			<hr />
 			<div align="left" className="cf">
@@ -382,19 +387,8 @@ export default function Table({
 								return (
 									<th key={item[header.primary_key]} align="center" className="mw4 w4 pa1">
 										<div className="flex justify-center">
-											{/*
-											<div
-												className="flex from-end"
-												data-interaction="from_end"
-												data-node-id={node.id}
-												data-entity-id={item[header.primary_key]}
-												data-entity-type={header.graphql_meta_type}
-											>
-												<button className="truncate-ns">FROM</button>
-											</div>
-											*/}
 											<div className="flex relative row" tabIndex="0">
-												<button className="truncate-ns">FROM</button>
+												<button className="w3 truncate-ns relationship">FROM</button>
 												<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
 													<div className="pa1">FROM</div>
 													{header.relationships_from.map(function (from) {
@@ -406,17 +400,20 @@ export default function Table({
 													})}
 												</span>
 											</div>
-											<div
-												className="flex from-start from-end"
-												data-interaction="from_end"
-												data-node-id={node.id}
-												data-entity-id={item[header.primary_key]}
-												data-entity-type={header.graphql_meta_type}
-											>
-												<button>
-													<PlusIcon />
-												</button>
-											</div>
+											{link ? (
+												<div
+													className="flex from-start from-end"
+													data-interaction="from_end"
+													data-node-id={node.id}
+													data-entity-id={item[header.primary_key]}
+													data-entity-type={header.graphql_meta_type}
+												>
+													{/*<a className="br-pill bg-green pa1">*/}
+													<button>
+														<PlusIcon />
+													</button>
+												</div>
+											) : null}
 										</div>
 										{node.props.connectionIDs.map(function (id) {
 											const connection = connections[id];
@@ -431,18 +428,26 @@ export default function Table({
 											) {
 												//const absolutePosition = absoluteToAbstract(connection);
 												return (
-													<Connection
-														key={id}
-														route={route}
-														dataX={connection.x}
-														dataY={connection.y}
-														graph={graph}
-														nodes={nodes}
-														edges={edges}
-														connections={connections}
-														node={node}
-														connection={connection}
-													/>
+													<div key={connection.id} className="flex justify-center">
+														<Connection
+															route={route}
+															dataX={connection.x}
+															dataY={connection.y}
+															graph={graph}
+															nodes={nodes}
+															edges={edges}
+															connections={connections}
+															node={node}
+															connection={connection}
+														/>
+														{link ? (
+															<div>
+																<button onClick={handleDeleteRelationship(connection)}>
+																	<MinusIcon />
+																</button>
+															</div>
+														) : null}
+													</div>
 												);
 											} else {
 												return null;
@@ -619,7 +624,7 @@ export default function Table({
 									<th key={item[header.primary_key]} align="center" className="mw4 w4 pa1">
 										<div className="flex justify-center">
 											<div className="flex relative row" tabIndex="0">
-												<button className="truncate-ns">TO</button>
+												<button className="w3 truncate-ns relationship">TO</button>
 												<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
 													<div className="pa1">TO</div>
 													{header.relationships_to.map(function (to) {
@@ -631,17 +636,19 @@ export default function Table({
 													})}
 												</span>
 											</div>
-											<div
-												className="flex to-start to-end"
-												data-interaction="to_end"
-												data-node-id={node.id}
-												data-entity-id={item[header.primary_key]}
-												data-entity-type={header.graphql_meta_type}
-											>
-												<button>
-													<PlusIcon />
-												</button>
-											</div>
+											{link ? (
+												<div
+													className="flex to-start to-end"
+													data-interaction="to_end"
+													data-node-id={node.id}
+													data-entity-id={item[header.primary_key]}
+													data-entity-type={header.graphql_meta_type}
+												>
+													<button>
+														<PlusIcon />
+													</button>
+												</div>
+											) : null}
 										</div>
 										{node.props.connectionIDs.map(function (id) {
 											const connection = connections[id];
@@ -654,43 +661,31 @@ export default function Table({
 											) {
 												//const absolutePosition = absoluteToAbstract(connection);
 												return (
-													<Connection
-														key={connection.id}
-														route={route}
-														dataX={connection.x}
-														dataY={connection.y}
-														graph={graph}
-														nodes={nodes}
-														edges={edges}
-														connections={connections}
-														node={node}
-														connection={connection}
-													/>
+													<div key={connection.id} className="flex justify-center">
+														<Connection
+															route={route}
+															dataX={connection.x}
+															dataY={connection.y}
+															graph={graph}
+															nodes={nodes}
+															edges={edges}
+															connections={connections}
+															node={node}
+															connection={connection}
+														/>
+														{link ? (
+															<div>
+																<button onClick={handleDeleteRelationship(connection)}>
+																	<MinusIcon />
+																</button>
+															</div>
+														) : null}
+													</div>
 												);
 											} else {
 												return null;
 											}
 										})}
-										{/*
-										<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
-											<div
-												className="pa1 to-start"
-												data-interaction="to_start"
-												data-node-id={node.id}
-												data-entity-id={item[header.primary_key]}
-												data-entity-type={header.graphql_meta_type}
-											>
-												TO
-											</div>
-											{header.relationships_to.map(function (to) {
-												return (
-													<div key={to} className="pa1">
-														<button onClick={traverseTo(header, item, to)}>{to}</button>
-													</div>
-												);
-											})}
-										</span>
-										*/}
 									</th>
 								);
 							})}
