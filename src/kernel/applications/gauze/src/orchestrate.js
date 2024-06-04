@@ -490,87 +490,109 @@ function reloadRelationships(services, agentHeader) {
 			const relationshipHeader = headers.find(function (header) {
 				return header.name === "relationship";
 			});
-			const parameters = {
-				where_in: {
-					gauze__relationship__from_id: activeEntityIDs,
-					gauze__relationship__to_id: activeEntityIDs,
-				},
-				limit: 1024,
+			// do a count query to get the total number of results
+			// paginate and collect all results
+			const maxLimit = 1024; // max size should align with server limit
+			const whereIn = {
+				gauze__relationship__from_id: activeEntityIDs,
+				gauze__relationship__to_id: activeEntityIDs,
 			};
-			return gauze.read(relationshipHeader, parameters).then(function (relationships) {
-				// check every relationship to see if an edge exists
-				// if it doesn't, create the connections
-				// synchronize at end
-				relationships
-					.map(function (r) {
-						return r.attributes;
-					})
-					.forEach(function (relationship) {
-						const fromHeader = headers.find(function (header) {
-							return header.table_name === relationship.gauze__relationship__from_type;
-						});
-						const toHeader = headers.find(function (header) {
-							return header.table_name === relationship.gauze__relationship__to_type;
-						});
-						const edge = activeEdges.values.find(function (edge) {
-							const fromConnection = activeConnections.object[edge.fromConnectionID];
-							const toConnection = activeConnections.object[edge.toConnectionID];
-							const fromEntityID = fromConnection.entityID === relationship.gauze__relationship__from_id;
-							const fromEntityType = fromConnection.entityType === fromHeader.graphql_meta_type;
-							const toEntityID = toConnection.entityID === relationship.gauze__relationship__to_id;
-							const toEntityType = toConnection.entityType === toHeader.graphql_meta_type;
-							return fromEntityID && fromEntityType && toEntityID && toEntityType;
-						});
-						if (edge) {
-							console.log("edge found!");
-						} else {
-							const fromConnectionID = uuidv4();
-							const fromConnection = {
-								id: fromConnectionID,
-								name: "from",
-								nodeID: activeEntityToNodeMap[relationship.gauze__relationship__from_id].id,
-								entityID: relationship.gauze__relationship__from_id,
-								entityType: fromHeader.graphql_meta_type,
-								x: null,
-								y: null,
-								z: 1,
-								component: component.default,
-								props: {
-									gauze: gauze,
-									model: model,
-									router: router,
-								},
-							};
-							const toConnectionID = uuidv4();
-							const toConnection = {
-								id: toConnectionID,
-								name: "to",
-								nodeID: activeEntityToNodeMap[relationship.gauze__relationship__to_id].id,
-								entityID: relationship.gauze__relationship__to_id,
-								entityType: toHeader.graphql_meta_type,
-								x: null,
-								y: null,
-								z: 1,
-								component: component.default,
-								props: {
-									gauze: gauze,
-									model: model,
-									router: router,
-								},
-							};
-							const edgeID = uuidv4();
-							const edge = {
-								id: edgeID,
-								fromNodeID: activeEntityToNodeMap[relationship.gauze__relationship__from_id].id,
-								fromConnectionID: fromConnectionID,
-								toNodeID: activeEntityToNodeMap[relationship.gauze__relationship__to_id].id,
-								toConnectionID: toConnectionID,
-							};
-							graph.createConnections([fromConnection, toConnection]);
-							graph.createEdges([edge]);
-						}
+			const countParameters = {
+				where_in: whereIn,
+			};
+			return gauze.count(relationshipHeader, countParameters).then(function (data) {
+				// create buckets of size maxLimit
+				const bucketsCount = Math.ceil(data[0].count / maxLimit);
+				const buckets = [];
+				for (var i = 0; i < bucketsCount; i += 1) {
+					buckets.push({
+						where_in: whereIn,
+						offset: i * maxLimit,
+						limit: maxLimit,
 					});
-				return synchronize(services, agentHeader, null);
+				}
+				return Promise.all(
+					buckets.map(function (bucket) {
+						return gauze.read(relationshipHeader, bucket);
+					}),
+				).then(function (results) {
+					// iterate over results
+					results.forEach(function (relationships) {
+						// check every relationship to see if an edge exists
+						// if it doesn't, create the connections
+						// synchronize at end
+						relationships
+							.map(function (r) {
+								return r.attributes;
+							})
+							.forEach(function (relationship) {
+								const fromHeader = headers.find(function (header) {
+									return header.table_name === relationship.gauze__relationship__from_type;
+								});
+								const toHeader = headers.find(function (header) {
+									return header.table_name === relationship.gauze__relationship__to_type;
+								});
+								const edge = activeEdges.values.find(function (edge) {
+									const fromConnection = activeConnections.object[edge.fromConnectionID];
+									const toConnection = activeConnections.object[edge.toConnectionID];
+									const fromEntityID = fromConnection.entityID === relationship.gauze__relationship__from_id;
+									const fromEntityType = fromConnection.entityType === fromHeader.graphql_meta_type;
+									const toEntityID = toConnection.entityID === relationship.gauze__relationship__to_id;
+									const toEntityType = toConnection.entityType === toHeader.graphql_meta_type;
+									return fromEntityID && fromEntityType && toEntityID && toEntityType;
+								});
+								if (edge) {
+									console.log("edge found!");
+								} else {
+									const fromConnectionID = uuidv4();
+									const fromConnection = {
+										id: fromConnectionID,
+										name: "from",
+										nodeID: activeEntityToNodeMap[relationship.gauze__relationship__from_id].id,
+										entityID: relationship.gauze__relationship__from_id,
+										entityType: fromHeader.graphql_meta_type,
+										x: null,
+										y: null,
+										z: 1,
+										component: component.default,
+										props: {
+											gauze: gauze,
+											model: model,
+											router: router,
+										},
+									};
+									const toConnectionID = uuidv4();
+									const toConnection = {
+										id: toConnectionID,
+										name: "to",
+										nodeID: activeEntityToNodeMap[relationship.gauze__relationship__to_id].id,
+										entityID: relationship.gauze__relationship__to_id,
+										entityType: toHeader.graphql_meta_type,
+										x: null,
+										y: null,
+										z: 1,
+										component: component.default,
+										props: {
+											gauze: gauze,
+											model: model,
+											router: router,
+										},
+									};
+									const edgeID = uuidv4();
+									const edge = {
+										id: edgeID,
+										fromNodeID: activeEntityToNodeMap[relationship.gauze__relationship__from_id].id,
+										fromConnectionID: fromConnectionID,
+										toNodeID: activeEntityToNodeMap[relationship.gauze__relationship__to_id].id,
+										toConnectionID: toConnectionID,
+									};
+									graph.createConnections([fromConnection, toConnection]);
+									graph.createEdges([edge]);
+								}
+							});
+						return synchronize(services, agentHeader, null);
+					});
+				});
 			});
 		})
 		.catch(function (err) {

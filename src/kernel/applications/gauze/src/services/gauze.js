@@ -516,12 +516,16 @@ query read(
 query count(
 	$source: ${header.graphql_query_source_type},
 	$count: ${header.graphql_query_where_string_type},
-	$where: ${header.graphql_query_where_type}
+	$where: ${header.graphql_query_where_type},
+    $where_in: ${header.graphql_query_where_array_type},
+    $where_not_in: ${header.graphql_query_where_array_type},
 ) {
 	count_${header.name}(
 		source: $source,
 		count: $count,
 		where: $where,
+		where_in: $where_in,
+		where_not_in: $where_not_in
 	) {
 		select
 		count
@@ -543,6 +547,8 @@ query count(
 mutation update(
 	$source: ${header.graphql_mutation_source_type},
 	$where: ${header.graphql_mutation_where_type},
+    $where_in: ${header.graphql_mutation_where_array_type},
+    $where_not_in: ${header.graphql_mutation_where_array_type},
 	$attributes: ${header.graphql_mutation_attributes_type},
 	$limit: Int,
 	$offset: Int,
@@ -552,6 +558,8 @@ mutation update(
 	update_${header.name}(
 		source: $source,
 		where: $where,
+		where_in: $where_in,
+		where_not_in: $where_not_in,
 		attributes: $attributes,
 		limit: $limit,
 		offset: $offset,
@@ -583,6 +591,8 @@ mutation update(
 mutation delete(
 	$source: ${header.graphql_mutation_source_type},
 	$where: ${header.graphql_mutation_where_type},
+    $where_in: ${header.graphql_mutation_where_array_type},
+    $where_not_in: ${header.graphql_mutation_where_array_type},
 	$limit: Int,
 	$offset: Int,
 	$order: String,
@@ -591,6 +601,8 @@ mutation delete(
 	delete_${header.name}(
 		source: $source,
 		where: $where,
+		where_in: $where_in,
+		where_not_in: $where_not_in,
 		limit: $limit,
 		offset: $offset,
 		order: $order,
