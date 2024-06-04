@@ -191,16 +191,20 @@ class RelationshipSystemModel extends SystemModel {
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const { agent_id } = agent;
+		const valid_from_ids = relationship_rows.map(function (relationship) {
+			return relationship.gauze__relationship__from_id;
+		});
 		const valid_to_ids = relationship_rows.map(function (relationship) {
 			return relationship.gauze__relationship__to_id;
 		});
+		const valid_entity_ids = valid_from_ids.concat(valid_to_ids);
 		// use relationships to do a where in query on both whitelist and blacklist
 		const sql = database(self.whitelist_table)
 			.where({
 				gauze__whitelist__agent_id: agent_id,
 				gauze__whitelist__method: method,
 			})
-			.whereIn("gauze__whitelist__entity_id", valid_to_ids)
+			.whereIn("gauze__whitelist__entity_id", valid_entity_ids)
 			.transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._filter_access:debug_sql`, sql.toString());
@@ -211,7 +215,7 @@ class RelationshipSystemModel extends SystemModel {
 					gauze__blacklist__agent_id: agent_id,
 					gauze__blacklist__method: method,
 				})
-				.whereIn("gauze__blacklist__entity_id", valid_to_ids)
+				.whereIn("gauze__blacklist__entity_id", valid_entity_ids)
 				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._filter_access:debug_sql`, sql.toString());
@@ -315,7 +319,7 @@ class RelationshipSystemModel extends SystemModel {
 			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_entity:debug_sql`, sql.toString());
 		}
 		return sql.then(function (relationship_rows) {
-			return self._filter_access(context, scope, parameters, realm, relationship_rows, "read").then(function (valid_ids) {
+			return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
 				parameters.where_in = {
 					[self.entity.primary_key]: valid_ids,
 				};
@@ -345,7 +349,7 @@ class RelationshipSystemModel extends SystemModel {
 			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_entity:debug_sql`, sql.toString());
 		}
 		return sql.then(function (relationship_rows) {
-			return self._filter_access(context, scope, parameters, realm, relationship_rows, "read").then(function (valid_ids) {
+			return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
 				parameters.where_in = {
 					[self.entity.primary_key]: valid_ids,
 				};
@@ -389,7 +393,7 @@ class RelationshipSystemModel extends SystemModel {
 						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_from:debug_sql`, sql.toString());
 					}
 					return sql.then(function (relationship_rows) {
-						return self._filter_access(context, scope, parameters, realm, relationship_rows, "read").then(function (valid_ids) {
+						return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
 							parameters.where_in = {
 								[self.entity.primary_key]: valid_ids,
 							};
@@ -416,7 +420,7 @@ class RelationshipSystemModel extends SystemModel {
 			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
-					return self._authorized_relationship(context, scope, relationship, agent, "read").then(function () {
+					return self._authorized_relationship(context, scope, relationship, agent, method).then(function () {
 						// note: should we just return the relationship here instead of executing a graphql query?
 						return self._execute(context, operation, parameters);
 					});
@@ -457,15 +461,16 @@ class RelationshipSystemModel extends SystemModel {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
-		entity.entity_method = "update";
+		const method = "update";
+		entity.entity_method = method;
 		if (parameters.where && parameters.where.gauze__relationship__id) {
 			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
 					const staged = { ...relationship, ...parameters.attributes };
 					self._connected_relationship(staged);
-					return self._authorized_relationship(context, scope, relationship, agent, "update").then(function () {
-						return self._authorized_relationship(context, scope, staged, agent, "update").then(function () {
+					return self._authorized_relationship(context, scope, relationship, agent, method).then(function () {
+						return self._authorized_relationship(context, scope, staged, agent, method).then(function () {
 							return self._execute(context, operation, parameters);
 						});
 					});
@@ -491,12 +496,13 @@ class RelationshipSystemModel extends SystemModel {
 		const self = this;
 		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
-		entity.entity_method = "delete";
+		const method = "delete";
+		entity.entity_method = method;
 		if (parameters.where && parameters.where.gauze__relationship__id) {
 			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
-					return self._authorized_relationship(context, scope, relationship, agent, "delete").then(function () {
+					return self._authorized_relationship(context, scope, relationship, agent, method).then(function () {
 						return self._execute(context, operation, parameters);
 					});
 				} else {
@@ -514,6 +520,152 @@ class RelationshipSystemModel extends SystemModel {
 	_delete(context, scope, parameters, realm) {
 		const self = this;
 		const key = self._model_batch_key(parameters, realm, "delete");
+		return self.model_loader.load(context, scope, key);
+	}
+	_count_entity(context, scope, parameters, realm) {
+		const self = this;
+		const { database, transaction } = context;
+		const { agent, entity, operation } = realm;
+		const { agent_id } = agent;
+		const method = "count";
+		const { where = {} } = parameters;
+		const sql = database(self.entity.table_name).where(where).transacting(transaction);
+		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._count_entity:debug_sql`, sql.toString());
+		}
+		return sql.then(function (relationship_rows) {
+			return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
+				parameters.where_in = {
+					[self.entity.primary_key]: valid_ids,
+				};
+				// note: should we just return the relationships here instead of executing a graphql query?
+				return self._execute(context, operation, parameters);
+			});
+		});
+	}
+	_count_entity_in(context, scope, parameters, realm) {
+		const self = this;
+		const { database, transaction } = context;
+		const { agent, entity, operation } = realm;
+		const { agent_id } = agent;
+		const method = "count";
+		const { where_in = {}, where_not_in = {} } = parameters;
+		const sql = database(self.entity.table_name)
+			.where(function (builder) {
+				Object.keys(where_in).forEach(function (key) {
+					builder.whereIn(key, where_in[key]);
+				});
+				Object.keys(where_not_in).forEach(function (key) {
+					builder.whereNotIn(key, where_not_in[key]);
+				});
+			})
+			.transacting(transaction);
+		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._count_entity:debug_sql`, sql.toString());
+		}
+		return sql.then(function (relationship_rows) {
+			return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
+				parameters.where_in = {
+					[self.entity.primary_key]: valid_ids,
+				};
+				// note: should we just return the relationships here instead of executing a graphql query?
+				return self._execute(context, operation, parameters);
+			});
+		});
+	}
+	_count_from(context, scope, parameters, realm) {
+		// check that from policy aligns
+		// get list of relationship
+		// intersect with agent whitelist or blacklist based on policy by doing a where in query (this could work if we leverage the fact that uuids rarely have collisions)
+		// the problem is that every to target has its own policy
+		// do an in memory join basically
+		// final set of relationships the user has access to
+		const self = this;
+		const { database, transaction } = context;
+		const { agent, entity, operation } = realm;
+		const { agent_id } = agent;
+		const method = "count";
+
+		const from_entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[parameters.where.gauze__relationship__from_type];
+		const from_entity_module = $abstract.entities[from_entity_module_name].default($abstract);
+		const from_entity_method_privacy = from_entity_module.methods[method].privacy;
+
+		return self
+			.authorization_element(context, scope, "system", agent, {
+				entity_id: parameters.where.gauze__relationship__from_id,
+				entity_type: parameters.where.gauze__relationship__from_type,
+				entity_method: method,
+			})
+			.then(function (auth) {
+				if (auth.status === true) {
+					const sql = database(self.entity.table_name)
+						.where({
+							gauze__relationship__from_type: parameters.where.gauze__relationship__from_type,
+							gauze__relationship__from_id: parameters.where.gauze__relationship__from_id,
+						})
+						.transacting(transaction);
+					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._count_from:debug_sql`, sql.toString());
+					}
+					return sql.then(function (relationship_rows) {
+						return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
+							parameters.where_in = {
+								[self.entity.primary_key]: valid_ids,
+							};
+							// note: should we just return the relationships here instead of executing a graphql query?
+							return self._execute(context, operation, parameters);
+						});
+					});
+				} else {
+					throw new Error("Agent does not have access to target method");
+				}
+			});
+	}
+	_root_count(context, scope, parameters, realm) {
+		const self = this;
+		const { database, transaction } = context;
+		const { agent, entity, operation } = realm;
+		const method = "count";
+		entity.entity_method = method;
+		if (parameters.where && parameters.where.gauze__relationship__id) {
+			self._validate_entity_types(parameters.where);
+			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
+				if (relationships && relationships.length) {
+					const relationship = relationships[0];
+					return self._authorized_relationship(context, scope, relationship, agent, method).then(function () {
+						// note: should we just return the relationship here instead of executing a graphql query?
+						return self._execute(context, operation, parameters);
+					});
+				} else {
+					return {
+						data: {
+							read_relationship: [],
+						},
+					};
+				}
+			});
+		} else if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__to_id) {
+			self._validate_entity_types(parameters.where);
+			return self._count_entity(context, scope, parameters, realm);
+		} else if (
+			parameters.where_in &&
+			parameters.where_in.gauze__relationship__from_id &&
+			parameters.where_in.gauze__relationship__from_id.length &&
+			parameters.where_in.gauze__relationship__to_id &&
+			parameters.where_in.gauze__relationship__to_id.length
+		) {
+			return self._read_entity_in(context, scope, parameters, realm);
+		} else if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__from_type) {
+			return self._count_from(context, scope, parameters, realm);
+		} else {
+			throw new Error(
+				"Field 'where.gauze__relationship__id' is required or (Field 'where_in.gauze__relationship__from_id' and where_in.gauze__relationship__to_id' are required) or (Field 'where.gauze__relationship__from_id' and 'where.gauze__relationship__from_type' are required)",
+			);
+		}
+	}
+	_count(context, scope, parameters, realm) {
+		const self = this;
+		const key = self._model_batch_key(parameters, realm, "count");
 		return self.model_loader.load(context, scope, key);
 	}
 }
