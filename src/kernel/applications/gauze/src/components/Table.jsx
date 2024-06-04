@@ -453,7 +453,6 @@ export default function Table({
 												return null;
 											}
 										})}
-										{/* connection component? */}
 									</th>
 								);
 							})}
