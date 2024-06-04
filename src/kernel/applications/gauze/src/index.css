@@ -33,12 +33,81 @@ table .truncate-ns {
 	height: 23px;
 }
 
-/*
-.from:hover {
-	cursor: pointer;
+.wrapper {
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	gap: 0px;
+	grid-template-rows: 1fr;
 }
 
-button:hover {
-	cursor: pointer;
+.one {
+	grid-column: 1fr;
+	grid-row: 1fr;
+	background-color: #080808;
 }
-*/
+
+.two {
+	grid-column: 1fr;
+	grid-row: 1fr;
+	background-color: #01121a;
+}
+
+.three {
+	grid-column: 1fr;
+	grid-row: 1fr;
+	background-color: #005f73;
+}
+
+.four {
+	grid-column: 1fr;
+	grid-row: 1fr;
+	background-color: #099396;
+}
+
+.five {
+	grid-column: 1fr;
+	grid-row: 1fr;
+	background-color: #93d2bd;
+}
+
+.six {
+	grid-column: 1fr;
+	grid-row: 1fr;
+	background-color: #e8d7a4;
+}
+
+.seven {
+	grid-column: 1fr;
+	grid-row: 1fr;
+	background-color: #ed9b00;
+}
+
+.eight {
+	grid-column: 1fr;
+	grid-row: 1fr;
+	background-color: #ca6702;
+}
+
+.nine {
+	grid-column: 1fr;
+	grid-row: 1fr;
+	background-color: #bb3f02;
+}
+
+.ten {
+	grid-column: 1fr;
+	grid-row: 1fr;
+	background-color: #b02013;
+}
+
+.eleven {
+	grid-column: 1fr;
+	grid-row: 1fr;
+	background-color: #9c2227;
+}
+
+.twelve {
+	grid-column: 1fr;
+	grid-row: 1fr;
+	background-color: #eeeeee;
+}

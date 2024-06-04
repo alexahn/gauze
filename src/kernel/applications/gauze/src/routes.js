@@ -475,6 +475,13 @@ const routes = [
 			},
 		},
 	},
+	{
+		name: "design",
+		path: "/design",
+		layout: layouts.axolotl.default,
+		sections: {},
+		units: {},
+	},
 ];
 
 export default routes;
