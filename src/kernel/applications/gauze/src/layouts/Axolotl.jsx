@@ -6,7 +6,7 @@ export default function Axolotl({ sections, units }) {
 	const [theme, setTheme] = useState(0);
 
 	function handleNext(e) {
-		setTheme((theme + 1) % 3);
+		setTheme((theme + 1) % 4);
 	}
 	function renderTheme(theme) {
 		switch (theme) {
@@ -198,6 +198,125 @@ export default function Axolotl({ sections, units }) {
 								MMXVI Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 								quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
 								dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+							</div>
+						</div>
+					</div>
+				);
+			case 3:
+				return (
+					<div className="wrapper w-100 h-100 bgxb bdxb">
+						{/*
+                        <div className="one bgxa" />
+                        <div className="two bgxb" />
+                        <div className="three bgxc" />
+                        <div className="four bgxd" />
+                        <div className="five bgxe" />
+                        <div className="six bgxf" />
+                        <div className="seven bgxg" />
+                        <div className="eight bgxh" />
+                        <div className="nine bgxi" />
+                        <div className="ten bgxj" />
+                        <div className="eleven bgxk" />
+                        <div className="twelve bgxl" />
+						*/}
+						<div className="small-window-1 cxg athelas br4 pa2 f4">
+							<div className="ba bw1 bgxk bdxk pa2 br4">
+								<div>
+									MMXVI Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+									quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+									dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+								</div>
+								<div className="ba bw1 bgxh bdxh pa2 br4 cxf">
+									<div>
+										MMXVI Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+										veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+										esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+										laborum.
+									</div>
+								</div>
+								{/*
+								<div className="ba bw1 bgyk bdyk pa2 br4">
+									<div className="ba bw1 bgzk bdzk pa2 br4">
+										<div className="ba bw1 bgxyzg bdxyzg pa2 br4">
+										</div>
+									</div>
+								</div>
+								*/}
+							</div>
+						</div>
+						<div className="small-window-2 cxf athelas br4 pa2 f4">
+							<div className="ba bw1 bgxh bdxh pa2 br4">
+								<div>
+									MMXVI Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+									quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+									dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+								</div>
+								<div className="ba bw1 bgxf bdxf pa2 br4 cxyzg">
+									<div>
+										MMXVI Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+										veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+										esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+										laborum.
+									</div>
+								</div>
+								{/*
+								<div className="ba bw1 bgyk bdyk pa2 br4">
+									<div className="ba bw1 bgzk bdzk pa2 br4">
+										<div className="ba bw1 bgxyzg bdxyzg pa2 br4">
+										</div>
+									</div>
+								</div>
+								*/}
+							</div>
+						</div>
+						<div className="small-window-3 cxyzg athelas br4 pa2 f4">
+							<div className="ba bw1 bgxf bdxf pa2 br4">
+								<div>
+									MMXVI Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+									quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+									dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+								</div>
+								<div className="ba bw1 bgxd bdxd pa2 br4 cxf">
+									<div>
+										MMXVI Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+										veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+										esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+										laborum.
+									</div>
+								</div>
+								{/*
+								<div className="ba bw1 bgyk bdyk pa2 br4">
+									<div className="ba bw1 bgzk bdzk pa2 br4">
+										<div className="ba bw1 bgxyzg bdxyzg pa2 br4">
+										</div>
+									</div>
+								</div>
+								*/}
+							</div>
+						</div>
+						<div className="small-window-4 cxf athelas br4 pa2 f4">
+							<div className="ba bw1 bgxd bdxd pa2 br4">
+								<div>
+									MMXVI Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+									quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+									dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+								</div>
+								<div className="ba bw1 bgxk bdxk pa2 br4 cxg">
+									<div>
+										MMXVI Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+										veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+										esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+										laborum.
+									</div>
+								</div>
+								{/*
+								<div className="ba bw1 bgyk bdyk pa2 br4">
+									<div className="ba bw1 bgzk bdzk pa2 br4">
+										<div className="ba bw1 bgxyzg bdxyzg pa2 br4">
+										</div>
+									</div>
+								</div>
+								*/}
 							</div>
 						</div>
 					</div>
