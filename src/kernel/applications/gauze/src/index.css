@@ -117,6 +117,18 @@ table .truncate-ns {
 	font-family: athelas, georgia, serif;
 }
 
+.avenir {
+	font-family: avenir-next, avenir, sans-serif;
+}
+
+.helvetica {
+	font-family: helvetica, sans-serif;
+}
+
+.consolas {
+	font-family: Consolas, monaco, monospace;
+}
+
 .button:active {
 	border-color: #ca6702;
 	background-color: #ca6702;
