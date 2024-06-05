@@ -96,6 +96,7 @@ function synchronize(services, agentHeader, targetNode, callback) {
 						gauze: gauze,
 						model: model,
 						router: router,
+						graph: graph,
 					},
 				};
 			});
@@ -480,7 +481,11 @@ function reloadRelationships(services, agentHeader) {
 				.map(function (node) {
 					return node.props.data.map(function (entity) {
 						const entityID = entity[node.props.primary_key];
-						activeEntityToNodeMap[entityID] = node;
+						if (activeEntityToNodeMap[entityID]) {
+							activeEntityToNodeMap[entityID].push(node);
+						} else {
+							activeEntityToNodeMap[entityID] = [node];
+						}
 						return entityID;
 					});
 				})
@@ -532,63 +537,73 @@ function reloadRelationships(services, agentHeader) {
 								const toHeader = headers.find(function (header) {
 									return header.table_name === relationship.gauze__relationship__to_type;
 								});
-								const edge = activeEdges.values.find(function (edge) {
-									const fromConnection = activeConnections.object[edge.fromConnectionID];
-									const toConnection = activeConnections.object[edge.toConnectionID];
-									const fromEntityID = fromConnection.entityID === relationship.gauze__relationship__from_id;
-									const fromEntityType = fromConnection.entityType === fromHeader.graphql_meta_type;
-									const toEntityID = toConnection.entityID === relationship.gauze__relationship__to_id;
-									const toEntityType = toConnection.entityType === toHeader.graphql_meta_type;
-									return fromEntityID && fromEntityType && toEntityID && toEntityType;
+								activeEntityToNodeMap[relationship.gauze__relationship__from_id].forEach(function (fromNode) {
+									activeEntityToNodeMap[relationship.gauze__relationship__to_id].forEach(function (toNode) {
+										const edge = activeEdges.values.find(function (edge) {
+											const fromConnection = activeConnections.object[edge.fromConnectionID];
+											const toConnection = activeConnections.object[edge.toConnectionID];
+											const fromNodeID = fromConnection.nodeID === fromNode.id;
+											const fromEntityID = fromConnection.entityID === relationship.gauze__relationship__from_id;
+											const fromEntityType = fromConnection.entityType === fromHeader.graphql_meta_type;
+											const toNodeID = toConnection.nodeID === toNode.id;
+											const toEntityID = toConnection.entityID === relationship.gauze__relationship__to_id;
+											const toEntityType = toConnection.entityType === toHeader.graphql_meta_type;
+											return fromNodeID && fromEntityID && fromEntityType && toNodeID && toEntityID && toEntityType;
+										});
+										if (edge) {
+											console.log("edge found!");
+										} else {
+											// loop through activeNodeEntityMap using from
+											// loop through activeNodeEntityMap using to
+											const fromConnectionID = uuidv4();
+											const fromConnection = {
+												id: fromConnectionID,
+												name: "from",
+												nodeID: fromNode.id,
+												entityID: relationship.gauze__relationship__from_id,
+												entityType: fromHeader.graphql_meta_type,
+												x: null,
+												y: null,
+												z: 1,
+												component: component.default,
+												props: {
+													gauze: gauze,
+													model: model,
+													router: router,
+													graph: graph,
+												},
+											};
+											const toConnectionID = uuidv4();
+											const toConnection = {
+												id: toConnectionID,
+												name: "to",
+												nodeID: toNode.id,
+												entityID: relationship.gauze__relationship__to_id,
+												entityType: toHeader.graphql_meta_type,
+												x: null,
+												y: null,
+												z: 1,
+												component: component.default,
+												props: {
+													gauze: gauze,
+													model: model,
+													router: router,
+													graph: graph,
+												},
+											};
+											const edgeID = uuidv4();
+											const edge = {
+												id: edgeID,
+												fromNodeID: fromNode.id,
+												fromConnectionID: fromConnectionID,
+												toNodeID: toNode.id,
+												toConnectionID: toConnectionID,
+											};
+											graph.createConnections([fromConnection, toConnection]);
+											graph.createEdges([edge]);
+										}
+									});
 								});
-								if (edge) {
-									console.log("edge found!");
-								} else {
-									const fromConnectionID = uuidv4();
-									const fromConnection = {
-										id: fromConnectionID,
-										name: "from",
-										nodeID: activeEntityToNodeMap[relationship.gauze__relationship__from_id].id,
-										entityID: relationship.gauze__relationship__from_id,
-										entityType: fromHeader.graphql_meta_type,
-										x: null,
-										y: null,
-										z: 1,
-										component: component.default,
-										props: {
-											gauze: gauze,
-											model: model,
-											router: router,
-										},
-									};
-									const toConnectionID = uuidv4();
-									const toConnection = {
-										id: toConnectionID,
-										name: "to",
-										nodeID: activeEntityToNodeMap[relationship.gauze__relationship__to_id].id,
-										entityID: relationship.gauze__relationship__to_id,
-										entityType: toHeader.graphql_meta_type,
-										x: null,
-										y: null,
-										z: 1,
-										component: component.default,
-										props: {
-											gauze: gauze,
-											model: model,
-											router: router,
-										},
-									};
-									const edgeID = uuidv4();
-									const edge = {
-										id: edgeID,
-										fromNodeID: activeEntityToNodeMap[relationship.gauze__relationship__from_id].id,
-										fromConnectionID: fromConnectionID,
-										toNodeID: activeEntityToNodeMap[relationship.gauze__relationship__to_id].id,
-										toConnectionID: toConnectionID,
-									};
-									graph.createConnections([fromConnection, toConnection]);
-									graph.createEdges([edge]);
-								}
 							});
 						return synchronize(services, agentHeader, null);
 					});
@@ -604,8 +619,23 @@ function reloadRelationships(services, agentHeader) {
 function createRelationship(services, agentHeader, relationship) {
 	return import("./components/Relationship.jsx").then(function (component) {
 		const { gauze, model, router, graph } = services;
+		const activeNodes = graph.activeNodes(agentHeader.name);
 		const activeEdges = graph.activeEdges(agentHeader.name);
 		const activeConnections = graph.activeConnections(agentHeader.name);
+		const activeEntityToNodeMap = {};
+		const activeEntityIDs = activeNodes.values
+			.map(function (node) {
+				return node.props.data.map(function (entity) {
+					const entityID = entity[node.props.primary_key];
+					if (activeEntityToNodeMap[entityID]) {
+						activeEntityToNodeMap[entityID].push(node);
+					} else {
+						activeEntityToNodeMap[entityID] = [node];
+					}
+					return entityID;
+				});
+			})
+			.flat();
 		const edge = activeEdges.values.find(function (edge) {
 			const fromConnection = activeConnections.object[edge.fromConnectionID];
 			const toConnection = activeConnections.object[edge.toConnectionID];
@@ -618,7 +648,6 @@ function createRelationship(services, agentHeader, relationship) {
 		if (edge) {
 			console.log("edge", edge);
 		} else {
-			//alert(JSON.stringify(relationship, null, 4));
 			const headers = model.all("HEADER");
 			const relationshipHeader = headers.find(function (header) {
 				return header.name === "relationship";
@@ -641,50 +670,72 @@ function createRelationship(services, agentHeader, relationship) {
 				})
 				.then(function (data) {
 					// create a relationship, create the connections, create the edge
-					const fromConnectionID = uuidv4();
-					const fromConnection = {
-						id: fromConnectionID,
-						name: "from",
-						nodeID: relationship.fromNodeID,
-						entityID: relationship.fromEntityID,
-						entityType: relationship.fromEntityType,
-						x: null,
-						y: null,
-						z: 1,
-						component: component.default,
-						props: {
-							gauze: gauze,
-							model: model,
-							router: router,
-						},
-					};
-					const toConnectionID = uuidv4();
-					const toConnection = {
-						id: toConnectionID,
-						name: "to",
-						nodeID: relationship.toNodeID,
-						entityID: relationship.toEntityID,
-						entityType: relationship.toEntityType,
-						x: null,
-						y: null,
-						z: 1,
-						component: component.default,
-						props: {
-							gauze: gauze,
-							model: model,
-							router: router,
-						},
-					};
-					const edgeID = uuidv4();
-					const edge = {
-						id: edgeID,
-						fromNodeID: relationship.fromNodeID,
-						fromConnectionID: fromConnectionID,
-						toNodeID: relationship.toNodeID,
-						toConnectionID: toConnectionID,
-					};
-					graph.createConnections([fromConnection, toConnection]);
-					graph.createEdges([edge]);
+					activeEntityToNodeMap[relationship.fromEntityID].forEach(function (fromNode) {
+						activeEntityToNodeMap[relationship.toEntityID].forEach(function (toNode) {
+							const edge = activeEdges.values.find(function (edge) {
+								const fromConnection = activeConnections.object[edge.fromConnectionID];
+								const toConnection = activeConnections.object[edge.toConnectionID];
+								const fromNodeID = fromConnection.nodeID === fromNode.id;
+								const fromEntityID = fromConnection.entityID === relationship.fromEntityID;
+								const fromEntityType = fromConnection.entityType === relationship.fromEntityType;
+								const toNodeID = toConnection.nodeID === toNode.id;
+								const toEntityID = toConnection.entityID === relationship.toEntityID;
+								const toEntityType = toConnection.entityType === relationship.toEntityType;
+								return fromNodeID && fromEntityID && fromEntityType && toNodeID && toEntityID && toEntityType;
+							});
+							if (edge) {
+								console.log("edge", edge);
+							} else {
+								//alert(JSON.stringify(relationship, null, 4));
+								const fromConnectionID = uuidv4();
+								const fromConnection = {
+									id: fromConnectionID,
+									name: "from",
+									nodeID: fromNode.id,
+									entityID: relationship.fromEntityID,
+									entityType: relationship.fromEntityType,
+									x: null,
+									y: null,
+									z: 1,
+									component: component.default,
+									props: {
+										gauze: gauze,
+										model: model,
+										router: router,
+										graph: graph,
+									},
+								};
+								const toConnectionID = uuidv4();
+								const toConnection = {
+									id: toConnectionID,
+									name: "to",
+									nodeID: toNode.id,
+									entityID: relationship.toEntityID,
+									entityType: relationship.toEntityType,
+									x: null,
+									y: null,
+									z: 1,
+									component: component.default,
+									props: {
+										gauze: gauze,
+										model: model,
+										router: router,
+										graph: graph,
+									},
+								};
+								const edgeID = uuidv4();
+								const edge = {
+									id: edgeID,
+									fromNodeID: fromNode.id,
+									fromConnectionID: fromConnectionID,
+									toNodeID: toNode.id,
+									toConnectionID: toConnectionID,
+								};
+								graph.createConnections([fromConnection, toConnection]);
+								graph.createEdges([edge]);
+							}
+						});
+					});
 					return synchronize(services, agentHeader, null);
 				});
 		}
@@ -693,9 +744,24 @@ function createRelationship(services, agentHeader, relationship) {
 
 function deleteRelationship(services, agentHeader, relationship) {
 	const { gauze, model, graph } = services;
+	const activeNodes = graph.activeNodes(agentHeader.name);
 	const activeEdges = graph.activeEdges(agentHeader.name);
 	const activeConnections = graph.activeConnections(agentHeader.name);
 	const headers = model.all("HEADER");
+	const activeEntityToNodeMap = {};
+	const activeEntityIDs = activeNodes.values
+		.map(function (node) {
+			return node.props.data.map(function (entity) {
+				const entityID = entity[node.props.primary_key];
+				if (activeEntityToNodeMap[entityID]) {
+					activeEntityToNodeMap[entityID].push(node);
+				} else {
+					activeEntityToNodeMap[entityID] = [node];
+				}
+				return entityID;
+			});
+		})
+		.flat();
 	const relationshipHeader = headers.find(function (header) {
 		return header.name === "relationship";
 	});
@@ -726,23 +792,29 @@ function deleteRelationship(services, agentHeader, relationship) {
 						where: where,
 					})
 					.then(function (deleted) {
-						const edge = activeEdges.values.find(function (edge) {
-							const fromConnection = activeConnections.object[edge.fromConnectionID];
-							const toConnection = activeConnections.object[edge.toConnectionID];
-							const fromEntityID = fromConnection.entityID === relationship.fromEntityID;
-							const fromEntityType = fromConnection.entityType === relationship.fromEntityType;
-							const toEntityID = toConnection.entityID === relationship.toEntityID;
-							const toEntityType = toConnection.entityType === relationship.toEntityType;
-							return fromEntityID && fromEntityType && toEntityID && toEntityType;
+						activeEntityToNodeMap[relationship.fromEntityID].forEach(function (fromNode) {
+							activeEntityToNodeMap[relationship.toEntityID].forEach(function (toNode) {
+								const edge = activeEdges.values.find(function (edge) {
+									const fromConnection = activeConnections.object[edge.fromConnectionID];
+									const toConnection = activeConnections.object[edge.toConnectionID];
+									const fromNodeID = fromConnection.nodeID === fromNode.id;
+									const fromEntityID = fromConnection.entityID === relationship.fromEntityID;
+									const fromEntityType = fromConnection.entityType === relationship.fromEntityType;
+									const toNodeID = toConnection.nodeID === toNode.id;
+									const toEntityID = toConnection.entityID === relationship.toEntityID;
+									const toEntityType = toConnection.entityType === relationship.toEntityType;
+									return fromNodeID && fromEntityID && fromEntityType && toNodeID && toEntityID && toEntityType;
+								});
+								if (edge) {
+									// delete the connections and then delete the edge and then synchronize
+									const fromConnection = activeConnections.object[edge.fromConnectionID];
+									const toConnection = activeConnections.object[edge.toConnectionID];
+									graph.deleteConnections([fromConnection, toConnection]);
+									graph.deleteEdges([edge]);
+									return synchronize(services, agentHeader, null);
+								}
+							});
 						});
-						if (edge) {
-							// delete the connections and then delete the edge and then synchronize
-							const fromConnection = activeConnections.object[edge.fromConnectionID];
-							const toConnection = activeConnections.object[edge.toConnectionID];
-							graph.deleteConnections([fromConnection, toConnection]);
-							graph.deleteEdges([edge]);
-							return synchronize(services, agentHeader, null);
-						}
 					});
 			}
 		});

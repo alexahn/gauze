@@ -430,6 +430,7 @@ export default function Table({
 												return (
 													<div key={connection.id} className="flex justify-center">
 														<Connection
+															agentHeader={agentHeader}
 															route={route}
 															dataX={connection.x}
 															dataY={connection.y}
@@ -662,6 +663,7 @@ export default function Table({
 												return (
 													<div key={connection.id} className="flex justify-center">
 														<Connection
+															agentHeader={agentHeader}
 															route={route}
 															dataX={connection.x}
 															dataY={connection.y}
