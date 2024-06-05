@@ -27,7 +27,7 @@
 		--xyzl: #eeeeee;
 
 		/* x */
-		--xa: #080808;
+		--xa: #111111;
 		--xb: #01121a;
 		--xc: #005f73;
 		--xd: #099396;
@@ -41,7 +41,7 @@
 		--xl: #eeeeee;
 
 		/* y */
-		--ya: #080808;
+		--ya: #111111;
 		--yb: #100112;
 		--yc: #73005f;
 		--yd: #960993;
@@ -55,7 +55,7 @@
 		--yl: #eeeeee;
 
 		/* z */
-		--za: #080808;
+		--za: #111111;
 		--zb: #121001;
 		--zc: #5f7300;
 		--zd: #939609;
@@ -111,17 +111,6 @@ table .truncate-ns {
 
 .athelas {
 	font-family: athelas, georgia, serif;
-}
-
-.button {
-	border-style: solid;
-	/*
-	border-color: #ed9b00;
-	background-color: #ed9b00;
-	*/
-	border-color: #279c22;
-	background-color: #279c22;
-	color: #eeeeee;
 }
 
 .button:active {
