@@ -25,8 +25,8 @@ export default function Axolotl({ sections, units }) {
 						<div className="ten bgxj" />
 						<div className="eleven bgxk" />
 						<div className="twelve bgxl" />
-						<div className="small-window-1 cxl athelas br4 pa2 f4">
-							<div className="ba bw1 bgxj bdxj pa2 br4">
+						<div className="small-window-1 cxg athelas br4 pa2 f4">
+							<div className="ba bw1 bgxk bdxk pa2 br4">
 								<div>
 									MMXVI Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 									quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
@@ -36,7 +36,7 @@ export default function Axolotl({ sections, units }) {
 									<label for="email" className="pr1">
 										Email
 									</label>
-									<input id="email" className="br2 ba bw1 bgxl bdxl cxa" />
+									<input id="email" className="w-100 br2 ba bw1 bgxl bdxl cxa" />
 								</div>
 								<div className="pt2 flex f5">
 									<button className="br-pill ba bw1 bgxh bdxh cxf">Submit</button>
@@ -65,7 +65,7 @@ export default function Axolotl({ sections, units }) {
 								dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 							</div>
 						</div>
-						<div className="small-window-5 cxl athelas br4 f4 pa2">
+						<div className="small-window-5 cxc athelas br4 f4 pa2">
 							<div className="ba bw1 bdxb bgxb pa2 br4">
 								MMXVI Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 								quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
@@ -89,8 +89,8 @@ export default function Axolotl({ sections, units }) {
 						<div className="ten bgyj" />
 						<div className="eleven bgyk" />
 						<div className="twelve bgyl" />
-						<div className="small-window-1 cyl athelas br4 pa2 f4">
-							<div className="ba bw1 bgyj bdyj pa2 br4">
+						<div className="small-window-1 cyg athelas br4 pa2 f4">
+							<div className="ba bw1 bgyk bdyk pa2 br4">
 								<div>
 									MMXVI Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 									quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
@@ -129,7 +129,7 @@ export default function Axolotl({ sections, units }) {
 								dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 							</div>
 						</div>
-						<div className="small-window-5 cyl athelas br4 f4 pa2">
+						<div className="small-window-5 cyc athelas br4 f4 pa2">
 							<div className="ba bw1 bdyb bgyb pa2 br4">
 								MMXVI Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 								quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
@@ -153,8 +153,8 @@ export default function Axolotl({ sections, units }) {
 						<div className="ten bgzj" />
 						<div className="eleven bgzk" />
 						<div className="twelve bgzl" />
-						<div className="small-window-1 czl athelas br4 pa2 f4">
-							<div className="ba bw1 bgzj bdzj pa2 br4">
+						<div className="small-window-1 czg athelas br4 pa2 f4">
+							<div className="ba bw1 bgzk bdzk pa2 br4">
 								<div>
 									MMXVI Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 									quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
@@ -193,7 +193,7 @@ export default function Axolotl({ sections, units }) {
 								dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 							</div>
 						</div>
-						<div className="small-window-5 czl athelas br4 f4 pa2">
+						<div className="small-window-5 czc athelas br4 f4 pa2">
 							<div className="ba bw1 bdzb bgzb pa2 br4">
 								MMXVI Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
 								quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum

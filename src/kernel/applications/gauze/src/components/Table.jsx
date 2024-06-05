@@ -379,7 +379,7 @@ export default function Table({
 					<thead className="mw-100">
 						<tr align="right" className="flex">
 							<th align="center" className="mw4 w4"></th>
-							<th className="mw4 w4 pa1 relative row" tabIndex="0">
+							<th className="br2 mw4 w4 pa1 relative row" tabIndex="0">
 								<div className="truncate-ns">RELATIONSHIPS</div>
 								<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">RELATIONSHIPS</span>
 							</th>
