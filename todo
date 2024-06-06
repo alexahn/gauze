@@ -604,7 +604,12 @@
 			[x] show and hide buttons to create and delete relationships based on editing mode
 		[ ] personal description for table
 			[ ] or allow them to rename the title
-	[ ] rename color scheme variables to use numbers
+	[x] rename color scheme variables to use numbers
+	[ ] a minimum design language
+		[ ] fonts
+		[ ] colors
+		[ ] shapes
+		[ ] interactivity
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages

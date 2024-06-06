@@ -213,6 +213,58 @@ export default function Table({
 		filter();
 	}
 
+	const colors = {
+		0: {
+			node: {
+				bg: "bgx11",
+				bd: "bdx11",
+				c: "cx7",
+			},
+			table: {
+				bg: "bgx8",
+				bd: "bdx8",
+				c: "cx6",
+			},
+		},
+		1: {
+			node: {
+				bg: "bgx8",
+				bd: "bdx8",
+				c: "cx6",
+			},
+			table: {
+				bg: "bgx6",
+				bd: "bdx6",
+				c: "cxyz7",
+			},
+		},
+		2: {
+			node: {
+				bg: "bgx6",
+				bd: "bdx6",
+				c: "cxyz7",
+			},
+			table: {
+				bg: "bgx4",
+				bd: "bdx6",
+				c: "cx6",
+			},
+		},
+		3: {
+			node: {
+				bg: "bgx4",
+				bd: "bdx4",
+				c: "cx6",
+			},
+			table: {
+				bg: "bgx11",
+				bd: "bdx11",
+				c: "cx7",
+			},
+		},
+	};
+	const color = node.props.depth % 4 < 0 ? colors[(node.props.depth % 4) + 4] : colors[node.props.depth % 4];
+
 	function updateFields(name) {
 		return function (e) {
 			if (e.target.checked) {
