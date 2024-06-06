@@ -412,6 +412,8 @@ export default function Table({
 		};
 	}
 
+	const cellClass = "mw4 w4 br2";
+
 	return (
 		<div className={`mw-100 w-100 consolas relative ${color.node.bd} ${color.node.bg} ${color.node.c} pa4 br4`}>
 			<h1 align="center">{header.graphql_meta_type}</h1>
@@ -432,9 +434,9 @@ export default function Table({
 			<div className="flex fr">
 				<table className={`${color.table.bd} ${color.table.bg} ${color.table.c} br3`}>
 					<thead className="mw-100">
-						<tr align="right" className="flex">
-							<th align="center" className="mw4 w4 br2"></th>
-							<th className="mw4 w4 br2">
+						<tr align="right" className="">
+							<th align="center" className={cellClass}></th>
+							<th className={cellClass}>
 								<div className="pa1 relative row" tabIndex="0">
 									<div className="truncate-ns">RELATIONSHIPS</div>
 									<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">RELATIONSHIPS</span>
@@ -442,10 +444,10 @@ export default function Table({
 							</th>
 							{data.map(function (item) {
 								return (
-									<th key={item[header.primary_key]} align="center" className="mw4 w4 br2">
-										<div className="pa1 flex justify-center">
+									<th key={item[header.primary_key]} align="center" className={cellClass}>
+										<div className="flex justify-center pa1">
 											<div className="flex relative row" tabIndex="0">
-												<button className={`w3 truncate-ns relationship ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c} br2 ba`}>FROM</button>
+												<button className={`relationship w3 truncate-ns ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c} br2 ba`}>FROM</button>
 												<span className="dn bg-washed-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
 													<div className="pa1">FROM</div>
 													{header.relationships_from.map(function (from) {
@@ -484,7 +486,7 @@ export default function Table({
 											) {
 												//const absolutePosition = absoluteToAbstract(connection);
 												return (
-													<div key={connection.id} className="flex justify-center">
+													<div key={connection.id} className="flex justify-center pa1">
 														<Connection
 															agentHeader={agentHeader}
 															route={route}
@@ -513,46 +515,48 @@ export default function Table({
 									</th>
 								);
 							})}
-							<th align="center" className="mw4 w4"></th>
+							<th align="center" className={cellClass}></th>
 						</tr>
-						<tr align="right" className="flex">
-							<th align="center" className="mw4 w4">
+						<tr align="right" className="">
+							<th align="center" className={cellClass}>
 								<button onClick={applyFilterButton}>Filter</button>
 							</th>
-							<th className="mw4 w4 pa1 relative row" tabIndex="0">
-								<div>FIELDS</div>
-								<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
-									{header.fields.map(function (field) {
-										return (
-											<div key={`${field.name}.checkbox`} className="flex fr">
-												{field.name}
-												<input
-													type="checkbox"
-													defaultChecked={
-														localFields
-															? localFields.find(function (v) {
-																	return v.name === field.name;
-																})
-															: true
-													}
-													onChange={updateFields(field.name)}
-												/>
-												{/*
-												<a href={router.buildUrl(route.name, { ...route.params, order: field.name, order_direction: "asc" })}>
-													<button className="f6" disabled={route.params.order && route.params.order === field.name && route.params.order_direction === "asc"}>
-														{"<"}
-													</button>
-												</a>
-												<a href={router.buildUrl(route.name, { ...route.params, order: field.name, order_direction: "desc" })}>
-													<button className="f6" disabled={route.params.order && route.params.order === field.name && route.params.order_direction === "desc"}>
-														{">"}
-													</button>
-												</a>
-												*/}
-											</div>
-										);
-									})}
-								</span>
+							<th className={cellClass}>
+								<div className="pa1 relative row" tabIndex="0">
+									<div>FIELDS</div>
+									<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
+										{header.fields.map(function (field) {
+											return (
+												<div key={`${field.name}.checkbox`} className="flex fr">
+													{field.name}
+													<input
+														type="checkbox"
+														defaultChecked={
+															localFields
+																? localFields.find(function (v) {
+																		return v.name === field.name;
+																	})
+																: true
+														}
+														onChange={updateFields(field.name)}
+													/>
+													{/*
+													<a href={router.buildUrl(route.name, { ...route.params, order: field.name, order_direction: "asc" })}>
+														<button className="f6" disabled={route.params.order && route.params.order === field.name && route.params.order_direction === "asc"}>
+															{"<"}
+														</button>
+													</a>
+													<a href={router.buildUrl(route.name, { ...route.params, order: field.name, order_direction: "desc" })}>
+														<button className="f6" disabled={route.params.order && route.params.order === field.name && route.params.order_direction === "desc"}>
+															{">"}
+														</button>
+													</a>
+													*/}
+												</div>
+											);
+										})}
+									</span>
+								</div>
 							</th>
 							{data.map(function (item) {
 								function whitelistWhere(method) {
@@ -580,50 +584,52 @@ export default function Table({
 									entity_type: header.table_name,
 								};
 								return (
-									<th key={item[header.primary_key]} align="left" className="mw4 w4 pt1 flex justify-center">
-										<a href={router.buildUrl("system.types.item.type.id", { type: type, id: item[header.primary_key], mode: "edit" })}>
-											<button className="">
-												<Pencil2Icon />
-											</button>
-										</a>
-										<div className="relative row mw4 w4" tabIndex="0">
-											<button className="">
-												<BookmarkIcon />
-											</button>
-											<span className="dn bg-light-green mw4 w4 top-0 right-0 pa1 absolute f4 tooltip">
-												{header.methods.map(function (method) {
-													return (
-														<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "whitelist", where: whitelistWhere(method.name) })}>
-															<button className="mw4 w4">{method.name}</button>
-														</a>
-													);
-												})}
-											</span>
-										</div>
-										<div className="relative row mw4 w4" tabIndex="0">
-											<button className="">
-												<BookmarkFilledIcon />
-											</button>
-											<span className="dn bg-light-green mw4 w4 top-0 right-0 pa1 absolute f4 tooltip">
-												{header.methods.map(function (method) {
-													return (
-														<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "blacklist", where: blacklistWhere(method.name) })}>
-															<button className="mw4 w4">{method.name}</button>
-														</a>
-													);
-												})}
-											</span>
-										</div>
-										<div className="relative row mw4 w4" tabIndex="0">
-											<button>
-												<Share1Icon />
-											</button>
-											<span className="dn bg-light-green mw6 w6 top-0 right-0 pa1 absolute f9 tooltip">{JSON.stringify(share)}</span>
+									<th key={item[header.primary_key]} align="left" className={cellClass}>
+										<div className="flex justify-center">
+											<a href={router.buildUrl("system.types.item.type.id", { type: type, id: item[header.primary_key], mode: "edit" })}>
+												<button className="">
+													<Pencil2Icon />
+												</button>
+											</a>
+											<div className="relative row mw4 w4" tabIndex="0">
+												<button className="">
+													<BookmarkIcon />
+												</button>
+												<span className="dn bg-light-green mw4 w4 top-0 right-0 pa1 absolute f4 tooltip">
+													{header.methods.map(function (method) {
+														return (
+															<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "whitelist", where: whitelistWhere(method.name) })}>
+																<button className="mw4 w4">{method.name}</button>
+															</a>
+														);
+													})}
+												</span>
+											</div>
+											<div className="relative row mw4 w4" tabIndex="0">
+												<button className="">
+													<BookmarkFilledIcon />
+												</button>
+												<span className="dn bg-light-green mw4 w4 top-0 right-0 pa1 absolute f4 tooltip">
+													{header.methods.map(function (method) {
+														return (
+															<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "blacklist", where: blacklistWhere(method.name) })}>
+																<button className="mw4 w4">{method.name}</button>
+															</a>
+														);
+													})}
+												</span>
+											</div>
+											<div className="relative row mw4 w4" tabIndex="0">
+												<button>
+													<Share1Icon />
+												</button>
+												<span className="dn bg-light-green mw6 w6 top-0 right-0 pa1 absolute f9 tooltip">{JSON.stringify(share)}</span>
+											</div>
 										</div>
 									</th>
 								);
 							})}
-							<th align="center" className="mw4 w4">
+							<th align="center" className={cellClass}>
 								<button className="green" onClick={handleCreate} disabled={submitCreate}>
 									Create
 								</button>
@@ -633,56 +639,59 @@ export default function Table({
 					<tbody align="right" className="mw-100">
 						{localFields.map(function (field) {
 							return (
-								<tr align="right" key={field.name} className="flex">
-									<td className="mw4 w4 overflow-x-hidden">
+								<tr align="right" key={field.name} className="">
+									<td className={cellClass}>
 										<Input
 											defaultMode={true}
 											field={field}
-											className="mw4"
+											className="w-100 br2 ba bw1"
 											defaultValue={variables.where ? variables.where[field.name] : null}
 											onChange={updateFilter(field.name)}
 											onKeyDown={applyFilterEnter(field.name)}
 											disabled={syncing}
 										/>
 									</td>
-									<td className="relative mw4 w4 pa1 row" tabIndex="0">
-										<div className="truncate-ns field">
-											<b>{field.name}</b>
+									<td className={cellClass}>
+										<div className="relative pa1 row" tabIndex="0">
+											<div className="truncate-ns field">{field.name}</div>
+											<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip br2">{field.name}</span>
 										</div>
-										<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip">
-											<b>{field.name}</b>
-										</span>
 									</td>
 									{data.map(function (item) {
 										return (
-											<td align="left" key={`${item[header.primary_key]}.${field}`} className="relative mw4 w4 pa1 row" tabIndex="0">
-												<div className="truncate-ns">{item[field.name]}</div>
-												<span className="dn bg-washed-green mw9 w5 top-0 left-0 pa1 absolute f4 tooltip">{item[field.name]}</span>
+											<td align="left" key={`${item[header.primary_key]}.${field}`} className={cellClass}>
+												<div className="relative pa1 row" tabIndex="0">
+													<div className="truncate-ns">{item[field.name]}</div>
+													<span className="dn bg-washed-green mw9 w5 top-0 left-0 pa1 absolute f4 tooltip">{item[field.name]}</span>
+												</div>
 											</td>
 										);
 									})}
-									<td className="mw4 w4 overflow-x-hidden">
-										<Input field={field} className="mw4 w4" value={createItem[field.name]} onChange={updateCreateItem(field.name)} disabled={submitCreate} />
+									<td className={cellClass}>
+										<Input field={field} className="w-100 br2 ba bw1" value={createItem[field.name]} onChange={updateCreateItem(field.name)} disabled={submitCreate} />
 									</td>
 								</tr>
 							);
 						})}
 					</tbody>
 					<tfoot className="mw-100">
-						<tr align="right" className="flex">
-							<th align="center" className="mw4 w4"></th>
-							<th className="mw4 w4 pa1 relative row" tabIndex="0">
-								<div className="truncate-ns">RELATIONSHIPS</div>
-								<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">RELATIONSHIPS</span>
+						<tr align="right" className="">
+							<th align="center" className={cellClass}></th>
+							<th className={cellClass}>
+								<div className="relative pa1 row" tabIndex="0">
+									<div className="truncate-ns">RELATIONSHIPS</div>
+									<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">RELATIONSHIPS</span>
+								</div>
 							</th>
 							{data.map(function (item) {
 								return (
-									<th key={item[header.primary_key]} align="center" className="mw4 w4 pa1">
-										<div className="flex justify-center">
+									<th key={item[header.primary_key]} align="center" className={cellClass}>
+										<div className="flex justify-center pa1">
 											<div className="flex relative row" tabIndex="0">
-												<button className="w3 truncate-ns relationship">TO</button>
+												{/*<button className="w3 truncate-ns relationship">TO</button>*/}
+												<button className={`relationship w3 truncate-ns ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c} br2 ba`}>TO</button>
 												<span className="dn bg-washed-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
-													<div className="pa1">TO</div>
+													<div className="">TO</div>
 													{header.relationships_to.map(function (to) {
 														return (
 															<div key={to} className="pa1">
@@ -717,7 +726,7 @@ export default function Table({
 											) {
 												//const absolutePosition = absoluteToAbstract(connection);
 												return (
-													<div key={connection.id} className="flex justify-center">
+													<div key={connection.id} className="flex justify-center pa1">
 														<Connection
 															agentHeader={agentHeader}
 															route={route}
@@ -746,7 +755,7 @@ export default function Table({
 									</th>
 								);
 							})}
-							<th align="center" className="mw4 w4"></th>
+							<th align="center" className={cellClass}></th>
 						</tr>
 					</tfoot>
 				</table>

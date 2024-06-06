@@ -85,6 +85,23 @@ td {
 	border-spacing: 1px;
 }
 
+.node table,
+th,
+td {
+	border: 1px solid black;
+	border-spacing: 15px;
+}
+
+.node thead,
+th {
+	font-weight: normal;
+}
+
+.node tfoot,
+th {
+	font-weight: normal;
+}
+
 .flex th {
 	margin-top: 1px;
 	margin-left: 1px;

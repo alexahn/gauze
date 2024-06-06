@@ -75,7 +75,7 @@ export default function Relationship({ agentHeader, route, nodes, connections, e
 			return (
 				<div className="relative row" tabIndex="0">
 					<div className="w3 truncate-ns">{toConnection.entityID}</div>
-					<span className="dn bg-washed-green mw6 w6 top-0 right-0 pa1 absolute f4 tooltip">
+					<span className="dn bg-washed-green mw9 w5 top-0 right-0 pa1 absolute f4 tooltip">
 						<div>{toConnection.entityID}</div>
 						<div>
 							<button onClick={handleFocus(toConnection)}>Focus</button>
@@ -88,7 +88,7 @@ export default function Relationship({ agentHeader, route, nodes, connections, e
 			return (
 				<div className="relative row" tabIndex="0">
 					<div className="w3 truncate-ns">{fromConnection.entityID}</div>
-					<span className="dn bg-washed-green mw6 w6 top-0 right-0 pa1 absolute f4 tooltip">
+					<span className="dn bg-washed-green mw9 w5 top-0 right-0 pa1 absolute f4 tooltip">
 						<div>{fromConnection.entityID}</div>
 						<div>
 							<button onClick={handleFocus(fromConnection)}>Focus</button>
