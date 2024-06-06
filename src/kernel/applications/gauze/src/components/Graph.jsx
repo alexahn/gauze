@@ -59,7 +59,7 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 			);
 		} else if (e.button === 0) {
 			if (e.target === containerRef.current) {
-				//e.preventDefault();
+				e.preventDefault();
 				setPanning(true);
 				graph.updateNodes(
 					graph.selectNodes(activeNodes.keys).map(function (position) {

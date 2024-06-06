@@ -25,6 +25,8 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 				// note: is there a way to do this elegantly?
 				const fromTarget = e.target.closest(".from-start");
 				const toTarget = e.target.closest(".to-start");
+				const buttonTarget = e.target.closest("button");
+				const spanTarget = e.target.closest("span");
 				if (fromTarget) {
 					setConnecting(true);
 					// create two interaction connections
@@ -95,8 +97,11 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 						toConnectionID: endID,
 					});
 					e.preventDefault();
+				} else if (buttonTarget) {
+				} else if (spanTarget) {
 				} else {
 					setDragging(true);
+					//e.preventDefault();
 					graph.updateNodes([
 						{
 							...graph.selectNode(node.id),

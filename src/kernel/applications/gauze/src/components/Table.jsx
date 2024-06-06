@@ -389,7 +389,7 @@ export default function Table({
 										<div className="flex justify-center">
 											<div className="flex relative row" tabIndex="0">
 												<button className="w3 truncate-ns relationship">FROM</button>
-												<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
+												<span className="dn bg-washed-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
 													<div className="pa1">FROM</div>
 													{header.relationships_from.map(function (from) {
 														return (
@@ -408,7 +408,6 @@ export default function Table({
 													data-entity-id={item[header.primary_key]}
 													data-entity-type={header.graphql_meta_type}
 												>
-													{/*<a className="br-pill bg-green pa1">*/}
 													<button>
 														<PlusIcon />
 													</button>
@@ -625,7 +624,7 @@ export default function Table({
 										<div className="flex justify-center">
 											<div className="flex relative row" tabIndex="0">
 												<button className="w3 truncate-ns relationship">TO</button>
-												<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
+												<span className="dn bg-washed-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
 													<div className="pa1">TO</div>
 													{header.relationships_to.map(function (to) {
 														return (
