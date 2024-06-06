@@ -213,61 +213,6 @@ export default function Table({
 		filter();
 	}
 
-	const colors = {
-		0: {
-			node: {
-				bg: "bgx11",
-				bd: "bdx11",
-				c: "cx7",
-			},
-			table: {
-				bg: "bgx8",
-				bd: "bdx8",
-				c: "cx6",
-			},
-		},
-		1: {
-			node: {
-				bg: "bgx8",
-				bd: "bdx8",
-				c: "cx6",
-			},
-			table: {
-				bg: "bgx6",
-				bd: "bdx6",
-				c: "cxyz7",
-			},
-		},
-		2: {
-			node: {
-				bg: "bgx6",
-				bd: "bdx6",
-				c: "cxyz7",
-			},
-			table: {
-				bg: "bgx4",
-				bd: "bdx6",
-				c: "cx6",
-			},
-		},
-		3: {
-			node: {
-				bg: "bgx4",
-				bd: "bdx4",
-				c: "cx6",
-			},
-			table: {
-				bg: "bgx11",
-				bd: "bdx11",
-				c: "cx7",
-			},
-		},
-	};
-	const colorIndex = node.props.depth % 4 < 0 ? (node.props.depth % 4) + 4 : node.props.depth % 4;
-	const nextColorIndex = (colorIndex + 1) % 4;
-	const color = colors[colorIndex];
-	const nextColor = colors[nextColorIndex];
-
 	function updateFields(name) {
 		return function (e) {
 			if (e.target.checked) {
@@ -412,7 +357,109 @@ export default function Table({
 		};
 	}
 
+	const colors = {
+		0: {
+			node: {
+				bg: "bgx11",
+				bd: "bdx11",
+				c: "cx7",
+				x: 11,
+			},
+			/*
+			table: {
+				bg: "bgx8",
+				bd: "bdx8",
+				c: "cx6",
+				x: 8
+			},
+			*/
+			table: {
+				bg: "bgx6",
+				bd: "bdx6",
+				c: "cxyz7",
+				x: 6,
+			},
+		},
+		1: {
+			node: {
+				bg: "bgx8",
+				bd: "bdx8",
+				c: "cx6",
+				x: 8,
+			},
+			/*
+			table: {
+				bg: "bgx6",
+				bd: "bdx6",
+				c: "cxyz7",
+				x: 6
+			},
+			*/
+			table: {
+				bg: "bgx4",
+				bd: "bdx4",
+				c: "cx6",
+				x: 4,
+			},
+		},
+		2: {
+			node: {
+				bg: "bgx6",
+				bd: "bdx6",
+				c: "cxyz7",
+				x: 6,
+			},
+			/*
+			table: {
+				bg: "bgx4",
+				bd: "bdx4",
+				c: "cx6",
+				x: 4
+			},
+			*/
+			table: {
+				bg: "bgx11",
+				bd: "bdx11",
+				c: "cx7",
+				x: 11,
+			},
+		},
+		3: {
+			node: {
+				bg: "bgx4",
+				bd: "bdx4",
+				c: "cx6",
+				x: 4,
+			},
+			/*
+			table: {
+				bg: "bgx11",
+				bd: "bdx11",
+				c: "cx7",
+				x: 11
+			},
+			*/
+			table: {
+				bg: "bgx8",
+				bd: "bdx8",
+				c: "cx6",
+				x: 8,
+			},
+		},
+	};
+	const colorIndex = node.props.depth % 4 < 0 ? (node.props.depth % 4) + 4 : node.props.depth % 4;
+	const nextColorIndex = (colorIndex + 1) % 4;
+	const color = colors[colorIndex];
+	const nextColor = colors[nextColorIndex];
+
 	const cellClass = "mw4 w4 br2";
+	const buttonClass = `ba br2 ${color.table.bd} ${color.table.bg} ${color.table.c}`;
+	const tableButtonClass = `ba br2 ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c}`;
+	const cellInputClass = `${cellClass} ${color.node.bg} ${color.node.bd}`;
+	const cellInputClass2 = `${cellClass} ${color.node.bg} bdx${color.table.x - 1} bw1`;
+	const tableInputClass = `w-100 br2 ba bw1 ${color.node.bd} ${color.node.bg} ${color.node.c}`;
+	const cellTableClass = `${cellClass} ${color.node.bg} ${color.node.bd} ${color.node.c}`;
+	const cellEntityClass = `${cellClass} bw1 ${nextColor.node.bg} ${nextColor.node.bd} ${nextColor.node.c}`;
 
 	return (
 		<div className={`mw-100 w-100 consolas relative ${color.node.bd} ${color.node.bg} ${color.node.c} pa4 br4`}>
@@ -427,7 +474,7 @@ export default function Table({
 			{/*<hr />*/}
 			<div align="left" className="cf">
 				<div className="flex fl">
-					<Pagination page={page_current} count={page_max} handleClick={paginate} reverse={false} buttonClass={`ba br2 ${color.table.bg} ${color.table.bd} ${color.table.c}`} />
+					<Pagination page={page_current} count={page_max} handleClick={paginate} reverse={false} buttonClass={buttonClass} />
 				</div>
 			</div>
 			{/*<hr />*/}
@@ -435,8 +482,8 @@ export default function Table({
 				<table className={`${color.table.bd} ${color.table.bg} ${color.table.c} br3`}>
 					<thead className="mw-100">
 						<tr align="right" className="">
-							<th align="center" className={cellClass}></th>
-							<th className={cellClass}>
+							<th align="center" className={cellTableClass}></th>
+							<th className={cellTableClass}>
 								<div className="pa1 relative row" tabIndex="0">
 									<div className="truncate-ns">RELATIONSHIPS</div>
 									<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">RELATIONSHIPS</span>
@@ -444,10 +491,12 @@ export default function Table({
 							</th>
 							{data.map(function (item) {
 								return (
-									<th key={item[header.primary_key]} align="center" className={cellClass}>
+									<th key={item[header.primary_key]} align="center" className={cellEntityClass}>
 										<div className="flex justify-center pa1">
 											<div className="flex relative row" tabIndex="0">
-												<button className={`relationship w3 truncate-ns ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c} br2 ba`}>FROM</button>
+												<button className={`relationship ${tableButtonClass}`}>
+													<div className="w3 truncate-ns">FROM</div>
+												</button>
 												<span className="dn bg-washed-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
 													<div className="pa1">FROM</div>
 													{header.relationships_from.map(function (from) {
@@ -515,13 +564,15 @@ export default function Table({
 									</th>
 								);
 							})}
-							<th align="center" className={cellClass}></th>
+							<th align="center" className={cellTableClass}></th>
 						</tr>
 						<tr align="right" className="">
-							<th align="center" className={cellClass}>
-								<button onClick={applyFilterButton}>Filter</button>
+							<th align="center" className={cellTableClass}>
+								<button className={tableButtonClass} onClick={applyFilterButton}>
+									Filter
+								</button>
 							</th>
-							<th className={cellClass}>
+							<th className={cellTableClass}>
 								<div className="pa1 relative row" tabIndex="0">
 									<div>FIELDS</div>
 									<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
@@ -584,15 +635,17 @@ export default function Table({
 									entity_type: header.table_name,
 								};
 								return (
-									<th key={item[header.primary_key]} align="left" className={cellClass}>
+									<th key={item[header.primary_key]} align="center" valign="middle" className={cellEntityClass}>
 										<div className="flex justify-center">
-											<a href={router.buildUrl("system.types.item.type.id", { type: type, id: item[header.primary_key], mode: "edit" })}>
-												<button className="">
-													<Pencil2Icon />
-												</button>
-											</a>
+											<div className="relative mw4 w4">
+												<a href={router.buildUrl("system.types.item.type.id", { type: type, id: item[header.primary_key], mode: "edit" })}>
+													<button className={tableButtonClass}>
+														<Pencil2Icon />
+													</button>
+												</a>
+											</div>
 											<div className="relative row mw4 w4" tabIndex="0">
-												<button className="">
+												<button className={tableButtonClass}>
 													<BookmarkIcon />
 												</button>
 												<span className="dn bg-light-green mw4 w4 top-0 right-0 pa1 absolute f4 tooltip">
@@ -606,7 +659,7 @@ export default function Table({
 												</span>
 											</div>
 											<div className="relative row mw4 w4" tabIndex="0">
-												<button className="">
+												<button className={tableButtonClass}>
 													<BookmarkFilledIcon />
 												</button>
 												<span className="dn bg-light-green mw4 w4 top-0 right-0 pa1 absolute f4 tooltip">
@@ -620,7 +673,7 @@ export default function Table({
 												</span>
 											</div>
 											<div className="relative row mw4 w4" tabIndex="0">
-												<button>
+												<button className={tableButtonClass}>
 													<Share1Icon />
 												</button>
 												<span className="dn bg-light-green mw6 w6 top-0 right-0 pa1 absolute f9 tooltip">{JSON.stringify(share)}</span>
@@ -629,8 +682,8 @@ export default function Table({
 									</th>
 								);
 							})}
-							<th align="center" className={cellClass}>
-								<button className="green" onClick={handleCreate} disabled={submitCreate}>
+							<th align="center" className={cellTableClass}>
+								<button className={tableButtonClass} onClick={handleCreate} disabled={submitCreate}>
 									Create
 								</button>
 							</th>
@@ -640,18 +693,18 @@ export default function Table({
 						{localFields.map(function (field) {
 							return (
 								<tr align="right" key={field.name} className="">
-									<td className={cellClass}>
+									<td className={cellTableClass}>
 										<Input
 											defaultMode={true}
 											field={field}
-											className="w-100 br2 ba bw1"
+											className={tableInputClass}
 											defaultValue={variables.where ? variables.where[field.name] : null}
 											onChange={updateFilter(field.name)}
 											onKeyDown={applyFilterEnter(field.name)}
 											disabled={syncing}
 										/>
 									</td>
-									<td className={cellClass}>
+									<td className={cellTableClass}>
 										<div className="relative pa1 row" tabIndex="0">
 											<div className="truncate-ns field">{field.name}</div>
 											<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip br2">{field.name}</span>
@@ -659,7 +712,7 @@ export default function Table({
 									</td>
 									{data.map(function (item) {
 										return (
-											<td align="left" key={`${item[header.primary_key]}.${field}`} className={cellClass}>
+											<td align="left" key={`${item[header.primary_key]}.${field}`} className={cellEntityClass}>
 												<div className="relative pa1 row" tabIndex="0">
 													<div className="truncate-ns">{item[field.name]}</div>
 													<span className="dn bg-washed-green mw9 w5 top-0 left-0 pa1 absolute f4 tooltip">{item[field.name]}</span>
@@ -667,8 +720,8 @@ export default function Table({
 											</td>
 										);
 									})}
-									<td className={cellClass}>
-										<Input field={field} className="w-100 br2 ba bw1" value={createItem[field.name]} onChange={updateCreateItem(field.name)} disabled={submitCreate} />
+									<td className={cellTableClass}>
+										<Input field={field} className={tableInputClass} value={createItem[field.name]} onChange={updateCreateItem(field.name)} disabled={submitCreate} />
 									</td>
 								</tr>
 							);
@@ -676,8 +729,8 @@ export default function Table({
 					</tbody>
 					<tfoot className="mw-100">
 						<tr align="right" className="">
-							<th align="center" className={cellClass}></th>
-							<th className={cellClass}>
+							<th align="center" className={cellTableClass}></th>
+							<th className={cellTableClass}>
 								<div className="relative pa1 row" tabIndex="0">
 									<div className="truncate-ns">RELATIONSHIPS</div>
 									<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">RELATIONSHIPS</span>
@@ -685,11 +738,13 @@ export default function Table({
 							</th>
 							{data.map(function (item) {
 								return (
-									<th key={item[header.primary_key]} align="center" className={cellClass}>
+									<th key={item[header.primary_key]} align="center" className={cellEntityClass}>
 										<div className="flex justify-center pa1">
 											<div className="flex relative row" tabIndex="0">
 												{/*<button className="w3 truncate-ns relationship">TO</button>*/}
-												<button className={`relationship w3 truncate-ns ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c} br2 ba`}>TO</button>
+												<button className={`relationship ${tableButtonClass}`}>
+													<div className="w3 truncate-ns">TO</div>
+												</button>
 												<span className="dn bg-washed-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
 													<div className="">TO</div>
 													{header.relationships_to.map(function (to) {
@@ -755,7 +810,7 @@ export default function Table({
 									</th>
 								);
 							})}
-							<th align="center" className={cellClass}></th>
+							<th align="center" className={cellTableClass}></th>
 						</tr>
 					</tfoot>
 				</table>
