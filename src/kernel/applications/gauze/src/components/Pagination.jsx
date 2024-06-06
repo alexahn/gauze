@@ -100,7 +100,7 @@ function paginationItems({
 	return items;
 }
 
-export default function Pagination({ page, count, href, handleClick, reverse }) {
+export default function Pagination({ page, count, href, handleClick, reverse, buttonClass }) {
 	// generate an array of items to render
 	// pass the items to the renderOption function
 	const items = paginationItems({
@@ -123,6 +123,7 @@ export default function Pagination({ page, count, href, handleClick, reverse }) 
 								<a href={href(item)}>
 									<button
 										type="button"
+										className={buttonClass}
 										style={{
 											fontWeight: selected ? "bold" : undefined,
 										}}
@@ -136,6 +137,7 @@ export default function Pagination({ page, count, href, handleClick, reverse }) 
 							children = (
 								<button
 									type="button"
+									className={buttonClass}
 									style={{
 										fontWeight: selected ? "bold" : undefined,
 									}}
@@ -149,6 +151,7 @@ export default function Pagination({ page, count, href, handleClick, reverse }) 
 							children = (
 								<button
 									type="button"
+									className={buttonClass}
 									style={{
 										fontWeight: selected ? "bold" : undefined,
 									}}
@@ -162,20 +165,20 @@ export default function Pagination({ page, count, href, handleClick, reverse }) 
 						if (href) {
 							children = (
 								<a href={href(item)}>
-									<button type="button" {...rest}>
+									<button type="button" className={buttonClass} {...rest}>
 										{type === "previous" ? (reverse ? ">" : "<") : type === "next" ? (reverse ? "<" : ">") : type}
 									</button>
 								</a>
 							);
 						} else if (handleClick) {
 							children = (
-								<button type="button" onClick={handleClick(item)} {...rest}>
+								<button type="button" onClick={handleClick(item)} className={buttonClass} {...rest}>
 									{type === "previous" ? (reverse ? ">" : "<") : type === "next" ? (reverse ? "<" : ">") : type}
 								</button>
 							);
 						} else {
 							children = (
-								<button type="button" {...rest}>
+								<button type="button" className={buttonClass} {...rest}>
 									{type === "previous" ? (reverse ? ">" : "<") : type === "next" ? (reverse ? "<" : ">") : type}
 								</button>
 							);

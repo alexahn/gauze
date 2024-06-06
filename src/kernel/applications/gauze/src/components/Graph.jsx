@@ -153,7 +153,7 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 		};
 	});
 	return (
-		<div className="graph debug-grid relative overflow-hidden mw-100 mh-100 h-100 w-100" ref={containerRef} onMouseDown={onMouseDown} onWheel={onWheel}>
+		<div className="graph relative overflow-hidden mw-100 mh-100 h-100 w-100" ref={containerRef} onMouseDown={onMouseDown} onWheel={onWheel}>
 			{nodesArray.map(function (node, index) {
 				const absolutePosition = abstractToAbsolute(node);
 				if (node.complete) {

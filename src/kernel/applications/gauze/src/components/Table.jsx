@@ -263,7 +263,10 @@ export default function Table({
 			},
 		},
 	};
-	const color = node.props.depth % 4 < 0 ? colors[(node.props.depth % 4) + 4] : colors[node.props.depth % 4];
+	const colorIndex = node.props.depth % 4 < 0 ? (node.props.depth % 4) + 4 : node.props.depth % 4;
+	const nextColorIndex = (colorIndex + 1) % 4;
+	const color = colors[colorIndex];
+	const nextColor = colors[nextColorIndex];
 
 	function updateFields(name) {
 		return function (e) {
@@ -410,7 +413,7 @@ export default function Table({
 	}
 
 	return (
-		<div className="mw-100 w-100 consolas">
+		<div className={`mw-100 w-100 consolas relative ${color.node.bd} ${color.node.bg} ${color.node.c} pa4 br4`}>
 			<h1 align="center">{header.graphql_meta_type}</h1>
 			<div className="absolute top-0 right-0 pa1">
 				{node.root ? null : link ? (
@@ -419,28 +422,30 @@ export default function Table({
 					</button>
 				) : null}
 			</div>
-			<hr />
+			{/*<hr />*/}
 			<div align="left" className="cf">
 				<div className="flex fl">
-					<Pagination page={page_current} count={page_max} handleClick={paginate} reverse={false} />
+					<Pagination page={page_current} count={page_max} handleClick={paginate} reverse={false} buttonClass={`ba br2 ${color.table.bg} ${color.table.bd} ${color.table.c}`} />
 				</div>
 			</div>
-			<hr />
+			{/*<hr />*/}
 			<div className="flex fr">
-				<table>
+				<table className={`${color.table.bd} ${color.table.bg} ${color.table.c} br3`}>
 					<thead className="mw-100">
 						<tr align="right" className="flex">
-							<th align="center" className="mw4 w4"></th>
-							<th className="mw4 w4 pa1 relative row" tabIndex="0">
-								<div className="truncate-ns">RELATIONSHIPS</div>
-								<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">RELATIONSHIPS</span>
+							<th align="center" className="mw4 w4 br2"></th>
+							<th className="mw4 w4 br2">
+								<div className="pa1 relative row" tabIndex="0">
+									<div className="truncate-ns">RELATIONSHIPS</div>
+									<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">RELATIONSHIPS</span>
+								</div>
 							</th>
 							{data.map(function (item) {
 								return (
-									<th key={item[header.primary_key]} align="center" className="mw4 w4 pa1">
-										<div className="flex justify-center">
+									<th key={item[header.primary_key]} align="center" className="mw4 w4 br2">
+										<div className="pa1 flex justify-center">
 											<div className="flex relative row" tabIndex="0">
-												<button className="w3 truncate-ns relationship">FROM</button>
+												<button className={`w3 truncate-ns relationship ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c} br2 ba`}>FROM</button>
 												<span className="dn bg-washed-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">
 													<div className="pa1">FROM</div>
 													{header.relationships_from.map(function (from) {

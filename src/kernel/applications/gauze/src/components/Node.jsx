@@ -229,7 +229,7 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 	// todo: remove render from here and define it inside of the connection props
 	return (
 		<div
-			className="node absolute shadow-1"
+			className="node flex absolute br4 shadow-2"
 			style={{
 				transform: `translate(${x}px, ${y}px) scale(${z})`,
 				visibility: node.render ? "visible" : "hidden",

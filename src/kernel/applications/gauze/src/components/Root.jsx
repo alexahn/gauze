@@ -136,6 +136,7 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 				connections={connections}
 				interaction={interaction}
 			/>
+			<div className="bgx12 mw-100 mh-100 h-100 w-100 fixed top-0 left-0" style={{ zIndex: -2 }} />
 		</div>
 	);
 }
