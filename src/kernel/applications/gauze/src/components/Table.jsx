@@ -396,7 +396,7 @@ export default function Table({
 				x: 8,
 				bgh: "bgx6h",
 				bdh: "bdx6h",
-				ch: "cx4h",
+				ch: "cxyz7h",
 				xh: 6,
 			},
 			/*
@@ -474,7 +474,7 @@ export default function Table({
 				x: 8,
 				bgh: "bgx6h",
 				bdh: "bdx6h",
-				ch: "cx4h",
+				ch: "cxyz7h",
 				xh: 6,
 			},
 		},

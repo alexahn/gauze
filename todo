@@ -616,7 +616,8 @@
 		[x] highlight edges that represent the nested relationship by changing their color to red
 	[ ] figure out how to handle z-index for relationship spans (so that the edges don't overlay the span)
 	[ ] update pagination to use chevron icons instead of carrots
-	[ ] add hover classes to indicate interactive elements
+	[x] add hover classes to indicate interactive elements
+	[ ] add active classes to indicate interaction consequence
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages
