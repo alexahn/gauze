@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useLayoutEffect, useRef } from "react";
 
-export default function Connection({ agentHeader, route, dataX, dataY, graph, nodes, edges, connections, node, connection, gauze, model, router }) {
+export default function Connection({ agentHeader, route, dataX, dataY, graph, nodes, edges, connections, node, connection, gauze, model, router, buttonClass, buttonSpanClass, spanClass }) {
 	const containerRef = useRef();
 	useLayoutEffect(function () {
 		if (node.render && (connection.x === null || connection.y === null)) {
@@ -20,7 +20,19 @@ export default function Connection({ agentHeader, route, dataX, dataY, graph, no
 	/*<div ref={containerRef} className="absolute top-0 pa1" style={{"visibility": "hidden"}}>*/
 	return (
 		<div ref={containerRef} className="connection" data-id={connection.id} data-x={connection.x} data-y={connection.y}>
-			<connection.component agentHeader={agentHeader} route={route} nodes={nodes} edges={edges} connections={connections} node={node} connection={connection} {...connection.props} />
+			<connection.component
+				agentHeader={agentHeader}
+				route={route}
+				nodes={nodes}
+				edges={edges}
+				connections={connections}
+				node={node}
+				connection={connection}
+				buttonClass={buttonClass}
+				buttonSpanClass={buttonSpanClass}
+				spanClass={spanClass}
+				{...connection.props}
+			/>
 		</div>
 	);
 }

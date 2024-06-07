@@ -448,13 +448,21 @@ export default function Table({
 		},
 	};
 	const colorIndex = node.props.depth % 4 < 0 ? (node.props.depth % 4) + 4 : node.props.depth % 4;
+	const prevColorIndex = colorIndex - 1 < 0 ? ((colorIndex - 1) % 4) + 4 : colorIndex - 1;
+	const prevPrevColorIndex = prevColorIndex - 1 < 0 ? ((prevColorIndex - 1) % 4) + 4 : prevColorIndex - 1;
 	const nextColorIndex = (colorIndex + 1) % 4;
+	const nextNextColorIndex = (nextColorIndex + 1) % 4;
 	const color = colors[colorIndex];
+	const prevColor = colors[prevColorIndex];
+	const prevPrevColor = colors[prevPrevColorIndex];
 	const nextColor = colors[nextColorIndex];
+	const nextNextColor = colors[nextNextColorIndex];
 
 	const cellClass = "mw4 w4 br2";
 	const buttonClass = `ba br2 ${color.table.bd} ${color.table.bg} ${color.table.c}`;
+	const buttonPaginationClass = `${buttonClass} mr1`;
 	const buttonTableClass = `ba br2 ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c}`;
+	const buttonBlackClass = `ba br2 bgx2 bdx2 cx12`;
 	const buttonSpanClass = `mw5 w-100 truncate-ns ba bw1 br2 ${nextColor.node.bd} ${nextColor.table.bg} ${nextColor.table.c}`;
 	const cellInputClass = `${cellClass} ${color.node.bg} ${color.node.bd}`;
 	const cellInputClass2 = `${cellClass} ${color.node.bg} bdx${color.table.x - 1} bw1`;
@@ -462,26 +470,30 @@ export default function Table({
 	const cellEntityClass = `${cellClass} ${nextColor.node.bg} ${nextColor.node.bd} ${nextColor.node.c}`;
 	const inputTableClass = `w-100 br2 ba bw1 ${color.node.bd} ${color.node.bg} ${color.node.c}`;
 	const spanTableClass = `dn mw9 w6 top-0 right-0 pa1 absolute f4 tooltip ${color.node.bg} bdx2 ${color.node.c} bw1 ba br2`;
-	// dn bg-washed-green mw9 w5 top-0 left-0 pa1 absolute f4 tooltip
 	const spanEntityClass = `dn mw5 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.node.x - 1} bdx${nextColor.node.x - 1} cx${nextColor.node.x === 6 ? nextColor.node.x + 2 : nextColor.node.x + 1} bw1 ba br2`;
 	const spanButtonClass = `dn mw5 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.table.x - 1} bdx${nextColor.table.x - 1} cx${nextColor.table.x === 6 ? nextColor.table.x + 2 : nextColor.table.x + 1} br2`;
 	const spanButtonLongClass = `dn mw9 w6 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.table.x - 1} bdx${nextColor.table.x - 1} cx${nextColor.table.x === 6 ? nextColor.table.x + 2 : nextColor.table.x + 1} br2`;
-	// dn bg-washed-green mw9 w6 top-0 left-0 pa1 absolute f4 tooltip cf
+	const buttonConnectionToClass = `ba br2 ${prevPrevColor.table.bd} ${prevPrevColor.table.bg} ${prevPrevColor.table.c}`;
+	const buttonSpanConnectionToClass = `ba br2 w-100 mw5 ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c}`;
+	const spanConnectionToClass = `dn mw9 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${prevPrevColor.table.x - 1} bdx${prevPrevColor.table.x - 1} cx${prevPrevColor.table.x === 6 ? prevPrevColor.table.x + 2 : prevPrevColor.table.x + 1} bw1 ba br2`;
+	const buttonConnectionFromClass = `ba br2 ${nextNextColor.node.bd} ${nextNextColor.node.bg} ${nextNextColor.node.c}`;
+	const buttonSpanConnectionFromClass = `ba br2 w-100 mw5 ${prevColor.table.bd} ${prevColor.table.bg} ${prevColor.table.c}`;
+	const spanConnectionFromClass = `dn mw9 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextNextColor.node.x - 1} bdx${nextNextColor.node.x - 1} cx${nextNextColor.node.x === 6 ? nextNextColor.node.x + 2 : nextNextColor.node.x + 1} bw1 ba br2`;
 
 	return (
 		<div className={`mw-100 w-100 consolas relative ${color.node.bd} ${color.node.bg} ${color.node.c} pa4 br4`}>
 			<h1 align="center">{header.graphql_meta_type}</h1>
-			<div className="absolute top-0 right-0 pa1">
-				{node.root ? null : link ? (
-					<button onClick={handleClose}>
+			{node.root ? null : link ? (
+				<div className="absolute top-1 right-1">
+					<button className={buttonClass} onClick={handleClose}>
 						<Cross1Icon />
 					</button>
-				) : null}
-			</div>
+				</div>
+			) : null}
 			{/*<hr />*/}
 			<div align="left" className="cf">
-				<div className="flex fl">
-					<Pagination page={page_current} count={page_max} handleClick={paginate} reverse={false} buttonClass={buttonClass} />
+				<div className="flex fl pb2">
+					<Pagination page={page_current} count={page_max} handleClick={paginate} reverse={false} buttonClass={buttonPaginationClass} />
 				</div>
 			</div>
 			{/*<hr />*/}
@@ -520,13 +532,13 @@ export default function Table({
 											</div>
 											{link ? (
 												<div
-													className="flex from-start from-end"
+													className="flex pl1 from-start from-end"
 													data-interaction="from_end"
 													data-node-id={node.id}
 													data-entity-id={item[header.primary_key]}
 													data-entity-type={header.graphql_meta_type}
 												>
-													<button>
+													<button className={buttonBlackClass}>
 														<PlusIcon />
 													</button>
 												</div>
@@ -557,10 +569,13 @@ export default function Table({
 															connections={connections}
 															node={node}
 															connection={connection}
+															buttonClass={buttonConnectionToClass}
+															buttonSpanClass={buttonSpanConnectionToClass}
+															spanClass={spanConnectionToClass}
 														/>
 														{link ? (
-															<div>
-																<button onClick={handleDeleteRelationship(connection)}>
+															<div className="flex pl1">
+																<button className={buttonTableClass} onClick={handleDeleteRelationship(connection)}>
 																	<MinusIcon />
 																</button>
 															</div>
@@ -660,9 +675,10 @@ export default function Table({
 												</button>
 												{/*<span className="dn bg-light-green mw5 w5 top-0 left-0 pa1 absolute f4 tooltip">*/}
 												<span className={spanButtonClass}>
+													<div className="pa1">BLACKLIST</div>
 													{header.methods.map(function (method) {
 														return (
-															<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "whitelist", where: whitelistWhere(method.name) })}>
+															<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "blacklist", where: blacklistWhere(method.name) })}>
 																<button className={buttonSpanClass}>{method.name}</button>
 															</a>
 														);
@@ -674,9 +690,10 @@ export default function Table({
 													<BookmarkFilledIcon />
 												</button>
 												<span className={spanButtonClass}>
+													<div className="pa1">WHITELIST</div>
 													{header.methods.map(function (method) {
 														return (
-															<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "blacklist", where: blacklistWhere(method.name) })}>
+															<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "whitelist", where: whitelistWhere(method.name) })}>
 																<button className={buttonSpanClass}>{method.name}</button>
 															</a>
 														);
@@ -780,13 +797,13 @@ export default function Table({
 											</div>
 											{link ? (
 												<div
-													className="flex to-start to-end"
+													className="flex pl1 to-start to-end"
 													data-interaction="to_end"
 													data-node-id={node.id}
 													data-entity-id={item[header.primary_key]}
 													data-entity-type={header.graphql_meta_type}
 												>
-													<button>
+													<button className={buttonBlackClass}>
 														<PlusIcon />
 													</button>
 												</div>
@@ -815,10 +832,13 @@ export default function Table({
 															connections={connections}
 															node={node}
 															connection={connection}
+															buttonClass={buttonConnectionFromClass}
+															buttonSpanClass={buttonSpanConnectionFromClass}
+															spanClass={spanConnectionFromClass}
 														/>
 														{link ? (
-															<div>
-																<button onClick={handleDeleteRelationship(connection)}>
+															<div className="flex pl1">
+																<button className={buttonTableClass} onClick={handleDeleteRelationship(connection)}>
 																	<MinusIcon />
 																</button>
 															</div>

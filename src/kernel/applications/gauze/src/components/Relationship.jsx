@@ -20,7 +20,7 @@ function absoluteToAbstract({ x, y, z, width, height }) {
 	};
 }
 
-export default function Relationship({ agentHeader, route, nodes, connections, edges, node, connection, gauze, model, router, graph }) {
+export default function Relationship({ agentHeader, route, nodes, connections, edges, node, connection, buttonClass, buttonSpanClass, spanClass, gauze, model, router, graph }) {
 	const activeNodes = graph.activeNodes(agentHeader.name);
 	const activeEdges = graph.activeEdges(agentHeader.name);
 	const activeConnections = graph.activeConnections(agentHeader.name);
@@ -74,11 +74,15 @@ export default function Relationship({ agentHeader, route, nodes, connections, e
 			const toConnection = activeConnections.object[edge.toConnectionID];
 			return (
 				<div className="relative row" tabIndex="0">
-					<div className="w3 truncate-ns">{toConnection.entityID}</div>
-					<span className="dn bg-washed-green mw9 w5 top-0 right-0 pa1 absolute f4 tooltip">
+					<button className={buttonClass}>
+						<div className="w3 truncate-ns">{toConnection.entityID}</div>
+					</button>
+					<span className={spanClass} style={{ zIndex: 4 }}>
 						<div>{toConnection.entityID}</div>
 						<div>
-							<button onClick={handleFocus(toConnection)}>Focus</button>
+							<button className={buttonSpanClass} onClick={handleFocus(toConnection)}>
+								Focus
+							</button>
 						</div>
 					</span>
 				</div>
@@ -87,11 +91,15 @@ export default function Relationship({ agentHeader, route, nodes, connections, e
 			const fromConnection = activeConnections.object[edge.fromConnectionID];
 			return (
 				<div className="relative row" tabIndex="0">
-					<div className="w3 truncate-ns">{fromConnection.entityID}</div>
-					<span className="dn bg-washed-green mw9 w5 top-0 right-0 pa1 absolute f4 tooltip">
+					<button className={buttonClass}>
+						<div className="w3 truncate-ns">{fromConnection.entityID}</div>
+					</button>
+					<span className={spanClass} style={{ zIndex: 4 }}>
 						<div>{fromConnection.entityID}</div>
 						<div>
-							<button onClick={handleFocus(fromConnection)}>Focus</button>
+							<button className={buttonSpanClass} onClick={handleFocus(fromConnection)}>
+								Focus
+							</button>
 						</div>
 					</span>
 				</div>

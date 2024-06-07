@@ -78,7 +78,7 @@
 	/* custom class variables here */
 }
 
-table,
+.type-item .type-list table,
 th,
 td {
 	border: 1px solid black;
@@ -88,7 +88,7 @@ td {
 .node table,
 th,
 td {
-	border: 1px solid black;
+	/*border: 1px solid black;*/
 	border-spacing: 15px;
 }
 

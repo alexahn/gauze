@@ -144,7 +144,7 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 		entity_type: header.table_name,
 	};
 	return (
-		<div className="mw-100 w-100">
+		<div className="type-item mw-100 w-100">
 			<h1 align="right">{header.graphql_meta_type}</h1>
 			<div align="right">Type Item</div>
 			<hr />
