@@ -364,6 +364,10 @@ export default function Table({
 				bd: "bdx11",
 				c: "cx7",
 				x: 11,
+				bgh: "bgx8h",
+				bdh: "bdx8h",
+				ch: "cx6h",
+				xh: 8,
 			},
 			/*
 			table: {
@@ -378,6 +382,10 @@ export default function Table({
 				bd: "bdx6",
 				c: "cxyz7",
 				x: 6,
+				bgh: "bgx4h",
+				bdh: "bdx4h",
+				ch: "cx6h",
+				xh: 4,
 			},
 		},
 		1: {
@@ -386,6 +394,10 @@ export default function Table({
 				bd: "bdx8",
 				c: "cx6",
 				x: 8,
+				bgh: "bgx6h",
+				bdh: "bdx6h",
+				ch: "cx4h",
+				xh: 6,
 			},
 			/*
 			table: {
@@ -400,6 +412,10 @@ export default function Table({
 				bd: "bdx4",
 				c: "cx6",
 				x: 4,
+				bgh: "bgx11h",
+				bdh: "bdx11h",
+				ch: "cx7h",
+				xh: 11,
 			},
 		},
 		2: {
@@ -408,6 +424,10 @@ export default function Table({
 				bd: "bdx6",
 				c: "cxyz7",
 				x: 6,
+				bgh: "bgx4h",
+				bdh: "bdx4h",
+				ch: "cx6h",
+				xh: 4,
 			},
 			/*
 			table: {
@@ -422,6 +442,10 @@ export default function Table({
 				bd: "bdx11",
 				c: "cx7",
 				x: 11,
+				bgh: "bgx8h",
+				bdh: "bdx8h",
+				ch: "cx6h",
+				xh: 8,
 			},
 		},
 		3: {
@@ -430,6 +454,10 @@ export default function Table({
 				bd: "bdx4",
 				c: "cx6",
 				x: 4,
+				bgh: "bgx11h",
+				bdh: "bdx11h",
+				ch: "cx7h",
+				xh: 11,
 			},
 			/*
 			table: {
@@ -444,6 +472,10 @@ export default function Table({
 				bd: "bdx8",
 				c: "cx6",
 				x: 8,
+				bgh: "bgx6h",
+				bdh: "bdx6h",
+				ch: "cx4h",
+				xh: 6,
 			},
 		},
 	};
@@ -459,25 +491,25 @@ export default function Table({
 	const nextNextColor = colors[nextNextColorIndex];
 
 	const cellClass = "mw4 w4 br2";
-	const buttonClass = `ba br2 ${color.table.bd} ${color.table.bg} ${color.table.c}`;
+	const buttonClass = `ba br2 ${color.table.bd} ${color.table.bg} ${color.table.c} ${color.table.bdh} ${color.table.bgh} ${color.table.ch}`;
 	const buttonPaginationClass = `${buttonClass} mr1`;
-	const buttonTableClass = `ba br2 ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c}`;
-	const buttonBlackClass = `ba br2 bgx2 bdx2 cx12`;
-	const buttonSpanClass = `mw5 w-100 truncate-ns ba bw1 br2 ${nextColor.node.bd} ${nextColor.table.bg} ${nextColor.table.c}`;
-	const cellInputClass = `${cellClass} ${color.node.bg} ${color.node.bd}`;
+	const buttonTableClass = `ba br2 ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c} ${nextColor.table.bdh} ${nextColor.table.bgh} ${nextColor.table.ch}`;
+	const buttonBlackClass = `ba br2 bgx2 bdx2 cx12 bgx12h bdx12h cx2h`;
+	const buttonSpanClass = `mw5 w-100 truncate-ns ba bw1 br2 ${nextColor.node.bd} ${nextColor.table.bg} ${nextColor.table.c} ${nextColor.node.bdh} ${nextColor.table.bgh} ${nextColor.table.ch}`;
+	const cellInputClass = `${cellClass} ${color.node.bg} ${color.node.bd} ${color.node.bgh} ${color.node.bdh} ${color.node.ch}`;
 	const cellInputClass2 = `${cellClass} ${color.node.bg} bdx${color.table.x - 1} bw1`;
 	const cellTableClass = `${cellClass} ${color.node.bg} ${color.node.bd} ${color.node.c}`;
 	const cellEntityClass = `${cellClass} ${nextColor.node.bg} ${nextColor.node.bd} ${nextColor.node.c}`;
-	const inputTableClass = `w-100 br2 ba bw1 ${color.node.bd} ${color.node.bg} ${color.node.c}`;
+	const inputTableClass = `w-100 br2 ba bw1 ${color.node.bd} ${color.node.bg} ${color.node.c} ${color.node.bdh} ${color.node.bgh} ${color.node.ch}`;
 	const spanTableClass = `dn mw9 w6 top-0 right-0 pa1 absolute f4 tooltip ${color.node.bg} bdx2 ${color.node.c} bw1 ba br2`;
 	const spanEntityClass = `dn mw5 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.node.x - 1} bdx${nextColor.node.x - 1} cx${nextColor.node.x === 6 ? nextColor.node.x + 2 : nextColor.node.x + 1} bw1 ba br2`;
 	const spanButtonClass = `dn mw5 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.table.x - 1} bdx${nextColor.table.x - 1} cx${nextColor.table.x === 6 ? nextColor.table.x + 2 : nextColor.table.x + 1} br2`;
 	const spanButtonLongClass = `dn mw9 w6 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.table.x - 1} bdx${nextColor.table.x - 1} cx${nextColor.table.x === 6 ? nextColor.table.x + 2 : nextColor.table.x + 1} br2`;
-	const buttonConnectionToClass = `ba br2 ${prevPrevColor.table.bd} ${prevPrevColor.table.bg} ${prevPrevColor.table.c}`;
-	const buttonSpanConnectionToClass = `ba br2 w-100 mw5 ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c}`;
+	const buttonConnectionToClass = `ba br2 ${prevPrevColor.table.bd} ${prevPrevColor.table.bg} ${prevPrevColor.table.c} ${prevPrevColor.table.bdh} ${prevPrevColor.table.bgh} ${prevPrevColor.table.ch}`;
+	const buttonSpanConnectionToClass = `ba br2 w-100 mw5 ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c} ${nextColor.table.bdh} ${nextColor.table.bgh} ${nextColor.table.ch}`;
 	const spanConnectionToClass = `dn mw9 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${prevPrevColor.table.x - 1} bdx${prevPrevColor.table.x - 1} cx${prevPrevColor.table.x === 6 ? prevPrevColor.table.x + 2 : prevPrevColor.table.x + 1} bw1 ba br2`;
-	const buttonConnectionFromClass = `ba br2 ${nextNextColor.node.bd} ${nextNextColor.node.bg} ${nextNextColor.node.c}`;
-	const buttonSpanConnectionFromClass = `ba br2 w-100 mw5 ${prevColor.table.bd} ${prevColor.table.bg} ${prevColor.table.c}`;
+	const buttonConnectionFromClass = `ba br2 ${nextNextColor.node.bd} ${nextNextColor.node.bg} ${nextNextColor.node.c} ${nextNextColor.node.bdh} ${nextNextColor.node.bgh} ${nextNextColor.node.ch}`;
+	const buttonSpanConnectionFromClass = `ba br2 w-100 mw5 ${prevColor.table.bd} ${prevColor.table.bg} ${prevColor.table.c} ${prevColor.table.bdh} ${prevColor.table.bgh} ${prevColor.table.ch}`;
 	const spanConnectionFromClass = `dn mw9 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextNextColor.node.x - 1} bdx${nextNextColor.node.x - 1} cx${nextNextColor.node.x === 6 ? nextNextColor.node.x + 2 : nextNextColor.node.x + 1} bw1 ba br2`;
 
 	return (

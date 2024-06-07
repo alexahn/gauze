@@ -202,6 +202,43 @@ table .truncate-ns {
 	color: var(--xyz12);
 }
 
+.cxyz1h:hover {
+	color: var(--xyz1);
+}
+.cxyz2h:hover {
+	color: var(--xyz2);
+}
+.cxyz3h:hover {
+	color: var(--xyz3);
+}
+.cxyz4h:hover {
+	color: var(--xyz4);
+}
+.cxyz5h:hover {
+	color: var(--xyz5);
+}
+.cxyz6h:hover {
+	color: var(--xyz6);
+}
+.cxyz7h:hover {
+	color: var(--xyz7);
+}
+.cxyz8h:hover {
+	color: var(--xyz8);
+}
+.cxyz9h:hover {
+	color: var(--xyz9);
+}
+.cxyz10h:hover {
+	color: var(--xyz10);
+}
+.cxyz11h:hover {
+	color: var(--xyz11);
+}
+.cxyz12h:hover {
+	color: var(--xyz12);
+}
+
 .bgxyz1 {
 	background-color: var(--xyz1);
 }
@@ -239,6 +276,43 @@ table .truncate-ns {
 	background-color: var(--xyz12);
 }
 
+.bgxyz1h:hover {
+	background-color: var(--xyz1);
+}
+.bgxyz2h:hover {
+	background-color: var(--xyz2);
+}
+.bgxyz3h:hover {
+	background-color: var(--xyz3);
+}
+.bgxyz4h:hover {
+	background-color: var(--xyz4);
+}
+.bgxyz5h:hover {
+	background-color: var(--xyz5);
+}
+.bgxyz6h:hover {
+	background-color: var(--xyz6);
+}
+.bgxyz7h:hover {
+	background-color: var(--xyz7);
+}
+.bgxyz8h:hover {
+	background-color: var(--xyz8);
+}
+.bgxyz9h:hover {
+	background-color: var(--xyz9);
+}
+.bgxyz10h:hover {
+	background-color: var(--xyz10);
+}
+.bgxyz11h:hover {
+	background-color: var(--xyz11);
+}
+.bgxyz12h:hover {
+	background-color: var(--xyz12);
+}
+
 .bdxyz1 {
 	border-color: var(--xyz1);
 }
@@ -273,6 +347,43 @@ table .truncate-ns {
 	border-color: var(--xyz11);
 }
 .bdxyz12 {
+	border-color: var(--xyz12);
+}
+
+.bdxyz1h:hover {
+	border-color: var(--xyz1);
+}
+.bdxyz2h:hover {
+	border-color: var(--xyz2);
+}
+.bdxyz3h:hover {
+	border-color: var(--xyz3);
+}
+.bdxyz4h:hover {
+	border-color: var(--xyz4);
+}
+.bdxyz5h:hover {
+	border-color: var(--xyz5);
+}
+.bdxyz6h:hover {
+	border-color: var(--xyz6);
+}
+.bdxyz7h:hover {
+	border-color: var(--xyz7);
+}
+.bdxyz8h:hover {
+	border-color: var(--xyz8);
+}
+.bdxyz9h:hover {
+	border-color: var(--xyz9);
+}
+.bdxyz10h:hover {
+	border-color: var(--xyz10);
+}
+.bdxyz11h:hover {
+	border-color: var(--xyz11);
+}
+.bdxyz12h:hover {
 	border-color: var(--xyz12);
 }
 
@@ -315,6 +426,43 @@ table .truncate-ns {
 	color: var(--x12);
 }
 
+.cx1h:hover {
+	color: var(--x1);
+}
+.cx2h:hover {
+	color: var(--x2);
+}
+.cx3h:hover {
+	color: var(--x3);
+}
+.cx4h:hover {
+	color: var(--x4);
+}
+.cx5h:hover {
+	color: var(--x5);
+}
+.cx6h:hover {
+	color: var(--x6);
+}
+.cx7h:hover {
+	color: var(--x7);
+}
+.cx8h:hover {
+	color: var(--x8);
+}
+.cx9h:hover {
+	color: var(--x9);
+}
+.cx10h:hover {
+	color: var(--x10);
+}
+.cx11h:hover {
+	color: var(--x11);
+}
+.cx12h:hover {
+	color: var(--x12);
+}
+
 .bgx1 {
 	background-color: var(--x1);
 }
@@ -349,6 +497,43 @@ table .truncate-ns {
 	background-color: var(--x11);
 }
 .bgx12 {
+	background-color: var(--x12);
+}
+
+.bgx1h:hover {
+	background-color: var(--x1);
+}
+.bgx2h:hover {
+	background-color: var(--x2);
+}
+.bgx3h:hover {
+	background-color: var(--x3);
+}
+.bgx4h:hover {
+	background-color: var(--x4);
+}
+.bgx5h:hover {
+	background-color: var(--x5);
+}
+.bgx6h:hover {
+	background-color: var(--x6);
+}
+.bgx7h:hover {
+	background-color: var(--x7);
+}
+.bgx8h:hover {
+	background-color: var(--x8);
+}
+.bgx9h:hover {
+	background-color: var(--x9);
+}
+.bgx10h:hover {
+	background-color: var(--x10);
+}
+.bgx11h:hover {
+	background-color: var(--x11);
+}
+.bgx12h:hover {
 	background-color: var(--x12);
 }
 
@@ -389,6 +574,42 @@ table .truncate-ns {
 	border-color: var(--x12);
 }
 
+.bdx1h:hover {
+	border-color: var(--x1);
+}
+.bdx2h:hover {
+	border-color: var(--x2);
+}
+.bdx3h:hover {
+	border-color: var(--x3);
+}
+.bdx4h:hover {
+	border-color: var(--x4);
+}
+.bdx5h:hover {
+	border-color: var(--x5);
+}
+.bdx6h:hover {
+	border-color: var(--x6);
+}
+.bdx7h:hover {
+	border-color: var(--x7);
+}
+.bdx8h:hover {
+	border-color: var(--x8);
+}
+.bdx9h:hover {
+	border-color: var(--x9);
+}
+.bdx10h:hover {
+	border-color: var(--x10);
+}
+.bdx11h:hover {
+	border-color: var(--x11);
+}
+.bdx12h:hover {
+	border-color: var(--x12);
+}
 /* y */
 
 .cy1 {

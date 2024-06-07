@@ -1,6 +1,8 @@
 import React from "react";
 import { useState } from "react";
 
+import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+
 function paginationItems({
 	showFirstButton = false,
 	showLastButton = false,
@@ -108,9 +110,11 @@ export default function Pagination({ page, count, href, handleClick, reverse, bu
 		count: count,
 		reverse: reverse,
 	});
+	const chevronWidth = 15;
+	const chevronHeight = 15;
 	return (
 		<nav>
-			<div className="flex pa1">
+			<div className="flex pa1 items-center">
 				{items.map((item, index) => {
 					const { page, type, selected, ...rest } = item;
 					let children = null;
@@ -167,6 +171,7 @@ export default function Pagination({ page, count, href, handleClick, reverse, bu
 								<a href={href(item)}>
 									<button type="button" className={buttonClass} {...rest}>
 										{type === "previous" ? (reverse ? ">" : "<") : type === "next" ? (reverse ? "<" : ">") : type}
+										{/*{type === "previous" ? (reverse ? <ChevronRightIcon /> : <ChevronLeftIcon />) : type === "next" ? (reverse ? <ChevronLeftIcon /> : <ChevronRightIcon />) : type} */}
 									</button>
 								</a>
 							);
@@ -174,6 +179,7 @@ export default function Pagination({ page, count, href, handleClick, reverse, bu
 							children = (
 								<button type="button" onClick={handleClick(item)} className={buttonClass} {...rest}>
 									{type === "previous" ? (reverse ? ">" : "<") : type === "next" ? (reverse ? "<" : ">") : type}
+									{/* {type === "previous" ? (reverse ? <ChevronRightIcon /> : <ChevronLeftIcon />) : type === "next" ? (reverse ? <ChevronLeftIcon /> : <ChevronRightIcon />) : type} */}
 								</button>
 							);
 						} else {
