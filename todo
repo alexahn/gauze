@@ -611,7 +611,9 @@
 		[x] shapes
 		[ ] interactivity
 	[x] color the graph ui using the minimum design language
-	[ ] make parent visible from table (to know which relationship the table is representing)
+	[x] make parent visible from table (to know which relationship the table is representing)
+		[x] add from and to identifier information to top left corner of the table
+		[x] highlight edges that represent the nested relationship by changing their color to red
 	[ ] figure out how to handle z-index for relationship spans (so that the edges don't overlay the span)
 	[ ] update pagination to use chevron icons instead of carrots
 	[ ] add hover classes to indicate interactive elements

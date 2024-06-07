@@ -483,6 +483,11 @@ export default function Table({
 	return (
 		<div className={`mw-100 w-100 consolas relative ${color.node.bd} ${color.node.bg} ${color.node.c} pa4 br4`}>
 			<h1 align="center">{header.graphql_meta_type}</h1>
+			{node.props.from ? (
+				<div className="absolute top-1 left-1">{`From: ${node.props.from._metadata.id}`}</div>
+			) : node.props.to ? (
+				<div className="absolute top-1 left-1">{`To:  ${node.props.to._metadata.id}`}</div>
+			) : null}
 			{node.root ? null : link ? (
 				<div className="absolute top-1 right-1">
 					<button className={buttonClass} onClick={handleClose}>
