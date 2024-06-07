@@ -505,7 +505,6 @@ export default function Table({
 							<th className={cellTableClass}>
 								<div className="pa1 relative row" tabIndex="0">
 									<div className="truncate-ns">RELATIONSHIPS</div>
-									{/*<span className="dn bg-light-green mw9 w6 top-0 right-0 pa1 absolute f4 tooltip cf">RELATIONSHIPS</span>*/}
 									<span className={spanTableClass}>RELATIONSHIPS</span>
 								</div>
 							</th>
@@ -673,7 +672,6 @@ export default function Table({
 												<button className={buttonTableClass}>
 													<BookmarkIcon />
 												</button>
-												{/*<span className="dn bg-light-green mw5 w5 top-0 left-0 pa1 absolute f4 tooltip">*/}
 												<span className={spanButtonClass}>
 													<div className="pa1">BLACKLIST</div>
 													{header.methods.map(function (method) {
@@ -704,7 +702,6 @@ export default function Table({
 												<button className={buttonTableClass}>
 													<Share1Icon />
 												</button>
-												{/*<span className="dn bg-light-green mw6 w6 top-0 left-0 pa1 absolute f9 tooltip">{JSON.stringify(share)}</span>*/}
 												<span align="left" className={spanButtonLongClass}>
 													{JSON.stringify(share)}
 												</span>
@@ -778,7 +775,6 @@ export default function Table({
 									<th key={item[header.primary_key]} align="center" className={cellEntityClass}>
 										<div className="flex justify-center pa1">
 											<div className="flex relative row" tabIndex="0">
-												{/*<button className="w3 truncate-ns relationship">TO</button>*/}
 												<button className={`relationship ${buttonTableClass}`}>
 													<div className="w3 truncate-ns">TO</div>
 												</button>

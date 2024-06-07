@@ -1,13 +1,6 @@
 import React from "react";
 import { useState } from "react";
 
-function abstractToAbsolute({ x, y, z, width, height }) {
-	return {
-		x: x + (1 - z) * (width / 2),
-		y: y + (1 - z) * (height / 2),
-		z: z,
-	};
-}
 function absoluteToAbstract({ x, y, z, width, height }) {
 	return {
 		/*

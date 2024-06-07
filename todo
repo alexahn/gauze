@@ -613,6 +613,8 @@
 	[x] color the graph ui using the minimum design language
 	[ ] make parent visible from table (to know which relationship the table is representing)
 	[ ] figure out how to handle z-index for relationship spans (so that the edges don't overlay the span)
+	[ ] update pagination to use chevron icons instead of carrots
+	[ ] add hover classes to indicate interactive elements
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages

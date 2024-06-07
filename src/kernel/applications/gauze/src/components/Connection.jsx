@@ -17,7 +17,6 @@ export default function Connection({ agentHeader, route, dataX, dataY, graph, no
 			graph.initializeConnections([initialized]);
 		}
 	});
-	/*<div ref={containerRef} className="absolute top-0 pa1" style={{"visibility": "hidden"}}>*/
 	return (
 		<div ref={containerRef} className="connection" data-id={connection.id} data-x={connection.x} data-y={connection.y}>
 			<connection.component
