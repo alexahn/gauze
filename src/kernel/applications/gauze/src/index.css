@@ -116,13 +116,21 @@ th {
 	direction: rtl;
 }
 
+.entity {
+	direction: ltr;
+}
+
+.edge {
+	pointer-events: none;
+}
+
 table .truncate-ns {
 	padding-left: 1px;
 }
 
 .row:focus .tooltip {
 	display: block;
-	border: 1px solid black;
+	/*border: 1px solid black;*/
 	z-index: 1;
 }
 
