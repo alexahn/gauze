@@ -85,6 +85,13 @@ td {
 	border-spacing: 1px;
 }
 
+/* trying to prevent font blur */
+/*
+.node {
+	-webkit-font-smoothing: subpixel-antialiased;
+}
+*/
+
 .node table,
 th,
 td {

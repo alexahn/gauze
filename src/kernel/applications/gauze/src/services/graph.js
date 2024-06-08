@@ -31,6 +31,14 @@ class GraphService {
 			activeEdges: {},
 			nodeConnections: {},
 		};
+		this.isPanning = false;
+		this.isZooming = false;
+		this.isDragging = false;
+		this.debounce = {
+			zooming: {},
+			panning: {},
+			dragging: {},
+		};
 	}
 	root(type) {
 		const self = this;
@@ -754,6 +762,81 @@ class GraphService {
 		const self = this;
 		delete self.interaction;
 		return self.interaction;
+	}
+	getPanning() {
+		return this.isPanning;
+	}
+	setPanning(panning) {
+		this.isPanning = panning;
+		if (this.debounce.panning && this.debounce.panning.timer) {
+			clearTimeout(this.debounce.panning.timer);
+		}
+	}
+	debounceSetPanning(panning, delay) {
+		const self = this;
+		if (self.debounce.panning.timer) {
+			clearTimeout(self.debounce.panning.timer);
+			if (self.debounce.panning.value !== panning) {
+				self.setPanning(self.debounce.panning.value);
+			}
+		}
+		const timer = setTimeout(function () {
+			self.setPanning(panning);
+		}, delay);
+		self.debounce.panning = {
+			timer: timer,
+			value: panning,
+		};
+	}
+	getZooming() {
+		return this.isZooming;
+	}
+	setZooming(zooming) {
+		this.isZooming = zooming;
+		if (this.debounce.zooming && this.debounce.zooming.timer) {
+			clearTimeout(this.debounce.zooming.timer);
+		}
+	}
+	debounceSetZooming(zooming, delay) {
+		const self = this;
+		if (self.debounce.zooming.timer) {
+			clearTimeout(self.debounce.zooming.timer);
+			if (self.debounce.zooming.value !== zooming) {
+				self.setZooming(self.debounce.zooming.value);
+			}
+		}
+		const timer = setTimeout(function () {
+			self.setZooming(zooming);
+		}, delay);
+		self.debounce.zooming = {
+			timer: timer,
+			value: zooming,
+		};
+	}
+	getDragging() {
+		return this.isDragging;
+	}
+	setDragging(dragging) {
+		this.isDragging = dragging;
+		if (this.debounce.dragging && this.debounce.dragging.timer) {
+			clearTimeout(this.debounce.dragging.timer);
+		}
+	}
+	debounceSetDragging(dragging, delay) {
+		const self = this;
+		if (self.debounce.dragging.timer) {
+			clearTimeout(self.debounce.dragging.timer);
+			if (self.debounce.dragging.value !== dragging) {
+				self.setDragging(self.debounce.dragging.value);
+			}
+		}
+		const timer = setTimeout(function () {
+			self.setDragging(dragging);
+		}, delay);
+		self.debounce.dragging = {
+			timer: timer,
+			value: dragging,
+		};
 	}
 }
 

@@ -21,6 +21,13 @@ export default function Table({
 	edges,
 	connections,
 	node,
+	graphZooming,
+	graphPanning,
+	graphDragging,
+	skeletonZooming,
+	skeletonPanning,
+	skeletonDragging,
+	durationSkeleton,
 	gauze,
 	model,
 	router,
@@ -511,148 +518,148 @@ export default function Table({
 	const buttonConnectionFromClass = `ba br2 ${nextNextColor.node.bd} ${nextNextColor.node.bg} ${nextNextColor.node.c} ${nextNextColor.node.bdh} ${nextNextColor.node.bgh} ${nextNextColor.node.ch}`;
 	const buttonSpanConnectionFromClass = `ba br2 w-100 mw5 ${prevColor.table.bd} ${prevColor.table.bg} ${prevColor.table.c} ${prevColor.table.bdh} ${prevColor.table.bgh} ${prevColor.table.ch}`;
 	const spanConnectionFromClass = `dn mw9 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextNextColor.node.x - 1} bdx${nextNextColor.node.x - 1} cx${nextNextColor.node.x === 6 ? nextNextColor.node.x + 2 : nextNextColor.node.x + 1} bw1 ba br2`;
-
-	return (
-		<div className={`mw-100 w-100 consolas relative ${color.node.bd} ${color.node.bg} ${color.node.c} pa4 br4`}>
-			<h1 align="center">{header.graphql_meta_type}</h1>
-			{node.props.from ? (
-				<div className="absolute top-1 left-1">{`From: ${node.props.from._metadata.id}`}</div>
-			) : node.props.to ? (
-				<div className="absolute top-1 left-1">{`To:  ${node.props.to._metadata.id}`}</div>
-			) : null}
-			{node.root ? null : link ? (
-				<div className="absolute top-1 right-1">
-					<button className={buttonClass} onClick={handleClose}>
-						<Cross1Icon />
-					</button>
+	function renderTable() {
+		return (
+			<div className={`node-component mw-100 w-100 consolas relative ${color.node.bd} ${color.node.bg} ${color.node.c} pa4 br4`}>
+				<h1 align="center">{header.graphql_meta_type}</h1>
+				{node.props.from ? (
+					<div className="absolute top-1 left-1">{`From: ${node.props.from._metadata.id}`}</div>
+				) : node.props.to ? (
+					<div className="absolute top-1 left-1">{`To:  ${node.props.to._metadata.id}`}</div>
+				) : null}
+				{node.root ? null : link ? (
+					<div className="absolute top-1 right-1">
+						<button className={buttonClass} onClick={handleClose}>
+							<Cross1Icon />
+						</button>
+					</div>
+				) : null}
+				{/*<hr />*/}
+				<div align="left" className="cf">
+					<div className="flex fl pb2">
+						<Pagination page={page_current} count={page_max} handleClick={paginate} reverse={false} buttonClass={buttonPaginationClass} />
+					</div>
 				</div>
-			) : null}
-			{/*<hr />*/}
-			<div align="left" className="cf">
-				<div className="flex fl pb2">
-					<Pagination page={page_current} count={page_max} handleClick={paginate} reverse={false} buttonClass={buttonPaginationClass} />
-				</div>
-			</div>
-			{/*<hr />*/}
-			<div className="flex fr">
-				<table className={`${color.table.bd} ${color.table.bg} ${color.table.c} br3`}>
-					<thead className="mw-100">
-						<tr align="right" className="">
-							<th align="center" className={cellTableClass}></th>
-							<th className={cellTableClass}>
-								<div className="pa1 relative row" tabIndex="0">
-									<div className="truncate-ns">RELATIONSHIPS</div>
-									<span className={spanTableClass}>RELATIONSHIPS</span>
-								</div>
-							</th>
-							{data.map(function (item) {
-								return (
-									<th key={item[header.primary_key]} align="center" className={cellEntityClass}>
-										<div className="flex justify-center pa1">
-											<div className="flex relative row" tabIndex="0">
-												<button className={`relationship ${buttonTableClass}`}>
-													<div className="w3 truncate-ns">FROM</div>
-												</button>
-												<span className={spanButtonClass}>
-													<div className="pa1">FROM</div>
-													{header.relationships_from.map(function (from) {
-														return (
-															<div key={from} className="pa1">
-																<button className={buttonSpanClass} onClick={traverseFrom(header, item, from)}>
-																	{from}
-																</button>
-															</div>
-														);
-													})}
-												</span>
-											</div>
-											{link ? (
-												<div
-													className="flex pl1 from-start from-end"
-													data-interaction="from_end"
-													data-node-id={node.id}
-													data-entity-id={item[header.primary_key]}
-													data-entity-type={header.graphql_meta_type}
-												>
-													<button className={buttonBlackClass}>
-														<PlusIcon />
+				{/*<hr />*/}
+				<div className="flex fr">
+					<table className={`${color.table.bd} ${color.table.bg} ${color.table.c} br3`}>
+						<thead className="mw-100">
+							<tr align="right" className="">
+								<th align="center" className={cellTableClass}></th>
+								<th className={cellTableClass}>
+									<div className="pa1 relative row" tabIndex="0">
+										<div className="truncate-ns">RELATIONSHIPS</div>
+										<span className={spanTableClass}>RELATIONSHIPS</span>
+									</div>
+								</th>
+								{data.map(function (item) {
+									return (
+										<th key={item[header.primary_key]} align="center" className={cellEntityClass}>
+											<div className="flex justify-center pa1">
+												<div className="flex relative row" tabIndex="0">
+													<button className={`relationship ${buttonTableClass}`}>
+														<div className="w3 truncate-ns">FROM</div>
 													</button>
+													<span className={spanButtonClass}>
+														<div className="pa1">FROM</div>
+														{header.relationships_from.map(function (from) {
+															return (
+																<div key={from} className="pa1">
+																	<button className={buttonSpanClass} onClick={traverseFrom(header, item, from)}>
+																		{from}
+																	</button>
+																</div>
+															);
+														})}
+													</span>
 												</div>
-											) : null}
-										</div>
-										{node.props.connectionIDs.map(function (id) {
-											const connection = connections[id];
-											// note: for some reason we need an existence check here. maybe double check our rendering logic?
-											// note: possibly related to scaling the window?
-											if (
-												connection &&
-												connection.nodeID === node.id &&
-												connection.name === "to" &&
-												connection.entityID === item[header.primary_key] &&
-												connection.entityType === header.graphql_meta_type
-											) {
-												//const absolutePosition = absoluteToAbstract(connection);
-												return (
-													<div key={connection.id} className="flex justify-center pa1">
-														<Connection
-															agentHeader={agentHeader}
-															route={route}
-															dataX={connection.x}
-															dataY={connection.y}
-															graph={graph}
-															nodes={nodes}
-															edges={edges}
-															connections={connections}
-															node={node}
-															connection={connection}
-															buttonClass={buttonConnectionToClass}
-															buttonSpanClass={buttonSpanConnectionToClass}
-															spanClass={spanConnectionToClass}
-														/>
-														{link ? (
-															<div className="flex pl1">
-																<button className={buttonTableClass} onClick={handleDeleteRelationship(connection)}>
-																	<MinusIcon />
-																</button>
-															</div>
-														) : null}
+												{link ? (
+													<div
+														className="flex pl1 from-start from-end"
+														data-interaction="from_end"
+														data-node-id={node.id}
+														data-entity-id={item[header.primary_key]}
+														data-entity-type={header.graphql_meta_type}
+													>
+														<button className={buttonBlackClass}>
+															<PlusIcon />
+														</button>
 													</div>
-												);
-											} else {
-												return null;
-											}
-										})}
-									</th>
-								);
-							})}
-							<th align="center" className={cellTableClass}></th>
-						</tr>
-						<tr>
-							<th align="center" className={cellTableClass}>
-								<button className={buttonTableClass} onClick={applyFilterButton}>
-									Filter
-								</button>
-							</th>
-							<th className={cellTableClass}>
-								<div className="pa1 relative row" tabIndex="0">
-									<div>FIELDS</div>
-									<span className={spanTableClass}>
-										{header.fields.map(function (field) {
-											return (
-												<div key={`${field.name}.checkbox`} className="flex fr">
-													{field.name}
-													<input
-														type="checkbox"
-														defaultChecked={
-															localFields
-																? localFields.find(function (v) {
-																		return v.name === field.name;
-																	})
-																: true
-														}
-														onChange={updateFields(field.name)}
-													/>
-													{/*
+												) : null}
+											</div>
+											{node.props.connectionIDs.map(function (id) {
+												const connection = connections[id];
+												// note: for some reason we need an existence check here. maybe double check our rendering logic?
+												// note: possibly related to scaling the window?
+												if (
+													connection &&
+													connection.nodeID === node.id &&
+													connection.name === "to" &&
+													connection.entityID === item[header.primary_key] &&
+													connection.entityType === header.graphql_meta_type
+												) {
+													//const absolutePosition = absoluteToAbstract(connection);
+													return (
+														<div key={connection.id} className="flex justify-center pa1">
+															<Connection
+																agentHeader={agentHeader}
+																route={route}
+																dataX={connection.x}
+																dataY={connection.y}
+																graph={graph}
+																nodes={nodes}
+																edges={edges}
+																connections={connections}
+																node={node}
+																connection={connection}
+																buttonClass={buttonConnectionToClass}
+																buttonSpanClass={buttonSpanConnectionToClass}
+																spanClass={spanConnectionToClass}
+															/>
+															{link ? (
+																<div className="flex pl1">
+																	<button className={buttonTableClass} onClick={handleDeleteRelationship(connection)}>
+																		<MinusIcon />
+																	</button>
+																</div>
+															) : null}
+														</div>
+													);
+												} else {
+													return null;
+												}
+											})}
+										</th>
+									);
+								})}
+								<th align="center" className={cellTableClass}></th>
+							</tr>
+							<tr>
+								<th align="center" className={cellTableClass}>
+									<button className={buttonTableClass} onClick={applyFilterButton}>
+										Filter
+									</button>
+								</th>
+								<th className={cellTableClass}>
+									<div className="pa1 relative row" tabIndex="0">
+										<div>FIELDS</div>
+										<span className={spanTableClass}>
+											{header.fields.map(function (field) {
+												return (
+													<div key={`${field.name}.checkbox`} className="flex fr">
+														{field.name}
+														<input
+															type="checkbox"
+															defaultChecked={
+																localFields
+																	? localFields.find(function (v) {
+																			return v.name === field.name;
+																		})
+																	: true
+															}
+															onChange={updateFields(field.name)}
+														/>
+														{/*
 													<a href={router.buildUrl(route.name, { ...route.params, order: field.name, order_direction: "asc" })}>
 														<button className="f6" disabled={route.params.order && route.params.order === field.name && route.params.order_direction === "asc"}>
 															{"<"}
@@ -664,232 +671,248 @@ export default function Table({
 														</button>
 													</a>
 													*/}
-												</div>
-											);
-										})}
-									</span>
-								</div>
-							</th>
-							{data.map(function (item) {
-								function whitelistWhere(method) {
-									const whitelistWhere = encodeURIComponent(
-										JSON.stringify({
-											gauze__whitelist__entity_id: item[header.primary_key],
-											gauze__whitelist__entity_type: header.table_name,
-											gauze__whitelist__method: method,
-										}),
-									);
-									return whitelistWhere;
-								}
-								function blacklistWhere(method) {
-									const blacklistWhere = encodeURIComponent(
-										JSON.stringify({
-											gauze__blacklist__entity_id: item[header.primary_key],
-											gauze__blacklist__entity_type: header.table_name,
-											gauze__blacklist__method: method,
-										}),
-									);
-									return blacklistWhere;
-								}
-								const share = {
-									entity_id: item[header.primary_key],
-									entity_type: header.table_name,
-								};
-								return (
-									<th key={item[header.primary_key]} align="center" valign="middle" className={cellEntityClass}>
-										<div className="flex justify-center">
-											<div className="relative mw4 w4">
-												<a href={router.buildUrl("system.types.item.type.id", { type: type, id: item[header.primary_key], mode: "edit" })}>
-													<button className={buttonTableClass}>
-														<Pencil2Icon />
-													</button>
-												</a>
-											</div>
-											<div className="relative row mw4 w4" tabIndex="0">
-												<button className={buttonTableClass}>
-													<BookmarkIcon />
-												</button>
-												<span className={spanButtonClass}>
-													<div className="pa1">BLACKLIST</div>
-													{header.methods.map(function (method) {
-														return (
-															<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "blacklist", where: blacklistWhere(method.name) })}>
-																<button className={buttonSpanClass}>{method.name}</button>
-															</a>
-														);
-													})}
-												</span>
-											</div>
-											<div className="relative row mw4 w4" tabIndex="0">
-												<button className={buttonTableClass}>
-													<BookmarkFilledIcon />
-												</button>
-												<span className={spanButtonClass}>
-													<div className="pa1">WHITELIST</div>
-													{header.methods.map(function (method) {
-														return (
-															<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "whitelist", where: whitelistWhere(method.name) })}>
-																<button className={buttonSpanClass}>{method.name}</button>
-															</a>
-														);
-													})}
-												</span>
-											</div>
-											<div className="relative row mw4 w4" tabIndex="0">
-												<button className={buttonTableClass}>
-													<Share1Icon />
-												</button>
-												<span align="left" className={spanButtonLongClass}>
-													{JSON.stringify(share)}
-												</span>
-											</div>
-										</div>
-									</th>
-								);
-							})}
-							<th align="center" className={cellTableClass}>
-								<button className={buttonTableClass} onClick={handleCreate} disabled={submitCreate}>
-									Create
-								</button>
-							</th>
-						</tr>
-					</thead>
-					<tbody className="mw-100">
-						{localFields.map(function (field) {
-							return (
-								<tr key={field.name} className="">
-									<td className={cellTableClass}>
-										<Input
-											defaultMode={true}
-											field={field}
-											className={inputTableClass}
-											defaultValue={variables.where ? variables.where[field.name] : null}
-											onChange={updateFilter(field.name)}
-											onKeyDown={applyFilterEnter(field.name)}
-											disabled={syncing}
-										/>
-									</td>
-									<td align="right" className={cellTableClass}>
-										<div className="relative pa1 row" tabIndex="0">
-											<div className="truncate-ns field">{field.name}</div>
-											<span className={spanTableClass}>
-												{/*<div className="absolute top-0 right-0 field w6">{field.name}</div>*/}
-												<div>{field.name}</div>
-											</span>
-										</div>
-									</td>
-									{data.map(function (item) {
-										return (
-											<td align="left" key={`${item[header.primary_key]}.${field}`} className={cellEntityClass}>
-												<div className="relative pa1 row" tabIndex="0">
-													<div className="truncate-ns entity">{item[field.name]}</div>
-													<span className={spanEntityClass}>
-														{/*<div className="absolute top-0 left-0">{item[field.name]}</div>*/}
-														<div>{item[field.name]}</div>
-													</span>
-												</div>
-											</td>
-										);
-									})}
-									<td className={cellTableClass}>
-										<Input field={field} className={inputTableClass} value={createItem[field.name]} onChange={updateCreateItem(field.name)} disabled={submitCreate} />
-									</td>
-								</tr>
-							);
-						})}
-					</tbody>
-					<tfoot className="mw-100">
-						<tr align="right" className="">
-							<th align="center" className={cellTableClass}></th>
-							<th className={cellTableClass}>
-								<div className="relative pa1 row" tabIndex="0">
-									<div className="truncate-ns">RELATIONSHIPS</div>
-									<span className={spanTableClass}>RELATIONSHIPS</span>
-								</div>
-							</th>
-							{data.map(function (item) {
-								return (
-									<th key={item[header.primary_key]} align="center" className={cellEntityClass}>
-										<div className="flex justify-center pa1">
-											<div className="flex relative row" tabIndex="0">
-												<button className={`relationship ${buttonTableClass}`}>
-													<div className="w3 truncate-ns">TO</div>
-												</button>
-												<span className={spanButtonClass}>
-													<div className="">TO</div>
-													{header.relationships_to.map(function (to) {
-														return (
-															<div key={to} className="pa1">
-																<button className={buttonSpanClass} onClick={traverseTo(header, item, to)}>
-																	{to}
-																</button>
-															</div>
-														);
-													})}
-												</span>
-											</div>
-											{link ? (
-												<div
-													className="flex pl1 to-start to-end"
-													data-interaction="to_end"
-													data-node-id={node.id}
-													data-entity-id={item[header.primary_key]}
-													data-entity-type={header.graphql_meta_type}
-												>
-													<button className={buttonBlackClass}>
-														<PlusIcon />
-													</button>
-												</div>
-											) : null}
-										</div>
-										{node.props.connectionIDs.map(function (id) {
-											const connection = connections[id];
-											if (
-												connection &&
-												connection.nodeID === node.id &&
-												connection.name === "from" &&
-												connection.entityID === item[header.primary_key] &&
-												connection.entityType === header.graphql_meta_type
-											) {
-												//const absolutePosition = absoluteToAbstract(connection);
-												return (
-													<div key={connection.id} className="flex justify-center pa1">
-														<Connection
-															agentHeader={agentHeader}
-															route={route}
-															dataX={connection.x}
-															dataY={connection.y}
-															graph={graph}
-															nodes={nodes}
-															edges={edges}
-															connections={connections}
-															node={node}
-															connection={connection}
-															buttonClass={buttonConnectionFromClass}
-															buttonSpanClass={buttonSpanConnectionFromClass}
-															spanClass={spanConnectionFromClass}
-														/>
-														{link ? (
-															<div className="flex pl1">
-																<button className={buttonTableClass} onClick={handleDeleteRelationship(connection)}>
-																	<MinusIcon />
-																</button>
-															</div>
-														) : null}
 													</div>
 												);
-											} else {
-												return null;
-											}
+											})}
+										</span>
+									</div>
+								</th>
+								{data.map(function (item) {
+									function whitelistWhere(method) {
+										const whitelistWhere = encodeURIComponent(
+											JSON.stringify({
+												gauze__whitelist__entity_id: item[header.primary_key],
+												gauze__whitelist__entity_type: header.table_name,
+												gauze__whitelist__method: method,
+											}),
+										);
+										return whitelistWhere;
+									}
+									function blacklistWhere(method) {
+										const blacklistWhere = encodeURIComponent(
+											JSON.stringify({
+												gauze__blacklist__entity_id: item[header.primary_key],
+												gauze__blacklist__entity_type: header.table_name,
+												gauze__blacklist__method: method,
+											}),
+										);
+										return blacklistWhere;
+									}
+									const share = {
+										entity_id: item[header.primary_key],
+										entity_type: header.table_name,
+									};
+									return (
+										<th key={item[header.primary_key]} align="center" valign="middle" className={cellEntityClass}>
+											<div className="flex justify-center">
+												<div className="relative mw4 w4">
+													<a href={router.buildUrl("system.types.item.type.id", { type: type, id: item[header.primary_key], mode: "edit" })}>
+														<button className={buttonTableClass}>
+															<Pencil2Icon />
+														</button>
+													</a>
+												</div>
+												<div className="relative row mw4 w4" tabIndex="0">
+													<button className={buttonTableClass}>
+														<BookmarkIcon />
+													</button>
+													<span className={spanButtonClass}>
+														<div className="pa1">BLACKLIST</div>
+														{header.methods.map(function (method) {
+															return (
+																<a
+																	key={method.name}
+																	href={router.buildUrl("system.types.list.type", { type: "blacklist", where: blacklistWhere(method.name) })}
+																>
+																	<button className={buttonSpanClass}>{method.name}</button>
+																</a>
+															);
+														})}
+													</span>
+												</div>
+												<div className="relative row mw4 w4" tabIndex="0">
+													<button className={buttonTableClass}>
+														<BookmarkFilledIcon />
+													</button>
+													<span className={spanButtonClass}>
+														<div className="pa1">WHITELIST</div>
+														{header.methods.map(function (method) {
+															return (
+																<a
+																	key={method.name}
+																	href={router.buildUrl("system.types.list.type", { type: "whitelist", where: whitelistWhere(method.name) })}
+																>
+																	<button className={buttonSpanClass}>{method.name}</button>
+																</a>
+															);
+														})}
+													</span>
+												</div>
+												<div className="relative row mw4 w4" tabIndex="0">
+													<button className={buttonTableClass}>
+														<Share1Icon />
+													</button>
+													<span align="left" className={spanButtonLongClass}>
+														{JSON.stringify(share)}
+													</span>
+												</div>
+											</div>
+										</th>
+									);
+								})}
+								<th align="center" className={cellTableClass}>
+									<button className={buttonTableClass} onClick={handleCreate} disabled={submitCreate}>
+										Create
+									</button>
+								</th>
+							</tr>
+						</thead>
+						<tbody className="mw-100">
+							{localFields.map(function (field) {
+								return (
+									<tr key={field.name} className="">
+										<td className={cellTableClass}>
+											<Input
+												defaultMode={true}
+												field={field}
+												className={inputTableClass}
+												defaultValue={variables.where ? variables.where[field.name] : null}
+												onChange={updateFilter(field.name)}
+												onKeyDown={applyFilterEnter(field.name)}
+												disabled={syncing}
+											/>
+										</td>
+										<td align="right" className={cellTableClass}>
+											<div className="relative pa1 row" tabIndex="0">
+												<div className="truncate-ns field">{field.name}</div>
+												<span className={spanTableClass}>
+													{/*<div className="absolute top-0 right-0 field w6">{field.name}</div>*/}
+													<div>{field.name}</div>
+												</span>
+											</div>
+										</td>
+										{data.map(function (item) {
+											return (
+												<td align="left" key={`${item[header.primary_key]}.${field}`} className={cellEntityClass}>
+													<div className="relative pa1 row" tabIndex="0">
+														<div className="truncate-ns entity">{item[field.name]}</div>
+														<span className={spanEntityClass}>
+															{/*<div className="absolute top-0 left-0">{item[field.name]}</div>*/}
+															<div>{item[field.name]}</div>
+														</span>
+													</div>
+												</td>
+											);
 										})}
-									</th>
+										<td className={cellTableClass}>
+											<Input field={field} className={inputTableClass} value={createItem[field.name]} onChange={updateCreateItem(field.name)} disabled={submitCreate} />
+										</td>
+									</tr>
 								);
 							})}
-							<th align="center" className={cellTableClass}></th>
-						</tr>
-					</tfoot>
-				</table>
+						</tbody>
+						<tfoot className="mw-100">
+							<tr align="right" className="">
+								<th align="center" className={cellTableClass}></th>
+								<th className={cellTableClass}>
+									<div className="relative pa1 row" tabIndex="0">
+										<div className="truncate-ns">RELATIONSHIPS</div>
+										<span className={spanTableClass}>RELATIONSHIPS</span>
+									</div>
+								</th>
+								{data.map(function (item) {
+									return (
+										<th key={item[header.primary_key]} align="center" className={cellEntityClass}>
+											<div className="flex justify-center pa1">
+												<div className="flex relative row" tabIndex="0">
+													<button className={`relationship ${buttonTableClass}`}>
+														<div className="w3 truncate-ns">TO</div>
+													</button>
+													<span className={spanButtonClass}>
+														<div className="">TO</div>
+														{header.relationships_to.map(function (to) {
+															return (
+																<div key={to} className="pa1">
+																	<button className={buttonSpanClass} onClick={traverseTo(header, item, to)}>
+																		{to}
+																	</button>
+																</div>
+															);
+														})}
+													</span>
+												</div>
+												{link ? (
+													<div
+														className="flex pl1 to-start to-end"
+														data-interaction="to_end"
+														data-node-id={node.id}
+														data-entity-id={item[header.primary_key]}
+														data-entity-type={header.graphql_meta_type}
+													>
+														<button className={buttonBlackClass}>
+															<PlusIcon />
+														</button>
+													</div>
+												) : null}
+											</div>
+											{node.props.connectionIDs.map(function (id) {
+												const connection = connections[id];
+												if (
+													connection &&
+													connection.nodeID === node.id &&
+													connection.name === "from" &&
+													connection.entityID === item[header.primary_key] &&
+													connection.entityType === header.graphql_meta_type
+												) {
+													//const absolutePosition = absoluteToAbstract(connection);
+													return (
+														<div key={connection.id} className="flex justify-center pa1">
+															<Connection
+																agentHeader={agentHeader}
+																route={route}
+																dataX={connection.x}
+																dataY={connection.y}
+																graph={graph}
+																nodes={nodes}
+																edges={edges}
+																connections={connections}
+																node={node}
+																connection={connection}
+																buttonClass={buttonConnectionFromClass}
+																buttonSpanClass={buttonSpanConnectionFromClass}
+																spanClass={spanConnectionFromClass}
+															/>
+															{link ? (
+																<div className="flex pl1">
+																	<button className={buttonTableClass} onClick={handleDeleteRelationship(connection)}>
+																		<MinusIcon />
+																	</button>
+																</div>
+															) : null}
+														</div>
+													);
+												} else {
+													return null;
+												}
+											})}
+										</th>
+									);
+								})}
+								<th align="center" className={cellTableClass}></th>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
 			</div>
-		</div>
-	);
+		);
+	}
+	function renderSkeleton() {
+		return (
+			<div
+				className={`node-component mw-100 w-100 consolas relative ${color.node.bd} ${color.node.bg} ${color.node.c} pa4 br4`}
+				style={{ width: node.width, height: node.height }}
+			></div>
+		);
+	}
+	return (skeletonZooming && graphZooming) || (skeletonPanning && graphPanning) || (skeletonDragging && graphDragging) ? renderSkeleton() : renderTable();
 }

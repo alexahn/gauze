@@ -1,10 +1,38 @@
 import React from "react";
 import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
+import domtoimage from "dom-to-image";
 
 import * as orchestrate from "./../orchestrate.js";
 
-export default function Node({ agentHeader, route, gauze, model, router, link, graph, x, y, z, width, height, dataX, dataY, dataZ, node, nodes, edges, connections }) {
+export default function Node({
+	agentHeader,
+	route,
+	gauze,
+	model,
+	router,
+	link,
+	graph,
+	x,
+	y,
+	z,
+	width,
+	height,
+	dataX,
+	dataY,
+	dataZ,
+	node,
+	nodes,
+	edges,
+	connections,
+	graphZooming,
+	graphPanning,
+	graphDragging,
+	skeletonZooming,
+	skeletonPanning,
+	skeletonDragging,
+	durationSkeleton,
+}) {
 	const containerRef = useRef();
 	const [isLoaded, setLoaded] = useState(false);
 	const [isDragging, setDragging] = useState(false);
@@ -16,6 +44,7 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 	const activeConnections = graph.activeConnections(agentHeader.name);
 	const activeEdges = graph.activeEdges(agentHeader.name);
 	const nodeConnections = graph.nodeConnections(node.id);
+	const [svg, setSvg] = useState();
 	function onMouseDown(e) {
 		if (e.button === 2) {
 			e.preventDefault();
@@ -101,6 +130,7 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 				} else if (spanTarget) {
 				} else {
 					setDragging(true);
+					graph.setDragging(true);
 					//e.preventDefault();
 					graph.updateNodes([
 						{
@@ -168,6 +198,7 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 			}
 		} else if (isDragging) {
 			setDragging(false);
+			graph.debounceSetDragging(false, durationSkeleton);
 		} else {
 		}
 	}
@@ -215,7 +246,29 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 				width: containerRef.current.offsetWidth,
 			};
 			graph.initializeNodes(agentHeader.name, [initialized]);
+			/*
+			function filter(node) {
+				return node.tagName !== "span"
+			}
+			if (localHeight !== initialized.height || localWidth !== initialized.width) {
+				setLocalHeight(initialized.height)
+				setLocalWidth(initialized.width)
+				domtoimage.toPng(containerRef.current.querySelector('.node-component'), { filter: filter }).then(function (dataUrl) {
+					console.log('dataUrl', dataUrl)
+					setSvg(dataUrl)
+					model.create("SVG", node.id, {
+						data: dataUrl
+					})
+					graph.initializeNodes(agentHeader.name, [initialized]);
+				})
+			} else {
+				graph.initializeNodes(agentHeader.name, [initialized]);
+			}
+			*/
 			setLoaded(true);
+		} else {
+			if (!svg) {
+			}
 		}
 	});
 	useEffect(() => {
@@ -226,14 +279,18 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 			window.removeEventListener("mousemove", onMouseMove);
 		};
 	});
-	// todo: remove render from here and define it inside of the connection props
+	function renderComponent() {
+		return <node.component agentHeader={agentHeader} route={route} link={link} nodes={nodes} edges={edges} connections={connections} node={node} {...node.props} />;
+	}
 	return (
 		<div
 			className="node flex absolute br4 shadow-2"
 			style={{
 				transform: `translate(${x}px, ${y}px) scale(${z})`,
 				visibility: node.render ? "visible" : "hidden",
+				//zIndex: node.render ? 0 : -3
 			}}
+			id={node.id}
 			ref={containerRef}
 			onMouseDown={onMouseDown}
 			data-id={node.id}
@@ -243,7 +300,24 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 			data-width={width}
 			data-height={height}
 		>
-			<node.component agentHeader={agentHeader} route={route} link={link} nodes={nodes} edges={edges} connections={connections} node={node} {...node.props} />
+			{/* {panning ? (svg ? <img src={svg} /> : renderComponent()) : renderComponent()} */}
+			<node.component
+				agentHeader={agentHeader}
+				route={route}
+				link={link}
+				nodes={nodes}
+				edges={edges}
+				connections={connections}
+				node={node}
+				graphZooming={graphZooming}
+				graphPanning={graphPanning}
+				graphDragging={graphDragging}
+				skeletonZooming={skeletonZooming}
+				skeletonPanning={skeletonPanning}
+				skeletonDragging={skeletonDragging}
+				durationSkeleton={durationSkeleton}
+				{...node.props}
+			/>
 		</div>
 	);
 }
