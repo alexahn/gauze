@@ -14,7 +14,6 @@ export default function Connection({ agentHeader, route, dataX, dataY, graph, no
 				width: containerRef.current.offsetWidth,
 				x: containerRects.x,
 				y: containerRects.y,
-				z: 1,
 			};
 			graph.initializeConnections([initialized]);
 		}
