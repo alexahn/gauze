@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { memo, useState } from "react";
 
 import { PAGINATION_PAGE_SIZE } from "./../constants.js";
 
@@ -13,21 +13,15 @@ import Pagination from "./Pagination.jsx";
 import { v4 as uuidv4 } from "uuid";
 import { Share1Icon, Pencil2Icon, Cross1Icon, BookmarkIcon, BookmarkFilledIcon, PlusIcon, MinusIcon } from "@radix-ui/react-icons";
 
-export default function Table({
+export default memo(function Table({
 	agentHeader,
 	route,
 	link,
 	nodes,
 	edges,
 	connections,
-	node,
-	graphZooming,
-	graphPanning,
-	graphDragging,
-	skeletonZooming,
-	skeletonPanning,
-	skeletonDragging,
-	durationSkeleton,
+	nodeID,
+	depth,
 	gauze,
 	model,
 	router,
@@ -53,6 +47,7 @@ export default function Table({
 	const activeNodes = graph.activeNodes(agentHeader.name);
 	const activeConnections = graph.activeConnections(agentHeader.name);
 	const activeEdges = graph.activeEdges(agentHeader.name);
+	//const node = activeNodes.object[nodeID]
 
 	const offset = variables.offset ? Number.parseInt(variables.offset) : 0;
 	const limit = variables.limit ? Number.parseInt(variables.limit) : PAGINATION_PAGE_SIZE;
@@ -105,7 +100,8 @@ export default function Table({
 						return item.attributes;
 					});
 					const count = results[1][0].count;
-					const targetNode = { ...node };
+					const selectedNode = graph.selectNode(nodeID);
+					const targetNode = { ...selectedNode };
 					targetNode.props.variables = localVariables;
 					targetNode.props.data = data;
 					targetNode.props.count = count;
@@ -128,9 +124,10 @@ export default function Table({
 
 	function traverseTo(sourceHeader, item, targetType) {
 		return function (e) {
+			const selectedNode = graph.selectNode(nodeID);
 			setSyncing(true);
 			return orchestrate
-				.traverseTo(services, agentHeader, node, item, targetType)
+				.traverseTo(services, agentHeader, selectedNode, item, targetType)
 				.then(function () {
 					setSyncing(false);
 				})
@@ -143,9 +140,10 @@ export default function Table({
 
 	function traverseFrom(sourceHeader, item, targetType) {
 		return function (e) {
+			const selectedNode = graph.selectNode(nodeID);
 			setSyncing(true);
 			return orchestrate
-				.traverseFrom(services, agentHeader, node, item, targetType)
+				.traverseFrom(services, agentHeader, selectedNode, item, targetType)
 				.then(function () {
 					setSyncing(false);
 				})
@@ -170,7 +168,8 @@ export default function Table({
 					return item.attributes;
 				});
 				const count = results[1][0].count;
-				const targetNode = { ...node };
+				const selectedNode = graph.selectNode(nodeID);
+				const targetNode = { ...selectedNode };
 				targetNode.props.variables = localVariables;
 				targetNode.props.data = data;
 				targetNode.props.count = count;
@@ -222,6 +221,7 @@ export default function Table({
 
 	function updateFields(name) {
 		return function (e) {
+			const selectedNode = graph.selectNode(nodeID);
 			if (e.target.checked) {
 				const updatedFields = [...header.fields].filter(function (field) {
 					const exists = localFields.find(function (f) {
@@ -232,11 +232,11 @@ export default function Table({
 				setLocalFields(updatedFields);
 				graph.updateNodes([
 					{
-						...graph.selectNode(node.id),
+						...selectedNode,
 						width: null,
 						height: null,
 						props: {
-							...node.props,
+							...selectedNode.props,
 							fields: updatedFields,
 						},
 					},
@@ -251,11 +251,11 @@ export default function Table({
 				setLocalFields(updatedFields);
 				graph.updateNodes([
 					{
-						...graph.selectNode(node.id),
+						...selectedNode,
 						width: null,
 						height: null,
 						props: {
-							...node.props,
+							...selectedNode.props,
 							fields: updatedFields,
 						},
 					},
@@ -289,26 +289,29 @@ export default function Table({
 		// for convenience to avoid backend issues
 		delete attributes[node.props.primary_key];
 		if (input === expected) {
+			const selectedNode = graph.selectNode(nodeID);
 			return gauze
 				.create(header, {
-					source: node.props.variables.source,
+					source: selectedNode.props.variables.source,
 					attributes: attributes,
 				})
 				.then(function (results) {
 					if (results && results.length) {
+						const selectedNode = graph.selectNode(nodeID);
 						const created = results[0];
 						model.create(header.graphql_meta_type, created.attributes[header.primary_key], created.attributes);
 						setSubmitCreate(false);
 						setCreateItem(created.attributes);
 						setSyncing(true);
 						return orchestrate
-							.read(services, header, node.props.variables)
+							.read(services, header, selectedNode.props.variables)
 							.then(function (results) {
 								const data = results[0].map(function (item) {
 									return item.attributes;
 								});
 								const count = results[1][0].count;
-								const targetNode = { ...node };
+								const selectedNode = graph.selectNode(nodeID);
+								const targetNode = { ...selectedNode };
 								targetNode.props.data = data;
 								targetNode.props.count = count;
 								orchestrate.synchronize({ gauze, model, graph }, agentHeader, targetNode, function (targetNode) {
@@ -335,8 +338,9 @@ export default function Table({
 	}
 
 	function handleClose(e) {
-		if (!node.root) {
-			graph.deleteNodes([node]);
+		const selectedNode = graph.selectNode(nodeID);
+		if (!selectedNode.root) {
+			graph.deleteNodes([selectedNode]);
 			orchestrate.synchronize(services, agentHeader, null);
 		}
 	}
@@ -486,7 +490,7 @@ export default function Table({
 			},
 		},
 	};
-	const colorIndex = node.props.depth % 4 < 0 ? (node.props.depth % 4) + 4 : node.props.depth % 4;
+	const colorIndex = depth % 4 < 0 ? (depth % 4) + 4 : depth % 4;
 	const prevColorIndex = colorIndex - 1 < 0 ? ((colorIndex - 1) % 4) + 4 : colorIndex - 1;
 	const prevPrevColorIndex = prevColorIndex - 1 < 0 ? ((prevColorIndex - 1) % 4) + 4 : prevColorIndex - 1;
 	const nextColorIndex = (colorIndex + 1) % 4;
@@ -519,6 +523,7 @@ export default function Table({
 	const buttonSpanConnectionFromClass = `ba br2 w-100 mw5 ${prevColor.table.bd} ${prevColor.table.bg} ${prevColor.table.c} ${prevColor.table.bdh} ${prevColor.table.bgh} ${prevColor.table.ch}`;
 	const spanConnectionFromClass = `dn mw9 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextNextColor.node.x - 1} bdx${nextNextColor.node.x - 1} cx${nextNextColor.node.x === 6 ? nextNextColor.node.x + 2 : nextNextColor.node.x + 1} bw1 ba br2`;
 	function renderTable() {
+		const node = activeNodes.object[nodeID];
 		return (
 			<div className={`node-component mw-100 w-100 consolas relative ${color.node.bd} ${color.node.bg} ${color.node.c} pa4 br4`}>
 				<h1 align="center">{header.graphql_meta_type}</h1>
@@ -588,7 +593,8 @@ export default function Table({
 												) : null}
 											</div>
 											{node.props.connectionIDs.map(function (id) {
-												const connection = connections[id];
+												//const connection = activeConnections.object[id];
+												const connection = graph.selectConnection(id);
 												// note: for some reason we need an existence check here. maybe double check our rendering logic?
 												// note: possibly related to scaling the window?
 												if (
@@ -607,11 +613,8 @@ export default function Table({
 																dataX={connection.x}
 																dataY={connection.y}
 																graph={graph}
-																nodes={nodes}
-																edges={edges}
-																connections={connections}
-																node={node}
-																connection={connection}
+																nodeID={nodeID}
+																connectionID={connection.id}
 																buttonClass={buttonConnectionToClass}
 																buttonSpanClass={buttonSpanConnectionToClass}
 																spanClass={spanConnectionToClass}
@@ -660,17 +663,17 @@ export default function Table({
 															onChange={updateFields(field.name)}
 														/>
 														{/*
-													<a href={router.buildUrl(route.name, { ...route.params, order: field.name, order_direction: "asc" })}>
-														<button className="f6" disabled={route.params.order && route.params.order === field.name && route.params.order_direction === "asc"}>
-															{"<"}
-														</button>
-													</a>
-													<a href={router.buildUrl(route.name, { ...route.params, order: field.name, order_direction: "desc" })}>
-														<button className="f6" disabled={route.params.order && route.params.order === field.name && route.params.order_direction === "desc"}>
-															{">"}
-														</button>
-													</a>
-													*/}
+														<a href={router.buildUrl(route.name, { ...route.params, order: field.name, order_direction: "asc" })}>
+															<button className="f6" disabled={route.params.order && route.params.order === field.name && route.params.order_direction === "asc"}>
+																{"<"}
+															</button>
+														</a>
+														<a href={router.buildUrl(route.name, { ...route.params, order: field.name, order_direction: "desc" })}>
+															<button className="f6" disabled={route.params.order && route.params.order === field.name && route.params.order_direction === "desc"}>
+																{">"}
+															</button>
+														</a>
+														*/}
 													</div>
 												);
 											})}
@@ -856,7 +859,8 @@ export default function Table({
 												) : null}
 											</div>
 											{node.props.connectionIDs.map(function (id) {
-												const connection = connections[id];
+												//const connection = activeConnections.object[id];
+												const connection = graph.selectConnection(id);
 												if (
 													connection &&
 													connection.nodeID === node.id &&
@@ -873,11 +877,8 @@ export default function Table({
 																dataX={connection.x}
 																dataY={connection.y}
 																graph={graph}
-																nodes={nodes}
-																edges={edges}
-																connections={connections}
-																node={node}
-																connection={connection}
+																nodeID={nodeID}
+																connectionID={connection.id}
 																buttonClass={buttonConnectionFromClass}
 																buttonSpanClass={buttonSpanConnectionFromClass}
 																spanClass={spanConnectionFromClass}
@@ -906,13 +907,5 @@ export default function Table({
 			</div>
 		);
 	}
-	function renderSkeleton() {
-		return (
-			<div
-				className={`node-component mw-100 w-100 consolas relative ${color.node.bd} ${color.node.bg} ${color.node.c} pa4 br4`}
-				style={{ width: node.width, height: node.height }}
-			></div>
-		);
-	}
-	return (skeletonZooming && graphZooming) || (skeletonPanning && graphPanning) || (skeletonDragging && graphDragging) ? renderSkeleton() : renderTable();
-}
+	return renderTable();
+});

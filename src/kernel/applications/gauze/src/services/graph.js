@@ -672,6 +672,7 @@ class GraphService {
 			staged[connection.id] = {
 				...connection,
 				z: z,
+				render: true,
 			};
 		});
 		self.connections = staged;

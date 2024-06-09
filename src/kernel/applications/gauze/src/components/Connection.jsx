@@ -1,8 +1,10 @@
 import React from "react";
 import { useState, useLayoutEffect, useRef } from "react";
 
-export default function Connection({ agentHeader, route, dataX, dataY, graph, nodes, edges, connections, node, connection, gauze, model, router, buttonClass, buttonSpanClass, spanClass }) {
+export default function Connection({ agentHeader, route, dataX, dataY, graph, nodeID, connectionID, gauze, model, router, buttonClass, buttonSpanClass, spanClass }) {
 	const containerRef = useRef();
+	const node = graph.selectNode(nodeID);
+	const connection = graph.selectConnection(connectionID);
 	useLayoutEffect(function () {
 		if (node.render && (connection.x === null || connection.y === null)) {
 			const containerRects = containerRef.current.getClientRects()[0];
@@ -18,15 +20,12 @@ export default function Connection({ agentHeader, route, dataX, dataY, graph, no
 		}
 	});
 	return (
-		<div ref={containerRef} className="connection" data-id={connection.id} data-x={connection.x} data-y={connection.y}>
+		<div ref={containerRef} className="connection" data-id={connection && connection.id} data-x={connection && connection.x} data-y={connection && connection.y}>
 			<connection.component
 				agentHeader={agentHeader}
 				route={route}
-				nodes={nodes}
-				edges={edges}
-				connections={connections}
-				node={node}
-				connection={connection}
+				nodeID={nodeID}
+				connectionID={connectionID}
 				buttonClass={buttonClass}
 				buttonSpanClass={buttonSpanClass}
 				spanClass={spanClass}

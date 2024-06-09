@@ -27,26 +27,7 @@ function abstractToAbsolute({ x, y, z, width, height }) {
 	};
 }
 
-export default function Graph({
-	agentHeader,
-	route,
-	gauze,
-	model,
-	router,
-	link,
-	graph,
-	nodes,
-	edges,
-	connections,
-	interaction,
-	graphZooming,
-	graphPanning,
-	graphDragging,
-	skeletonZooming,
-	skeletonPanning,
-	skeletonDragging,
-	durationSkeleton,
-}) {
+export default function Graph({ agentHeader, route, gauze, model, router, link, graph, nodes, edges, connections, interaction }) {
 	const containerRef = useRef();
 	const nodesArray = Object.values(nodes);
 	const connectionsArray = Object.values(connections);
@@ -58,7 +39,6 @@ export default function Graph({
 		if (e.button === 2) {
 		} else if (e.button === 1) {
 			setPanning(true);
-			graph.setPanning(true);
 			graph.updateNodes(
 				graph.selectNodes(activeNodes.keys).map(function (position) {
 					return {
@@ -81,7 +61,6 @@ export default function Graph({
 			if (e.target === containerRef.current) {
 				e.preventDefault();
 				setPanning(true);
-				graph.setPanning(true);
 				graph.updateNodes(
 					graph.selectNodes(activeNodes.keys).map(function (position) {
 						return {
@@ -107,7 +86,6 @@ export default function Graph({
 	}
 	function onMouseUp(e) {
 		setPanning(false);
-		graph.debounceSetPanning(false, durationSkeleton);
 	}
 	function onMouseMove(e) {
 		if (isPanning) {
@@ -164,8 +142,6 @@ export default function Graph({
 					};
 				}),
 			);
-			graph.setZooming(true);
-			graph.debounceSetZooming(false, durationSkeleton);
 		}
 	}
 	useEffect(() => {
@@ -203,13 +179,6 @@ export default function Graph({
 							edges={edges}
 							connections={connections}
 							node={node}
-							graphZooming={graphZooming}
-							graphPanning={graphPanning}
-							graphDragging={graphDragging}
-							skeletonZooming={skeletonZooming}
-							skeletonPanning={skeletonPanning}
-							skeletonDragging={skeletonDragging}
-							durationSkeleton={durationSkeleton}
 						/>
 					);
 				} else {

@@ -85,6 +85,12 @@ td {
 	border-spacing: 1px;
 }
 
+.graph-background {
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
 /* trying to prevent font blur */
 /*
 .node {

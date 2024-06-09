@@ -13,16 +13,18 @@ function absoluteToAbstract({ x, y, z, width, height }) {
 	};
 }
 
-export default function Relationship({ agentHeader, route, nodes, connections, edges, node, connection, buttonClass, buttonSpanClass, spanClass, gauze, model, router, graph }) {
+export default function Relationship({ agentHeader, route, nodeID, connectionID, buttonClass, buttonSpanClass, spanClass, gauze, model, router, graph }) {
 	const activeNodes = graph.activeNodes(agentHeader.name);
 	const activeEdges = graph.activeEdges(agentHeader.name);
 	const activeConnections = graph.activeConnections(agentHeader.name);
 	const edge = activeEdges.values.find(function (edge) {
-		return edge.fromConnectionID === connection.id || edge.toConnectionID === connection.id;
+		return edge.fromConnectionID === connectionID || edge.toConnectionID === connectionID;
 	});
 	function handleFocus(connection) {
 		// simple hack using window width and height (will need to use the containing dimensions later if we ever want to embed the graph)
 		return function (e) {
+			const activeNodes = graph.activeNodes(agentHeader.name);
+			const activeConnections = graph.activeConnections(agentHeader.name);
 			const node = activeNodes.object[connection.nodeID];
 			/*
 			const abstractWindow = absoluteToAbstract({
@@ -63,8 +65,8 @@ export default function Relationship({ agentHeader, route, nodes, connections, e
 		};
 	}
 	if (edge) {
-		if (edge.fromConnectionID === connection.id) {
-			const toConnection = activeConnections.object[edge.toConnectionID];
+		if (edge.fromConnectionID === connectionID) {
+			const toConnection = graph.selectConnection(edge.toConnectionID);
 			return (
 				<div className="relative row" tabIndex="0">
 					<button className={buttonClass}>
@@ -80,8 +82,8 @@ export default function Relationship({ agentHeader, route, nodes, connections, e
 					</span>
 				</div>
 			);
-		} else if (edge.toConnectionID === connection.id) {
-			const fromConnection = activeConnections.object[edge.fromConnectionID];
+		} else if (edge.toConnectionID === connectionID) {
+			const fromConnection = graph.selectConnection(edge.fromConnectionID);
 			return (
 				<div className="relative row" tabIndex="0">
 					<button className={buttonClass}>

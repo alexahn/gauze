@@ -24,13 +24,6 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 	const [share, setShare] = useState();
 	const [displayShare, setDisplayShare] = useState(false);
 	const [link, setLink] = useState(false);
-	const [graphPanning, setGraphPanning] = useState(graph.getPanning());
-	const [skeletonPanning, setSkeletonPanning] = useState(false);
-	const [graphZooming, setGraphZooming] = useState(graph.getZooming());
-	const [skeletonZooming, setSkeletonZooming] = useState(false);
-	const [graphDragging, setGraphDragging] = useState(graph.getDragging());
-	const [skeletonDragging, setSkeletonDragging] = useState(false);
-	const [durationSkeleton, setDurationSkeleton] = useState(512);
 	function toggleShare(e) {
 		setDisplayShare(!displayShare);
 	}
@@ -81,26 +74,6 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 			setPerformance(128);
 		}
 	}
-	function handleZoomingSkeleton(e) {
-		setSkeletonZooming(!skeletonZooming);
-	}
-	function handlePanningSkeleton(e) {
-		setSkeletonPanning(!skeletonPanning);
-	}
-	function handleDraggingSkeleton(e) {
-		setSkeletonDragging(!skeletonDragging);
-	}
-	function handleDurationSkeleton(e) {
-		if (e.target.value === "long") {
-			setDurationSkeleton(1024);
-		} else if (e.target.value === "medium") {
-			setDurationSkeleton(512);
-		} else if (e.target.value === "short") {
-			setDurationSkeleton(256);
-		} else {
-			setDurationSkeleton(256);
-		}
-	}
 	useEffect(function () {
 		const timer = setInterval(function () {
 			const activeNodes = graph.activeNodes(agentHeader.name);
@@ -111,9 +84,6 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 			setConnections(activeConnections.object);
 			setEdges(activeEdges.object);
 			setInteraction(interaction);
-			setGraphPanning(graph.getPanning());
-			setGraphZooming(graph.getZooming());
-			setGraphDragging(graph.getDragging());
 		}, performance);
 		return function () {
 			clearInterval(timer);
@@ -135,26 +105,6 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 						<br />
 						<input type="radio" id="performance3" name="performance" value="low" defaultChecked={performance === 256} onChange={handlePerformance} />
 						<label htmlFor="performance3">Low</label>
-						<br />
-						<label htmlFor="zoomingSkeleton">Zooming Skeleton:</label>
-						<input type="checkbox" name="zoomingSkeleton" value={skeletonZooming} onChange={handleZoomingSkeleton} />
-						<br />
-						<label htmlFor="panningSkeleton">Panning Skeleton:</label>
-						<input type="checkbox" name="panningSkeleton" value={skeletonPanning} onChange={handlePanningSkeleton} />
-						<br />
-						<label htmlFor="draggingSkeleton">Dragging Skeleton:</label>
-						<input type="checkbox" name="draggingSkeleton" value={skeletonDragging} onChange={handleDraggingSkeleton} />
-						<br />
-						<label htmlFor="durationSkeleton">Skeleton Duration:</label>
-						<br />
-						<input type="radio" id="durationSkeleton1" name="durationSkeleton" value="long" defaultChecked={durationSkeleton === 1024} onChange={handleDurationSkeleton} />
-						<label htmlFor="durationSkeleton1">Long</label>
-						<br />
-						<input type="radio" id="durationSkeleton2" name="durationSkeleton" value="medium" defaultChecked={durationSkeleton === 512} onChange={handleDurationSkeleton} />
-						<label htmlFor="durationSkeleton2">Medium</label>
-						<br />
-						<input type="radio" id="durationSkeleton3" name="durationSkeleton" value="short" defaultChecked={durationSkeleton === 256} onChange={handleDurationSkeleton} />
-						<label htmlFor="durationSkeleton3">Short</label>
 						<br />
 					</span>
 				</div>
@@ -185,15 +135,8 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 				edges={edges}
 				connections={connections}
 				interaction={interaction}
-				graphZooming={graphZooming}
-				graphPanning={graphPanning}
-				graphDragging={graphDragging}
-				skeletonZooming={skeletonZooming}
-				skeletonPanning={skeletonPanning}
-				skeletonDragging={skeletonDragging}
-				durationSkeleton={durationSkeleton}
 			/>
-			<div className="bgx12 mw-100 mh-100 h-100 w-100 fixed top-0 left-0" style={{ zIndex: -2 }} />
+			<div className="graph-background bgx12 mw-100 mh-100 h-100 w-100 fixed top-0 left-0" style={{ zIndex: -2, width: "100%", height: "100%" }} />
 		</div>
 	);
 }
