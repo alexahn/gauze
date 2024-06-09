@@ -141,6 +141,18 @@ table .truncate-ns {
 	padding-left: 1px;
 }
 
+.type-item {
+	.row:focus .tooltip {
+		border: 1px solid black;
+	}
+}
+
+.type-list {
+	.row:focus .tooltip {
+		border: 1px solid black;
+	}
+}
+
 .row:focus .tooltip {
 	display: block;
 	/*border: 1px solid black;*/
