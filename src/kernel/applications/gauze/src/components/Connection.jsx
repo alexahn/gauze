@@ -4,7 +4,7 @@ import { useState, useLayoutEffect, useRef } from "react";
 export default function Connection({ agentHeader, route, dataX, dataY, graph, nodes, edges, connections, node, connection, gauze, model, router, buttonClass, buttonSpanClass, spanClass }) {
 	const containerRef = useRef();
 	useLayoutEffect(function () {
-		if (node.render && (connection.x === null || connection.y === null)) {
+		if (node.render && node.initialized && (connection.x === null || connection.y === null)) {
 			const containerRects = containerRef.current.getClientRects()[0];
 			const initialized = {
 				...connection,

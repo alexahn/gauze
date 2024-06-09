@@ -575,6 +575,10 @@ class GraphService {
 			const { width, height } = node;
 			if (width === null || height === null) throw new Error(`Cannot initialize with null dimensions: width=${width} height=${height}`);
 			if (node.render) {
+				node.x = node.renderX
+				node.y = node.renderY
+				node.z = node.renderZ
+				node.initialized = true;
 				staged[node.id] = node;
 			} else {
 				// get max x in nodes
@@ -619,6 +623,7 @@ class GraphService {
 					y,
 					z,
 					render: true,
+					initialized: true
 				};
 			}
 		});

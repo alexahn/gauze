@@ -31,6 +31,7 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 	const [graphDragging, setGraphDragging] = useState(graph.getDragging());
 	const [skeletonDragging, setSkeletonDragging] = useState(false);
 	const [durationSkeleton, setDurationSkeleton] = useState(512);
+	const [snapshotSkeleton, setSnapshotSkeleton] = useState(false);
 	function toggleShare(e) {
 		setDisplayShare(!displayShare);
 	}
@@ -101,6 +102,9 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 			setDurationSkeleton(256);
 		}
 	}
+	function handleSnapshotSkeleton(e) {
+		setSnapshotSkeleton(!snapshotSkeleton)
+	}
 	useEffect(function () {
 		const timer = setInterval(function () {
 			const activeNodes = graph.activeNodes(agentHeader.name);
@@ -156,6 +160,8 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 						<input type="radio" id="durationSkeleton3" name="durationSkeleton" value="short" defaultChecked={durationSkeleton === 256} onChange={handleDurationSkeleton} />
 						<label htmlFor="durationSkeleton3">Short</label>
 						<br />
+						<label htmlFor="snapshotSkeleton">Snapshot Skeleton:</label>
+						<input type="checkbox" name="snapshotSkeleton" value={snapshotSkeleton} onChange={handleSnapshotSkeleton} />
 					</span>
 				</div>
 			</div>
@@ -192,6 +198,7 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 				skeletonPanning={skeletonPanning}
 				skeletonDragging={skeletonDragging}
 				durationSkeleton={durationSkeleton}
+				snapshotSkeleton={snapshotSkeleton}
 			/>
 			<div className="bgx12 mw-100 mh-100 h-100 w-100 fixed top-0 left-0" style={{ zIndex: -2 }} />
 		</div>

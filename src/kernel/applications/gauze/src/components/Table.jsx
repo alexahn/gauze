@@ -15,6 +15,7 @@ import { Share1Icon, Pencil2Icon, Cross1Icon, BookmarkIcon, BookmarkFilledIcon, 
 
 export default function Table({
 	agentHeader,
+	className,
 	route,
 	link,
 	nodes,
@@ -520,7 +521,7 @@ export default function Table({
 	const spanConnectionFromClass = `dn mw9 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextNextColor.node.x - 1} bdx${nextNextColor.node.x - 1} cx${nextNextColor.node.x === 6 ? nextNextColor.node.x + 2 : nextNextColor.node.x + 1} bw1 ba br2`;
 	function renderTable() {
 		return (
-			<div className={`node-component mw-100 w-100 consolas relative ${color.node.bd} ${color.node.bg} ${color.node.c} pa4 br4`}>
+			<div className={`${className} mw-100 w-100 consolas relative ${color.node.bd} ${color.node.bg} ${color.node.c} pa4 br4`}>
 				<h1 align="center">{header.graphql_meta_type}</h1>
 				{node.props.from ? (
 					<div className="absolute top-1 left-1">{`From: ${node.props.from._metadata.id}`}</div>

@@ -140,6 +140,13 @@ function synchronize(services, agentHeader, targetNode, callback) {
 					oldHeight: node.height,
 					width: null,
 					height: null,
+					// todo: find a way to snapshot the element to canvas without overiding z scale here
+					// todo: one way is to snapshot the scaled version, and then inverse scale it when rendering
+					z: 1,
+					renderX: node.x,
+					renderY: node.y,
+					renderZ: node.z,
+					initialized: false
 				};
 			}),
 		);
@@ -150,6 +157,10 @@ function synchronize(services, agentHeader, targetNode, callback) {
 					...connection,
 					x: null,
 					y: null,
+					//z: 1,
+					renderX: connection.x,
+					renderY: connection.y,
+					renderZ: connection.z
 				};
 			}),
 		);

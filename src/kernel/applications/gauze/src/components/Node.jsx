@@ -1,7 +1,10 @@
 import React from "react";
 import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
+
 import domtoimage from "dom-to-image";
+import html2canvas from 'html2canvas';
+import DOM from "./DOM.jsx"
 
 import * as orchestrate from "./../orchestrate.js";
 
@@ -32,6 +35,7 @@ export default function Node({
 	skeletonPanning,
 	skeletonDragging,
 	durationSkeleton,
+	snapshotSkeleton
 }) {
 	const containerRef = useRef();
 	const [isLoaded, setLoaded] = useState(false);
@@ -131,7 +135,7 @@ export default function Node({
 				} else {
 					setDragging(true);
 					graph.setDragging(true);
-					//e.preventDefault();
+					e.preventDefault();
 					graph.updateNodes([
 						{
 							...graph.selectNode(node.id),
@@ -246,63 +250,33 @@ export default function Node({
 				width: containerRef.current.offsetWidth,
 			};
 			graph.initializeNodes(agentHeader.name, [initialized]);
-			/*
-			function filter(node) {
-				return node.tagName !== "span"
-			}
-			if (localHeight !== initialized.height || localWidth !== initialized.width) {
+			if (snapshotSkeleton && (localHeight !== initialized.height || localWidth !== initialized.width)) {
+				console.log('snapshotting', snapshotSkeleton)
 				setLocalHeight(initialized.height)
 				setLocalWidth(initialized.width)
-				domtoimage.toPng(containerRef.current.querySelector('.node-component'), { filter: filter }).then(function (dataUrl) {
-					console.log('dataUrl', dataUrl)
-					setSvg(dataUrl)
-					model.create("SVG", node.id, {
-						data: dataUrl
-					})
-					graph.initializeNodes(agentHeader.name, [initialized]);
+				html2canvas(containerRef.current.querySelector('.node-component')).then(function (canvas) {
+					setSvg(canvas)
 				})
-			} else {
-				graph.initializeNodes(agentHeader.name, [initialized]);
 			}
-			*/
 			setLoaded(true);
 		} else {
-			if (!svg) {
-			}
 		}
 	});
 	useEffect(() => {
 		window.addEventListener("mouseup", onMouseUp);
 		window.addEventListener("mousemove", onMouseMove);
+		//
+		
 		return function () {
 			window.removeEventListener("mouseup", onMouseUp);
 			window.removeEventListener("mousemove", onMouseMove);
 		};
 	});
-	function renderComponent() {
-		return <node.component agentHeader={agentHeader} route={route} link={link} nodes={nodes} edges={edges} connections={connections} node={node} {...node.props} />;
-	}
-	return (
-		<div
-			className="node flex absolute br4 shadow-2"
-			style={{
-				transform: `translate(${x}px, ${y}px) scale(${z})`,
-				visibility: node.render ? "visible" : "hidden",
-				//zIndex: node.render ? 0 : -3
-			}}
-			id={node.id}
-			ref={containerRef}
-			onMouseDown={onMouseDown}
-			data-id={node.id}
-			data-x={dataX}
-			data-y={dataY}
-			data-z={dataZ}
-			data-width={width}
-			data-height={height}
-		>
-			{/* {panning ? (svg ? <img src={svg} /> : renderComponent()) : renderComponent()} */}
+	function renderComponent(className) {
+		return (
 			<node.component
 				agentHeader={agentHeader}
+				className={className}
 				route={route}
 				link={link}
 				nodes={nodes}
@@ -318,6 +292,38 @@ export default function Node({
 				durationSkeleton={durationSkeleton}
 				{...node.props}
 			/>
+		)
+	}
+	function renderCanvas() {
+		return (
+			<div
+			>
+				<DOM key={node.id} element={svg}/>
+			</div>
+		)
+	}
+	// todo: to prevent flicker, we need to create a shadow of the node on a lower z index and use it for all initialization logic
+	// todo: to prevent inproper zooming, we need to establish a strict initialization order so our coordinates are consistent
+	// todo: to prevent unacceptable loading times when navigating routes, we need to store the computed canvas into model and use it instead of recalculating the canvas
+	return (
+			<div
+				ref={containerRef}
+				className="node flex absolute br4 shadow-2"
+				style={{
+					transform: `translate(${x}px, ${y}px) scale(${z})`,
+					//visibility: node.render ? "visible" : "hidden",
+					zIndex: (node.render && node.initialized) ? 0 : -3
+				}}
+				id={node.id}
+				onMouseDown={onMouseDown}
+				data-id={node.id}
+				data-x={dataX}
+				data-y={dataY}
+				data-z={dataZ}
+				data-width={width}
+				data-height={height}
+			>
+				{(((graphZooming && skeletonZooming && snapshotSkeleton) || (graphPanning && skeletonPanning && snapshotSkeleton) || (graphDragging && skeletonDragging && snapshotSkeleton)) && svg) ? renderCanvas() : renderComponent('node-component')}
 		</div>
 	);
 }

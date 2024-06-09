@@ -46,6 +46,7 @@ export default function Graph({
 	skeletonPanning,
 	skeletonDragging,
 	durationSkeleton,
+	snapshotSkeleton,
 }) {
 	const containerRef = useRef();
 	const nodesArray = Object.values(nodes);
@@ -210,6 +211,7 @@ export default function Graph({
 							skeletonPanning={skeletonPanning}
 							skeletonDragging={skeletonDragging}
 							durationSkeleton={durationSkeleton}
+							snapshotSkeleton={snapshotSkeleton}
 						/>
 					);
 				} else {
