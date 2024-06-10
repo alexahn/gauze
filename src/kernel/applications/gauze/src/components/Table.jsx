@@ -287,10 +287,10 @@ export default memo(function Table({
 		const expected = "create";
 		const input = prompt(`Confirm create by entering '${expected}'`, "");
 		const attributes = { ...createItem };
+		const selectedNode = graph.selectNode(nodeID)
 		// for convenience to avoid backend issues
-		delete attributes[node.props.primary_key];
+		delete attributes[selectedNode.props.primary_key];
 		if (input === expected) {
-			const selectedNode = graph.selectNode(nodeID);
 			return gauze
 				.create(header, {
 					source: selectedNode.props.variables.source,
