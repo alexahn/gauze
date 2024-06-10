@@ -222,6 +222,7 @@ export default memo(function Table({
 	function updateFields(name) {
 		return function (e) {
 			const selectedNode = graph.selectNode(nodeID);
+			const nodeConnections = graph.nodeConnections(nodeID);
 			if (e.target.checked) {
 				const updatedFields = [...header.fields].filter(function (field) {
 					const exists = localFields.find(function (f) {
@@ -262,7 +263,7 @@ export default memo(function Table({
 				]);
 			}
 			graph.updateConnections(
-				graph.activeConnections(agentHeader.name).values.map(function (connection) {
+				graph.selectConnections(nodeConnections.keys).map(function (connection) {
 					return {
 						...connection,
 						x: null,
