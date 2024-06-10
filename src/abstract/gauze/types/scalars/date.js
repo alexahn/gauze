@@ -43,4 +43,17 @@ const DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT = new GraphQLScalarType({
 	},
 });
 
+// should return true or false to specify if a javascript type represents this scalar type
+DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT.match_value = function (value) {
+	return value instanceof Date;
+};
+
+// should return true or false to specify if an ast type represents this scalar type
+DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT.match_ast = function (ast) {
+	var result = new Date(ast.value);
+	if (isNaN(result.getTime())) return false;
+	if (ast.value !== result.toJSON()) return false;
+	return true;
+};
+
 export { DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT };

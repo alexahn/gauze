@@ -1,5 +1,6 @@
-import date_scalar from "./date.js";
+import { DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT } from "./date.js";
 
-console.log(date_scalar);
+console.log(DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT);
 
-date_scalar.serialize(new Date());
+console.log("serialize", DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT.serialize(new Date()));
+console.log("match_value", DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT.match_value("hello"));
