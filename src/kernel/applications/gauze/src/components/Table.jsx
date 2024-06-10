@@ -105,7 +105,7 @@ export default memo(function Table({
 					targetNode.props.variables = localVariables;
 					targetNode.props.data = data;
 					targetNode.props.count = count;
-					graph.updateNodes([targetNode])
+					graph.updateNodes([targetNode]);
 					return orchestrate.reloadRelationships(services, agentHeader).then(function () {
 						setSyncing(false);
 					});
@@ -168,7 +168,7 @@ export default memo(function Table({
 				targetNode.props.variables = localVariables;
 				targetNode.props.data = data;
 				targetNode.props.count = count;
-				graph.updateNodes([targetNode])
+				graph.updateNodes([targetNode]);
 				return orchestrate.reloadRelationships(services, agentHeader).then(function () {
 					setSyncing(false);
 				});
@@ -277,7 +277,7 @@ export default memo(function Table({
 		const expected = "create";
 		const input = prompt(`Confirm create by entering '${expected}'`, "");
 		const attributes = { ...createItem };
-		const selectedNode = graph.selectNode(nodeID)
+		const selectedNode = graph.selectNode(nodeID);
 		// for convenience to avoid backend issues
 		delete attributes[selectedNode.props.primary_key];
 		if (input === expected) {
@@ -305,10 +305,10 @@ export default memo(function Table({
 								const targetNode = { ...selectedNode };
 								targetNode.props.data = data;
 								targetNode.props.count = count;
-								graph.updateNodes([targetNode])
+								graph.updateNodes([targetNode]);
 								return orchestrate.reloadRelationships(services, agentHeader).then(function () {
 									setSyncing(false);
-								})
+								});
 							})
 							.catch(function (err) {
 								setSyncing(false);

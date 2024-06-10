@@ -65,7 +65,7 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 	}
 	function handlePerformance(e) {
 		if (e.target.value === "max") {
-			setPerformance(0)
+			setPerformance(0);
 		} else if (e.target.value === "high") {
 			setPerformance(4);
 		} else if (e.target.value === "medium") {
