@@ -38,11 +38,15 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 	const nodesInitialized = activeNodes.values.every(function (node) {
 		return node.width !== null && node.height !== null;
 	});
+	// note: we can't use the below unless we only selectively set x and y to null for the connections that are shown on the screen
+	// note: we are currently setting x and y to null to trigger a recalculation for all active connections
+	/*
 	const connectionsInitialized = activeConnections.values.every(function (connection) {
 		return connection.x !== null && connection.y !== null;
 	});
+	*/
 	function onMouseDown(e) {
-		if (nodesInitialized && connectionsInitialized) {
+		if (nodesInitialized) {
 			if (e.button === 2) {
 			} else if (e.button === 1) {
 				setPanning(true);
@@ -94,12 +98,12 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 	}
 	function onMouseUp(e) {
 		// note: consider any scenarios where this guard might be a problem (e.g. can we make an uninitialized node while panning?)
-		if (nodesInitialized && connectionsInitialized) {
+		if (nodesInitialized) {
 			setPanning(false);
 		}
 	}
 	function onMouseMove(e) {
-		if (nodesInitialized && connectionsInitialized) {
+		if (nodesInitialized) {
 			if (isPanning) {
 				graph.updateNodes(
 					graph.selectNodes(activeNodes.keys).map(function (node) {
@@ -127,7 +131,7 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 		}
 	}
 	function onWheel(e) {
-		if (nodesInitialized && connectionsInitialized) {
+		if (nodesInitialized) {
 			if (e.deltaY) {
 				const sign = Math.sign(e.deltaY) / 10;
 				const scale = 1 - sign;
