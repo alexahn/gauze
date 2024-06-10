@@ -105,15 +105,10 @@ export default memo(function Table({
 					targetNode.props.variables = localVariables;
 					targetNode.props.data = data;
 					targetNode.props.count = count;
-					return orchestrate
-						.synchronize({ gauze, model, graph }, agentHeader, targetNode, function (targetNode) {
-							graph.updateNodes([targetNode]);
-						})
-						.then(function () {
-							return orchestrate.reloadRelationships({ gauze, model, graph }, agentHeader).then(function () {
-								setSyncing(false);
-							});
-						});
+					graph.updateNodes([targetNode])
+					return orchestrate.reloadRelationships(services, agentHeader).then(function () {
+						setSyncing(false);
+					});
 				})
 				.catch(function (err) {
 					setSyncing(false);
@@ -173,15 +168,10 @@ export default memo(function Table({
 				targetNode.props.variables = localVariables;
 				targetNode.props.data = data;
 				targetNode.props.count = count;
-				return orchestrate
-					.synchronize(services, agentHeader, targetNode, function (targetNode) {
-						graph.updateNodes([targetNode]);
-					})
-					.then(function () {
-						return orchestrate.reloadRelationships({ gauze, model, graph }, agentHeader).then(function () {
-							setSyncing(false);
-						});
-					});
+				graph.updateNodes([targetNode])
+				return orchestrate.reloadRelationships(services, agentHeader).then(function () {
+					setSyncing(false);
+				});
 			})
 			.catch(function (err) {
 				setSyncing(false);
@@ -315,10 +305,10 @@ export default memo(function Table({
 								const targetNode = { ...selectedNode };
 								targetNode.props.data = data;
 								targetNode.props.count = count;
-								orchestrate.synchronize({ gauze, model, graph }, agentHeader, targetNode, function (targetNode) {
-									graph.updateNodes([targetNode]);
-								});
-								setSyncing(false);
+								graph.updateNodes([targetNode])
+								return orchestrate.reloadRelationships(services, agentHeader).then(function () {
+									setSyncing(false);
+								})
 							})
 							.catch(function (err) {
 								setSyncing(false);

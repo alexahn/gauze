@@ -65,13 +65,13 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 	}
 	function handlePerformance(e) {
 		if (e.target.value === "high") {
-			setPerformance(4);
+			setPerformance(0);
 		} else if (e.target.value === "medium") {
-			setPerformance(32);
+			setPerformance(4);
 		} else if (e.target.value === "low") {
-			setPerformance(128);
+			setPerformance(32);
 		} else {
-			setPerformance(128);
+			setPerformance(32);
 		}
 	}
 	useEffect(function () {
@@ -97,13 +97,13 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 					<span className="dn bg-light-green mw6 w5 top-0 right-0 pa1 absolute f4 tooltip">
 						<label htmlFor="performance">Performance:</label>
 						<br />
-						<input type="radio" id="performance1" name="performance" value="high" defaultChecked={performance === 4} onChange={handlePerformance} />
+						<input type="radio" id="performance1" name="performance" value="high" defaultChecked={performance === 0} onChange={handlePerformance} />
 						<label htmlFor="performance1">High</label>
 						<br />
-						<input type="radio" id="performance2" name="performance" value="medium" defaultChecked={performance === 32} onChange={handlePerformance} />
+						<input type="radio" id="performance2" name="performance" value="medium" defaultChecked={performance === 4} onChange={handlePerformance} />
 						<label htmlFor="performance2">Medium</label>
 						<br />
-						<input type="radio" id="performance3" name="performance" value="low" defaultChecked={performance === 256} onChange={handlePerformance} />
+						<input type="radio" id="performance3" name="performance" value="low" defaultChecked={performance === 32} onChange={handlePerformance} />
 						<label htmlFor="performance3">Low</label>
 						<br />
 					</span>

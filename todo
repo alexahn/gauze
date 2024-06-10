@@ -632,6 +632,8 @@
 		[ ] use local storage and have a new route structure
 			[ ] routes will only resolve due to local state, so if someone were to open the url in a brand new browser, it will fail
 				[ ] this is fine, they should just copy and paste the workspace data they manage manually (e.g. stored into a workspace entity)
+	[ ] figure out how to handle spacing out initialization events in purely synchronous code
+		[ ] probably need to use setTimeout
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages
