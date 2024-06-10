@@ -624,6 +624,14 @@
 	[ ] local storage for graph
 	[ ] change default route after proxy login to be root
 	[ ] style the environment pages (sign in, sign out, sign up)
+	[ ] workspaces
+		[ ] allow custom workspaces to be created and shared
+		[ ] navigable by either menu on left side of screen or bottom of screen
+		[ ] default workspace is the entry point
+			[ ] have an easy way for agents to store custom workspaces (e.g. a workspace entity that is automatically connected to the agent entity)
+		[ ] use local storage and have a new route structure
+			[ ] routes will only resolve due to local state, so if someone were to open the url in a brand new browser, it will fail
+				[ ] this is fine, they should just copy and paste the workspace data they manage manually (e.g. stored into a workspace entity)
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages
@@ -672,6 +680,8 @@
 		[x] create new graphql structures to align with the new properties
 		[x] update header graphql query to return the new properties
 		[x] remove graphql_fields from entity definition
+	[ ] test custom abstract types/scalars
+		[ ] see how easy it is to use third party scalars and how the error messages present themselves
 [ ] cli, commands, and manager application
 	[ ] polish commands and manager application
 	[x] align environment variables with cli commands
