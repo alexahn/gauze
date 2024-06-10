@@ -15,195 +15,203 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 	const activeConnections = graph.activeConnections(agentHeader.name);
 	const activeEdges = graph.activeEdges(agentHeader.name);
 	const nodeConnections = graph.nodeConnections(node.id);
+	const initialized = height !== null && width !== null;
 	function onMouseDown(e) {
-		if (e.button === 2) {
-			e.preventDefault();
-		} else if (e.button === 1) {
-		} else if (e.button === 0) {
-			if (containerRef.current.contains(e.target)) {
-				// note: is there a way to do this elegantly?
-				const fromTarget = e.target.closest(".from-start");
-				const toTarget = e.target.closest(".to-start");
-				const buttonTarget = e.target.closest("button");
-				const spanTarget = e.target.closest("span");
-				if (fromTarget) {
-					setConnecting(true);
-					// create two interaction connections
-					// create interaction
-					const startID = uuidv4();
-					const endID = uuidv4();
-					graph.createConnections([
-						{
-							id: startID,
-							name: "from_start",
-							nodeID: fromTarget.dataset.nodeId,
-							entityID: fromTarget.dataset.entityId,
-							entityType: fromTarget.dataset.entityType,
-							x: e.clientX,
-							y: e.clientY,
-							z: node.z,
-						},
-						{
-							id: endID,
-							name: "from_end",
-							nodeID: fromTarget.dataset.nodeId,
-							entityID: fromTarget.dataset.entityId,
-							entityType: fromTarget.dataset.entityType,
-							x: e.clientX,
-							y: e.clientY,
-							z: node.z,
-						},
-					]);
-					graph.createInteraction({
-						fromNodeID: node.id,
-						fromConnectionID: startID,
-						toNodeID: node.id,
-						toConnectionID: endID,
-					});
-					e.preventDefault();
-				} else if (toTarget) {
-					setConnecting(true);
-					// create two interaction connections
-					// create interaction
-					const startID = uuidv4();
-					const endID = uuidv4();
-					graph.createConnections([
-						{
-							id: startID,
-							name: "to_start",
-							nodeID: toTarget.dataset.nodeId,
-							entityID: toTarget.dataset.entityId,
-							entityType: toTarget.dataset.entityType,
-							x: e.clientX,
-							y: e.clientY,
-							z: node.z,
-						},
-						{
-							id: endID,
-							name: "to_end",
-							nodeID: toTarget.dataset.nodeId,
-							entityID: toTarget.dataset.entityId,
-							entityType: toTarget.dataset.entityType,
-							x: e.clientX,
-							y: e.clientY,
-							z: node.z,
-						},
-					]);
-					graph.createInteraction({
-						fromNodeID: node.id,
-						fromConnectionID: startID,
-						toNodeID: node.id,
-						toConnectionID: endID,
-					});
-					e.preventDefault();
-				} else if (buttonTarget) {
-				} else if (spanTarget) {
-				} else {
-					setDragging(true);
-					//e.preventDefault();
-					graph.updateNodes([
-						{
-							...graph.selectNode(node.id),
-							oldX: e.clientX,
-							oldY: e.clientY,
-						},
-					]);
-					graph.updateConnections(
-						graph.selectConnections(nodeConnections.keys).map(function (connection) {
-							return {
-								...connection,
+		if (initialized) {
+			if (e.button === 2) {
+				e.preventDefault();
+			} else if (e.button === 1) {
+			} else if (e.button === 0) {
+				if (containerRef.current.contains(e.target)) {
+					// note: is there a way to do this elegantly?
+					const fromTarget = e.target.closest(".from-start");
+					const toTarget = e.target.closest(".to-start");
+					const buttonTarget = e.target.closest("button");
+					const spanTarget = e.target.closest("span");
+					if (fromTarget) {
+						setConnecting(true);
+						// create two interaction connections
+						// create interaction
+						const startID = uuidv4();
+						const endID = uuidv4();
+						graph.createConnections([
+							{
+								id: startID,
+								name: "from_start",
+								nodeID: fromTarget.dataset.nodeId,
+								entityID: fromTarget.dataset.entityId,
+								entityType: fromTarget.dataset.entityType,
+								x: e.clientX,
+								y: e.clientY,
+								z: node.z,
+							},
+							{
+								id: endID,
+								name: "from_end",
+								nodeID: fromTarget.dataset.nodeId,
+								entityID: fromTarget.dataset.entityId,
+								entityType: fromTarget.dataset.entityType,
+								x: e.clientX,
+								y: e.clientY,
+								z: node.z,
+							},
+						]);
+						graph.createInteraction({
+							fromNodeID: node.id,
+							fromConnectionID: startID,
+							toNodeID: node.id,
+							toConnectionID: endID,
+						});
+						e.preventDefault();
+					} else if (toTarget) {
+						setConnecting(true);
+						// create two interaction connections
+						// create interaction
+						const startID = uuidv4();
+						const endID = uuidv4();
+						graph.createConnections([
+							{
+								id: startID,
+								name: "to_start",
+								nodeID: toTarget.dataset.nodeId,
+								entityID: toTarget.dataset.entityId,
+								entityType: toTarget.dataset.entityType,
+								x: e.clientX,
+								y: e.clientY,
+								z: node.z,
+							},
+							{
+								id: endID,
+								name: "to_end",
+								nodeID: toTarget.dataset.nodeId,
+								entityID: toTarget.dataset.entityId,
+								entityType: toTarget.dataset.entityType,
+								x: e.clientX,
+								y: e.clientY,
+								z: node.z,
+							},
+						]);
+						graph.createInteraction({
+							fromNodeID: node.id,
+							fromConnectionID: startID,
+							toNodeID: node.id,
+							toConnectionID: endID,
+						});
+						e.preventDefault();
+					} else if (buttonTarget) {
+					} else if (spanTarget) {
+					} else {
+						setDragging(true);
+						//e.preventDefault();
+						graph.updateNodes([
+							{
+								...graph.selectNode(node.id),
 								oldX: e.clientX,
 								oldY: e.clientY,
-							};
-						}),
-					);
+							},
+						]);
+						graph.updateConnections(
+							graph.selectConnections(nodeConnections.keys).map(function (connection) {
+								return {
+									...connection,
+									oldX: e.clientX,
+									oldY: e.clientY,
+								};
+							}),
+						);
+					}
+				} else {
 				}
-			} else {
 			}
 		}
 	}
 	function onMouseUp(e) {
-		const interaction = graph.readInteraction();
-		if (interaction) {
-			const fromTarget = e.target.closest(".from-start");
-			const toTarget = e.target.closest(".to-start");
-			if (fromTarget || toTarget) {
-				const target = fromTarget ? fromTarget.dataset : toTarget.dataset;
-				const source = connections[interaction.fromConnectionID];
-				graph.deleteConnections([connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
-				graph.deleteInteraction();
-				setConnecting(false);
-				if (source.name === "from_start") {
-					if (target.interaction === "to_end") {
-						return orchestrate.createRelationship({ gauze, model, graph }, agentHeader, {
-							fromNodeID: target.nodeId,
-							fromEntityID: target.entityId,
-							fromEntityType: target.entityType,
-							toNodeID: source.nodeID,
-							toEntityID: source.entityID,
-							toEntityType: source.entityType,
-						});
-					}
-				} else if (source.name === "to_start") {
-					if (target.interaction === "from_end") {
-						return orchestrate.createRelationship({ gauze, model, graph }, agentHeader, {
-							fromNodeID: source.nodeID,
-							fromEntityID: source.entityID,
-							fromEntityType: source.entityType,
-							toNodeID: target.nodeId,
-							toEntityID: target.entityId,
-							toEntityType: target.entityType,
-						});
+		// note: consider any scenarios where this guard might be a problem (e.g. can we make an uninitialized node while dragging?)
+		if (initialized) {
+			const interaction = graph.readInteraction();
+			if (interaction) {
+				const fromTarget = e.target.closest(".from-start");
+				const toTarget = e.target.closest(".to-start");
+				if (fromTarget || toTarget) {
+					const target = fromTarget ? fromTarget.dataset : toTarget.dataset;
+					const source = connections[interaction.fromConnectionID];
+					graph.deleteConnections([connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
+					graph.deleteInteraction();
+					setConnecting(false);
+					if (source.name === "from_start") {
+						if (target.interaction === "to_end") {
+							return orchestrate.createRelationship({ gauze, model, graph }, agentHeader, {
+								fromNodeID: target.nodeId,
+								fromEntityID: target.entityId,
+								fromEntityType: target.entityType,
+								toNodeID: source.nodeID,
+								toEntityID: source.entityID,
+								toEntityType: source.entityType,
+							});
+						}
+					} else if (source.name === "to_start") {
+						if (target.interaction === "from_end") {
+							return orchestrate.createRelationship({ gauze, model, graph }, agentHeader, {
+								fromNodeID: source.nodeID,
+								fromEntityID: source.entityID,
+								fromEntityType: source.entityType,
+								toNodeID: target.nodeId,
+								toEntityID: target.entityId,
+								toEntityType: target.entityType,
+							});
+						}
+					} else {
+						graph.deleteConnections([connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
+						graph.deleteInteraction();
+						setConnecting(false);
 					}
 				} else {
 					graph.deleteConnections([connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
 					graph.deleteInteraction();
 					setConnecting(false);
 				}
+			} else if (isDragging) {
+				setDragging(false);
 			} else {
-				graph.deleteConnections([connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
-				graph.deleteInteraction();
-				setConnecting(false);
 			}
-		} else if (isDragging) {
-			setDragging(false);
-		} else {
 		}
 	}
 	function onMouseMove(e) {
-		const interaction = graph.readInteraction();
-		if (interaction) {
-			// update the relationship_end connection
-			const endConnection = {
-				...connections[interaction.toConnectionID],
-				x: e.clientX,
-				y: e.clientY,
-			};
-			//console.log('updating end connection', endConnection)
-			graph.updateConnections([endConnection]);
-		} else if (isDragging) {
-			const activeNode = graph.selectNode(node.id);
-			graph.updateNodes([
-				{
-					...activeNode,
-					oldX: e.clientX,
-					oldY: e.clientY,
-					x: activeNode.x + e.clientX - activeNode.oldX,
-					y: activeNode.y + e.clientY - activeNode.oldY,
-					z: activeNode.z,
-				},
-			]);
-			graph.updateConnections(
-				graph.selectConnections(nodeConnections.keys).map(function (connection) {
-					return {
-						...connection,
+		if (initialized) {
+			const interaction = graph.readInteraction();
+			if (interaction) {
+				// update the relationship_end connection
+				const endConnection = {
+					...connections[interaction.toConnectionID],
+					x: e.clientX,
+					y: e.clientY,
+				};
+				//console.log('updating end connection', endConnection)
+				graph.updateConnections([endConnection]);
+			} else if (isDragging) {
+				const activeNode = graph.selectNode(node.id);
+				graph.updateNodes([
+					{
+						...activeNode,
 						oldX: e.clientX,
 						oldY: e.clientY,
-						x: connection.x + e.clientX - connection.oldX,
-						y: connection.y + e.clientY - connection.oldY,
-					};
-				}),
-			);
+						x: activeNode.x + e.clientX - activeNode.oldX,
+						y: activeNode.y + e.clientY - activeNode.oldY,
+						z: activeNode.z,
+					},
+				]);
+				graph.updateConnections(
+					graph.selectConnections(nodeConnections.keys).map(function (connection) {
+						return {
+							...connection,
+							oldX: e.clientX,
+							oldY: e.clientY,
+							x: connection.x + e.clientX - connection.oldX,
+							y: connection.y + e.clientY - connection.oldY,
+						};
+					}),
+				);
+			}
 		}
 	}
 	useLayoutEffect(function () {
@@ -225,9 +233,6 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 			window.removeEventListener("mousemove", onMouseMove);
 		};
 	});
-	function renderComponent() {
-		return <node.component agentHeader={agentHeader} route={route} link={link} nodes={nodes} edges={edges} connections={connections} node={node} {...node.props} />;
-	}
 	return (
 		<div
 			className="node flex absolute br4 shadow-2"

@@ -620,7 +620,7 @@
 	[ ] update pagination to use chevron icons instead of carrots
 	[x] add hover classes to indicate interactive elements
 	[ ] add active classes to indicate interaction consequence
-	[ ] interaction guards for strict run state management
+	[x] interaction guards for strict run state management
 	[ ] local storage for graph
 	[ ] change default route after proxy login to be root
 	[ ] style the environment pages (sign in, sign out, sign up)

@@ -35,31 +35,16 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 	const activeNodes = graph.activeNodes(agentHeader.name);
 	const activeConnections = graph.activeConnections(agentHeader.name);
 	const activeEdges = graph.activeEdges(agentHeader.name);
+	const nodesInitialized = activeNodes.values.every(function (node) {
+		return node.width !== null && node.height !== null;
+	});
+	const connectionsInitialized = activeConnections.values.every(function (connection) {
+		return connection.x !== null && connection.y !== null;
+	});
 	function onMouseDown(e) {
-		if (e.button === 2) {
-		} else if (e.button === 1) {
-			setPanning(true);
-			graph.updateNodes(
-				graph.selectNodes(activeNodes.keys).map(function (position) {
-					return {
-						...position,
-						oldX: e.clientX,
-						oldY: e.clientY,
-					};
-				}),
-			);
-			graph.updateConnections(
-				graph.selectConnections(activeConnections.keys).map(function (connection) {
-					return {
-						...connection,
-						oldX: e.clientX,
-						oldY: e.clientY,
-					};
-				}),
-			);
-		} else if (e.button === 0) {
-			if (e.target === containerRef.current) {
-				e.preventDefault();
+		if (nodesInitialized && connectionsInitialized) {
+			if (e.button === 2) {
+			} else if (e.button === 1) {
 				setPanning(true);
 				graph.updateNodes(
 					graph.selectNodes(activeNodes.keys).map(function (position) {
@@ -79,69 +64,99 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 						};
 					}),
 				);
+			} else if (e.button === 0) {
+				if (e.target === containerRef.current) {
+					e.preventDefault();
+					setPanning(true);
+					graph.updateNodes(
+						graph.selectNodes(activeNodes.keys).map(function (position) {
+							return {
+								...position,
+								oldX: e.clientX,
+								oldY: e.clientY,
+							};
+						}),
+					);
+					graph.updateConnections(
+						graph.selectConnections(activeConnections.keys).map(function (connection) {
+							return {
+								...connection,
+								oldX: e.clientX,
+								oldY: e.clientY,
+							};
+						}),
+					);
+				} else {
+				}
 			} else {
 			}
-		} else {
 		}
 	}
 	function onMouseUp(e) {
-		setPanning(false);
+		// note: consider any scenarios where this guard might be a problem (e.g. can we make an uninitialized node while panning?)
+		if (nodesInitialized && connectionsInitialized) {
+			setPanning(false);
+		}
 	}
 	function onMouseMove(e) {
-		if (isPanning) {
-			graph.updateNodes(
-				graph.selectNodes(activeNodes.keys).map(function (node) {
-					return {
-						...node,
-						x: node.x + e.clientX - node.oldX,
-						y: node.y + e.clientY - node.oldY,
-						oldX: e.clientX,
-						oldY: e.clientY,
-					};
-				}),
-			);
-			graph.updateConnections(
-				graph.selectConnections(activeConnections.keys).map(function (connection) {
-					return {
-						...connection,
-						x: connection.x + e.clientX - connection.oldX,
-						y: connection.y + e.clientY - connection.oldY,
-						oldX: e.clientX,
-						oldY: e.clientY,
-					};
-				}),
-			);
+		if (nodesInitialized && connectionsInitialized) {
+			if (isPanning) {
+				graph.updateNodes(
+					graph.selectNodes(activeNodes.keys).map(function (node) {
+						return {
+							...node,
+							x: node.x + e.clientX - node.oldX,
+							y: node.y + e.clientY - node.oldY,
+							oldX: e.clientX,
+							oldY: e.clientY,
+						};
+					}),
+				);
+				graph.updateConnections(
+					graph.selectConnections(activeConnections.keys).map(function (connection) {
+						return {
+							...connection,
+							x: connection.x + e.clientX - connection.oldX,
+							y: connection.y + e.clientY - connection.oldY,
+							oldX: e.clientX,
+							oldY: e.clientY,
+						};
+					}),
+				);
+			}
 		}
 	}
 	function onWheel(e) {
-		if (e.deltaY) {
-			const sign = Math.sign(e.deltaY) / 10;
-			const scale = 1 - sign;
-			const rect = containerRef.current.getBoundingClientRect();
-			graph.updateNodes(
-				graph.selectNodes(activeNodes.keys).map(function (node) {
-					const x = rect.width / 2 - (rect.width / 2 - node.x) * scale - (node.width / 2) * sign;
-					const y = rect.height / 2 - (rect.height / 2 - node.y) * scale - (node.height / 2) * sign;
-					return {
-						...node,
-						x: x,
-						y: y,
-						z: node.z * scale,
-					};
-				}),
-			);
-			graph.updateConnections(
-				graph.selectConnections(activeConnections.keys).map(function (connection) {
-					const x = rect.width / 2 - (rect.width / 2 - connection.x) * scale;
-					const y = rect.height / 2 - (rect.height / 2 - connection.y) * scale;
-					return {
-						...connection,
-						x: x,
-						y: y,
-						z: connection.z * scale,
-					};
-				}),
-			);
+		if (nodesInitialized && connectionsInitialized) {
+			if (e.deltaY) {
+				const sign = Math.sign(e.deltaY) / 10;
+				const scale = 1 - sign;
+				const rect = containerRef.current.getBoundingClientRect();
+				graph.updateNodes(
+					graph.selectNodes(activeNodes.keys).map(function (node) {
+						const x = rect.width / 2 - (rect.width / 2 - node.x) * scale - (node.width / 2) * sign;
+						const y = rect.height / 2 - (rect.height / 2 - node.y) * scale - (node.height / 2) * sign;
+						return {
+							...node,
+							x: x,
+							y: y,
+							z: node.z * scale,
+						};
+					}),
+				);
+				graph.updateConnections(
+					graph.selectConnections(activeConnections.keys).map(function (connection) {
+						const x = rect.width / 2 - (rect.width / 2 - connection.x) * scale;
+						const y = rect.height / 2 - (rect.height / 2 - connection.y) * scale;
+						return {
+							...connection,
+							x: x,
+							y: y,
+							z: connection.z * scale,
+						};
+					}),
+				);
+			}
 		}
 	}
 	useEffect(() => {
