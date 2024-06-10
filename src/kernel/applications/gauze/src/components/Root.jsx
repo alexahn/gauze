@@ -20,7 +20,7 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 	const [edges, setEdges] = useState(activeEdges.object);
 	const [connections, setConnections] = useState(activeConnections.object);
 	const [interaction, setInteraction] = useState(graph.readInteraction());
-	const [performance, setPerformance] = useState(4);
+	const [performance, setPerformance] = useState(0);
 	const [share, setShare] = useState();
 	const [displayShare, setDisplayShare] = useState(false);
 	const [link, setLink] = useState(false);
@@ -64,14 +64,16 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 		setLink(!link);
 	}
 	function handlePerformance(e) {
-		if (e.target.value === "high") {
-			setPerformance(0);
-		} else if (e.target.value === "medium") {
+		if (e.target.value === "max") {
+			setPerformance(0)
+		} else if (e.target.value === "high") {
 			setPerformance(4);
+		} else if (e.target.value === "medium") {
+			setPerformance(32);
 		} else if (e.target.value === "low") {
-			setPerformance(32);
+			setPerformance(128);
 		} else {
-			setPerformance(32);
+			setPerformance(128);
 		}
 	}
 	useEffect(function () {
@@ -97,13 +99,16 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 					<span className="dn bg-light-green mw6 w5 top-0 right-0 pa1 absolute f4 tooltip">
 						<label htmlFor="performance">Performance:</label>
 						<br />
-						<input type="radio" id="performance1" name="performance" value="high" defaultChecked={performance === 0} onChange={handlePerformance} />
+						<input type="radio" id="performance0" name="performance" value="max" defaultChecked={performance === 0} onChange={handlePerformance} />
+						<label htmlFor="performance1">Max</label>
+						<br />
+						<input type="radio" id="performance1" name="performance" value="high" defaultChecked={performance === 4} onChange={handlePerformance} />
 						<label htmlFor="performance1">High</label>
 						<br />
-						<input type="radio" id="performance2" name="performance" value="medium" defaultChecked={performance === 4} onChange={handlePerformance} />
+						<input type="radio" id="performance2" name="performance" value="medium" defaultChecked={performance === 32} onChange={handlePerformance} />
 						<label htmlFor="performance2">Medium</label>
 						<br />
-						<input type="radio" id="performance3" name="performance" value="low" defaultChecked={performance === 32} onChange={handlePerformance} />
+						<input type="radio" id="performance3" name="performance" value="low" defaultChecked={performance === 128} onChange={handlePerformance} />
 						<label htmlFor="performance3">Low</label>
 						<br />
 					</span>

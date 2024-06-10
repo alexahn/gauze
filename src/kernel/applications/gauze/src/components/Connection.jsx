@@ -6,6 +6,7 @@ export default function Connection({ agentHeader, route, dataX, dataY, graph, no
 	const node = graph.selectNode(nodeID);
 	const connection = graph.selectConnection(connectionID);
 	useLayoutEffect(function () {
+		// note: we need to do something about this render guard here
 		if (node.render && (connection.x === null || connection.y === null)) {
 			const containerRects = containerRef.current.getClientRects()[0];
 			const initialized = {
