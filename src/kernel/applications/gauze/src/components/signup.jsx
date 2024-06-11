@@ -49,6 +49,10 @@ export default function SignUp({ router, gauze, model }) {
 				model.create("SESSION", session.gauze__session__id, session);
 				// use router here to do a redirect
 				router.navigate("proxy.agents", {}, { replace: true });
+			})
+			.catch(function (err) {
+				setSubmitSignUp(false);
+				setError("Something went wrong!");
 			});
 	}
 	function previous() {
@@ -61,63 +65,103 @@ export default function SignUp({ router, gauze, model }) {
 			setStep(step + 1);
 		}
 	}
+	const fieldClass = "flex items-center athelas";
+	const labelClass = "clouds br2 ba bw1 bgxyz4 bdxyz4 cx6 w4 f7";
+	const inputClass = "clouds w-100 h-100 br2 bdx6 bgx6 ba bw1 cx2 f6";
+	const previousButtonClass = "clouds athelas bgx2 bdx2 bgx3h bdx3h ba br2 bw1 cx4 cx5h w3 f6";
+	const resetButtonClass = "clouds athelas bgx7 bdx7 bgx6h bdx6h ba br2 bw1 cx6 cxyz7h w3 f6";
+	const nextButtonClass = "clouds athelas bgx11 bdx11 bgx9h bdx9h ba br2 bw1 cx7 cx5h w3 f6";
+	const errorClass = "clouds athelas bgx10 bdx10 cx7 ba br2 bw1 pa1 f6";
 	if (step === 0) {
 		return (
 			<div>
-				<div>Sign Up</div>
+				{/*<div>Sign Up</div>*/}
 				<hr />
 				<form method="post" onSubmit={handleSubmitPerson}>
-					<label>
-						Email: <input name="email" defaultValue={person.email} disabled={submitSignUp} />
-					</label>
+					<div className={fieldClass}>
+						<label htmlFor="email">
+							<button className={labelClass} disabled={true}>
+								EMAIL
+							</button>
+						</label>
+						<input className={inputClass} name="email" defaultValue={person.email} disabled={submitSignUp} />
+					</div>
 					<hr />
-					<button type="reset" disabled={submitSignUp}>
-						Reset
-					</button>
-					<button type="submit" disabled={submitSignUp}>
-						Next
-					</button>
+					<div align="right">
+						<button className={previousButtonClass} type="reset" disabled={submitSignUp}>
+							Reset
+						</button>
+						<button className={nextButtonClass} type="submit" disabled={submitSignUp}>
+							Next
+						</button>
+					</div>
 				</form>
-				<label>{error}</label>
+				<div className="h1" align="right">
+					<div style={{ visibility: "hidden" }}>*</div>
+					{error ? <label className={errorClass}>{error}</label> : null}
+				</div>
 			</div>
 		);
 	} else if (step === 1) {
 		return (
 			<div>
-				<div>Sign Up</div>
+				{/*<div>Sign Up</div>*/}
 				<hr />
 				<form method="post" onSubmit={handleSubmitAccount}>
-					<label>
-						Password: <input name="password" type="password" defaultValue={account.password} disabled={submitSignUp} />
-					</label>
+					<div className={fieldClass}>
+						<label htmlFor="password">
+							<button className={labelClass} disabled={true}>
+								PASSWORD
+							</button>
+						</label>
+						<input className={inputClass} name="password" type="password" defaultValue={account.password} disabled={submitSignUp} />
+					</div>
 					<hr />
-					<button onClick={previous} disabled={submitSignUp}>
-						Previous
-					</button>
-					<button type="reset" disabled={submitSignUp}>
-						Reset
-					</button>
-					<button type="submit" disabled={submitSignUp}>
-						Next
-					</button>
+					<div align="right">
+						<button className={previousButtonClass} onClick={previous} disabled={submitSignUp}>
+							Previous
+						</button>
+						<button className={resetButtonClass} type="reset" disabled={submitSignUp}>
+							Reset
+						</button>
+						<button className={nextButtonClass} type="submit" disabled={submitSignUp}>
+							Next
+						</button>
+					</div>
 				</form>
-				<label>{error}</label>
+				<div className="h1" align="right">
+					<div style={{ visibility: "hidden" }}>*</div>
+					{error ? <label className={errorClass}>{error}</label> : null}
+				</div>
 			</div>
 		);
 	} else if (step === 2) {
 		return (
 			<div>
-				<div>Sign Up</div>
+				{/*<div>Sign Up</div>*/}
 				<hr />
 				<form method="post" onSubmit={handleSignUp}>
-					<button onClick={previous} disabled={submitSignUp}>
-						Previous
-					</button>
-					<button type="submit" disabled={submitSignUp}>
-						Sign Up
-					</button>
+					<div className={fieldClass} style={{ visibility: "hidden" }}>
+						<label htmlFor="password">
+							<button className={labelClass} disabled={true}>
+								PASSWORD
+							</button>
+						</label>
+						<input className={inputClass} name="password" type="password" defaultValue={account.password} disabled={submitSignUp} />
+					</div>
+					<div align="right">
+						<button className={previousButtonClass} onClick={previous} disabled={submitSignUp}>
+							Previous
+						</button>
+						<button className={nextButtonClass} type="submit" disabled={submitSignUp}>
+							Sign Up
+						</button>
+					</div>
 				</form>
-				<label>{error}</label>
+				<div className="h1" align="right">
+					<div style={{ visibility: "hidden" }}>*</div>
+					{error ? <label className={errorClass}>{error}</label> : null}
+				</div>
 			</div>
 		);
 	} else {

@@ -16,10 +16,13 @@ export default function Banner3Unit() {
 	const gauze = useSelector((state) => {
 		return state.services.gauze.default;
 	});
+	const route = useSelector((state) => {
+		return state.router.route;
+	});
 	return (
 		<div id={id} key={id}>
 			{/* render a pure function component here */}
-			<Banner3 router={router} gauze={gauze} model={model} />
+			<Banner3 route={route} router={router} gauze={gauze} model={model} />
 		</div>
 	);
 }

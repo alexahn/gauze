@@ -51,14 +51,14 @@ const routes = [
 		onActivate: function ({ dependencies }) {
 			return Promise.resolve(true);
 		},
-		layout: layouts.alligator.default,
+		layout: layouts.alpaca.default,
 		sections: {
 			top: sections.alder.default,
 			bottom: sections.alder.default,
 		},
 		units: {
 			top: {
-				body: units.adamite.default,
+				body: units.banner3.default,
 			},
 			bottom: {
 				body: units.amethyst.default,
@@ -91,18 +91,18 @@ const routes = [
 		onActivate: function (params) {
 			return Promise.resolve(true);
 		},
-		layout: layouts.anaconda.default,
+		layout: layouts.alpaca.default,
 		sections: {
-			left: sections.almond.default,
-			right: sections.alder.default,
+			top: sections.alder.default,
+			bottom: sections.alder.default,
 		},
 		units: {
-			left: {
-				header: units.adamite.default,
-				body: units.ammonite.default,
+			top: {
+				body: units.banner3.default,
+				//body: units.ammonite.default,
 			},
-			right: {
-				body: units.azurite.default,
+			bottom: {
+				body: units.ammonite.default,
 			},
 		},
 	},
