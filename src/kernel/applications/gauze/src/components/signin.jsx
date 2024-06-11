@@ -23,16 +23,23 @@ export default function SignIn({ route, router, gauze, model }) {
 		setPerson(formJSON);
 		setSubmitAssert(true);
 		// async call
-		return gauze.personAssert(formJSON).then(function (status) {
-			setSubmitAssert(false);
-			if (status.person.assert.email.success) {
-				setAsserted({ ...asserted, ...status });
-				setStep(step + 1);
-			} else {
-				// construct an error here
-				setError("Person could not be asserted");
-			}
-		});
+		return gauze
+			.personAssert(formJSON)
+			.then(function (status) {
+				setSubmitAssert(false);
+				if (status.person.assert.email.success) {
+					setAsserted({ ...asserted, ...status });
+					console.log("incrementing");
+					setStep(step + 1);
+				} else {
+					// construct an error here
+					setError("Person could not be asserted");
+				}
+			})
+			.catch(function (err) {
+				setSubmitAssert(false);
+				setError("Something went wrong!");
+			});
 	}
 	function handleSubmitVerify(e) {
 		e.preventDefault();
@@ -43,16 +50,22 @@ export default function SignIn({ route, router, gauze, model }) {
 		setAccount(formJSON);
 		setSubmitVerify(true);
 		// async call
-		return gauze.accountVerify(formJSON).then(function (status) {
-			setSubmitVerify(false);
-			if (status.account.verify.password.success) {
-				setVerified({ ...verified, ...status });
-				setStep(step + 1);
-			} else {
-				// construct an error here
-				setError("Account could not be verified");
-			}
-		});
+		return gauze
+			.accountVerify(formJSON)
+			.then(function (status) {
+				setSubmitVerify(false);
+				if (status.account.verify.password.success) {
+					setVerified({ ...verified, ...status });
+					setStep(step + 1);
+				} else {
+					// construct an error here
+					setError("Account could not be verified");
+				}
+			})
+			.catch(function (err) {
+				setSubmitVerify(false);
+				setError("Something went wrong!");
+			});
 	}
 	function handleSignIn(e) {
 		e.preventDefault();
@@ -62,40 +75,54 @@ export default function SignIn({ route, router, gauze, model }) {
 		const formJSON = Object.fromEntries(formData.entries());
 		setSubmitSignIn(true);
 		// async call
-		return gauze.signIn().then(function (session) {
-			setSubmitSignIn(false);
-			gauze.setProxyJWT(session.gauze__session__value);
-			model.create("SESSION", session.gauze__session__id, session);
-			// router navigate
-			router.navigate("proxy.agents", { next: route.params.next }, { replace: true });
-		});
+		return gauze
+			.signIn()
+			.then(function (session) {
+				setSubmitSignIn(false);
+				gauze.setProxyJWT(session.gauze__session__value);
+				model.create("SESSION", session.gauze__session__id, session);
+				// router navigate
+				router.navigate("proxy.agents", { next: route.params.next }, { replace: true });
+			})
+			.catch(function (err) {
+				setSubmitSignIn(false);
+				setError("Something went wrong!");
+			});
 	}
 	function previous() {
 		if (0 < step) {
+			console.log("decrementing");
 			setStep(step - 1);
 		}
 	}
 	function next() {
 		if (step < requirements.length) {
+			console.log("incrementing");
 			setStep(step + 1);
 		}
 	}
+	console.log("step", step);
 	if (step === 0) {
 		return (
 			<div>
 				<div>Sign In</div>
 				<hr />
 				<form method="post" onSubmit={handleSubmitAssert}>
-					<label>
-						Email: <input name="email" defaultValue={person.email} disabled={submitAssert} />
-					</label>
+					<div className="flex items-center athelas f5">
+						<label htmlFor="email">
+							<button className="br2 ba bw1 bgxyz4 bdxyz4 cx12 w3">Email</button>
+						</label>
+						<input className="w-100 br2 bdx12 bgx12 ba bw1" name="email" defaultValue={person.email} disabled={submitAssert} />
+					</div>
 					<hr />
-					<button type="reset" disabled={submitAssert}>
+					<div align="right">
+					<button className="bgx2 bdx2 bgx3h bdx3h ba br2 bw1 cx11 cx9h w3" type="reset" disabled={submitAssert}>
 						Reset
 					</button>
-					<button type="submit" disabled={submitAssert}>
+					<button className="bgx11 bdx11 bgx9h bdx9h ba br2 bw1 cx2 cx4h w3" type="submit" disabled={submitAssert}>
 						Next
 					</button>
+					</div>
 				</form>
 				<label>{error}</label>
 			</div>
@@ -106,9 +133,8 @@ export default function SignIn({ route, router, gauze, model }) {
 				<div>Sign In</div>
 				<hr />
 				<form method="post" onSubmit={handleSubmitVerify}>
-					<label>
-						Password: <input name="password" type="password" defaultValue={account.password} disabled={submitVerify} />
-					</label>
+					<label>Password:</label>
+					<input name="password" type="password" defaultValue={account.password} disabled={submitVerify} />
 					<hr />
 					<button onClick={previous} disabled={submitVerify}>
 						Previous
