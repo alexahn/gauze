@@ -39,6 +39,30 @@ class GraphService {
 			panning: {},
 			dragging: {},
 		};
+		/*
+		this.spaces = {
+			default: {
+				nodes: {
+					object: {
+						[id]: true
+					},
+					array: [id]
+				},
+				connections: {
+					object: {
+						[id]: true
+					},
+					array: [id]
+				},
+				edges: {
+					object: {
+						[id]: true
+					},
+					array: [id]
+				}
+			}
+		}
+		*/
 	}
 	root(type) {
 		const self = this;
