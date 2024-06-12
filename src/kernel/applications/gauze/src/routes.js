@@ -164,6 +164,20 @@ const routes = [
 		onActivate: function ({ dependencies }) {
 			return Promise.resolve(true);
 		},
+		layout: layouts.alpaca.default,
+		sections: {
+			top: sections.alder.default,
+			bottom: sections.alder.default,
+		},
+		units: {
+			top: {
+				body: units.banner3.default,
+			},
+			bottom: {
+				body: units.proxies.default,
+			},
+		},
+		/*
 		layout: layouts.anaconda.default,
 		sections: {
 			left: sections.almond.default,
@@ -178,6 +192,7 @@ const routes = [
 				body: units.azurite.default,
 			},
 		},
+		*/
 	},
 	{
 		name: "system",
@@ -218,8 +233,8 @@ const routes = [
 		},
 	},
 	{
-		name: "system.root",
-		path: "/root",
+		name: "system.graph",
+		path: "/graph",
 		canActivate: (router, dependencies) => (toState, fromState, done) => {
 			const { services } = dependencies;
 			const { gauze, model, graph, router } = services;

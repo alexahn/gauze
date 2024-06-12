@@ -37,9 +37,9 @@ export default function Banner({ gauze, model, router }) {
 			<a href={router.buildUrl("system.types", {})}>System</a>
 		</div>
 	);
-	const root = (
+	const graph = (
 		<div>
-			<a href={router.buildUrl("system.root", {})}>Root</a>
+			<a href={router.buildUrl("system.graph", {})}>Graph</a>
 		</div>
 	);
 	return (
@@ -50,7 +50,7 @@ export default function Banner({ gauze, model, router }) {
 			{authProxy || authSystem ? signOut : null}
 			{authProxy ? proxy : null}
 			{authSystem ? system : null}
-			{authSystem ? root : null}
+			{authSystem ? graph : null}
 		</div>
 	);
 }

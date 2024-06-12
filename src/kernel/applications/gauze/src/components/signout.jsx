@@ -37,7 +37,7 @@ export default function SignOut({ router, gauze, model }) {
 				setError("Something went wrong!");
 			});
 	}
-	const buttonClass = "clouds athelas bgx11 bdx11 bgx9h bdx9h ba br2 bw1 cx7 cx5h w4 f6";
+	const buttonClass = "clouds athelas bgx11 bdx11 bgx9h bdx9h ba br2 bw1 cx7 cx5h w-100 f6";
 	return (
 		<div>
 			{/*<div>Sign Out</div>*/}

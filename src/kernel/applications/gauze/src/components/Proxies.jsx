@@ -5,7 +5,17 @@ export default function Proxies({ route, router, gauze, model }) {
 	const [submitProxy, setSubmitProxy] = useState(false);
 	const [error, setError] = useState("");
 
-	const proxies = model.all("PROXY");
+	const order = {
+		gauze__agent_root: 0,
+		gauze__agent_account: 1,
+		gauze__agent_user: 2,
+		gauze__agent_person: 3,
+		gauze__agent_character: 4,
+	};
+
+	const proxies = model.all("PROXY").sort(function (a, b) {
+		return order[b.gauze__proxy__agent_type] < order[a.gauze__proxy__agent_type];
+	});
 
 	const readable = {
 		gauze__agent_root: "ROOT",
@@ -38,10 +48,10 @@ export default function Proxies({ route, router, gauze, model }) {
 					if (matched) {
 						router.navigate(matched.name, matched.params);
 					} else {
-						router.navigate("system.types", {}, {});
+						router.navigate("system.graph", {}, {});
 					}
 				} else {
-					router.navigate("system.types", {}, {});
+					router.navigate("system.graph", {}, {});
 				}
 			} else {
 				return gauze.proxyEnterSession(proxy).then(function (session) {
@@ -54,23 +64,31 @@ export default function Proxies({ route, router, gauze, model }) {
 						if (matched) {
 							router.navigate(matched.name, matched.params);
 						} else {
-							router.navigate("system.types", {}, {});
+							router.navigate("system.graph", {}, {});
 						}
 					} else {
-						router.navigate("system.types", {}, {});
+						router.navigate("system.graph", {}, {});
 					}
 				});
 			}
 		};
 	}
+	const buttonClass = "clouds w-100 ba bw1 br2 truncate-ns mb1 f6 athelas";
+	const classes = {
+		gauze__agent_root: `${buttonClass} bgx2 bdx2 cx6 bgx3h bdx3h cx6h`,
+		gauze__agent_account: `${buttonClass} bgx4 bdx4 cx6 bgx5h bdx5h cx6h`,
+		gauze__agent_user: `${buttonClass} bgx6 bdx6 cxyz7 bgxyz6h bdxyz6h cx12h`,
+		gauze__agent_person: `${buttonClass} bgx8 bdx8 cx6 bgx7h bdx7h`,
+		gauze__agent_character: `${buttonClass} bgx10 bdx10 cx6 bgx9h bdx9h`,
+	};
 	return (
 		<div>
-			<div>Proxy List</div>
+			{/*<div>Proxy List</div>*/}
 			<hr />
 			{proxies.map(function (proxy, index) {
 				return (
 					<form key={proxy.gauze__proxy__id} method="post" className="mb0" onSubmit={handleProxy(proxy)}>
-						<button type="submit" className="w4 truncate-ns" disabled={submitProxy}>
+						<button className={classes[proxy.gauze__proxy__agent_type]} type="submit" disabled={submitProxy}>
 							{readable[proxy.gauze__proxy__agent_type]}
 						</button>
 					</form>

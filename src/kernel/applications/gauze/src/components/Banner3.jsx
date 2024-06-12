@@ -14,7 +14,7 @@ export default function Banner({ route, gauze, model, router }) {
 	const authSystem = systemSessions.length || systemJWT;
 	const signOutClass = route.name === "environment.signout" ? "w4 athelas clouds ba bw1 br2 bgx2 bdx1 cxyz6 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx2 bdx2 cx6 bgx3h bdx3h";
 	const signUpClass = route.name === "environment.signup" ? "w3 athelas clouds ba bw1 br2 bgx4 bdx1 cxyz6 b--dotted f6" : "f6 w3 athelas clouds ba bw1 br2 bgx4 bdx4 cx6 bgx3h bdx3h";
-	const proxyClass = route.name === "environment.proxy" ? "w4 athelas clouds ba bw1 br2 bgx6 bdx1 cxyz6 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx6 bdx6 cxyz7 bgx5h bdx5h cx6h";
+	const proxyClass = route.name === "proxy.agents" ? "w4 athelas clouds ba bw1 br2 bgx6 bdx1 cx2 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx6 bdx6 cxyz7 bgx5h bdx5h cx6h";
 	const signInClass = route.name === "environment.signin" ? "w3 athelas clouds ba bw1 br2 bgx8 bdx1 cxyz6 b--dotted f6" : "f6 w3 athelas clouds ba bw1 br2 bgx8 bdx8 cx6 bgx9h bdx9h";
 	const systemClass = route.name == "system.root" ? "w4 athelas clouds ba bw1 br2 bgx10 bdx1 cxyz6 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx10 bdx10 cx6 bgx8h bdx8h";
 	const signUp = (
@@ -38,7 +38,7 @@ export default function Banner({ route, gauze, model, router }) {
 	const signOut = (
 		<div>
 			<a href={router.buildUrl("environment.signout", {})}>
-				<button className={signOutClass} style={{ opacity: route.name === "environment.signin" ? "0.5" : "1" }} disabled={route.name === "environment.signout"}>
+				<button className={signOutClass} style={{ opacity: route.name === "environment.signout" ? "0.5" : "1" }} disabled={route.name === "environment.signout"}>
 					Sign Out
 				</button>
 			</a>
@@ -47,24 +47,19 @@ export default function Banner({ route, gauze, model, router }) {
 	const proxy = (
 		<div>
 			<a href={router.buildUrl("proxy.agents", {})}>
-				<button className={proxyClass} style={{ opacity: route.name === "proxy.agent" ? "0.5" : "1" }} disabled={route.name === "proxy.agent"}>
-					Proxy
+				<button className={proxyClass} style={{ opacity: route.name === "proxy.agents" ? "0.5" : "1" }} disabled={route.name === "proxy.agents"}>
+					Sessions
 				</button>
 			</a>
 		</div>
 	);
-	const system = (
+	const graph = (
 		<div>
-			<a href={router.buildUrl("system.root", {})}>
-				<button className={systemClass} style={{ opacity: route.name === "system.root" ? "0.5" : "1" }} disabled={route.name === "system.root"}>
-					System
+			<a href={router.buildUrl("system.graph", {})}>
+				<button className={systemClass} style={{ opacity: route.name === "system.graph" ? "0.5" : "1" }} disabled={route.name === "system.graph"}>
+					Graph
 				</button>
 			</a>
-		</div>
-	);
-	const root = (
-		<div>
-			<a href={router.buildUrl("system.root", {})}>Root</a>
 		</div>
 	);
 	return (
@@ -84,7 +79,7 @@ export default function Banner({ route, gauze, model, router }) {
 				{!(authProxy || authSystem) ? signUp : null}
 				{authProxy ? proxy : null}
 				{!(authProxy || authSystem) ? signIn : null}
-				{authSystem ? system : null}
+				{authSystem ? graph : null}
 			</div>
 		</div>
 	);
