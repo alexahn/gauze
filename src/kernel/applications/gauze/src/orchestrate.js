@@ -325,6 +325,7 @@ function traverseRoot(services, agentHeader, where, targetType) {
 				model: model,
 				router: router,
 				graph: graph,
+				depth: 0,
 				type: targetHeader.name,
 				table_name: targetHeader.table_name,
 				primary_key: targetHeader.primary_key,
