@@ -1061,6 +1061,12 @@ class GraphService {
 		const self = this;
 		self.spaceValidateSpaceID(rootType, spaceID);
 		self.createNodes(nodes);
+		if (!self.spaces[rootType][spaceID].nodes) {
+			self.spaces[rootType][spaceID].nodes = {
+				object: {},
+				keys: [],
+			};
+		}
 		nodes.forEach(function (node) {
 			self.spaces[rootType][spaceID].nodes.object[node.id] = true;
 		});
@@ -1108,6 +1114,12 @@ class GraphService {
 		const self = this;
 		self.spaceValidateSpaceID(rootType, spaceID);
 		self.createConnections(connections);
+		if (!self.spaces[rootType][spaceID].connections) {
+			self.spaces[rootType][spaceID].connections = {
+				object: {},
+				keys: [],
+			};
+		}
 		connections.forEach(function (node) {
 			self.spaces[rootType][spaceID].connections.object[connection.id] = true;
 		});
@@ -1155,6 +1167,12 @@ class GraphService {
 		const self = this;
 		self.spaceValidateSpaceID(rootType, spaceID);
 		self.createEdges(edges);
+		if (!self.spaces[rootType][spaceID].edges) {
+			self.spaces[rootType][spaceID].edges = {
+				object: {},
+				keys: [],
+			};
+		}
 		edges.forEach(function (edge) {
 			self.spaces[rootType][spaceID].edges.object[edge.id] = true;
 		});
