@@ -30,6 +30,23 @@ class GraphService {
 			activeConnections: {},
 			activeEdges: {},
 			nodeConnections: {},
+			spaces: {
+				gauze__agent_root: {
+					home: {},
+				},
+				gauze__agent_account: {
+					home: {},
+				},
+				gauze__agent_user: {
+					home: {},
+				},
+				gauze__agent_person: {
+					home: {},
+				},
+				gauze__agent_character: {
+					home: {},
+				},
+			},
 		};
 		this.isPanning = false;
 		this.isZooming = false;
@@ -41,24 +58,26 @@ class GraphService {
 		};
 		/*
 		this.spaces = {
-			default: {
-				nodes: {
-					object: {
-						[id]: true
+			gauze__agent_root: {
+				default: {
+					nodes: {
+						object: {
+							[id]: true
+						},
+						array: [id]
 					},
-					array: [id]
-				},
-				connections: {
-					object: {
-						[id]: true
+					connections: {
+						object: {
+							[id]: true
+						},
+						array: [id]
 					},
-					array: [id]
-				},
-				edges: {
-					object: {
-						[id]: true
-					},
-					array: [id]
+					edges: {
+						object: {
+							[id]: true
+						},
+						array: [id]
+					}
 				}
 			}
 		}
@@ -862,6 +881,322 @@ class GraphService {
 			timer: timer,
 			value: dragging,
 		};
+	}
+	// CACHE SPACE APIS
+	cacheSetSpaceNodes(rootType, spaceID, nodes) {
+		const self = this;
+		if (self.spaces[rootType]) {
+			if (self.spaces[rootType][spaceID]) {
+				self.spaces[rootType][spaceID].nodes = nodes;
+			} else {
+				self.spaces[rootType][spaceID] = {
+					nodes: nodes,
+				};
+			}
+		} else {
+			self.spaces[rootType] = {
+				[spaceID]: {
+					nodes: nodes,
+				},
+			};
+		}
+	}
+	cacheClearSpaceNodes(rootType, spaceID) {
+		const self = this;
+		if (self.spaces[rootType]) {
+			if (self.spaces[rootType][spaceID]) {
+				if (self.spaces[rootType][spaceID].nodes) {
+					delete self.spaces[rootType][spaceID].nodes;
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	cacheSetSpaceConnections(rootType, spaceID, connections) {
+		const self = this;
+		if (self.spaces[rootType]) {
+			if (self.spaces[rootType][spaceID]) {
+				self.spaces[rootType][spaceID].connections = connections;
+			} else {
+				self.spaces[rootType][spaceID] = {
+					connections: connections,
+				};
+			}
+		} else {
+			self.spaces[rootType] = {
+				[spaceID]: {
+					connections: connections,
+				},
+			};
+		}
+	}
+	cacheClearSpaceConnections(rootType, spaceID) {
+		const self = this;
+		if (self.spaces[rootType]) {
+			if (self.spaces[rootType][spaceID]) {
+				if (self.spaces[rootType][spaceID].connections) {
+					delete self.spaces[rootType][spaceID].connections;
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	cacheSetSpaceEdges(rootType, spaceID, edges) {
+		const self = this;
+		if (self.spaces[rootType]) {
+			if (self.spaces[rootType][spaceID]) {
+				self.spaces[rootType][spaceID].edges = edges;
+			} else {
+				self.spaces[rootType][spaceID] = {
+					edges: edges,
+				};
+			}
+		} else {
+			self.spaces[rootType] = {
+				[spaceID]: {
+					edges: edges,
+				},
+			};
+		}
+	}
+	cacheClearSpaceEdges(rootType, spaceID) {
+		const self = this;
+		if (self.spaces[rootType]) {
+			if (self.spaces[rootType][spaceID]) {
+				if (self.spaces[rootType][spaceID].edges) {
+					delete self.spaces[rootType][spaceID].edges;
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	// SPACE APIS
+	spaceActiveNodes(rootType, spaceID) {
+		const self = this;
+		if (self.cache.spaces[rootType] && self.cache.spaces[rootType][spaceID] && self.cache.spaces[rootType][spaceID].nodes) {
+			return self.cache.spaces[rootType][spaceId].nodes;
+		} else {
+			const activeNodes = {};
+			activeNodes.object = {};
+			self.spaces[rootType][spaceID].nodes.keys.forEach(function (id) {
+				activeNodes.object[id] = self.nodes[id];
+			});
+			activeNodes.values = Object.values(activeNodes.object);
+			activeNodes.keys = Object.keys(activeNodes.object);
+			self.cacheSetSpaceNodes(rootType, spaceID, activeNodes);
+			return activeNodes;
+		}
+	}
+	spaceActiveConnections(rootType, spaceID) {
+		const self = this;
+		if (self.cache.spaces[rootType] && self.cache.spaces[rootType][spaceID] && self.cache.spaces[rootType][spaceID].connections) {
+			return self.cache.spaces[rootType][spaceId].connections;
+		} else {
+			const activeConnections = {};
+			activeConnections.object = {};
+			self.spaces[rootType][spaceID].connections.keys.forEach(function (id) {
+				activeConnections.object[id] = self.connections[id];
+			});
+			activeConnections.values = Object.values(activeConnections.object);
+			activeConnections.keys = Object.keys(activeConnections.object);
+			self.cacheSetSpaceConnections(rootType, spaceID, activeConnections);
+			return activeConnections;
+		}
+	}
+	spaceActiveEdges(rootType, spaceID) {
+		const self = this;
+		if (self.cache.spaces[rootType] && self.cache.spaces[rootType][spaceID] && self.cache.spaces[rootType][spaceID].edges) {
+			return self.cache.spaces[rootType][spaceId].edges;
+		} else {
+			const activeEdges = {};
+			activeEdges.object = {};
+			self.spaces[rootType][spaceID].edges.keys.forEach(function (id) {
+				activeEdges.object[id] = self.edges[id];
+			});
+			activeEdges.values = Object.values(activeEdges.object);
+			activeEdges.keys = Object.keys(activeEdges.object);
+			self.cacheSetSpaceEdges(rootType, spaceID, activeEdges);
+			return activeEdges;
+		}
+	}
+	spaceValidateRootType(rootType) {
+		const self = this;
+		if (!self.spaces[rootType]) {
+			throw new Error("Root type does not exist");
+		}
+	}
+	spaceValidateSpaceID(rootType, spaceID) {
+		const self = this;
+		self.spaceValidRootType(rootType);
+		if (!self.spaces[rootType][spaceID]) {
+			throw new Error("Space ID does not exist");
+		}
+	}
+	createSpace(rootType, spaceID, space) {
+		const self = this;
+		self.spaceValidateRootType(rootType);
+		self.spaces[rootType][spaceID] = space;
+		return space;
+	}
+	readSpace(rootType, spaceID) {
+		const self = this;
+		self.spaceValidateSpaceID(rootType, spaceID);
+		return self.spaces[rootType][spaceID];
+	}
+	updateSpace(rootType, spaceID, space) {
+		const self = this;
+		self.spaceValidateSpaceID(rootType, spaceID);
+		self.spaces[rootType][spaceID] = space;
+		return space;
+	}
+	deleteSpace(rootType, spaceID) {
+		const self = this;
+		self.spaceValidateSpaceID(rootType, spaceID);
+		delete self.spaces[rootType][spaceID];
+	}
+	createSpaceNodes(rootType, spaceID, nodes) {
+		const self = this;
+		self.spaceValidateSpaceID(rootType, spaceID);
+		self.createNodes(nodes);
+		nodes.forEach(function (node) {
+			self.spaces[rootType][spaceID].nodes.object[node.id] = true;
+		});
+		self.spaces[rootType][spaceID].nodes.keys = Object.keys(self.spaces[rootType][spaceID].nodes.object);
+		// clear cache
+		self.cacheClearSpaceNodes(rootType, spaceID);
+		return nodes;
+	}
+	readSpaceNodes(rootType, spaceID, nodes) {
+		const self = this;
+		self.spaceValidateSpaceID(rootType, spaceID);
+		const filtered = nodes.filter(function (node) {
+			return self.spaces[rootType][spaceID].nodes.object[node.id];
+		});
+		const result = self.readNodes(filtered);
+		return result;
+	}
+	updateSpaceNodes(rootType, spaceID, nodes) {
+		const self = this;
+		self.spaceValidateSpaceID(rootType, spaceID);
+		const filtered = nodes.filter(function (node) {
+			return self.spaces[rootType][spaceID].nodes.object[node.id];
+		});
+		const result = self.updateNodes(filtered);
+		// clear cache
+		self.cacheClearSpaceNodes(rootType, spaceID);
+		return result;
+	}
+	deleteSpaceNodes(rootType, spaceID, nodes) {
+		const self = this;
+		self.spaceValidateSpaceID(rootType, spaceID);
+		const filtered = nodes.filter(function (node) {
+			return self.spaces[rootType][spaceID].nodes.object[node.id];
+		});
+		const result = self.deleteNodes(filtered);
+		filtered.forEach(function (node) {
+			delete self.spaces[rootType][spaceID].nodes.object[node.id];
+		});
+		self.spaces[rootType][spaceID].nodes.keys = Object.keys(self.spaces[rootType][spaceID].nodes.object);
+		// clear cache
+		self.cacheClearSpaceNodes(rootType, spaceID);
+		return result;
+	}
+	createSpaceConnections(rootType, spaceID, connections) {
+		const self = this;
+		self.spaceValidateSpaceID(rootType, spaceID);
+		self.createConnections(connections);
+		connections.forEach(function (node) {
+			self.spaces[rootType][spaceID].connections.object[connection.id] = true;
+		});
+		self.spaces[rootType][spaceID].connections.keys = Object.keys(self.spaces[rootType][spaceID].connections.object);
+		// clear cache
+		self.cacheClearSpaceConnections(rootType, spaceID);
+		return connections;
+	}
+	readSpaceConnections(rootType, spaceID, connections) {
+		const self = this;
+		self.spaceValidateSpaceID(rootType, spaceID);
+		const filtered = connections.filter(function (connection) {
+			return self.spaces[rootType][spaceID].connections.object[connection.id];
+		});
+		const result = self.readConnections(filtered);
+		return result;
+	}
+	updateSpaceConnections(rootType, spaceID, connections) {
+		const self = this;
+		self.spaceValidateSpaceID(rootType, spaceID);
+		const filtered = connections.filter(function (connection) {
+			return self.spaces[rootType][spaceID].connections.object[connection.id];
+		});
+		const result = self.updateConnections(filtered);
+		// clear cache
+		self.cacheClearSpaceConnections(rootType, spaceID);
+		return result;
+	}
+	deleteSpaceConnections(rootType, spaceID, connections) {
+		const self = this;
+		self.spaceValidateSpaceID(rootType, spaceID);
+		const filtered = connections.filter(function (connection) {
+			return self.spaces[rootType][spaceID].connections.object[connection.id];
+		});
+		const result = self.deleteConnections(filtered);
+		filtered.forEach(function (connection) {
+			delete self.spaces[rootType][spaceID].connections.object[connection.id];
+		});
+		self.spaces[rootType][spaceID].connections.keys = Object.keys(self.spaces[rootType][spaceID].connections.object);
+		// clear cache
+		self.cacheClearSpaceConnections(rootType, spaceID);
+		return result;
+	}
+	createSpaceEdges(rootType, spaceID, edges) {
+		const self = this;
+		self.spaceValidateSpaceID(rootType, spaceID);
+		self.createEdges(edges);
+		edges.forEach(function (edge) {
+			self.spaces[rootType][spaceID].edges.object[edge.id] = true;
+		});
+		self.spaces[rootType][spaceID].edges.keys = Object.keys(self.spaces[rootType][spaceID].edges.object);
+		// clear cache
+		self.cacheClearSpaceEdges(rootType, spaceID);
+		return edges;
+	}
+	readSpaceEdges(rootType, spaceID, edges) {
+		const self = this;
+		self.spaceValidateSpaceID(rootType, spaceID);
+		const filtered = edges.filter(function (edge) {
+			return self.spaces[rootType][spaceID].edges.object[edge.id];
+		});
+		const result = self.readEdges(filtered);
+		return result;
+	}
+	updateSpaceEdges(rootType, spaceID, edges) {
+		const self = this;
+		self.spaceValidateSpaceID(rootType, spaceID);
+		const filtered = edges.filter(function (edge) {
+			return self.spaces[rootType][spaceID].edges.object[edge.id];
+		});
+		const result = self.updateEdges(filtered);
+		// clear cache
+		self.cacheClearSpaceEdges(rootType, spaceID);
+		return result;
+	}
+	deleteSpaceEdges(rootType, spaceID, edges) {
+		const self = this;
+		self.spaceValidateSpaceID(rootType, spaceID);
+		const filtered = edges.filter(function (edge) {
+			return self.spaces[rootType][spaceID].edges.object[edge.id];
+		});
+		const result = self.deleteEdges(filtered);
+		filtered.forEach(function (edge) {
+			delete self.spaces[rootType][spaceID].edges.object[edge.id];
+		});
+		self.spaces[rootType][spaceID].edges.keys = Object.keys(self.spaces[rootType][spaceID].edges.object);
+		// clear cache
+		self.cacheClearSpaceEdges(rootType, spaceID);
+		return result;
 	}
 }
 
