@@ -1127,6 +1127,64 @@ class GraphService {
 		self.spaceValidateSpaceID(rootType, spaceID);
 		delete self.spaces[rootType][spaceID];
 	}
+	initializeSpaceNodes(rootType, spaceID, candidates) {
+		const self = this;
+		const staged = self.spaceActiveNodes(rootType, spaceID).object;
+		const activeNodes = self.spaceActiveNodes(rootType, spaceID);
+		candidates.forEach(function (node) {
+			const { width, height } = node;
+			if (width === null || height === null) throw new Error(`Cannot initialize with null dimensions: width=${width} height=${height}`);
+			if (node.render) {
+				staged[node.id] = node;
+			} else {
+				// get max x in nodes
+				// get max y in nodes
+				const zMax = activeNodes.values.reduce(function (max, item) {
+					const candidate = item.z;
+					if (item.root === true && max <= candidate) {
+						return candidate;
+					} else if (item.render && max <= candidate) {
+						return candidate;
+					} else {
+						return max;
+					}
+				}, 0);
+				const xMax = activeNodes.values.reduce(function (max, item) {
+					const candidate = item.x + item.oldWidth * item.z;
+					if (node.root === true && max < candidate) {
+						return item.x;
+					} else if (max < candidate) {
+						return candidate;
+					} else {
+						return max;
+					}
+				}, 0);
+				const yMax = activeNodes.values.reduce(function (max, item) {
+					const candidate = item.y + item.oldHeight * item.z;
+					if (node.root === true && max < candidate) {
+						return item.y;
+					} else if (max < candidate) {
+						return candidate;
+					} else {
+						return max;
+					}
+				}, 0);
+				const padding = 0;
+				const x = xMax + padding * zMax;
+				const y = yMax + padding * zMax;
+				const z = zMax;
+				staged[node.id] = {
+					...node,
+					x,
+					y,
+					z,
+					render: true,
+				};
+			}
+		});
+		self.updateSpaceNodes(rootType, spaceID, Object.values(staged));
+		self.cacheClearSpaceNodes(rootType, spaceID);
+	}
 	createSpaceNodes(rootType, spaceID, nodes) {
 		const self = this;
 		self.spaceValidateSpaceID(rootType, spaceID);

@@ -6,6 +6,7 @@ import * as orchestrate from "./../orchestrate.js";
 
 export default function Node({ agentHeader, route, gauze, model, router, link, graph, x, y, z, width, height, dataX, dataY, dataZ, node, nodes, edges, connections }) {
 	const containerRef = useRef();
+	const spaceID = route.params.space
 	const [isLoaded, setLoaded] = useState(false);
 	const [isDragging, setDragging] = useState(false);
 	const [isConnecting, setConnecting] = useState(false);
@@ -221,7 +222,11 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 				height: containerRef.current.offsetHeight,
 				width: containerRef.current.offsetWidth,
 			};
-			graph.initializeNodes(agentHeader.name, [initialized]);
+			if (spaceID) {
+				graph.initializeSpaceNodes(agentHeader.name, spaceID, [initialized])
+			} else {
+				graph.initializeNodes(agentHeader.name, [initialized]);
+			}
 			setLoaded(true);
 		}
 	});
