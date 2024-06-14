@@ -41,7 +41,7 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 				return header.table_name === parsed.entity_type;
 			});
 			return orchestrate
-				.traverseSpace(
+				.traverseRoot(
 					{
 						gauze,
 						model,
