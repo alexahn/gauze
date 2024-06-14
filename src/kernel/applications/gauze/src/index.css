@@ -100,6 +100,11 @@ td {
 	user-select: none;
 }
 
+.workspaces {
+	/*transform: scaleX(-1);*/
+	/* need to add a container inside that reverses the contents */
+}
+
 /* trying to prevent font blur */
 /*
 .node {

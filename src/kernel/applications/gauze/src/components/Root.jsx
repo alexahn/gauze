@@ -24,6 +24,7 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 	const [share, setShare] = useState();
 	const [displayShare, setDisplayShare] = useState(false);
 	const [link, setLink] = useState(false);
+	const [displayWorkspace, setDisplayWorkspace] = useState(false);
 	function toggleShare(e) {
 		setDisplayShare(!displayShare);
 	}
@@ -76,6 +77,12 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 			setPerformance(128);
 		}
 	}
+	function handleWorkspaceEnter(e) {
+		setDisplayWorkspace(true);
+	}
+	function handleWorkspaceLeave(e) {
+		setDisplayWorkspace(false);
+	}
 	useEffect(function () {
 		const timer = setInterval(function () {
 			const activeNodes = graph.activeNodes(agentHeader.name);
@@ -126,6 +133,48 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 			</div>
 			<div className="fixed bottom-1 right-1" style={{ zIndex: 1 }}>
 				{link ? <LinkBreak2Icon width={30} height={30} onClick={handleLink} /> : <Link2Icon width={30} height={30} onClick={handleLink} />}
+			</div>
+			<div className="fixed top-0 left-0 flex items-center mh-100 h-100 mw-100" style={{ zIndex: 3 }}>
+				<div
+					className="workspaces flex flex-column mh-75 overflow-y-auto overflow-x-hidden"
+					style={{ width: displayWorkspace ? "256px" : "100%" }}
+					onMouseEnter={handleWorkspaceEnter}
+					onMouseLeave={handleWorkspaceLeave}
+				>
+					<div className="bgx10 relative">
+						<div>
+							<h1>1</h1>
+						</div>
+						<span
+							className="dn bg-light-green mw6 w5 top-0 left-0 pa1 absolute f4 tooltip truncate-ns"
+							style={{ zIndex: 3, width: "256px", display: displayWorkspace ? "block" : "none" }}
+						>
+							Workspace Workspace 1
+						</span>
+					</div>
+					<div className="bgx10 relative">
+						<div>
+							<h1>2</h1>
+						</div>
+						<span
+							className="dn bg-light-green mw6 w5 top-0 left-0 pa1 absolute f4 tooltip truncate-ns"
+							style={{ zIndex: 3, width: "256px", display: displayWorkspace ? "block" : "none" }}
+						>
+							Workspace Workspace 2
+						</span>
+					</div>
+					<div className="bgx10 relative">
+						<div>
+							<h1>3</h1>
+						</div>
+						<span
+							className="dn bg-light-green mw6 w5 top-0 left-0 pa1 absolute f4 tooltip truncate-ns"
+							style={{ zIndex: 3, width: "256px", display: displayWorkspace ? "block" : "none" }}
+						>
+							Workspace Workspace 3
+						</span>
+					</div>
+				</div>
 			</div>
 			<Graph
 				key={"graph"}
