@@ -284,6 +284,53 @@ const routes = [
 		},
 	},
 	{
+		name: "system.graph.space",
+		path: "/:space",
+		canActivate: (router, dependencies) => (toState, fromState, done) => {
+			const { services } = dependencies;
+			const { gauze, model, graph, router } = services;
+			const orchestrateServices = {
+				gauze: gauze.default,
+				model: model.default,
+				graph: graph.default,
+				router: router.default,
+			};
+			const spaceID = toState.params.space;
+			return gauze.default.header().then(function (headers) {
+				headers.forEach(function (header) {
+					model.default.create("HEADER", header.name, header);
+				});
+				const agentHeader = gauze.default.getSystemAgentHeader(model.default);
+				const space = graph.default.readSpace(agentHeader.name, spaceID);
+				if (space) {
+					// reload space
+					// return orchestrate.reloadSpace(orchestrateServices, agentHeader, toState.params.space)
+					return orchestrate.reloadSpace(orchestrateServices, agentHeader, spaceID);
+				} else {
+					// create space
+					// create root node
+					// reload space
+					return orchestrate.createSpace(orchestrateServices, agentHeader, spaceID).then(function (space) {
+						return orchestrate.reloadSpace(orchestrateServices, agentHeader, spaceID);
+					});
+				}
+			});
+		},
+		layout: layouts.albatross.default,
+		sections: {
+			top: sections.alder.default,
+			bottom: sections.alder.default,
+		},
+		units: {
+			top: {
+				body: units.banner2.default,
+			},
+			bottom: {
+				body: units.root.default,
+			},
+		},
+	},
+	{
 		name: "system.types",
 		path: "/types",
 		canActivate: (router, dependencies) => (toState, fromState, done) => {

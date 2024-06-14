@@ -206,7 +206,6 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 			})}
 			{Object.values(edges).map(function (edge) {
 				if (edge.id) {
-					//return <div>{edge.id}</div>;
 					return <Edge key={edge.id} agentHeader={agentHeader} route={route} graph={graph} nodes={nodes} edges={edges} connections={connections} edge={edge} />;
 				} else {
 					return null;

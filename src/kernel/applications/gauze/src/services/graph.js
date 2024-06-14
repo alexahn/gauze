@@ -31,19 +31,19 @@ class GraphService {
 			activeEdges: {},
 			nodeConnections: {},
 			spaces: {
-				gauze__agent_root: {
+				agent_root: {
 					home: {},
 				},
-				gauze__agent_account: {
+				agent_account: {
 					home: {},
 				},
-				gauze__agent_user: {
+				agent_user: {
 					home: {},
 				},
-				gauze__agent_person: {
+				agent_person: {
 					home: {},
 				},
-				gauze__agent_character: {
+				agent_character: {
 					home: {},
 				},
 			},
@@ -82,6 +82,7 @@ class GraphService {
 			}
 		}
 		*/
+		this.spaces = {};
 	}
 	root(type) {
 		const self = this;
@@ -251,6 +252,8 @@ class GraphService {
 			newEdges: newEdges,
 		};
 	}
+	// this will create the initial set of connections based on the from and to properties on nodes
+	// note: remove this since we are loading relationships from the backend?
 	syncNodesEdges(results) {
 		const self = this;
 		const mapped = results.map(function (result) {
@@ -275,6 +278,7 @@ class GraphService {
 			newEdges,
 		};
 	}
+	// this will allow us to update the connectionsIDs for nodes
 	syncNodeConnections(nodes, edges, connections) {
 		const index = {};
 		const edgesArray = Object.values(edges);
@@ -675,6 +679,10 @@ class GraphService {
 			return self.nodes[node.id];
 		});
 	}
+	readNode(candidate) {
+		const self = this;
+		return self.nodes[candidate.id];
+	}
 	createNodes(candidates) {
 		const self = this;
 		const staging = self.nodes;
@@ -683,6 +691,13 @@ class GraphService {
 		});
 		self.nodes = staging;
 		self.clearCacheNodes();
+		return candidates;
+	}
+	createNode(candidate) {
+		const self = this;
+		self.nodes[candidate.id] = candidate;
+		self.clearCacheNodes();
+		return candidate;
 	}
 	updateNodes(candidates) {
 		const self = this;
@@ -692,6 +707,13 @@ class GraphService {
 		});
 		self.nodes = staging;
 		self.clearCacheNodes();
+		return candidates;
+	}
+	updateNode(candidate) {
+		const self = this;
+		self.nodes[candidate.id] = candidate;
+		self.clearCacheNodes();
+		return candidate;
 	}
 	deleteNodes(candidates) {
 		const self = this;
@@ -701,6 +723,13 @@ class GraphService {
 		});
 		self.nodes = staging;
 		self.clearCacheNodes();
+		return candidates;
+	}
+	deleteNode(candidate) {
+		const self = this;
+		delete self.nodes[candidate.id];
+		self.clearCacheNodes();
+		return candidate;
 	}
 	// connection methods
 	initializeConnections(candidates) {
@@ -885,16 +914,16 @@ class GraphService {
 	// CACHE SPACE APIS
 	cacheSetSpaceNodes(rootType, spaceID, nodes) {
 		const self = this;
-		if (self.spaces[rootType]) {
-			if (self.spaces[rootType][spaceID]) {
-				self.spaces[rootType][spaceID].nodes = nodes;
+		if (self.cache.spaces[rootType]) {
+			if (self.cache.spaces[rootType][spaceID]) {
+				self.cache.spaces[rootType][spaceID].nodes = nodes;
 			} else {
-				self.spaces[rootType][spaceID] = {
+				self.cache.spaces[rootType][spaceID] = {
 					nodes: nodes,
 				};
 			}
 		} else {
-			self.spaces[rootType] = {
+			self.cache.spaces[rootType] = {
 				[spaceID]: {
 					nodes: nodes,
 				},
@@ -903,10 +932,10 @@ class GraphService {
 	}
 	cacheClearSpaceNodes(rootType, spaceID) {
 		const self = this;
-		if (self.spaces[rootType]) {
-			if (self.spaces[rootType][spaceID]) {
-				if (self.spaces[rootType][spaceID].nodes) {
-					delete self.spaces[rootType][spaceID].nodes;
+		if (self.cache.spaces[rootType]) {
+			if (self.cache.spaces[rootType][spaceID]) {
+				if (self.cache.spaces[rootType][spaceID].nodes) {
+					delete self.cache.spaces[rootType][spaceID].nodes;
 					return true;
 				}
 			}
@@ -915,16 +944,16 @@ class GraphService {
 	}
 	cacheSetSpaceConnections(rootType, spaceID, connections) {
 		const self = this;
-		if (self.spaces[rootType]) {
-			if (self.spaces[rootType][spaceID]) {
-				self.spaces[rootType][spaceID].connections = connections;
+		if (self.cache.spaces[rootType]) {
+			if (self.cache.spaces[rootType][spaceID]) {
+				self.cache.spaces[rootType][spaceID].connections = connections;
 			} else {
-				self.spaces[rootType][spaceID] = {
+				self.cache.spaces[rootType][spaceID] = {
 					connections: connections,
 				};
 			}
 		} else {
-			self.spaces[rootType] = {
+			self.cache.spaces[rootType] = {
 				[spaceID]: {
 					connections: connections,
 				},
@@ -933,10 +962,10 @@ class GraphService {
 	}
 	cacheClearSpaceConnections(rootType, spaceID) {
 		const self = this;
-		if (self.spaces[rootType]) {
-			if (self.spaces[rootType][spaceID]) {
-				if (self.spaces[rootType][spaceID].connections) {
-					delete self.spaces[rootType][spaceID].connections;
+		if (self.cache.spaces[rootType]) {
+			if (self.cache.spaces[rootType][spaceID]) {
+				if (self.cache.spaces[rootType][spaceID].connections) {
+					delete self.cache.spaces[rootType][spaceID].connections;
 					return true;
 				}
 			}
@@ -945,16 +974,16 @@ class GraphService {
 	}
 	cacheSetSpaceEdges(rootType, spaceID, edges) {
 		const self = this;
-		if (self.spaces[rootType]) {
-			if (self.spaces[rootType][spaceID]) {
-				self.spaces[rootType][spaceID].edges = edges;
+		if (self.cache.spaces[rootType]) {
+			if (self.cache.spaces[rootType][spaceID]) {
+				self.cache.spaces[rootType][spaceID].edges = edges;
 			} else {
-				self.spaces[rootType][spaceID] = {
+				self.cache.spaces[rootType][spaceID] = {
 					edges: edges,
 				};
 			}
 		} else {
-			self.spaces[rootType] = {
+			self.cache.spaces[rootType] = {
 				[spaceID]: {
 					edges: edges,
 				},
@@ -963,10 +992,10 @@ class GraphService {
 	}
 	cacheClearSpaceEdges(rootType, spaceID) {
 		const self = this;
-		if (self.spaces[rootType]) {
-			if (self.spaces[rootType][spaceID]) {
-				if (self.spaces[rootType][spaceID].edges) {
-					delete self.spaces[rootType][spaceID].edges;
+		if (self.cache.spaces[rootType]) {
+			if (self.cache.spaces[rootType][spaceID]) {
+				if (self.cache.spaces[rootType][spaceID].edges) {
+					delete self.cache.spaces[rootType][spaceID].edges;
 					return true;
 				}
 			}
@@ -977,7 +1006,7 @@ class GraphService {
 	spaceActiveNodes(rootType, spaceID) {
 		const self = this;
 		if (self.cache.spaces[rootType] && self.cache.spaces[rootType][spaceID] && self.cache.spaces[rootType][spaceID].nodes) {
-			return self.cache.spaces[rootType][spaceId].nodes;
+			return self.cache.spaces[rootType][spaceID].nodes;
 		} else {
 			const activeNodes = {};
 			activeNodes.object = {};
@@ -993,7 +1022,7 @@ class GraphService {
 	spaceActiveConnections(rootType, spaceID) {
 		const self = this;
 		if (self.cache.spaces[rootType] && self.cache.spaces[rootType][spaceID] && self.cache.spaces[rootType][spaceID].connections) {
-			return self.cache.spaces[rootType][spaceId].connections;
+			return self.cache.spaces[rootType][spaceID].connections;
 		} else {
 			const activeConnections = {};
 			activeConnections.object = {};
@@ -1009,7 +1038,7 @@ class GraphService {
 	spaceActiveEdges(rootType, spaceID) {
 		const self = this;
 		if (self.cache.spaces[rootType] && self.cache.spaces[rootType][spaceID] && self.cache.spaces[rootType][spaceID].edges) {
-			return self.cache.spaces[rootType][spaceId].edges;
+			return self.cache.spaces[rootType][spaceID].edges;
 		} else {
 			const activeEdges = {};
 			activeEdges.object = {};
@@ -1030,21 +1059,62 @@ class GraphService {
 	}
 	spaceValidateSpaceID(rootType, spaceID) {
 		const self = this;
-		self.spaceValidRootType(rootType);
+		self.spaceValidateRootType(rootType);
 		if (!self.spaces[rootType][spaceID]) {
 			throw new Error("Space ID does not exist");
 		}
 	}
 	createSpace(rootType, spaceID, space) {
 		const self = this;
-		self.spaceValidateRootType(rootType);
-		self.spaces[rootType][spaceID] = space;
+		//self.spaceValidateRootType(rootType);
+		if (!space) {
+			space = {};
+		}
+		if (!space.nodes) {
+			space.nodes = {
+				object: {},
+				keys: [],
+			};
+		}
+		if (!space.connections) {
+			space.connections = {
+				object: {},
+				keys: [],
+			};
+		}
+		if (!space.edges) {
+			space.edges = {
+				object: {},
+				keys: [],
+			};
+		}
+		if (self.spaces[rootType]) {
+			if (self.spaces[rootType][spaceID]) {
+				// overwrite
+				self.spaces[rootType][spaceID] = space;
+			} else {
+				self.spaces[rootType][spaceID] = space;
+			}
+		} else {
+			self.spaces[rootType] = {
+				[spaceID]: space,
+			};
+		}
 		return space;
 	}
 	readSpace(rootType, spaceID) {
 		const self = this;
-		self.spaceValidateSpaceID(rootType, spaceID);
-		return self.spaces[rootType][spaceID];
+		//self.spaceValidateRootType(rootType)
+		//self.spaceValidateSpaceID(rootType, spaceID);
+		if (self.spaces[rootType]) {
+			if (self.spaces[rootType][spaceID]) {
+				return self.spaces[rootType][spaceID];
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
 	}
 	updateSpace(rootType, spaceID, space) {
 		const self = this;

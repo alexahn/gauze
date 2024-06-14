@@ -137,7 +137,7 @@ export default function Root({ gauze, model, router, route, render, graph }) {
 			<div className="fixed top-0 left-0 flex items-center mh-100 h-100 mw-100" style={{ zIndex: 3 }}>
 				<div
 					className="workspaces flex flex-column mh-75 overflow-y-auto overflow-x-hidden"
-					style={{ width: displayWorkspace ? "256px" : "100%" }}
+					style={{ width: displayWorkspace ? "256px" : "100%", maxHeight: "75%" }}
 					onMouseEnter={handleWorkspaceEnter}
 					onMouseLeave={handleWorkspaceLeave}
 				>

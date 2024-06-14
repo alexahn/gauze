@@ -7,49 +7,449 @@ import { v4 as uuidv4 } from "uuid";
 function createNode(services, header) {
 	return import("./components/Table.jsx").then(function (table) {
 		const { gauze, model, router, graph } = services;
-		graph.createNodes([
-			{
-				id: uuidv4(),
-				root: true,
-				index: 0,
-				oldX: 0,
-				oldY: 0,
-				x: 0,
-				y: 0,
-				z: 1,
-				height: null,
-				width: null,
-				component: table.default,
-				props: {
-					gauze: gauze,
-					model: model,
-					router: router,
-					graph: graph,
-					depth: 0,
-					type: header.name,
-					table_name: header.table_name,
-					primary_key: header.primary_key,
-					graphql_meta_type: header.graphql_meta_type,
-					fromNodeID: null,
-					toNodeID: null,
-					from: null,
-					to: null,
-					fields: header.fields,
-					variables: {
-						where: {},
-						offset: 0,
-						limit: PAGINATION_PAGE_SIZE,
-						order: header.default_order,
-						order_direction: "desc",
-					},
-					data: [],
-					count: 0,
+		const candidate = {
+			id: uuidv4(),
+			root: true,
+			index: 0,
+			oldX: 0,
+			oldY: 0,
+			x: 0,
+			y: 0,
+			z: 1,
+			height: null,
+			width: null,
+			component: table.default,
+			props: {
+				gauze: gauze,
+				model: model,
+				router: router,
+				graph: graph,
+				depth: 0,
+				type: header.name,
+				table_name: header.table_name,
+				primary_key: header.primary_key,
+				graphql_meta_type: header.graphql_meta_type,
+				fromNodeID: null,
+				toNodeID: null,
+				from: null,
+				to: null,
+				fields: header.fields,
+				variables: {
+					where: {},
+					offset: 0,
+					limit: PAGINATION_PAGE_SIZE,
+					order: header.default_order,
+					order_direction: "desc",
 				},
-				complete: false,
-				sound: false,
-				render: false,
+				data: [],
+				count: 0,
 			},
-		]);
+			complete: false,
+			sound: false,
+			render: false,
+		};
+		console.log("candidate", candidate);
+		return graph.createNode(candidate);
+	});
+}
+
+function createSpace(services, header, spaceID) {
+	const { gauze, model, router, graph } = services;
+	return import("./components/Table.jsx").then(function (table) {
+		const node = {
+			id: uuidv4(),
+			root: true,
+			index: 0,
+			oldX: 0,
+			oldY: 0,
+			x: 0,
+			y: 0,
+			z: 1,
+			height: null,
+			width: null,
+			component: table.default,
+			props: {
+				gauze: gauze,
+				model: model,
+				router: router,
+				graph: graph,
+				depth: 0,
+				type: header.name,
+				table_name: header.table_name,
+				primary_key: header.primary_key,
+				graphql_meta_type: header.graphql_meta_type,
+				fromNodeID: null,
+				toNodeID: null,
+				from: null,
+				to: null,
+				fields: header.fields,
+				variables: {
+					where: {},
+					offset: 0,
+					limit: PAGINATION_PAGE_SIZE,
+					order: header.default_order,
+					order_direction: "desc",
+				},
+				data: [],
+				count: 0,
+			},
+			complete: false,
+			sound: false,
+			render: false,
+		};
+		const createdSpace = graph.createSpace(header.name, spaceID, {});
+		console.log("spaceID", spaceID);
+		graph.createSpaceNodes(header.name, spaceID, [node]);
+	});
+}
+
+function reloadSpace(services, agentHeader, spaceID) {
+	return import("./components/Relationship.jsx").then(function (relationship) {
+		const { gauze, model, router, graph } = services;
+		const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
+		console.log("activeNodes", activeNodes);
+		return Promise.all(
+			activeNodes.values.map(function (node) {
+				const header = model.read("HEADER", node.props.type);
+				const transactions = [
+					function () {
+						// todo: squash this into one http call by using named queries (use the node id as the name)
+						return gauze.read(header, node.props.variables).then(function (data) {
+							if (data && data.length) {
+								data.forEach(function (item) {
+									model.create(item._metadata.type, item._metadata.id, item.attributes);
+								});
+							}
+							return data;
+						});
+					},
+					function () {
+						return gauze.count(header, {
+							source: node.props.variables.source,
+							count: {
+								[header.primary_key]: header.primary_key,
+							},
+							where: node.props.variables.where,
+						});
+					},
+				];
+				return Promise.all(
+					transactions.map(function (t) {
+						return t();
+					}),
+				).then(function (results) {
+					const data = results[0].map(function (item) {
+						return item.attributes;
+					});
+					const count = results[1][0].count;
+					return {
+						node: node,
+						header: header,
+						data: data,
+						count: count,
+					};
+				});
+			}),
+		)
+			.then(function (results) {
+				// update data and count
+				graph.updateSpaceNodes(
+					agentHeader.name,
+					spaceID,
+					results.map(function (result) {
+						return {
+							...result.node,
+							props: {
+								...result.node.props,
+								data: result.data,
+								count: result.count,
+								connectionIDs: [],
+							},
+							complete: true,
+						};
+					}),
+				);
+				const synced = graph.syncNodesEdges(results);
+				console.log("reload synced", synced);
+				const newConnections = synced.newConnections.map(function (connection) {
+					return {
+						...connection,
+						component: relationship.default,
+						props: {
+							gauze: gauze,
+							model: model,
+							router: router,
+							graph: graph,
+						},
+					};
+				});
+				const newEdges = synced.newEdges;
+				graph.createSpaceConnections(agentHeader.name, spaceID, newConnections);
+				graph.createSpaceEdges(agentHeader.name, spaceID, newEdges);
+				const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
+				console.log("reload syncedConnections", syncedConnections);
+				const connectedNodes = Object.keys(syncedConnections).map(function (id) {
+					return {
+						...graph.nodes[id],
+						props: {
+							...graph.nodes[id].props,
+							connectionIDs: syncedConnections[id].connections,
+						},
+					};
+				});
+				graph.updateSpaceNodes(agentHeader.name, spaceID, connectedNodes);
+				// reinitialize
+				graph.updateSpaceNodes(
+					agentHeader.name,
+					spaceID,
+					graph.spaceActiveNodes(agentHeader.name, spaceID).values.map(function (node) {
+						return {
+							...node,
+							oldWidth: node.width,
+							oldHeight: node.height,
+							width: null,
+							height: null,
+						};
+					}),
+				);
+				// reinitialize connections
+				graph.updateSpaceConnections(
+					agentHeader.name,
+					spaceID,
+					graph.spaceActiveConnections(agentHeader.name, spaceID).values.map(function (connection) {
+						return {
+							...connection,
+							x: null,
+							y: null,
+						};
+					}),
+				);
+				return results;
+			})
+			.then(function () {
+				return reloadSpaceRelationships(services, agentHeader, spaceID);
+			});
+	});
+}
+
+function reloadSpaceRelationships(services, agentHeader, spaceID) {
+	return import("./components/Relationship.jsx")
+		.then(function (component) {
+			const { gauze, model, router, graph } = services;
+			const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
+			const activeConnections = graph.spaceActiveConnections(agentHeader.name, spaceID);
+			const activeEdges = graph.spaceActiveEdges(agentHeader.name, spaceID);
+			const activeEntityToNodeMap = {};
+			const activeEntityIDs = activeNodes.values
+				.map(function (node) {
+					return node.props.data.map(function (entity) {
+						const entityID = entity[node.props.primary_key];
+						if (activeEntityToNodeMap[entityID]) {
+							activeEntityToNodeMap[entityID].push(node);
+						} else {
+							activeEntityToNodeMap[entityID] = [node];
+						}
+						return entityID;
+					});
+				})
+				.flat();
+			// there should be at least one id if we fetched the root
+			const headers = model.all("HEADER");
+			const relationshipHeader = headers.find(function (header) {
+				return header.name === "relationship";
+			});
+			// do a count query to get the total number of results
+			// paginate and collect all results
+			const maxLimit = 1024; // max size should align with server limit
+			const whereIn = {
+				gauze__relationship__from_id: activeEntityIDs,
+				gauze__relationship__to_id: activeEntityIDs,
+			};
+			const countParameters = {
+				where_in: whereIn,
+			};
+			return gauze.count(relationshipHeader, countParameters).then(function (data) {
+				// create buckets of size maxLimit
+				const bucketsCount = Math.ceil(data[0].count / maxLimit);
+				const buckets = [];
+				for (var i = 0; i < bucketsCount; i += 1) {
+					buckets.push({
+						where_in: whereIn,
+						offset: i * maxLimit,
+						limit: maxLimit,
+					});
+				}
+				return Promise.all(
+					buckets.map(function (bucket) {
+						return gauze.read(relationshipHeader, bucket);
+					}),
+				).then(function (results) {
+					// iterate over results
+					results.forEach(function (relationships) {
+						// check every relationship to see if an edge exists
+						// if it doesn't, create the connections
+						// synchronize at end
+						relationships
+							.map(function (r) {
+								return r.attributes;
+							})
+							.forEach(function (relationship) {
+								const fromHeader = headers.find(function (header) {
+									return header.table_name === relationship.gauze__relationship__from_type;
+								});
+								const toHeader = headers.find(function (header) {
+									return header.table_name === relationship.gauze__relationship__to_type;
+								});
+								activeEntityToNodeMap[relationship.gauze__relationship__from_id].forEach(function (fromNode) {
+									activeEntityToNodeMap[relationship.gauze__relationship__to_id].forEach(function (toNode) {
+										const edge = activeEdges.values.find(function (edge) {
+											const fromConnection = activeConnections.object[edge.fromConnectionID];
+											const toConnection = activeConnections.object[edge.toConnectionID];
+											const fromNodeID = fromConnection.nodeID === fromNode.id;
+											const fromEntityID = fromConnection.entityID === relationship.gauze__relationship__from_id;
+											const fromEntityType = fromConnection.entityType === fromHeader.graphql_meta_type;
+											const toNodeID = toConnection.nodeID === toNode.id;
+											const toEntityID = toConnection.entityID === relationship.gauze__relationship__to_id;
+											const toEntityType = toConnection.entityType === toHeader.graphql_meta_type;
+											return fromNodeID && fromEntityID && fromEntityType && toNodeID && toEntityID && toEntityType;
+										});
+										if (edge) {
+											console.log("edge found!");
+										} else {
+											// loop through activeNodeEntityMap using from
+											// loop through activeNodeEntityMap using to
+											const fromConnectionID = uuidv4();
+											const fromConnection = {
+												id: fromConnectionID,
+												name: "from",
+												nodeID: fromNode.id,
+												entityID: relationship.gauze__relationship__from_id,
+												entityType: fromHeader.graphql_meta_type,
+												x: null,
+												y: null,
+												z: 1,
+												component: component.default,
+												props: {
+													gauze: gauze,
+													model: model,
+													router: router,
+													graph: graph,
+												},
+											};
+											const toConnectionID = uuidv4();
+											const toConnection = {
+												id: toConnectionID,
+												name: "to",
+												nodeID: toNode.id,
+												entityID: relationship.gauze__relationship__to_id,
+												entityType: toHeader.graphql_meta_type,
+												x: null,
+												y: null,
+												z: 1,
+												component: component.default,
+												props: {
+													gauze: gauze,
+													model: model,
+													router: router,
+													graph: graph,
+												},
+											};
+											const edgeID = uuidv4();
+											const edge = {
+												id: edgeID,
+												fromNodeID: fromNode.id,
+												fromConnectionID: fromConnectionID,
+												toNodeID: toNode.id,
+												toConnectionID: toConnectionID,
+											};
+											graph.createConnections([fromConnection, toConnection]);
+											graph.createEdges([edge]);
+										}
+									});
+								});
+							});
+						return synchronizeSpace(services, agentHeader, null);
+					});
+				});
+			});
+		})
+		.catch(function (err) {
+			console.error(err);
+			throw err;
+		});
+}
+
+function synchronizeSpace(services, agentHeader, spaceID, targetNode, callback) {
+	return import("./components/Relationship.jsx").then(function (relationship) {
+		const { gauze, model, router, graph } = services;
+		if (targetNode) {
+			const synced = graph.syncNodeEdges(targetNode, targetNode.props.data);
+			console.log("synced", synced);
+			// create new edges, connections, and nodes using service
+			const newConnections = synced.newConnections.map(function (connection) {
+				return {
+					...connection,
+					component: relationship.default,
+					props: {
+						gauze: gauze,
+						model: model,
+						router: router,
+						graph: graph,
+					},
+				};
+			});
+			const newEdges = synced.newEdges;
+			graph.createConnections(newConnections);
+			graph.createEdges(newEdges);
+			callback(targetNode);
+		}
+		// syncedConnections is the total set of connections for all nodes
+		const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
+		// wipe connections for all active nodes
+		graph.updateNodes(
+			graph.spaceActiveNodes(agentHeader.name, spaceID).values.map(function (node) {
+				return {
+					...node,
+					props: {
+						...node.props,
+						connectionIDs: [],
+					},
+				};
+			}),
+		);
+		// apply synced connections for all nodes
+		const connectedNodes = Object.keys(syncedConnections).map(function (id) {
+			return {
+				...graph.selectNode(id),
+				props: {
+					...graph.selectNode(id).props,
+					connectionIDs: syncedConnections[id].connections,
+				},
+			};
+		});
+		graph.updateNodes(connectedNodes);
+		// reinitialize nodes
+		graph.updateNodes(
+			graph.spaceActiveNodes(agentHeader.name, spaceID).values.map(function (node) {
+				return {
+					...node,
+					oldWidth: node.width,
+					oldHeight: node.height,
+					width: null,
+					height: null,
+				};
+			}),
+		);
+		// reinitialize connections
+		graph.updateConnections(
+			graph.spaceActiveConnections(agentHeader.name, spaceID).values.map(function (connection) {
+				return {
+					...connection,
+					x: null,
+					y: null,
+				};
+			}),
+		);
 	});
 }
 
@@ -172,10 +572,10 @@ function traverse(services, agentHeader, targetHeader, targetNode) {
 		const count = results[1][0].count;
 		targetNode.props.data = data;
 		targetNode.props.count = count;
-		synchronize(services, agentHeader, targetNode, function (targetNode) {
+		return synchronize(services, agentHeader, targetNode, function (targetNode) {
 			graph.createNodes([targetNode]);
 		}).then(function () {
-			reloadRelationships(services, agentHeader);
+			return reloadRelationships(services, agentHeader);
 		});
 	});
 }
@@ -361,6 +761,7 @@ function reload(services, agentHeader) {
 				const header = model.read("HEADER", node.props.type);
 				const transactions = [
 					function () {
+						// todo: squash this into one http call by using named queries (use the node id as the name)
 						return gauze.read(header, node.props.variables).then(function (data) {
 							if (data && data.length) {
 								data.forEach(function (item) {
@@ -824,4 +1225,4 @@ function deleteRelationship(services, agentHeader, relationship) {
 		});
 }
 
-export { createNode, read, reload, synchronize, traverse, traverseTo, traverseFrom, traverseRoot, createRelationship, deleteRelationship, reloadRelationships };
+export { createNode, createSpace, reloadSpace, read, reload, synchronize, traverse, traverseTo, traverseFrom, traverseRoot, createRelationship, deleteRelationship, reloadRelationships };
