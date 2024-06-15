@@ -52,7 +52,7 @@ function createNode(services, header) {
 	});
 }
 
-function createSpace(services, header, spaceID) {
+function createSpace(services, header, spaceID, space = {}) {
 	const { gauze, model, router, graph } = services;
 	return import("./components/Table.jsx").then(function (table) {
 		const node = {
@@ -96,7 +96,7 @@ function createSpace(services, header, spaceID) {
 			sound: false,
 			render: false,
 		};
-		const createdSpace = graph.createSpace(header.name, spaceID, {});
+		const createdSpace = graph.createSpace(header.name, spaceID, space);
 		graph.createSpaceNodes(header.name, spaceID, [node]);
 	});
 }
