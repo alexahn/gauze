@@ -627,11 +627,14 @@
 	[ ] workspaces
 		[ ] allow custom workspaces to be created and shared
 		[ ] navigable by either menu on left side of screen or bottom of screen
-		[ ] default workspace is the entry point
+		[x] home workspace is the entry point
 			[ ] have an easy way for agents to store custom workspaces (e.g. a workspace entity that is automatically connected to the agent entity)
 		[ ] use local storage and have a new route structure
 			[ ] routes will only resolve due to local state, so if someone were to open the url in a brand new browser, it will fail
 				[ ] this is fine, they should just copy and paste the workspace data they manage manually (e.g. stored into a workspace entity)
+		[x] create new orchestrate methods to deal with spaces
+		[x] create new graph methods to deal with spaces
+		[x] change spaceActiveEdges to filter by active entities
 	[ ] figure out how to handle spacing out initialization events in purely synchronous code
 		[ ] probably need to use setTimeout
 [ ] naming, organization, error consistency and code quality

@@ -26,6 +26,12 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 	const [displayShare, setDisplayShare] = useState(false);
 	const [link, setLink] = useState(false);
 	const [displayWorkspace, setDisplayWorkspace] = useState(false);
+	const services = {
+		gauze,
+		model,
+		router,
+		graph,
+	};
 	function toggleShare(e) {
 		setDisplayShare(!displayShare);
 	}
@@ -41,14 +47,10 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 				return header.table_name === parsed.entity_type;
 			});
 			return orchestrate
-				.traverseRoot(
-					{
-						gauze,
-						model,
-						router,
-						graph,
-					},
+				.traverseSpaceRoot(
+					services,
 					agentHeader,
+					spaceID,
 					{
 						[targetHeader.primary_key]: parsed.entity_id,
 					},

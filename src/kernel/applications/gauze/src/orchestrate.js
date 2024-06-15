@@ -98,7 +98,6 @@ function createSpace(services, header, spaceID) {
 			render: false,
 		};
 		const createdSpace = graph.createSpace(header.name, spaceID, {});
-		console.log("spaceID", spaceID);
 		graph.createSpaceNodes(header.name, spaceID, [node]);
 	});
 }
@@ -107,7 +106,6 @@ function reloadSpace(services, agentHeader, spaceID) {
 	return import("./components/Relationship.jsx").then(function (relationship) {
 		const { gauze, model, router, graph } = services;
 		const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
-		console.log("activeNodes", activeNodes);
 		return Promise.all(
 			activeNodes.values.map(function (node) {
 				const header = model.read("HEADER", node.props.type);
@@ -170,7 +168,6 @@ function reloadSpace(services, agentHeader, spaceID) {
 					}),
 				);
 				const synced = graph.syncNodesEdges(results);
-				console.log("reload synced", synced);
 				const newConnections = synced.newConnections.map(function (connection) {
 					return {
 						...connection,
@@ -187,7 +184,6 @@ function reloadSpace(services, agentHeader, spaceID) {
 				graph.createSpaceConnections(agentHeader.name, spaceID, newConnections);
 				graph.createSpaceEdges(agentHeader.name, spaceID, newEdges);
 				const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
-				console.log("reload syncedConnections", syncedConnections);
 				const connectedNodes = Object.keys(syncedConnections).map(function (id) {
 					return {
 						...graph.nodes[id],
@@ -239,6 +235,22 @@ function reloadSpaceRelationships(services, agentHeader, spaceID) {
 			const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
 			const activeConnections = graph.spaceActiveConnections(agentHeader.name, spaceID);
 			const activeEdges = graph.spaceActiveEdges(agentHeader.name, spaceID);
+			const entityFromIDs = {};
+			const entityToIDs = {};
+			activeEdges.values.forEach(function (edge) {
+				const fromConnection = activeConnections.object[edge.fromConnectionID];
+				const toConnection = activeConnections.object[edge.toConnectionID];
+				if (entityFromIDs[fromConnection.entityType]) {
+					entityFromIDs[fromConnection.entityType].push(fromConnection.entityID);
+				} else {
+					entityFromIDs[fromConnection.entityType] = [fromConnection.entityID];
+				}
+				if (entityToIDs[toConnection.entityType]) {
+					entityToIDs[toConnection.entityType].push(toConnection.entityID);
+				} else {
+					entityToIDs[toConnection.entityType] = [toConnection.entityID];
+				}
+			});
 			const activeEntityToNodeMap = {};
 			const activeEntityIDs = activeNodes.values
 				.map(function (node) {
@@ -311,11 +323,32 @@ function reloadSpaceRelationships(services, agentHeader, spaceID) {
 											const toNodeID = toConnection.nodeID === toNode.id;
 											const toEntityID = toConnection.entityID === relationship.gauze__relationship__to_id;
 											const toEntityType = toConnection.entityType === toHeader.graphql_meta_type;
+											/*
+											if (!fromNodeID) {
+												console.log('fromNodeID', fromNodeID)
+											}
+											if (!fromEntityID) {
+												console.log('fromEntityID', fromEntityID)
+											}
+											if (!fromEntityType) {
+												console.log('fromEntityType', fromEntityType)
+											}
+											if (!toNodeID) {
+												console.log('toNodeID', toNodeID)
+											}
+											if (!toEntityID) {
+												console.log('toEntityID', toEntityID, toConnection, relationship.gauze__relationship__to_id)
+											}
+											if (!toEntityType) {
+												console.log('toEntityType', toEntityType)
+											}
+											*/
 											return fromNodeID && fromEntityID && fromEntityType && toNodeID && toEntityID && toEntityType;
 										});
 										if (edge) {
 											console.log("edge found!");
 										} else {
+											console.log("edge not found!");
 											// loop through activeNodeEntityMap using from
 											// loop through activeNodeEntityMap using to
 											const fromConnectionID = uuidv4();
@@ -362,13 +395,13 @@ function reloadSpaceRelationships(services, agentHeader, spaceID) {
 												toNodeID: toNode.id,
 												toConnectionID: toConnectionID,
 											};
-											graph.createConnections([fromConnection, toConnection]);
-											graph.createEdges([edge]);
+											graph.createSpaceConnections(agentHeader.name, spaceID, [fromConnection, toConnection]);
+											graph.createSpaceEdges(agentHeader.name, spaceID, [edge]);
 										}
 									});
 								});
 							});
-						return synchronizeSpace(services, agentHeader, null);
+						return synchronizeSpace(services, agentHeader, spaceID, null);
 					});
 				});
 			});
@@ -399,14 +432,17 @@ function synchronizeSpace(services, agentHeader, spaceID, targetNode, callback) 
 				};
 			});
 			const newEdges = synced.newEdges;
-			graph.createConnections(newConnections);
-			graph.createEdges(newEdges);
+			graph.createSpaceConnections(agentHeader.name, spaceID, newConnections);
+			graph.createSpaceEdges(agentHeader.name, spaceID, newEdges);
 			callback(targetNode);
 		}
 		// syncedConnections is the total set of connections for all nodes
 		const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
 		// wipe connections for all active nodes
-		graph.updateNodes(
+		console.log("asd", spaceID);
+		graph.updateSpaceNodes(
+			agentHeader.name,
+			spaceID,
 			graph.spaceActiveNodes(agentHeader.name, spaceID).values.map(function (node) {
 				return {
 					...node,
@@ -427,9 +463,11 @@ function synchronizeSpace(services, agentHeader, spaceID, targetNode, callback) 
 				},
 			};
 		});
-		graph.updateNodes(connectedNodes);
+		graph.updateSpaceNodes(agentHeader.name, spaceID, connectedNodes);
 		// reinitialize nodes
-		graph.updateNodes(
+		graph.updateSpaceNodes(
+			agentHeader.name,
+			spaceID,
 			graph.spaceActiveNodes(agentHeader.name, spaceID).values.map(function (node) {
 				return {
 					...node,
@@ -441,7 +479,9 @@ function synchronizeSpace(services, agentHeader, spaceID, targetNode, callback) 
 			}),
 		);
 		// reinitialize connections
-		graph.updateConnections(
+		graph.updateSpaceConnections(
+			agentHeader.name,
+			spaceID,
 			graph.spaceActiveConnections(agentHeader.name, spaceID).values.map(function (connection) {
 				return {
 					...connection,
@@ -450,6 +490,407 @@ function synchronizeSpace(services, agentHeader, spaceID, targetNode, callback) 
 				};
 			}),
 		);
+	});
+}
+
+function createSpaceRelationship(services, agentHeader, spaceID, relationship) {
+	return import("./components/Relationship.jsx").then(function (component) {
+		const { gauze, model, router, graph } = services;
+		const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
+		const activeEdges = graph.spaceActiveEdges(agentHeader.name, spaceID);
+		const activeConnections = graph.spaceActiveConnections(agentHeader.name, spaceID);
+		const activeEntityToNodeMap = {};
+		const activeEntityIDs = activeNodes.values
+			.map(function (node) {
+				return node.props.data.map(function (entity) {
+					const entityID = entity[node.props.primary_key];
+					if (activeEntityToNodeMap[entityID]) {
+						activeEntityToNodeMap[entityID].push(node);
+					} else {
+						activeEntityToNodeMap[entityID] = [node];
+					}
+					return entityID;
+				});
+			})
+			.flat();
+		const edge = activeEdges.values.find(function (edge) {
+			const fromConnection = activeConnections.object[edge.fromConnectionID];
+			const toConnection = activeConnections.object[edge.toConnectionID];
+			const fromEntityID = fromConnection.entityID === relationship.fromEntityID;
+			const fromEntityType = fromConnection.entityType === relationship.fromEntityType;
+			const toEntityID = toConnection.entityID === relationship.toEntityID;
+			const toEntityType = toConnection.entityType === relationship.toEntityType;
+			return fromEntityID && fromEntityType && toEntityID && toEntityType;
+		});
+		if (edge) {
+			console.log("edge", edge);
+		} else {
+			const headers = model.all("HEADER");
+			const relationshipHeader = headers.find(function (header) {
+				return header.name === "relationship";
+			});
+			const fromHeader = headers.find(function (header) {
+				return header.graphql_meta_type === relationship.fromEntityType;
+			});
+			const toHeader = headers.find(function (header) {
+				return header.graphql_meta_type === relationship.toEntityType;
+			});
+			const attributes = {
+				gauze__relationship__from_id: relationship.fromEntityID,
+				gauze__relationship__from_type: fromHeader.table_name,
+				gauze__relationship__to_id: relationship.toEntityID,
+				gauze__relationship__to_type: toHeader.table_name,
+			};
+			return gauze
+				.create(relationshipHeader, {
+					attributes: attributes,
+				})
+				.then(function (data) {
+					// create a relationship, create the connections, create the edge
+					activeEntityToNodeMap[relationship.fromEntityID].forEach(function (fromNode) {
+						activeEntityToNodeMap[relationship.toEntityID].forEach(function (toNode) {
+							const edge = activeEdges.values.find(function (edge) {
+								const fromConnection = activeConnections.object[edge.fromConnectionID];
+								const toConnection = activeConnections.object[edge.toConnectionID];
+								const fromNodeID = fromConnection.nodeID === fromNode.id;
+								const fromEntityID = fromConnection.entityID === relationship.fromEntityID;
+								const fromEntityType = fromConnection.entityType === relationship.fromEntityType;
+								const toNodeID = toConnection.nodeID === toNode.id;
+								const toEntityID = toConnection.entityID === relationship.toEntityID;
+								const toEntityType = toConnection.entityType === relationship.toEntityType;
+								return fromNodeID && fromEntityID && fromEntityType && toNodeID && toEntityID && toEntityType;
+							});
+							if (edge) {
+								console.log("edge", edge);
+							} else {
+								//alert(JSON.stringify(relationship, null, 4));
+								const fromConnectionID = uuidv4();
+								const fromConnection = {
+									id: fromConnectionID,
+									name: "from",
+									nodeID: fromNode.id,
+									entityID: relationship.fromEntityID,
+									entityType: relationship.fromEntityType,
+									x: null,
+									y: null,
+									z: 1,
+									component: component.default,
+									props: {
+										gauze: gauze,
+										model: model,
+										router: router,
+										graph: graph,
+									},
+								};
+								const toConnectionID = uuidv4();
+								const toConnection = {
+									id: toConnectionID,
+									name: "to",
+									nodeID: toNode.id,
+									entityID: relationship.toEntityID,
+									entityType: relationship.toEntityType,
+									x: null,
+									y: null,
+									z: 1,
+									component: component.default,
+									props: {
+										gauze: gauze,
+										model: model,
+										router: router,
+										graph: graph,
+									},
+								};
+								const edgeID = uuidv4();
+								const edge = {
+									id: edgeID,
+									fromNodeID: fromNode.id,
+									fromConnectionID: fromConnectionID,
+									toNodeID: toNode.id,
+									toConnectionID: toConnectionID,
+								};
+								graph.createSpaceConnections(agentHeader.name, spaceID, [fromConnection, toConnection]);
+								graph.createSpaceEdges(agentHeader.name, spaceID, [edge]);
+							}
+						});
+					});
+					return synchronizeSpace(services, agentHeader, spaceID, null);
+				});
+		}
+	});
+}
+
+function deleteSpaceRelationship(services, agentHeader, spaceID, relationship) {
+	const { gauze, model, graph } = services;
+	const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
+	const activeEdges = graph.spaceActiveEdges(agentHeader.name, spaceID);
+	const activeConnections = graph.spaceActiveConnections(agentHeader.name, spaceID);
+	const headers = model.all("HEADER");
+	const activeEntityToNodeMap = {};
+	const activeEntityIDs = activeNodes.values
+		.map(function (node) {
+			return node.props.data.map(function (entity) {
+				const entityID = entity[node.props.primary_key];
+				if (activeEntityToNodeMap[entityID]) {
+					activeEntityToNodeMap[entityID].push(node);
+				} else {
+					activeEntityToNodeMap[entityID] = [node];
+				}
+				return entityID;
+			});
+		})
+		.flat();
+	const relationshipHeader = headers.find(function (header) {
+		return header.name === "relationship";
+	});
+	const fromHeader = headers.find(function (header) {
+		return header.graphql_meta_type === relationship.fromEntityType;
+	});
+	const toHeader = headers.find(function (header) {
+		return header.graphql_meta_type === relationship.toEntityType;
+	});
+	const attributes = {
+		gauze__relationship__from_id: relationship.fromEntityID,
+		gauze__relationship__from_type: fromHeader.table_name,
+		gauze__relationship__to_id: relationship.toEntityID,
+		gauze__relationship__to_type: toHeader.table_name,
+	};
+	return gauze
+		.read(relationshipHeader, {
+			where: attributes,
+		})
+		.then(function (read) {
+			if (read && read.length) {
+				const found = read[0];
+				const where = {
+					[relationshipHeader.primary_key]: found.attributes[relationshipHeader.primary_key],
+				};
+				return gauze
+					.delete(relationshipHeader, {
+						where: where,
+					})
+					.then(function (deleted) {
+						activeEntityToNodeMap[relationship.fromEntityID].forEach(function (fromNode) {
+							activeEntityToNodeMap[relationship.toEntityID].forEach(function (toNode) {
+								const edge = activeEdges.values.find(function (edge) {
+									const fromConnection = activeConnections.object[edge.fromConnectionID];
+									const toConnection = activeConnections.object[edge.toConnectionID];
+									const fromNodeID = fromConnection.nodeID === fromNode.id;
+									const fromEntityID = fromConnection.entityID === relationship.fromEntityID;
+									const fromEntityType = fromConnection.entityType === relationship.fromEntityType;
+									const toNodeID = toConnection.nodeID === toNode.id;
+									const toEntityID = toConnection.entityID === relationship.toEntityID;
+									const toEntityType = toConnection.entityType === relationship.toEntityType;
+									return fromNodeID && fromEntityID && fromEntityType && toNodeID && toEntityID && toEntityType;
+								});
+								if (edge) {
+									// delete the connections and then delete the edge and then synchronize
+									const fromConnection = activeConnections.object[edge.fromConnectionID];
+									const toConnection = activeConnections.object[edge.toConnectionID];
+									graph.deleteSpaceConnections(agentHeader.name, spaceID, [fromConnection, toConnection]);
+									graph.deleteSpaceEdges(agentHeader.name, spaceID, [edge]);
+									return synchronizeSpace(services, agentHeader, spaceID, null);
+								}
+							});
+						});
+					});
+			}
+		});
+}
+
+function traverseSpace(services, agentHeader, spaceID, targetHeader, targetNode) {
+	const { gauze, model, graph } = services;
+	return read(
+		{
+			gauze,
+			model,
+		},
+		targetHeader,
+		targetNode.props.variables,
+	).then(function (results) {
+		const data = results[0].map(function (item) {
+			return item.attributes;
+		});
+		const count = results[1][0].count;
+		targetNode.props.data = data;
+		targetNode.props.count = count;
+		return synchronizeSpace(services, agentHeader, spaceID, targetNode, function (targetNode) {
+			graph.createSpaceNodes(agentHeader.name, spaceID, [targetNode]);
+		}).then(function () {
+			return reloadSpaceRelationships(services, agentHeader, spaceID);
+		});
+	});
+}
+
+function traverseSpaceTo(services, agentHeader, spaceID, node, item, targetType) {
+	console.log("traverseSpaceTo", spaceID);
+	return import("./components/Table.jsx").then(function (table) {
+		const { gauze, model, router, graph } = services;
+		const headers = model.all("HEADER");
+		const sourceHeader = model.read("HEADER", node.props.type);
+		const targetHeader = headers.find(function (header) {
+			return header.graphql_meta_type === targetType;
+		});
+		console.log("traverseTo", sourceHeader, item, targetType);
+		console.log("targetHeader", targetHeader);
+		const source = {
+			_metadata: {
+				type: sourceHeader.graphql_meta_type,
+				id: item[sourceHeader.primary_key],
+			},
+			_direction: "to",
+		};
+		const targetNode = {
+			id: uuidv4(),
+			oldX: 0,
+			oldY: 0,
+			x: null,
+			y: null,
+			z: 1,
+			height: null,
+			width: null,
+			component: table.default,
+			props: {
+				gauze: gauze,
+				model: model,
+				router: router,
+				graph: graph,
+				depth: node.props.depth + 1,
+				type: targetHeader.name,
+				table_name: targetHeader.table_name,
+				primary_key: targetHeader.primary_key,
+				graphql_meta_type: targetHeader.graphql_meta_type,
+				from: source,
+				fromNodeID: node.id,
+				to: null,
+				toNodeID: null,
+				fields: targetHeader.fields,
+				variables: {
+					source: source,
+					where: {},
+					offset: 0,
+					limit: PAGINATION_PAGE_SIZE,
+					order: targetHeader.default_order,
+					order_direction: "desc",
+				},
+				data: [],
+				count: 0,
+			},
+			complete: true,
+			sound: false,
+		};
+		return traverseSpace(services, agentHeader, spaceID, targetHeader, targetNode);
+	});
+}
+
+function traverseSpaceFrom(services, agentHeader, spaceID, node, item, targetType) {
+	return import("./components/Table.jsx").then(function (table) {
+		const { gauze, model, router, graph } = services;
+		const headers = model.all("HEADER");
+		const sourceHeader = model.read("HEADER", node.props.type);
+		const targetHeader = headers.find(function (header) {
+			return header.graphql_meta_type === targetType;
+		});
+		console.log("traverse", sourceHeader, item, targetType);
+		console.log("targetHeader", targetHeader);
+		const source = {
+			_metadata: {
+				type: sourceHeader.graphql_meta_type,
+				id: item[sourceHeader.primary_key],
+			},
+			_direction: "from",
+		};
+		const targetNode = {
+			id: uuidv4(),
+			oldX: 0,
+			oldY: 0,
+			x: null,
+			y: null,
+			z: 1,
+			height: null,
+			width: null,
+			component: table.default,
+			props: {
+				gauze: gauze,
+				model: model,
+				router: router,
+				graph: graph,
+				depth: node.props.depth - 1,
+				type: targetHeader.name,
+				table_name: targetHeader.table_name,
+				primary_key: targetHeader.primary_key,
+				graphql_meta_type: targetHeader.graphql_meta_type,
+				from: null,
+				fromNodeID: null,
+				to: source,
+				toNodeID: node.id,
+				fields: targetHeader.fields,
+				variables: {
+					source: source,
+					where: {},
+					offset: 0,
+					limit: PAGINATION_PAGE_SIZE,
+					order: targetHeader.default_order,
+					order_direction: "desc",
+				},
+				data: [],
+				count: 0,
+			},
+			complete: true,
+			sound: false,
+		};
+		return traverseSpace(services, agentHeader, spaceID, targetHeader, targetNode);
+	});
+}
+
+function traverseSpaceRoot(services, agentHeader, spaceID, where, targetType) {
+	return import("./components/Table.jsx").then(function (table) {
+		const { gauze, model, router, graph } = services;
+		const headers = model.all("HEADER");
+		const targetHeader = headers.find(function (header) {
+			return header.graphql_meta_type === targetType;
+		});
+		console.log("traverse", where, targetType);
+		console.log("targetHeader", targetHeader);
+		const targetNode = {
+			id: uuidv4(),
+			workspace: agentHeader.name,
+			oldX: 0,
+			oldY: 0,
+			x: null,
+			y: null,
+			z: 1,
+			height: null,
+			width: null,
+			component: table.default,
+			props: {
+				gauze: gauze,
+				model: model,
+				router: router,
+				graph: graph,
+				depth: 0,
+				type: targetHeader.name,
+				table_name: targetHeader.table_name,
+				primary_key: targetHeader.primary_key,
+				graphql_meta_type: targetHeader.graphql_meta_type,
+				from: null,
+				fromNodeID: null,
+				to: null,
+				toNodeID: null,
+				fields: targetHeader.fields,
+				variables: {
+					where: where,
+					offset: 0,
+					limit: PAGINATION_PAGE_SIZE,
+					order: targetHeader.default_order,
+					order_direction: "desc",
+				},
+				data: [],
+				count: 0,
+			},
+			complete: true,
+			sound: false,
+		};
+		return traverseSpace(services, agentHeader, spaceID, targetHeader, targetNode);
 	});
 }
 
@@ -1225,4 +1666,25 @@ function deleteRelationship(services, agentHeader, relationship) {
 		});
 }
 
-export { createNode, createSpace, reloadSpace, read, reload, synchronize, traverse, traverseTo, traverseFrom, traverseRoot, createRelationship, deleteRelationship, reloadRelationships };
+export {
+	createNode,
+	createSpace,
+	reloadSpace,
+	reloadSpaceRelationships,
+	createSpaceRelationship,
+	deleteSpaceRelationship,
+	traverseSpaceTo,
+	traverseSpaceFrom,
+	traverseSpaceRoot,
+	synchronizeSpace,
+	read,
+	reload,
+	synchronize,
+	traverse,
+	traverseTo,
+	traverseFrom,
+	traverseRoot,
+	createRelationship,
+	deleteRelationship,
+	reloadRelationships,
+};

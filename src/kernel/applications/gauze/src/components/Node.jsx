@@ -17,6 +17,12 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 	const activeEdges = graph.spaceActiveEdges(agentHeader.name, spaceID);
 	const nodeConnections = graph.spaceNodeConnections(agentHeader.name, spaceID, node.id);
 	const initialized = height !== null && width !== null;
+	const services = {
+		gauze,
+		model,
+		router,
+		graph,
+	};
 	function onMouseDown(e) {
 		if (initialized) {
 			if (e.button === 2) {
@@ -111,6 +117,7 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 								oldY: e.clientY,
 							},
 						]);
+						console.log("nodeConnections", nodeConnections);
 						graph.updateSpaceConnections(
 							agentHeader.name,
 							spaceID,
@@ -143,7 +150,7 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 					setConnecting(false);
 					if (source.name === "from_start") {
 						if (target.interaction === "to_end") {
-							return orchestrate.createRelationship({ gauze, model, graph }, agentHeader, {
+							return orchestrate.createSpaceRelationship(services, agentHeader, spaceID, {
 								fromNodeID: target.nodeId,
 								fromEntityID: target.entityId,
 								fromEntityType: target.entityType,
@@ -154,7 +161,7 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 						}
 					} else if (source.name === "to_start") {
 						if (target.interaction === "from_end") {
-							return orchestrate.createRelationship({ gauze, model, graph }, agentHeader, {
+							return orchestrate.createSpaceRelationship(services, agentHeader, spaceID, {
 								fromNodeID: source.nodeID,
 								fromEntityID: source.entityID,
 								fromEntityType: source.entityType,
@@ -202,6 +209,8 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 						z: activeNode.z,
 					},
 				]);
+				const nodeConnections = graph.spaceNodeConnections(agentHeader.name, spaceID, node.id);
+				console.log("nodeConnections", nodeConnections, node.id);
 				graph.updateSpaceConnections(
 					agentHeader.name,
 					spaceID,

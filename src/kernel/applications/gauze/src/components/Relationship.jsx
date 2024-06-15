@@ -14,9 +14,10 @@ function absoluteToAbstract({ x, y, z, width, height }) {
 }
 
 export default function Relationship({ agentHeader, route, nodeID, connectionID, buttonClass, buttonSpanClass, spanClass, gauze, model, router, graph }) {
-	const activeNodes = graph.activeNodes(agentHeader.name);
-	const activeEdges = graph.activeEdges(agentHeader.name);
-	const activeConnections = graph.activeConnections(agentHeader.name);
+	const spaceID = route.params.space;
+	const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
+	const activeEdges = graph.spaceActiveEdges(agentHeader.name, spaceID);
+	const activeConnections = graph.spaceActiveConnections(agentHeader.name, spaceID);
 	const edge = activeEdges.values.find(function (edge) {
 		return edge.fromConnectionID === connectionID || edge.toConnectionID === connectionID;
 	});

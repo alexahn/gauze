@@ -107,7 +107,7 @@ export default memo(function Table({
 					targetNode.props.data = data;
 					targetNode.props.count = count;
 					graph.updateSpaceNodes(agentHeader.name, spaceID, [targetNode]);
-					return orchestrate.reloadRelationships(services, agentHeader).then(function () {
+					return orchestrate.reloadSpaceRelationships(services, agentHeader, spaceID).then(function () {
 						setSyncing(false);
 					});
 				})
@@ -123,7 +123,7 @@ export default memo(function Table({
 			const selectedNode = graph.selectNode(nodeID);
 			setSyncing(true);
 			return orchestrate
-				.traverseTo(services, agentHeader, selectedNode, item, targetType)
+				.traverseSpaceTo(services, agentHeader, spaceID, selectedNode, item, targetType)
 				.then(function () {
 					setSyncing(false);
 				})
@@ -139,7 +139,7 @@ export default memo(function Table({
 			const selectedNode = graph.selectNode(nodeID);
 			setSyncing(true);
 			return orchestrate
-				.traverseFrom(services, agentHeader, selectedNode, item, targetType)
+				.traverseSpaceFrom(services, agentHeader, spaceID, selectedNode, item, targetType)
 				.then(function () {
 					setSyncing(false);
 				})
@@ -170,7 +170,7 @@ export default memo(function Table({
 				targetNode.props.data = data;
 				targetNode.props.count = count;
 				graph.updateSpaceNodes(agentHeader.name, spaceID, [targetNode]);
-				return orchestrate.reloadRelationships(services, agentHeader).then(function () {
+				return orchestrate.reloadSpaceRelationships(services, agentHeader, spaceID).then(function () {
 					setSyncing(false);
 				});
 			})
@@ -241,7 +241,7 @@ export default memo(function Table({
 					return exists && field.name !== name;
 				});
 				setLocalFields(updatedFields);
-				graph.updateNodes(agentHeader.name, spaceID, [
+				graph.updateSpaceNodes(agentHeader.name, spaceID, [
 					{
 						...selectedNode,
 						width: null,
@@ -253,7 +253,7 @@ export default memo(function Table({
 					},
 				]);
 			}
-			graph.updateConnections(
+			graph.updateSpaceConnections(
 				agentHeader.name,
 				spaceID,
 				graph.selectConnections(nodeConnections.keys).map(function (connection) {
@@ -309,7 +309,7 @@ export default memo(function Table({
 								targetNode.props.data = data;
 								targetNode.props.count = count;
 								graph.updateSpaceNodes(agentHeader.name, spaceID, [targetNode]);
-								return orchestrate.reloadRelationships(services, agentHeader).then(function () {
+								return orchestrate.reloadSpaceRelationships(services, agentHeader, spaceID).then(function () {
 									setSyncing(false);
 								});
 							})
@@ -335,7 +335,7 @@ export default memo(function Table({
 		const selectedNode = graph.selectNode(nodeID);
 		if (!selectedNode.root) {
 			graph.deleteSpaceNodes(agentHeader.name, spaceID, [selectedNode]);
-			orchestrate.synchronize(services, agentHeader, null);
+			orchestrate.synchronizeSpace(services, agentHeader, spaceID, null);
 		}
 	}
 
@@ -349,7 +349,7 @@ export default memo(function Table({
 			if (edge) {
 				const fromConnection = activeConnections.object[edge.fromConnectionID];
 				const toConnection = activeConnections.object[edge.toConnectionID];
-				return orchestrate.deleteRelationship(services, agentHeader, {
+				return orchestrate.deleteSpaceRelationship(services, agentHeader, spaceID, {
 					fromEntityID: fromConnection.entityID,
 					fromEntityType: fromConnection.entityType,
 					toEntityID: toConnection.entityID,
@@ -518,6 +518,7 @@ export default memo(function Table({
 	const spanConnectionFromClass = `dn mw9 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextNextColor.node.x - 1} bdx${nextNextColor.node.x - 1} cx${nextNextColor.node.x === 6 ? nextNextColor.node.x + 2 : nextNextColor.node.x + 1} bw1 ba br2`;
 	function renderTable() {
 		const node = activeNodes.object[nodeID];
+		console.log("node", node);
 		return (
 			<div className={`node-component mw-100 w-100 consolas relative ${color.node.bd} ${color.node.bg} ${color.node.c} pa4 br4`}>
 				<h1 align="center">{header.graphql_meta_type}</h1>
