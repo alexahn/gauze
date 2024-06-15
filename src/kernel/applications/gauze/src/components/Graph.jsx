@@ -29,12 +29,13 @@ function abstractToAbsolute({ x, y, z, width, height }) {
 
 export default function Graph({ agentHeader, route, gauze, model, router, link, graph, nodes, edges, connections, interaction }) {
 	const containerRef = useRef();
+	const spaceID = route.params.space;
 	const nodesArray = Object.values(nodes);
 	const connectionsArray = Object.values(connections);
 	const [isPanning, setPanning] = useState(false);
-	const activeNodes = graph.activeNodes(agentHeader.name);
-	const activeConnections = graph.activeConnections(agentHeader.name);
-	const activeEdges = graph.activeEdges(agentHeader.name);
+	const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
+	const activeConnections = graph.spaceActiveConnections(agentHeader.name, spaceID);
+	const activeEdges = graph.spaceActiveEdges(agentHeader.name, spaceID);
 	const nodesInitialized = activeNodes.values.every(function (node) {
 		return node.width !== null && node.height !== null;
 	});
@@ -50,7 +51,9 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 			if (e.button === 2) {
 			} else if (e.button === 1) {
 				setPanning(true);
-				graph.updateNodes(
+				graph.updateSpaceNodes(
+					agentHeader.name,
+					spaceID,
 					graph.selectNodes(activeNodes.keys).map(function (position) {
 						return {
 							...position,
@@ -59,7 +62,9 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 						};
 					}),
 				);
-				graph.updateConnections(
+				graph.updateSpaceConnections(
+					agentHeader.name,
+					spaceID,
 					graph.selectConnections(activeConnections.keys).map(function (connection) {
 						return {
 							...connection,
@@ -72,7 +77,9 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 				if (e.target === containerRef.current) {
 					e.preventDefault();
 					setPanning(true);
-					graph.updateNodes(
+					graph.updateSpaceNodes(
+						agentHeader.name,
+						spaceID,
 						graph.selectNodes(activeNodes.keys).map(function (position) {
 							return {
 								...position,
@@ -81,7 +88,9 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 							};
 						}),
 					);
-					graph.updateConnections(
+					graph.updateSpaceConnections(
+						agentHeader.name,
+						spaceID,
 						graph.selectConnections(activeConnections.keys).map(function (connection) {
 							return {
 								...connection,
@@ -105,7 +114,9 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 	function onMouseMove(e) {
 		if (nodesInitialized) {
 			if (isPanning) {
-				graph.updateNodes(
+				graph.updateSpaceNodes(
+					agentHeader.name,
+					spaceID,
 					graph.selectNodes(activeNodes.keys).map(function (node) {
 						return {
 							...node,
@@ -116,7 +127,9 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 						};
 					}),
 				);
-				graph.updateConnections(
+				graph.updateSpaceConnections(
+					agentHeader.name,
+					spaceID,
 					graph.selectConnections(activeConnections.keys).map(function (connection) {
 						return {
 							...connection,
@@ -136,7 +149,9 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 				const sign = Math.sign(e.deltaY) / 10;
 				const scale = 1 - sign;
 				const rect = containerRef.current.getBoundingClientRect();
-				graph.updateNodes(
+				graph.updateSpaceNodes(
+					agentHeader.name,
+					spaceID,
 					graph.selectNodes(activeNodes.keys).map(function (node) {
 						const x = rect.width / 2 - (rect.width / 2 - node.x) * scale - (node.width / 2) * sign;
 						const y = rect.height / 2 - (rect.height / 2 - node.y) * scale - (node.height / 2) * sign;
@@ -148,7 +163,9 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 						};
 					}),
 				);
-				graph.updateConnections(
+				graph.updateSpaceConnections(
+					agentHeader.name,
+					spaceID,
 					graph.selectConnections(activeConnections.keys).map(function (connection) {
 						const x = rect.width / 2 - (rect.width / 2 - connection.x) * scale;
 						const y = rect.height / 2 - (rect.height / 2 - connection.y) * scale;

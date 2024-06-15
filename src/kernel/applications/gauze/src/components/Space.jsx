@@ -12,11 +12,11 @@ import Table from "./Table.jsx";
 import { GearIcon, PlusCircledIcon, Link2Icon, LinkBreak2Icon } from "@radix-ui/react-icons";
 
 export default function Space({ gauze, model, router, route, render, graph }) {
-	const spaceID = route.params.space
+	const spaceID = route.params.space;
 	const agentHeader = gauze.getSystemAgentHeader(model);
-	const activeNodes = graph.activeNodes(agentHeader.name);
-	const activeConnections = graph.activeConnections(agentHeader.name);
-	const activeEdges = graph.activeEdges(agentHeader.name);
+	const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
+	const activeConnections = graph.spaceActiveConnections(agentHeader.name, spaceID);
+	const activeEdges = graph.spaceActiveEdges(agentHeader.name, spaceID);
 	const [nodes, setNodes] = useState(activeNodes.object);
 	const [edges, setEdges] = useState(activeEdges.object);
 	const [connections, setConnections] = useState(activeConnections.object);
@@ -84,7 +84,6 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 	function handleWorkspaceLeave(e) {
 		setDisplayWorkspace(false);
 	}
-	console.log('graph.spaces', graph.spaces)
 	useEffect(function () {
 		const timer = setInterval(function () {
 			const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
@@ -100,7 +99,8 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 			clearInterval(timer);
 		};
 	});
-	console.log('nodes', nodes)
+	//console.log("graph.spaces", graph.spaces);
+	//console.log("nodes", nodes);
 	return (
 		<div className="mw-100 mh-100 h-100 w-100">
 			<div className="fixed top-1 right-1" style={{ zIndex: 1 }}>

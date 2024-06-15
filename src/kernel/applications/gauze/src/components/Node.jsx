@@ -6,16 +6,16 @@ import * as orchestrate from "./../orchestrate.js";
 
 export default function Node({ agentHeader, route, gauze, model, router, link, graph, x, y, z, width, height, dataX, dataY, dataZ, node, nodes, edges, connections }) {
 	const containerRef = useRef();
-	const spaceID = route.params.space
+	const spaceID = route.params.space;
 	const [isLoaded, setLoaded] = useState(false);
 	const [isDragging, setDragging] = useState(false);
 	const [isConnecting, setConnecting] = useState(false);
 	const [localWidth, setLocalWidth] = useState(width);
 	const [localHeight, setLocalHeight] = useState(height);
-	const activeNodes = graph.activeNodes(agentHeader.name);
-	const activeConnections = graph.activeConnections(agentHeader.name);
-	const activeEdges = graph.activeEdges(agentHeader.name);
-	const nodeConnections = graph.nodeConnections(node.id);
+	const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
+	const activeConnections = graph.spaceActiveConnections(agentHeader.name, spaceID);
+	const activeEdges = graph.spaceActiveEdges(agentHeader.name, spaceID);
+	const nodeConnections = graph.spaceNodeConnections(agentHeader.name, spaceID, node.id);
 	const initialized = height !== null && width !== null;
 	function onMouseDown(e) {
 		if (initialized) {
@@ -104,14 +104,16 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 					} else {
 						setDragging(true);
 						//e.preventDefault();
-						graph.updateNodes([
+						graph.updateSpaceNodes(agentHeader.name, spaceID, [
 							{
 								...graph.selectNode(node.id),
 								oldX: e.clientX,
 								oldY: e.clientY,
 							},
 						]);
-						graph.updateConnections(
+						graph.updateSpaceConnections(
+							agentHeader.name,
+							spaceID,
 							graph.selectConnections(nodeConnections.keys).map(function (connection) {
 								return {
 									...connection,
@@ -187,11 +189,10 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 					x: e.clientX,
 					y: e.clientY,
 				};
-				//console.log('updating end connection', endConnection)
 				graph.updateConnections([endConnection]);
 			} else if (isDragging) {
 				const activeNode = graph.selectNode(node.id);
-				graph.updateNodes([
+				graph.updateSpaceNodes(agentHeader.name, spaceID, [
 					{
 						...activeNode,
 						oldX: e.clientX,
@@ -201,7 +202,9 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 						z: activeNode.z,
 					},
 				]);
-				graph.updateConnections(
+				graph.updateSpaceConnections(
+					agentHeader.name,
+					spaceID,
 					graph.selectConnections(nodeConnections.keys).map(function (connection) {
 						return {
 							...connection,
@@ -223,7 +226,7 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 				width: containerRef.current.offsetWidth,
 			};
 			if (spaceID) {
-				graph.initializeSpaceNodes(agentHeader.name, spaceID, [initialized])
+				graph.initializeSpaceNodes(agentHeader.name, spaceID, [initialized]);
 			} else {
 				graph.initializeNodes(agentHeader.name, [initialized]);
 			}

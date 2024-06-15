@@ -48,10 +48,10 @@ export default function Proxies({ route, router, gauze, model }) {
 					if (matched) {
 						router.navigate(matched.name, matched.params);
 					} else {
-						router.navigate("system.graph", {}, {});
+						router.navigate("system.graph.space", { space: "home" }, {});
 					}
 				} else {
-					router.navigate("system.graph", {}, {});
+					router.navigate("system.graph.space", { space: "home" }, {});
 				}
 			} else {
 				return gauze.proxyEnterSession(proxy).then(function (session) {
@@ -64,10 +64,10 @@ export default function Proxies({ route, router, gauze, model }) {
 						if (matched) {
 							router.navigate(matched.name, matched.params);
 						} else {
-							router.navigate("system.graph", {}, {});
+							router.navigate("system.graph.space", { space: "home" }, {});
 						}
 					} else {
-						router.navigate("system.graph", {}, {});
+						router.navigate("system.graph.space", { space: "home" }, {});
 					}
 				});
 			}

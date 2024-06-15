@@ -55,7 +55,7 @@ export default function Banner({ route, gauze, model, router }) {
 	);
 	const graph = (
 		<div>
-			<a href={router.buildUrl("system.graph", {})}>
+			<a href={router.buildUrl("system.graph.space", { space: "home" })}>
 				<button className={systemClass} style={{ opacity: route.name === "system.graph" ? "0.5" : "1" }} disabled={route.name === "system.graph"}>
 					Graph
 				</button>
