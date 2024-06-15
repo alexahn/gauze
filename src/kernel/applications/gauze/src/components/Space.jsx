@@ -137,16 +137,16 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 					<span className="dn bgx2 cx12 br2 mw6 w5 top-0 right-0 pa3 absolute f4 tooltip">
 						<label htmlFor="performance">Performance:</label>
 						<br />
-						<input type="radio" id="performance0" name="performance" value="max" defaultChecked={performance === 0} onChange={handlePerformance} />
+						<input type="radio" id="performance0" name="performance" value="max" defaultChecked={performance === 0} onChange={handlePerformance} />&nbsp;
 						<label htmlFor="performance1">Max</label>
 						<br />
-						<input type="radio" id="performance1" name="performance" value="high" defaultChecked={performance === 4} onChange={handlePerformance} />
+						<input type="radio" id="performance1" name="performance" value="high" defaultChecked={performance === 4} onChange={handlePerformance} />&nbsp;
 						<label htmlFor="performance1">High</label>
 						<br />
-						<input type="radio" id="performance2" name="performance" value="medium" defaultChecked={performance === 32} onChange={handlePerformance} />
+						<input type="radio" id="performance2" name="performance" value="medium" defaultChecked={performance === 32} onChange={handlePerformance} />&nbsp;
 						<label htmlFor="performance2">Medium</label>
 						<br />
-						<input type="radio" id="performance3" name="performance" value="low" defaultChecked={performance === 128} onChange={handlePerformance} />
+						<input type="radio" id="performance3" name="performance" value="low" defaultChecked={performance === 128} onChange={handlePerformance} />&nbsp;
 						<label htmlFor="performance3">Low</label>
 						<br />
 					</span>
