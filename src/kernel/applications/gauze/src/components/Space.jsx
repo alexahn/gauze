@@ -21,7 +21,7 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 	const [edges, setEdges] = useState(activeEdges.object);
 	const [connections, setConnections] = useState(activeConnections.object);
 	const [interaction, setInteraction] = useState(graph.readInteraction());
-	const [performance, setPerformance] = useState(128);
+	const [performance, setPerformance] = useState(0);
 	const [share, setShare] = useState();
 	const [displayShare, setDisplayShare] = useState(false);
 	const [link, setLink] = useState(false);

@@ -117,7 +117,6 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 								oldY: e.clientY,
 							},
 						]);
-						console.log("nodeConnections", nodeConnections);
 						graph.updateSpaceConnections(
 							agentHeader.name,
 							spaceID,
@@ -209,8 +208,7 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 						z: activeNode.z,
 					},
 				]);
-				const nodeConnections = graph.spaceNodeConnections(agentHeader.name, spaceID, node.id);
-				console.log("nodeConnections", nodeConnections, node.id);
+				//const nodeConnections = graph.spaceNodeConnections(agentHeader.name, spaceID, node.id);
 				graph.updateSpaceConnections(
 					agentHeader.name,
 					spaceID,

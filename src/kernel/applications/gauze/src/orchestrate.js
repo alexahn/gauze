@@ -48,7 +48,6 @@ function createNode(services, header) {
 			sound: false,
 			render: false,
 		};
-		console.log("candidate", candidate);
 		return graph.createNode(candidate);
 	});
 }
@@ -439,7 +438,6 @@ function synchronizeSpace(services, agentHeader, spaceID, targetNode, callback) 
 		// syncedConnections is the total set of connections for all nodes
 		const syncedConnections = graph.syncNodeConnections(graph.nodes, graph.edges, graph.connections);
 		// wipe connections for all active nodes
-		console.log("asd", spaceID);
 		graph.updateSpaceNodes(
 			agentHeader.name,
 			spaceID,
@@ -722,7 +720,6 @@ function traverseSpace(services, agentHeader, spaceID, targetHeader, targetNode)
 }
 
 function traverseSpaceTo(services, agentHeader, spaceID, node, item, targetType) {
-	console.log("traverseSpaceTo", spaceID);
 	return import("./components/Table.jsx").then(function (table) {
 		const { gauze, model, router, graph } = services;
 		const headers = model.all("HEADER");
