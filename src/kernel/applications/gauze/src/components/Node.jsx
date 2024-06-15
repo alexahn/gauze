@@ -41,7 +41,7 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 						// create interaction
 						const startID = uuidv4();
 						const endID = uuidv4();
-						graph.createConnections([
+						graph.createSpaceConnections(agentHeader.name, spaceID, [
 							{
 								id: startID,
 								name: "from_start",
@@ -76,7 +76,7 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 						// create interaction
 						const startID = uuidv4();
 						const endID = uuidv4();
-						graph.createConnections([
+						graph.createSpaceConnections(agentHeader.name, spaceID, [
 							{
 								id: startID,
 								name: "to_start",
@@ -144,7 +144,7 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 				if (fromTarget || toTarget) {
 					const target = fromTarget ? fromTarget.dataset : toTarget.dataset;
 					const source = connections[interaction.fromConnectionID];
-					graph.deleteConnections([connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
+					graph.deleteSpaceConnections(agentHeader.name, spaceID, [connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
 					graph.deleteInteraction();
 					setConnecting(false);
 					if (source.name === "from_start") {
@@ -170,12 +170,12 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 							});
 						}
 					} else {
-						graph.deleteConnections([connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
+						graph.deleteSpaceConnections(agentHeader.name, spaceID, [connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
 						graph.deleteInteraction();
 						setConnecting(false);
 					}
 				} else {
-					graph.deleteConnections([connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
+					graph.deleteSpaceConnections(agentHeader.name, spaceID, [connections[interaction.fromConnectionID], connections[interaction.toConnectionID]]);
 					graph.deleteInteraction();
 					setConnecting(false);
 				}
@@ -195,7 +195,7 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 					x: e.clientX,
 					y: e.clientY,
 				};
-				graph.updateConnections([endConnection]);
+				graph.updateSpaceConnections(agentHeader.name, spaceID, [endConnection]);
 			} else if (isDragging) {
 				const activeNode = graph.selectNode(node.id);
 				graph.updateSpaceNodes(agentHeader.name, spaceID, [
