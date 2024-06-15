@@ -8,15 +8,18 @@ import * as orchestrate from "./../orchestrate.js";
 import Graph from "./Graph.jsx";
 import Node from "./Node.jsx";
 import Table from "./Table.jsx";
+import SpacesBar from "./SpacesBar.jsx";
 
 import { GearIcon, PlusCircledIcon, Link2Icon, LinkBreak2Icon } from "@radix-ui/react-icons";
 
 export default function Space({ gauze, model, router, route, render, graph }) {
 	const spaceID = route.params.space;
 	const agentHeader = gauze.getSystemAgentHeader(model);
+	const activeSpaces = graph.agentActiveSpaces(agentHeader.name);
 	const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
 	const activeConnections = graph.spaceActiveConnections(agentHeader.name, spaceID);
 	const activeEdges = graph.spaceActiveEdges(agentHeader.name, spaceID);
+	const [spaces, setSpaces] = useState(activeSpaces.object);
 	const [nodes, setNodes] = useState(activeNodes.object);
 	const [edges, setEdges] = useState(activeEdges.object);
 	const [connections, setConnections] = useState(activeConnections.object);
@@ -25,7 +28,6 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 	const [share, setShare] = useState();
 	const [displayShare, setDisplayShare] = useState(false);
 	const [link, setLink] = useState(false);
-	const [displayWorkspace, setDisplayWorkspace] = useState(false);
 	const services = {
 		gauze,
 		model,
@@ -80,18 +82,14 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 			setPerformance(128);
 		}
 	}
-	function handleWorkspaceEnter(e) {
-		setDisplayWorkspace(true);
-	}
-	function handleWorkspaceLeave(e) {
-		setDisplayWorkspace(false);
-	}
 	useEffect(function () {
 		const timer = setInterval(function () {
+			const activeSpaces = graph.agentActiveSpaces(agentHeader.name);
 			const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
 			const activeConnections = graph.spaceActiveConnections(agentHeader.name, spaceID);
 			const activeEdges = graph.spaceActiveEdges(agentHeader.name, spaceID);
 			const interaction = graph.readInteraction();
+			setSpaces(activeSpaces.object);
 			setNodes(activeNodes.object);
 			setConnections(activeConnections.object);
 			setEdges(activeEdges.object);
@@ -105,10 +103,38 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 	//console.log("nodes", nodes);
 	return (
 		<div className="mw-100 mh-100 h-100 w-100">
+			<div className="fixed top-1 left-1" style={{ zIndex: 1 }}>
+				<div className="relative">
+					<PlusCircledIcon width={30} height={30} onClick={toggleShare} />
+					<span className="dn bgx2 br2 w6 top-0 left-0 pa3 absolute f4" style={{ display: displayShare ? "block" : "none" }}>
+						<div className="flex flex-column">
+							<div className="">
+								<textarea
+									className="bgx12 br2"
+									placeholder={'{"entity_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx","entity_type": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"}'}
+									value={share}
+									onChange={updateShare}
+									rows="4"
+									cols="30"
+									autoFocus={true}
+								/>
+							</div>
+							<div className="flex justify-end w-100 pt3">
+								<button className="ba bw1 br2 bgx8 bdx8 cx6 mr1" onClick={handleShare}>
+									Add
+								</button>
+								<button className="ba bw1 br2 bgx10 bdx10 cx6" onClick={toggleShare}>
+									Cancel
+								</button>
+							</div>
+						</div>
+					</span>
+				</div>
+			</div>
 			<div className="fixed top-1 right-1" style={{ zIndex: 1 }}>
 				<div className="relative row" tabIndex="0">
 					<GearIcon width={30} height={30} />
-					<span className="dn bg-light-green mw6 w5 top-0 right-0 pa1 absolute f4 tooltip">
+					<span className="dn bgx2 cx12 br2 mw6 w5 top-0 right-0 pa3 absolute f4 tooltip">
 						<label htmlFor="performance">Performance:</label>
 						<br />
 						<input type="radio" id="performance0" name="performance" value="max" defaultChecked={performance === 0} onChange={handlePerformance} />
@@ -126,60 +152,11 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 					</span>
 				</div>
 			</div>
-			<div className="fixed top-1 left-1" style={{ zIndex: 1 }}>
-				<div className="relative">
-					<PlusCircledIcon width={30} height={30} onClick={toggleShare} />
-					<span className="dn bg-light-green w6 top-0 left-0 pa1 absolute f4" style={{ display: displayShare ? "block" : "none" }}>
-						<textarea value={share} onChange={updateShare} rows="4" cols="30" autoFocus={true} />
-						<button onClick={handleShare}>Add</button>
-						<button onClick={toggleShare}>Cancel</button>
-					</span>
-				</div>
-			</div>
 			<div className="fixed bottom-1 right-1" style={{ zIndex: 1 }}>
 				{link ? <LinkBreak2Icon width={30} height={30} onClick={handleLink} /> : <Link2Icon width={30} height={30} onClick={handleLink} />}
 			</div>
 			<div className="fixed top-0 left-0 flex items-center mh-100 h-100 mw-100" style={{ zIndex: 3 }}>
-				<div
-					className="workspaces flex flex-column mh-75 overflow-y-auto overflow-x-hidden"
-					style={{ width: displayWorkspace ? "256px" : "100%", maxHeight: "75%" }}
-					onMouseEnter={handleWorkspaceEnter}
-					onMouseLeave={handleWorkspaceLeave}
-				>
-					<div className="bgx10 relative">
-						<div>
-							<h1>1!</h1>
-						</div>
-						<span
-							className="dn bg-light-green mw6 w5 top-0 left-0 pa1 absolute f4 tooltip truncate-ns"
-							style={{ zIndex: 3, width: "256px", display: displayWorkspace ? "block" : "none" }}
-						>
-							Workspace Workspace 1
-						</span>
-					</div>
-					<div className="bgx10 relative">
-						<div>
-							<h1>2!</h1>
-						</div>
-						<span
-							className="dn bg-light-green mw6 w5 top-0 left-0 pa1 absolute f4 tooltip truncate-ns"
-							style={{ zIndex: 3, width: "256px", display: displayWorkspace ? "block" : "none" }}
-						>
-							Workspace Workspace 2
-						</span>
-					</div>
-					<div className="bgx10 relative">
-						<div>
-							<h1>3!</h1>
-						</div>
-						<span
-							className="dn bg-light-green mw6 w5 top-0 left-0 pa1 absolute f4 tooltip truncate-ns"
-							style={{ zIndex: 3, width: "256px", display: displayWorkspace ? "block" : "none" }}
-						>
-							Workspace Workspace 3
-						</span>
-					</div>
-				</div>
+				<SpacesBar spaces={spaces} route={route} router={router} graph={graph} />
 			</div>
 			<Graph
 				key={"graph"}

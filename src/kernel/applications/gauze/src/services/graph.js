@@ -47,6 +47,7 @@ class GraphService {
 					home: {},
 				},
 			},
+			agents: {},
 		};
 		this.isPanning = false;
 		this.isZooming = false;
@@ -911,6 +912,15 @@ class GraphService {
 			value: dragging,
 		};
 	}
+	// CACHE AGENT APIS
+	cacheSetAgentSpaces(rootType, spaces) {
+		const self = this;
+		self.cache.agents[rootType] = spaces;
+	}
+	cacheClearAgentSpaces(rootType) {
+		const self = this;
+		delete self.cache.agents[rootType];
+	}
 	// CACHE SPACE APIS
 	cacheSetSpaceNodes(rootType, spaceID, nodes) {
 		const self = this;
@@ -1049,6 +1059,22 @@ class GraphService {
 			}
 		}
 		return false;
+	}
+	// AGENT APIS
+	agentActiveSpaces(rootType) {
+		const self = this;
+		if (self.cache.agents[rootType]) {
+			return self.cache.agents[rootType];
+		} else {
+			const agent = self.spaces[rootType];
+			const activeSpaces = {
+				object: agent,
+				values: Object.values(agent),
+				keys: Object.keys(agent),
+			};
+			self.cacheSetAgentSpaces(rootType, activeSpaces);
+			return activeSpaces;
+		}
 	}
 	// SPACE APIS
 	spaceActiveNodes(rootType, spaceID) {
@@ -1231,6 +1257,7 @@ class GraphService {
 				[spaceID]: space,
 			};
 		}
+		self.cacheClearAgentSpaces(rootType);
 		return space;
 	}
 	readSpace(rootType, spaceID) {
@@ -1251,12 +1278,14 @@ class GraphService {
 		const self = this;
 		self.spaceValidateSpaceID(rootType, spaceID);
 		self.spaces[rootType][spaceID] = space;
+		self.cacheClearAgentSpaces(rootType);
 		return space;
 	}
 	deleteSpace(rootType, spaceID) {
 		const self = this;
 		self.spaceValidateSpaceID(rootType, spaceID);
 		delete self.spaces[rootType][spaceID];
+		self.cacheClearAgentSpaces(rootType);
 	}
 	initializeSpaceNodes(rootType, spaceID, candidates) {
 		const self = this;

@@ -248,6 +248,7 @@ const routes = [
 				headers.forEach(function (header) {
 					model.default.create("HEADER", header.name, header);
 				});
+				/*
 				const agentHeader = gauze.default.getSystemAgentHeader(model.default);
 				const root = graph.default.root(agentHeader.name);
 				if (root) {
@@ -267,6 +268,7 @@ const routes = [
 							throw err;
 						});
 				}
+				*/
 			});
 		},
 		layout: layouts.albatross.default,
@@ -296,25 +298,20 @@ const routes = [
 				router: router.default,
 			};
 			const spaceID = toState.params.space;
-			return gauze.default.header().then(function (headers) {
-				headers.forEach(function (header) {
-					model.default.create("HEADER", header.name, header);
-				});
-				const agentHeader = gauze.default.getSystemAgentHeader(model.default);
-				const space = graph.default.readSpace(agentHeader.name, spaceID);
-				if (space) {
-					// reload space
-					// return orchestrate.reloadSpace(orchestrateServices, agentHeader, toState.params.space)
+			const agentHeader = gauze.default.getSystemAgentHeader(model.default);
+			const space = graph.default.readSpace(agentHeader.name, spaceID);
+			if (space) {
+				// reload space
+				// return orchestrate.reloadSpace(orchestrateServices, agentHeader, toState.params.space)
+				return orchestrate.reloadSpace(orchestrateServices, agentHeader, spaceID);
+			} else {
+				// create space
+				// create root node
+				// reload space
+				return orchestrate.createSpace(orchestrateServices, agentHeader, spaceID).then(function (space) {
 					return orchestrate.reloadSpace(orchestrateServices, agentHeader, spaceID);
-				} else {
-					// create space
-					// create root node
-					// reload space
-					return orchestrate.createSpace(orchestrateServices, agentHeader, spaceID).then(function (space) {
-						return orchestrate.reloadSpace(orchestrateServices, agentHeader, spaceID);
-					});
-				}
-			});
+				});
+			}
 		},
 		layout: layouts.albatross.default,
 		sections: {
