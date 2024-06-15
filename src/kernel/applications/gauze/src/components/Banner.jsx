@@ -39,7 +39,7 @@ export default function Banner({ gauze, model, router }) {
 	);
 	const graph = (
 		<div>
-			<a href={router.buildUrl("system.graph", {})}>Graph</a>
+			<a href={router.buildUrl("system.graph.space", {space: "home"})}>Graph</a>
 		</div>
 	);
 	return (

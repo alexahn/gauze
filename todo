@@ -625,8 +625,9 @@
 	[x] change default route after proxy login to be root
 	[x] style the environment pages (sign in, sign out, sign up)
 	[ ] workspaces
-		[ ] allow custom workspaces to be created and shared
-		[ ] navigable by either menu on left side of screen or bottom of screen
+		[x] allow custom workspaces to be created
+		[ ] allow custom workspaces to be shared
+		[x] navigable by either menu on left side of screen or bottom of screen
 		[x] home workspace is the entry point
 			[ ] have an easy way for agents to store custom workspaces (e.g. a workspace entity that is automatically connected to the agent entity)
 		[ ] use local storage and have a new route structure
