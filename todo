@@ -638,6 +638,7 @@
 		[x] change spaceActiveEdges to filter by active entities
 		[x] fix creating relationships (currently crashing)
 		[ ] clean up dead orchestrate and graph methods
+		[ ] capability to rename a workspace
 	[ ] figure out how to handle spacing out initialization events in purely synchronous code
 		[ ] probably need to use setTimeout
 	[ ] display an error message inside the table if an agent does not have permission to view

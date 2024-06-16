@@ -99,7 +99,6 @@ const routes = [
 		units: {
 			top: {
 				body: units.banner3.default,
-				//body: units.ammonite.default,
 			},
 			bottom: {
 				body: units.ammonite.default,
@@ -177,22 +176,6 @@ const routes = [
 				body: units.proxies.default,
 			},
 		},
-		/*
-		layout: layouts.anaconda.default,
-		sections: {
-			left: sections.almond.default,
-			right: sections.alder.default,
-		},
-		units: {
-			left: {
-				header: units.adamite.default,
-				body: units.proxies.default,
-			},
-			right: {
-				body: units.azurite.default,
-			},
-		},
-		*/
 	},
 	{
 		name: "system",
@@ -248,27 +231,6 @@ const routes = [
 				headers.forEach(function (header) {
 					model.default.create("HEADER", header.name, header);
 				});
-				/*
-				const agentHeader = gauze.default.getSystemAgentHeader(model.default);
-				const root = graph.default.root(agentHeader.name);
-				if (root) {
-					console.log("root found!");
-					return orchestrate.reload(orchestrateServices, agentHeader).catch(function (err) {
-						console.error(err);
-						throw err;
-					});
-				} else {
-					return orchestrate
-						.createNode(orchestrateServices, agentHeader)
-						.then(function () {
-							return orchestrate.reload(orchestrateServices, agentHeader);
-						})
-						.catch(function (err) {
-							console.error(err);
-							throw err;
-						});
-				}
-				*/
 			});
 		},
 		layout: layouts.albatross.default,
