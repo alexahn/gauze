@@ -621,7 +621,7 @@
 	[x] add hover classes to indicate interactive elements
 	[ ] add active classes to indicate interaction consequence
 	[x] interaction guards for strict run state management
-	[ ] local storage for graph
+	[x] local storage for graph
 	[x] change default route after proxy login to be root
 	[x] style the environment pages (sign in, sign out, sign up)
 	[ ] workspaces
@@ -630,9 +630,9 @@
 		[x] navigable by either menu on left side of screen or bottom of screen
 		[x] home workspace is the entry point
 			[ ] have an easy way for agents to store custom workspaces (e.g. a workspace entity that is automatically connected to the agent entity)
-		[ ] use local storage and have a new route structure
-			[ ] routes will only resolve due to local state, so if someone were to open the url in a brand new browser, it will fail
-				[ ] this is fine, they should just copy and paste the workspace data they manage manually (e.g. stored into a workspace entity)
+		[x] use local storage and have a new route structure
+			[x] routes will only resolve due to local state, so if someone were to open the url in a brand new browser, it will fail
+				[x] this is fine, they should just copy and paste the workspace data they manage manually (e.g. stored into a workspace entity)
 		[x] create new orchestrate methods to deal with spaces
 		[x] create new graph methods to deal with spaces
 		[x] change spaceActiveEdges to filter by active entities

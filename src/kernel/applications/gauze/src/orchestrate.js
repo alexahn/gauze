@@ -10,7 +10,6 @@ function createNode(services, header) {
 		const candidate = {
 			id: uuidv4(),
 			root: true,
-			index: 0,
 			oldX: 0,
 			oldY: 0,
 			x: 0,
@@ -58,7 +57,6 @@ function createSpace(services, header, spaceID, space = {}) {
 		const node = {
 			id: uuidv4(),
 			root: true,
-			index: 0,
 			oldX: 0,
 			oldY: 0,
 			x: 0,

@@ -25,11 +25,6 @@ export default function SpacesBar({ route, agentHeader, gauze, model, router, gr
 		const formData = new FormData(e.target);
 		const workspaceName = formData.get("name");
 		const workspaceID = uuidv4();
-		/*
-		graph.createSpace(agentHeader.name, workspaceID, {
-			name: workspaceName
-		})
-		*/
 		return orchestrate
 			.createSpace(services, agentHeader, workspaceID, { name: workspaceName })
 			.then(function (space) {
@@ -47,7 +42,7 @@ export default function SpacesBar({ route, agentHeader, gauze, model, router, gr
 	function handleDeleteWorkspace(spaceID) {
 		return function (e) {
 			graph.deleteSpace(agentHeader.name, spaceID);
-			router.navigate("system.graph.space", { space: "home" });
+			router.navigate("system.graph.space", { space: "home", time: new Date().getTime() });
 		};
 	}
 	return (

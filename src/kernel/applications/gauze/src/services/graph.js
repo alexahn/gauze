@@ -1,8 +1,109 @@
 import { v4 as uuidv4 } from "uuid";
 
+import * as gauze from "./gauze.js";
+import * as model from "./model.js";
+import * as router from "./../router.js";
+
+import * as components from "./../components/index.js";
+
+function nodesToJSON(nodes) {
+	const json = { ...nodes };
+	for (const [key, value] of Object.entries(json)) {
+		json[key] = nodeToJSON(value);
+	}
+	return json;
+}
+
+function nodeToJSON(node) {
+	const { component, ...root } = { ...node };
+	const { gauze, model, router, graph, ...props } = root.props;
+	const json = { ...root, props };
+	return json;
+}
+
+function nodesFromJSON(json, services, components) {
+	const nodes = { ...json };
+	for (const [key, value] of Object.entries(nodes)) {
+		nodes[key] = nodeFromJSON(value, services, components);
+	}
+	return nodes;
+}
+
+function nodeFromJSON(json, services, components) {
+	json.component = components.table.default;
+	json.props.gauze = services.gauze;
+	json.props.model = services.model;
+	json.props.router = services.router;
+	json.props.graph = services.graph;
+	return json;
+}
+
+function connectionsToJSON(connections) {
+	const json = { ...connections };
+	for (const [key, value] of Object.entries(json)) {
+		json[key] = connectionToJSON(value);
+	}
+	return json;
+}
+
+function connectionToJSON(connection) {
+	const { component, ...root } = { ...connection };
+	const { gauze, model, router, graph, ...props } = root.props;
+	const json = { ...root, props };
+	return json;
+}
+
+function connectionsFromJSON(json, services, components) {
+	const connections = { ...json };
+	for (const [key, value] of Object.entries(connections)) {
+		connections[key] = connectionFromJSON(value, services, components);
+	}
+	return connections;
+}
+
+function connectionFromJSON(json, services, components) {
+	json.component = components.relationship.default;
+	json.props.gauze = services.gauze;
+	json.props.model = services.model;
+	json.props.router = services.router;
+	json.props.graph = services.graph;
+	return json;
+}
+
 class GraphService {
 	constructor() {
-		this.nodes = {};
+		const self = this;
+		const services = {
+			gauze: gauze.default,
+			model: model.default,
+			router: router.default,
+			graph: self,
+		};
+		try {
+			const graph = localStorage.getItem("graph");
+			const parsed = JSON.parse(graph);
+			this.nodes = nodesFromJSON(parsed.nodes || {}, services, components);
+			this.connections = connectionsFromJSON(parsed.connections || {}, services, components);
+			this.edges = parsed.edges || {};
+			this.spaces = parsed.spaces || {};
+		} catch (e) {
+			console.error(e);
+			this.nodes = {};
+			this.connections = {};
+			this.edges = {};
+			this.spaces = {};
+		}
+		setInterval(function () {
+			const graph = JSON.stringify({
+				nodes: nodesToJSON(self.nodes),
+				connections: connectionsToJSON(self.connections),
+				edges: self.edges,
+				spaces: self.spaces,
+			});
+			localStorage.setItem("graph", graph);
+		}, 512);
+
+		//this.nodes = {};
 		/*
 			edge: {
 				fromNodeID
@@ -11,7 +112,7 @@ class GraphService {
 				toConnectionID
 			}
 		*/
-		this.edges = {};
+		//this.edges = {};
 		/*
 			connection: {
 				name
@@ -23,7 +124,7 @@ class GraphService {
 				z
 			}
 		*/
-		this.connections = {};
+		//this.connections = {};
 		this.interaction = null;
 		this.cache = {
 			activeNodes: {},
@@ -59,8 +160,8 @@ class GraphService {
 		};
 		/*
 		this.spaces = {
-			gauze__agent_root: {
-				default: {
+			agent_root: {
+				home: {
 					nodes: {
 						object: {
 							[id]: true
@@ -83,7 +184,7 @@ class GraphService {
 			}
 		}
 		*/
-		this.spaces = {};
+		//this.spaces = {};
 	}
 	root(type) {
 		const self = this;

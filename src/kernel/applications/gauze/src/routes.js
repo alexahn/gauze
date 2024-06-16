@@ -287,7 +287,7 @@ const routes = [
 	},
 	{
 		name: "system.graph.space",
-		path: "/:space",
+		path: "/:space?time",
 		canActivate: (router, dependencies) => (toState, fromState, done) => {
 			const { services } = dependencies;
 			const { gauze, model, graph, router } = services;
