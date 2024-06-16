@@ -24,8 +24,8 @@ export default function Relationship({ agentHeader, route, nodeID, connectionID,
 	function handleFocus(connection) {
 		// simple hack using window width and height (will need to use the containing dimensions later if we ever want to embed the graph)
 		return function (e) {
-			const activeNodes = graph.activeNodes(agentHeader.name);
-			const activeConnections = graph.activeConnections(agentHeader.name);
+			const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
+			const activeConnections = graph.spaceActiveConnections(agentHeader.name, spaceID);
 			const node = activeNodes.object[connection.nodeID];
 			/*
 			const abstractWindow = absoluteToAbstract({
@@ -45,7 +45,9 @@ export default function Relationship({ agentHeader, route, nodeID, connectionID,
 			});
 			const offsetX = abstractWindow.x * node.z - node.x - (node.width / 2) * node.z;
 			const offsetY = abstractWindow.y * node.z - node.y - (node.height / 2) * node.z;
-			graph.updateConnections(
+			graph.updateSpaceConnections(
+				agentHeader.name,
+				spaceID,
 				activeConnections.values.map(function (connection) {
 					return {
 						...connection,
@@ -54,7 +56,9 @@ export default function Relationship({ agentHeader, route, nodeID, connectionID,
 					};
 				}),
 			);
-			graph.updateNodes(
+			graph.updateSpaceNodes(
+				agentHeader.name,
+				spaceID,
 				activeNodes.values.map(function (node) {
 					return {
 						...node,

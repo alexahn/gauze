@@ -243,7 +243,7 @@ const routes = [
 				body: units.banner2.default,
 			},
 			bottom: {
-				body: units.root.default,
+				body: units.azurite.default,
 			},
 		},
 	},

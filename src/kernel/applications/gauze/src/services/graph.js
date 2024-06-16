@@ -82,16 +82,16 @@ class GraphService {
 		try {
 			const graph = localStorage.getItem("graph");
 			const parsed = JSON.parse(graph);
-			this.nodes = nodesFromJSON(parsed.nodes || {}, services, components);
-			this.connections = connectionsFromJSON(parsed.connections || {}, services, components);
-			this.edges = parsed.edges || {};
-			this.spaces = parsed.spaces || {};
+			self.nodes = nodesFromJSON(parsed.nodes || {}, services, components);
+			self.connections = connectionsFromJSON(parsed.connections || {}, services, components);
+			self.edges = parsed.edges || {};
+			self.spaces = parsed.spaces || {};
 		} catch (e) {
 			console.error(e);
-			this.nodes = {};
-			this.connections = {};
-			this.edges = {};
-			this.spaces = {};
+			self.nodes = {};
+			self.connections = {};
+			self.edges = {};
+			self.spaces = {};
 		}
 		setInterval(function () {
 			const graph = JSON.stringify({
@@ -102,9 +102,8 @@ class GraphService {
 			});
 			localStorage.setItem("graph", graph);
 		}, 512);
-
-		//this.nodes = {};
 		/*
+		//this.nodes = {};
 			edge: {
 				fromNodeID
 				fromConnectionID
@@ -112,8 +111,8 @@ class GraphService {
 				toConnectionID
 			}
 		*/
-		//this.edges = {};
 		/*
+		//this.edges = {};
 			connection: {
 				name
 				nodeID
@@ -124,13 +123,35 @@ class GraphService {
 				z
 			}
 		*/
-		//this.connections = {};
+		/*
+		//this.spaces = {};
+			spaces: {
+				agent_root: {
+					home: {
+						nodes: {
+							object: {
+								[id]: true
+							},
+							array: [id]
+						},
+						connections: {
+							object: {
+								[id]: true
+							},
+							array: [id]
+						},
+						edges: {
+							object: {
+								[id]: true
+							},
+							array: [id]
+						}
+					}
+				}
+			}
+		*/
 		this.interaction = null;
 		this.cache = {
-			activeNodes: {},
-			activeConnections: {},
-			activeEdges: {},
-			nodeConnections: {},
 			spaces: {
 				agent_root: {
 					home: {},
@@ -158,33 +179,6 @@ class GraphService {
 			panning: {},
 			dragging: {},
 		};
-		/*
-		this.spaces = {
-			agent_root: {
-				home: {
-					nodes: {
-						object: {
-							[id]: true
-						},
-						array: [id]
-					},
-					connections: {
-						object: {
-							[id]: true
-						},
-						array: [id]
-					},
-					edges: {
-						object: {
-							[id]: true
-						},
-						array: [id]
-					}
-				}
-			}
-		}
-		*/
-		//this.spaces = {};
 	}
 	root(type) {
 		const self = this;
@@ -421,271 +415,6 @@ class GraphService {
 		});
 		return index;
 	}
-	activeNodes(rootType) {
-		const self = this;
-		if (self.cache.activeNodes[rootType]) {
-			return self.cache.activeNodes[rootType];
-		} else {
-			const reachedInside = {};
-			const reachedOutside = {};
-			const nodesArray = Object.values(self.nodes);
-			nodesArray.forEach(function (node) {
-				if ((node.root === true && node.props.type === rootType) || node.workspace === rootType) {
-					if (reachedOutside[node.id]) {
-						reachedInside[node.id] = reachedOutside[node.id];
-					} else {
-						if (reachedInside[node.id]) {
-							reachedInside[node.id].push(node.id);
-						} else {
-							reachedInside[node.id] = [node.id];
-						}
-					}
-				} else {
-					if (node.props.from) {
-						if (reachedInside[node.props.fromNodeID]) {
-							if (reachedOutside[node.props.fromNodeID]) {
-								reachedInside[node.props.fromNodeID] = reachedInside[node.props.fromNodeID].concat(reachedOutside[node.props.fromNodeID]);
-								reachedInside[node.props.fromNodeID].push(node.id);
-							} else {
-								reachedInside[node.props.fromNodeID].push(node.id);
-								reachedInside[node.props.fromNodeID].push(node.props.fromNodeID);
-							}
-							if (reachedOutside[node.id]) {
-								reachedInside[node.props.fromNodeID] = reachedInside[node.props.fromNodeID].concat(reachedOutside[node.id]);
-								reachedInside[node.props.fromNodeID].push(node.props.fromNodeID);
-							} else {
-								reachedInside[node.props.fromNodeID].push(node.id);
-								reachedInside[node.props.fromNodeID].push(node.props.fromNodeID);
-							}
-							if (reachedInside[node.id]) {
-								reachedInside[node.id].push(node.props.fromNodeID);
-							} else {
-								reachedInside[node.id] = [node.id, node.props.fromNodeID];
-							}
-						} else {
-							if (reachedOutside[node.props.fromNodeID]) {
-								reachedOutside[node.props.fromNodeID].push(node.id);
-							} else {
-								reachedOutside[node.props.fromNodeID] = [node.id, node.props.fromNodeID];
-							}
-							if (reachedOutside[node.id]) {
-								reachedOutside[node.id].push(node.props.fromNodeID);
-							} else {
-								reachedOutside[node.id] = [node.props.fromNodeID, node.ID];
-							}
-						}
-						if (reachedInside[node.id]) {
-							if (reachedOutside[node.id]) {
-								reachedInside[node.id] = reachedInside[node.id].concat(reachedOutside[node.id]);
-								reachedInside[node.id].push(node.props.fromNodeID);
-							} else {
-								reachedInside[node.id].push(node.props.fromNodeID);
-								reachedInside[node.id].push(node.id);
-							}
-							if (reachedOutside[node.props.fromNodeID]) {
-								reachedInside[node.id] = reachedInside[node.id].concat(reachedOutside[node.props.fromNodeID]);
-								reachedInside[node.id].push(node.id);
-							} else {
-								reachedInside[node.id].push(node.props.fromNodeID);
-								reachedInside[node.id].push(node.id);
-							}
-						} else {
-							if (reachedOutside[node.id]) {
-								reachedOutside[node.id].push(node.props.fromNodeID);
-							} else {
-								reachedOutside[node.id] = [node.props.fromNodeID, node.id];
-							}
-							if (reachedOutside[node.props.fromNodeID]) {
-								reachedOutside[node.props.fromNodeID].push(node.id);
-							} else {
-								reachedOutside[node.props.fromNodeID] = [node.id, node.props.fromNodeID];
-							}
-						}
-					} else if (node.props.to) {
-						if (reachedInside[node.props.toNodeID]) {
-							if (reachedOutside[node.props.toNodeID]) {
-								reachedInside[node.props.toNodeID] = reachedInside[node.props.toNodeID].concat(reachedOutside[node.props.toNodeID]);
-								reachedInside[node.props.toNodeID].push(node.id);
-							} else {
-								reachedInside[node.props.toNodeID].push(node.id);
-								reachedInside[node.props.toNodeID].push(node.props.toNodeID);
-							}
-							if (reachedOutside[node.id]) {
-								reachedInside[node.props.toNodeID] = reachedInside[node.props.toNodeID].concat(reachedOutside[node.id]);
-								reachedInside[node.props.toNodeID].push(node.props.toNodeID);
-							} else {
-								reachedInside[node.props.toNodeID].push(node.id);
-								reachedInside[node.props.toNodeID].push(node.props.toNodeID);
-							}
-							if (reachedInside[node.id]) {
-								reachedInside[node.id].push(node.props.toNodeID);
-							} else {
-								reachedInside[node.id] = [node.id, node.props.toNodeID];
-							}
-						} else {
-							if (reachedOutside[node.props.toNodeID]) {
-								reachedOutside[node.props.toNodeID].push(node.id);
-							} else {
-								reachedOutside[node.props.toNodeID] = [node.props.toNodeID, node.id];
-							}
-							if (reachedOutside[node.id]) {
-								reachedOutside[node.id].push(node.props.toNodeID);
-							} else {
-								reachedOutside[node.id] = [node.props.toNodeID, node.id];
-							}
-						}
-						if (reachedInside[node.id]) {
-							if (reachedOutside[node.id]) {
-								reachedInside[node.id] = reachedInside[node.id].concat(reachedOutside[node.id]);
-								reachedInside[node.id].push(node.props.toNodeID);
-							} else {
-								reachedInside[node.id].push(node.props.toNodeID);
-								reachedInside[node.id].push(node.id);
-							}
-							if (reachedOutside[node.props.toNodeID]) {
-								reachedInside[node.id] = reachedInside[node.props.id].concat(reachedOutside[node.props.toNodeID]);
-								reachedInside[node.id].push(node.id);
-							} else {
-								reachedInside[node.id].push(node.props.toNodeID);
-								reachedInside[node.id].push(node.id);
-							}
-						} else {
-							if (reachedOutside[node.id]) {
-								reachedOutside[node.id].push(node.props.toNodeID);
-							} else {
-								reachedOutside[node.id] = [node.props.toNodeID, node.id];
-							}
-							if (reachedOutside[node.props.toNodeID]) {
-								reachedOutside[node.props.toNodeID].push(node.id);
-							} else {
-								reachedOutside[node.props.toNodeID] = [node.id, node.props.toNodeID];
-							}
-						}
-					} else {
-					}
-				}
-			});
-			// flatten reachedInside
-			const activeNodesIndex = {};
-			Object.keys(reachedInside).forEach(function (key) {
-				activeNodesIndex[key] = true;
-				const reached = reachedInside[key];
-				reached.forEach(function (id) {
-					activeNodesIndex[id] = true;
-				});
-			});
-			const nodes = {};
-			for (const key of Object.keys(activeNodesIndex)) {
-				nodes[key] = self.nodes[key];
-			}
-			const activeNodes = {
-				object: nodes,
-				values: Object.values(nodes),
-				keys: Object.keys(nodes),
-			};
-			self.cache.activeNodes[rootType] = activeNodes;
-			return activeNodes;
-		}
-	}
-	activeConnections(rootType) {
-		const self = this;
-		if (self.cache.activeConnections[rootType]) {
-			return self.cache.activeConnections[rootType];
-		} else {
-			const activeNodes = self.activeNodes(rootType);
-			const connections = { ...self.connections };
-			for (const [key, value] of Object.entries(connections)) {
-				if (!activeNodes.object[value.nodeID]) {
-					delete connections[key];
-				}
-			}
-			const activeConnections = {
-				object: connections,
-				values: Object.values(connections),
-				keys: Object.keys(connections),
-			};
-			self.cache.activeConnections[rootType] = activeConnections;
-			return activeConnections;
-		}
-	}
-	activeEdges(rootType) {
-		const self = this;
-		if (self.cache.activeEdges[rootType]) {
-			return self.cache.activeEdges[rootType];
-		} else {
-			const activeNodes = self.activeNodes(rootType);
-			const activeConnections = self.activeConnections(rootType);
-			const edges = { ...self.edges };
-			for (const [key, value] of Object.entries(edges)) {
-				const fromNode = activeNodes.object[value.fromNodeID];
-				const fromConnection = activeConnections.object[value.fromConnectionID];
-				const toNode = activeNodes.object[value.toNodeID];
-				const toConnection = activeConnections.object[value.toConnectionID];
-				if (fromNode && fromConnection && toNode && toConnection) {
-					// check that the connection references a data item
-					const fromEntity = fromNode.props.data.find(function (entity) {
-						const entityID = fromConnection.entityID === entity[fromNode.props.primary_key];
-						const entityType = fromConnection.entityType === fromNode.props.graphql_meta_type;
-						return entityID && entityType;
-					});
-					const toEntity = toNode.props.data.find(function (entity) {
-						const entityID = toConnection.entityID === entity[toNode.props.primary_key];
-						const entityType = toConnection.entityType === toNode.props.graphql_meta_type;
-						return entityID && entityType;
-					});
-					if (!fromEntity || !toEntity) {
-						delete edges[key];
-					}
-				} else {
-					delete edges[key];
-				}
-			}
-			const activeEdges = {
-				object: edges,
-				values: Object.values(edges),
-				keys: Object.keys(edges),
-			};
-			self.cache.activeEdges[rootType] = activeEdges;
-			return activeEdges;
-		}
-	}
-	nodeConnections(nodeID) {
-		const self = this;
-		if (self.cache.nodeConnections[nodeID]) {
-			return self.cache.nodeConnections[nodeID];
-		} else {
-			const connections = { ...self.connections };
-			for (const [key, value] of Object.entries(connections)) {
-				if (value.nodeID !== nodeID) {
-					delete connections[key];
-				}
-			}
-			const nodeConnections = {
-				object: connections,
-				values: Object.values(connections),
-				keys: Object.keys(connections),
-			};
-			self.cache.nodeConnections[nodeID] = nodeConnections;
-			return nodeConnections;
-		}
-	}
-	clearCacheNodes() {
-		const self = this;
-		self.cache.activeNodes = {};
-		self.cache.activeConnections = {};
-		self.cache.activeEdges = {};
-		self.cache.nodeConnections = {};
-	}
-	clearCacheConnections() {
-		const self = this;
-		self.cache.activeConnections = {};
-		self.cache.activeEdges = {};
-		self.cache.nodeConnections = {};
-	}
-	clearCacheEdges() {
-		const self = this;
-		self.cache.activeEdges = {};
-	}
 	selectNodes(keys) {
 		const self = this;
 		return keys.map(function (key) {
@@ -772,7 +501,6 @@ class GraphService {
 			}
 		});
 		self.updateNodes(Object.values(staged));
-		self.clearCacheNodes();
 	}
 	// node methods
 	readNodes(candidates) {
@@ -792,13 +520,11 @@ class GraphService {
 			staging[node.id] = node;
 		});
 		self.nodes = staging;
-		self.clearCacheNodes();
 		return candidates;
 	}
 	createNode(candidate) {
 		const self = this;
 		self.nodes[candidate.id] = candidate;
-		self.clearCacheNodes();
 		return candidate;
 	}
 	updateNodes(candidates) {
@@ -808,13 +534,11 @@ class GraphService {
 			staging[node.id] = node;
 		});
 		self.nodes = staging;
-		self.clearCacheNodes();
 		return candidates;
 	}
 	updateNode(candidate) {
 		const self = this;
 		self.nodes[candidate.id] = candidate;
-		self.clearCacheNodes();
 		return candidate;
 	}
 	deleteNodes(candidates) {
@@ -824,13 +548,11 @@ class GraphService {
 			delete staging[node.id];
 		});
 		self.nodes = staging;
-		self.clearCacheNodes();
 		return candidates;
 	}
 	deleteNode(candidate) {
 		const self = this;
 		delete self.nodes[candidate.id];
-		self.clearCacheNodes();
 		return candidate;
 	}
 	// connection methods
@@ -850,7 +572,6 @@ class GraphService {
 			};
 		});
 		self.connections = staged;
-		self.clearCacheConnections();
 	}
 	readConnections(candidates) {
 		const self = this;
@@ -865,7 +586,6 @@ class GraphService {
 			staging[connection.id] = connection;
 		});
 		self.connections = staging;
-		self.clearCacheConnections();
 	}
 	updateConnections(candidates) {
 		const self = this;
@@ -874,7 +594,6 @@ class GraphService {
 			staging[connection.id] = connection;
 		});
 		self.connections = staging;
-		self.clearCacheConnections();
 	}
 	deleteConnections(candidates) {
 		const self = this;
@@ -883,7 +602,6 @@ class GraphService {
 			delete staging[connection.id];
 		});
 		self.connections = staging;
-		self.clearCacheConnections();
 	}
 	// edge methods
 	readEdges(candidates) {
@@ -899,7 +617,6 @@ class GraphService {
 			staging[edge.id] = edge;
 		});
 		self.edges = staging;
-		self.clearCacheEdges();
 	}
 	updateEdges(candidates) {
 		const self = this;
@@ -908,7 +625,6 @@ class GraphService {
 			staging[edge.id] = edge;
 		});
 		self.edges = staging;
-		self.clearCacheEdges();
 	}
 	deleteEdges(candidates) {
 		const self = this;
@@ -917,7 +633,6 @@ class GraphService {
 			delete staging[edge.id];
 		});
 		self.edges = staging;
-		self.clearCacheEdges();
 	}
 	createInteraction(interaction) {
 		const self = this;

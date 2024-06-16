@@ -46,30 +46,39 @@ export default function SpacesBar({ route, agentHeader, gauze, model, router, gr
 			router.navigate("system.graph.space", { space: "home", time: new Date().getTime() });
 		};
 	}
+	function handleEditWorkspace(spaceID) {
+		return function (e) {
+			e.preventDefault();
+			const formData = new FormData(e.target);
+			const workspaceName = formData.get("name");
+			const space = graph.readSpace(agentHeader.name, spaceID);
+			space.name = workspaceName;
+			graph.updateSpace(agentHeader.name, spaceID, space);
+			setEditWorkspace(null);
+		};
+	}
 	function handleEnterEditWorkspace(spaceID) {
 		return function (e) {
-			if (spaceID === "home") return;
 			setEditWorkspace(spaceID);
 		};
 	}
 	function handleExitEditWorkspace(spaceID) {
 		return function (e) {
-			if (spaceID === "home") return;
 			setEditWorkspace(null);
 		};
 	}
 	function renderEditWorkspace(spaceID) {
 		const space = spaces[spaceID];
-		const saveClassName = spaceID === "home" ? "ba bw1 br2 bgx11 bdx11 cx6" : "ba bw1 br2 bgx11 bdx11 cx6 bgx10h bdx10h";
-		const inputClassName = spaceID === "home" ? "ba bw1 br2 bgx4 bdx4 cx6 truncate-ns mw-100" : "ba bw1 br2 bgx4 bdx4 cx6 bgx5h bdx5h truncate-ns mw-100";
+		const saveClassName = "ba bw1 br2 bgx11 bdx11 cx6 bgx10h bdx10h";
+		const inputClassName = "ba bw1 br2 bgx12 bdx12 cxyz7 mw-100";
 		return (
-			<form style={{ marginBlockEnd: "0" }}>
+			<form style={{ marginBlockEnd: "0" }} onSubmit={handleEditWorkspace(spaceID)}>
 				<div className="flex pa1">
 					<div className="mr1" style={{ width: "100%" }}>
-						<input className="mw-100" style={{ width: "100%" }} name="name" defaultValue={space.name || spaceID.toUpperCase()} />
+						<input className={inputClassName} style={{ width: "100%" }} name="name" defaultValue={space.name || spaceID.toUpperCase()} />
 					</div>
 					<div>
-						<button className={saveClassName} disabled={spaceID === "home"} style={{ opacity: spaceID === "home" ? "0.5" : "1" }} type="submit">
+						<button className={saveClassName} type="submit">
 							Save
 						</button>
 					</div>
@@ -80,7 +89,7 @@ export default function SpacesBar({ route, agentHeader, gauze, model, router, gr
 	function renderDeleteWorkspace(spaceID) {
 		const space = spaces[spaceID];
 		const deleteClassName = spaceID === "home" ? "ba bw1 br2 bgx11 bdx11 cx6" : "ba bw1 br2 bgx11 bdx11 cx6 bgx10h bdx10h";
-		const editClassName = spaceID === "home" ? "ba bw1 br2 bgx4 bdx4 cx6 truncate-ns mw-100" : "ba bw1 br2 bgx4 bdx4 cx6 bgx5h bdx5h truncate-ns mw-100";
+		const editClassName = "ba bw1 br2 bgx4 bdx4 cx6 bgx5h bdx5h truncate-ns mw-100";
 		return (
 			<div className="flex pa1">
 				<div className="mr1" style={{ width: "100%" }}>

@@ -29,3 +29,12 @@ router.setDependencies({ store, services });
 router.start();
 
 console.log("gauze:start");
+
+/*
+const worker = new Worker("worker.js");
+setInterval(function () {
+	// kind of defeats the purpose of using workers when we need to be able to make a structured clone of the message
+	// since it means that we are one step away from being able to put it in local storage
+	worker.postMessage(services.graph)
+}, 512)
+*/
