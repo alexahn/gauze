@@ -176,7 +176,24 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 				connections={connections}
 				interaction={interaction}
 			/>
-			<div className="graph-background bgx12 mw-100 mh-100 h-100 w-100 fixed top-0 left-0" style={{ zIndex: -2, width: "100%", height: "100%" }} />
+			<div className="graph-background bgx12 mw-100 mh-100 h-100 w-100 fixed top-0 left-0" style={{ zIndex: -2, width: "100%", height: "100%" }}>
+				{/*
+				<div className="fixed wrapper w-100 h-100">
+					<div className="one bgx1" />
+					<div className="two bgx2" />
+					<div className="three bgx3" />
+					<div className="four bgx4" />
+					<div className="five bgx5" />
+					<div className="six bgx6" />
+					<div className="seven bgx7" />
+					<div className="eight bgx8" />
+					<div className="nine bgx9" /> 
+					<div className="ten bgx10" /> 
+					<div className="eleven bgx11" />
+					<div className="twelve bgx12" />
+				</div>
+				*/}
+			</div>
 		</div>
 	);
 }

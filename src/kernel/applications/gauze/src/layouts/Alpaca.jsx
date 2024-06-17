@@ -4,7 +4,8 @@ import React from "react";
 export default function Alpaca({ sections, units }) {
 	const id = "layout:alpaca";
 	return (
-		<div id={id} key={id} className="flex justify-center w-100 h-100 items-center">
+		<div id={id} key={id} className="flex bgx12 justify-center w-100 h-100 items-center">
+			{/*
 			<div className="fixed wrapper w-100 h-100">
 				<div className="one bgx1" />
 				<div className="two bgx2" />
@@ -19,6 +20,7 @@ export default function Alpaca({ sections, units }) {
 				<div className="eleven bgx11" />
 				<div className="twelve bgx12" />
 			</div>
+			*/}
 			<div className="circle-border" style={{ zIndex: 4 }}>
 				<div className="clouds flex cf mw6 w-100 flex-column bgxyz7 bdx6 cx12 br3 ba bw2" style={{ zIndex: 3 }}>
 					<div className="fl w-100 pa4 pb2">
