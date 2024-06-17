@@ -106,7 +106,7 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 			<div className="fixed top-1 left-1" style={{ zIndex: 1 }}>
 				<div className="relative">
 					<PlusCircledIcon width={30} height={30} onClick={toggleShare} />
-					<span className="dn bgx2 br2 w6 top-0 left-0 pa3 absolute f4" style={{ display: displayShare ? "block" : "none" }}>
+					<span className="dn bgx2 br3 w6 top-0 left-0 pa3 absolute f4" style={{ display: displayShare ? "block" : "none" }}>
 						<div className="flex flex-column">
 							<div className="">
 								<textarea
@@ -134,7 +134,7 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 			<div className="fixed top-1 right-1" style={{ zIndex: 1 }}>
 				<div className="relative row" tabIndex="0">
 					<GearIcon width={30} height={30} />
-					<span className="dn bgx2 cx12 br2 mw6 w5 top-0 right-0 pa3 absolute f4 tooltip">
+					<span className="dn bgx2 cx12 br3 mw6 w5 top-0 right-0 pa3 absolute f4 tooltip">
 						<label htmlFor="performance">Performance:</label>
 						<br />
 						<input type="radio" id="performance0" name="performance" value="max" defaultChecked={performance === 0} onChange={handlePerformance} />
