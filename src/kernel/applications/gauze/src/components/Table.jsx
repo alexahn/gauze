@@ -366,6 +366,97 @@ export default memo(function Table({
 	const colors = {
 		0: {
 			node: {
+				bg: "bgx10",
+				bd: "bdx10",
+				c: "cx6",
+				x: 10,
+				bgh: "bgx4h",
+				bdh: "bdx4h",
+				ch: "cx6h",
+				xh: 4,
+			},
+			table: {
+				bg: "bgx7",
+				bd: "bdx7",
+				c: "cx2",
+				x: 7,
+				bgh: "bgx2h",
+				bdh: "bdx2h",
+				ch: "cx6h",
+				xh: 2,
+			},
+		},
+		1: {
+			node: {
+				bg: "bgx4",
+				bd: "bdx4",
+				c: "cx6",
+				x: 4,
+				bgh: "bgx7h",
+				bdh: "bdx7h",
+				ch: "cx6h",
+				xh: 7,
+			},
+			table: {
+				bg: "bgx2",
+				bd: "bdx2",
+				c: "cx6",
+				x: 2,
+				bgh: "bgx10h",
+				bdh: "bdx10h",
+				ch: "cx6h",
+				xh: 10,
+			},
+		},
+		2: {
+			node: {
+				bg: "bgx7",
+				bd: "bdx7",
+				c: "cx2",
+				x: 7,
+				bgh: "bgx2h",
+				bdh: "bdx2h",
+				ch: "cx6h",
+				xh: 2,
+			},
+			table: {
+				bg: "bgx10",
+				bd: "bdx10",
+				c: "cx6",
+				x: 10,
+				bgh: "bgx4h",
+				bdh: "bdx4h",
+				ch: "cx6h",
+				xh: 4,
+			},
+		},
+		3: {
+			node: {
+				bg: "bgx2",
+				bd: "bdx2",
+				c: "cx6",
+				x: 2,
+				bgh: "bgx10h",
+				bdh: "bdx10h",
+				ch: "cx6h",
+				xh: 10,
+			},
+			table: {
+				bg: "bgx4",
+				bd: "bdx4",
+				c: "cx6",
+				x: 4,
+				bgh: "bgx7h",
+				bdh: "bdx7h",
+				ch: "cx2h",
+				xh: 7,
+			},
+		},
+	};
+	/*
+	const colors = {
+		0: {
+			node: {
 				bg: "bgx11",
 				bd: "bdx11",
 				c: "cx7",
@@ -375,14 +466,6 @@ export default memo(function Table({
 				ch: "cx6h",
 				xh: 8,
 			},
-			/*
-			table: {
-				bg: "bgx8",
-				bd: "bdx8",
-				c: "cx6",
-				x: 8
-			},
-			*/
 			table: {
 				bg: "bgx6",
 				bd: "bdx6",
@@ -405,14 +488,6 @@ export default memo(function Table({
 				ch: "cxyz7h",
 				xh: 6,
 			},
-			/*
-			table: {
-				bg: "bgx6",
-				bd: "bdx6",
-				c: "cxyz7",
-				x: 6
-			},
-			*/
 			table: {
 				bg: "bgx4",
 				bd: "bdx4",
@@ -435,14 +510,6 @@ export default memo(function Table({
 				ch: "cx6h",
 				xh: 4,
 			},
-			/*
-			table: {
-				bg: "bgx4",
-				bd: "bdx4",
-				c: "cx6",
-				x: 4
-			},
-			*/
 			table: {
 				bg: "bgx11",
 				bd: "bdx11",
@@ -465,14 +532,6 @@ export default memo(function Table({
 				ch: "cx7h",
 				xh: 11,
 			},
-			/*
-			table: {
-				bg: "bgx11",
-				bd: "bdx11",
-				c: "cx7",
-				x: 11
-			},
-			*/
 			table: {
 				bg: "bgx8",
 				bd: "bdx8",
@@ -485,6 +544,7 @@ export default memo(function Table({
 			},
 		},
 	};
+	*/
 	const colorIndex = depth % 4 < 0 ? (depth % 4) + 4 : depth % 4;
 	const prevColorIndex = colorIndex - 1 < 0 ? ((colorIndex - 1) % 4) + 4 : colorIndex - 1;
 	const prevPrevColorIndex = prevColorIndex - 1 < 0 ? ((prevColorIndex - 1) % 4) + 4 : prevColorIndex - 1;
@@ -508,6 +568,17 @@ export default memo(function Table({
 	const cellEntityClass = `${cellClass} ${nextColor.node.bg} ${nextColor.node.bd} ${nextColor.node.c}`;
 	const inputTableClass = `w-100 br2 ba bw1 ${color.node.bd} ${color.node.bg} ${color.node.c} ${color.node.bdh} ${color.node.bgh} ${color.node.ch}`;
 	const spanTableClass = `dn mw9 w6 top-0 right-0 pa1 absolute f4 tooltip ${color.node.bg} bdx2 ${color.node.c} bw1 ba br2`;
+	const spanEntityClass = `dn mw5 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.node.x - 1} bdx${nextColor.node.x - 1} cx${nextColor.node.x === 10 ? nextColor.node.x + 2 : nextColor.node.x + 1} bw1 ba br2`;
+	const spanButtonClass = `dn mw5 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.table.x - 1} bdx${nextColor.table.x - 1} cx${nextColor.table.x === 10 ? nextColor.table.x + 2 : nextColor.table.x + 1} br2`;
+	const spanButtonLongClass = `dn mw9 w6 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.table.x - 1} bdx${nextColor.table.x - 1} cx${nextColor.table.x === 10 ? nextColor.table.x + 2 : nextColor.table.x + 1} br2`;
+	const buttonConnectionToClass = `ba br2 ${prevPrevColor.table.bd} ${prevPrevColor.table.bg} ${prevPrevColor.table.c} ${prevPrevColor.table.bdh} ${prevPrevColor.table.bgh} ${prevPrevColor.table.ch}`;
+	const buttonSpanConnectionToClass = `ba br2 w-100 mw5 ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c} ${nextColor.table.bdh} ${nextColor.table.bgh} ${nextColor.table.ch}`;
+	const spanConnectionToClass = `dn mw9 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${prevPrevColor.table.x - 1} bdx${prevPrevColor.table.x - 1} cx${prevPrevColor.table.x === 10 ? prevPrevColor.table.x + 2 : prevPrevColor.table.x + 1} bw1 ba br2`;
+	const buttonConnectionFromClass = `ba br2 ${nextNextColor.node.bd} ${nextNextColor.node.bg} ${nextNextColor.node.c} ${nextNextColor.node.bdh} ${nextNextColor.node.bgh} ${nextNextColor.node.ch}`;
+	const buttonSpanConnectionFromClass = `ba br2 w-100 mw5 ${prevColor.table.bd} ${prevColor.table.bg} ${prevColor.table.c} ${prevColor.table.bdh} ${prevColor.table.bgh} ${prevColor.table.ch}`;
+	const spanConnectionFromClass = `dn mw9 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextNextColor.node.x - 1} bdx${nextNextColor.node.x - 1} cx${nextNextColor.node.x === 10 ? nextNextColor.node.x + 2 : nextNextColor.node.x + 1} bw1 ba br2`;
+	/*
+	const spanTableClass = `dn mw9 w6 top-0 right-0 pa1 absolute f4 tooltip ${color.node.bg} bdx2 ${color.node.c} bw1 ba br2`;
 	const spanEntityClass = `dn mw5 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.node.x - 1} bdx${nextColor.node.x - 1} cx${nextColor.node.x === 6 ? nextColor.node.x + 2 : nextColor.node.x + 1} bw1 ba br2`;
 	const spanButtonClass = `dn mw5 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.table.x - 1} bdx${nextColor.table.x - 1} cx${nextColor.table.x === 6 ? nextColor.table.x + 2 : nextColor.table.x + 1} br2`;
 	const spanButtonLongClass = `dn mw9 w6 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.table.x - 1} bdx${nextColor.table.x - 1} cx${nextColor.table.x === 6 ? nextColor.table.x + 2 : nextColor.table.x + 1} br2`;
@@ -517,6 +588,7 @@ export default memo(function Table({
 	const buttonConnectionFromClass = `ba br2 ${nextNextColor.node.bd} ${nextNextColor.node.bg} ${nextNextColor.node.c} ${nextNextColor.node.bdh} ${nextNextColor.node.bgh} ${nextNextColor.node.ch}`;
 	const buttonSpanConnectionFromClass = `ba br2 w-100 mw5 ${prevColor.table.bd} ${prevColor.table.bg} ${prevColor.table.c} ${prevColor.table.bdh} ${prevColor.table.bgh} ${prevColor.table.ch}`;
 	const spanConnectionFromClass = `dn mw9 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextNextColor.node.x - 1} bdx${nextNextColor.node.x - 1} cx${nextNextColor.node.x === 6 ? nextNextColor.node.x + 2 : nextNextColor.node.x + 1} bw1 ba br2`;
+	*/
 	function renderTable() {
 		const node = activeNodes.object[nodeID];
 		if (!node) return null;
