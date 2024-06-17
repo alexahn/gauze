@@ -70,7 +70,7 @@ export default function Banner({ route, gauze, model, router }) {
 					<div className="cx2">G</div>
 					<div className="cx4">A</div>
 					<div className="cx6">U</div>
-					<div className="cx8">Z</div>
+					<div className="cx7">Z</div>
 					<div className="cx10">E</div>
 				</div>
 			</h1>
