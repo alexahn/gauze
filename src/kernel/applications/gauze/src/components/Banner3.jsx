@@ -67,11 +67,11 @@ export default function Banner({ route, gauze, model, router }) {
 			{/*<h1 className="athelas f1"><div className="cx2">G</div><div className="cx4">A</div><div className="cx6">U</div><div className="cx8">Z</div><div className="cx10">E</div></h1>*/}
 			<h1 className="athelas f1" align="center">
 				<div className="flex" align="center">
-					<div className="cx2">G</div>
-					<div className="cx4">A</div>
-					<div className="cx6">U</div>
-					<div className="cx7">Z</div>
-					<div className="cx10">E</div>
+					<div className="clouds bgx6 br2 cx2">G</div>
+					<div className="clouds bgx7 br2 cx4">A</div>
+					<div className="clouds bgx10 br2 cx6">U</div>
+					<div className="clouds bgx2 br2 cx7">Z</div>
+					<div className="clouds bgx4 br2 cx10">E</div>
 				</div>
 			</h1>
 			<div className="flex">
