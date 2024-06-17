@@ -87,6 +87,18 @@
 	/* custom class variables here */
 }
 
+.circle-border {
+	border: 60px solid;
+	border-image-source: url(border-color.svg);
+	/*width: 60vw;
+	height: 60vw;
+	*/
+	/*border-image-slice: 500;*/
+	border-image-slice: 33%;
+	border-image-width: 210px;
+	border-image-outset: 10px;
+}
+
 .type-item .type-list table,
 th,
 td {

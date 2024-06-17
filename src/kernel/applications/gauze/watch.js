@@ -49,6 +49,7 @@ async function watch() {
 		logLevel: "info",
 		sourcemap: true,
 		outfile: "./src/kernel/applications/gauze/build/index.js",
+		external: ["border.svg", "border-color.svg", "border-color-reverse.svg"],
 		plugins: [envPlugin],
 	});
 	await ctx.watch();

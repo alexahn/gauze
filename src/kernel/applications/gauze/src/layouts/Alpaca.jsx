@@ -19,12 +19,14 @@ export default function Alpaca({ sections, units }) {
 				<div className="eleven bgx11" />
 				<div className="twelve bgx12" />
 			</div>
-			<div className="clouds flex cf mw6 w-100 flex-column bgxyz7 cx12 br3 bdx1 ba bw1" style={{ zIndex: 3 }}>
-				<div className="fl w-100 pa4 pb2">
-					<sections.top units={units.top} />
-				</div>
-				<div className="fl w-100 pl4 pr4 pb5">
-					<sections.bottom units={units.bottom} />
+			<div className="circle-border" style={{ zIndex: 4 }}>
+				<div className="clouds flex cf mw6 w-100 flex-column bgxyz7 bdx6 cx12 br3 ba bw2" style={{ zIndex: 3 }}>
+					<div className="fl w-100 pa4 pb2">
+						<sections.top units={units.top} />
+					</div>
+					<div className="fl w-100 pl4 pr4 pb5">
+						<sections.bottom units={units.bottom} />
+					</div>
 				</div>
 			</div>
 		</div>
