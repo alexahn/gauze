@@ -227,11 +227,24 @@ const routes = [
 				graph: graph.default,
 				router: router.default,
 			};
+			/*
+			if (model.default.all("HEADER").length) {
+				setTimeout(function () {
+					return gauze.default.header().then(function (headers) {
+						headers.forEach(function (header) {
+							model.default.create("HEADER", header.name, header);
+						});
+					});
+				}, 0)
+				return true
+			} else {
+			*/
 			return gauze.default.header().then(function (headers) {
 				headers.forEach(function (header) {
 					model.default.create("HEADER", header.name, header);
 				});
 			});
+			//}
 		},
 		layout: layouts.albatross.default,
 		sections: {
