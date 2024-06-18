@@ -645,6 +645,11 @@
 		[ ] use an error boundary?
 	[ ] test usage in non-private browser tab
 		[ ] see if the memory usage becomes a problem for long sessions and if reloading the app in another tab makes it re-useable
+	[ ] use local data for initial render if possible
+		[ ] re-implement soundness and completeness (or maybe just one of them)
+	[x] reorganize synchronization logic to be done from the entry point
+	[ ] add synchronization for model service
+	[ ] app icon svg
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages

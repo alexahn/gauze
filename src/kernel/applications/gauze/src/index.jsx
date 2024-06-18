@@ -12,6 +12,8 @@ import store from "./store.js";
 import Route from "./route.jsx";
 
 import * as services from "./services/index.js";
+import * as components from "./components/index.js";
+import * as synchronize from "./synchronize.js";
 
 const root = Client.createRoot(document.getElementById("gauze"));
 
@@ -25,6 +27,8 @@ root.render(
 );
 
 router.setDependencies({ store, services });
+
+synchronize.start(services, components);
 
 router.start();
 

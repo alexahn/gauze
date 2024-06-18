@@ -6,113 +6,16 @@ import * as router from "./../router.js";
 
 import * as components from "./../components/index.js";
 
-function nodesToJSON(nodes) {
-	const json = { ...nodes };
-	for (const [key, value] of Object.entries(json)) {
-		json[key] = nodeToJSON(value);
-	}
-	return json;
-}
-
-function nodeToJSON(node) {
-	const { component, ...root } = { ...node };
-	const { gauze, model, router, graph, ...props } = root.props;
-	const json = { ...root, props };
-	return json;
-}
-
-function nodesFromJSON(json, services, components) {
-	const nodes = { ...json };
-	for (const [key, value] of Object.entries(nodes)) {
-		nodes[key] = nodeFromJSON(value, services, components);
-	}
-	return nodes;
-}
-
-function nodeFromJSON(json, services, components) {
-	json.component = components.table.default;
-	json.props.gauze = services.gauze;
-	json.props.model = services.model;
-	json.props.router = services.router;
-	json.props.graph = services.graph;
-	return json;
-}
-
-function connectionsToJSON(connections) {
-	const json = { ...connections };
-	for (const [key, value] of Object.entries(json)) {
-		json[key] = connectionToJSON(value);
-	}
-	return json;
-}
-
-function connectionToJSON(connection) {
-	const { component, ...root } = { ...connection };
-	const { gauze, model, router, graph, ...props } = root.props;
-	const json = { ...root, props };
-	return json;
-}
-
-function connectionsFromJSON(json, services, components) {
-	const connections = { ...json };
-	for (const [key, value] of Object.entries(connections)) {
-		connections[key] = connectionFromJSON(value, services, components);
-	}
-	return connections;
-}
-
-function connectionFromJSON(json, services, components) {
-	json.component = components.relationship.default;
-	json.props.gauze = services.gauze;
-	json.props.model = services.model;
-	json.props.router = services.router;
-	json.props.graph = services.graph;
-	return json;
-}
-
 class GraphService {
 	constructor() {
 		const self = this;
-		const services = {
-			gauze: gauze.default,
-			model: model.default,
-			router: router.default,
-			graph: self,
-		};
-		try {
-			const graph = localStorage.getItem("graph");
-			const parsed = JSON.parse(graph);
-			self.nodes = nodesFromJSON(parsed.nodes || {}, services, components);
-			self.connections = connectionsFromJSON(parsed.connections || {}, services, components);
-			self.edges = parsed.edges || {};
-			self.spaces = parsed.spaces || {};
-		} catch (e) {
-			console.error(e);
-			self.nodes = {};
-			self.connections = {};
-			self.edges = {};
-			self.spaces = {};
-		}
-		setInterval(function () {
-			const graph = JSON.stringify({
-				nodes: nodesToJSON(self.nodes),
-				connections: connectionsToJSON(self.connections),
-				edges: self.edges,
-				spaces: self.spaces,
-			});
-			localStorage.setItem("graph", graph);
-		}, 512);
 		/*
-		//this.nodes = {};
 			edge: {
 				fromNodeID
 				fromConnectionID
 				toNodeID
 				toConnectionID
 			}
-		*/
-		/*
-		//this.edges = {};
 			connection: {
 				name
 				nodeID
@@ -122,9 +25,6 @@ class GraphService {
 				y
 				z
 			}
-		*/
-		/*
-		//this.spaces = {};
 			spaces: {
 				agent_root: {
 					home: {
@@ -150,6 +50,10 @@ class GraphService {
 				}
 			}
 		*/
+		self.nodes = {};
+		self.connections = {};
+		self.edges = {};
+		self.spaces = {};
 		this.interaction = null;
 		this.cache = {
 			spaces: {
@@ -179,6 +83,68 @@ class GraphService {
 			panning: {},
 			dragging: {},
 		};
+	}
+	nodesToJSON(nodes) {
+		const self = this;
+		const json = { ...nodes };
+		for (const [key, value] of Object.entries(json)) {
+			json[key] = self.nodeToJSON(value);
+		}
+		return json;
+	}
+	nodeToJSON(node) {
+		const self = this;
+		const { component, ...root } = { ...node };
+		const { gauze, model, router, graph, ...props } = root.props;
+		const json = { ...root, props };
+		return json;
+	}
+	nodesFromJSON(json, services, components) {
+		const self = this;
+		const nodes = { ...json };
+		for (const [key, value] of Object.entries(nodes)) {
+			nodes[key] = self.nodeFromJSON(value, services, components);
+		}
+		return nodes;
+	}
+	nodeFromJSON(json, services, components) {
+		json.component = components.table.default;
+		json.props.gauze = services.gauze.default;
+		json.props.model = services.model.default;
+		json.props.router = services.router.default;
+		json.props.graph = services.graph.default;
+		return json;
+	}
+	connectionsToJSON(connections) {
+		const self = this;
+		const json = { ...connections };
+		for (const [key, value] of Object.entries(json)) {
+			json[key] = self.connectionToJSON(value);
+		}
+		return json;
+	}
+	connectionToJSON(connection) {
+		const self = this;
+		const { component, ...root } = { ...connection };
+		const { gauze, model, router, graph, ...props } = root.props;
+		const json = { ...root, props };
+		return json;
+	}
+	connectionsFromJSON(json, services, components) {
+		const self = this;
+		const connections = { ...json };
+		for (const [key, value] of Object.entries(connections)) {
+			connections[key] = self.connectionFromJSON(value, services, components);
+		}
+		return connections;
+	}
+	connectionFromJSON(json, services, components) {
+		json.component = components.relationship.default;
+		json.props.gauze = services.gauze.default;
+		json.props.model = services.model.default;
+		json.props.router = services.router.default;
+		json.props.graph = services.graph.default;
+		return json;
 	}
 	root(type) {
 		const self = this;
