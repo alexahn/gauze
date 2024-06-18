@@ -651,6 +651,7 @@
 	[ ] add synchronization for model service
 	[ ] app icon svg
 	[x] move static directory to inside of src and define a dataurl loader for svg
+	[ ] look into and fix edges not rendering correctly in non-private tab
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages
