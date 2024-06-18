@@ -69,11 +69,11 @@ export default function SpacesBar({ route, agentHeader, gauze, model, router, gr
 	}
 	function renderEditWorkspace(spaceID) {
 		const space = spaces[spaceID];
-		const saveClassName = "ba bw1 br2 bgx11 bdx11 cx6 bgx10h bdx10h";
-		const inputClassName = "ba bw1 br2 bgx12 bdx12 cxyz7 mw-100";
+		const saveClassName = route.params.space === spaceID ? "ba bw1 br2 bgx2 bdx2 cx12 bgx3h bdx3h" : "ba bw1 br2 bgx2 bdx2 cx6 bgx3h bdx3h";
+		const inputClassName = "ba bw1 br2 bgx12 bdx12 cx2 mw-100";
 		return (
 			<form style={{ marginBlockEnd: "0" }} onSubmit={handleEditWorkspace(spaceID)}>
-				<div className="flex pa1">
+				<div className="flex pa1 athelas">
 					<div className="mr1" style={{ width: "100%" }}>
 						<input className={inputClassName} style={{ width: "100%" }} name="name" defaultValue={space.name || spaceID.toUpperCase()} />
 					</div>
@@ -88,10 +88,17 @@ export default function SpacesBar({ route, agentHeader, gauze, model, router, gr
 	}
 	function renderDeleteWorkspace(spaceID) {
 		const space = spaces[spaceID];
-		const deleteClassName = spaceID === "home" ? "ba bw1 br2 bgx11 bdx11 cx6" : "ba bw1 br2 bgx11 bdx11 cx6 bgx10h bdx10h";
-		const editClassName = "ba bw1 br2 bgx4 bdx4 cx6 bgx5h bdx5h truncate-ns mw-100";
+		const deleteClassName =
+			route.params.space === spaceID
+				? spaceID === "home"
+					? "ba bw1 br2 bgx2 bdx2 cx12"
+					: "ba bw1 br2 bgx2 bdx2 cx12 bgx3h bdx3h"
+				: spaceID === "home"
+					? "ba bw1 br2 bgx2 bdx2 cx6"
+					: "ba bw1 br2 bgx2 bdx2 cx6 bgx3h bdx3h";
+		const editClassName = route.params.space === spaceID ? "ba bw1 br2 bgx2 bdx2 cx12 bgx3h bdx3h truncate-ns mw-100" : "ba bw1 br2 bgx2 bdx2 cx6 bgx3h bdx3h truncate-ns mw-100";
 		return (
-			<div className="flex pa1">
+			<div className="flex pa1 athelas">
 				<div className="mr1" style={{ width: "100%" }}>
 					<button className={editClassName} style={{ width: "100%" }} onClick={handleEnterEditWorkspace(spaceID)}>
 						{space.name || spaceID.toUpperCase()}
@@ -117,14 +124,14 @@ export default function SpacesBar({ route, agentHeader, gauze, model, router, gr
 					<div>
 						<h1>+</h1>
 					</div>
-					<span className="dn bgx3 cx8 mw6 top-0 left-0 absolute f4 tooltip truncate-ns" style={{ zIndex: 3, width: "256px", display: displayWorkspace ? "block" : "none" }}>
+					<span className="dn bgx2 cx8 mw6 top-0 left-0 absolute f4 tooltip truncate-ns" style={{ zIndex: 3, width: "256px", display: displayWorkspace ? "block" : "none" }}>
 						<div>
-							<form className="flex flex-column" onSubmit={handleCreateWorkspace}>
+							<form className="flex flex-column athelas" onSubmit={handleCreateWorkspace}>
 								<div className="pa1">
 									<input className="ba bw1 br2 bgx12 bdx12 mr1 mw-100" name="name" placeholder="Space Name" style={{ width: "100%" }} />
 								</div>
 								<div className="pa1">
-									<button className="ba bw1 br2 bgx4 bdx4 cx6 bgx5h bdx5h w-100" type="submit" disabled={submitCreateWorkspace}>
+									<button className="ba bw1 br2 bgx10 bdx10 cx6 bgx5h bdx5h w-100" type="submit" disabled={submitCreateWorkspace}>
 										Create
 									</button>
 								</div>
@@ -137,35 +144,18 @@ export default function SpacesBar({ route, agentHeader, gauze, model, router, gr
 					const className = route.params.space === spaceID ? "bgx10 cx12 relative" : "bgx10 cx2 relative";
 					const spanClassName =
 						route.params.space === spaceID
-							? "dn bgx9 cx12 mw6 w5 top-0 left-0 absolute f4 tooltip truncate-ns"
-							: "dn bgx9 cx5 mw6 w5 top-0 left-0 absolute f4 tooltip truncate-ns";
-					const selectClassName = route.params.space === spaceID ? "ba br2 bgx4 bdx4 cx6" : "ba br2 bgx4 bdx4 cx6 bgx5h bdx5h";
-					const cancelClassName = "ba br2 bgx4 bdx4 cx6 bgx5h bdx5h";
+							? "dn bgx10 cx12 mw6 w5 top-0 left-0 absolute f4 tooltip truncate-ns"
+							: "dn bgx10 cx5 mw6 w5 top-0 left-0 absolute f4 tooltip truncate-ns";
+					const selectClassName = route.params.space === spaceID ? "ba br2 bgx2 bdx2 cx12" : "ba br2 bgx2 bdx2 cx6 bgx3h bdx3h";
+					const cancelClassName = route.params.space === spaceID ? "ba br2 bgx2 bdx2 cx12 bgx3h bdx3h" : "ba br2 bgx2 bdx2 cx6 bgx3h bdx3h";
 					return (
 						<div className={className} key={spaceID}>
 							<div>
 								<h1>{index + 1}</h1>
 							</div>
 							<span className={spanClassName} style={{ zIndex: 3, width: "256px", display: displayWorkspace ? "block" : "none" }}>
-								<div className="flex flex-column">
+								<div className="flex flex-column athelas">
 									{editWorkspace === spaceID ? renderEditWorkspace(spaceID) : renderDeleteWorkspace(spaceID)}
-									{/*
-									<div className="flex pa1">
-										<div className="mr1" style={{ width: "100%" }}>
-											<button className={editClassName} style={{width: "100%"}} onClick={handleEditWorkspace(spaceID)}>{space.name || spaceID.toUpperCase()}</button>
-										</div>
-										<div>
-											<button
-												className={deleteClassName}
-												disabled={spaceID === "home"}
-												style={{ opacity: spaceID === "home" ? "0.5" : "1" }}
-												onClick={handleDeleteWorkspace(spaceID)}
-											>
-												Delete
-											</button>
-										</div>
-									</div>
-									*/}
 									<div className="w-100 pa1">
 										{editWorkspace === spaceID ? (
 											<button className={cancelClassName} style={{ width: "100%" }} onClick={handleExitEditWorkspace(spaceID)}>
