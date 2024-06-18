@@ -650,6 +650,7 @@
 	[x] reorganize synchronization logic to be done from the entry point
 	[ ] add synchronization for model service
 	[ ] app icon svg
+	[x] move static directory to inside of src and define a dataurl loader for svg
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages

@@ -151,7 +151,7 @@
 
 .circle-border {
 	border: 60px solid;
-	border-image-source: url(border-color.svg);
+	border-image-source: url(static/border-color.svg);
 	/*width: 60vw;
 	height: 60vw;
 	*/

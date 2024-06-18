@@ -49,6 +49,9 @@ const result = await esbuild.build({
 	minify: true,
 	sourcemap: true,
 	metafile: true,
+	loader: {
+		".svg": "dataurl",
+	},
 	outfile: "./src/kernel/applications/gauze/build/index.js",
 	plugins: [envPlugin],
 });

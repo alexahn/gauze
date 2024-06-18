@@ -1,0 +1,1 @@
+copy src/static/index.html to build/index.html
