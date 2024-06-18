@@ -1,7 +1,6 @@
 // will synchronize state between local storage and services
 
 import * as packageJSON from "./../../../../../package.json";
-console.log("PACKAGE", packageJSON);
 
 function migrateGraph(services, components) {
 	// fetch the freshest version and attempt a migration if necessary

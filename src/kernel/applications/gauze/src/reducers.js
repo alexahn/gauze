@@ -5,16 +5,8 @@ import { createStore, applyMiddleware, combineReducers } from "redux";
 import routes from "./routes.js";
 
 import * as services from "./services/index.js";
-console.log("services", services);
-
-/*
-const initialState = {
-	services: services,
-};
-*/
 
 const reducers = combineReducers({
-	//...initialState,
 	router: router5Reducer,
 	view: viewReducer,
 	services: servicesReducer,
