@@ -29,7 +29,6 @@ export default function SignIn({ route, router, gauze, model }) {
 				setSubmitAssert(false);
 				if (status.person.assert.email.success) {
 					setAsserted({ ...asserted, ...status });
-					console.log("incrementing");
 					setStep(step + 1);
 				} else {
 					// construct an error here
@@ -91,17 +90,14 @@ export default function SignIn({ route, router, gauze, model }) {
 	}
 	function previous() {
 		if (0 < step) {
-			console.log("decrementing");
 			setStep(step - 1);
 		}
 	}
 	function next() {
 		if (step < requirements.length) {
-			console.log("incrementing");
 			setStep(step + 1);
 		}
 	}
-	console.log("step", step);
 	const fieldClass = "flex items-center athelas";
 	const labelClass = "clouds br2 ba bw1 bw0 bgxyz4 bdxyz4 cx6 w4 f7";
 	const inputClass = "clouds w-100 h-100 br2 bdx6 bgx6 ba bw1 cx2 f6";
