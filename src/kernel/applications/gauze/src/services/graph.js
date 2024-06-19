@@ -84,6 +84,28 @@ class GraphService {
 			dragging: {},
 		};
 	}
+	clearCache() {
+		this.cache = {
+			spaces: {
+				agent_root: {
+					home: {},
+				},
+				agent_account: {
+					home: {},
+				},
+				agent_user: {
+					home: {},
+				},
+				agent_person: {
+					home: {},
+				},
+				agent_character: {
+					home: {},
+				},
+			},
+			agents: {},
+		};
+	}
 	nodesToJSON(nodes) {
 		const self = this;
 		const json = { ...nodes };

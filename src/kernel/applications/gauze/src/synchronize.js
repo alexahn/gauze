@@ -21,10 +21,7 @@ function loadGraph(services, components) {
 		graph.default.spaces = parsed.spaces || {};
 
 		// clear cache so we get an instant update
-		const route = router.default.getState();
-		if (route && route.params && route.params.space) {
-			graph.default.cacheClearSpaceNodes(gauze.default.getSystemAgentHeader(model.default).name, route.params.space);
-		}
+		graph.default.clearCache();
 	} catch (e) {
 		console.error("failed to load graph:", e);
 	}
