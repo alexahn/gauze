@@ -657,8 +657,11 @@
 		[-] using a crdt could work, but it is probably overkill
 			[x] try to see if there is a way to make the blur and focus more reliable?
 				[x] seems to be okay if we properly act on cleared intervals?
-	[ ] change update fields to use graph methods to update service state, and don't use a local state in the table component
-		[ ] this will allow state to properly propagate between windows/tabs
+	[x] change update fields to use graph methods to update service state, and don't use a local state in the table component
+		[x] this will allow state to properly propagate between windows/tabs
+	[x] fix filter fields not syncing across tabs
+	[x] fix date input not parsing changes correctly
+	[ ] change created_at, updated_at, deleted_at to use a regular input field instead of a datetime input field because they cannot be defined via a datetime input due to the time granularity
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages

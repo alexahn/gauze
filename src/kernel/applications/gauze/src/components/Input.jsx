@@ -8,7 +8,7 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 	};
 	const serializeGraphQLTypeToInputType = {
 		Date: function (v) {
-			if (v instanceof Date) {
+			if (typeof v === "string") {
 				const d = new Date(v).toISOString();
 				return d.slice(0, 16);
 			} else {

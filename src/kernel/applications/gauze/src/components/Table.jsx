@@ -40,7 +40,6 @@ export default memo(function Table({
 	if (!type) return;
 	const spaceID = route.params.space;
 	const header = model.read("HEADER", type);
-	const [localFields, setLocalFields] = useState(fields);
 	const [localWhere, setLocalWhere] = useState(variables.where || {});
 	const [createItem, setCreateItem] = useState({});
 	const [submitCreate, setSubmitCreate] = useState(false);
@@ -155,7 +154,6 @@ export default memo(function Table({
 		setSyncing(true);
 		const localVariables = {
 			...variables,
-			where: localWhere,
 			offset: 0,
 		};
 		return orchestrate
@@ -185,16 +183,29 @@ export default memo(function Table({
 		return function (e) {
 			if (e.target.value !== "") {
 				const updatedWhere = {
-					...localWhere,
 					[field]: e.target.value,
 				};
 				setLocalWhere(updatedWhere);
+				const selectedNode = graph.selectNode(nodeID);
+				const targetNode = { ...selectedNode };
+				targetNode.props.variables.where = {
+					...targetNode.props.variables.where,
+					...updatedWhere,
+				};
+				graph.updateSpaceNodes(agentHeader.name, spaceID, [targetNode]);
 			} else {
 				const updatedWhere = {
 					...localWhere,
 				};
 				delete updatedWhere[field];
 				setLocalWhere(updatedWhere);
+				const selectedNode = graph.selectNode(nodeID);
+				const targetNode = { ...selectedNode };
+				targetNode.props.variables.where = {
+					...targetNode.props.variables.where,
+				};
+				delete targetNode.props.variables.where[field];
+				graph.updateSpaceNodes(agentHeader.name, spaceID, [targetNode]);
 			}
 		};
 	}
@@ -217,12 +228,11 @@ export default memo(function Table({
 			const nodeConnections = graph.spaceNodeConnections(agentHeader.name, spaceID, nodeID);
 			if (e.target.checked) {
 				const updatedFields = [...header.fields].filter(function (field) {
-					const exists = localFields.find(function (f) {
+					const exists = selectedNode.props.fields.find(function (f) {
 						return f.name === field.name;
 					});
 					return exists || field.name === name;
 				});
-				setLocalFields(updatedFields);
 				graph.updateSpaceNodes(agentHeader.name, spaceID, [
 					{
 						...selectedNode,
@@ -236,12 +246,11 @@ export default memo(function Table({
 				]);
 			} else {
 				const updatedFields = [...header.fields].filter(function (field) {
-					const exists = localFields.find(function (f) {
+					const exists = selectedNode.props.fields.find(function (f) {
 						return f.name === field.name;
 					});
 					return exists && field.name !== name;
 				});
-				setLocalFields(updatedFields);
 				graph.updateSpaceNodes(agentHeader.name, spaceID, [
 					{
 						...selectedNode,
@@ -394,7 +403,7 @@ export default memo(function Table({
 				x: 4,
 				bgh: "bgx7h",
 				bdh: "bdx7h",
-				ch: "cx6h",
+				ch: "cx2h",
 				xh: 7,
 			},
 			table: {
@@ -721,11 +730,13 @@ export default memo(function Table({
 														{field.name}
 														<input
 															type="checkbox"
-															defaultChecked={
-																localFields
-																	? localFields.find(function (v) {
+															checked={
+																node.props.fields
+																	? node.props.fields.find(function (v) {
 																			return v.name === field.name;
 																		})
+																		? true
+																		: false
 																	: true
 															}
 															onChange={updateFields(field.name)}
@@ -839,15 +850,15 @@ export default memo(function Table({
 							</tr>
 						</thead>
 						<tbody className="mw-100">
-							{localFields.map(function (field) {
+							{node.props.fields.map(function (field) {
 								return (
 									<tr key={field.name} className="">
 										<td className={cellTableClass}>
 											<Input
-												defaultMode={true}
+												defaultMode={false}
 												field={field}
 												className={inputTableClass}
-												defaultValue={variables.where ? variables.where[field.name] : null}
+												value={variables.where ? variables.where[field.name] : null}
 												onChange={updateFilter(field.name)}
 												onKeyDown={applyFilterEnter(field.name)}
 												disabled={syncing}
