@@ -520,6 +520,8 @@
 			[x] not enforced but should be documented
 [ ] query and mutation argument extensions (aligned with database semantics)
 	[ ] add where_greater and where_lesser
+	[ ] add where_between
+	[ ] add where_like
 	[ ] consider changing order to accept an array of ordering arguments (e.g. column and direction)
 		[ ] the problem is that it would be a pain to handle in the ui because the order in which the sorts are applied matter
 		[x] for now, let's keep it simple and stick to only one sort order
@@ -643,8 +645,9 @@
 		[ ] probably need to use setTimeout
 	[ ] display an error message inside the table if an agent does not have permission to view
 		[ ] use an error boundary?
-	[ ] test usage in non-private browser tab
-		[ ] see if the memory usage becomes a problem for long sessions and if reloading the app in another tab makes it re-useable
+	[x] test usage in non-private browser tab
+		[x] see if the memory usage becomes a problem for long sessions and if reloading the app in another tab makes it re-useable
+		[ ] not noticing any noticeable performance degradation so far
 	[ ] use local data for initial render if possible
 		[ ] re-implement soundness and completeness (or maybe just one of them)
 	[x] reorganize synchronization logic to be done from the entry point
