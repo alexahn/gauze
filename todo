@@ -651,7 +651,14 @@
 	[ ] add synchronization for model service
 	[ ] app icon svg
 	[x] move static directory to inside of src and define a dataurl loader for svg
-	[ ] look into and fix edges not rendering correctly in non-private tab
+	[x] look into and fix edges not rendering correctly in non-private tab
+	[x] using blur and focus seem to be unreliable for handling state synchronization across tabs
+		[x] page visibility api is only helpful when dealing with tabs, not windows
+		[-] using a crdt could work, but it is probably overkill
+			[x] try to see if there is a way to make the blur and focus more reliable?
+				[x] seems to be okay if we properly act on cleared intervals?
+	[ ] change update fields to use graph methods to update service state, and don't use a local state in the table component
+		[ ] this will allow state to properly propagate between windows/tabs
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages

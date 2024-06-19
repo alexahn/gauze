@@ -10,7 +10,7 @@ function migrateGraph(services, components) {
 }
 
 function loadGraph(services, components) {
-	const { graph } = services;
+	const { gauze, model, router, graph } = services;
 	try {
 		const version = localStorage.getItem("version:graph");
 		const json = localStorage.getItem(`graph:${version}`);
@@ -19,6 +19,12 @@ function loadGraph(services, components) {
 		graph.default.connections = graph.default.connectionsFromJSON(parsed.connections || {}, services, components);
 		graph.default.edges = parsed.edges || {};
 		graph.default.spaces = parsed.spaces || {};
+
+		// clear cache so we get an instant update
+		const route = router.default.getState();
+		if (route && route.params && route.params.space) {
+			graph.default.cacheClearSpaceNodes(gauze.default.getSystemAgentHeader(model.default).name, route.params.space);
+		}
 	} catch (e) {
 		console.error("failed to load graph:", e);
 	}
@@ -51,10 +57,40 @@ function start(services, components) {
 	migrateGraph(services, components);
 	// load stage
 	loadGraph(services, components);
-	const timer = setInterval(function () {
+	let timer = setInterval(function () {
 		// store stage
 		storeGraph(services, components);
 	}, 512);
+
+	window.addEventListener("focus", function (e) {
+		if (timer) {
+			loadGraph(services, components);
+		} else {
+			loadGraph(services, components);
+			timer = setInterval(function () {
+				storeGraph(services, components);
+			}, 512);
+		}
+	});
+
+	window.addEventListener("blur", function (e) {
+		if (timer) {
+			storeGraph(services, components);
+			timer = clearInterval(timer);
+		} else {
+			storeGraph(services, components);
+		}
+	});
+
+	/*
+	// note: this cannot handle switching between active windows
+	document.addEventListener('visibilitychange', function () {
+		console.log('document.visibilityState', document.visibilityState)
+		if (document.visibilityState === 'visible') {
+			loadGraph(services, components)
+		}
+	})
+	*/
 }
 
 export { start };
