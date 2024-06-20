@@ -113,8 +113,10 @@ const READ__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	resolve: (source, query_arguments, context) => {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "query_arguments", query_arguments);
-		if (!query_arguments.where && !query_arguments.where_in && !query_arguments.where_not_in) {
-			throw new Error("Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required");
+		if (!query_arguments.where && !query_arguments.where_in && !query_arguments.where_not_in && !query_arguments.where_like && !query_arguments.where_between) {
+			throw new Error(
+				"Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required or field 'where_like' is required or field 'where_between' is required",
+			);
 		}
 		return CONTROLLER__SESSION__CONTROLLER__DATABASE.read(
 			context,
@@ -172,8 +174,10 @@ const COUNT__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	resolve: (source, query_arguments, context) => {
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
 		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__SESSION__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "query_arguments", query_arguments);
-		if (!query_arguments.where && !query_arguments.where_in && !query_arguments.where_not_in) {
-			throw new Error("Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required");
+		if (!query_arguments.where && !query_arguments.where_in && !query_arguments.where_not_in && !query_arguments.where_like && !query_arguments.where_between) {
+			throw new Error(
+				"Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required or field 'where_like' is required or field 'where_between' is required",
+			);
 		}
 		return CONTROLLER__SESSION__CONTROLLER__DATABASE.count(
 			context,
