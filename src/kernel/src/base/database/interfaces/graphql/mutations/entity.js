@@ -182,11 +182,13 @@ const UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		if (!mutation_arguments.where && !mutation_arguments.where_in && !mutation_arguments.where_not_in) {
-			throw new Error("Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required");
-		}
 		if (!mutation_arguments.attributes) {
 			throw new Error("Field 'attributes' is required");
+		}
+		if (!mutation_arguments.where && !mutation_arguments.where_in && !mutation_arguments.where_not_in && !mutation_arguments.where_like && !mutation_arguments.where_between) {
+			throw new Error(
+				"Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required or field 'where_like' is required or field 'where_between' is required",
+			);
 		}
 		return CONTROLLER__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__DATABASE.update(
 			context,
@@ -280,8 +282,10 @@ const DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		if (!mutation_arguments.where && !mutation_arguments.where_in && !mutation_arguments.where_not_in) {
-			throw new Error("Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required");
+		if (!mutation_arguments.where && !mutation_arguments.where_in && !mutation_arguments.where_not_in && !mutation_arguments.where_like && !mutation_arguments.where_between) {
+			throw new Error(
+				"Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required or field 'where_like' is required or field 'where_between' is required",
+			);
 		}
 		return CONTROLLER__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__DATABASE.delete(
 			context,

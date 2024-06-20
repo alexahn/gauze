@@ -73,6 +73,14 @@ const READ__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 			description: "where not in",
 			type: WHERE_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
+		where_like: {
+			description: "where like",
+			type: WHERE__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
 		limit: {
 			description: "limit",
 			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -132,6 +140,14 @@ const COUNT__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 		where_not_in: {
 			description: "where not in",
+			type: WHERE_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_like: {
+			description: "where like",
+			type: WHERE__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_between: {
+			description: "where between",
 			type: WHERE_ARRAY__WHITELIST__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
 	},

@@ -105,6 +105,14 @@ const UPDATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			description: "where not in",
 			type: WHERE_ARRAY__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
+		where_like: {
+			description: "where like",
+			type: WHERE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		},
 		attributes: {
 			description: "attributes",
 			type: ATTRIBUTES__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
@@ -149,8 +157,10 @@ const UPDATE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		if (!mutation_arguments.attributes) {
 			throw new Error("Field 'attributes' is required");
 		}
-		if (!mutation_arguments.where) {
-			throw new Error("Field 'where' is required");
+		if (!mutation_arguments.where && !mutation_arguments.where_in && !mutation_arguments.where_not_in && !mutation_arguments.where_like && !mutation_arguments.where_between) {
+			throw new Error(
+				"Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required or field 'where_like' is required or field 'where_between' is required",
+			);
 		}
 		return CONTROLLER__RELATIONSHIP__CONTROLLER__SYSTEM.update(
 			context,
@@ -182,6 +192,14 @@ const DELETE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 		where_not_in: {
 			description: "where not in",
+			type: WHERE_ARRAY__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_like: {
+			description: "where like",
+			type: WHERE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_between: {
+			description: "where between",
 			type: WHERE_ARRAY__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM,
 		},
 		limit: {
@@ -221,8 +239,10 @@ const DELETE__RELATIONSHIP__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			"mutation_arguments",
 			mutation_arguments,
 		);
-		if (!mutation_arguments.where) {
-			throw new Error("Field 'where' is required");
+		if (!mutation_arguments.where && !mutation_arguments.where_in && !mutation_arguments.where_not_in && !mutation_arguments.where_like && !mutation_arguments.where_between) {
+			throw new Error(
+				"Field 'where' is required or field 'where_in' is required or field 'where_not_in' is required or field 'where_like' is required or field 'where_between' is required",
+			);
 		}
 		return CONTROLLER__RELATIONSHIP__CONTROLLER__SYSTEM.delete(
 			context,
