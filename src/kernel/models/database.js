@@ -408,6 +408,8 @@ class DatabaseModel extends Model {
 			cache_where_in = {},
 			where_not_in = {},
 			cache_where_not_in = {},
+			where_like = {},
+			where_between = {},
 			limit = 16,
 			offset = 0,
 			order = self.entity.default_order || self.primary_key,
@@ -429,6 +431,12 @@ class DatabaseModel extends Model {
 				});
 				Object.keys(cache_where_not_in).forEach(function (key) {
 					builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[key]).value);
+				});
+				Object.keys(where_like).forEach(function (key) {
+					builder.whereLike(key, where_like[key]);
+				});
+				Object.keys(where_between).forEach(function (key) {
+					builder.whereBetween(key, where_between[key]);
 				});
 				/*
 				Object.keys(where_greater).forEach(function (key) {
@@ -470,6 +478,8 @@ class DatabaseModel extends Model {
 			cache_where_in = {},
 			where_not_in = {},
 			cache_where_not_in = {},
+			where_like = {},
+			where_between = {},
 			limit = 16,
 			offset = 0,
 			order = self.entity.default_order || self.primary_key,
@@ -510,6 +520,16 @@ class DatabaseModel extends Model {
 			var joined_key = self.table_name + "." + k;
 			joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[k]).value;
 		});
+		var joined_where_like = {};
+		Object.keys(where_like).forEach(function (k) {
+			var joined_key = self.table_name + "." + k;
+			joined_where_like[joined_key] = where_like[k];
+		});
+		var joined_where_between = {};
+		Object.keys(where_between).forEach(function (k) {
+			var joined_key = self.table_name + "." + k;
+			joined_where_between[joined_key] = where_between[k];
+		});
 		const joined_order = self.table_name + "." + order;
 		if (relationship_source._direction === "to") {
 			const sql = database(self.table_name)
@@ -523,6 +543,12 @@ class DatabaseModel extends Model {
 					});
 					Object.keys(joined_where_not_in).forEach(function (key) {
 						builder.whereNotIn(key, joined_where_not_in[key]);
+					});
+					Object.keys(joined_where_like).forEach(function (key) {
+						builder.whereLike(key, joined_where_like[key]);
+					});
+					Object.keys(joined_where_between).forEach(function (key) {
+						builder.whereBetween(key, joined_where_between[key]);
 					});
 					return builder;
 				})
@@ -557,6 +583,12 @@ class DatabaseModel extends Model {
 					});
 					Object.keys(joined_where_not_in).forEach(function (key) {
 						builder.whereNotIn(key, joined_where_not_in[key]);
+					});
+					Object.keys(joined_where_like).forEach(function (key) {
+						builder.whereLike(key, joined_where_like[key]);
+					});
+					Object.keys(joined_where_between).forEach(function (key) {
+						builder.whereBetween(key, joined_where_between[key]);
 					});
 					return builder;
 				})
@@ -600,7 +632,7 @@ class DatabaseModel extends Model {
 	_root_update(context, scope, parameters) {
 		var self = this;
 		const { database, transaction } = context;
-		var { attributes, where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = parameters;
+		var { attributes, where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
 		const sql = database(self.table_name)
 			.where(function (builder) {
@@ -616,6 +648,12 @@ class DatabaseModel extends Model {
 				});
 				Object.keys(cache_where_not_in).forEach(function (key) {
 					builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[key]).value);
+				});
+				Object.keys(where_like).forEach(function (key) {
+					builder.whereLike(key, where_like[key]);
+				});
+				Object.keys(where_between).forEach(function (key) {
+					builder.whereBetween(key, where_between[key]);
 				});
 				return builder;
 			})
@@ -638,7 +676,7 @@ class DatabaseModel extends Model {
 	_relationship_update(context, scope, parameters) {
 		const self = this;
 		const { database, transaction } = context;
-		const { attributes, where, where_in = {}, where_not_in = {} } = parameters;
+		const { attributes } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
 		// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
 		const MAXIMUM_ROWS = 4294967296;
@@ -743,7 +781,7 @@ class DatabaseModel extends Model {
 	_root_delete(context, scope, parameters) {
 		const self = this;
 		const { database, transaction } = context;
-		const { where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, limit = 16 } = parameters;
+		const { where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {}, limit = 16 } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
 		const MAXIMUM_ROWS = 4294967296;
@@ -773,6 +811,12 @@ class DatabaseModel extends Model {
 						Object.keys(cache_where_not_in).forEach(function (key) {
 							builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[key]).value);
 						});
+						Object.keys(where_like).forEach(function (key) {
+							builder.whereLike(key, where_like[key]);
+						});
+						Object.keys(where_between).forEach(function (key) {
+							builder.whereBetween(key, where_between[key]);
+						});
 						return builder;
 					})
 					.del()
@@ -796,7 +840,7 @@ class DatabaseModel extends Model {
 	_relationship_delete(context, scope, parameters) {
 		const self = this;
 		const { database, transaction } = context;
-		const { where, where_in = {}, where_not_in = {}, limit = 16 } = parameters;
+		const { limit = 16 } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		const MAXIMUM_ROWS = 4294967296;
 		return self
@@ -843,7 +887,7 @@ class DatabaseModel extends Model {
 	_root_count(context, scope, parameters) {
 		const self = this;
 		const { database, transaction } = context;
-		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = parameters;
+		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
 		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
 		const reversed = {};
@@ -868,6 +912,12 @@ class DatabaseModel extends Model {
 				Object.keys(cache_where_not_in).forEach(function (key) {
 					builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[key]).value);
 				});
+				Object.keys(where_like).forEach(function (key) {
+					builder.whereLike(key, where_like[key]);
+				});
+				Object.keys(where_between).forEach(function (key) {
+					builder.whereBetween(key, where_between[key]);
+				});
 				return builder;
 			})
 			.first()
@@ -889,7 +939,7 @@ class DatabaseModel extends Model {
 	_relationship_count(context, scope, parameters) {
 		const self = this;
 		const { database, transaction } = context;
-		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {} } = parameters;
+		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
 		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
 		const relationship_source = self._parse_source(scope, parameters);
 
@@ -932,6 +982,16 @@ class DatabaseModel extends Model {
 			var joined_key = self.table_name + "." + k;
 			joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[k]).value;
 		});
+		var joined_where_like = {};
+		Object.keys(where_like).forEach(function (k) {
+			var joined_key = self.table_name + "." + k;
+			joined_where_like[joined_key] = where_like[k];
+		});
+		var joined_where_between = {};
+		Object.keys(where_between).forEach(function (k) {
+			var joined_key = self.table_name + "." + k;
+			joined_where_between[joined_key] = where_between[k];
+		});
 		if (relationship_source._direction === "to") {
 			const sql = database(self.table_name)
 				.count(count_has_key ? reversed : null)
@@ -945,6 +1005,12 @@ class DatabaseModel extends Model {
 					});
 					Object.keys(joined_where_not_in).forEach(function (key) {
 						builder.whereNotIn(key, joined_where_not_in[key]);
+					});
+					Object.keys(joined_where_like).forEach(function (key) {
+						builder.whereLike(key, joined_where_like[key]);
+					});
+					Object.keys(joined_where_between).forEach(function (key) {
+						builder.whereBetween(key, joined_where_between[key]);
 					});
 					return builder;
 				})
