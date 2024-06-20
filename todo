@@ -520,8 +520,8 @@
 			[x] not enforced but should be documented
 [ ] query and mutation argument extensions (aligned with database semantics)
 	[ ] add where_greater and where_lesser
-	[ ] add where_between
-	[ ] add where_like
+	[x] add where_between
+	[x] add where_like
 	[ ] consider changing order to accept an array of ordering arguments (e.g. column and direction)
 		[ ] the problem is that it would be a pain to handle in the ui because the order in which the sorts are applied matter
 		[x] for now, let's keep it simple and stick to only one sort order

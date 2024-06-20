@@ -323,6 +323,20 @@ class DatabaseModel extends Model {
 				}
 			});
 		}
+		if (parameters.where_like) {
+			Object.keys(parameters.where_like).forEach(function (key) {
+				if (!self.entity.fields[key].indexed) {
+					throw new Error(`Input argument 'where_like.${key}' is invalid: ${key} is not an indexed field`);
+				}
+			});
+		}
+		if (parameters.where_between) {
+			Object.keys(parameters.where_between).forEach(function (key) {
+				if (!self.entity.fields[key].indexed) {
+					throw new Error(`Input argument 'where_between.${key}' is invalid: ${key} is not an indexed field`);
+				}
+			});
+		}
 		if (parameters.order) {
 			if (self.entity.fields[parameters.order]) {
 				if (!self.entity.fields[parameters.order].indexed) {
