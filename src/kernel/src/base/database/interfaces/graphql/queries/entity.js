@@ -83,6 +83,14 @@ const READ__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABAS
 			description: "cache where not in",
 			type: WHERE_STRING__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
+		where_like: {
+			description: "where like",
+			type: WHERE__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
 		limit: {
 			description: "limit",
 			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -171,6 +179,14 @@ const COUNT__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABA
 		cache_where_not_in: {
 			description: "cache where not in",
 			type: WHERE_STRING__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_like: {
+			description: "where like",
+			type: WHERE__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__cd637bc32c364580be5cc28396d3dee8__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 	},
 	resolve: (source, query_arguments, context) => {

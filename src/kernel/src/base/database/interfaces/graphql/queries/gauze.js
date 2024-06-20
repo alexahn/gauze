@@ -83,6 +83,14 @@ const READ__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABAS
 			description: "cache where not in",
 			type: WHERE_STRING__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
+		where_like: {
+			description: "where like",
+			type: WHERE__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
 		limit: {
 			description: "limit",
 			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -171,6 +179,14 @@ const COUNT__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABA
 		cache_where_not_in: {
 			description: "cache where not in",
 			type: WHERE_STRING__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_like: {
+			description: "where like",
+			type: WHERE__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 	},
 	resolve: (source, query_arguments, context) => {

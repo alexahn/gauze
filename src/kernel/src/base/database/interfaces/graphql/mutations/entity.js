@@ -134,6 +134,14 @@ const UPDATE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 			description: "cache where not in",
 			type: WHERE_STRING__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
+		where_like: {
+			description: "where like",
+			type: WHERE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
 		attributes: {
 			description: "attributes",
 			type: ATTRIBUTES__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -227,6 +235,14 @@ const DELETE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DA
 		cache_where_not_in: {
 			description: "cache where not in",
 			type: WHERE_STRING__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_like: {
+			description: "where like",
+			type: WHERE__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__cd637bc32c364580be5cc28396d3dee8__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",

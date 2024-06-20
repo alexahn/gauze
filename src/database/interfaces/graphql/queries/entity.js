@@ -81,6 +81,14 @@ const READ__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			description: "cache where not in",
 			type: WHERE_STRING__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
+		where_like: {
+			description: "where like",
+			type: WHERE__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
 		limit: {
 			description: "limit",
 			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
@@ -151,6 +159,14 @@ const COUNT__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		cache_where_not_in: {
 			description: "cache where not in",
 			type: WHERE_STRING__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_like: {
+			description: "where like",
+			type: WHERE__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
 	},
 	resolve: (source, query_arguments, context) => {

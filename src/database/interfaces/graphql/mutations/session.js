@@ -118,6 +118,14 @@ const UPDATE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			description: "cache where not in",
 			type: WHERE_STRING__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
+		where_like: {
+			description: "where like",
+			type: WHERE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
 		attributes: {
 			description: "attributes",
 			type: ATTRIBUTES__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -197,6 +205,14 @@ const DELETE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		cache_where_not_in: {
 			description: "cache where not in",
 			type: WHERE_STRING__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_like: {
+			description: "where like",
+			type: WHERE__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__SESSION__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",

@@ -118,6 +118,14 @@ const UPDATE__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			description: "cache where not in",
 			type: WHERE_STRING__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
+		where_like: {
+			description: "where like",
+			type: WHERE__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
 		attributes: {
 			description: "attributes",
 			type: ATTRIBUTES__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE,
@@ -197,6 +205,14 @@ const DELETE__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		cache_where_not_in: {
 			description: "cache where not in",
 			type: WHERE_STRING__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_like: {
+			description: "where like",
+			type: WHERE__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__ENTITY__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 		},
 		limit: {
 			description: "limit",
