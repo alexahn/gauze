@@ -5,6 +5,8 @@ query Countbb95d174a16f4ddd935ff3a802f7c7bc(
 	$cache_where_in: bb95d174a16f4ddd935ff3a802f7c7bc_Query__Where_String
 	$where_not_in: bb95d174a16f4ddd935ff3a802f7c7bc_Query__Where_Array
 	$cache_where_not_in: bb95d174a16f4ddd935ff3a802f7c7bc_Query__Where_String
+	$where_like: bb95d174a16f4ddd935ff3a802f7c7bc_Query__Where
+	$where_between: bb95d174a16f4ddd935ff3a802f7c7bc_Query__Where_Array
 ) {
 	count_a543731262804f64adcc0eae1a225acc(
 		count: $count
@@ -13,6 +15,8 @@ query Countbb95d174a16f4ddd935ff3a802f7c7bc(
 		cache_where_in: $cache_where_in
 		where_not_in: $where_not_in
 		cache_where_not_in: $cache_where_not_in
+		where_like: $where_like
+		where_between: $where_between
 	) {
 		select
 		count

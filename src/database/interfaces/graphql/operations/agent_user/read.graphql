@@ -5,6 +5,8 @@ query ReadAgent_User(
 	$cache_where_in: Agent_User_Query__Where_String
 	$where_not_in: Agent_User_Query__Where_Array
 	$cache_where_not_in: Agent_User_Query__Where_String
+	$where_like: Agent_User_Query__Where
+	$where_between: Agent_User_Query__Where_Array
 	$limit: Int
 	$offset: Int
 	$order: String
@@ -18,6 +20,8 @@ query ReadAgent_User(
 		cache_where_in: $cache_where_in
 		where_not_in: $where_not_in
 		cache_where_not_in: $cache_where_not_in
+		where_like: $where_like
+		where_between: $where_between
 		limit: $limit
 		offset: $offset
 		order: $order

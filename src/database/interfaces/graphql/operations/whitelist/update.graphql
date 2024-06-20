@@ -5,6 +5,8 @@ mutation UpdateWhitelist(
 	$cache_where_in: Whitelist_Mutation__Where_String
 	$where_not_in: Whitelist_Mutation__Where_Array
 	$cache_where_not_in: Whitelist_Mutation__Where_String
+	$where_like: Whitelist_Mutation__Where
+	$where_between: Whitelist_Mutation__Where_Array
 	$limit: Int
 	$offset: Int
 	$order: String
@@ -13,11 +15,13 @@ mutation UpdateWhitelist(
 ) {
 	update_whitelist(
 		attributes: $attributes
+		where: $where
 		where_in: $where_in
 		cache_where_in: $cache_where_in
 		where_not_in: $where_not_in
 		cache_where_not_in: $cache_where_not_in
-		where: $where
+		where_like: $where_like
+		where_between: $where_between
 		limit: $limit
 		offset: $offset
 		order: $order
