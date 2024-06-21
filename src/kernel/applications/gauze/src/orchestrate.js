@@ -81,6 +81,8 @@ function reloadSpace(services, agentHeader, spaceID) {
 								[header.primary_key]: header.primary_key,
 							},
 							where: node.props.variables.where,
+							where_like: node.props.variables.where_like,
+							where_between: node.props.variables.where_between,
 						});
 					},
 				];
@@ -218,6 +220,7 @@ function reloadSpaceRelationships(services, agentHeader, spaceID) {
 					});
 				})
 				.flat();
+			if (!activeEntityIDs.length) return;
 			// there should be at least one id if we fetched the root
 			const headers = model.all("HEADER");
 			const relationshipHeader = headers.find(function (header) {
@@ -863,6 +866,8 @@ function read(services, header, variables) {
 					[header.primary_key]: header.primary_key,
 				},
 				where: variables.where,
+				where_like: variables.where_like,
+				where_between: variables.where_between,
 			};
 			return gauze.count(header, countVariables);
 		},

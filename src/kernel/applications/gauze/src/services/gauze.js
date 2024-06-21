@@ -129,6 +129,25 @@ class GauzeService {
 		});
 		return agentHeader;
 	}
+	/*
+	processVariables(header, variables) {
+		// modify where_like to prefix and suffix with % if and only if the field type is string
+		const processed = {...variables}
+		Object.keys(processed.where_like || {}).forEach(function (key) {
+			const field = header.fields.find(function (field) {
+				return field.name === key
+			})
+			console.log('key', key)
+			console.log('field', field)
+			if (field && field.graphql_type.name === "String") {
+				
+				processed.where_like[key] = '%' + variables.where_like[key] + '%'
+			}
+		})
+		console.log('processed', processed)
+		return processed
+	}
+	*/
 	// centralize environment queries here for convenience
 	personAssert(person) {
 		const self = this;
@@ -476,6 +495,8 @@ query read(
 	$where: ${header.graphql_query_where_type},
 	$where_in: ${header.graphql_query_where_array_type},
 	$where_not_in: ${header.graphql_query_where_array_type},
+	$where_like: ${header.graphql_query_where_type},
+	$where_between: ${header.graphql_query_where_array_type},
 	$limit: Int,
 	$offset: Int,
 	$order: String,
@@ -486,6 +507,8 @@ query read(
 		where: $where,
 		where_in: $where_in,
 		where_not_in: $where_not_in,
+		where_like: $where_like,
+		where_between: $where_between,
 		limit: $limit,
 		offset: $offset,
 		order: $order,
@@ -501,6 +524,7 @@ query read(
 	}
 }
 `;
+		//const processed = self.processVariables(header, variables)
 		return self
 			.system({
 				query: query,
@@ -519,13 +543,17 @@ query count(
 	$where: ${header.graphql_query_where_type},
     $where_in: ${header.graphql_query_where_array_type},
     $where_not_in: ${header.graphql_query_where_array_type},
+	$where_like: ${header.graphql_query_where_type},
+	$where_between: ${header.graphql_query_where_array_type},
 ) {
 	count_${header.name}(
 		source: $source,
 		count: $count,
 		where: $where,
 		where_in: $where_in,
-		where_not_in: $where_not_in
+		where_not_in: $where_not_in,
+		where_like: $where_like,
+		where_between: $where_between
 	) {
 		select
 		count
