@@ -281,13 +281,21 @@ export default memo(function Table({
 	function updateBetweenFilter(field, position) {
 		return function (e) {
 			if (e.target.serialized !== "") {
-				const range = localWhereBetween[field] ? localWhereBetween[field] : [null, null];
+				const selectedNode = graph.selectNode(nodeID);
+				const localRange = localWhereBetween[field] ? localWhereBetween[field] : null;
+				const globalRange = selectedNode.props.variables.where_between
+					? selectedNode.props.variables.where_between[field]
+						? selectedNode.props.variables.where_between[field]
+						: null
+					: null;
+				//const range = globalRange ? globalRange : (localRange ? localRange : [null, null])
+				const range = globalRange ? globalRange : [null, null];
 				range[position] = e.target.serialized;
 				const updatedWhere = {
 					[field]: range,
 				};
+				//console.log('updatedWhere', updatedWhere)
 				setLocalWhereBetween(updatedWhere);
-				const selectedNode = graph.selectNode(nodeID);
 				const targetNode = { ...selectedNode };
 				targetNode.props.variables.where_between = {
 					...targetNode.props.variables.where_between,
@@ -295,12 +303,21 @@ export default memo(function Table({
 				};
 				graph.updateSpaceNodes(agentHeader.name, spaceID, [targetNode]);
 			} else {
-				const range = localWhereBetween[field] ? localWhereBetween[field] : [null, null];
+				const selectedNode = graph.selectNode(nodeID);
+				const localRange = localWhereBetween[field] ? localWhereBetween[field] : null;
+				const globalRange = selectedNode.props.variables.where_between
+					? selectedNode.props.variables.where_between[field]
+						? selectedNode.props.variables.where_between[field]
+						: null
+					: null;
+				//const range = globalRange ? globalRange : (localRange ? localRange : [null, null])
+				const range = globalRange ? globalRange : [null, null];
 				range[position] = null;
 				const isEmpty = range.every(function (v) {
 					return v === null;
 				});
 				const updatedWhere = {
+					...selectedNode.props.variables.where_between,
 					...localWhereBetween,
 				};
 				if (isEmpty) {
@@ -308,11 +325,12 @@ export default memo(function Table({
 				} else {
 					updatedWhere[field] = range;
 				}
+				//console.log('updatedWhere', updatedWhere)
 				setLocalWhereBetween(updatedWhere);
-				const selectedNode = graph.selectNode(nodeID);
 				const targetNode = { ...selectedNode };
 				targetNode.props.variables.where_between = {
 					...targetNode.props.variables.where_between,
+					...updatedWhere,
 				};
 				if (isEmpty) {
 					delete targetNode.props.variables.where_between[field];

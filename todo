@@ -671,6 +671,7 @@
 	[x] add new filter modes
 		[x] search (where_like)
 		[x] range (where_between)
+	[ ] prevent tab from repositioning the view
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages
