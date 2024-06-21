@@ -33,8 +33,11 @@ function createSpace(services, header, spaceID, space = {}) {
 				from: null,
 				to: null,
 				fields: header.fields,
+				filterMode: "where",
 				variables: {
 					where: {},
+					where_like: {},
+					where_between: {},
 					offset: 0,
 					limit: PAGINATION_PAGE_SIZE,
 					order: header.default_order,

@@ -31,6 +31,7 @@ export default memo(function Table({
 	from,
 	to,
 	fields,
+	filterMode,
 	variables,
 	data,
 	count,
@@ -56,6 +57,9 @@ export default memo(function Table({
 	const page_current = offset + limit < total ? Math.floor(Math.max(offset / limit) + 1) : Math.ceil(Math.max(total / limit));
 	const page_max_no_skew = Math.ceil(Math.max(total / limit));
 	const page_max = page_max_no_skew < page_current ? page_current : page_max_no_skew;
+
+	// note: placeholder, remove after we add the prop to nodes
+	const mode = filterMode || "where";
 
 	const services = {
 		gauze,
@@ -372,6 +376,26 @@ export default memo(function Table({
 		};
 	}
 
+	function handleChangeFilterMode(mode) {
+		return function (e) {
+			const selectedNode = graph.selectNode(nodeID);
+			const updatedNode = {
+				...selectedNode,
+				props: {
+					...selectedNode.props,
+					filterMode: mode,
+				},
+			};
+			graph.updateSpaceNodes(agentHeader.name, spaceID, [updatedNode]);
+		};
+	}
+
+	const filterModeLabel = {
+		where: "Match",
+		where_like: "Search",
+		where_between: "Range",
+	};
+
 	const colors = {
 		0: {
 			node: {
@@ -462,98 +486,6 @@ export default memo(function Table({
 			},
 		},
 	};
-	/*
-	const colors = {
-		0: {
-			node: {
-				bg: "bgx11",
-				bd: "bdx11",
-				c: "cx7",
-				x: 11,
-				bgh: "bgx8h",
-				bdh: "bdx8h",
-				ch: "cx6h",
-				xh: 8,
-			},
-			table: {
-				bg: "bgx6",
-				bd: "bdx6",
-				c: "cxyz7",
-				x: 6,
-				bgh: "bgx4h",
-				bdh: "bdx4h",
-				ch: "cx6h",
-				xh: 4,
-			},
-		},
-		1: {
-			node: {
-				bg: "bgx8",
-				bd: "bdx8",
-				c: "cx6",
-				x: 8,
-				bgh: "bgx6h",
-				bdh: "bdx6h",
-				ch: "cxyz7h",
-				xh: 6,
-			},
-			table: {
-				bg: "bgx4",
-				bd: "bdx4",
-				c: "cx6",
-				x: 4,
-				bgh: "bgx11h",
-				bdh: "bdx11h",
-				ch: "cx7h",
-				xh: 11,
-			},
-		},
-		2: {
-			node: {
-				bg: "bgx6",
-				bd: "bdx6",
-				c: "cxyz7",
-				x: 6,
-				bgh: "bgx4h",
-				bdh: "bdx4h",
-				ch: "cx6h",
-				xh: 4,
-			},
-			table: {
-				bg: "bgx11",
-				bd: "bdx11",
-				c: "cx7",
-				x: 11,
-				bgh: "bgx8h",
-				bdh: "bdx8h",
-				ch: "cx6h",
-				xh: 8,
-			},
-		},
-		3: {
-			node: {
-				bg: "bgx4",
-				bd: "bdx4",
-				c: "cx6",
-				x: 4,
-				bgh: "bgx11h",
-				bdh: "bdx11h",
-				ch: "cx7h",
-				xh: 11,
-			},
-			table: {
-				bg: "bgx8",
-				bd: "bdx8",
-				c: "cx6",
-				x: 8,
-				bgh: "bgx6h",
-				bdh: "bdx6h",
-				ch: "cxyz7h",
-				xh: 6,
-			},
-		},
-	};
-	*/
 	const colorIndex = depth % 4 < 0 ? (depth % 4) + 4 : depth % 4;
 	const prevColorIndex = colorIndex - 1 < 0 ? ((colorIndex - 1) % 4) + 4 : colorIndex - 1;
 	const prevPrevColorIndex = prevColorIndex - 1 < 0 ? ((prevColorIndex - 1) % 4) + 4 : prevColorIndex - 1;
@@ -586,18 +518,252 @@ export default memo(function Table({
 	const buttonConnectionFromClass = `ba br2 ${nextNextColor.node.bd} ${nextNextColor.node.bg} ${nextNextColor.node.c} ${nextNextColor.node.bdh} ${nextNextColor.node.bgh} ${nextNextColor.node.ch}`;
 	const buttonSpanConnectionFromClass = `ba br2 w-100 mw5 ${prevColor.table.bd} ${prevColor.table.bg} ${prevColor.table.c} ${prevColor.table.bdh} ${prevColor.table.bgh} ${prevColor.table.ch}`;
 	const spanConnectionFromClass = `dn mw9 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextNextColor.node.x - 1} bdx${nextNextColor.node.x - 1} cx${nextNextColor.node.x === 10 ? nextNextColor.node.x + 2 : nextNextColor.node.x + 1} bw1 ba br2`;
-	/*
-	const spanTableClass = `dn mw9 w6 top-0 right-0 pa1 absolute f4 tooltip ${color.node.bg} bdx2 ${color.node.c} bw1 ba br2`;
-	const spanEntityClass = `dn mw5 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.node.x - 1} bdx${nextColor.node.x - 1} cx${nextColor.node.x === 6 ? nextColor.node.x + 2 : nextColor.node.x + 1} bw1 ba br2`;
-	const spanButtonClass = `dn mw5 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.table.x - 1} bdx${nextColor.table.x - 1} cx${nextColor.table.x === 6 ? nextColor.table.x + 2 : nextColor.table.x + 1} br2`;
-	const spanButtonLongClass = `dn mw9 w6 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.table.x - 1} bdx${nextColor.table.x - 1} cx${nextColor.table.x === 6 ? nextColor.table.x + 2 : nextColor.table.x + 1} br2`;
-	const buttonConnectionToClass = `ba br2 ${prevPrevColor.table.bd} ${prevPrevColor.table.bg} ${prevPrevColor.table.c} ${prevPrevColor.table.bdh} ${prevPrevColor.table.bgh} ${prevPrevColor.table.ch}`;
-	const buttonSpanConnectionToClass = `ba br2 w-100 mw5 ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c} ${nextColor.table.bdh} ${nextColor.table.bgh} ${nextColor.table.ch}`;
-	const spanConnectionToClass = `dn mw9 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${prevPrevColor.table.x - 1} bdx${prevPrevColor.table.x - 1} cx${prevPrevColor.table.x === 6 ? prevPrevColor.table.x + 2 : prevPrevColor.table.x + 1} bw1 ba br2`;
-	const buttonConnectionFromClass = `ba br2 ${nextNextColor.node.bd} ${nextNextColor.node.bg} ${nextNextColor.node.c} ${nextNextColor.node.bdh} ${nextNextColor.node.bgh} ${nextNextColor.node.ch}`;
-	const buttonSpanConnectionFromClass = `ba br2 w-100 mw5 ${prevColor.table.bd} ${prevColor.table.bg} ${prevColor.table.c} ${prevColor.table.bdh} ${prevColor.table.bgh} ${prevColor.table.ch}`;
-	const spanConnectionFromClass = `dn mw9 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextNextColor.node.x - 1} bdx${nextNextColor.node.x - 1} cx${nextNextColor.node.x === 6 ? nextNextColor.node.x + 2 : nextNextColor.node.x + 1} bw1 ba br2`;
-	*/
+
+	function renderFilterHeader1() {
+		switch (mode) {
+			case "where":
+				return <th align="center" className={cellTableClass}></th>;
+			case "where_like":
+				return <th align="center" className={cellTableClass}></th>;
+			case "where_between":
+				return (
+					<>
+						<th align="center" className={cellTableClass}></th>
+						<th align="center" className={cellTableClass}></th>
+					</>
+				);
+			default:
+				return null;
+		}
+	}
+
+	function renderFilterHeader2() {
+		switch (mode) {
+			case "where":
+				return (
+					<th align="center" className={cellTableClass}>
+						<div className="pa1 relative row" tabIndex="0">
+							{/*<button className={buttonTableClass} onClick={applyFilterButton}>*/}
+							<button className={buttonTableClass}>{filterModeLabel[mode]}</button>
+							<span className={spanTableClass}>
+								<div className="pa1">{filterModeLabel[mode]}</div>
+								<button className={buttonClass} style={{ width: "100%" }}>
+									Apply
+								</button>
+								<button className={buttonClass} style={{ width: "100%" }}>
+									Clear
+								</button>
+								<button
+									className={buttonSpanClass}
+									style={{ opacity: mode === "where_like" ? "0.5" : "1" }}
+									onClick={handleChangeFilterMode("where_like")}
+									disabled={mode === "where_like"}
+								>
+									{filterModeLabel["where_like"]}
+								</button>
+								<button className={buttonSpanClass} style={{ opacity: mode === "where" ? "0.5" : "1" }} onClick={handleChangeFilterMode("where")} disabled={mode === "where"}>
+									{filterModeLabel["where"]}
+								</button>
+								<button
+									className={buttonSpanClass}
+									style={{ opacity: mode === "where_between" ? "0.5" : "1" }}
+									onClick={handleChangeFilterMode("where_between")}
+									disabled={mode === "where_between"}
+								>
+									{filterModeLabel["where_between"]}
+								</button>
+							</span>
+						</div>
+					</th>
+				);
+			case "where_like":
+				return (
+					<th align="center" className={cellTableClass}>
+						<div className="pa1 relative row" tabIndex="0">
+							{/*<button className={buttonTableClass} onClick={applyFilterButton}>*/}
+							<button className={buttonTableClass}>{filterModeLabel[mode]}</button>
+							<span className={spanTableClass}>
+								<div className="pa1">{filterModeLabel[mode]}</div>
+								<button
+									className={buttonSpanClass}
+									style={{ opacity: mode === "where_like" ? "0.5" : "1" }}
+									onClick={handleChangeFilterMode("where_like")}
+									disabled={mode === "where_like"}
+								>
+									{filterModeLabel["where_like"]}
+								</button>
+								<button className={buttonSpanClass} style={{ opacity: mode === "where" ? "0.5" : "1" }} onClick={handleChangeFilterMode("where")} disabled={mode === "where"}>
+									{filterModeLabel["where"]}
+								</button>
+								<button
+									className={buttonSpanClass}
+									style={{ opacity: mode === "where_between" ? "0.5" : "1" }}
+									onClick={handleChangeFilterMode("where_between")}
+									disabled={mode === "where_between"}
+								>
+									{filterModeLabel["where_between"]}
+								</button>
+							</span>
+						</div>
+					</th>
+				);
+			case "where_between":
+				return (
+					<>
+						<th align="center" className={cellTableClass}>
+							<div className="pa1 relative row" tabIndex="0">
+								{/*<button className={buttonTableClass} onClick={applyFilterButton}>*/}
+								<button className={buttonTableClass}>Start</button>
+								<span className={spanTableClass}>
+									<div className="pa1">{filterModeLabel[mode]}</div>
+									<button
+										className={buttonSpanClass}
+										style={{ opacity: mode === "where_like" ? "0.5" : "1" }}
+										onClick={handleChangeFilterMode("where_like")}
+										disabled={mode === "where_like"}
+									>
+										{filterModeLabel["where_like"]}
+									</button>
+									<button
+										className={buttonSpanClass}
+										style={{ opacity: mode === "where" ? "0.5" : "1" }}
+										onClick={handleChangeFilterMode("where")}
+										disabled={mode === "where"}
+									>
+										{filterModeLabel["where"]}
+									</button>
+									<button
+										className={buttonSpanClass}
+										style={{ opacity: mode === "where_between" ? "0.5" : "1" }}
+										onClick={handleChangeFilterMode("where_between")}
+										disabled={mode === "where_between"}
+									>
+										{filterModeLabel["where_between"]}
+									</button>
+								</span>
+							</div>
+						</th>
+						<th align="center" className={cellTableClass}>
+							<div className="pa1 relative row" tabIndex="0">
+								{/*<button className={buttonTableClass} onClick={applyFilterButton}>*/}
+								<button className={buttonTableClass}>End</button>
+								<span className={spanTableClass}>
+									<div className="pa1">{filterModeLabel[mode]}</div>
+									<button
+										className={buttonSpanClass}
+										style={{ opacity: mode === "where_like" ? "0.5" : "1" }}
+										onClick={handleChangeFilterMode("where_like")}
+										disabled={mode === "where_like"}
+									>
+										{filterModeLabel["where_like"]}
+									</button>
+									<button
+										className={buttonSpanClass}
+										style={{ opacity: mode === "where" ? "0.5" : "1" }}
+										onClick={handleChangeFilterMode("where")}
+										disabled={mode === "where"}
+									>
+										{filterModeLabel["where"]}
+									</button>
+									<button
+										className={buttonSpanClass}
+										style={{ opacity: mode === "where_between" ? "0.5" : "1" }}
+										onClick={handleChangeFilterMode("where_between")}
+										disabled={mode === "where_between"}
+									>
+										{filterModeLabel["where_between"]}
+									</button>
+								</span>
+							</div>
+						</th>
+					</>
+				);
+			default:
+				return null;
+		}
+	}
+
+	function renderFilterInput(field) {
+		switch (mode) {
+			case "where":
+				return (
+					<td className={cellTableClass}>
+						<Input
+							defaultMode={false}
+							field={field}
+							className={inputTableClass}
+							value={variables.where ? variables.where[field.name] : null}
+							onChange={updateFilter(field.name)}
+							onKeyDown={applyFilterEnter(field.name)}
+							disabled={syncing}
+						/>
+					</td>
+				);
+			case "where_like":
+				return (
+					<td className={cellTableClass}>
+						<Input
+							defaultMode={false}
+							field={field}
+							className={inputTableClass}
+							value={variables.where ? variables.where[field.name] : null}
+							onChange={updateFilter(field.name)}
+							onKeyDown={applyFilterEnter(field.name)}
+							disabled={syncing}
+						/>
+					</td>
+				);
+			case "where_between":
+				// see if this works:
+				return (
+					<>
+						<td className={cellTableClass}>
+							<Input
+								defaultMode={false}
+								field={field}
+								className={inputTableClass}
+								value={variables.where ? variables.where[field.name] : null}
+								onChange={updateFilter(field.name)}
+								onKeyDown={applyFilterEnter(field.name)}
+								disabled={syncing}
+							/>
+						</td>
+						<td className={cellTableClass}>
+							<Input
+								defaultMode={false}
+								field={field}
+								className={inputTableClass}
+								value={variables.where ? variables.where[field.name] : null}
+								onChange={updateFilter(field.name)}
+								onKeyDown={applyFilterEnter(field.name)}
+								disabled={syncing}
+							/>
+						</td>
+					</>
+				);
+			default:
+				return null;
+		}
+	}
+
+	function renderFilterFooter() {
+		switch (mode) {
+			case "where":
+				return <th align="center" className={cellTableClass}></th>;
+			case "where_like":
+				return <th align="center" className={cellTableClass}></th>;
+			case "where_between":
+				return (
+					<>
+						<th align="center" className={cellTableClass}></th>
+						<th align="center" className={cellTableClass}></th>
+					</>
+				);
+			default:
+				return null;
+		}
+	}
+
 	function renderTable() {
 		const node = activeNodes.object[nodeID];
 		if (!node) return null;
@@ -616,18 +782,17 @@ export default memo(function Table({
 						</button>
 					</div>
 				) : null}
-				{/*<hr />*/}
 				<div align="left" className="cf">
 					<div className="flex fl pb2">
 						<Pagination page={page_current} count={page_max} handleClick={paginate} reverse={false} buttonClass={buttonPaginationClass} />
 					</div>
 				</div>
-				{/*<hr />*/}
 				<div className="flex fr">
 					<table className={`${color.table.bd} ${color.table.bg} ${color.table.c} br3`}>
 						<thead className="mw-100">
 							<tr align="right" className="">
-								<th align="center" className={cellTableClass}></th>
+								{/*<th align="center" className={cellTableClass}></th>*/}
+								{renderFilterHeader1()}
 								<th className={cellTableClass}>
 									<div className="pa1 relative row" tabIndex="0">
 										<div className="truncate-ns">RELATIONSHIPS</div>
@@ -670,7 +835,6 @@ export default memo(function Table({
 												) : null}
 											</div>
 											{node.props.connectionIDs.map(function (id) {
-												//const connection = activeConnections.object[id];
 												const connection = graph.selectConnection(id);
 												// note: for some reason we need an existence check here. maybe double check our rendering logic?
 												// note: possibly related to scaling the window?
@@ -715,11 +879,22 @@ export default memo(function Table({
 								<th align="center" className={cellTableClass}></th>
 							</tr>
 							<tr>
-								<th align="center" className={cellTableClass}>
-									<button className={buttonTableClass} onClick={applyFilterButton}>
-										Filter
-									</button>
+								{/*<th align="center" className={cellTableClass}>
+									<div className="pa1 relative row" tabIndex="0">
+										//<button className={buttonTableClass} onClick={applyFilterButton}>
+										<button className={buttonTableClass}>
+											{filterModeLabel[mode]}
+										</button>
+										<span className={spanTableClass}>
+											<div className="pa1">{filterModeLabel[mode]}</div>
+											<button className={buttonSpanClass} style={{opacity: mode === "where_like" ? "0.5" : "1" }} onClick={handleChangeFilterMode("where_like")} disabled={mode === "where_like"}>{filterModeLabel["where_like"]}</button>
+											<button className={buttonSpanClass} style={{opacity: mode === "where" ? "0.5" : "1" }} onClick={handleChangeFilterMode("where")} disabled={mode === "where"}>{filterModeLabel["where"]}</button>
+											<button className={buttonSpanClass} style={{opacity: mode === "where_between" ? "0.5" : "1" }} onClick={handleChangeFilterMode("where_between")} disabled={mode === "where_between"}>{filterModeLabel["where_between"]}</button>
+										</span>
+									</div>
 								</th>
+								*/}
+								{renderFilterHeader2()}
 								<th className={cellTableClass}>
 									<div className="pa1 relative row" tabIndex="0">
 										<div>FIELDS</div>
@@ -853,6 +1028,7 @@ export default memo(function Table({
 							{node.props.fields.map(function (field) {
 								return (
 									<tr key={field.name} className="">
+										{/*
 										<td className={cellTableClass}>
 											<Input
 												defaultMode={false}
@@ -864,6 +1040,8 @@ export default memo(function Table({
 												disabled={syncing}
 											/>
 										</td>
+										*/}
+										{renderFilterInput(field)}
 										<td align="right" className={cellTableClass}>
 											<div className="relative pa1 row" tabIndex="0">
 												<div className="truncate-ns field">{field.name}</div>
@@ -895,7 +1073,8 @@ export default memo(function Table({
 						</tbody>
 						<tfoot className="mw-100">
 							<tr align="right" className="">
-								<th align="center" className={cellTableClass}></th>
+								{/*<th align="center" className={cellTableClass}></th>*/}
+								{renderFilterFooter()}
 								<th className={cellTableClass}>
 									<div className="relative pa1 row" tabIndex="0">
 										<div className="truncate-ns">RELATIONSHIPS</div>
@@ -938,7 +1117,6 @@ export default memo(function Table({
 												) : null}
 											</div>
 											{node.props.connectionIDs.map(function (id) {
-												//const connection = activeConnections.object[id];
 												const connection = graph.selectConnection(id);
 												if (
 													connection &&
@@ -986,5 +1164,6 @@ export default memo(function Table({
 			</div>
 		);
 	}
+
 	return renderTable();
 });
