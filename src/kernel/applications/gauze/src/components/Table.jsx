@@ -519,8 +519,11 @@ export default memo(function Table({
 		return function (e) {
 			const selectedNode = graph.selectNode(nodeID);
 			const updatedNode = { ...selectedNode };
-			delete updatedNode.props.variables[mode];
+			updatedNode.props.variables[mode] = {};
+			// note: why do we need a timestamp here?
+			updatedNode.props.timestamp = new Date().getTime();
 			graph.updateSpaceNodes(agentHeader.name, spaceID, [updatedNode]);
+			filter();
 		};
 	}
 
@@ -880,10 +883,10 @@ export default memo(function Table({
 					<>
 						<td className={positionCellClass(0)}>
 							<Input
-								defaultMode={false}
+								defaultMode={true}
 								field={field}
 								className={inputTableClass}
-								value={variables.where_between ? (variables.where_between[field.name] ? variables.where_between[field.name][0] : null) : null}
+								defaultValue={variables.where_between ? (variables.where_between[field.name] ? variables.where_between[field.name][0] : null) : null}
 								onChange={updateBetweenFilter(field.name, 0)}
 								onKeyDown={applyFilterEnter(field.name)}
 								disabled={syncing}
@@ -891,10 +894,10 @@ export default memo(function Table({
 						</td>
 						<td className={positionCellClass(1)}>
 							<Input
-								defaultMode={false}
+								defaultMode={true}
 								field={field}
 								className={inputTableClass}
-								value={variables.where_between ? (variables.where_between[field.name] ? variables.where_between[field.name][1] : null) : null}
+								defaultValue={variables.where_between ? (variables.where_between[field.name] ? variables.where_between[field.name][1] : null) : null}
 								onChange={updateBetweenFilter(field.name, 1)}
 								onKeyDown={applyFilterEnter(field.name)}
 								disabled={syncing}

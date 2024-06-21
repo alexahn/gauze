@@ -1,7 +1,9 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function Input({ field, className, defaultMode, defaultValue, value, onChange, onKeyDown, disabled, cache }) {
+	const inputRef = useRef();
+	const [lastChanged, setLastChanged] = useState(new Date().getTime());
 	const graphQLTypeToInputType = {
 		Date: "datetime-local",
 		String: "text",
@@ -55,11 +57,28 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 		},
 	};
 	function handleChange(e) {
+		setLastChanged(new Date().getTime());
 		const serializedValue = serializeInputValueToGraphQLType[field.graphql_type.name](e, field.name);
 		return onChange(serializedValue);
 	}
+	useEffect(function () {
+		if (512 < new Date().getTime() - lastChanged) {
+			if (defaultMode) {
+				const serializedValue = initializeValue[field.graphql_type.name](serializeGraphQLTypeToInputType[field.graphql_type.name](defaultValue, field.name), field.name);
+				if (serializedValue !== inputRef.current.value) {
+					inputRef.current.value = serializedValue;
+				}
+			} else {
+				const serializedValue = initializeValue[field.graphql_type.name](serializeGraphQLTypeToInputType[field.graphql_type.name](value, field.name), field.name);
+				if (serializedValue !== inputRef.current.value) {
+					inputRef.current.value = serializedValue;
+				}
+			}
+		}
+	});
 	const valueInput = (
 		<input
+			ref={inputRef}
 			className={className}
 			type={graphQLTypeToInputType[field.graphql_type.name]}
 			value={initializeValue[field.graphql_type.name](serializeGraphQLTypeToInputType[field.graphql_type.name](value, field.name), field.name)}
@@ -71,6 +90,7 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 	);
 	const defaultInput = (
 		<input
+			ref={inputRef}
 			className={className}
 			type={graphQLTypeToInputType[field.graphql_type.name]}
 			defaultValue={initializeValue[field.graphql_type.name](serializeGraphQLTypeToInputType[field.graphql_type.name](defaultValue, field.name), field.name)}
