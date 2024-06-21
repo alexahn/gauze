@@ -61,7 +61,7 @@ export default memo(function Table({
 	const page_max = page_max_no_skew < page_current ? page_current : page_max_no_skew;
 
 	// note: placeholder, remove after we add the prop to nodes
-	const mode = filterMode || "where";
+	const mode = filterMode || "where_like";
 
 	const services = {
 		gauze,
@@ -661,6 +661,7 @@ export default memo(function Table({
 	const cellInputClass = `${cellClass} ${color.node.bg} ${color.node.bd} ${color.node.bgh} ${color.node.bdh} ${color.node.ch}`;
 	const cellInputClass2 = `${cellClass} ${color.node.bg} bdx${color.table.x - 1} bw1`;
 	const cellTableClass = `${cellClass} ${color.node.bg} ${color.node.bd} ${color.node.c} bw1`;
+	const cellActiveTableClass = `${cellClass} ${color.node.bg} ${nextColor.node.bd} ${color.node.c} bw1`;
 	const cellErrorTableClass = `${cellClass} ${color.node.bg} ${nextColor.table.bd} ${color.node.c} bw1`;
 	const cellEntityClass = `${cellClass} ${nextColor.node.bg} ${nextColor.node.bd} ${nextColor.node.c}`;
 	const inputTableClass = `w-100 br2 ba bw1 ${color.node.bd} ${color.node.bg} ${color.node.c} ${color.node.bdh} ${color.node.bgh} ${color.node.ch}`;
@@ -861,8 +862,9 @@ export default memo(function Table({
 	function renderFilterInput(field) {
 		switch (mode) {
 			case "where":
+				const cellMatchClass = variables.where ? (variables.where[field.name] ? cellActiveTableClass : cellTableClass) : cellTableClass;
 				return (
-					<td className={cellTableClass}>
+					<td className={cellMatchClass}>
 						<Input
 							defaultMode={true}
 							field={field}
@@ -875,8 +877,9 @@ export default memo(function Table({
 					</td>
 				);
 			case "where_like":
+				const cellLikeClass = variables.where_like ? (variables.where_like[field.name] ? cellActiveTableClass : cellTableClass) : cellTableClass;
 				return (
-					<td className={cellTableClass}>
+					<td className={cellLikeClass}>
 						<Input
 							defaultMode={true}
 							field={field}
@@ -894,7 +897,11 @@ export default memo(function Table({
 					if (variables.where_between && variables.where_between[field.name] && variables.where_between[field.name][position] === null) {
 						return cellErrorTableClass;
 					} else {
-						return cellTableClass;
+						if (variables.where_between && variables.where_between[field.name] && variables.where_between[field.name][position]) {
+							return cellActiveTableClass;
+						} else {
+							return cellTableClass;
+						}
 					}
 				}
 				return (

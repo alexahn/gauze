@@ -33,7 +33,7 @@ function createSpace(services, header, spaceID, space = {}) {
 				from: null,
 				to: null,
 				fields: header.fields,
-				filterMode: "where",
+				filterMode: "where_like",
 				variables: {
 					where: {},
 					where_like: {},
@@ -718,6 +718,7 @@ function traverseSpaceTo(services, agentHeader, spaceID, node, item, targetType)
 				to: null,
 				toNodeID: null,
 				fields: targetHeader.fields,
+				filterMode: "where_like",
 				variables: {
 					source: source,
 					where: {},
@@ -778,6 +779,7 @@ function traverseSpaceFrom(services, agentHeader, spaceID, node, item, targetTyp
 				to: source,
 				toNodeID: node.id,
 				fields: targetHeader.fields,
+				filterMode: "where_like",
 				variables: {
 					source: source,
 					where: {},
@@ -831,6 +833,7 @@ function traverseSpaceRoot(services, agentHeader, spaceID, where, targetType) {
 				to: null,
 				toNodeID: null,
 				fields: targetHeader.fields,
+				filterMode: "where_like",
 				variables: {
 					where: where,
 					offset: 0,
