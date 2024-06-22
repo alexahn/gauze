@@ -487,6 +487,16 @@ mutation create(
 				return data.data[`create_${header.name}`];
 			});
 	}
+	reloadRead(operations) {
+		// operation.id (nodeID)
+		// operation.header
+		// operation.variables
+	}
+	reloadCount(operations) {
+		// operation.id
+		// operation.header
+		// operation.variables
+	}
 	read(header, variables) {
 		const self = this;
 		const query = `
