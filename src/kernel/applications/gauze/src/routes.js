@@ -19,9 +19,11 @@ const routes = [
 			const { gauze, model } = services;
 			const environmentSessions = model.default.environmentSessions();
 			const environmentJWT = gauze.default.getEnvironmentJWT();
-			if (environmentSessions && environmentSessions.length) {
+			// todo: remove session check
+			if (environmentJWT && environmentSessions && environmentSessions.length) {
 				return Promise.resolve(true);
 			} else if (environmentJWT) {
+				// todo: decode jwt and check expiration
 				return Promise.resolve(true);
 			} else {
 				return gauze.default.enterSession(null).then(function (session) {
@@ -113,7 +115,8 @@ const routes = [
 			const { gauze, model } = services;
 			const proxySessions = model.default.proxySessions();
 			const proxyJWT = gauze.default.getProxyJWT();
-			if (proxySessions && proxySessions.length) {
+			// todo: remove session check
+			if (proxyJWT && proxySessions && proxySessions.length) {
 				const proxy = proxySessions[0];
 				return gauze.default
 					.proxies({
@@ -126,6 +129,7 @@ const routes = [
 						return Promise.resolve(true);
 					});
 			} else if (proxyJWT) {
+				// todo: decode jwt and check expiration
 				const decoded = jose.decodeJwt(proxyJWT);
 				const proxy = {
 					gauze__proxy__id: decoded.proxy_id,
@@ -185,13 +189,16 @@ const routes = [
 			const { gauze, model } = services;
 			const systemSessions = model.default.systemSessions();
 			const systemJWT = gauze.default.getSystemJWT();
-			if (systemSessions && systemSessions.length) {
+			// todo: remove session check
+			if (systemJWT && systemSessions && systemSessions.length) {
 				return Promise.resolve(true);
 			} else if (systemJWT) {
+				// todo: decode jwt and check expiration
 				return Promise.resolve(true);
 			} else {
+				const proxyJWT = gauze.default.getProxyJWT();
 				const proxySessions = model.default.proxySessions();
-				if (proxySessions && proxySessions.length) {
+				if (proxyJWT && proxySessions && proxySessions.length) {
 					return Promise.reject({ redirect: { name: "proxy.agents" }, params: { next: window.location.href } });
 				} else {
 					return Promise.reject({ redirect: { name: "environment.signin", params: { next: window.location.href } } });
@@ -227,6 +234,7 @@ const routes = [
 				graph: graph.default,
 				router: router.default,
 			};
+			/*
 			if (model.default.all("HEADER").length) {
 				setTimeout(function () {
 					console.log("async header");
@@ -238,12 +246,13 @@ const routes = [
 				}, 0);
 				return true;
 			} else {
-				return gauze.default.header().then(function (headers) {
-					headers.forEach(function (header) {
-						model.default.create("HEADER", header.name, header);
-					});
+			*/
+			return gauze.default.header().then(function (headers) {
+				headers.forEach(function (header) {
+					model.default.create("HEADER", header.name, header);
 				});
-			}
+			});
+			//}
 		},
 		layout: layouts.albatross.default,
 		sections: {
@@ -277,11 +286,12 @@ const routes = [
 			if (space) {
 				// reload space
 				// return orchestrate.reloadSpace(orchestrateServices, agentHeader, toState.params.space)
-				setTimeout(function () {
+				/*setTimeout(function () {
 					console.log("async reload space");
-					return orchestrate.reloadSpace(orchestrateServices, agentHeader, spaceID);
-				}, 0);
-				return true;
+				*/
+				return orchestrate.reloadSpace(orchestrateServices, agentHeader, spaceID);
+				/*}, 0);
+				return true;*/
 			} else {
 				// create space
 				// create root node

@@ -35,6 +35,8 @@ export default function Proxies({ route, router, gauze, model }) {
 			// async call
 			// check if we have a system session for the proxy
 			// if not, create one
+			// todo: remove session check
+			/*
 			const sessions = model.all("SESSION").filter(function (session) {
 				return session.gauze__session__agent_type === proxy.gauze__proxy__agent_type && session.gauze__session__agent_id === proxy.gauze__proxy__agent_id;
 			});
@@ -54,23 +56,24 @@ export default function Proxies({ route, router, gauze, model }) {
 					router.navigate("system.graph.space", { space: "home" }, {});
 				}
 			} else {
-				return gauze.proxyEnterSession(proxy).then(function (session) {
-					setSubmitProxy(false);
-					gauze.setSystemJWT(session.gauze__session__value);
-					model.create("SESSION", session.gauze__session__id, session);
-					// router navigate
-					if (route.params && route.params.next) {
-						const matched = router.matchUrl(route.params.next);
-						if (matched) {
-							router.navigate(matched.name, matched.params);
-						} else {
-							router.navigate("system.graph.space", { space: "home" }, {});
-						}
+			*/
+			return gauze.proxyEnterSession(proxy).then(function (session) {
+				setSubmitProxy(false);
+				gauze.setSystemJWT(session.gauze__session__value);
+				model.create("SESSION", session.gauze__session__id, session);
+				// router navigate
+				if (route.params && route.params.next) {
+					const matched = router.matchUrl(route.params.next);
+					if (matched) {
+						router.navigate(matched.name, matched.params);
 					} else {
 						router.navigate("system.graph.space", { space: "home" }, {});
 					}
-				});
-			}
+				} else {
+					router.navigate("system.graph.space", { space: "home" }, {});
+				}
+			});
+			//}
 		};
 	}
 	const buttonClass = "clouds w-100 ba bw1 br2 truncate-ns mb1 f6 athelas";

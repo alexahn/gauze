@@ -9,9 +9,9 @@ export default function Banner({ route, gauze, model, router }) {
 	const environmentJWT = gauze.getEnvironmentJWT();
 	const proxyJWT = gauze.getProxyJWT();
 	const systemJWT = gauze.getSystemJWT();
-	const authEnvironment = environmentSessions.length || environmentJWT;
-	const authProxy = proxySessions.length || proxyJWT;
-	const authSystem = systemSessions.length || systemJWT;
+	const authEnvironment = environmentSessions.length && environmentJWT;
+	const authProxy = proxySessions.length && proxyJWT;
+	const authSystem = systemSessions.length && systemJWT;
 	const signOutClass = route.name === "environment.signout" ? "w4 athelas clouds ba bw1 br2 bgx2 bdx1 cxyz6 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx2 bdx2 cx6 bgx3h bdx3h";
 	const signUpClass = route.name === "environment.signup" ? "w3 athelas clouds ba bw1 br2 bgx4 bdx1 cxyz6 b--dotted f6" : "f6 w3 athelas clouds ba bw1 br2 bgx4 bdx4 cx6 bgx3h bdx3h";
 	const proxyClass = route.name === "proxy.agents" ? "w4 athelas clouds ba bw1 br2 bgx6 bdx1 cx2 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx6 bdx6 cxyz7 bgx5h bdx5h cx6h";

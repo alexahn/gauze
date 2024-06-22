@@ -653,6 +653,7 @@
 		[x] minimal local data loading for graph routes
 			[ ] test edge cases where data is not fully formed
 				[ ] should be impossible because we are only updating the graph data with fully formed data?
+		[ ] rearchitect session management to be only jwt based before relying on local data for rendering
 	[x] reorganize synchronization logic to be done from the entry point
 	[x] add synchronization for model service
 	[ ] app icon svg
