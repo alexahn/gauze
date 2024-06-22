@@ -666,12 +666,13 @@
 	[x] fix date input not parsing changes correctly
 	[-] change created_at, updated_at, deleted_at to use a regular input field instead of a datetime input field because they cannot be defined via a datetime input due to the time granularity
 		[x] there is no point because like does not work with date type in sqlite
-	[ ] update input field columns to be twice as wide as they are currently so that datetime field can display the time portion
+	[x] update input field columns to be twice as wide as they are currently so that datetime field can display the time portion
 	[x] update input field component to manually modify the dom element value on a hard sync (this is because we can't use a controlled component for date input)
 	[x] add new filter modes
 		[x] search (where_like)
 		[x] range (where_between)
 	[ ] prevent tab from repositioning the view
+	[x] reinitialize connections when entering and exiting link edit mode
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages

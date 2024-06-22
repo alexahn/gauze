@@ -68,6 +68,30 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 	}
 	function handleLink(e) {
 		setLink(!link);
+		const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
+		const activeConnections = graph.spaceActiveConnections(agentHeader.name, spaceID);
+		graph.updateSpaceNodes(
+			agentHeader.name,
+			spaceID,
+			graph.selectNodes(activeNodes.keys).map(function (node) {
+				return {
+					...node,
+					width: null,
+					height: null,
+				};
+			}),
+		);
+		graph.updateSpaceConnections(
+			agentHeader.name,
+			spaceID,
+			graph.selectConnections(activeConnections.keys).map(function (connection) {
+				return {
+					...connection,
+					x: null,
+					y: null,
+				};
+			}),
+		);
 	}
 	function handlePerformance(e) {
 		if (e.target.value === "max") {

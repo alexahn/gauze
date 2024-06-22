@@ -10,7 +10,8 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 	};
 	const serializeGraphQLTypeToInputType = {
 		Date: function (v, field) {
-			if (typeof v === "string") {
+			// note: look into why we need an existence check here (system entity page)
+			if (v && typeof v === "string") {
 				const d = new Date(v).toISOString();
 				return d.slice(0, 16);
 			} else {

@@ -653,6 +653,7 @@ export default memo(function Table({
 	const nextNextColor = colors[nextNextColorIndex];
 
 	const cellClass = "mw4 w4 br2";
+	const cellWideClass = "mw5 w5 br2";
 	const buttonClass = `ba br2 ${color.table.bd} ${color.table.bg} ${color.table.c} ${color.table.bdh} ${color.table.bgh} ${color.table.ch}`;
 	const buttonPaginationClass = `${buttonClass} mr1`;
 	const buttonTableClass = `ba br2 ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c} ${nextColor.table.bdh} ${nextColor.table.bgh} ${nextColor.table.ch}`;
@@ -661,8 +662,9 @@ export default memo(function Table({
 	const cellInputClass = `${cellClass} ${color.node.bg} ${color.node.bd} ${color.node.bgh} ${color.node.bdh} ${color.node.ch}`;
 	const cellInputClass2 = `${cellClass} ${color.node.bg} bdx${color.table.x - 1} bw1`;
 	const cellTableClass = `${cellClass} ${color.node.bg} ${color.node.bd} ${color.node.c} bw1`;
-	const cellActiveTableClass = `${cellClass} ${color.node.bg} ${nextColor.node.bd} ${color.node.c} bw1`;
-	const cellErrorTableClass = `${cellClass} ${color.node.bg} ${nextColor.table.bd} ${color.node.c} bw1`;
+	const cellWideTableClass = `${cellWideClass} ${color.node.bg} ${color.node.bd} ${color.node.c} bw1`;
+	const cellWideActiveTableClass = `${cellWideClass} ${color.node.bg} ${nextColor.node.bd} ${color.node.c} bw1`;
+	const cellWideErrorTableClass = `${cellWideClass} ${color.node.bg} ${nextColor.table.bd} ${color.node.c} bw1`;
 	const cellEntityClass = `${cellClass} ${nextColor.node.bg} ${nextColor.node.bd} ${nextColor.node.c}`;
 	const inputTableClass = `w-100 br2 ba bw1 ${color.node.bd} ${color.node.bg} ${color.node.c} ${color.node.bdh} ${color.node.bgh} ${color.node.ch}`;
 	const inputErrorTableClass = `w-100 br2 ba bw1 ${color.table.bd} ${color.node.bg} ${color.node.c} ${color.node.bdh} ${color.node.bgh} ${color.node.ch}`;
@@ -680,14 +682,14 @@ export default memo(function Table({
 	function renderFilterHeader1() {
 		switch (mode) {
 			case "where":
-				return <th align="center" className={cellTableClass}></th>;
+				return <th align="center" className={cellWideTableClass}></th>;
 			case "where_like":
-				return <th align="center" className={cellTableClass}></th>;
+				return <th align="center" className={cellWideTableClass}></th>;
 			case "where_between":
 				return (
 					<>
-						<th align="center" className={cellTableClass}></th>
-						<th align="center" className={cellTableClass}></th>
+						<th align="center" className={cellWideTableClass}></th>
+						<th align="center" className={cellWideTableClass}></th>
 					</>
 				);
 			default:
@@ -699,7 +701,7 @@ export default memo(function Table({
 		switch (mode) {
 			case "where":
 				return (
-					<th align="center" className={cellTableClass}>
+					<th align="center" className={cellWideTableClass}>
 						<div className="pa1 relative row" tabIndex="0">
 							{/*<button className={buttonTableClass} onClick={applyFilterButton}>*/}
 							<button className={buttonTableClass}>{filterModeLabel[mode]}</button>
@@ -736,7 +738,7 @@ export default memo(function Table({
 				);
 			case "where_like":
 				return (
-					<th align="center" className={cellTableClass}>
+					<th align="center" className={cellWideTableClass}>
 						<div className="pa1 relative row" tabIndex="0">
 							{/*<button className={buttonTableClass} onClick={applyFilterButton}>*/}
 							<button className={buttonTableClass}>{filterModeLabel[mode]}</button>
@@ -774,7 +776,7 @@ export default memo(function Table({
 			case "where_between":
 				return (
 					<>
-						<th align="center" className={cellTableClass}>
+						<th align="center" className={cellWideTableClass}>
 							<div className="pa1 relative row" tabIndex="0">
 								{/*<button className={buttonTableClass} onClick={applyFilterButton}>*/}
 								<button className={buttonTableClass}>Start</button>
@@ -813,7 +815,7 @@ export default memo(function Table({
 								</span>
 							</div>
 						</th>
-						<th align="center" className={cellTableClass}>
+						<th align="center" className={cellWideTableClass}>
 							<div className="pa1 relative row" tabIndex="0">
 								{/*<button className={buttonTableClass} onClick={applyFilterButton}>*/}
 								<button className={buttonTableClass}>End</button>
@@ -862,7 +864,7 @@ export default memo(function Table({
 	function renderFilterInput(field) {
 		switch (mode) {
 			case "where":
-				const cellMatchClass = variables.where ? (variables.where[field.name] ? cellActiveTableClass : cellTableClass) : cellTableClass;
+				const cellMatchClass = variables.where ? (variables.where[field.name] ? cellWideActiveTableClass : cellWideTableClass) : cellWideTableClass;
 				return (
 					<td className={cellMatchClass}>
 						<Input
@@ -877,7 +879,7 @@ export default memo(function Table({
 					</td>
 				);
 			case "where_like":
-				const cellLikeClass = variables.where_like ? (variables.where_like[field.name] ? cellActiveTableClass : cellTableClass) : cellTableClass;
+				const cellLikeClass = variables.where_like ? (variables.where_like[field.name] ? cellWideActiveTableClass : cellWideTableClass) : cellWideTableClass;
 				return (
 					<td className={cellLikeClass}>
 						<Input
@@ -895,12 +897,12 @@ export default memo(function Table({
 				// see if this works:
 				function positionCellClass(position) {
 					if (variables.where_between && variables.where_between[field.name] && variables.where_between[field.name][position] === null) {
-						return cellErrorTableClass;
+						return cellWideErrorTableClass;
 					} else {
 						if (variables.where_between && variables.where_between[field.name] && variables.where_between[field.name][position]) {
-							return cellActiveTableClass;
+							return cellWideActiveTableClass;
 						} else {
-							return cellTableClass;
+							return cellWideTableClass;
 						}
 					}
 				}
@@ -938,14 +940,14 @@ export default memo(function Table({
 	function renderFilterFooter() {
 		switch (mode) {
 			case "where":
-				return <th align="center" className={cellTableClass}></th>;
+				return <th align="center" className={cellWideTableClass}></th>;
 			case "where_like":
-				return <th align="center" className={cellTableClass}></th>;
+				return <th align="center" className={cellWideTableClass}></th>;
 			case "where_between":
 				return (
 					<>
-						<th align="center" className={cellTableClass}></th>
-						<th align="center" className={cellTableClass}></th>
+						<th align="center" className={cellWideTableClass}></th>
+						<th align="center" className={cellWideTableClass}></th>
 					</>
 				);
 			default:
@@ -1065,7 +1067,7 @@ export default memo(function Table({
 										</th>
 									);
 								})}
-								<th align="center" className={cellTableClass}></th>
+								<th align="center" className={cellWideTableClass}></th>
 							</tr>
 							<tr>
 								{/*<th align="center" className={cellTableClass}>
@@ -1206,7 +1208,7 @@ export default memo(function Table({
 										</th>
 									);
 								})}
-								<th align="center" className={cellTableClass}>
+								<th align="center" className={cellWideTableClass}>
 									<button className={buttonTableClass} onClick={handleCreate} disabled={submitCreate}>
 										Create
 									</button>
@@ -1253,7 +1255,7 @@ export default memo(function Table({
 												</td>
 											);
 										})}
-										<td className={cellTableClass}>
+										<td className={cellWideTableClass}>
 											<Input field={field} className={inputTableClass} value={createItem[field.name]} onChange={updateCreateItem(field.name)} disabled={submitCreate} />
 										</td>
 									</tr>
@@ -1345,7 +1347,7 @@ export default memo(function Table({
 										</th>
 									);
 								})}
-								<th align="center" className={cellTableClass}></th>
+								<th align="center" className={cellWideTableClass}></th>
 							</tr>
 						</tfoot>
 					</table>
