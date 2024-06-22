@@ -51,7 +51,6 @@ export default memo(function Table({
 	const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
 	const activeConnections = graph.spaceActiveConnections(agentHeader.name, spaceID);
 	const activeEdges = graph.spaceActiveEdges(agentHeader.name, spaceID);
-	//const node = activeNodes.object[nodeID]
 
 	const offset = variables.offset ? Number.parseInt(variables.offset) : 0;
 	const limit = variables.limit ? Number.parseInt(variables.limit) : PAGINATION_PAGE_SIZE;

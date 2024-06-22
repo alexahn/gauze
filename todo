@@ -650,8 +650,11 @@
 		[ ] not noticing any noticeable performance degradation so far
 	[ ] use local data for initial render if possible
 		[ ] re-implement soundness and completeness (or maybe just one of them)
+		[x] minimal local data loading for graph routes
+			[ ] test edge cases where data is not fully formed
+				[ ] should be impossible because we are only updating the graph data with fully formed data?
 	[x] reorganize synchronization logic to be done from the entry point
-	[ ] add synchronization for model service
+	[x] add synchronization for model service
 	[ ] app icon svg
 	[x] move static directory to inside of src and define a dataurl loader for svg
 	[x] look into and fix edges not rendering correctly in non-private tab
@@ -673,6 +676,7 @@
 		[x] range (where_between)
 	[ ] prevent tab from repositioning the view
 	[x] reinitialize connections when entering and exiting link edit mode
+	[ ] collapse reload queries into one query by using nodeID as the query name
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages

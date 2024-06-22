@@ -44,38 +44,78 @@ function storeGraph(services, components) {
 	}
 }
 
-// todo:
-// migrateModel
-// loadModel
-// storeModel
+function migrateModel(services, components) {}
+
+function loadModel(services, components) {
+	const { gauze, model, router, graph } = services;
+	try {
+		const version = localStorage.getItem("version:model");
+		const json = localStorage.getItem(`model:${version}`);
+		const parsed = JSON.parse(json);
+		model.default.index = parsed.index;
+		model.default.collection = parsed.collection;
+	} catch (e) {
+		console.error("failed to load model:", e);
+	}
+}
+
+function storeModel(services, components) {
+	const { model } = services;
+	const version = localStorage.getItem("version:model");
+	const json = JSON.stringify({
+		index: model.default.index,
+		collection: model.default.collection,
+	});
+	if (version) {
+		localStorage.setItem(`model:${version}`, json);
+	} else {
+		localStorage.setItem("version:model", packageJSON.version);
+		localStorage.setItem(`model:${packageJSON.version}`, json);
+	}
+}
+
+function migrate(services, components) {
+	migrateGraph(services, components);
+	migrateModel(services, components);
+}
+
+function load(services, components) {
+	loadGraph(services, components);
+	loadModel(services, components);
+}
+
+function store(services, components) {
+	storeGraph(services, components);
+	storeModel(services, components);
+}
 
 function start(services, components) {
 	// migrate stage
-	migrateGraph(services, components);
+	migrate(services, components);
 	// load stage
-	loadGraph(services, components);
+	load(services, components);
 	let timer = setInterval(function () {
 		// store stage
-		storeGraph(services, components);
+		store(services, components);
 	}, 512);
 
 	window.addEventListener("focus", function (e) {
 		if (timer) {
-			loadGraph(services, components);
+			load(services, components);
 		} else {
-			loadGraph(services, components);
+			load(services, components);
 			timer = setInterval(function () {
-				storeGraph(services, components);
+				store(services, components);
 			}, 512);
 		}
 	});
 
 	window.addEventListener("blur", function (e) {
 		if (timer) {
-			storeGraph(services, components);
+			store(services, components);
 			timer = clearInterval(timer);
 		} else {
-			storeGraph(services, components);
+			store(services, components);
 		}
 	});
 
