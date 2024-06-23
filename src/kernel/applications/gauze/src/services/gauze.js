@@ -2,6 +2,10 @@ import { GAUZE_PROTOCOL, GAUZE_HOST, GAUZE_PORT } from "env";
 
 import * as jose from "jose";
 
+// note: this is very ugly, and the architecture tries to avoid services having dependencies on each other
+// todo: refactor the fetch method so we don't need this
+import model from "./model.js";
+
 class GauzeService {
 	constructor() {
 		const self = this;
@@ -32,6 +36,14 @@ class GauzeService {
 					return res.json();
 				}
 				if (res.status === 401) {
+					// note: we need this code block to delete invalid sessions
+					// todo: either trigger a call to verify a session is valid on proxy selection or don't rely on local model data for jwt selection
+					const sessions = model.all("SESSION");
+					sessions.forEach(function (session) {
+						if (jwt === session.gauze__session__value) {
+							model.delete("SESSION", session.gauze__session__id);
+						}
+					});
 					// destroy this jwt
 					if (self.getEnvironmentJWT() === jwt) {
 						self.deleteEnvironmentJWT();
