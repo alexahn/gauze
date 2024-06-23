@@ -281,7 +281,6 @@ const routes = [
 				graph: graph.default,
 				router: router.default,
 			};
-			/*
 			if (model.default.all("HEADER").length) {
 				setTimeout(function () {
 					console.log("async header");
@@ -293,13 +292,12 @@ const routes = [
 				}, 0);
 				return true;
 			} else {
-			*/
-			return gauze.default.header().then(function (headers) {
-				headers.forEach(function (header) {
-					model.default.create("HEADER", header.name, header);
+				return gauze.default.header().then(function (headers) {
+					headers.forEach(function (header) {
+						model.default.create("HEADER", header.name, header);
+					});
 				});
-			});
-			//}
+			}
 		},
 		layout: layouts.albatross.default,
 		sections: {
@@ -333,12 +331,11 @@ const routes = [
 			if (space) {
 				// reload space
 				// return orchestrate.reloadSpace(orchestrateServices, agentHeader, toState.params.space)
-				/*setTimeout(function () {
+				setTimeout(function () {
 					console.log("async reload space");
-				*/
-				return orchestrate.reloadSpace(orchestrateServices, agentHeader, spaceID);
-				/*}, 0);
-				return true;*/
+					return orchestrate.reloadSpace(orchestrateServices, agentHeader, spaceID);
+				}, 0);
+				return true;
 			} else {
 				// create space
 				// create root node
