@@ -100,6 +100,13 @@ class GauzeService {
 	}
 	deleteEnvironmentJWT() {
 		const self = this;
+		// todo: see if we can separate this
+		const sessions = model.all("SESSION").filter(function (session) {
+			return session.gauze__session__value === self.environmentJWT;
+		});
+		sessions.forEach(function (session) {
+			model.delete("SESSION", session.gauze__session_id);
+		});
 		self.environmentJWT = null;
 		localStorage.removeItem("environmentJWT");
 	}
@@ -114,6 +121,13 @@ class GauzeService {
 	}
 	deleteSystemJWT() {
 		const self = this;
+		// todo: see if we can separate this
+		const sessions = model.all("SESSION").filter(function (session) {
+			return session.gauze__session__value === self.systemJWT;
+		});
+		sessions.forEach(function (session) {
+			model.delete("SESSION", session.gauze__session_id);
+		});
 		self.systemJWT = null;
 		localStorage.removeItem("systemJWT");
 	}
@@ -128,6 +142,13 @@ class GauzeService {
 	}
 	deleteProxyJWT() {
 		const self = this;
+		// todo: see if we can separate this
+		const sessions = model.all("SESSION").filter(function (session) {
+			return session.gauze__session__value === self.proxyJWT;
+		});
+		sessions.forEach(function (session) {
+			model.delete("SESSION", session.gauze__session_id);
+		});
 		self.proxyJWT = null;
 		localStorage.removeItem("proxyJWT");
 	}
@@ -500,34 +521,34 @@ mutation create(
 			});
 	}
 	reload(operations) {
+		const self = this;
 		function operationParameters(header, id) {
 			return `
-	$${id}_source: ${header.graphql_query_source_type},
-	$${id}_count: ${header.graphql_query_where_string_type},
-	$${id}_where: ${header.graphql_query_where_type},
-	$${id}_where_in: ${header.graphql_query_where_array_type},
-	$${id}_where_not_in: ${header.graphql_query_where_array_type},
-	$${id}_where_like: ${header.graphql_query_where_type},
-	$${id}_where_between: ${header.graphql_query_where_array_type},
-	$${id}_limit: Int,
-	$${id}_offset: Int,
-	$${id}_order: String,
-	$${id}_order_direction: String
-`;
+	$source_${id}: ${header.graphql_query_source_type},
+	$count_${id}: ${header.graphql_query_where_string_type},
+	$where_${id}: ${header.graphql_query_where_type},
+	$where_in_${id}: ${header.graphql_query_where_array_type},
+	$where_not_in_${id}: ${header.graphql_query_where_array_type},
+	$where_like_${id}: ${header.graphql_query_where_type},
+	$where_between_${id}: ${header.graphql_query_where_array_type},
+	$limit_${id}: Int,
+	$offset_${id}: Int,
+	$order_${id}: String,
+	$order_direction_${id}: String,`;
 		}
 		function operationFunction(header, id) {
 			return `
-    ${id}_read: read_${header.name}(
-        source: $${id}_source,
-        where: $${id}_where,
-        where_in: $${id}_where_in,
-        where_not_in: $${id}_where_not_in,
-        where_like: $${id}_where_like,
-        where_between: $${id}_where_between,
-        limit: $${id}_limit,
-        offset: $${id}_offset,
-        order: $${id}_order,
-        order_direction: $${id}_order_direction
+    read_${id}: read_${header.name}(
+        source: $source_${id},
+        where: $where_${id},
+        where_in: $where_in_${id},
+        where_not_in: $where_not_in_${id},
+        where_like: $where_like_${id},
+        where_between: $where_between_${id},
+        limit: $limit_${id},
+        offset: $offset_${id},
+        order: $order_${id},
+        order_direction: $order_direction_${id}
     ) {
         _metadata {
             id
@@ -537,30 +558,30 @@ mutation create(
             ${header.graphql_attributes_string}
         }
     }
-	${id}_count: count_${header.name}(
-		source: $${id}_source,
-		count: $${id}_count,
-		where: $${id}_where,
-		where_in: $${id}_where_in,
-		where_not_in: $${id}_where_not_in,
-		where_like: $${id}_where_like,
-		where_between: $${id}_where_between
+	count_${id}: count_${header.name}(
+		source: $source_${id},
+		count: $count_${id},
+		where: $where_${id},
+		where_in: $where_in_${id},
+		where_not_in: $where_not_in_${id},
+		where_like: $where_like_${id},
+		where_between: $where_between_${id}
 	) {
 		select
 		count
-	}
-`;
+	}`;
 		}
 		function operationVariables(variables, id) {
 			const prefixed = {};
 			Object.keys(variables).forEach(function (key) {
-				const prefixedKey = `${id}_${key}`;
+				const prefixedKey = `${key}_${id}`;
 				prefixed[prefixedKey] = variables[key];
 			});
 			return prefixed;
 		}
 		const buckets = [[]];
 		const bucketSizes = [0];
+		const bucketTransactions = [0];
 		let bucketIndex = 0;
 		// todo: load from env variable
 		const maxHTTPSize = 1048576;
@@ -568,7 +589,7 @@ mutation create(
 		// look up array index from node id
 		const index = {};
 		operations.forEach(function (operation, idx) {
-			const id = operation.node.id;
+			const id = operation.node.id.replaceAll("-", "_");
 			const node = operation.node;
 			const header = operation.header;
 			index[id] = idx;
@@ -578,8 +599,9 @@ mutation create(
 			const variablesString = JSON.stringify(variables);
 			// get length of all of these combined
 			const size = new TextEncoder().encode(`${parametersString} ${functionString} ${variablesString}`).length;
-			// divide maxHTTPSize by 2 as a safety buffer
-			if (bucketSizes[bucketIndex] + size < maxHTTPSize / 2) {
+			const transactions = 2;
+			// divide maxHTTPSize by 2 as a safety buffer and divie maxSQLTransactions by 2 as a safety buffer
+			if (bucketSizes[bucketIndex] + size < maxHTTPSize / 2 && bucketTransactions[bucketIndex] + transactions < maxSQLTransactions / 2) {
 				// add to bucket
 				buckets[bucketIndex].push({
 					operationParameters: parametersString,
@@ -587,6 +609,7 @@ mutation create(
 					operationVariables: variables,
 				});
 				bucketSizes[bucketIndex] = bucketSizes[bucketIndex] + size;
+				bucketTransactions[bucketIndex] = bucketTransactions[bucketIndex] + transactions;
 			} else {
 				// make new bucket
 				buckets.push([
@@ -597,27 +620,68 @@ mutation create(
 					},
 				]);
 				bucketSizes.push(size);
+				bucketTransactions.push(transactions);
 				bucketIndex = bucketIndex + 1;
 			}
 		});
 		// do all bucket transactions in parallel and stitch together results based on aliases
 		// return results in one shot (the interface for the rest of the code in orchestrate should ideally be unchanged)
+		return Promise.all(
+			buckets.map(function (bucket) {
+				let parameters = "";
+				let functions = "";
+				let variables = {};
+				bucket.forEach(function (segment) {
+					parameters = parameters + segment.operationParameters;
+					functions = functions + segment.operationFunction;
+					Object.keys(segment.operationVariables).forEach(function (key) {
+						variables[key] = segment.operationVariables[key];
+					});
+				});
+				//console.log(parameters, parameters.split('\n').length)
+				//console.log(functions, functions.split('\n').length)
+				const query = `
+query reload(
+	${parameters}
+) {
+	${functions}
+}
+`;
+				return self.system({
+					query: query,
+					variables: variables,
+				});
+			}),
+		).then(function (results) {
+			const combined = [];
+			Object.keys(index).forEach(function (id) {
+				combined[index[id]] = {
+					node: operations[index[id]].node,
+					header: operations[index[id]].header,
+				};
+			});
+			results.forEach(function (result) {
+				// parse results and stitch together a final result
+				Object.keys(result.data).forEach(function (key) {
+					const splitIndex = key.indexOf("_");
+					const method = key.slice(0, splitIndex);
+					const id = key.slice(splitIndex + 1);
+					if (method === "count") {
+						const count = result.data[key][0].count;
+						combined[index[id]].count = count;
+					} else if (method === "read") {
+						const data = result.data[key].map(function (item) {
+							return item.attributes;
+						});
+						combined[index[id]].data = data;
+					}
+				});
+			});
+			return combined;
+		});
 	}
-	reloadRead(operations) {
-		// operation.id (nodeID)
-		// operation.header
-		// operation.variables
-		// todo: load this from env variable
-		const maxHTTPSize = 1048576;
-		const maxSQLTransactions = 256;
-	}
-	reloadCount(operations) {
-		// operation.id
-		// operation.header
-		// operation.variables
-		const maxHTTPSize = 1048576;
-		const maxSQLTransactions = 256;
-	}
+	// todo: maybe generalize the query stitching by leveraging setTimeout and the equivalent of process.nextTick by batching the method calls here and dynamically stitching together a query for each event time slice
+	// note: it seems like it would be possible, but it would be a little more involved
 	read(header, variables) {
 		const self = this;
 		const query = `

@@ -27,6 +27,7 @@ const routes = [
 					return Promise.resolve(true);
 				} else {
 					// invalid
+					gauze.default.deleteEnvironmentJWT();
 					return gauze.default.enterSession(null).then(function (session) {
 						model.default.create("SESSION", session.gauze__session__id, session);
 						gauze.default.setEnvironmentJWT(session.gauze__session__value);
@@ -131,6 +132,7 @@ const routes = [
 					return Promise.resolve(true);
 				} else {
 					// invalid
+					gauze.default.deleteProxyJWT();
 					return Promise.reject({ redirect: { name: "environment.signin" } });
 				}
 			} else {
@@ -182,6 +184,7 @@ const routes = [
 						});
 					}
 				} else {
+					gauze.default.deleteProxyJWT();
 					return Promise.reject({ redirect: { name: "environment.signin", params: { next: toStart.params.next } } });
 				}
 			} else {
@@ -221,12 +224,14 @@ const routes = [
 					// valid
 					return Promise.resolve(true);
 				} else {
+					gauze.default.deleteSystemJWT();
 					// invalid
 					if (proxyJWT) {
 						const decodedProxy = jose.decodeJwt(proxyJWT);
 						if (now < decodedProxy.exp) {
 							return Promise.reject({ redirect: { name: "proxy.agents" }, params: { next: window.location.href } });
 						} else {
+							gauze.default.deleteProxyJWT();
 							return Promise.reject({ redirect: { name: "environment.signin", params: { next: window.location.href } } });
 						}
 					} else {
@@ -239,6 +244,7 @@ const routes = [
 					if (now < decodedProxy.exp) {
 						return Promise.reject({ redirect: { name: "proxy.agents" }, params: { next: window.location.href } });
 					} else {
+						gauze.default.deleteProxyJWT();
 						return Promise.reject({ redirect: { name: "environment.signin", params: { next: window.location.href } } });
 					}
 				} else {

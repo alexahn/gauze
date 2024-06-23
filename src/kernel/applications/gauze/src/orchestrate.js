@@ -59,8 +59,7 @@ function reloadSpace(services, agentHeader, spaceID) {
 	return import("./components/Relationship.jsx").then(function (relationship) {
 		const { gauze, model, router, graph } = services;
 		const activeNodes = graph.spaceActiveNodes(agentHeader.name, spaceID);
-		/*
-		const reloadParameters = activeNodes.map(function (node) {
+		const reloadParameters = activeNodes.values.map(function (node) {
 			const header = model.read("HEADER", node.props.type);
 			return {
 				node: node,
@@ -69,11 +68,11 @@ function reloadSpace(services, agentHeader, spaceID) {
 					...node.props.variables,
 					count: {
 						[header.primary_key]: header.primary_key,
-					}
+					},
 				},
-			}
-		})
-		*/
+			};
+		});
+		/*
 		return Promise.all(
 			activeNodes.values.map(function (node) {
 				const header = model.read("HEADER", node.props.type);
@@ -118,7 +117,9 @@ function reloadSpace(services, agentHeader, spaceID) {
 					};
 				});
 			}),
-		)
+		)*/
+		return gauze
+			.reload(reloadParameters)
 			.then(function (results) {
 				// update data and count
 				graph.updateSpaceNodes(
