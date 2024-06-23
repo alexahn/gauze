@@ -678,6 +678,8 @@
 	[ ] prevent tab from repositioning the view
 	[x] reinitialize connections when entering and exiting link edit mode
 	[ ] collapse reload queries into one query by using nodeID as the query name
+	[ ] add timestamp to every model record (to enable conditional data loading based on freshness)
+	[ ] flush old sessions from model collection periodically
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages

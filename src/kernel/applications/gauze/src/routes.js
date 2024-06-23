@@ -17,14 +17,22 @@ const routes = [
 		onActivate: function ({ dependencies }) {
 			const { services } = dependencies;
 			const { gauze, model } = services;
-			const environmentSessions = model.default.environmentSessions();
 			const environmentJWT = gauze.default.getEnvironmentJWT();
-			// todo: remove session check
-			if (environmentJWT && environmentSessions && environmentSessions.length) {
-				return Promise.resolve(true);
-			} else if (environmentJWT) {
-				// todo: decode jwt and check expiration
-				return Promise.resolve(true);
+			if (environmentJWT) {
+				// check expiration
+				const now = new Date().getTime() / 1000;
+				const decoded = jose.decodeJwt(environmentJWT);
+				if (now < decoded.exp) {
+					// valid
+					return Promise.resolve(true);
+				} else {
+					// invalid
+					return gauze.default.enterSession(null).then(function (session) {
+						model.default.create("SESSION", session.gauze__session__id, session);
+						gauze.default.setEnvironmentJWT(session.gauze__session__value);
+						return Promise.resolve(true);
+					});
+				}
 			} else {
 				return gauze.default.enterSession(null).then(function (session) {
 					model.default.create("SESSION", session.gauze__session__id, session);
@@ -113,33 +121,18 @@ const routes = [
 		canActivate: (router, dependencies) => (toState, fromState, done) => {
 			const { services } = dependencies;
 			const { gauze, model } = services;
-			const proxySessions = model.default.proxySessions();
 			const proxyJWT = gauze.default.getProxyJWT();
-			// todo: remove session check
-			if (proxyJWT && proxySessions && proxySessions.length) {
-				const proxy = proxySessions[0];
-				return gauze.default
-					.proxies({
-						gauze__proxy__id: proxy.gauze__session__agent_id,
-					})
-					.then(function (proxies) {
-						proxies.forEach(function (proxy) {
-							model.default.create(proxy._metadata.type, proxy._metadata.id, proxy.attributes);
-						});
-						return Promise.resolve(true);
-					});
-			} else if (proxyJWT) {
-				// todo: decode jwt and check expiration
+			if (proxyJWT) {
+				// check expiration
+				const now = new Date().getTime() / 1000;
 				const decoded = jose.decodeJwt(proxyJWT);
-				const proxy = {
-					gauze__proxy__id: decoded.proxy_id,
-				};
-				return gauze.default.proxies(proxy).then(function (proxies) {
-					proxies.forEach(function (proxy) {
-						model.default.create(proxy._metadata.type, proxy._metadata.id, proxy.attributes);
-					});
+				if (now < decoded.exp) {
+					// valid
 					return Promise.resolve(true);
-				});
+				} else {
+					// invalid
+					return Promise.reject({ redirect: { name: "environment.signin" } });
+				}
 			} else {
 				return Promise.reject({ redirect: { name: "environment.signin" } });
 			}
@@ -164,6 +157,37 @@ const routes = [
 	{
 		name: "proxy.agents",
 		path: "/agents?next",
+		canActivate: (router, dependencies) => (toState, fromState, done) => {
+			const { services } = dependencies;
+			const { gauze, model } = services;
+			const proxyJWT = gauze.default.getProxyJWT();
+			if (proxyJWT) {
+				const now = new Date().getTime() / 1000;
+				const decoded = jose.decodeJwt(proxyJWT);
+				if (now < decoded.exp) {
+					const agentProxies = model.default.all("PROXY").filter(function (proxy) {
+						return proxy.gauze__proxy__root_id === decoded.proxy_id;
+					});
+					if (agentProxies && agentProxies.length === 5) {
+						return Promise.resolve(true);
+					} else {
+						const proxy = {
+							gauze__proxy__id: decoded.proxy_id,
+						};
+						return gauze.default.proxies(proxy).then(function (proxies) {
+							proxies.forEach(function (proxy) {
+								model.default.create(proxy._metadata.type, proxy._metadata.id, proxy.attributes);
+							});
+							return Promise.resolve(true);
+						});
+					}
+				} else {
+					return Promise.reject({ redirect: { name: "environment.signin", params: { next: toStart.params.next } } });
+				}
+			} else {
+				return Promise.reject({ redirect: { name: "environment.signin", params: { next: toStart.params.next } } });
+			}
+		},
 		onActivate: function ({ dependencies }) {
 			return Promise.resolve(true);
 		},
@@ -187,19 +211,36 @@ const routes = [
 		canActivate: (router, dependencies) => (toState, fromState, done) => {
 			const { services } = dependencies;
 			const { gauze, model } = services;
-			const systemSessions = model.default.systemSessions();
 			const systemJWT = gauze.default.getSystemJWT();
-			// todo: remove session check
-			if (systemJWT && systemSessions && systemSessions.length) {
-				return Promise.resolve(true);
-			} else if (systemJWT) {
-				// todo: decode jwt and check expiration
-				return Promise.resolve(true);
+			const proxyJWT = gauze.default.getProxyJWT();
+			if (systemJWT) {
+				// check expiration
+				const now = new Date().getTime() / 1000;
+				const decodedSystem = jose.decodeJwt(systemJWT);
+				if (now < decodedSystem.exp) {
+					// valid
+					return Promise.resolve(true);
+				} else {
+					// invalid
+					if (proxyJWT) {
+						const decodedProxy = jose.decodeJwt(proxyJWT);
+						if (now < decodedProxy.exp) {
+							return Promise.reject({ redirect: { name: "proxy.agents" }, params: { next: window.location.href } });
+						} else {
+							return Promise.reject({ redirect: { name: "environment.signin", params: { next: window.location.href } } });
+						}
+					} else {
+						return Promise.reject({ redirect: { name: "environment.signin", params: { next: window.location.href } } });
+					}
+				}
 			} else {
-				const proxyJWT = gauze.default.getProxyJWT();
-				const proxySessions = model.default.proxySessions();
-				if (proxyJWT && proxySessions && proxySessions.length) {
-					return Promise.reject({ redirect: { name: "proxy.agents" }, params: { next: window.location.href } });
+				if (proxyJWT) {
+					const decodedProxy = jose.decodeJwt(proxyJWT);
+					if (now < decodedProxy.exp) {
+						return Promise.reject({ redirect: { name: "proxy.agents" }, params: { next: window.location.href } });
+					} else {
+						return Promise.reject({ redirect: { name: "environment.signin", params: { next: window.location.href } } });
+					}
 				} else {
 					return Promise.reject({ redirect: { name: "environment.signin", params: { next: window.location.href } } });
 				}
