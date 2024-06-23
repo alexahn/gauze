@@ -499,15 +499,124 @@ mutation create(
 				return data.data[`create_${header.name}`];
 			});
 	}
+	reload(operations) {
+		function operationParameters(header, id) {
+			return `
+	$${id}_source: ${header.graphql_query_source_type},
+	$${id}_count: ${header.graphql_query_where_string_type},
+	$${id}_where: ${header.graphql_query_where_type},
+	$${id}_where_in: ${header.graphql_query_where_array_type},
+	$${id}_where_not_in: ${header.graphql_query_where_array_type},
+	$${id}_where_like: ${header.graphql_query_where_type},
+	$${id}_where_between: ${header.graphql_query_where_array_type},
+	$${id}_limit: Int,
+	$${id}_offset: Int,
+	$${id}_order: String,
+	$${id}_order_direction: String
+`;
+		}
+		function operationFunction(header, id) {
+			return `
+    ${id}_read: read_${header.name}(
+        source: $${id}_source,
+        where: $${id}_where,
+        where_in: $${id}_where_in,
+        where_not_in: $${id}_where_not_in,
+        where_like: $${id}_where_like,
+        where_between: $${id}_where_between,
+        limit: $${id}_limit,
+        offset: $${id}_offset,
+        order: $${id}_order,
+        order_direction: $${id}_order_direction
+    ) {
+        _metadata {
+            id
+            type
+        }
+        attributes {
+            ${header.graphql_attributes_string}
+        }
+    }
+	${id}_count: count_${header.name}(
+		source: $${id}_source,
+		count: $${id}_count,
+		where: $${id}_where,
+		where_in: $${id}_where_in,
+		where_not_in: $${id}_where_not_in,
+		where_like: $${id}_where_like,
+		where_between: $${id}_where_between
+	) {
+		select
+		count
+	}
+`;
+		}
+		function operationVariables(variables, id) {
+			const prefixed = {};
+			Object.keys(variables).forEach(function (key) {
+				const prefixedKey = `${id}_${key}`;
+				prefixed[prefixedKey] = variables[key];
+			});
+			return prefixed;
+		}
+		const buckets = [[]];
+		const bucketSizes = [0];
+		let bucketIndex = 0;
+		// todo: load from env variable
+		const maxHTTPSize = 1048576;
+		const maxSQLTransactions = 256;
+		// look up array index from node id
+		const index = {};
+		operations.forEach(function (operation, idx) {
+			const id = operation.node.id;
+			const node = operation.node;
+			const header = operation.header;
+			index[id] = idx;
+			const parametersString = operationParameters(header, id);
+			const functionString = operationFunction(header, id);
+			const variables = operationVariables(operation.variables, id);
+			const variablesString = JSON.stringify(variables);
+			// get length of all of these combined
+			const size = new TextEncoder().encode(`${parametersString} ${functionString} ${variablesString}`).length;
+			// divide maxHTTPSize by 2 as a safety buffer
+			if (bucketSizes[bucketIndex] + size < maxHTTPSize / 2) {
+				// add to bucket
+				buckets[bucketIndex].push({
+					operationParameters: parametersString,
+					operationFunction: functionString,
+					operationVariables: variables,
+				});
+				bucketSizes[bucketIndex] = bucketSizes[bucketIndex] + size;
+			} else {
+				// make new bucket
+				buckets.push([
+					{
+						operationParameters: parametersString,
+						operationFunction: functionString,
+						operationVariables: variables,
+					},
+				]);
+				bucketSizes.push(size);
+				bucketIndex = bucketIndex + 1;
+			}
+		});
+		// do all bucket transactions in parallel and stitch together results based on aliases
+		// return results in one shot (the interface for the rest of the code in orchestrate should ideally be unchanged)
+	}
 	reloadRead(operations) {
 		// operation.id (nodeID)
 		// operation.header
 		// operation.variables
+		// todo: load this from env variable
+		const maxHTTPSize = 1048576;
+		const maxSQLTransactions = 256;
 	}
 	reloadCount(operations) {
 		// operation.id
 		// operation.header
 		// operation.variables
+		const maxHTTPSize = 1048576;
+		const maxSQLTransactions = 256;
 	}
 	read(header, variables) {
 		const self = this;
