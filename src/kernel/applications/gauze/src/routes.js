@@ -222,7 +222,24 @@ const routes = [
 				const decodedSystem = jose.decodeJwt(systemJWT);
 				if (now < decodedSystem.exp) {
 					// valid
-					return Promise.resolve(true);
+					// load headers if necessary
+					if (model.default.all("HEADER").length) {
+						setTimeout(function () {
+							console.log("async header");
+							return gauze.default.header().then(function (headers) {
+								headers.forEach(function (header) {
+									model.default.create("HEADER", header.name, header);
+								});
+							});
+						}, 0);
+						return Promise.resolve(true);
+					} else {
+						return gauze.default.header().then(function (headers) {
+							headers.forEach(function (header) {
+								model.default.create("HEADER", header.name, header);
+							});
+						});
+					}
 				} else {
 					gauze.default.deleteSystemJWT();
 					// invalid
@@ -273,31 +290,7 @@ const routes = [
 		name: "system.graph",
 		path: "/graph",
 		canActivate: (router, dependencies) => (toState, fromState, done) => {
-			const { services } = dependencies;
-			const { gauze, model, graph, router } = services;
-			const orchestrateServices = {
-				gauze: gauze.default,
-				model: model.default,
-				graph: graph.default,
-				router: router.default,
-			};
-			if (model.default.all("HEADER").length) {
-				setTimeout(function () {
-					console.log("async header");
-					return gauze.default.header().then(function (headers) {
-						headers.forEach(function (header) {
-							model.default.create("HEADER", header.name, header);
-						});
-					});
-				}, 0);
-				return true;
-			} else {
-				return gauze.default.header().then(function (headers) {
-					headers.forEach(function (header) {
-						model.default.create("HEADER", header.name, header);
-					});
-				});
-			}
+			return true;
 		},
 		layout: layouts.albatross.default,
 		sections: {
@@ -363,15 +356,7 @@ const routes = [
 		name: "system.types",
 		path: "/types",
 		canActivate: (router, dependencies) => (toState, fromState, done) => {
-			//onActivate: function ({ dependencies }) {
-			const { services } = dependencies;
-			const { gauze, model } = services;
-			return gauze.default.header().then(function (headers) {
-				headers.forEach(function (header) {
-					model.default.create("HEADER", header.name, header);
-				});
-				return Promise.resolve(true);
-			});
+			return true;
 		},
 		layout: layouts.anaconda.default,
 		sections: {

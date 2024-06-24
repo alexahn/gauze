@@ -683,6 +683,7 @@
 	[ ] investigate fetch issue (seems to take over a second for a non-private tab)
 		[ ] in a private tab, the latency displayed in the network tab aligns with the timestamps in console.logs
 		[ ] in the public tab, the latency for the graphql query is 30ms, but it takes fetch over a second (1000ms) to resolve
+	[x] fetch headers from root system state
 [ ] naming, organization, error consistency and code quality
 	[x] rename valid_agent_types in abstract definition to allowed_agent_types
 	[x] refactor validate_entity_config to use dot path for error messages

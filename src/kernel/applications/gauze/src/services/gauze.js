@@ -4,6 +4,7 @@ import * as jose from "jose";
 
 // note: this is very ugly, and the architecture tries to avoid services having dependencies on each other
 // todo: refactor the fetch method so we don't need this
+// todo: refactor delete jwt methods so we don't need this
 import model from "./model.js";
 
 class GauzeService {

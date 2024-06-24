@@ -22,7 +22,7 @@ const dataMiddlewareFactory = (routes) => (router, dependencies) => (toState, fr
 const options = {
 	defaultRoute: "system.graph.space",
 	defaultParams: {
-		space: "home"
+		space: "home",
 	},
 	queryParamsMode: "strict",
 	urlParamsEncoding: "uriComponent",
