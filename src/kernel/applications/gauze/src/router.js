@@ -20,7 +20,10 @@ const dataMiddlewareFactory = (routes) => (router, dependencies) => (toState, fr
 };
 
 const options = {
-	defaultRoute: "environment.signin",
+	defaultRoute: "system.graph.space",
+	defaultParams: {
+		space: "home"
+	},
 	queryParamsMode: "strict",
 	urlParamsEncoding: "uriComponent",
 };
