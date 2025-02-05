@@ -3,7 +3,7 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-//import * as $operations from "./operations/index.js";
+import * as $operations from "./operations/index.js";
 
 class AgentAccountEnvironmentModel extends $kernel.models.environment.EnvironmentModel {
 	constructor(root_config, config) {

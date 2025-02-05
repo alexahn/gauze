@@ -914,3 +914,4 @@
 [ ] look into deno, bun, etc
 [ ] start thinking about making a build system
 [ ] documentation for cli and entity definitions
+[ ] commit the gauze spa files to the repo and serve it via the server application
