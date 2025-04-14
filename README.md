@@ -2,7 +2,7 @@
 
 A GraphQL server architecture.
 
-## Prerequisite
+## Prerequisites
 
 - `nodejs` version `21.7.3`
 
@@ -20,6 +20,19 @@ A GraphQL server architecture.
 10. Update `{ project_directory }/structure/relationships.js` to define your relationships
 11. Run the server: `npx gauze project { project_directory } run server --port { port }`
 12. Send GraphQL queries to the server
+
+## Commands
+
+- `npm run start`
+	- Starts the `gauze` server on port `4000`
+- `npm run start-graphiql`
+	- Starts three `graphiql` instances on port `4001` (`database` realm), `4002` (`system` realm), and `4003` (`environment` realm)
+- `npm run build-ui-env`
+	- Builds the web interface while using proxy environment variables
+- `npm run watch-ui-env`
+	- Watches the web interface source directory and rebuilds when any file is changed while using proxy environment variables
+- `serve-ui`
+	- Serves the built web interface application on port `3000`
 
 ## Entity Definition
 
