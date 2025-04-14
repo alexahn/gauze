@@ -2,6 +2,10 @@
 
 A GraphQL server architecture.
 
+## Prerequisite
+
+- `nodejs` version `21.7.3`
+
 ## Usage
 
 1. Create a project using the cli: `npx gauze create project { project_directory }`
