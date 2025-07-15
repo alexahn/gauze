@@ -915,3 +915,15 @@
 [ ] start thinking about making a build system
 [ ] documentation for cli and entity definitions
 [ ] commit the gauze spa files to the repo and serve it via the server application
+
+[ ] custom gauze parsers
+[ ] realm level auth
+	[ ] specified in entity definitions
+[ ] http middleware
+[ ] process middleware
+[ ] closed and open project modes
+[ ] routing pattern
+	[ ] modular applications/realms
+[ ] server side rendering
+	[ ] env variable parsing for stores
+	[ ] write project documentation using server side rendering
