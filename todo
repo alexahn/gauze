@@ -936,4 +936,8 @@
 	[ ] createState(url) -> (state, params)
 	[ ] createURL(state, params) -> url
 
-
+[ ] new router exploration
+	[ ] designed to integrate with koa
+	[ ] might be a fallacy trying to create a fixed point router
+		[ ] becomes circular
+		[ ] what we have no might not be that bad
