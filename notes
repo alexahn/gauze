@@ -1,0 +1,13 @@
+router
+
+we need to make a new router.
+router.navigate("user/1/page/1") -> [users, pages]
+router.navigate("user/1/page/2") -> [users, pages]
+
+greatest common prefix GCP("user/1/page/1", "user/1/page/2") = "user/1/page"
+
+router.navigate("user/1/page") -> [users]
+
+diff("user/1/page/1", "user/1/page/2") = router.navigate("user/1/page/2") - GCP("user/1/page/1", "user/1/page/2") = [users, pages] - [users] = [pages]
+
+either we manage the transitions by fixed function symbols (e.g. constant address throughout all uses of the handler, so we can do a comparison check), or we create a tree structure that follows the transition logic. essentially we can do it through a subtractive method (stripping handlers from common middlewares found in the greatest common prefix) or additive method (constructing the set of handlers as we navigate a graph)
