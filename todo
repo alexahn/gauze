@@ -933,5 +933,7 @@
 
 [ ] simple react app using koa-tree-router
 	[ ] need to manually configure browser hooks and middleware for state management
-	[ ] createState(path) -> (state, params)
-	[ ] createPath(state, params) -> path
+	[ ] createState(url) -> (state, params)
+	[ ] createURL(state, params) -> url
+
+
