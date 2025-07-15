@@ -916,6 +916,7 @@
 [ ] documentation for cli and entity definitions
 [ ] commit the gauze spa files to the repo and serve it via the server application
 
+[ ] cli command to add and remove methods
 [ ] custom gauze parsers
 [ ] realm level auth
 	[ ] specified in entity definitions
