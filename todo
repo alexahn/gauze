@@ -945,6 +945,8 @@
 		[ ] we would need to find all the connection points and algorithmically instantiate everything
 			[ ] this seems like it would introduce a lot of complexity, and all we would gain would be the ability to pass in a configuration to modules
 		[ ] we can go with convention over configuration for now
+		[ ] this ultimately comes down to whether or not we expect people to copy the code for sub-applications into their repository, or if we want to be able to load applications from node_modules
+			[ ] the simpler way is to copy (and probably more performant)
 
 [ ] simple react app using koa-tree-router
 	[ ] need to manually configure browser hooks and middleware for state management
