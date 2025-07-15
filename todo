@@ -938,6 +938,9 @@
 [ ] applications (which are the same structure as projects)
 	[ ] self-contained modules that contain entity definitions, kernel realm, database realm, and system realm
 	[ ] would be ideal if every application returned a server or router object
+[ ] config/settings
+	[ ] cli command to parse configs/settings for every type (project, realm, application)
+	[ ] configs/settings should be thought of as constructor arguments
 
 [ ] simple react app using koa-tree-router
 	[ ] need to manually configure browser hooks and middleware for state management
