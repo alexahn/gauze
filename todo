@@ -919,6 +919,8 @@
 [ ] custom gauze parsers
 [ ] realm level auth
 	[ ] specified in entity definitions
+[ ] refactor serialize and deserialize middlewares to act on a passed in promise
+[ ] refactor http server
 [ ] http middleware
 [ ] process middleware
 [ ] closed and open project modes

@@ -2,6 +2,18 @@ export default {
 	name: "gauze",
 	type: "project",
 	version: "0.0.1",
+	realms: [
+		"./kernel",
+		"./database",
+		"./system",
+		"./environment"
+	],
+	process_middlewares: [
+
+	],
+	http_middlewares: [
+
+	],
 	development: {
 		admins: [
 			{
