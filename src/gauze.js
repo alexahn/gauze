@@ -1,4 +1,6 @@
 export default {
+	name: "gauze",
+	type: "project",
 	version: "0.0.1",
 	development: {
 		admins: [
