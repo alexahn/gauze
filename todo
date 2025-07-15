@@ -922,9 +922,14 @@
 	[ ] specified in entity definitions
 [ ] refactor serialize and deserialize middlewares to act on a passed in promise
 [ ] refactor http server
+	[ ] plugin architecture to configure to major low level frameworks (e.g. express, koa, hono)
+	[ ] start with koa or hono
 [ ] http middleware
+	[ ] middlewares are defined according to the server plugin used
 [ ] process middleware
 [ ] closed and open project modes
+	[ ] open mode would allow us to use graphql to create public facing sites, like documentation
+	[ ] closed by default (e.g. requires authentication)
 [ ] routing pattern
 	[ ] modular applications/realms
 [ ] server side rendering
