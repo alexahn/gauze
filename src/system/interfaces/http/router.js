@@ -6,7 +6,7 @@ import Router from "@koa/router";
 export default function ($gauze) {
 	const ROUTER__HTTP__INTERFACE__SYSTEM = new Router();
 
-	ROUTER__HTTP__INTERFACE__SYSTEM.get("/graphql", function (ctx, next) {
+	ROUTER__HTTP__INTERFACE__SYSTEM.post("/graphql", function (ctx, next) {
 		ctx.body = "test";
 		return next();
 	});
