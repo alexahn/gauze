@@ -11,17 +11,3 @@ export default function ($gauze) {
 
 	return ROUTER;
 }
-
-//export default ROUTER
-
-/*
-
-todo: change to structure below to inject $gauze
-
-export default function ($gauze) {
-	const router = new Router()
-	router.use("/system", ROUTES__SYSTEM($gauze))
-	router.use("/database", ROUTES__DATABASE($gauze))
-	return router
-}
-*/

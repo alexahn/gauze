@@ -40,7 +40,19 @@ class GauzeServer {
 			{
 				url: new RegExp("^/database/graphql"),
 				handler: function (req, res) {
-					return self.handle_graphql($gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE, req, res);
+					if (process.env.GAUZE_ENV === "development") {
+						return self.handle_graphql($gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE, req, res);
+					} else {
+						res.writeHead(404, "Not Found", {
+							"content-type": "application/json; charset=utf-8",
+							"Access-Control-Allow-Origin": "*",
+						}).end(
+							JSON.stringify({
+								status: 404,
+								message: "Not Found",
+							}),
+						);
+					}
 				},
 			},
 			{
