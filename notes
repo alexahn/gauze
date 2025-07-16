@@ -11,3 +11,14 @@ router.navigate("user/1/page") -> [users]
 diff("user/1/page/1", "user/1/page/2") = router.navigate("user/1/page/2") - GCP("user/1/page/1", "user/1/page/2") = [users, pages] - [users] = [pages]
 
 either we manage the transitions by fixed function symbols (e.g. constant address throughout all uses of the handler, so we can do a comparison check), or we create a tree structure that follows the transition logic. essentially we can do it through a subtractive method (stripping handlers from common middlewares found in the greatest common prefix) or additive method (constructing the set of handlers as we navigate a graph)
+
+
+-------------
+
+not sure if we should lean all the way into koa and abuse contexts
+part of me dislikes the architecture because it is impure
+there are no return values and changes are accrued on a common object
+it feels like it would be hard to debug if anything went wrong
+it defeats the purpose of using promises to return deferred values
+but part of me also thinks it would be way more performant
+i dont think i have any performance issues yet, so i want to keep everything functionally pure
