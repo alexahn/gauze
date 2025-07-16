@@ -100,7 +100,7 @@ class GauzeServer {
 						}
 						// parse system jwt
 						return self.$gauze.environment.authentication
-							.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req)
+							.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req.headers.authorization)
 							.then(function (agent) {
 								if (agent) {
 									return self.handle_graphql($gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM, req, res, agent);
@@ -172,10 +172,10 @@ class GauzeServer {
 						// parse environment and system jwt
 						const auth_transactions = [
 							function () {
-								return self.$gauze.environment.authentication.AUTHENTICATE_ENVIRONMENT__AUTHENTICATION__ENVIRONMENT(req);
+								return self.$gauze.environment.authentication.AUTHENTICATE_ENVIRONMENT__AUTHENTICATION__ENVIRONMENT(req.headers.authorization);
 							},
 							function () {
-								return self.$gauze.environment.authentication.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req);
+								return self.$gauze.environment.authentication.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT(req.headers.authorization);
 							},
 						];
 						return Promise.all(

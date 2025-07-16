@@ -62,10 +62,11 @@ const VERIFY_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT = function (jwt) {
 	});
 };
 
-const AUTHENTICATE_ENVIRONMENT__AUTHENTICATION__ENVIRONMENT = function (req) {
+// auth is authentication header
+const AUTHENTICATE_ENVIRONMENT__AUTHENTICATION__ENVIRONMENT = function (auth) {
 	// parse the header to extract the token
 	var jwt = null;
-	const auth = req.headers.authorization;
+	//const auth = req.headers.authorization;
 	if (auth) {
 		const auth_split = auth.split(" ");
 		if (auth_split[0] === "Bearer") {
@@ -93,6 +94,8 @@ const SYSTEM_JWT_ISSUER = "gauze";
 const SYSTEM_JWT_AUDIENCE = "system";
 
 // todo: change the algorithm to EdDSA
+// note: will need a master public/private key pair
+// note: we could leave it as symmetric to make it easy to run the serve
 const SYSTEM_JWT_HEADER = {
 	alg: "HS256",
 };
@@ -110,10 +113,11 @@ const VERIFY_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT = function (jwt) {
 	});
 };
 
-const AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT = function (req) {
+// auth is authentication header
+const AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT = function (auth) {
 	// parse the header to extract the token
 	var jwt = null;
-	const auth = req.headers.authorization;
+	//const auth = req.headers.authorization;
 	if (auth) {
 		const auth_split = auth.split(" ");
 		if (auth_split[0] === "Bearer") {
