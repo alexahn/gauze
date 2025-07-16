@@ -919,25 +919,33 @@
 [ ] cli command to add and remove methods
 [ ] custom gauze parsers
 [ ] realm level auth
-	[ ] specified in entity definitions
+	[ ] controls specified in entity definitions
+	[x] add database authentication functions
+	[ ] add database authentication to environment interface
 [ ] refactor serialize and deserialize middlewares to act on a passed in promise
-[ ] refactor http server
-	[ ] plugin architecture to configure to major low level frameworks (e.g. express, koa, hono)
-	[ ] start with koa or hono
-[ ] http middleware
-	[ ] middlewares are defined according to the server plugin used
+[x] refactor http server
+	[-] plugin architecture to configure to major low level frameworks (e.g. express, koa, hono)
+		[x] might just go with koa since it has the router that best aligns with my vision
+	[x] start with koa or hono
+	[x] create a new command to run custom project applications (treat the project server as a custom command)
+		[x] the reason for this is because people will want to customize their koa app
+[-] http middleware
+	[-] middlewares are defined according to the server plugin used
+	[x] taken care of by custom application command that allows the user to configure a koa app
 [ ] process middleware
 [ ] closed and open project modes
 	[ ] open mode would allow us to use graphql to create public facing sites, like documentation
 	[ ] closed by default (e.g. requires authentication)
-[ ] routing pattern
-	[ ] modular applications/realms
+[x] routing pattern
+	[x] modular applications/realms
+	[x] configure project to use koa and koa router
 [ ] server side rendering
 	[ ] env variable parsing for stores
 	[ ] write project documentation using server side rendering
-[ ] applications (which are the same structure as projects)
+[ ] projects
 	[ ] self-contained modules that contain entity definitions, kernel realm, database realm, and system realm
 	[ ] would be ideal if every application returned a server or router object
+	[x] projects are just a bundle of realms
 [ ] config/settings
 	[ ] cli command to parse configs/settings for every type (project, realm, application)
 	[ ] configs/settings should be thought of as constructor arguments
@@ -948,14 +956,14 @@
 		[ ] this ultimately comes down to whether or not we expect people to copy the code for sub-applications into their repository, or if we want to be able to load applications from node_modules
 			[ ] the simpler way is to copy (and probably more performant)
 
-[ ] simple react app using koa-tree-router
-	[ ] need to manually configure browser hooks and middleware for state management
-	[ ] createState(url) -> (state, params)
-	[ ] createURL(state, params) -> url
+[-] simple react app using koa-tree-router
+	[-] need to manually configure browser hooks and middleware for state management
+	[-] createState(url) -> (state, params)
+	[-] createURL(state, params) -> url
 
-[ ] new router exploration
-	[ ] designed to integrate with koa
-	[ ] might be a fallacy trying to create a fixed point router
-		[ ] becomes circular
-		[ ] what we have might not be that bad
+[-] new router exploration
+	[-] designed to integrate with koa
+	[-] might be a fallacy trying to create a fixed point router
+		[-] becomes circular
+		[-] what we have might not be that bad
 
