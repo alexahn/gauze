@@ -128,13 +128,16 @@ const AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT = function (auth) {
 				})
 				.catch(function (err) {
 					// note: maybe log?
-					return null;
+					//return null;
+					throw new Error("Invalid JWT")
 				});
 		} else {
-			return Promise.resolve(null);
+			return Promise.reject(new Error("Invalid Authorization type")
+			//return Promise.resolve(null);
 		}
 	} else {
-		return Promise.resolve(null);
+		return Promise.reject(new Error("Missing authorization header"))
+		//return Promise.resolve(null);
 	}
 };
 
