@@ -3,18 +3,13 @@
 
 import Router from "@koa/router";
 
-const ROUTER__HTTP__INTERFACE__SYSTEM = new Router();
+export default function ($gauze) {
+	const ROUTER__HTTP__INTERFACE__SYSTEM = new Router();
 
-ROUTER__HTTP__INTERFACE__SYSTEM.get('/graphql', function (ctx, next) {
-	ctx.body = 'test'
-	return next()
-})
+	ROUTER__HTTP__INTERFACE__SYSTEM.get("/graphql", function (ctx, next) {
+		ctx.body = "test";
+		return next();
+	});
 
-export default ROUTER__HTTP__INTERFACE__SYSTEM;
-
-// note: we can revert to the structure below for structural consistency if we dislike the default export
-/*
-export { 
-	ROUTES__ROUTES__HTTP__INTERFACE__SYSTEM
+	return ROUTER__HTTP__INTERFACE__SYSTEM;
 }
-*/

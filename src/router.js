@@ -3,12 +3,16 @@ import ROUTES__SYSTEM from "./system/router.js";
 
 import Router from "@koa/router";
 
-const ROUTER = new Router();
+export default function ($gauze) {
+	const ROUTER = new Router();
 
-ROUTER.use("/system", ROUTES__SYSTEM.routes());
-ROUTER.use("/database", ROUTES__DATABASE.routes());
+	ROUTER.use("/system", ROUTES__SYSTEM($gauze).routes());
+	ROUTER.use("/database", ROUTES__DATABASE($gauze).routes());
 
-export default ROUTER
+	return ROUTER;
+}
+
+//export default ROUTER
 
 /*
 
