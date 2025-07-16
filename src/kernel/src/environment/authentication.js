@@ -156,7 +156,13 @@ const DATABASE_JWT_HEADER = {
 
 const SIGN_DATABASE_JWT__AUTHENTICATION__ENVIRONMENT = function (payload) {
 	const secret = new TextEncoder().encode(process.env.GAUZE_DATABASE_JWT_SECRET);
-	return new jose.SignJWT(payload).setProtectedHeader(DATABASE_JWT_HEADER).setIssuedAt().setIssuer(DATABASE_JWT_ISSUER).setAudience(DATABASE_JWT_AUDIENCE).setExpirationTime("2h").sign(secret);
+	return new jose.SignJWT(payload)
+		.setProtectedHeader(DATABASE_JWT_HEADER)
+		.setIssuedAt()
+		.setIssuer(DATABASE_JWT_ISSUER)
+		.setAudience(DATABASE_JWT_AUDIENCE)
+		.setExpirationTime("2h")
+		.sign(secret);
 };
 
 const VERIFY_DATABASE_JWT__AUTHENTICATION__ENVIRONMENT = function (jwt) {

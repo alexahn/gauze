@@ -1,14 +1,26 @@
-// todo: figure out if we want to change graphql to not used a named export either
-// note: use a default export here because it makes composing much easier across realms and applications
-
 import Router from "@koa/router";
 
 export default function ($gauze) {
 	const ROUTER__HTTP__INTERFACE__DATABASE = new Router();
 
-	ROUTER__HTTP__INTERFACE__DATABASE.get("/graphql", function (ctx, next) {
-		ctx.body = "test";
-		return next();
+	const database = $gauze.database.knex.create_connection();
+
+	// this is called once the exit trajectory has been set
+	process.on("exit", function (val) {
+		database.destroy();
+	});
+
+	ROUTER__HTTP__INTERFACE__DATABASE.post("/graphql", function (ctx, next) {
+		return $gauze.kernel.http.HANDLE_REALM_GRAPHQL__HTTP__KERNEL(
+			{
+				$gauze: $gauze,
+				database: database,
+				authenticators: [$gauze.environment.authentication.AUTHENTICATE_DATABASE__AUTHENTICATION__ENVIRONMENT],
+				schema: $gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
+			},
+			ctx,
+			next,
+		);
 	});
 
 	return ROUTER__HTTP__INTERFACE__DATABASE;
