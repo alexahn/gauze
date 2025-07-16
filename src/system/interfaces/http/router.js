@@ -3,11 +3,14 @@
 
 import Router from "@koa/router";
 
-const router = new Router();
+const ROUTER__HTTP__INTERFACE__SYSTEM = new Router();
 
-console.log("router", router);
+ROUTER__HTTP__INTERFACE__SYSTEM.get('/graphql', function (ctx, next) {
+	ctx.body = 'test'
+	return next()
+})
 
-export default router;
+export default ROUTER__HTTP__INTERFACE__SYSTEM;
 
 // note: we can revert to the structure below for structural consistency if we dislike the default export
 /*
