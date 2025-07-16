@@ -50,9 +50,9 @@ export const handler = function (argv) {
 	const app = new Koa();
 	const router = Router($gauze);
 
-	app.use(koaBody())
-	app.use(cors())
+	app.use(koaBody());
+	app.use(cors());
 	app.use(router.routes());
 
 	app.listen(argv.port);
-}
+};
