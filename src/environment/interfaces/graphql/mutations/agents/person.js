@@ -1,10 +1,10 @@
-import * as $structure from "./../../../../structure/index.js";
+import * as $structure from "./../../../../../structure/index.js";
 
 import { GraphQLString, GraphQLObjectType, GraphQLInputObjectType } from "graphql";
 
-import { STEP__TYPE__ENVIRONMENT, INPUT_CODE__TYPE__ENVIRONMENT, INPUT_AGENT_PERSON__TYPE__ENVIRONMENT } from "./../../../types.js";
+import { STEP__TYPE__ENVIRONMENT, INPUT_CODE__TYPE__ENVIRONMENT, INPUT_AGENT_PERSON__TYPE__ENVIRONMENT } from "./../../../../types.js";
 
-import { CONTROLLER__AGENT_PERSON__CONTROLLER__ENVIRONMENT } from "./../../../controllers/agent_person.js";
+import { CONTROLLER__AGENT_PERSON__CONTROLLER__ENVIRONMENT } from "./../../../../controllers/agent_person.js";
 
 const ASSERT__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Person__Assert",
