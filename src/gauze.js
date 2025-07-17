@@ -24,6 +24,23 @@ export default {
 	production: {
 		admins: [],
 	},
+	agents: {
+		gauze__agent_root: {
+			allowed_realms: ["system"]
+		},
+		gauze__agent_accounts: {
+			allowed_realms: ["system"]
+		},
+		gauze__agent_user: {
+			allowed_realms: ["system"]
+		},
+		gauze__agent_person: {
+			allowed_realms: ["system"]
+		},
+		gauze__agent_character: {
+			allowed_realms: ["system"]
+		}
+	},
 	authentication: {
 		proxy: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
 		realms: {
