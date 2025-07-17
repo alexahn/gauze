@@ -975,3 +975,6 @@
 	[ ] add configuration settings to project settings to manage authentication settings
 	[ ] better templating system for bootstrapping environment?
 
+[ ] need group concept
+	[ ] update access control logic to use all associated groups for a user
+
