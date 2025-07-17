@@ -971,9 +971,10 @@
 	[ ] koa middleware to serve files as pages (for a completely self-contained backend and frontend)
 
 [ ] redesign authentication and authorization
-	[ ] move authentication functions to kernel
+	[ ] move authentication functions to kernel (kernel/authentication.js)
 	[ ] add configuration settings to project settings to manage authentication settings
 	[ ] better templating system for bootstrapping environment?
+	[ ] move controller functions to kernel (kernel/environment.js)
 
 [ ] end game performance and scaling (take architecture into consideration but save the concrete work for last)
 	[ ] need group concept
