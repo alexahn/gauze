@@ -1,11 +1,5 @@
-
-// note: these imports are invalid
-//import { hash_function } from "./../environment/authentication.js";
-
-//import { session_model } from "./../environment/models/session.js";
-//import { secret_model } from "./../environment/models/secret.js";
-
-function verify_password(context, scope, { proxy_type, session_model, secret_model, hash_function }, password) {
+// todo: refactor to throw errors instead of returning null
+const VERIFY_PASSWORD__AGENT_ACCOUNT__AGENT__KERNEL = function (context, scope, { proxy_type, session_model, secret_model, hash_function }, password) {
 	const { agent } = context;
 	if (agent) {
 		if (agent.proxy_id) {
@@ -137,4 +131,8 @@ function verify_password(context, scope, { proxy_type, session_model, secret_mod
 	} else {
 		throw new Error("Session is required to authenticate");
 	}
+}
+
+export {
+	VERIFY_PASSWORD__AGENT_ACCOUNT__AGENT__KERNEL
 }
