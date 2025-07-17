@@ -11,7 +11,7 @@ export default function ($gauze) {
 	});
 
 	ROUTER__HTTP__INTERFACE__DATABASE.post("/graphql", function (ctx, next) {
-		return $gauze.kernel.src.http.HANDLE_REALM_GRAPHQL__HTTP__KERNEL(
+		return gauze.kernel.src.servers.http.HANDLE_REALM_GRAPHQL__HTTP__SERVER__KERNEL(
 			{
 				$gauze: $gauze,
 				database: database,

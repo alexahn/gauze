@@ -6,7 +6,7 @@ export default function ($gauze) {
 	const database = $gauze.database.knex.create_connection();
 
 	ROUTER__HTTP__INTERFACE__ENVIRONMENT.post("/graphql", function (ctx, next) {
-		return $gauze.kernel.src.http.HANDLE_ENVIRONMENT_GRAPHQL__HTTP__KERNEL(
+		return $gauze.kernel.src.servers.http.HANDLE_ENVIRONMENT_GRAPHQL__HTTP__SERVER__KERNEL(
 			{
 				$gauze: $gauze,
 				database: database,

@@ -1,9 +1,9 @@
 import path from "path";
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
-import * as $project from "./../gauze.js";
+import * as $project from "./../../gauze.js";
 
-const HANDLE_REALM_GRAPHQL__HTTP__KERNEL = function ({ $gauze, database, authenticate, authenticators, schema }, ctx, next) {
+const HANDLE_REALM_GRAPHQL__HTTP__SERVER__KERNEL = function ({ $gauze, database, authenticate, authenticators, schema }, ctx, next) {
 	// 404 is the default response status
 	return Promise.any(
 		authenticators.map(function (authenticate) {
@@ -130,7 +130,7 @@ const HANDLE_REALM_GRAPHQL__HTTP__KERNEL = function ({ $gauze, database, authent
 // all this logic is complicated because we don't want to create a transaction unless we have a valid jwt
 // the logic would be simpler if we created a transaction before verifying the jwt, because then all the authentication logic would be adjacent to each other
 // but i dont want to allocate resources unless we absolutely need to. we can revisit this later and benchmark the difference with the simple version
-const HANDLE_ENVIRONMENT_GRAPHQL__HTTP__KERNEL = function ({ $gauze, database, authenticate, authenticators, schema }, ctx, next) {
+const HANDLE_ENVIRONMENT_GRAPHQL__HTTP__SERVER__KERNEL = function ({ $gauze, database, authenticate, authenticators, schema }, ctx, next) {
 	// 404 is the default response status
 	return Promise.any(
 		authenticators.map(function (authenticate) {
@@ -323,4 +323,4 @@ const HANDLE_ENVIRONMENT_GRAPHQL__HTTP__KERNEL = function ({ $gauze, database, a
 		.then(next);
 };
 
-export { HANDLE_REALM_GRAPHQL__HTTP__KERNEL, HANDLE_ENVIRONMENT_GRAPHQL__HTTP__KERNEL };
+export { HANDLE_REALM_GRAPHQL__HTTP__SERVER__KERNEL, HANDLE_ENVIRONMENT_GRAPHQL__HTTP__SERVER__KERNEL };
