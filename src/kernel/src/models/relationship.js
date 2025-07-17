@@ -6,9 +6,9 @@ import * as $structure from "./../../../structure/index.js";
 
 import { SystemModel } from "./system.js";
 
-import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
+import { LOGGER__IO__LOGGER__SRC__KERNEL } from "./../logger/io.js";
 
-import { EXECUTE__GRAPHQL__SHELL__KERNEL } from "./../shell/graphql.js";
+import { EXECUTE__GRAPHQL__SHELL__SRC__KERNEL } from "./../shell/graphql.js";
 
 // todo: replace sql queries with database graphql queries?
 class RelationshipSystemModel extends SystemModel {
@@ -164,7 +164,7 @@ class RelationshipSystemModel extends SystemModel {
 			})
 			.transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._preread:debug_sql`, sql.toString());
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._preread:debug_sql`, sql.toString());
 		}
 		return sql;
 	}
@@ -207,7 +207,7 @@ class RelationshipSystemModel extends SystemModel {
 			.whereIn("gauze__whitelist__entity_id", valid_entity_ids)
 			.transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._filter_access:debug_sql`, sql.toString());
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._filter_access:debug_sql`, sql.toString());
 		}
 		return sql.then(function (whitelist_rows) {
 			const sql = database(self.blacklist_table)
@@ -218,7 +218,7 @@ class RelationshipSystemModel extends SystemModel {
 				.whereIn("gauze__blacklist__entity_id", valid_entity_ids)
 				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._filter_access:debug_sql`, sql.toString());
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._filter_access:debug_sql`, sql.toString());
 			}
 			return sql.then(function (blacklist_rows) {
 				// in memory join here
@@ -316,7 +316,7 @@ class RelationshipSystemModel extends SystemModel {
 		const { where = {} } = parameters;
 		const sql = database(self.entity.table_name).where(where).transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_entity:debug_sql`, sql.toString());
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_entity:debug_sql`, sql.toString());
 		}
 		return sql.then(function (relationship_rows) {
 			return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
@@ -346,7 +346,7 @@ class RelationshipSystemModel extends SystemModel {
 			})
 			.transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_entity:debug_sql`, sql.toString());
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_entity:debug_sql`, sql.toString());
 		}
 		return sql.then(function (relationship_rows) {
 			return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
@@ -386,7 +386,7 @@ class RelationshipSystemModel extends SystemModel {
 						})
 						.transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_from:debug_sql`, sql.toString());
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_from:debug_sql`, sql.toString());
 					}
 					return sql.then(function (relationship_rows) {
 						return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
@@ -430,7 +430,7 @@ class RelationshipSystemModel extends SystemModel {
 						})
 						.transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_to:debug_sql`, sql.toString());
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_to:debug_sql`, sql.toString());
 					}
 					return sql.then(function (relationship_rows) {
 						return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
@@ -574,7 +574,7 @@ class RelationshipSystemModel extends SystemModel {
 		const { where = {} } = parameters;
 		const sql = database(self.entity.table_name).where(where).transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._count_entity:debug_sql`, sql.toString());
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._count_entity:debug_sql`, sql.toString());
 		}
 		return sql.then(function (relationship_rows) {
 			return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
@@ -604,7 +604,7 @@ class RelationshipSystemModel extends SystemModel {
 			})
 			.transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._count_entity:debug_sql`, sql.toString());
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._count_entity:debug_sql`, sql.toString());
 		}
 		return sql.then(function (relationship_rows) {
 			return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
@@ -643,7 +643,7 @@ class RelationshipSystemModel extends SystemModel {
 						})
 						.transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._count_from:debug_sql`, sql.toString());
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._count_from:debug_sql`, sql.toString());
 					}
 					return sql.then(function (relationship_rows) {
 						return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
@@ -686,7 +686,7 @@ class RelationshipSystemModel extends SystemModel {
 						})
 						.transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._count_to:debug_sql`, sql.toString());
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._count_to:debug_sql`, sql.toString());
 					}
 					return sql.then(function (relationship_rows) {
 						return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {

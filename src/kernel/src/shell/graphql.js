@@ -1,7 +1,7 @@
 import { graphql } from "graphql";
 
 // use this to execute graphql queries throughout the rest of the codebase
-const EXECUTE__GRAPHQL__SHELL__KERNEL = function ({ schema, context, operation, operation_name, operation_variables }) {
+const EXECUTE__GRAPHQL__SHELL__SRC__KERNEL = function ({ schema, context, operation, operation_name, operation_variables }) {
 	context.operation = JSON.stringify({
 		operation,
 		operation_name,
@@ -19,13 +19,13 @@ const EXECUTE__GRAPHQL__SHELL__KERNEL = function ({ schema, context, operation, 
 };
 
 // connection is a knex database connection
-const TRANSACTION_EXECUTE__GRAPHQL__SHELL__KERNEL = function (connection, config) {
+const TRANSACTION_EXECUTE__GRAPHQL__SHELL__SRC__KERNEL = function (connection, config) {
 	return connection.transaction(function (transaction) {
 		const context = config.context || {};
 		context.database = connection;
 		context.transaction = transaction;
 		config.context = context;
-		return EXECUTE__GRAPHQL__SHELL__KERNEL(config)
+		return EXECUTE__GRAPHQL__SHELL__SRC__KERNEL(config)
 			.then(function (data) {
 				if (data.errors && data.errors.length) {
 					throw data.errors;
@@ -42,4 +42,4 @@ const TRANSACTION_EXECUTE__GRAPHQL__SHELL__KERNEL = function (connection, config
 	});
 };
 
-export { EXECUTE__GRAPHQL__SHELL__KERNEL, TRANSACTION_EXECUTE__GRAPHQL__SHELL__KERNEL };
+export { EXECUTE__GRAPHQL__SHELL__SRC__KERNEL, TRANSACTION_EXECUTE__GRAPHQL__SHELL__SRC__KERNEL };

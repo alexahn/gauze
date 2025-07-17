@@ -4,9 +4,9 @@ const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 import * as $abstract from "./../../../abstract/index.js";
 import * as $structure from "./../../../structure/index.js";
 
-import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
+import { LOGGER__IO__LOGGER__SRC__KERNEL } from "./../logger/io.js";
 
-import { TIERED_CACHE__LRU__CACHE__KERNEL } from "./../cache/lru.js";
+import { TIERED_CACHE__LRU__CACHE__SRC__KERNEL } from "./../cache/lru.js";
 
 import DataLoader from "./../dataloader.js";
 import TTLLRUCache from "./../lru.js";
@@ -26,24 +26,24 @@ class DatabaseModel extends Model {
 		if ($structure.entities.relationship) {
 			this.relationship_table_name = $structure.entities.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE;
 		} else {
-			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${this.name}.constructor:WARNING`, new Error("Relationship structure not found"));
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("5", __RELATIVE_FILEPATH, `${this.name}.constructor:WARNING`, new Error("Relationship structure not found"));
 		}
 		if ($structure.entities.whitelist) {
 			self.whitelist_table = $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE;
 		} else {
-			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Whitelist structure not found"));
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Whitelist structure not found"));
 		}
 		if ($structure.entities.blacklist) {
 			self.blacklist_table = $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE;
 		} else {
-			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Blacklist structure not found"));
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Blacklist structure not found"));
 		}
 		self.name = self.__name();
 		self.loader = new DataLoader(self._batch, {
 			cacheMap: new TTLLRUCache(1024, 8192),
 		});
 		self.loader.model = self;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
 	}
 	static _class_name(table_name) {
 		return table_name ? `(${table_name})[${super._class_name()}]DatabaseModel` : `[${super._class_name()}]DatabaseModel`;
@@ -143,7 +143,7 @@ class DatabaseModel extends Model {
 					return Promise.all(
 						group.map(function (key) {
 							// rich typed parameters (post graphql parsing) pulled from cache
-							const parameters = TIERED_CACHE__LRU__CACHE__KERNEL.get(key.raw_key).value;
+							const parameters = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(key.raw_key).value;
 							if (key.method === "create") {
 								return self.model._root_create(contexts[key.index], scopes[key.index], parameters).then(function (data) {
 									self.clearAll();
@@ -212,7 +212,7 @@ class DatabaseModel extends Model {
 						return Promise.all(
 							group.map(function (key) {
 								// rich typed parameters (post graphql parsing) pulled from cache
-								const parameters = TIERED_CACHE__LRU__CACHE__KERNEL.get(key.raw_key).value;
+								const parameters = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(key.raw_key).value;
 								if (key.method === "create") {
 									return self.model._relationship_create(contexts[key.index], scopes[key.index], parameters).then(function (data) {
 										self.clearAll();
@@ -365,14 +365,14 @@ class DatabaseModel extends Model {
 		const { database, transaction } = context;
 		//const { source } = scope
 		const { attributes } = parameters;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.create.enter`, "parameters", parameters);
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.create.enter`, "parameters", parameters);
 		const sql = database(self.table_name).insert(attributes, [self.primary_key]).transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.create:debug_sql`, sql.toString());
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.create:debug_sql`, sql.toString());
 		}
 		return sql
 			.then(function (data) {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.create:success`, "data", data);
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.create:success`, "data", data);
 				context.breadth += data.length;
 				return self.read(
 					context,
@@ -392,7 +392,7 @@ class DatabaseModel extends Model {
 				);
 			})
 			.catch(function (err) {
-				LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.create:failure`, "err", err);
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.create:failure`, "err", err);
 				throw err;
 			});
 	}
@@ -410,7 +410,7 @@ class DatabaseModel extends Model {
 		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
-		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
+		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, scope, key);
 	}
 	_root_read(context, scope, parameters) {
@@ -430,7 +430,7 @@ class DatabaseModel extends Model {
 			order_direction = self.entity.default_order_direction || "asc",
 			order_nulls = "first",
 		} = parameters;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
 		const sql = database(self.table_name)
 			.where(function (builder) {
 				builder.where(where);
@@ -438,13 +438,13 @@ class DatabaseModel extends Model {
 					builder.whereIn(key, where_in[key]);
 				});
 				Object.keys(cache_where_in).forEach(function (key) {
-					builder.whereIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_in[key]).value);
+					builder.whereIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[key]).value);
 				});
 				Object.keys(where_not_in).forEach(function (key) {
 					builder.whereNotIn(key, where_not_in[key]);
 				});
 				Object.keys(cache_where_not_in).forEach(function (key) {
-					builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[key]).value);
+					builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[key]).value);
 				});
 				Object.keys(where_like).forEach(function (key) {
 					builder.whereLike(key, where_like[key]);
@@ -470,16 +470,16 @@ class DatabaseModel extends Model {
 			.orderBy(order, order_direction)
 			.transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
 		}
 		return sql
 			.then(function (data) {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
 				context.breadth += data.length;
 				return Promise.resolve(data);
 			})
 			.catch(function (err) {
-				LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.read:failure`, "err", err);
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.read:failure`, "err", err);
 				throw err;
 			});
 	}
@@ -500,7 +500,7 @@ class DatabaseModel extends Model {
 			order_direction = self.entity.default_order_direction || "asc",
 			order_nulls = "first",
 		} = parameters;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
 		const relationship_source = self._parse_source(scope, parameters);
 		// do join here based on source metadata
 		// use structure resolvers to convert graphql type to table_name name
@@ -523,7 +523,7 @@ class DatabaseModel extends Model {
 		});
 		Object.keys(cache_where_in).forEach(function (k) {
 			var joined_key = self.table_name + "." + k;
-			joined_where_in[joined_key] = TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_in[k]).value;
+			joined_where_in[joined_key] = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[k]).value;
 		});
 		var joined_where_not_in = {};
 		Object.keys(where_not_in).forEach(function (k) {
@@ -532,7 +532,7 @@ class DatabaseModel extends Model {
 		});
 		Object.keys(cache_where_not_in).forEach(function (k) {
 			var joined_key = self.table_name + "." + k;
-			joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[k]).value;
+			joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[k]).value;
 		});
 		var joined_where_like = {};
 		Object.keys(where_like).forEach(function (k) {
@@ -573,16 +573,16 @@ class DatabaseModel extends Model {
 				.orderBy(joined_order, order_direction)
 				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
 			}
 			return sql
 				.then(function (data) {
-					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
 					context.breadth += data.length;
 					return Promise.resolve(data);
 				})
 				.catch(function (err) {
-					LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.read:failure`, "err", err);
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.read:failure`, "err", err);
 					throw err;
 				});
 		} else if (relationship_source._direction === "from") {
@@ -613,16 +613,16 @@ class DatabaseModel extends Model {
 				.orderBy(joined_order, order_direction)
 				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
 			}
 			return sql
 				.then(function (data) {
-					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
 					context.breadth += data.length;
 					return Promise.resolve(data);
 				})
 				.catch(function (err) {
-					LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.read:failure`, "err", err);
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.read:failure`, "err", err);
 					throw err;
 				});
 		} else {
@@ -640,14 +640,14 @@ class DatabaseModel extends Model {
 		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
-		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
+		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, scope, key);
 	}
 	_root_update(context, scope, parameters) {
 		var self = this;
 		const { database, transaction } = context;
 		var { attributes, where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
 		const sql = database(self.table_name)
 			.where(function (builder) {
 				builder.where(where);
@@ -655,13 +655,13 @@ class DatabaseModel extends Model {
 					builder.whereIn(key, where_in[key]);
 				});
 				Object.keys(cache_where_in).forEach(function (key) {
-					builder.whereIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_in[key]).value);
+					builder.whereIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[key]).value);
 				});
 				Object.keys(where_not_in).forEach(function (key) {
 					builder.whereNotIn(key, where_not_in[key]);
 				});
 				Object.keys(cache_where_not_in).forEach(function (key) {
-					builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[key]).value);
+					builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[key]).value);
 				});
 				Object.keys(where_like).forEach(function (key) {
 					builder.whereLike(key, where_like[key]);
@@ -674,16 +674,16 @@ class DatabaseModel extends Model {
 			.update(attributes)
 			.transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
 		}
 		return sql
 			.then(function (data) {
-				LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
 				context.breadth += data.length;
 				return self.read(context, scope, parameters);
 			})
 			.catch(function (err) {
-				LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.update:failure`, "err", err);
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.update:failure`, "err", err);
 				throw err;
 			});
 	}
@@ -691,7 +691,7 @@ class DatabaseModel extends Model {
 		const self = this;
 		const { database, transaction } = context;
 		const { attributes } = parameters;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
 		// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
 		const MAXIMUM_ROWS = 4294967296;
 		return self
@@ -706,16 +706,16 @@ class DatabaseModel extends Model {
 				// use valid_ids to do a where in query
 				const sql = database(self.table_name).whereIn(self.primary_key, valid_ids).update(attributes).transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
 				}
 				context.breadth += data.length;
 				return sql.then(function (data) {
-					LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
 					return self.read(context, scope, parameters);
 				});
 			})
 			.catch(function (err) {
-				LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.update:failure`, "err", err);
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.update:failure`, "err", err);
 				throw err;
 			});
 	}
@@ -730,7 +730,7 @@ class DatabaseModel extends Model {
 		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
-		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
+		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, scope, key);
 	}
 	_cleanup_delete(context, valid_ids) {
@@ -745,7 +745,7 @@ class DatabaseModel extends Model {
 					.del()
 					.transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
 				}
 				return sql;
 			},
@@ -757,7 +757,7 @@ class DatabaseModel extends Model {
 					.del()
 					.transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
 				}
 				return sql;
 			},
@@ -769,7 +769,7 @@ class DatabaseModel extends Model {
 					.del()
 					.transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
 				}
 				return sql;
 			},
@@ -781,7 +781,7 @@ class DatabaseModel extends Model {
 					.del()
 					.transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
 				}
 				return sql;
 			},
@@ -796,7 +796,7 @@ class DatabaseModel extends Model {
 		const self = this;
 		const { database, transaction } = context;
 		const { where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {}, limit = 16 } = parameters;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
 		const MAXIMUM_ROWS = 4294967296;
 		// todo: use attributes and update deleted_at instead of deleting the row
@@ -817,13 +817,13 @@ class DatabaseModel extends Model {
 							builder.whereIn(key, where_in[key]);
 						});
 						Object.keys(cache_where_in).forEach(function (key) {
-							builder.whereIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_in[key]).value);
+							builder.whereIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[key]).value);
 						});
 						Object.keys(where_not_in).forEach(function (key) {
 							builder.whereNotIn(key, where_not_in[key]);
 						});
 						Object.keys(cache_where_not_in).forEach(function (key) {
-							builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[key]).value);
+							builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[key]).value);
 						});
 						Object.keys(where_like).forEach(function (key) {
 							builder.whereLike(key, where_like[key]);
@@ -836,10 +836,10 @@ class DatabaseModel extends Model {
 					.del()
 					.transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
 				}
 				return sql.then(function (delete_data) {
-					LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
 					context.breadth += read_data.length;
 					return self._cleanup_delete(context, valid_ids).then(function () {
 						return read_data.slice(0, Math.min(limit, self.limit_max));
@@ -847,7 +847,7 @@ class DatabaseModel extends Model {
 				});
 			})
 			.catch(function (err) {
-				LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.delete:failure`, "err", err);
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.delete:failure`, "err", err);
 				throw err;
 			});
 	}
@@ -855,7 +855,7 @@ class DatabaseModel extends Model {
 		const self = this;
 		const { database, transaction } = context;
 		const { limit = 16 } = parameters;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		const MAXIMUM_ROWS = 4294967296;
 		return self
 			.read(context, scope, {
@@ -869,10 +869,10 @@ class DatabaseModel extends Model {
 				// use valid_ids to do a where in query
 				const sql = database(self.table_name).whereIn(self.primary_key, valid_ids).del().transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
 				}
 				return sql.then(function (delete_data) {
-					LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
 					return self._cleanup_delete(context, valid_ids).then(function () {
 						context.breadth += read_data.length;
 						return read_data.slice(0, limit);
@@ -880,7 +880,7 @@ class DatabaseModel extends Model {
 				});
 			})
 			.catch(function (err) {
-				LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.delete:failure`, "err", err);
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.delete:failure`, "err", err);
 				throw err;
 			});
 	}
@@ -895,14 +895,14 @@ class DatabaseModel extends Model {
 		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
-		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
+		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, scope, key);
 	}
 	_root_count(context, scope, parameters) {
 		const self = this;
 		const { database, transaction } = context;
 		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
 		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
 		const reversed = {};
 		if (count_has_key) {
@@ -918,13 +918,13 @@ class DatabaseModel extends Model {
 					builder.whereIn(key, where_in[key]);
 				});
 				Object.keys(cache_where_in).forEach(function (key) {
-					builder.whereIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_in[key]).value);
+					builder.whereIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[key]).value);
 				});
 				Object.keys(where_not_in).forEach(function (key) {
 					builder.whereNotIn(key, where_not_in[key]);
 				});
 				Object.keys(cache_where_not_in).forEach(function (key) {
-					builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[key]).value);
+					builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[key]).value);
 				});
 				Object.keys(where_like).forEach(function (key) {
 					builder.whereLike(key, where_like[key]);
@@ -937,16 +937,16 @@ class DatabaseModel extends Model {
 			.first()
 			.transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
 		}
 		return sql
 			.then(function (data) {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
 				context.breadth += data.length;
 				return Promise.resolve(data);
 			})
 			.catch(function (err) {
-				LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
 				throw err;
 			});
 	}
@@ -954,7 +954,7 @@ class DatabaseModel extends Model {
 		const self = this;
 		const { database, transaction } = context;
 		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
 		const relationship_source = self._parse_source(scope, parameters);
 
 		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
@@ -985,7 +985,7 @@ class DatabaseModel extends Model {
 		});
 		Object.keys(cache_where_in).forEach(function (k) {
 			var joined_key = self.table_name + "." + k;
-			joined_where_in[joined_key] = TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_in[k]).value;
+			joined_where_in[joined_key] = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[k]).value;
 		});
 		var joined_where_not_in = {};
 		Object.keys(where_not_in).forEach(function (k) {
@@ -994,7 +994,7 @@ class DatabaseModel extends Model {
 		});
 		Object.keys(cache_where_not_in).forEach(function (k) {
 			var joined_key = self.table_name + "." + k;
-			joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__KERNEL.get(cache_where_not_in[k]).value;
+			joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[k]).value;
 		});
 		var joined_where_like = {};
 		Object.keys(where_like).forEach(function (k) {
@@ -1031,15 +1031,15 @@ class DatabaseModel extends Model {
 				.first()
 				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
 			}
 			return sql
 				.then(function (data) {
-					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
 					return Promise.resolve(data);
 				})
 				.catch(function (err) {
-					LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
 					throw err;
 				});
 		} else if (relationship_source._direction === "from") {
@@ -1061,16 +1061,16 @@ class DatabaseModel extends Model {
 				.first()
 				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
 			}
 			return sql
 				.then(function (data) {
-					LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
 					context.breadth += data.length;
 					return Promise.resolve(data);
 				})
 				.catch(function (err) {
-					LOGGER__IO__LOGGER__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
 					throw err;
 				});
 		} else {
@@ -1087,7 +1087,7 @@ class DatabaseModel extends Model {
 		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
-		TIERED_CACHE__LRU__CACHE__KERNEL.set(key, parameters, 1);
+		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, scope, key);
 	}
 }

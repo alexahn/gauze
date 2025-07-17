@@ -84,7 +84,7 @@ function run_step(environment, step) {
 	});
 	// schema, context, operation, operation_name, operation_variables
 	return $gauze.kernel.src.shell.graphql
-		.EXECUTE__GRAPHQL__SHELL__KERNEL({
+		.EXECUTE__GRAPHQL__SHELL__SRC__KERNEL({
 			schema,
 			context,
 			operation: step.operation.source,

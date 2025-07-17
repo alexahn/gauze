@@ -28,6 +28,6 @@ console.log(cache.get('anything'))
 console.log('cache', cache)
 */
 
-cache.lru.TIERED_CACHE__LRU__CACHE__KERNEL.set("hello", [1, 2], 2);
+cache.lru.TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set("hello", [1, 2], 2);
 
-console.log(cache.lru.TIERED_CACHE__LRU__CACHE__KERNEL.get("hello"));
+console.log(cache.lru.TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get("hello"));

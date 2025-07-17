@@ -1,8 +1,8 @@
-import { LOGGER__IO__LOGGER__KERNEL } from "./io.js";
+import { LOGGER__IO__LOGGER__SRC__KERNEL } from "./io.js";
 
-LOGGER__IO__LOGGER__KERNEL.write("1", "a", "hello\nworld");
+LOGGER__IO__LOGGER__SRC__KERNEL.write("1", "a", "hello\nworld");
 
-LOGGER__IO__LOGGER__KERNEL.write(
+LOGGER__IO__LOGGER__SRC__KERNEL.write(
 	"1",
 	"b",
 	JSON.stringify(
@@ -14,7 +14,7 @@ LOGGER__IO__LOGGER__KERNEL.write(
 	),
 );
 
-LOGGER__IO__LOGGER__KERNEL.write(
+LOGGER__IO__LOGGER__SRC__KERNEL.write(
 	"1.1",
 	"c",
 	JSON.stringify(
@@ -27,9 +27,9 @@ LOGGER__IO__LOGGER__KERNEL.write(
 	"something",
 );
 
-LOGGER__IO__LOGGER__KERNEL.write("1.1", "c", "something", function hello() {});
+LOGGER__IO__LOGGER__SRC__KERNEL.write("1.1", "c", "something", function hello() {});
 
-LOGGER__IO__LOGGER__KERNEL.write(
+LOGGER__IO__LOGGER__SRC__KERNEL.write(
 	"1.2",
 	"d",
 	"hello",
@@ -43,7 +43,7 @@ LOGGER__IO__LOGGER__KERNEL.write(
 	),
 );
 
-LOGGER__IO__LOGGER__KERNEL.write(
+LOGGER__IO__LOGGER__SRC__KERNEL.write(
 	"1.3",
 	"e",
 	JSON.stringify(

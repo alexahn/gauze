@@ -55,15 +55,15 @@ const CREATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 	},
 	resolve: (source, mutation_arguments, context) => {
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "CREATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "source", source);
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "CREATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "source", source);
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"CREATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
 			"access:agent_id",
 			context.agent_id,
 		);
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"CREATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
@@ -80,7 +80,7 @@ const CREATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			},
 			mutation_arguments,
 		).then(function (data) {
-			$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "CREATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "CREATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
 			return data.map(SERIALIZER__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
@@ -139,15 +139,15 @@ const UPDATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 	},
 	resolve: (source, mutation_arguments, context) => {
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "UPDATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "source", source);
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "UPDATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "source", source);
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"UPDATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
 			"access:agent_id",
 			context.agent_id,
 		);
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"UPDATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
@@ -169,7 +169,7 @@ const UPDATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			},
 			mutation_arguments,
 		).then(function (data) {
-			$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "UPDATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "UPDATE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
 			return data.map(SERIALIZER__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
@@ -224,15 +224,15 @@ const DELETE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 	},
 	resolve: (source, mutation_arguments, context) => {
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "DELETE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "source", source);
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "DELETE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "source", source);
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"DELETE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
 			"access:agent_id",
 			context.agent_id,
 		);
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"DELETE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
@@ -251,7 +251,7 @@ const DELETE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			},
 			mutation_arguments,
 		).then(function (data) {
-			$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "DELETE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "DELETE__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
 			return data.map(SERIALIZER__PROXY__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},

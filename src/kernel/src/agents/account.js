@@ -1,5 +1,5 @@
 // todo: refactor to throw errors instead of returning null
-const VERIFY_PASSWORD__AGENT_ACCOUNT__AGENT__KERNEL = function (context, scope, { proxy_type, session_model, secret_model, hash_function }, password) {
+const VERIFY_PASSWORD__AGENT_ACCOUNT__AGENT__SRC__KERNEL = function (context, scope, { proxy_type, session_model, secret_model, hash_function }, password) {
 	const { agent } = context;
 	if (agent) {
 		if (agent.proxy_id) {
@@ -134,4 +134,4 @@ const VERIFY_PASSWORD__AGENT_ACCOUNT__AGENT__KERNEL = function (context, scope, 
 	}
 };
 
-export { VERIFY_PASSWORD__AGENT_ACCOUNT__AGENT__KERNEL };
+export { VERIFY_PASSWORD__AGENT_ACCOUNT__AGENT__SRC__KERNEL };

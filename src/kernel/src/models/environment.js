@@ -11,9 +11,9 @@ import TTLLRUCache from "./../lru.js";
 
 import { Model } from "./class.js";
 
-import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
+import { LOGGER__IO__LOGGER__SRC__KERNEL } from "./../logger/io.js";
 
-import { EXECUTE__GRAPHQL__SHELL__KERNEL } from "./../shell/graphql.js";
+import { EXECUTE__GRAPHQL__SHELL__SRC__KERNEL } from "./../shell/graphql.js";
 
 // note: we need to write tests to make sure using dataloader here doesn't cause any data ownership issues
 // note: this is especially critical because this is where agents get created
@@ -32,7 +32,7 @@ class EnvironmentModel extends Model {
 			cacheMap: new TTLLRUCache(1024, 8192),
 		});
 		self.model_loader.model = self;
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.constructor:exit`);
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.constructor:exit`);
 	}
 	static _class_name(schema_name) {
 		return schema_name ? `(${schema_name})[${super._class_name()}]EnvironmentModel` : `[${super._class_name()}]EnvironmentModel`;
@@ -85,7 +85,7 @@ class EnvironmentModel extends Model {
 	_execute(context, operation_source, operation_variables) {
 		const self = this;
 		const { operation, operation_name } = operation_source;
-		return EXECUTE__GRAPHQL__SHELL__KERNEL({
+		return EXECUTE__GRAPHQL__SHELL__SRC__KERNEL({
 			schema: self.schema,
 			context,
 			operation,

@@ -12,12 +12,12 @@ class GauzeProjectManager {
 		this.config = config;
 
 		process.on("SIGINT", function (val) {
-			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGINT: ${val}`);
+			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGINT: ${val}`);
 			process.exit(130);
 		});
 
 		process.on("SIGTERM", function (val) {
-			$gauzekernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGTEM: ${val}`);
+			$gauzekernel.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGTEM: ${val}`);
 			// https://tldp.org/LDP/abs/html/exitcodes.html
 			// 128 + signal_constants from https://nodejs.org/dist/latest-v18.x/docs/api/os.html#signal-constants
 			// in this case SIGTERM is 15 so we have 128 + 15
@@ -26,7 +26,7 @@ class GauzeProjectManager {
 
 		// this is called once the exit trajectory has been set
 		process.on("exit", function (val) {
-			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.exit: ${val}`);
+			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `process.exit: ${val}`);
 		});
 	}
 	execute(command) {
@@ -40,7 +40,7 @@ class GauzeProjectManager {
 				process.stderr.write(data);
 			});
 			child.on("close", function (code) {
-				self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `child.exit: ${command}`);
+				self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `child.exit: ${command}`);
 				if (code === 0) {
 					return resolve(code);
 				} else {
@@ -67,8 +67,8 @@ class GauzeProjectManager {
 	}
 }
 
-const GAUZE__PROJECT_MANAGER__APPLICATION__KERNEL = function (modules, argv) {
+const GAUZE__PROJECT_MANAGER__APPLICATION__SRC__KERNEL = function (modules, argv) {
 	return new GauzeProjectManager(modules, argv);
 };
 
-export { GAUZE__PROJECT_MANAGER__APPLICATION__KERNEL };
+export { GAUZE__PROJECT_MANAGER__APPLICATION__SRC__KERNEL };

@@ -111,8 +111,8 @@ const READ__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		},
 	},
 	resolve: (source, query_arguments, context) => {
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"READ__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
@@ -131,7 +131,7 @@ const READ__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			},
 			query_arguments,
 		).then(function (data) {
-			$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "READ__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, "READ__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
 			return data.map(SERIALIZER__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE.serialize);
 		});
 	},
@@ -178,8 +178,8 @@ const COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 		},
 	},
 	resolve: (source, query_arguments, context) => {
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
@@ -198,7 +198,7 @@ const COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			},
 			query_arguments,
 		).then(function (data) {
-			$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, "COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, "COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
 			return data;
 		});
 	},

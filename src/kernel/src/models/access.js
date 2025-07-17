@@ -6,9 +6,9 @@ import * as $structure from "./../../../structure/index.js";
 
 import { SystemModel } from "./system.js";
 
-import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
+import { LOGGER__IO__LOGGER__SRC__KERNEL } from "./../logger/io.js";
 
-import { EXECUTE__GRAPHQL__SHELL__KERNEL } from "./../shell/graphql.js";
+import { EXECUTE__GRAPHQL__SHELL__SRC__KERNEL } from "./../shell/graphql.js";
 
 class AccessSystemModel extends SystemModel {
 	constructor(root_config, access_config) {
@@ -107,7 +107,7 @@ class AccessSystemModel extends SystemModel {
 			})
 			.transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._initiator_records:debug_sql`, sql.toString());
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._initiator_records:debug_sql`, sql.toString());
 		}
 		return sql;
 	}
@@ -178,7 +178,7 @@ class AccessSystemModel extends SystemModel {
 		const self = this;
 		const sql = database(self.entity.table_name).where(where).transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._preread:debug_sql`, sql.toString());
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._preread:debug_sql`, sql.toString());
 		}
 		return sql;
 	}

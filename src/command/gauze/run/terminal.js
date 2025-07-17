@@ -20,7 +20,7 @@ export const builder = function (yargs) {
 };
 
 export const handler = function (argv) {
-	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "terminal argv", argv);
-	const SHELL = $gauze.kernel.src.applications.terminal.GAUZE__TERMINAL__APPLICATION__KERNEL({ $gauze }, argv);
+	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "terminal argv", argv);
+	const SHELL = $gauze.kernel.src.applications.terminal.GAUZE__TERMINAL__APPLICATION__SRC__KERNEL({ $gauze }, argv);
 	SHELL.start();
 };

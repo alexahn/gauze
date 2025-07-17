@@ -16,12 +16,12 @@ class GauzeServer {
 		self.config = config;
 
 		process.on("SIGINT", function (val) {
-			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGINT: ${val}`);
+			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGINT: ${val}`);
 			process.exit(130);
 		});
 
 		process.on("SIGTERM", function (val) {
-			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGTERM: ${val}`);
+			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGTERM: ${val}`);
 			// https://tldp.org/LDP/abs/html/exitcodes.html
 			// 128 + signal_constants from https://nodejs.org/dist/latest-v18.x/docs/api/os.html#signal-constants
 			// in this case SIGTERM is 15 so we have 128 + 15
@@ -31,7 +31,7 @@ class GauzeServer {
 		// this is called once the exit trajectory has been set
 		process.on("exit", function (val) {
 			self.database.destroy();
-			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `process.exit: ${val}`);
+			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `process.exit: ${val}`);
 		});
 
 		self.database = $gauze.database.knex.create_connection();
@@ -117,7 +117,7 @@ class GauzeServer {
 								}
 							})
 							.catch(function (err) {
-								self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, "authentication", "error", err);
+								self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("5", __RELATIVE_FILEPATH, "authentication", "error", err);
 								res.writeHead(401, "Unauthorized", {
 									"content-type": "application/json; charset=utf-8",
 									"Access-Control-Allow-Origin": "*",
@@ -212,7 +212,7 @@ class GauzeServer {
 								}
 							})
 							.catch(function (err) {
-								self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, "authentication", "error", err);
+								self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("5", __RELATIVE_FILEPATH, "authentication", "error", err);
 								res.writeHead(401, "Unauthorized", {
 									"content-type": "application/json; charset=utf-8",
 									"Access-Control-Allow-Origin": "*",
@@ -274,7 +274,7 @@ class GauzeServer {
 			})
 				.then(function () {
 					return self.$gauze.kernel.src.shell.graphql
-						.EXECUTE__GRAPHQL__SHELL__KERNEL({
+						.EXECUTE__GRAPHQL__SHELL__SRC__KERNEL({
 							schema: schema,
 							context: context,
 							operation: body.query,
@@ -283,18 +283,18 @@ class GauzeServer {
 						})
 						.then(function (data) {
 							if (data.errors && data.errors.length) {
-								self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "errors", data.errors);
+								self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "errors", data.errors);
 								return transaction
 									.rollback()
 									.then(function () {
-										self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION REVERTED");
+										self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION REVERTED");
 										res.writeHead(400, "Bad Request", {
 											"content-type": "application/json; charset=utf-8",
 											"Access-Control-Allow-Origin": "*",
 										}).end(JSON.stringify(data));
 									})
 									.catch(function (err) {
-										self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO REVERT", err);
+										self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO REVERT", err);
 										res.writeHead(500, "Internal Server Error", {
 											"content-type": "application/json; charset=utf-8",
 											"Access-Control-Allow-Origin": "*",
@@ -309,14 +309,14 @@ class GauzeServer {
 								return transaction
 									.commit(data)
 									.then(function () {
-										self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION COMMITTED");
+										self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION COMMITTED");
 										res.writeHead(200, "OK", {
 											"content-type": "application/json; charset=utf-8",
 											"Access-Control-Allow-Origin": "*",
 										}).end(JSON.stringify(data));
 									})
 									.catch(function (err) {
-										self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO COMMIT", err);
+										self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO COMMIT", err);
 										res.writeHead(500, "Internal Server Error", {
 											"content-type": "application/json; charset=utf-8",
 											"Access-Control-Allow-Origin": "*",
@@ -330,7 +330,7 @@ class GauzeServer {
 							}
 						})
 						.catch(function (err) {
-							self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "internal error", err);
+							self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "internal error", err);
 							return transaction
 								.rollback(err)
 								.then(function () {
@@ -345,7 +345,7 @@ class GauzeServer {
 									);
 								})
 								.catch(function (err) {
-									self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO ROLLBACK", err);
+									self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO ROLLBACK", err);
 									res.writeHead(500, "Internal Server Error", {
 										"content-type": "application/json; charset=utf-8",
 										"Access-Control-Allow-Origin": "*",
@@ -359,7 +359,7 @@ class GauzeServer {
 						});
 				})
 				.catch(function (err) {
-					self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "internal error", err);
+					self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "internal error", err);
 					return transaction
 						.rollback()
 						.then(function () {
@@ -374,7 +374,7 @@ class GauzeServer {
 							);
 						})
 						.catch(function (err) {
-							self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO ROLLBACK", err);
+							self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO ROLLBACK", err);
 							res.writeHead(500, "Internal Server Error", {
 								"content-type": "application/json; charset=utf-8",
 								"Access-Control-Allow-Origin": "*",
@@ -430,8 +430,8 @@ class GauzeServer {
 	}
 }
 
-const GAUZE__SERVER__APPLICATION__KERNEL = function (modules, argv) {
+const GAUZE__SERVER__APPLICATION__SRC__KERNEL = function (modules, argv) {
 	return new GauzeServer(modules, argv);
 };
 
-export { GAUZE__SERVER__APPLICATION__KERNEL };
+export { GAUZE__SERVER__APPLICATION__SRC__KERNEL };

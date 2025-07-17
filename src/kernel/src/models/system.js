@@ -7,11 +7,11 @@ import { v4 as uuidv4 } from "uuid";
 import * as $abstract from "./../../../abstract/index.js";
 import * as $structure from "./../../../structure/index.js";
 
-import { LOGGER__IO__LOGGER__KERNEL } from "./../logger/io.js";
+import { LOGGER__IO__LOGGER__SRC__KERNEL } from "./../logger/io.js";
 
-import { EXECUTE__GRAPHQL__SHELL__KERNEL } from "./../shell/graphql.js";
+import { EXECUTE__GRAPHQL__SHELL__SRC__KERNEL } from "./../shell/graphql.js";
 
-import { SMALL_CACHE__LRU__CACHE__KERNEL, TIERED_CACHE__LRU__CACHE__KERNEL } from "./../cache/lru.js";
+import { SMALL_CACHE__LRU__CACHE__SRC__KERNEL, TIERED_CACHE__LRU__CACHE__SRC__KERNEL } from "./../cache/lru.js";
 
 import DataLoader from "./../dataloader.js";
 import TTLLRUCache from "./../lru.js";
@@ -29,12 +29,12 @@ class SystemModel extends Model {
 		if ($structure.entities.whitelist) {
 			self.whitelist_table = $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE;
 		} else {
-			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Whitelist structure not found"));
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Whitelist structure not found"));
 		}
 		if ($structure.entities.blacklist) {
 			self.blacklist_table = $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE;
 		} else {
-			LOGGER__IO__LOGGER__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Blacklist structure not found"));
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Blacklist structure not found"));
 		}
 		self.name = self.__name();
 		self.auth_loader = new DataLoader(self._auth_batch, {
@@ -64,7 +64,7 @@ class SystemModel extends Model {
 				}
 			});
 		});
-		LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.constructor:exit`);
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.constructor:exit`);
 	}
 	static _class_name(schema_name) {
 		return schema_name ? `(${schema_name})[${super._class_name()}]SystemModel` : `[${super._class_name()}]SystemModel`;
@@ -153,7 +153,7 @@ class SystemModel extends Model {
 	_execute(context, operation_source, operation_variables) {
 		const self = this;
 		const { operation, operation_name } = operation_source;
-		return EXECUTE__GRAPHQL__SHELL__KERNEL({
+		return EXECUTE__GRAPHQL__SHELL__SRC__KERNEL({
 			schema: self.schema,
 			context,
 			operation,
@@ -229,7 +229,7 @@ class SystemModel extends Model {
 				.limit(16)
 				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.authorization_element:debug_sql`, sql.toString());
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.authorization_element:debug_sql`, sql.toString());
 			}
 			return sql.then(function (rows) {
 				return {
@@ -257,7 +257,7 @@ class SystemModel extends Model {
 				.limit(16)
 				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.authorization_element:debug_sql`, sql.toString());
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.authorization_element:debug_sql`, sql.toString());
 			}
 			return sql.then(function (rows) {
 				return {
@@ -300,7 +300,7 @@ class SystemModel extends Model {
 				.limit(16)
 				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.authorization_set:debug_sql`, sql.toString());
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.authorization_set:debug_sql`, sql.toString());
 			}
 			return sql.then(function (null_rows) {
 				return {
@@ -327,7 +327,7 @@ class SystemModel extends Model {
 				.limit(16)
 				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.authorization_set:debug_sql`, sql.toString());
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.authorization_set:debug_sql`, sql.toString());
 			}
 			return sql.then(function (null_rows) {
 				// agent is unauthorized to act on set scope
@@ -376,7 +376,7 @@ class SystemModel extends Model {
 						.limit(4294967296)
 						.transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._authorization_filter:debug_sql`, sql.toString());
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._authorization_filter:debug_sql`, sql.toString());
 					}
 					return sql.then(function (rows) {
 						return {
@@ -406,7 +406,7 @@ class SystemModel extends Model {
 						.limit(4294967296)
 						.transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-						LOGGER__IO__LOGGER__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._authorization_filter:debug_sql`, sql.toString());
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._authorization_filter:debug_sql`, sql.toString());
 					}
 					return sql.then(function (rows) {
 						return {
@@ -468,7 +468,7 @@ class SystemModel extends Model {
 							// generate a uuidv4 as a cache key, put the valid ids into the cache using the cache key, and set the value of cache_where_in to the cache key
 							// from the database side, we use the cache key to pull the values from the lru cache
 							const cache_key = String(uuidv4());
-							TIERED_CACHE__LRU__CACHE__KERNEL.set(cache_key, valid_ids, valid_ids.length);
+							TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(cache_key, valid_ids, valid_ids.length);
 							parameters.cache_where_in = {
 								[self.entity.primary_key]: cache_key,
 							};
@@ -502,7 +502,7 @@ class SystemModel extends Model {
 							// generate a uuidv4 as a cache key, put the invalid ids into the cache using the cache key, and set the value of cache_where_not_in to the cache key
 							// from the database side, we use the cache key to pull the values from the lru cache
 							const cache_key = String(uuidv4());
-							TIERED_CACHE__LRU__CACHE__KERNEL.set(cache_key, invalid_ids, invalid_ids.length);
+							TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(cache_key, invalid_ids, invalid_ids.length);
 							parameters.cache_where_not_in = {
 								[self.entity.primary_key]: cache_key,
 							};

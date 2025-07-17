@@ -26,7 +26,7 @@ function invert_relationships(relationships) {
 	return mapping;
 }
 
-function HEADER__LINKER__KERNEL(realm, query_root, entities) {
+function HEADER__LINKER__SRC__KERNEL(realm, query_root, entities) {
 	const HEADER__HEADER__STRUCTURE = {
 		type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.header.HEADER_TYPE__HEADER__STRUCTURE),
 		args: {},
@@ -111,7 +111,7 @@ function HEADER__LINKER__KERNEL(realm, query_root, entities) {
 }
 
 // todo: add some existence checks and guards to these loops
-function LINK_RELATIONSHIPS__LINKER__KERNEL(entities, methods, relationships) {
+function LINK_RELATIONSHIPS__LINKER__SRC__KERNEL(entities, methods, relationships) {
 	// link to relationships
 	Object.keys(relationships).forEach(function (entity) {
 		const entity_relationships = relationships[entity];
@@ -156,7 +156,7 @@ function LINK_RELATIONSHIPS__LINKER__KERNEL(entities, methods, relationships) {
 	});
 }
 
-function LINK_ROOT__LINKER__KERNEL(query_root, mutation_root, methods) {
+function LINK_ROOT__LINKER__SRC__KERNEL(query_root, mutation_root, methods) {
 	Object.keys(methods).forEach(function (entity_method) {
 		Object.keys(methods[entity_method].query).forEach(function (query) {
 			const query_method = methods[entity_method].query[query];
@@ -169,4 +169,4 @@ function LINK_ROOT__LINKER__KERNEL(query_root, mutation_root, methods) {
 	});
 }
 
-export { HEADER__LINKER__KERNEL, LINK_RELATIONSHIPS__LINKER__KERNEL, LINK_ROOT__LINKER__KERNEL };
+export { HEADER__LINKER__SRC__KERNEL, LINK_RELATIONSHIPS__LINKER__SRC__KERNEL, LINK_ROOT__LINKER__SRC__KERNEL };
