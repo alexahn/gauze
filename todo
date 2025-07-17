@@ -971,17 +971,18 @@
 	[ ] koa middleware to serve files as pages (for a completely self-contained backend and frontend)
 
 [ ] redesign authentication and authorization
-	[ ] move authentication functions to kernel (kernel/authentication.js)
+	[-] move authentication functions to kernel (kernel/authentication.js)
 	[ ] add configuration settings to project settings to manage authentication settings
-	[ ] better templating system for bootstrapping environment?
-	[ ] move controller functions to kernel (kernel/environment.js)
-	[ ] it seems that the way i have it may be the simplest path
-		[ ] if we move the core logic to the kernel as higher order functions, environment becomes awkward because the input types for the graphql interface are controlled by the environment realm
-			[ ] we could have the core logic only accept abstract inputs (e.g. parsed from the graphql input types)
-		[ ] the only real benefit from centralizing the core logic is having kernel upgrades affect authentication and authorizationa
-			[ ] there isn't that much value because i suspect the core code will rarely change (since they are fundamental functions around hashing and managing sessions)
-			[ ] i also don't feel that great about the kernel containing logic for agents (which is a concrete entity)
-			[ ] it's more likely that a user will customize the base by extending the verification process and the extension would be easier if they could see everything that was going on without indirection
+	[-] better templating system for bootstrapping environment?
+	[-] move controller functions to kernel (kernel/environment.js)
+	[x] it seems that the way i have it may be the simplest path
+		[-] if we move the core logic to the kernel as higher order functions, environment becomes awkward because the input types for the graphql interface are controlled by the environment realm
+			[-] we could have the core logic only accept abstract inputs (e.g. parsed from the graphql input types)
+		[-] the only real benefit from centralizing the core logic is having kernel upgrades affect authentication and authorizationa
+			[x] there isn't that much value because i suspect the core code will rarely change (since they are fundamental functions around hashing and managing sessions)
+			[x] i also don't feel that great about the kernel containing logic for agents (which is a concrete entity)
+			[x] it's more likely that a user will customize the base by extending the verification process and the extension would be easier if they could see everything that was going on without indirection
+	[ ] time would be better spent making moderately comprehensive default template
 
 [ ] end game performance and scaling (take architecture into consideration but save the concrete work for last)
 	[ ] need group concept

@@ -1,4 +1,5 @@
 // current
+// assert, request, verify
 {
 	agent {
 		account {
@@ -22,16 +23,32 @@
 }
 
 // future
+// assert, request, verify
 {
 	agent {
 		account {
 			verify {
 				password(input_agent_account)
+				totp(input_agent_account)
+			}
+		}
+		user {
+			assert {
+				username(input_agent_account)
 			}
 		}
 		person {
+			request {
+				email(input_agent_person)
+				phone(input_agent_person)
+			}
 			assert {
 				email(input_agent_person)
+				phone(input_agent_person)
+			}
+			verify {
+				email(input_agent_person)
+				phone(input_agent_person)
 			}
 		}
 	}
