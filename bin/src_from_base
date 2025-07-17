@@ -167,9 +167,9 @@ node src/kernel/bin/module.js src/index.js join environment directory
 ##########################################################
 
 # class replacement for internal types
-find ./src/system/models/relationship.js -type f -name '*.js' -exec sed -i '' "s/kernel.models.system.SystemModel/kernel.models.relationship.RelationshipSystemModel/g" {} +
-find ./src/system/models/whitelist.js -type f -name '*.js' -exec sed -i '' "s/kernel.models.system.SystemModel/kernel.models.access.AccessSystemModel/g" {} +
-find ./src/system/models/blacklist.js -type f -name '*.js' -exec sed -i '' "s/kernel.models.system.SystemModel/kernel.models.access.AccessSystemModel/g" {} +
+find ./src/system/models/relationship.js -type f -name '*.js' -exec sed -i '' "s/kernel.src.models.system.SystemModel/kernel.src.models.relationship.RelationshipSystemModel/g" {} +
+find ./src/system/models/whitelist.js -type f -name '*.js' -exec sed -i '' "s/kernel.src.models.system.SystemModel/kernel.src.models.access.AccessSystemModel/g" {} +
+find ./src/system/models/blacklist.js -type f -name '*.js' -exec sed -i '' "s/kernel.src.models.system.SystemModel/kernel.src.models.access.AccessSystemModel/g" {} +
 
 # class name fix for pascal case
 find ./src/database/models/ezuag.js -type f -name "*.js" -exec sed -i '' "s/EzuagDatabaseModel/EzuagEzuagDatabaseModel/g" {} +
