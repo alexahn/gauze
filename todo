@@ -987,4 +987,4 @@
 	[ ] the routing would use the relationship data to form grouped transactions for private entities
 	[ ] the routing would have to ping all servers for public entities, so we would need to cache those results
 	[ ] need to figure out the garbage collection algorithm (for entities that have all links severed)
-
+	[ ] sharding by time might be the most performant to prevent too much network noise (e.g. unnecessary fanning of connections and requests)
