@@ -62,7 +62,7 @@ export const handler = function (argv) {
 
 	// asynchronous import here to avoid static dependency linking failing
 	import("./../../router.js").then(function (module) {
-		const Router = module.default
+		const Router = module.default;
 		const app = new Koa();
 		const router = Router($gauze);
 
@@ -72,5 +72,5 @@ export const handler = function (argv) {
 		app.use(router.routes());
 
 		app.listen(argv.port);
-	})
+	});
 };

@@ -96,7 +96,6 @@ class EnvironmentController {
 								const session_id = uuidv4();
 								const proxy_root_id = parsed_data.assert;
 								const proxy_type = self.proxy_type;
-								// todo: refactor this function so we accept a realm here
 								return self._create_system_session(context, scope, session_id, proxy_root_id, proxy_root_id, proxy_type).then(function (system_session) {
 									return {
 										...collection,
@@ -708,7 +707,6 @@ class EnvironmentController {
 				});
 			});
 	}
-	// todo: refactor this to accept a realm
 	_create_system_session(context, scope, session_id, proxy_id, agent_id, agent_type) {
 		const self = this;
 		const session_realm = "system";
