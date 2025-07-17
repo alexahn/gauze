@@ -13,7 +13,7 @@ import { koaBody } from "koa-body";
 import cors from "@koa/cors";
 
 import * as $gauze from "./../../index.js";
-import Router from "./../../router.js";
+//import Router from "./../../router.js";
 
 export const command = "server_http";
 
@@ -60,13 +60,17 @@ export const handler = function (argv) {
 		process.exit(143);
 	});
 
-	const app = new Koa();
-	const router = Router($gauze);
+	// asynchronous import here to avoid static dependency linking failing
+	import("./../../router.js").then(function (module) {
+		const Router = module.default
+		const app = new Koa();
+		const router = Router($gauze);
 
-	app.use(koaBody());
-	app.use(cors());
+		app.use(koaBody());
+		app.use(cors());
 
-	app.use(router.routes());
+		app.use(router.routes());
 
-	app.listen(argv.port);
+		app.listen(argv.port);
+	})
 };
