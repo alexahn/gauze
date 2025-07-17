@@ -1,8 +1,8 @@
-import * as $abstract from "./../../../abstract/index.js";
+import * as $abstract from "./../../abstract/index.js";
 
-import { MODEL__SESSION__MODEL__ENVIRONMENT } from "./../../models/session.js";
-import { MODEL__PROXY__MODEL__ENVIRONMENT } from "./../../models/proxy.js";
-import { MODEL__AGENT_PERSON__MODEL__ENVIRONMENT } from "./../../models/agent_person.js";
+import { MODEL__SESSION__MODEL__ENVIRONMENT } from "./../models/session.js";
+import { MODEL__PROXY__MODEL__ENVIRONMENT } from "./../models/proxy.js";
+import { MODEL__AGENT_PERSON__MODEL__ENVIRONMENT } from "./../models/agent_person.js";
 
 class AgentPersonController {
 	constructor() {

@@ -1,9 +1,9 @@
-import * as $abstract from "./../../../abstract/index.js";
+import * as $abstract from "./../../abstract/index.js";
 
-import { HASH_PASSWORD__AUTHENTICATION__ENVIRONMENT } from "./../../authentication.js";
+import { HASH_PASSWORD__AUTHENTICATION__ENVIRONMENT } from "./../authentication.js";
 
-import { MODEL__SESSION__MODEL__ENVIRONMENT } from "./../../models/session.js";
-import { MODEL__SECRET__MODEL__ENVIRONMENT } from "./../../models/secret.js";
+import { MODEL__SESSION__MODEL__ENVIRONMENT } from "./../models/session.js";
+import { MODEL__SECRET__MODEL__ENVIRONMENT } from "./../models/secret.js";
 
 class AgentAccountController {
 	constructor() {
