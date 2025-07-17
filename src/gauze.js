@@ -26,19 +26,19 @@ export default {
 	},
 	agents: {
 		gauze__agent_root: {
-			allowed_realms: ["system"]
+			allowed_realm_types: ["system"]
 		},
 		gauze__agent_accounts: {
-			allowed_realms: ["system"]
+			allowed_realm_types: ["system"]
 		},
 		gauze__agent_user: {
-			allowed_realms: ["system"]
+			allowed_realm_types: ["system"]
 		},
 		gauze__agent_person: {
-			allowed_realms: ["system"]
+			allowed_realm_types: ["system"]
 		},
 		gauze__agent_character: {
-			allowed_realms: ["system"]
+			allowed_realm_types: ["system"]
 		}
 	},
 	authentication: {
