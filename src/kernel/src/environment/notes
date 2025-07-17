@@ -1,0 +1,57 @@
+// current
+{
+	agent {
+		account {
+			verify {
+				password(input_agent_account)
+			}
+		}
+		person {
+			assert {
+				email(input_agent_person)
+			}
+		}
+	}
+	environment {
+		sign_in
+		sign_out
+		sign_up
+		enter_session
+		exit_session
+	}
+}
+
+// future
+{
+	agent {
+		account {
+			verify {
+				password(input_agent_account)
+			}
+		}
+		person {
+			assert {
+				email(input_agent_person)
+			}
+		}
+	}
+	realms {
+		system {
+			enter_session
+			exit_session
+		}
+		database {
+			enter_session
+			exit_session
+		}
+		kernel {
+			enter_session
+			exit_session
+		}
+	}
+	environment {
+		sign_in
+		sign_out
+		sign_up
+	}
+}

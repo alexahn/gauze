@@ -3,3 +3,9 @@ e.g. SystemModel to SYSTEM_MODEL__MODEL__KERNEL
 or should we use the PascalCase convention in all the kernel code to distinguish it from a realm?
 because the kernel realm code will have exports that look like SYSTEM_MODEL__MODEL__KERNEL
 if we go with the common convention we will need to update the exports to have SRC in the path, like SYSTEM_MODEL__MODEL__SRC__KERNEL
+
+keep controllers and models how they are because i dont want to deal with the templating changes
+everything else use the common convention
+
+todo: update models and controllers to use the same export convention as the rest of the codebase
+note: will need to update base_from_src and src_from_base to use the common convention, which could be a pain in the ass
