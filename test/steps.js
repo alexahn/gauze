@@ -83,7 +83,7 @@ function run_step(environment, step) {
 		context[key] = step.context[key];
 	});
 	// schema, context, operation, operation_name, operation_variables
-	return $gauze.kernel.shell.graphql
+	return $gauze.kernel.src.shell.graphql
 		.EXECUTE__GRAPHQL__SHELL__KERNEL({
 			schema,
 			context,
