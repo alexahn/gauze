@@ -25,6 +25,7 @@ export default {
 		admins: [],
 	},
 	authentication: {
+		proxy: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
 		realms: {
 			kernel: [],
 			database: [],
