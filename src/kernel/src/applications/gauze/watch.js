@@ -43,7 +43,7 @@ let envPlugin = {
 
 async function watch() {
 	let ctx = await esbuild.context({
-		entryPoints: ["src/kernel/applications/gauze/src/index.jsx"],
+		entryPoints: ["src/kernel/src/applications/gauze/src/index.jsx"],
 		bundle: true,
 		minify: false,
 		logLevel: "info",
@@ -51,7 +51,7 @@ async function watch() {
 		loader: {
 			".svg": "dataurl",
 		},
-		outfile: "./src/kernel/applications/gauze/build/index.js",
+		outfile: "./src/kernel/src/applications/gauze/build/index.js",
 		plugins: [envPlugin],
 	});
 	await ctx.watch();
