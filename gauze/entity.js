@@ -83,6 +83,7 @@ export default function ($abstract) {
 				allowed_agent_types: ["gauze__agent_user"],
 			},
 		},
+		// todo: update these names to match the graphql operation names, or add a new field called graphql_operation_name
 		methods: {
 			create: {
 				name: "create",

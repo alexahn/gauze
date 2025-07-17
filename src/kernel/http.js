@@ -22,6 +22,7 @@ const HANDLE_REALM_GRAPHQL__HTTP__KERNEL = function ({ $gauze, database, authent
 						.VERIFY_JWT_PAYLOAD(context, context.agent)
 						.then(function (session) {
 							// valid session
+							// todo: add check if the agent type is allowed to access this realm
 							return $gauze.kernel.shell.graphql
 								.EXECUTE__GRAPHQL__SHELL__KERNEL({
 									schema: schema,
