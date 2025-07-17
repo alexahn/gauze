@@ -55,7 +55,13 @@ const CREATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 	},
 	resolve: (source, mutation_arguments, context) => {
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "CREATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "source", source);
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"CREATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"source",
+			source,
+		);
 		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -80,7 +86,13 @@ const CREATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			},
 			mutation_arguments,
 		).then(function (data) {
-			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "CREATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+				"2",
+				__RELATIVE_FILEPATH,
+				"CREATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success",
+				"data",
+				data,
+			);
 			return data.map(SERIALIZER__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
@@ -139,7 +151,13 @@ const UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 	},
 	resolve: (source, mutation_arguments, context) => {
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "source", source);
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"source",
+			source,
+		);
 		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -169,7 +187,13 @@ const UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			},
 			mutation_arguments,
 		).then(function (data) {
-			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+				"2",
+				__RELATIVE_FILEPATH,
+				"UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success",
+				"data",
+				data,
+			);
 			return data.map(SERIALIZER__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
@@ -224,7 +248,13 @@ const DELETE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 		},
 	},
 	resolve: (source, mutation_arguments, context) => {
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "DELETE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "source", source);
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"DELETE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"source",
+			source,
+		);
 		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
@@ -251,7 +281,13 @@ const DELETE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			},
 			mutation_arguments,
 		).then(function (data) {
-			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "DELETE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+				"2",
+				__RELATIVE_FILEPATH,
+				"DELETE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success",
+				"data",
+				data,
+			);
 			return data.map(SERIALIZER__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},

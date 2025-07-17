@@ -198,7 +198,13 @@ const COUNT__AGENT_CHARACTER__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			},
 			query_arguments,
 		).then(function (data) {
-			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, "COUNT__AGENT_CHARACTER__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+				"1",
+				__RELATIVE_FILEPATH,
+				"COUNT__AGENT_CHARACTER__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success",
+				"data",
+				data,
+			);
 			return data;
 		});
 	},

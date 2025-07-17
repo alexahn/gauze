@@ -174,7 +174,13 @@ const HANDLE_ENVIRONMENT_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze
 													ctx.response.body = JSON.stringify(data);
 												})
 												.catch(function (err) {
-													$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO REVERT", err);
+													$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+														"2",
+														__RELATIVE_FILEPATH,
+														"request",
+														"TRANSACTION FAILED TO REVERT",
+														err,
+													);
 													ctx.response.status = 500;
 													ctx.response.body = JSON.stringify({
 														status: 500,
@@ -191,7 +197,13 @@ const HANDLE_ENVIRONMENT_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze
 													ctx.response.body = JSON.stringify(data);
 												})
 												.catch(function (err) {
-													$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO COMMIT", err);
+													$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+														"2",
+														__RELATIVE_FILEPATH,
+														"request",
+														"TRANSACTION FAILED TO COMMIT",
+														err,
+													);
 													ctx.response.status = 500;
 													ctx.response.body = JSON.stringify({
 														status: 500,
@@ -213,7 +225,12 @@ const HANDLE_ENVIRONMENT_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze
 												$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION UNEXPECTED REVERTED");
 											})
 											.catch(function (err) {
-												$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION UNEXPECTED FAILED TO REVERT");
+												$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+													"2",
+													__RELATIVE_FILEPATH,
+													"request",
+													"TRANSACTION UNEXPECTED FAILED TO REVERT",
+												);
 											});
 									});
 							})

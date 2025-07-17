@@ -80,7 +80,13 @@ const CREATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			},
 			mutation_arguments,
 		).then(function (data) {
-			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "CREATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+				"2",
+				__RELATIVE_FILEPATH,
+				"CREATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success",
+				"data",
+				data,
+			);
 			return data.map(SERIALIZER__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
@@ -169,7 +175,13 @@ const UPDATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			},
 			mutation_arguments,
 		).then(function (data) {
-			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "UPDATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+				"2",
+				__RELATIVE_FILEPATH,
+				"UPDATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success",
+				"data",
+				data,
+			);
 			return data.map(SERIALIZER__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
@@ -251,7 +263,13 @@ const DELETE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 			},
 			mutation_arguments,
 		).then(function (data) {
-			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "DELETE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+				"2",
+				__RELATIVE_FILEPATH,
+				"DELETE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM.resolve:success",
+				"data",
+				data,
+			);
 			return data.map(SERIALIZER__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__SYSTEM.serialize);
 		});
 	},
