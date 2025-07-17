@@ -6,9 +6,9 @@ import assert from "node:assert/strict";
 import child_process from "child_process";
 
 const __FILEDIR = import.meta.dirname;
-const GAUZE_BASE_DIR = path.resolve(__FILEDIR, "../../");
+const GAUZE_BASE_DIR = path.resolve(__FILEDIR, "../../../");
 // GAUZE_ROOT_DIR is only used when we need to reference the src directory from outside of it
-const GAUZE_ROOT_DIR = path.resolve(__FILEDIR, "../../../");
+const GAUZE_ROOT_DIR = path.resolve(__FILEDIR, "../../../../");
 
 // only allows one underscore per word
 function to_snake_case(string) {

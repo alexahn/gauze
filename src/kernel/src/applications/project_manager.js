@@ -4,7 +4,7 @@ const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 import child_process from "child_process";
 
 const __FILEDIR = import.meta.dirname;
-const GAUZE_BASE_DIR = path.resolve(__FILEDIR, "../../../");
+const GAUZE_BASE_DIR = path.resolve(__FILEDIR, "../../../../");
 
 class GauzeProjectManager {
 	constructor({ $gauze }, config) {
