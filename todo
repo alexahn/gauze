@@ -983,6 +983,7 @@
 			[x] i also don't feel that great about the kernel containing logic for agents (which is a concrete entity)
 			[x] it's more likely that a user will customize the base by extending the verification process and the extension would be easier if they could see everything that was going on without indirection
 	[ ] time would be better spent making moderately comprehensive default template
+	[ ] refactor only to introduce realm level authentication
 
 [ ] end game performance and scaling (take architecture into consideration but save the concrete work for last)
 	[ ] need group concept
