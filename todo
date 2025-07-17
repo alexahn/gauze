@@ -975,16 +975,16 @@
 	[ ] add configuration settings to project settings to manage authentication settings
 	[ ] better templating system for bootstrapping environment?
 
-[ ] need group concept
-	[ ] update access control logic to use all associated groups for a user
-		[ ] we need to copy groups to all database servers for sharded users
-			[ ] e.g. if a group has user 1 (on server 1), user 2 (on server 2), and user 3 (on server 2), we need to copy the group's data to server 1 and server 2
-			[ ] it's the same as how we were planning to copy the relationships to every sharded user database
-			[ ] there is a write penalty when we update these informations, but on the other side, these are datas that should rarely be modified. they are more likely to be deleted than updated
-
-[ ] database connection router
-	[ ] simplest initial configuration is one connection per database instance per application server instance. so if we have n application servers, and m database servers, we would have n * m connections
-	[ ] the routing would use the relationship data to form grouped transactions for private entities
-	[ ] the routing would have to ping all servers for public entities, so we would need to cache those results
-	[ ] need to figure out the garbage collection algorithm (for entities that have all links severed)
-	[ ] sharding by time might be the most performant to prevent too much network noise (e.g. unnecessary fanning of connections and requests)
+[ ] end game performance and scaling (take architecture into consideration but save the concrete work for last)
+	[ ] need group concept
+		[ ] update access control logic to use all associated groups for a user
+			[ ] we need to copy groups to all database servers for sharded users
+				[ ] e.g. if a group has user 1 (on server 1), user 2 (on server 2), and user 3 (on server 2), we need to copy the group's data to server 1 and server 2
+				[ ] it's the same as how we were planning to copy the relationships to every sharded user database
+				[ ] there is a write penalty when we update these informations, but on the other side, these are datas that should rarely be modified. they are more likely to be deleted than updated
+	[ ] database connection router
+		[ ] simplest initial configuration is one connection per database instance per application server instance. so if we have n application servers, and m database servers, we would have n * m connections
+		[ ] the routing would use the relationship data to form grouped transactions for private entities
+		[ ] the routing would have to ping all servers for public entities, so we would need to cache those results
+		[ ] need to figure out the garbage collection algorithm (for entities that have all links severed)
+		[ ] sharding by time might be the most performant to prevent too much network noise (e.g. unnecessary fanning of connections and requests)
