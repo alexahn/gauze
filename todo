@@ -978,7 +978,10 @@
 	[ ] it seems that the way i have it may be the simplest path
 		[ ] if we move the core logic to the kernel as higher order functions, environment becomes awkward because the input types for the graphql interface are controlled by the environment realm
 			[ ] we could have the core logic only accept abstract inputs (e.g. parsed from the graphql input types)
-		[ ] the only real benefit from centralizing the core logic is having kernel upgrades affect authentication and authorization
+		[ ] the only real benefit from centralizing the core logic is having kernel upgrades affect authentication and authorizationa
+			[ ] there isn't that much value because i suspect the core code will rarely change (since they are fundamental functions around hashing and managing sessions)
+			[ ] i also don't feel that great about the kernel containing logic for agents (which is a concrete entity)
+			[ ] it's more likely that a user will customize the base by extending the verification process and the extension would be easier if they could see everything that was going on without indirection
 
 [ ] end game performance and scaling (take architecture into consideration but save the concrete work for last)
 	[ ] need group concept
