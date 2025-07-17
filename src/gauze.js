@@ -24,4 +24,18 @@ export default {
 	production: {
 		admins: [],
 	},
+	authentication: {
+		realms: {
+			kernel: [],
+			database: [],
+			system: []
+		},
+		agents: {
+			gauze__agent_root: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
+			gauze__agent_accounts: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
+			gauze__agent_user: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
+			gauze__agent_person: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
+			gauze__agent_character: ["steps.person.assert.email.success", "steps.account.verify.password.success"]
+		}
+	}
 };
