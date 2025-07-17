@@ -65,7 +65,7 @@ class EnvironmentController {
 							return {
 								session: session,
 							};
-						} else {verify_requirements
+						} else {
 							return null;
 						}
 					})
@@ -708,7 +708,7 @@ class EnvironmentController {
 				});
 			});
 	}
-	// todo: refactor this to accept a realm
+	// todo: refactor this to accept a realm 
 	_create_system_session(context, scope, session_id, proxy_id, agent_id, agent_type) {
 		const self = this;
 		const session_realm = "system";
