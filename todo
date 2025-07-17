@@ -967,3 +967,6 @@
 		[-] becomes circular
 		[-] what we have might not be that bad
 
+[ ] research
+	[ ] koa middleware to serve files as pages (for a completely self-contained backend and frontend)
+
