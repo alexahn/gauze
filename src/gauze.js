@@ -26,34 +26,34 @@ export default {
 	},
 	agents: {
 		gauze__agent_root: {
-			allowed_realm_types: ["system"]
+			allowed_realm_types: ["system"],
 		},
 		gauze__agent_accounts: {
-			allowed_realm_types: ["system"]
+			allowed_realm_types: ["system"],
 		},
 		gauze__agent_user: {
-			allowed_realm_types: ["system"]
+			allowed_realm_types: ["system"],
 		},
 		gauze__agent_person: {
-			allowed_realm_types: ["system"]
+			allowed_realm_types: ["system"],
 		},
 		gauze__agent_character: {
-			allowed_realm_types: ["system"]
-		}
+			allowed_realm_types: ["system"],
+		},
 	},
 	authentication: {
 		proxy: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
 		realms: {
 			kernel: [],
 			database: [],
-			system: []
+			system: [],
 		},
 		agents: {
 			gauze__agent_root: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
 			gauze__agent_accounts: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
 			gauze__agent_user: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
 			gauze__agent_person: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
-			gauze__agent_character: ["steps.person.assert.email.success", "steps.account.verify.password.success"]
-		}
-	}
+			gauze__agent_character: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
+		},
+	},
 };

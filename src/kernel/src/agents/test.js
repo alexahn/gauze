@@ -1,3 +1,3 @@
-import * as agents from "./index.js"
+import * as agents from "./index.js";
 
-console.log(agents)
+console.log(agents);

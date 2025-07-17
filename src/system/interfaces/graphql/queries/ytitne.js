@@ -105,7 +105,13 @@ const READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	resolve: (source, query_arguments, context) => {
 		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "source", source);
 		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "query_arguments", query_arguments);
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "access:agent_id", context.agent_id);
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"access:agent_id",
+			context.agent_id,
+		);
 		return CONTROLLER__YTITNE__CONTROLLER__SYSTEM.read(
 			context,
 			{
@@ -153,8 +159,20 @@ const COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	},
 	resolve: (source, query_arguments, context) => {
 		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "source", source);
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "query_arguments", query_arguments);
-		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "access:agent_id", context.agent_id);
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"query_arguments",
+			query_arguments,
+		);
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter",
+			"access:agent_id",
+			context.agent_id,
+		);
 		return CONTROLLER__YTITNE__CONTROLLER__SYSTEM.count(
 			context,
 			{

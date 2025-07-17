@@ -12,7 +12,8 @@ const VERIFY_PASSWORD__AGENT_ACCOUNT__AGENT__KERNEL = function (context, scope, 
 				gauze__session__id: agent.session_id,
 			};
 			const session_parameters = { where: session_attributes };
-			return session_model.read(context, scope, session_parameters)
+			return session_model
+				.read(context, scope, session_parameters)
 				.then(function (sessions) {
 					if (sessions && sessions.length) {
 						const session = sessions[0];
@@ -131,8 +132,6 @@ const VERIFY_PASSWORD__AGENT_ACCOUNT__AGENT__KERNEL = function (context, scope, 
 	} else {
 		throw new Error("Session is required to authenticate");
 	}
-}
+};
 
-export {
-	VERIFY_PASSWORD__AGENT_ACCOUNT__AGENT__KERNEL
-}
+export { VERIFY_PASSWORD__AGENT_ACCOUNT__AGENT__KERNEL };
