@@ -975,6 +975,10 @@
 	[ ] add configuration settings to project settings to manage authentication settings
 	[ ] better templating system for bootstrapping environment?
 	[ ] move controller functions to kernel (kernel/environment.js)
+	[ ] it seems that the way i have it may be the simplest path
+		[ ] if we move the core logic to the kernel as higher order functions, environment becomes awkward because the input types for the graphql interface are controlled by the environment realm
+			[ ] we could have the core logic only accept abstract inputs (e.g. parsed from the graphql input types)
+		[ ] the only real benefit from centralizing the core logic is having kernel upgrades affect authentication and authorization
 
 [ ] end game performance and scaling (take architecture into consideration but save the concrete work for last)
 	[ ] need group concept

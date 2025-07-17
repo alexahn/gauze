@@ -35,7 +35,7 @@
 			}
 		}
 	}
-	realms {
+	realm {
 		system {
 			enter_session
 			exit_session
