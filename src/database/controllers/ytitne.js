@@ -2,7 +2,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__YTITNE__MODEL__DATABASE } from "./../models/ytitne.js";
 
-class YtitneYtitneDatabaseController extends $kernel.controllers.database.DatabaseController {
+class YtitneYtitneDatabaseController extends $kernel.src.controllers.database.DatabaseController {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

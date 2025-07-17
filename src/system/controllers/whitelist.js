@@ -2,7 +2,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__WHITELIST__MODEL__SYSTEM } from "./../models/whitelist.js";
 
-class WhitelistSystemController extends $kernel.controllers.system.SystemController {
+class WhitelistSystemController extends $kernel.src.controllers.system.SystemController {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

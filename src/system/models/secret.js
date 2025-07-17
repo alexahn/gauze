@@ -5,7 +5,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__RELATIONSHIP__MODEL__SYSTEM } from "./relationship.js";
 
-class SecretSystemModel extends $kernel.models.system.SystemModel {
+class SecretSystemModel extends $kernel.src.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

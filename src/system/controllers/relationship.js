@@ -2,7 +2,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__RELATIONSHIP__MODEL__SYSTEM } from "./../models/relationship.js";
 
-class RelationshipSystemController extends $kernel.controllers.system.SystemController {
+class RelationshipSystemController extends $kernel.src.controllers.system.SystemController {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

@@ -6,7 +6,7 @@ import * as $kernel from "./../../kernel/index.js";
 import fs from "fs";
 import path from "path";
 
-class SessionEnvironmentModel extends $kernel.models.environment.EnvironmentModel {
+class SessionEnvironmentModel extends $kernel.src.models.environment.EnvironmentModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

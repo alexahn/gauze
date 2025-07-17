@@ -3,7 +3,7 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-class BlacklistSystemModel extends $kernel.models.access.AccessSystemModel {
+class BlacklistSystemModel extends $kernel.src.models.access.AccessSystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

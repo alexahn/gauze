@@ -113,14 +113,14 @@ const READ__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABAS
 		},
 	},
 	resolve: (source, query_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"READ__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
 			"source",
 			source,
 		);
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"READ__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
@@ -139,7 +139,7 @@ const READ__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABAS
 			},
 			query_arguments,
 		).then(function (data) {
-			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 				"1",
 				__RELATIVE_FILEPATH,
 				"READ__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success",
@@ -192,14 +192,14 @@ const COUNT__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABA
 		},
 	},
 	resolve: (source, query_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"COUNT__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
 			"source",
 			source,
 		);
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"COUNT__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
@@ -218,7 +218,7 @@ const COUNT__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABA
 			},
 			query_arguments,
 		).then(function (data) {
-			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 				"1",
 				__RELATIVE_FILEPATH,
 				"COUNT__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success",

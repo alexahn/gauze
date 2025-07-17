@@ -2,7 +2,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__SESSION__MODEL__DATABASE } from "./../models/session.js";
 
-class SessionDatabaseController extends $kernel.controllers.database.DatabaseController {
+class SessionDatabaseController extends $kernel.src.controllers.database.DatabaseController {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

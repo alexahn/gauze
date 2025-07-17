@@ -2,7 +2,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__PROXY__MODEL__DATABASE } from "./../models/proxy.js";
 
-class ProxyDatabaseController extends $kernel.controllers.database.DatabaseController {
+class ProxyDatabaseController extends $kernel.src.controllers.database.DatabaseController {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

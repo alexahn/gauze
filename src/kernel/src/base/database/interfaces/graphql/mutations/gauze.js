@@ -69,14 +69,14 @@ const CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DA
 		},
 	},
 	resolve: (source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
 			"source",
 			source,
 		);
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
@@ -93,7 +93,7 @@ const CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DA
 			},
 			mutation_arguments,
 		).then(function (data) {
-			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 				"2",
 				__RELATIVE_FILEPATH,
 				"CREATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success",
@@ -168,14 +168,14 @@ const UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DA
 		},
 	},
 	resolve: (source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
 			"source",
 			source,
 		);
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
@@ -197,7 +197,7 @@ const UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DA
 			},
 			mutation_arguments,
 		).then(function (data) {
-			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 				"2",
 				__RELATIVE_FILEPATH,
 				"UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success",
@@ -268,14 +268,14 @@ const DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DA
 		},
 	},
 	resolve: (source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
 			"source",
 			source,
 		);
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
@@ -294,7 +294,7 @@ const DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DA
 			},
 			mutation_arguments,
 		).then(function (data) {
-			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 				"2",
 				__RELATIVE_FILEPATH,
 				"DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success",

@@ -2,7 +2,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__AGENT_USER__MODEL__DATABASE } from "./../models/agent_user.js";
 
-class AgentUserDatabaseController extends $kernel.controllers.database.DatabaseController {
+class AgentUserDatabaseController extends $kernel.src.controllers.database.DatabaseController {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

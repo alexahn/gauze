@@ -10,3 +10,5 @@ export * as cache from "./cache/index.js";
 export * as dataloader from "./dataloader.js";
 export * as linker from "./linker.js";
 export * as http from "./http.js";
+
+export * as src from "./src/index.js";

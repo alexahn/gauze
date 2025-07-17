@@ -2,7 +2,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__GAUZE__MODEL__SYSTEM } from "./../models/gauze.js";
 
-class GauzeSystemController extends $kernel.controllers.system.SystemController {
+class GauzeSystemController extends $kernel.src.controllers.system.SystemController {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

@@ -2,7 +2,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__EZUAG__MODEL__SYSTEM } from "./../models/ezuag.js";
 
-class EzuagEzuagSystemController extends $kernel.controllers.system.SystemController {
+class EzuagEzuagSystemController extends $kernel.src.controllers.system.SystemController {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

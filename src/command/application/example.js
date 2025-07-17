@@ -22,7 +22,7 @@ export const builder = function (yargs) {
 };
 
 export const handler = function (argv) {
-	$gauze.kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
+	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
 	// call a application level application here
 	console.log("project application command called");
 };

@@ -2,7 +2,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__PROXY__MODEL__SYSTEM } from "./../models/proxy.js";
 
-class ProxySystemController extends $kernel.controllers.system.SystemController {
+class ProxySystemController extends $kernel.src.controllers.system.SystemController {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

@@ -1,0 +1,5 @@
+- strict mode forces an additional render
+- variables passed into props cannot update props, but if the references are the same, changes to data can be represented when a render occurs, but it does not in of itself cause a render to occur
+- useState seems to track data changes, such that passing a useState variable into a prop causes the component to recalculate the prop when the useState variable is updated, changes to useState variables in and of itself cause a render to occur
+- it seems react has opted to make developers explicitly declare sources of change (e.g. useState variables) as a way to figure out when to re-calculate variables
+

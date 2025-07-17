@@ -1,0 +1,3 @@
+const PAGINATION_PAGE_SIZE = 3;
+
+export { PAGINATION_PAGE_SIZE };

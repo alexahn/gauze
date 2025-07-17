@@ -3,7 +3,7 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.models.system.SystemModel {
+class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.src.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

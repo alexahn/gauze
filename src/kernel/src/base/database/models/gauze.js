@@ -2,7 +2,7 @@ import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-class dd6fb00f485c4397add38780939d6923DatabaseModel extends $kernel.models.database.DatabaseModel {
+class dd6fb00f485c4397add38780939d6923DatabaseModel extends $kernel.src.models.database.DatabaseModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

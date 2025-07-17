@@ -2,7 +2,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__SESSION__MODEL__SYSTEM } from "./../models/session.js";
 
-class SessionSystemController extends $kernel.controllers.system.SystemController {
+class SessionSystemController extends $kernel.src.controllers.system.SystemController {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

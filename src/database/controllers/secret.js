@@ -2,7 +2,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__SECRET__MODEL__DATABASE } from "./../models/secret.js";
 
-class SecretDatabaseController extends $kernel.controllers.database.DatabaseController {
+class SecretDatabaseController extends $kernel.src.controllers.database.DatabaseController {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

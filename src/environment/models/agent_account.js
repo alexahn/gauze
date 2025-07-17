@@ -5,7 +5,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import * as $operations from "./operations/index.js";
 
-class AgentAccountEnvironmentModel extends $kernel.models.environment.EnvironmentModel {
+class AgentAccountEnvironmentModel extends $kernel.src.models.environment.EnvironmentModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

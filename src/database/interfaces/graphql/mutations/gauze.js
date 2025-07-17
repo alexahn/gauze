@@ -67,8 +67,8 @@ const CREATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 	},
 	resolve: (source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "CREATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "CREATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"CREATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
@@ -85,7 +85,7 @@ const CREATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			},
 			mutation_arguments,
 		).then(function (data) {
-			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "CREATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "CREATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
 			return data.map(SERIALIZER__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize);
 		});
 	},
@@ -152,8 +152,8 @@ const UPDATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 	},
 	resolve: (source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "UPDATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "UPDATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"UPDATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
@@ -175,7 +175,7 @@ const UPDATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			},
 			mutation_arguments,
 		).then(function (data) {
-			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "UPDATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "UPDATE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
 			return data.map(SERIALIZER__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize);
 		});
 	},
@@ -238,8 +238,8 @@ const DELETE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 	},
 	resolve: (source, mutation_arguments, context) => {
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "DELETE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
-		$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("0", __RELATIVE_FILEPATH, "DELETE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write(
 			"0",
 			__RELATIVE_FILEPATH,
 			"DELETE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
@@ -258,7 +258,7 @@ const DELETE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 			},
 			mutation_arguments,
 		).then(function (data) {
-			$kernel.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "DELETE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__KERNEL.write("2", __RELATIVE_FILEPATH, "DELETE__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:success", "data", data);
 			return data.map(SERIALIZER__GAUZE__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize);
 		});
 	},

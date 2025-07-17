@@ -2,7 +2,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__AGENT_PERSON__MODEL__SYSTEM } from "./../models/agent_person.js";
 
-class AgentPersonSystemController extends $kernel.controllers.system.SystemController {
+class AgentPersonSystemController extends $kernel.src.controllers.system.SystemController {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;

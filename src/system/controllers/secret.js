@@ -2,7 +2,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__SECRET__MODEL__SYSTEM } from "./../models/secret.js";
 
-class SecretSystemController extends $kernel.controllers.system.SystemController {
+class SecretSystemController extends $kernel.src.controllers.system.SystemController {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
