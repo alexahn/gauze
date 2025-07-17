@@ -1,5 +1,7 @@
 import { GraphQLString, GraphQLObjectType, GraphQLInputObjectType } from "graphql";
 
+import { CONTROLLER__AGENT_CHARACTER__CONTROLLER__ENVIRONMENT } from "./../../../../controllers/agents/character.js";
+
 const ASSERT__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Character__Assert",
 	fields: {

@@ -2,7 +2,7 @@ import { GraphQLString, GraphQLObjectType, GraphQLInputObjectType } from "graphq
 
 import { STEP__TYPE__ENVIRONMENT, INPUT_CODE__TYPE__ENVIRONMENT, INPUT_AGENT_ACCOUNT__TYPE__ENVIRONMENT } from "./../../../../types.js";
 
-import { CONTROLLER__AGENT_ACCOUNT__CONTROLLER__ENVIRONMENT } from "./../../../../controllers/agent_account.js";
+import { CONTROLLER__AGENT_ACCOUNT__CONTROLLER__ENVIRONMENT } from "./../../../../controllers/agents/account.js";
 
 const ASSERT__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Account__Assert",
