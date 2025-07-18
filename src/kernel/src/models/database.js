@@ -376,9 +376,7 @@ class DatabaseModel extends Model {
 				context.breadth += data.length;
 				return self.read(
 					context,
-					{
-						source: undefined,
-					},
+					{ source: undefined },
 					{
 						where: {
 							[self.primary_key]: data[0][self.primary_key],

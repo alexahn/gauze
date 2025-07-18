@@ -268,12 +268,10 @@ execute("/environment/graphql", null, enter_login_session_query)
 					return collection;
 				} else {
 					console.log("enter_session:", true);
-					return execute("/environment/graphql", signin_jwt, user_query).then(function (user_session) {
-						return {
-							...collection,
-							user_session: user_session.data.realm.system.enter_session,
-						};
-					});
+					return {
+						...collection,
+						user_session: user_session.data.realm.system.enter_session,
+					};
 				}
 			});
 		} else {
@@ -308,12 +306,48 @@ execute("/environment/graphql", null, enter_login_session_query)
 					return collection;
 				} else {
 					console.log("enter_session:", true);
-					return execute("/environment/graphql", signin_jwt, account_query).then(function (account_session) {
-						return {
-							...collection,
-							account_session: account_session.data.realm.system.enter_session,
-						};
-					});
+					return {
+						...collection,
+						account_session: account_session.data.realm.system.enter_session,
+					};
+				}
+			});
+		} else {
+			return collection;
+		}
+	})
+	.then(function (collection) {
+		if (collection && collection.account_proxy) {
+			const { signin_session, account_proxy } = collection;
+			const signin_jwt = signin_session.gauze__session__value;
+			const account_query = `
+			mutation {
+				realm {
+					system {
+						exit_session(proxy: {
+							gauze__proxy__root_id: "${account_proxy.attributes.gauze__proxy__root_id}",
+							gauze__proxy__agent_id: "${account_proxy.attributes.gauze__proxy__agent_id}",
+							gauze__proxy__agent_type: "${account_proxy.attributes.gauze__proxy__agent_type}"
+						}) {
+							gauze__session__id
+							gauze__session__agent_id
+							gauze__session__agent_type
+							gauze__session__value
+						}
+					}
+				}
+			}
+		`;
+			return execute("/environment/graphql", signin_jwt, account_query).then(function (account_session) {
+				if (account_session.errors && account_session.errors.length) {
+					console.log("exit_session.errors", account_session, JSON.stringify(account_session.errors.locations));
+					return collection;
+				} else {
+					console.log("exit_session:", true);
+					return {
+						...collection,
+						account_session_exit: account_session.data.realm.system.exit_session,
+					};
 				}
 			});
 		} else {

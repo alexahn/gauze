@@ -5,277 +5,170 @@ import { v4 as uuidv4 } from "uuid";
 // helper function for realms
 // enter session
 // exit session
-const ENTER_SESSION__REALM__ENVIRONMENT = function ({ proxy_type, session_type, proxy_model, session_model, relationship_model, realm, sign_jwt }, context, scope, parameters) {
+const ENTER_SESSION__REALM__ENVIRONMENT = function ({ proxy_type, session_type, proxy_model, session_model, realm, sign_jwt }, context, scope, parameters) {
 	const { agent } = context;
 	const target_agent = parameters.proxy;
 
-	const agent_is_proxy = agent.proxy_id && agent.session_id;
-
 	function enter() {
-		// ensure session exists
-		// ensure proxy exists for target agent with proxy session's root as its root
-		// create session
 		return new Promise(function (resolve, reject) {
 			const collection = {};
 			return resolve(collection);
 		})
 			.then(function (collection) {
-				return session_model.read().then(function (session) {
+				// ensure the session exists
+				const session_attributes = {
+					gauze__session__id: agent.session_id,
+				};
+				const session_parameters = { where: session_attributes };
+				return session_model.read(context, scope, session_parameters).then(function (sessions) {
+					if (sessions && sessions.length) {
+						const session = sessions[0];
+						return {
+							...collection,
+							session,
+						};
+					} else {
+						throw new Error("Session could not be found");
+					}
+				});
+			})
+			.then(function (collection) {
+				// ensure the proxy exists for target agent with proxy session's root as its root
+				const { session } = collection;
+				if (!session) throw new Error("Missing session dependency for proxy verification");
+				if (session.gauze__session__agent_type !== proxy_type) throw new Error("Proxy session is required to enter realm session");
+				const proxy_attributes = {
+					gauze__proxy__agent_type: target_agent.gauze__proxy__agent_type,
+					gauze__proxy__agent_id: target_agent.gauze__proxy__agent_id,
+					gauze__proxy__root_id: agent.proxy_id,
+				};
+				const proxy_parameters = { where: proxy_attributes };
+				return proxy_model.read(context, scope, proxy_parameters).then(function (proxies) {
+					if (proxies && proxies.length) {
+						const proxy = proxies[0];
+						return {
+							...collection,
+							proxy,
+						};
+					} else {
+						throw new Error("Proxy could not be found");
+					}
+				});
+			})
+			.then(function (collection) {
+				// create the session
+				const { proxy } = collection;
+				if (!proxy) throw new Error("Missing proxy dependency for session creation");
+				const session_id = uuidv4();
+				const proxy_id = agent.proxy_id;
+				const agent_id = proxy.gauze__proxy__agent_id;
+				const agent_type = proxy.gauze__proxy__agent_type;
+				return CREATE_SESSION__REALM__ENVIRONMENT({ proxy_type, session_type, proxy_model, session_model, realm, sign_jwt }, context, scope, {
+					session_id,
+					proxy_id,
+					agent_id,
+					agent_type,
+				}).then(function (realm_session) {
 					return {
 						...collection,
-						session,
+						realm_session,
 					};
 				});
 			})
 			.then(function (collection) {
-				const { dependencies } = collection;
-				if (!dependencies) throw new Error("Missing dependencies for proxy validation");
-				return proxy_model.read().then(function (proxy) {
-					return {
-						...collection,
-						proxy,
-					};
-				});
-			})
-			.then(function (collection) {});
+				// return result from collection
+				const { realm_session } = collection;
+				if (!realm_session) throw new Error("Missing realm session dependency for return");
+				return realm_session;
+			});
 	}
 
-	// the convention below is better to make sure we don't miss any edgecases
-	// what we need to do is somehow flatten the nesting a little bit
-	/*
+	// keep the branching logic legible by moving large blocks to their own functions
 	if (agent) {
 		if (agent.agent_type === proxy_type) {
 			if (target_agent) {
-				enter()
+				return enter();
 			} else {
-				throw new Error("Proxy agent is required to enter realm session")
+				throw new Error("Proxy agent is required to enter realm session");
 			}
 		} else {
-			throw new Error("Proxy session is required to enter realm session")
+			throw new Error("Proxy session is required to enter realm session");
 		}
 	} else {
-		throw new Error("Session is required to enter realm session")
-	}
-	*/
-
-	if (agent) {
-		if (target_agent) {
-			if (!target_agent.gauze__proxy__agent_type) {
-				throw new Error("Proxy argument requires field 'gauze__proxy__agent_type'");
-			}
-			if (!target_agent.gauze__proxy__agent_id) {
-				throw new Error("Proxy argument requires field 'gauze__proxy__agent_id'");
-			}
-			if (agent.proxy_id) {
-				if (agent.session_id) {
-					const session_attributes = {
-						gauze__session__id: agent.session_id,
-					};
-					const session_parameters = { where: session_attributes };
-					return session_model
-						.read(context, scope, session_parameters)
-						.then(function (sessions) {
-							if (sessions && sessions.length) {
-								const session = sessions[0];
-								return {
-									session: session,
-								};
-							} else {
-								return null;
-							}
-						})
-						.then(function (collection) {
-							if (collection) {
-								const { session } = collection;
-								if (session.gauze__session__agent_type === proxy_type) {
-									// do a look up to find the target proxy record
-									const proxy_attributes = {
-										gauze__proxy__agent_type: target_agent.gauze__proxy__agent_type,
-										gauze__proxy__agent_id: target_agent.gauze__proxy__agent_id,
-										gauze__proxy__root_id: agent.proxy_id,
-									};
-									const proxy_parameters = { where: proxy_attributes };
-									return proxy_model.read(context, scope, proxy_parameters).then(function (proxies) {
-										if (proxies && proxies.length) {
-											const proxy = proxies[0];
-											return {
-												...collection,
-												proxy: proxy,
-											};
-										} else {
-											return null;
-										}
-									});
-								} else {
-									return null;
-								}
-							} else {
-								return null;
-							}
-						})
-						.then(function (collection) {
-							if (collection) {
-								const { proxy } = collection;
-								const session_id = uuidv4();
-								const proxy_root_id = agent.proxy_id;
-								const agent_id = proxy.gauze__proxy__agent_id;
-								const agent_type = proxy.gauze__proxy__agent_type;
-								return CREATE_SESSION__REALM__ENVIRONMENT({ proxy_type, session_type, proxy_model, session_model, relationship_model, realm, sign_jwt }, context, scope, {
-									session_id,
-									proxy_id: proxy_root_id,
-									agent_id,
-									agent_type,
-								}).then(function (system_session) {
-									return {
-										...collection,
-										system_session: system_session,
-									};
-								});
-							} else {
-								return null;
-							}
-						})
-						.then(function (collection) {
-							if (collection) {
-								const { system_session } = collection;
-								return system_session;
-							} else {
-								throw new Error("Proxy session failed to enter session");
-							}
-						});
-				} else {
-					throw new Error("Proxy session is missing session id");
-				}
-			} else {
-				throw new Error("Non-proxy session cannot enter a proxy session");
-			}
-		} else {
-			if (agent.proxy_id) {
-				throw new Error("Proxy session cannot enter a non-proxy session");
-			} else {
-				throw new Error("Non-proxy session cannot enter a non-proxy session");
-			}
-		}
-	} else {
-		if (target_agent) {
-			if (!target_agent.gauze__proxy__agent_type) {
-				throw new Error("Proxy argument requires field 'gauze__proxy__agent_type'");
-			}
-			if (!target_agent.gauze__proxy__agent_id) {
-				throw new Error("Proxy argument requires field 'gauze__proxy__agent_id'");
-			}
-			throw new Error("Session is required to enter a proxy session");
-		} else {
-			// enter
-			//return self._create_environment_session(context, scope);
-		}
+		throw new Error("Session is required to enter realm session");
 	}
 };
-const EXIT_SESSION__REALM__ENVIRONMENT = function ({ proxy_type, session_type, proxy_model, session_model, relationship_model, realm }, context, scope, parameters) {
+
+const EXIT_SESSION__REALM__ENVIRONMENT = function ({ proxy_type, session_type, proxy_model, session_model, realm }, context, scope, parameters) {
 	const { agent } = context;
 	const target_agent = parameters.proxy;
-	if (agent) {
-		if (target_agent) {
-			if (agent.proxy_id) {
-				if (!agent.session_id) {
-					throw new Error("Proxy session is missing session id");
-				}
-				// first check to make sure that the target agent is a valid proxy for the current proxy session
-				// look up the proxy by using: agent_type: target_agent.agent_type, agent_id: target_agent.agent_id, root_id: agent.proxy_id
+
+	function exit() {
+		return new Promise(function (resolve, reject) {
+			const collection = {};
+			return resolve(collection);
+		})
+			.then(function (collection) {
+				// ensure the proxy exists for target agent with proxy session's root as its root
 				const proxy_attributes = {
 					gauze__proxy__root_id: agent.proxy_id,
 					gauze__proxy__agent_id: target_agent.gauze__proxy__agent_id,
 					gauze__proxy__agent_type: target_agent.gauze__proxy__agent_type,
 				};
 				const proxy_parameters = { where: proxy_attributes };
-				return (
-					proxy_model
-						.read(context, scope, proxy_parameters)
-						.then(function (proxies) {
-							if (proxies && proxies.length) {
-								const proxy = proxies[0];
-								return {
-									proxy: proxy,
-								};
-							} else {
-								return null;
-							}
-						})
-						.then(function (collection) {
-							if (collection) {
-								const { proxy } = collection;
-								// exit all sessions associated with the target proxy (for the realm)
-								const session_attributes = {
-									gauze__session__agent_id: target_agent.gauze__proxy__agent_id,
-									gauze__session__agent_type: target_agent.gauze__proxy__agent_type,
-									// todo: add realm filter here
-									gauze__session__realm: realm,
-								};
-								const session_parameters = {
-									where: session_attributes,
-								};
-								return session_model.delete(context, scope, session_parameters).then(function (sessions) {
-									return {
-										...collection,
-										sessions: sessions,
-									};
-								});
-							} else {
-								return null;
-							}
-						})
-						// todo: delete relationships
-						.then(function (collection) {
-							if (collection) {
-								const { sessions } = collection;
-								return sessions;
-							} else {
-								throw new Error("Proxy session failed to exit proxy session");
-							}
-						})
-				);
+				return proxy_model.read(context, scope, proxy_parameters).then(function (proxies) {
+					if (proxies && proxies.length) {
+						const proxy = proxies[0];
+						return {
+							...collection,
+							proxy,
+						};
+					} else {
+						throw new Error("Proxy could not be found");
+					}
+				});
+			})
+			.then(function (collection) {
+				// delete the sessions
+				const { proxy } = collection;
+				if (!proxy) throw new Error("Missing proxy dependency for session deletion");
+				const agent_id = target_agent.gauze__proxy__agent_id;
+				const agent_type = target_agent.gauze__proxy__agent_type;
+				return DELETE_SESSION__REALM__ENVIRONMENT({ proxy_type, session_type, proxy_model, session_model, realm }, context, scope, {
+					agent_id,
+					agent_type,
+				}).then(function (realm_sessions) {
+					return {
+						...collection,
+						realm_sessions,
+					};
+				});
+			})
+			.then(function (collection) {
+				// return result from collection
+				const { realm_sessions } = collection;
+				if (!realm_sessions) throw new Error("Missing realm sessions dependency for return");
+				return realm_sessions;
+			});
+	}
+
+	// keep the branching logic legible by moving large blocks to their own functions
+	if (agent) {
+		if (agent.agent_type === proxy_type) {
+			if (target_agent) {
+				return exit();
 			} else {
-				throw new Error("Non-proxy session cannot exit a proxy session");
+				throw new Error("Proxy agent is required to exit realm session");
 			}
 		} else {
-			if (agent.proxy_id) {
-				throw new Error("Proxy session cannot exit a non-proxy session");
-			} else {
-				if (!agent.session_id) {
-					throw new Error("Non-proxy session is missing session id");
-				}
-				// exit the current non-proxy session
-				const session_attributes = {
-					gauze__session__id: agent.session_id,
-				};
-				const session_parameters = {
-					where: session_attributes,
-				};
-				return session_model.delete(context, scope, session_parameters);
-			}
+			throw new Error("Proxy session is required to exit realm session");
 		}
 	} else {
-		if (target_agent) {
-			if (!target_agent.gauze__proxy__agent_type) {
-				throw new Error("Proxy argument requires field 'gauze__proxy__agent_type'");
-			}
-			if (!target_agent.gauze__proxy__agent_id) {
-				throw new Error("Proxy argument requires field 'gauze__proxy__agent_id'");
-			}
-			throw new Error("Session is required to exit a proxy session");
-		} else {
-			throw new Error("Session is required to exit a non-proxy session");
-		}
+		throw new Error("Session is required to exit realm session");
 	}
 };
 
-const CREATE_SESSION__REALM__ENVIRONMENT = function (
-	{ proxy_type, session_type, session_model, relationship_model, realm, sign_jwt },
-	context,
-	scope,
-	{ session_id, proxy_id, agent_id, agent_type },
-) {
-	const session_realm = realm;
+const CREATE_SESSION__REALM__ENVIRONMENT = function ({ proxy_type, session_type, session_model, realm, sign_jwt }, context, scope, { session_id, proxy_id, agent_id, agent_type }) {
 	const seed = randomBytes(64).toString("hex");
 	const payload = {
 		proxy_id: proxy_id,
@@ -284,55 +177,21 @@ const CREATE_SESSION__REALM__ENVIRONMENT = function (
 		session_id: session_id,
 		seed: seed,
 	};
-	// create a relationship
 	return sign_jwt(payload).then(function (jwt) {
-		const transactions = [
-			// session
-			function () {
-				const attributes = {
-					gauze__session__id: session_id,
-					gauze__session__agent_type: agent_type,
-					gauze__session__agent_id: agent_id,
-					gauze__session__realm: session_realm,
-					gauze__session__value: jwt,
-					gauze__session__kind: "agent",
-					gauze__session__data: "",
-					gauze__session__seed: seed,
-				};
-				const access_parameters = CREATE_SESSION_ACCESS_CONTROL__REALM__ENVIRONMENT(proxy_id, proxy_type, session_id, session_type);
-				const parameters = { attributes, ...access_parameters };
-				return session_model.create(context, scope, parameters).then(function (data) {
-					return data[0];
-				});
-			},
-			// relationships
-			function () {
-				const attributes = {
-					gauze__relationship__from_type: proxy_type,
-					gauze__relationship__from_id: proxy_id,
-					gauze__relationship__to_type: session_type,
-					gauze__relationship__to_id: session_id,
-				};
-				const parameters = { attributes };
-				return relationship_model.create(context, scope, parameters);
-			},
-			function () {
-				const attributes = {
-					gauze__relationship__from_type: session_type,
-					gauze__relationship__from_id: session_id,
-					gauze__relationship__to_type: proxy_type,
-					gauze__relationship__to_id: proxy_id,
-				};
-				const parameters = { attributes };
-				return relationship_model.create(context, scope, parameters);
-			},
-		];
-		return Promise.all(
-			transactions.map(function (f) {
-				return f();
-			}),
-		).then(function (results) {
-			return results[0];
+		const attributes = {
+			gauze__session__id: session_id,
+			gauze__session__agent_type: agent_type,
+			gauze__session__agent_id: agent_id,
+			gauze__session__realm: realm,
+			gauze__session__value: jwt,
+			gauze__session__kind: "agent",
+			gauze__session__data: "",
+			gauze__session__seed: seed,
+		};
+		const access_parameters = CREATE_SESSION_ACCESS_CONTROL__REALM__ENVIRONMENT(proxy_id, proxy_type, session_id, session_type);
+		const parameters = { attributes, ...access_parameters };
+		return session_model.create(context, scope, parameters).then(function (data) {
+			return data[0];
 		});
 	});
 };
@@ -430,6 +289,18 @@ const CREATE_SESSION_ACCESS_CONTROL__REALM__ENVIRONMENT = function (agent_id, ag
 		gauze__blacklist__method: "count",
 	};
 	return parameters;
+};
+
+const DELETE_SESSION__REALM__ENVIRONMENT = function ({ proxy_type, session_type, session_model, realm }, context, scope, { agent_id, agent_type }) {
+	const session_attributes = {
+		gauze__session__agent_id: agent_id,
+		gauze__session__agent_type: agent_type,
+		gauze__session__realm: realm,
+	};
+	const session_parameters = {
+		where: session_attributes,
+	};
+	return session_model.delete(context, scope, session_parameters);
 };
 
 export { ENTER_SESSION__REALM__ENVIRONMENT, EXIT_SESSION__REALM__ENVIRONMENT };
