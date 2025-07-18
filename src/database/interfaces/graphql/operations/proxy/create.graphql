@@ -21,6 +21,7 @@ mutation CreateProxy(
 			gauze__proxy__agent_id
 			gauze__proxy__agent_type
 			gauze__proxy__root_id
+			gauze__proxy__realms
 		}
 		mutation {
 			create_whitelist: create_whitelist(attributes: $whitelist_create) {

@@ -38,6 +38,7 @@ mutation UpdateProxy(
 			gauze__proxy__agent_id
 			gauze__proxy__agent_type
 			gauze__proxy__root_id
+			gauze__proxy__realms
 		}
 	}
 }

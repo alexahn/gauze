@@ -21,7 +21,6 @@ const up = function (knex) {
 			table.index("gauze__proxy__agent_type");
 			table.index("gauze__proxy__agent_id");
 			table.index("gauze__proxy__root_id");
-			
 
 			// note: do not add root_id as a unique constraint
 			table.unique(["gauze__proxy__agent_type", "gauze__proxy__agent_id"], {
