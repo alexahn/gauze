@@ -16,7 +16,7 @@ const up = function (knex) {
 			table.string("gauze__session__value", 1024).notNullable();
 			table.string("gauze__session__kind", 16).notNullable();
 			table.string("gauze__session__seed", 256).notNullable();
-			table.string("gauze__session__data", 512).notNullable();
+			table.json("gauze__session__data").notNullable();
 
 			table.index("gauze__session__created_at");
 			table.index("gauze__session__updated_at");

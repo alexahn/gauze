@@ -1000,3 +1000,8 @@
 		[ ] need to figure out the garbage collection algorithm (for entities that have all links severed)
 		[ ] sharding by time might be the most performant to prevent too much network noise (e.g. unnecessary fanning of connections and requests)
 
+
+[ ] revisit sql column limits
+	[ ] this is kind of a pain in the ass to keep thinking about
+	[ ] session data is 512 characters, which could overflow if we introduce many different authentication steps
+	[ ] maybe change variable length fields to text field
