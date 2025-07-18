@@ -198,6 +198,57 @@ const AUTHENTICATE_DATABASE__AUTHENTICATION__ENVIRONMENT = function (auth) {
 	}
 };
 
+const KERNEL_JWT_ISSUER = "gauze";
+
+// note: the unwrapped jwt should have an audience that is the resource server
+// note: the wrapped jwt should have an audience that maps to agent_type
+const KERNEL_JWT_AUDIENCE = "database";
+
+// todo: change the algorithm to EdDSA
+// note: will need a master public/private key pair
+// note: we could leave it as symmetric to make it easy to run the serve
+const KERNEL_JWT_HEADER = {
+	alg: "HS256",
+};
+
+const SIGN_KERNEL_JWT__AUTHENTICATION__ENVIRONMENT = function (payload) {
+	const secret = new TextEncoder().encode(process.env.GAUZE_KERNEL_JWT_SECRET);
+	return new jose.SignJWT(payload).setProtectedHeader(KERNEL_JWT_HEADER).setIssuedAt().setIssuer(KERNEL_JWT_ISSUER).setAudience(KERNEL_JWT_AUDIENCE).setExpirationTime("2h").sign(secret);
+};
+
+const VERIFY_KERNEL_JWT__AUTHENTICATION__ENVIRONMENT = function (jwt) {
+	const secret = new TextEncoder().encode(process.env.GAUZE_KERNEL_JWT_SECRET);
+	return jose.jwtVerify(jwt, secret, {
+		issuer: KERNEL_JWT_ISSUER,
+		audience: KERNEL_JWT_AUDIENCE,
+	});
+};
+
+// auth is authentication header
+const AUTHENTICATE_KERNEL__AUTHENTICATION__ENVIRONMENT = function (auth) {
+	// parse the header to extract the token
+	var jwt = null;
+	//const auth = req.headers.authorization;
+	if (auth) {
+		const auth_split = auth.split(" ");
+		if (auth_split[0] === "Bearer") {
+			jwt = auth_split[1];
+			return VERIFY_KERNEL_JWT__AUTHENTICATION__ENVIRONMENT(jwt)
+				.then(function ({ payload }) {
+					return payload;
+				})
+				.catch(function (err) {
+					// note: maybe log?
+					throw new Error("Invalid JWT");
+				});
+		} else {
+			return Promise.reject(new Error("Invalid Authorization type"));
+		}
+	} else {
+		return Promise.reject(new Error("Missing authorization header"));
+	}
+};
+
 export {
 	VERIFY_JWT_PAYLOAD,
 	HASH_PASSWORD__AUTHENTICATION__ENVIRONMENT,
@@ -213,4 +264,8 @@ export {
 	SIGN_DATABASE_JWT__AUTHENTICATION__ENVIRONMENT,
 	VERIFY_DATABASE_JWT__AUTHENTICATION__ENVIRONMENT,
 	AUTHENTICATE_DATABASE__AUTHENTICATION__ENVIRONMENT,
+	// KERNEL
+	SIGN_KERNEL_JWT__AUTHENTICATION__ENVIRONMENT,
+	VERIFY_KERNEL_JWT__AUTHENTICATION__ENVIRONMENT,
+	AUTHENTICATE_KERNEL__AUTHENTICATION__ENVIRONMENT,
 };

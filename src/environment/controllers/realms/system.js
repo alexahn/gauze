@@ -2,9 +2,6 @@ import * as $abstract from "./../../../abstract/index.js";
 
 import { SIGN_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT, SIGN_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT } from "./../../authentication.js";
 
-import { MODEL__RELATIONSHIP__MODEL__ENVIRONMENT } from "./../../models/relationship.js";
-
-//import { MODEL__SECRET__MODEL__ENVIRONMENT } from "./../../models/secret.js";
 import { MODEL__SESSION__MODEL__ENVIRONMENT } from "./../../models/session.js";
 import { MODEL__PROXY__MODEL__ENVIRONMENT } from "./../../models/proxy.js";
 
@@ -24,7 +21,6 @@ class RealmSystemController {
 			session_type: self.session_type,
 			proxy_model: MODEL__PROXY__MODEL__ENVIRONMENT,
 			session_model: MODEL__SESSION__MODEL__ENVIRONMENT,
-			relationship_model: MODEL__RELATIONSHIP__MODEL__ENVIRONMENT,
 			realm: "system",
 			sign_jwt: SIGN_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT,
 		};
@@ -38,7 +34,6 @@ class RealmSystemController {
 			session_type: self.session_type,
 			proxy_model: MODEL__PROXY__MODEL__ENVIRONMENT,
 			session_model: MODEL__SESSION__MODEL__ENVIRONMENT,
-			relationship_model: MODEL__RELATIONSHIP__MODEL__ENVIRONMENT,
 			realm: "system",
 		};
 		return EXIT_SESSION__REALM__ENVIRONMENT(dependencies, context, scope, parameters);
