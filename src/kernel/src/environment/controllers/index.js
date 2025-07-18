@@ -4,6 +4,5 @@ export * as agent_account from "./agent_account.js";
 export * as agent_user from "./agent_user.js";
 export * as agent_person from "./agent_person.js";
 export * as agent_character from "./agent_character.js";
-export * as realm_system from "./realm_system.js";
-export * as realm_database from "./realm_database.js";
-export * as realm_kernel from "./realm_kernel.js";
+
+export * as realms from "./realms/index.js";

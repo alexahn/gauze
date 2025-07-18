@@ -35,7 +35,7 @@ const MUTATION_TYPE = new GraphQLObjectType({
 			resolve: function (source, args, context) {
 				return {};
 			},
-		}
+		},
 	},
 });
 

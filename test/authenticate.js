@@ -1,7 +1,7 @@
 import http from "http";
 
-const GAUZE_EMAIL = "contact@home.alexahn.com"
-const GAUZE_PASSWORD = "1234"
+const GAUZE_EMAIL = "contact@home.alexahn.com";
+const GAUZE_PASSWORD = "1234";
 
 function execute(path, jwt, query) {
 	return new Promise(function (resolve, reject) {
@@ -13,7 +13,7 @@ function execute(path, jwt, query) {
 				method: "POST",
 				headers: {
 					Authorization: jwt ? `Bearer ${jwt}` : "",
-					"content-type": "application/json; charset=utf-8"
+					"content-type": "application/json; charset=utf-8",
 				},
 			},
 			function (res) {
@@ -209,19 +209,19 @@ execute("/environment/graphql", null, enter_login_session_query)
 							return proxy.attributes.gauze__proxy__agent_type === "gauze__agent_character";
 						});
 						if (!root_proxy) {
-							throw new Error("root_proxy does not exist")
+							throw new Error("root_proxy does not exist");
 						}
 						if (!account_proxy) {
-							throw new Error("account_proxy does not exist")
+							throw new Error("account_proxy does not exist");
 						}
 						if (!user_proxy) {
-							throw new Error("user_proxy does not exist")
+							throw new Error("user_proxy does not exist");
 						}
 						if (!person_proxy) {
-							throw new Error("person_proxy does not exist")
+							throw new Error("person_proxy does not exist");
 						}
 						if (!character_proxy) {
-							throw new Error("character_proxy does not exist")
+							throw new Error("character_proxy does not exist");
 						}
 						return {
 							...collection,
@@ -229,10 +229,10 @@ execute("/environment/graphql", null, enter_login_session_query)
 							account_proxy: account_proxy,
 							user_proxy: user_proxy,
 							person_proxy: person_proxy,
-							character_proxy: character_proxy
+							character_proxy: character_proxy,
 						};
 					} else {
-						throw new Error("read_proxy returned no proxies")
+						throw new Error("read_proxy returned no proxies");
 					}
 				}
 			});

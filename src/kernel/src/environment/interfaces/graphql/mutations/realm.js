@@ -23,7 +23,7 @@ const MUTATION__REALM__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLOb
 			type: MUTATION__SYSTEM__REALM__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			resolve: function (scooe, args, context) {
 				return {};
-			}
+			},
 		},
 	},
 });

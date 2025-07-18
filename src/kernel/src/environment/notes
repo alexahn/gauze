@@ -70,5 +70,7 @@
 		sign_in
 		sign_out
 		sign_up
+		enter_session
+		exit_session
 	}
 }
