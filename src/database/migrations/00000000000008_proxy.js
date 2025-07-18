@@ -13,6 +13,7 @@ const up = function (knex) {
 			table.string("gauze__proxy__agent_type", 64).notNullable();
 			table.uuid("gauze__proxy__agent_id").notNullable();
 			table.uuid("gauze__proxy__root_id").notNullable();
+			table.json("gauze__proxy__realms").notNullable();
 
 			table.index("gauze__proxy__created_at");
 			table.index("gauze__proxy__updated_at");
@@ -20,6 +21,7 @@ const up = function (knex) {
 			table.index("gauze__proxy__agent_type");
 			table.index("gauze__proxy__agent_id");
 			table.index("gauze__proxy__root_id");
+			
 
 			// note: do not add root_id as a unique constraint
 			table.unique(["gauze__proxy__agent_type", "gauze__proxy__agent_id"], {
