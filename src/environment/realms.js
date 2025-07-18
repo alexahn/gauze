@@ -1,9 +1,63 @@
+const { randomBytes } = await import("node:crypto");
+
+import { v4 as uuidv4 } from "uuid";
+
 // helper function for realms
 // enter session
 // exit session
 const ENTER_SESSION__REALM__ENVIRONMENT = function ({ proxy_type, session_type, proxy_model, session_model, relationship_model, realm, sign_jwt }, context, scope, parameters) {
 	const { agent } = context;
 	const target_agent = parameters.proxy;
+
+	const agent_is_proxy = agent.proxy_id && agent.session_id;
+
+	function enter() {
+		// ensure session exists
+		// ensure proxy exists for target agent with proxy session's root as its root
+		// create session
+		return new Promise(function (resolve, reject) {
+			const collection = {};
+			return resolve(collection);
+		})
+			.then(function (collection) {
+				return session_model.read().then(function (session) {
+					return {
+						...collection,
+						session,
+					};
+				});
+			})
+			.then(function (collection) {
+				const { dependencies } = collection;
+				if (!dependencies) throw new Error("Missing dependencies for proxy validation");
+				return proxy_model.read().then(function (proxy) {
+					return {
+						...collection,
+						proxy,
+					};
+				});
+			})
+			.then(function (collection) {});
+	}
+
+	// the convention below is better to make sure we don't miss any edgecases
+	// what we need to do is somehow flatten the nesting a little bit
+	/*
+	if (agent) {
+		if (agent.agent_type === proxy_type) {
+			if (target_agent) {
+				enter()
+			} else {
+				throw new Error("Proxy agent is required to enter realm session")
+			}
+		} else {
+			throw new Error("Proxy session is required to enter realm session")
+		}
+	} else {
+		throw new Error("Session is required to enter realm session")
+	}
+	*/
+
 	if (agent) {
 		if (target_agent) {
 			if (!target_agent.gauze__proxy__agent_type) {
@@ -66,15 +120,12 @@ const ENTER_SESSION__REALM__ENVIRONMENT = function ({ proxy_type, session_type, 
 								const proxy_root_id = agent.proxy_id;
 								const agent_id = proxy.gauze__proxy__agent_id;
 								const agent_type = proxy.gauze__proxy__agent_type;
-								return CREATE_SESSION__REALM__ENVIRONMENT(
-									{ proxy_type, session_type, proxy_model, session_model, relationship_model, realm, sign_jwt },
-									context,
-									scope,
+								return CREATE_SESSION__REALM__ENVIRONMENT({ proxy_type, session_type, proxy_model, session_model, relationship_model, realm, sign_jwt }, context, scope, {
 									session_id,
-									proxy_root_id,
+									proxy_id: proxy_root_id,
 									agent_id,
 									agent_type,
-								).then(function (system_session) {
+								}).then(function (system_session) {
 									return {
 										...collection,
 										system_session: system_session,
@@ -286,7 +337,7 @@ const CREATE_SESSION__REALM__ENVIRONMENT = function (
 	});
 };
 
-const CREATE_SESSION_ACCESS_CONTROL__REALM__ENVIROMENT = function (agent_id, agent_type, entity_id, entity_type) {
+const CREATE_SESSION_ACCESS_CONTROL__REALM__ENVIRONMENT = function (agent_id, agent_type, entity_id, entity_type) {
 	const parameters = {};
 	parameters.whitelist_create = {
 		gauze__whitelist__realm: "system",

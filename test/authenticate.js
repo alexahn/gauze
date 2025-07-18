@@ -8,7 +8,7 @@ function execute(path, jwt, query) {
 		const req = http.request(
 			{
 				hostname: "localhost",
-				port: 4003,
+				port: 4000,
 				path: path,
 				method: "POST",
 				headers: {
@@ -246,16 +246,18 @@ execute("/environment/graphql", null, enter_login_session_query)
 			const signin_jwt = signin_session.gauze__session__value;
 			const user_query = `
 			mutation {
-				environment {
-					enter_session(proxy: {
-						gauze__proxy__root_id: "${user_proxy.attributes.gauze__proxy__root_id}",
-						gauze__proxy__agent_id: "${user_proxy.attributes.gauze__proxy__agent_id}",
-						gauze__proxy__agent_type: "${user_proxy.attributes.gauze__proxy__agent_type}"
-					}) {
-						gauze__session__id
-						gauze__session__agent_id
-						gauze__session__agent_type
-						gauze__session__value
+				realm {
+					system {
+						enter_session(proxy: {
+							gauze__proxy__root_id: "${user_proxy.attributes.gauze__proxy__root_id}",
+							gauze__proxy__agent_id: "${user_proxy.attributes.gauze__proxy__agent_id}",
+							gauze__proxy__agent_type: "${user_proxy.attributes.gauze__proxy__agent_type}"
+						}) {
+							gauze__session__id
+							gauze__session__agent_id
+							gauze__session__agent_type
+							gauze__session__value
+						}
 					}
 				}
 			}
@@ -269,7 +271,7 @@ execute("/environment/graphql", null, enter_login_session_query)
 					return execute("/environment/graphql", signin_jwt, user_query).then(function (user_session) {
 						return {
 							...collection,
-							user_session: user_session.data.environment.enter_session,
+							user_session: user_session.data.realm.system.enter_session,
 						};
 					});
 				}
@@ -284,16 +286,18 @@ execute("/environment/graphql", null, enter_login_session_query)
 			const signin_jwt = signin_session.gauze__session__value;
 			const account_query = `
 			mutation {
-				environment {
-					enter_session(proxy: {
-						gauze__proxy__root_id: "${account_proxy.attributes.gauze__proxy__root_id}",
-						gauze__proxy__agent_id: "${account_proxy.attributes.gauze__proxy__agent_id}",
-						gauze__proxy__agent_type: "${account_proxy.attributes.gauze__proxy__agent_type}"
-					}) {
-						gauze__session__id
-						gauze__session__agent_id
-						gauze__session__agent_type
-						gauze__session__value
+				realm {
+					system {
+						enter_session(proxy: {
+							gauze__proxy__root_id: "${account_proxy.attributes.gauze__proxy__root_id}",
+							gauze__proxy__agent_id: "${account_proxy.attributes.gauze__proxy__agent_id}",
+							gauze__proxy__agent_type: "${account_proxy.attributes.gauze__proxy__agent_type}"
+						}) {
+							gauze__session__id
+							gauze__session__agent_id
+							gauze__session__agent_type
+							gauze__session__value
+						}
 					}
 				}
 			}
@@ -307,7 +311,7 @@ execute("/environment/graphql", null, enter_login_session_query)
 					return execute("/environment/graphql", signin_jwt, account_query).then(function (account_session) {
 						return {
 							...collection,
-							account_session: account_session.data.environment.enter_session,
+							account_session: account_session.data.realm.system.enter_session,
 						};
 					});
 				}
