@@ -6,7 +6,7 @@ import { STEP__TYPE__ENVIRONMENT, INPUT_CODE__TYPE__ENVIRONMENT, INPUT_AGENT_PER
 
 import { CONTROLLER__AGENT_PERSON__CONTROLLER__ENVIRONMENT } from "./../../../../controllers/agent_person.js";
 
-const ASSERT__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
+const ASSERT__PERSON__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Person__Assert",
 	fields: {
 		email: {
@@ -30,7 +30,7 @@ const ASSERT__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Grap
 	},
 });
 
-const REQUEST__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
+const REQUEST__PERSON__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Person__Request",
 	fields: {
 		email: {
@@ -72,7 +72,7 @@ const REQUEST__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 	},
 });
 
-const VERIFY__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
+const VERIFY__PERSON__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Person__Verify",
 	fields: {
 		email: {
@@ -114,23 +114,23 @@ const VERIFY__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Grap
 	},
 });
 
-const MUTATION__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
+const MUTATION__PERSON__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Person",
 	fields: {
 		assert: {
-			type: ASSERT__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+			type: ASSERT__PERSON__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			resolve: function (source, args, context) {
 				return {};
 			},
 		},
 		request: {
-			type: REQUEST__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+			type: REQUEST__PERSON__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			resolve: function (source, args, context) {
 				return {};
 			},
 		},
 		verify: {
-			type: VERIFY__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+			type: VERIFY__PERSON__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			resolve: function (source, args, context) {
 				return {};
 			},
@@ -138,4 +138,4 @@ const MUTATION__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gr
 	},
 });
 
-export { MUTATION__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT };
+export { MUTATION__PERSON__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT };

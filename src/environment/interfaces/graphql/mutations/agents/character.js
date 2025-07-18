@@ -2,7 +2,7 @@ import { GraphQLString, GraphQLObjectType, GraphQLInputObjectType } from "graphq
 
 import { CONTROLLER__AGENT_CHARACTER__CONTROLLER__ENVIRONMENT } from "./../../../../controllers/agent_character.js";
 
-const ASSERT__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
+const ASSERT__CHARACTER__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Character__Assert",
 	fields: {
 		assert: {
@@ -14,7 +14,7 @@ const ASSERT__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new G
 	},
 });
 
-const REQUEST__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
+const REQUEST__CHARACTER__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Character__Request",
 	fields: {
 		request: {
@@ -26,7 +26,7 @@ const REQUEST__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new 
 	},
 });
 
-const VERIFY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
+const VERIFY__CHARACTER__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Character__Verify",
 	fields: {
 		password: {
@@ -38,23 +38,23 @@ const VERIFY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new G
 	},
 });
 
-const MUTATION__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
+const MUTATION__CHARACTER__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Character",
 	fields: {
 		assert: {
-			type: ASSERT__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+			type: ASSERT__CHARACTER__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			resolve: function (source, args, context) {
 				return {};
 			},
 		},
 		request: {
-			type: REQUEST__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+			type: REQUEST__CHARACTER__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			resolve: function (source, args, context) {
 				return {};
 			},
 		},
 		verify: {
-			type: VERIFY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+			type: VERIFY__CHARACTER__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			resolve: function (source, args, context) {
 				return {};
 			},
@@ -62,4 +62,4 @@ const MUTATION__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new
 	},
 });
 
-export { MUTATION__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT };
+export { MUTATION__CHARACTER__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT };

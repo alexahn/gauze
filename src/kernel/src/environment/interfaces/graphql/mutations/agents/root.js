@@ -2,7 +2,7 @@ import { GraphQLString, GraphQLObjectType, GraphQLInputObjectType } from "graphq
 
 import { CONTROLLER__AGENT_ROOT__CONTROLLER__ENVIRONMENT } from "./../../../../controllers/agent_root.js";
 
-const ASSERT__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
+const ASSERT__ROOT__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Root__Assert",
 	fields: {
 		assert: {
@@ -14,7 +14,7 @@ const ASSERT__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQ
 	},
 });
 
-const REQUEST__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
+const REQUEST__ROOT__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Root__Request",
 	fields: {
 		request: {
@@ -26,7 +26,7 @@ const REQUEST__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Graph
 	},
 });
 
-const VERIFY__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
+const VERIFY__ROOT__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Root__Verify",
 	fields: {
 		password: {
@@ -38,23 +38,23 @@ const VERIFY__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQ
 	},
 });
 
-const MUTATION__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
+const MUTATION__ROOT__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Agent_Root",
 	fields: {
 		assert: {
-			type: ASSERT__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+			type: ASSERT__ROOT__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			resolve: function (source, args, context) {
 				return {};
 			},
 		},
 		request: {
-			type: REQUEST__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+			type: REQUEST__ROOT__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			resolve: function (source, args, context) {
 				return {};
 			},
 		},
 		verify: {
-			type: VERIFY__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+			type: VERIFY__ROOT__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
 			resolve: function (source, args, context) {
 				return {};
 			},
@@ -62,4 +62,4 @@ const MUTATION__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Grap
 	},
 });
 
-export { MUTATION__AGENT_ROOT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT };
+export { MUTATION__ROOT__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT };

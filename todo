@@ -944,7 +944,8 @@
 	[ ] write project documentation using server side rendering
 [ ] projects
 	[ ] self-contained modules that contain entity definitions, kernel realm, database realm, and system realm
-	[ ] would be ideal if every application returned a server or router object
+	[x] would be ideal if every project returned a server or router object
+		[x] convention is to have a root router.js file
 	[x] projects are just a bundle of realms
 [ ] config/settings
 	[ ] cli command to parse configs/settings for every type (project, realm, application)

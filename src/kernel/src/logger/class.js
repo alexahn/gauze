@@ -97,7 +97,7 @@ class IOLogger extends Logger {
 				const VALID_MESSAGE = MESSAGE_REGEX.test(message);
 				if (!VALID_MESSAGE) return null;
 			}
-			const formatted = `level:${level} topic:${topic} message: ${message}`;
+			const formatted = `level:${level} topic:${topic} message:${message}`;
 			return formatted;
 		});
 		stack.push(last_line);

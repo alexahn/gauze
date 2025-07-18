@@ -4,6 +4,8 @@ import { MUTATION__AGENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT } from "./mu
 
 import { MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT } from "./mutations/environment.js";
 
+import { MUTATION__REALM__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT } from "./mutations/realm.js";
+
 const QUERY_TYPE = new GraphQLObjectType({
 	name: "Query",
 	fields: {
@@ -28,6 +30,12 @@ const MUTATION_TYPE = new GraphQLObjectType({
 				return {};
 			},
 		},
+		realm: {
+			type: MUTATION__REALM__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT,
+			resolve: function (source, args, context) {
+				return {};
+			},
+		}
 	},
 });
 
