@@ -112,6 +112,21 @@ export default function ($abstract) {
 				post_deserialize_middlewares: [],
 				allowed_agent_types: ["gauze__proxy"],
 			},
+			gauze__proxy__realms: {
+				name: "gauze__proxy__realms",
+				indexed: false,
+				required: true,
+				sql_type: "json",
+				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				description: "realms",
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.UPDATE_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("gauze__proxy__realms")],
+				serializers: [],
+				post_serialize_middlewares: [],
+				pre_deserialize_middlewares: [],
+				deserializers: [],
+				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__proxy"],
+			},
 		},
 		methods: {
 			create: {
