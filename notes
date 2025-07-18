@@ -22,3 +22,25 @@ it feels like it would be hard to debug if anything went wrong
 it defeats the purpose of using promises to return deferred values
 but part of me also thinks it would be way more performant
 i dont think i have any performance issues yet, so i want to keep everything functionally pure
+
+-------------
+
+we need one convention for doing non-linear asynchronous work. the convention below seems to be the most flexible and it's not that far from what koa is doing.
+refactor all non-linear asynchronous code to use this pattern. we know the code is non-linear if we were already trying to do something like this because we needed to collect and access results across non-continuous steps.
+
+function pattern(params) {
+	return promise.then(function (collection) {
+		const { dependencies } = collection
+		if (!dependencies) throw new Error("Collection is missing dependency")
+		return work(params, dependencies).then(function (output) {
+			return {
+				...collection,
+				output: output
+			}
+		})
+	})
+}
+
+another pattern that we should maybe avoid (which we were doing before) is suppressing errors by returning a null collection. part of the reason i was doing this was to prevent the server from leaking any errors that could help an attacker understand the server's architecture. the obscurity is nice but the code becomes very ugly due to all the branching. maybe just throw errors and handle the error in one well placed promise.catch()
+
+
