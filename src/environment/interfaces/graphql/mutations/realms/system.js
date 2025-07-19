@@ -2,8 +2,6 @@ import { GraphQLList, GraphQLString, GraphQLObjectType, GraphQLInputObjectType }
 
 import { SESSION__TYPE__ENVIRONMENT, INPUT_PROXY__TYPE__ENVIRONMENT } from "./../../../../types.js";
 
-import { CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT } from "./../../../../controllers/environment.js";
-
 import { CONTROLLER__SYSTEM__REALM__CONTROLLER__ENVIRONMENT } from "./../../../../controllers/realms/system.js";
 
 const MUTATION__SYSTEM__REALM__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({

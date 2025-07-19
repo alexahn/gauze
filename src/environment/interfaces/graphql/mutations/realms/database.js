@@ -2,7 +2,7 @@ import { GraphQLList, GraphQLString, GraphQLObjectType, GraphQLInputObjectType }
 
 import { SESSION__TYPE__ENVIRONMENT, INPUT_PROXY__TYPE__ENVIRONMENT } from "./../../../../types.js";
 
-import { CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT } from "./../../../../controllers/environment.js";
+import { CONTROLLER__DATABASE__REALM__CONTROLLER__ENVIRONMENT } from "./../../../../controllers/realms/database.js";
 
 const MUTATION__DATABASE__REALM__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Realm_Database",
@@ -16,7 +16,7 @@ const MUTATION__DATABASE__REALM__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new
 				},
 			},
 			resolve: function (source, args, context) {
-				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.enter_session(
+				return CONTROLLER__DATABASE__REALM__CONTROLLER__ENVIRONMENT.enter_session(
 					context,
 					{
 						source,
@@ -34,7 +34,7 @@ const MUTATION__DATABASE__REALM__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new
 				},
 			},
 			resolve: function (source, args, context) {
-				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.exit_session(
+				return CONTROLLER__DATABASE__REALM__CONTROLLER__ENVIRONMENT.exit_session(
 					context,
 					{
 						source,

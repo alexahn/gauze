@@ -174,7 +174,7 @@ const routes = [
 						return Promise.resolve(true);
 					} else {
 						const proxy = {
-							gauze__proxy__root_id: decoded.proxy_id
+							gauze__proxy__root_id: decoded.proxy_id,
 						};
 						return gauze.default.proxies(proxy).then(function (proxies) {
 							proxies.forEach(function (proxy) {

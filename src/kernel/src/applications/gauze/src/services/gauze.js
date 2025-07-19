@@ -427,7 +427,7 @@ query read_proxy($proxy: Proxy_Query__Where) {
 }
 `;
 		const variables = {
-			proxy: proxy
+			proxy: proxy,
 		};
 		return self
 			.proxyEnvironment({

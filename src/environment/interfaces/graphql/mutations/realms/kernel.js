@@ -4,6 +4,8 @@ import { SESSION__TYPE__ENVIRONMENT, INPUT_PROXY__TYPE__ENVIRONMENT } from "./..
 
 import { CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT } from "./../../../../controllers/environment.js";
 
+import { CONTROLLER__KERNEL__REALM__CONTROLLER__ENVIRONMENT } from "./../../../../controllers/realms/kernel.js";
+
 const MUTATION__KERNEL__REALM__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new GraphQLObjectType({
 	name: "Realm_Kernel",
 	fields: {
@@ -16,7 +18,7 @@ const MUTATION__KERNEL__REALM__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new G
 				},
 			},
 			resolve: function (source, args, context) {
-				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.enter_session(
+				return CONTROLLER__KERNEL__REALM__CONTROLLER__ENVIRONMENT.enter_session(
 					context,
 					{
 						source,
@@ -34,7 +36,7 @@ const MUTATION__KERNEL__REALM__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new G
 				},
 			},
 			resolve: function (source, args, context) {
-				return CONTROLLER__ENVIRONMENT__CONTROLLER__ENVIRONMENT.exit_session(
+				return CONTROLLER__KERNEL__REALM__CONTROLLER__ENVIRONMENT.exit_session(
 					context,
 					{
 						source,

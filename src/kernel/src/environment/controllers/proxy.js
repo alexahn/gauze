@@ -13,20 +13,20 @@ class ProxyEnvironmentController extends $kernel.src.controllers.environment.Env
 	}
 	read(context, scope, input) {
 		const self = this;
-		const { agent } = context
+		const { agent } = context;
 		if (agent) {
 			if (agent.proxy_id) {
 				// override query here
 				// use agent.proxy_id to search for proxy.root_id
 				// lock down the query here to only return proxies with root set to the current sessions proxy id
-				input.where = input.where || {}
-				input.where.gauze__proxy__root_id = agent.proxy_id
+				input.where = input.where || {};
+				input.where.gauze__proxy__root_id = agent.proxy_id;
 				return self._read(context, scope, input);
 			} else {
-				throw new Error("Proxy session is required to view proxies")
+				throw new Error("Proxy session is required to view proxies");
 			}
 		} else {
-			throw new Error("Session is required to view proxies")
+			throw new Error("Session is required to view proxies");
 		}
 	}
 	update(context, scope, input) {
