@@ -115,7 +115,7 @@ export default function ($abstract) {
 			gauze__proxy__realms: {
 				name: "gauze__proxy__realms",
 				indexed: false,
-				required: true,
+				required: false,
 				sql_type: "json",
 				graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "realms",

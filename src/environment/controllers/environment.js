@@ -522,6 +522,7 @@ class EnvironmentController {
 							gauze__proxy__agent_type: agent_root_type,
 							gauze__proxy__agent_id: agent_root_id,
 							gauze__proxy__root_id: proxy_root_id,
+							gauze__proxy__realms: JSON.stringify({ system: true }),
 						};
 						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_root_id, proxy_type);
 						const parameters = { attributes, ...access_parameters };
@@ -533,6 +534,7 @@ class EnvironmentController {
 							gauze__proxy__agent_type: agent_account_type,
 							gauze__proxy__agent_id: agent_account_id,
 							gauze__proxy__root_id: proxy_root_id,
+							gauze__proxy__realms: JSON.stringify({ system: true }),
 						};
 						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_account_id, proxy_type);
 						const parameters = { attributes, ...access_parameters };
@@ -544,6 +546,7 @@ class EnvironmentController {
 							gauze__proxy__agent_type: agent_user_type,
 							gauze__proxy__agent_id: agent_user_id,
 							gauze__proxy__root_id: proxy_root_id,
+							gauze__proxy__realms: JSON.stringify({ system: true }),
 						};
 						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_user_id, proxy_type);
 						const parameters = { attributes, ...access_parameters };
@@ -555,6 +558,7 @@ class EnvironmentController {
 							gauze__proxy__agent_type: agent_person_type,
 							gauze__proxy__agent_id: agent_person_id,
 							gauze__proxy__root_id: proxy_root_id,
+							gauze__proxy__realms: JSON.stringify({ system: true }),
 						};
 						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_person_id, proxy_type);
 						const parameters = { attributes, ...access_parameters };
@@ -566,6 +570,7 @@ class EnvironmentController {
 							gauze__proxy__agent_type: agent_character_type,
 							gauze__proxy__agent_id: agent_character_id,
 							gauze__proxy__root_id: proxy_root_id,
+							gauze__proxy__realms: JSON.stringify({ system: true }),
 						};
 						const access_parameters = self.create_access_control(proxy_root_id, proxy_type, proxy_character_id, proxy_type);
 						const parameters = { attributes, ...access_parameters };
