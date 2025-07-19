@@ -381,15 +381,17 @@ mutation enter_session($proxy: Environment_Mutation__Proxy) {
 		const self = this;
 		const query = `
 mutation enter_session($proxy: Environment_Mutation__Proxy) {
-	environment {
-		enter_session(proxy: $proxy) {
-			gauze__session__id
-			gauze__session__realm
-			gauze__session__agent_id
-			gauze__session__agent_type
-			gauze__session__value
-			gauze__session__kind
-			gauze__session__seed
+	realm {
+		system {
+			enter_session(proxy: $proxy) {
+				gauze__session__id
+				gauze__session__realm
+				gauze__session__agent_id
+				gauze__session__agent_type
+				gauze__session__value
+				gauze__session__kind
+				gauze__session__seed
+			}
 		}
 	}
 }
@@ -403,7 +405,7 @@ mutation enter_session($proxy: Environment_Mutation__Proxy) {
 				operationName: "enter_session",
 			})
 			.then(function (data) {
-				return data.data.environment.enter_session;
+				return data.data.realm.system.enter_session;
 			});
 	}
 	proxies(proxy) {
