@@ -355,5 +355,37 @@ execute("/environment/graphql", null, enter_login_session_query)
 		}
 	})
 	.then(function (collection) {
+		if (collection && collection.account_proxy) {
+			const { signin_session, account_proxy } = collection;
+			const signin_jwt = signin_session.gauze__session__value;
+			const sign_out_query = `
+			mutation {
+				environment {
+					sign_out {
+						gauze__session__id
+						gauze__session__agent_id
+						gauze__session__agent_type
+						gauze__session__value
+					}
+				}
+			}
+		`;
+			return execute("/environment/graphql", signin_jwt, sign_out_query).then(function (agent_sessions) {
+				if (agent_sessions.errors && agent_sessions.errors.length) {
+					console.log("sign_out.errors", agent_sessions, JSON.stringify(agent_sessions.errors.locations));
+					return collection;
+				} else {
+					console.log("sign_out:", true);
+					return {
+						...collection,
+						sign_out: agent_sessions.data.environment.sign_out,
+					};
+				}
+			});
+		} else {
+			return collection;
+		}
+	})
+	.then(function (collection) {
 		console.log(collection);
 	});

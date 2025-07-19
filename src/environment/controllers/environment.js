@@ -20,6 +20,8 @@ import { MODEL__AGENT_USER__MODEL__ENVIRONMENT } from "./../models/agent_user.js
 import { MODEL__AGENT_PERSON__MODEL__ENVIRONMENT } from "./../models/agent_person.js";
 import { MODEL__AGENT_CHARACTER__MODEL__ENVIRONMENT } from "./../models/agent_character.js";
 
+import { EXIT_SESSION__REALM__ENVIRONMENT } from "./../realms.js";
+
 class EnvironmentController {
 	constructor() {
 		const self = this;
@@ -40,83 +42,84 @@ class EnvironmentController {
 	sign_in(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
-		if (agent) {
-			if (agent.proxy_id) {
-				throw new Error("Proxy session is already signed in");
-			} else {
-				if (agent.agent_id) {
-					throw new Error("Invalid session type: agent id must be null");
-				}
-				if (agent.agent_type) {
-					throw new Error("Invalid session type: agent type must be null");
-				}
-				if (!agent.session_id) {
-					throw new Error("Invalid session type: missing session id");
-				}
-				// proceed
-				const session_attributes = {
-					gauze__session__id: agent.session_id,
-				};
-				const session_parameters = { where: session_attributes };
-				return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, scope, session_parameters)
-					.then(function (sessions) {
+
+		function sign_in() {
+			return new Promise(function (resolve, reject) {
+				const collection = {};
+				return resolve(collection);
+			})
+				.then(function (collection) {
+					// proceed
+					const session_attributes = {
+						gauze__session__id: agent.session_id,
+					};
+					const session_parameters = { where: session_attributes };
+					return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, scope, session_parameters).then(function (sessions) {
 						if (sessions && sessions.length) {
 							const session = sessions[0];
 							return {
-								session: session,
+								...collection,
+								session,
 							};
 						} else {
-							return null;
-						}
-					})
-					.then(function (collection) {
-						if (collection) {
-							const { session } = collection;
-							// check the session data
-							const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
-							const requirements_passed = self.verify_requirements(parsed_data, self.sign_in_requirements);
-							if (requirements_passed) {
-								return {
-									...collection,
-									requirements_passed: requirements_passed,
-								};
-							} else {
-								return null;
-							}
-						} else {
-							return null;
-						}
-					})
-					.then(function (collection) {
-						if (collection) {
-							const { session } = collection;
-							const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
-							if (parsed_data.assert) {
-								// create a proxy session here
-								const session_id = uuidv4();
-								const proxy_root_id = parsed_data.assert;
-								const proxy_type = self.proxy_type;
-								return self._create_proxy_session(context, scope, session_id, proxy_root_id, proxy_root_id, proxy_type).then(function (system_session) {
-									return {
-										...collection,
-										system_session: system_session,
-									};
-								});
-							} else {
-								return null;
-							}
-						} else {
-							return null;
-						}
-					})
-					.then(function (collection) {
-						if (collection) {
-							const { system_session } = collection;
-							return system_session;
-						} else {
-							throw new Error("Proxy session failed to sign in");
+							throw new Error("Session could not be found");
 						}
 					});
+				})
+				.then(function (collection) {
+					const { session } = collection;
+					if (!session) throw new Error("Missing session dependency for checking session requirements");
+					// check the session data
+					const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
+					const requirements_passed = self.verify_requirements(parsed_data, self.sign_in_requirements);
+					if (requirements_passed) {
+						return {
+							...collection,
+							requirements_passed,
+						};
+					} else {
+						// todo: log expectation and actual
+						throw new Error("Session did not pass authentication requirements");
+					}
+				})
+				.then(function (collection) {
+					const { session } = collection;
+					if (!session) throw new Error("Missing session dependency for creating proxy session");
+					const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
+					if (parsed_data.assert) {
+						// create a proxy session here
+						const session_id = uuidv4();
+						const proxy_root_id = parsed_data.assert;
+						const proxy_type = self.proxy_type;
+						return self
+							._create_proxy_session(context, scope, { session_id, proxy_id: proxy_root_id, agent_id: proxy_root_id, agent_type: proxy_type })
+							.then(function (proxy_session) {
+								return {
+									...collection,
+									proxy_session,
+								};
+							});
+					} else {
+						throw new Error("Session did not assert an agent");
+					}
+				})
+				.then(function (collection) {
+					const { proxy_session } = collection;
+					if (!proxy_session) throw new Error("Missing proxy session dependency for return");
+					return proxy_session;
+				});
+		}
+
+		if (agent) {
+			if (agent.agent_type === null) {
+				// environment session
+				if (agent.session_id) {
+					return sign_in();
+				} else {
+					throw new Error("Session is missing session id");
+				}
+			} else {
+				throw new Error("Environment session required to sign in");
 			}
 		} else {
 			throw new Error("Session is required to sign in");
@@ -125,73 +128,72 @@ class EnvironmentController {
 	sign_out(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
-		if (agent) {
-			if (agent.proxy_id) {
-				// get all proxies
-				const proxy_attributes = {
-					gauze__proxy__root_id: agent.proxy_id,
-				};
-				const proxy_parameters = { where: proxy_attributes };
-				return MODEL__PROXY__MODEL__ENVIRONMENT.read(context, scope, proxy_parameters)
-					.then(function (proxies) {
+
+		function sign_out() {
+			return new Promise(function (resolve, reject) {
+				const collection = {};
+				return resolve(collection);
+			})
+				.then(function (collection) {
+					const proxy_attributes = {
+						gauze__proxy__root_id: agent.proxy_id,
+					};
+					const proxy_parameters = { where: proxy_attributes };
+					return MODEL__PROXY__MODEL__ENVIRONMENT.read(context, scope, proxy_parameters).then(function (proxies) {
 						if (proxies && proxies.length) {
 							return {
-								proxies: proxies,
+								...collection,
+								proxies,
 							};
 						} else {
-							return null;
-						}
-					})
-					.then(function (collection) {
-						if (collection) {
-							const { proxies } = collection;
-							const transactions = proxies.map(function (proxy) {
-								return self.exit_session(context, scope, { proxy: proxy });
-							});
-							return Promise.all(transactions).then(function (results) {
-								const proxy_sessions = results.reduce(function (prev, next) {
-									return prev.concat(next);
-								}, []);
-								return {
-									...collection,
-									proxy_sessions,
-								};
-							});
-						} else {
-							return null;
-						}
-					})
-					.then(function (collection) {
-						if (collection) {
-							const { proxy_sessions } = collection;
-							// sign out of the root proxy
-							const session_attributes = {
-								gauze__session__id: agent.session_id,
-							};
-							const session_parameters = { where: session_attributes };
-							return MODEL__SESSION__MODEL__ENVIRONMENT.delete(context, scope, session_parameters).then(function (sessions) {
-								if (sessions && sessions.length) {
-									const session = sessions[0];
-									return {
-										...collection,
-										session: session,
-									};
-								} else {
-									return null;
-								}
-							});
-						} else {
-							return null;
-						}
-					})
-					.then(function (collection) {
-						if (collection) {
-							const { proxy_sessions, session } = collection;
-							return proxy_sessions.concat(session);
-						} else {
-							throw new Error("Proxy session failed to sign out");
+							throw new Error("Proxies could not be found");
 						}
 					});
+				})
+				.then(function (collection) {
+					const { proxies } = collection;
+					if (!proxies || !proxies.length) throw new Error("Missing proxies dependency for exiting realm sessions");
+					const transactions = proxies.map(function (proxy) {
+						//return self.exit_session(context, scope, { proxy: proxy });
+						return self.exit_agent(context, scope, { proxy: proxy });
+					});
+					return Promise.all(transactions).then(function (results) {
+						// flatten sessions from every realm into one array
+						const agent_sessions = results.reduce(function (prev, next) {
+							return prev.concat(next);
+						}, []);
+						return {
+							...collection,
+							agent_sessions,
+						};
+					});
+				})
+				.then(function (collection) {
+					const { agent_sessions } = collection;
+					if (!agent_sessions) throw new Error("Missing agent sessions dependency for deleting proxy session");
+					return self._delete_proxy_session(context, scope, { session_id: agent.session_id, agent_id: agent.agent_id, agent_type: self.proxy_type }).then(function (proxy_session) {
+						return {
+							...collection,
+							proxy_session,
+						};
+					});
+				})
+				.then(function (collection) {
+					const { agent_sessions, proxy_session } = collection;
+					if (!agent_sessions) throw new Error("Missing agent sessions dependency for return");
+					if (!proxy_session) throw new Error("Missing proxy session dependency for return");
+					return agent_sessions.concat(proxy_session);
+				});
+		}
+
+		if (agent) {
+			if (agent.agent_type === self.proxy_type) {
+				// proxy session
+				if (agent.proxy_id) {
+					return sign_out();
+				} else {
+					throw new Error("Session is missing proxy id");
+				}
 			} else {
 				throw new Error("Proxy session is required to sign out");
 			}
@@ -708,11 +710,11 @@ class EnvironmentController {
 					}),
 				).then(function (results) {
 					// create a session now for the proxy root
-					return self._create_proxy_session(context, scope, session_id, proxy_root_id, proxy_root_id, proxy_type);
+					return self._create_proxy_session(context, scope, { session_id, proxy_id: proxy_root_id, agent_id: proxy_root_id, agent_type: proxy_type });
 				});
 			});
 	}
-	_create_proxy_session(context, scope, session_id, proxy_id, agent_id, agent_type) {
+	_create_proxy_session(context, scope, { session_id, proxy_id, agent_id, agent_type }) {
 		const self = this;
 		const session_realm = "system";
 		const seed = randomBytes(64).toString("hex");
@@ -739,6 +741,23 @@ class EnvironmentController {
 			return MODEL__SESSION__MODEL__ENVIRONMENT.create(context, scope, parameters).then(function (data) {
 				return data[0];
 			});
+		});
+	}
+	_delete_proxy_session(context, scope, { session_id, agent_id, agent_type }) {
+		// sign out of the root proxy
+		const session_attributes = {
+			gauze__session__id: session_id,
+			gauze__session__agent_id: agent_id,
+			gauze__session__agent_type: agent_type,
+		};
+		const session_parameters = { where: session_attributes };
+		return MODEL__SESSION__MODEL__ENVIRONMENT.delete(context, scope, session_parameters).then(function (sessions) {
+			if (sessions && sessions.length) {
+				const session = sessions[0];
+				return session;
+			} else {
+				throw new Error("Could not find proxy session to delete");
+			}
 		});
 	}
 	_create_environment_session(context, scope) {
@@ -810,6 +829,59 @@ class EnvironmentController {
 		} else {
 			throw new Error("Session is required to exit environment session");
 		}
+	}
+	exit_agent(context, scope, parameters) {
+		const { agent } = context;
+		const target_agent = parameters.proxy;
+
+		return new Promise(function (resolve, reject) {
+			const collection = {};
+			return resolve(collection);
+		})
+			.then(function (collection) {
+				// ensure the proxy exists for target agent with proxy session's root as its root
+				const proxy_attributes = {
+					gauze__proxy__root_id: agent.proxy_id,
+					gauze__proxy__agent_id: target_agent.gauze__proxy__agent_id,
+					gauze__proxy__agent_type: target_agent.gauze__proxy__agent_type,
+				};
+				const proxy_parameters = { where: proxy_attributes };
+				return MODEL__PROXY__MODEL__ENVIRONMENT.read(context, scope, proxy_parameters).then(function (proxies) {
+					if (proxies && proxies.length) {
+						const proxy = proxies[0];
+						return {
+							...collection,
+							proxy,
+						};
+					} else {
+						throw new Error("Proxy could not be found");
+					}
+				});
+			})
+			.then(function (collection) {
+				// delete the sessions
+				const { proxy } = collection;
+				if (!proxy) throw new Error("Missing proxy dependency for session deletion");
+				const session_attributes = {
+					gauze__session__agent_id: target_agent.gauze__proxy__agent_id,
+					gauze__session__agent_type: target_agent.gauze__proxy__agent_type,
+				};
+				const session_parameters = {
+					where: session_attributes,
+				};
+				return MODEL__SESSION__MODEL__ENVIRONMENT.delete(context, scope, session_parameters).then(function (agent_sessions) {
+					return {
+						...collection,
+						agent_sessions,
+					};
+				});
+			})
+			.then(function (collection) {
+				// return result from collection
+				const { agent_sessions } = collection;
+				if (!agent_sessions) throw new Error("Missing realm sessions dependency for return");
+				return agent_sessions;
+			});
 	}
 }
 
