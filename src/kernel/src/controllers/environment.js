@@ -7,7 +7,7 @@ import { LOGGER__IO__LOGGER__SRC__KERNEL } from "./../logger/io.js";
 
 class EnvironmentController extends DatabaseController {
 	constructor(root_config, system_config) {
-		super(root_config, system_config)
+		super(root_config, system_config);
 	}
 }
 
