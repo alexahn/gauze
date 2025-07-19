@@ -1007,5 +1007,5 @@
 	[x] maybe change variable length fields to text field
 		[x] changed session data column to json field
 [ ] fix proxy rendering bug on frontend
-	[ ] everytime we fetch the list we are appending, so it shows more and more options
-	[ ] signing up and then signing in shows proxies twice
+	[ ] sometimes it shows the options multiple times (i'm guessing it might be related to acting on a button click)
+	[ ] something is populating the data multiple times
