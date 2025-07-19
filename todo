@@ -918,10 +918,17 @@
 
 [ ] cli command to add and remove methods
 [ ] custom gauze parsers
-[ ] realm level auth
-	[ ] controls specified in entity definitions
-	[x] add database authentication functions
-	[ ] add database authentication to environment interface
+[x] realm level auth
+	[-] controls specified in entity definitions
+		[x] controls specified on new column on proxy table (e.g. user level realm access control)
+	[x] refactory environment interface to make accessing realms modular (e.g. group by realm for enter and exit session)
+		[x] add database authentication functions
+		[x] add database authentication to environment interface
+		[x] add kernel authentication functions
+		[x] add kernel authentication to environment interface
+[ ] new step authentication constraint format
+	[ ] realm and agent level authentication constraints to specify required steps necessary to authenticate
+	[ ] steps themselves should have constraints (e.g. requiring another step)
 [ ] refactor serialize and deserialize middlewares to act on a passed in promise
 [x] refactor http server
 	[-] plugin architecture to configure to major low level frameworks (e.g. express, koa, hono)
@@ -984,7 +991,7 @@
 			[x] i also don't feel that great about the kernel containing logic for agents (which is a concrete entity)
 			[x] it's more likely that a user will customize the base by extending the verification process and the extension would be easier if they could see everything that was going on without indirection
 	[ ] time would be better spent making moderately comprehensive default template
-	[ ] refactor only to introduce realm level authentication
+	[x] refactor only to introduce realm level authentication
 
 [ ] end game performance and scaling (take architecture into consideration but save the concrete work for last)
 	[ ] need group concept
