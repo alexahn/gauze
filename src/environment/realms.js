@@ -60,11 +60,11 @@ const ENTER_SESSION__REALM__ENVIRONMENT = function ({ proxy_type, session_type, 
 				const { proxy } = collection;
 				if (!proxy) throw new Error("Missing proxy dependency for session creation");
 				try {
-					const realms = JSON.parse(proxy.gauze__proxy__realms)
-					if (!realms[realm]) throw new Error("Agent does not have access to target realm")
+					const realms = JSON.parse(proxy.gauze__proxy__realms);
+					if (!realms[realm]) throw new Error("Agent does not have access to target realm");
 				} catch (e) {
 					// note: this should be treated as a fatal error since it should never happen
-					throw new Error("Invalid realms data for proxy")
+					throw new Error("Invalid realms data for proxy");
 				}
 				const session_id = uuidv4();
 				const proxy_id = agent.proxy_id;
@@ -140,11 +140,11 @@ const EXIT_SESSION__REALM__ENVIRONMENT = function ({ proxy_type, session_type, p
 				const { proxy } = collection;
 				if (!proxy) throw new Error("Missing proxy dependency for session deletion");
 				try {
-					const realms = JSON.parse(proxy.gauze__proxy__realms)
-					if (!realms[realm]) throw new Error("Agent does not have access to target realm")
+					const realms = JSON.parse(proxy.gauze__proxy__realms);
+					if (!realms[realm]) throw new Error("Agent does not have access to target realm");
 				} catch (e) {
 					// note: this should be treated as a fatal error since it should never happen
-					throw new Error("Invalid realms data for proxy")
+					throw new Error("Invalid realms data for proxy");
 				}
 				const agent_id = target_agent.gauze__proxy__agent_id;
 				const agent_type = target_agent.gauze__proxy__agent_type;

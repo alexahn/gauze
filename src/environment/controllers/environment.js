@@ -96,7 +96,7 @@ class EnvironmentController {
 								const session_id = uuidv4();
 								const proxy_root_id = parsed_data.assert;
 								const proxy_type = self.proxy_type;
-								return self._create_system_session(context, scope, session_id, proxy_root_id, proxy_root_id, proxy_type).then(function (system_session) {
+								return self._create_proxy_session(context, scope, session_id, proxy_root_id, proxy_root_id, proxy_type).then(function (system_session) {
 									return {
 										...collection,
 										system_session: system_session,
@@ -708,11 +708,11 @@ class EnvironmentController {
 					}),
 				).then(function (results) {
 					// create a session now for the proxy root
-					return self._create_system_session(context, scope, session_id, proxy_root_id, proxy_root_id, proxy_type);
+					return self._create_proxy_session(context, scope, session_id, proxy_root_id, proxy_root_id, proxy_type);
 				});
 			});
 	}
-	_create_system_session(context, scope, session_id, proxy_id, agent_id, agent_type) {
+	_create_proxy_session(context, scope, session_id, proxy_id, agent_id, agent_type) {
 		const self = this;
 		const session_realm = "system";
 		const seed = randomBytes(64).toString("hex");
@@ -723,55 +723,21 @@ class EnvironmentController {
 			session_id: session_id,
 			seed: seed,
 		};
-		// create a relationship
 		return SIGN_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT(payload).then(function (jwt) {
-			const transactions = [
-				// session
-				function () {
-					const attributes = {
-						gauze__session__id: session_id,
-						gauze__session__agent_type: agent_type,
-						gauze__session__agent_id: agent_id,
-						gauze__session__realm: session_realm,
-						gauze__session__value: jwt,
-						gauze__session__kind: "agent",
-						gauze__session__data: "",
-						gauze__session__seed: seed,
-					};
-					const access_parameters = self.create_session_access_control(proxy_id, self.proxy_type, session_id, self.session_type);
-					const parameters = { attributes, ...access_parameters };
-					return MODEL__SESSION__MODEL__ENVIRONMENT.create(context, scope, parameters).then(function (data) {
-						return data[0];
-					});
-				},
-				// relationships
-				function () {
-					const attributes = {
-						gauze__relationship__from_type: self.proxy_type,
-						gauze__relationship__from_id: proxy_id,
-						gauze__relationship__to_type: self.session_type,
-						gauze__relationship__to_id: session_id,
-					};
-					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, scope, parameters);
-				},
-				function () {
-					const attributes = {
-						gauze__relationship__from_type: self.session_type,
-						gauze__relationship__from_id: session_id,
-						gauze__relationship__to_type: self.proxy_type,
-						gauze__relationship__to_id: proxy_id,
-					};
-					const parameters = { attributes };
-					return MODEL__RELATIONSHIP__MODEL__ENVIRONMENT.create(context, scope, parameters);
-				},
-			];
-			return Promise.all(
-				transactions.map(function (f) {
-					return f();
-				}),
-			).then(function (results) {
-				return results[0];
+			const attributes = {
+				gauze__session__id: session_id,
+				gauze__session__agent_type: agent_type,
+				gauze__session__agent_id: agent_id,
+				gauze__session__realm: session_realm,
+				gauze__session__value: jwt,
+				gauze__session__kind: "agent",
+				gauze__session__data: "",
+				gauze__session__seed: seed,
+			};
+			const access_parameters = self.create_session_access_control(proxy_id, self.proxy_type, session_id, self.session_type);
+			const parameters = { attributes, ...access_parameters };
+			return MODEL__SESSION__MODEL__ENVIRONMENT.create(context, scope, parameters).then(function (data) {
+				return data[0];
 			});
 		});
 	}
@@ -802,113 +768,25 @@ class EnvironmentController {
 			});
 		});
 	}
+	_delete_environment_session(context, scope, session_id) {
+		const session_attributes = {
+			gauze__session__id: session_id,
+		};
+		const session_parameters = {
+			where: session_attributes,
+		};
+		return MODEL__SESSION__MODEL__ENVIRONMENT.delete(context, scope, session_parameters);
+	}
 	enter_session(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
 		const target_agent = parameters.proxy;
 		if (agent) {
-			if (target_agent) {
-				if (!target_agent.gauze__proxy__agent_type) {
-					throw new Error("Proxy argument requires field 'gauze__proxy__agent_type'");
-				}
-				if (!target_agent.gauze__proxy__agent_id) {
-					throw new Error("Proxy argument requires field 'gauze__proxy__agent_id'");
-				}
-				if (agent.proxy_id) {
-					if (agent.session_id) {
-						const session_attributes = {
-							gauze__session__id: agent.session_id,
-						};
-						const session_parameters = { where: session_attributes };
-						return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, scope, session_parameters)
-							.then(function (sessions) {
-								if (sessions && sessions.length) {
-									const session = sessions[0];
-									return {
-										session: session,
-									};
-								} else {
-									return null;
-								}
-							})
-							.then(function (collection) {
-								if (collection) {
-									const { session } = collection;
-									if (session.gauze__session__agent_type === self.proxy_type) {
-										// do a look up to find the target proxy record
-										const proxy_attributes = {
-											gauze__proxy__agent_type: target_agent.gauze__proxy__agent_type,
-											gauze__proxy__agent_id: target_agent.gauze__proxy__agent_id,
-											gauze__proxy__root_id: agent.proxy_id,
-										};
-										const proxy_parameters = { where: proxy_attributes };
-										return MODEL__PROXY__MODEL__ENVIRONMENT.read(context, scope, proxy_parameters).then(function (proxies) {
-											if (proxies && proxies.length) {
-												const proxy = proxies[0];
-												return {
-													...collection,
-													proxy: proxy,
-												};
-											} else {
-												return null;
-											}
-										});
-									} else {
-										return null;
-									}
-								} else {
-									return null;
-								}
-							})
-							.then(function (collection) {
-								if (collection) {
-									const { proxy } = collection;
-									const session_id = uuidv4();
-									const proxy_root_id = agent.proxy_id;
-									const agent_id = proxy.gauze__proxy__agent_id;
-									const agent_type = proxy.gauze__proxy__agent_type;
-									return self._create_system_session(context, scope, session_id, proxy_root_id, agent_id, agent_type).then(function (system_session) {
-										return {
-											...collection,
-											system_session: system_session,
-										};
-									});
-								} else {
-									return null;
-								}
-							})
-							.then(function (collection) {
-								if (collection) {
-									const { system_session } = collection;
-									return system_session;
-								} else {
-									throw new Error("Proxy session failed to enter session");
-								}
-							});
-					} else {
-						throw new Error("Proxy session is missing session id");
-					}
-				} else {
-					throw new Error("Non-proxy session cannot enter a proxy session");
-				}
-			} else {
-				if (agent.proxy_id) {
-					throw new Error("Proxy session cannot enter a non-proxy session");
-				} else {
-					throw new Error("Non-proxy session cannot enter a non-proxy session");
-				}
-			}
+			throw new Error("Session cannot enter environment session");
 		} else {
 			if (target_agent) {
-				if (!target_agent.gauze__proxy__agent_type) {
-					throw new Error("Proxy argument requires field 'gauze__proxy__agent_type'");
-				}
-				if (!target_agent.gauze__proxy__agent_id) {
-					throw new Error("Proxy argument requires field 'gauze__proxy__agent_id'");
-				}
-				throw new Error("Session is required to enter a proxy session");
+				throw new Error("Proxy agent cannot enter environment session");
 			} else {
-				// enter
 				return self._create_environment_session(context, scope);
 			}
 		}
@@ -917,92 +795,20 @@ class EnvironmentController {
 		const self = this;
 		const { agent } = context;
 		const target_agent = parameters.proxy;
+
 		if (agent) {
 			if (target_agent) {
-				if (agent.proxy_id) {
-					if (!agent.session_id) {
-						throw new Error("Proxy session is missing session id");
-					}
-					// first check to make sure that the target agent is a valid proxy for the current proxy session
-					// look up the proxy by using: agent_type: target_agent.agent_type, agent_id: target_agent.agent_id, root_id: agent.proxy_id
-					const proxy_attributes = {
-						gauze__proxy__root_id: agent.proxy_id,
-						gauze__proxy__agent_id: target_agent.gauze__proxy__agent_id,
-						gauze__proxy__agent_type: target_agent.gauze__proxy__agent_type,
-					};
-					const proxy_parameters = { where: proxy_attributes };
-					return MODEL__PROXY__MODEL__ENVIRONMENT.read(context, scope, proxy_parameters)
-						.then(function (proxies) {
-							if (proxies && proxies.length) {
-								const proxy = proxies[0];
-								return {
-									proxy: proxy,
-								};
-							} else {
-								return null;
-							}
-						})
-						.then(function (collection) {
-							if (collection) {
-								const { proxy } = collection;
-								// exit all sessions associated with the target proxy
-								const session_attributes = {
-									gauze__session__agent_id: target_agent.gauze__proxy__agent_id,
-									gauze__session__agent_type: target_agent.gauze__proxy__agent_type,
-								};
-								const session_parameters = {
-									where: session_attributes,
-								};
-								return MODEL__SESSION__MODEL__ENVIRONMENT.delete(context, scope, session_parameters).then(function (sessions) {
-									return {
-										...collection,
-										sessions: sessions,
-									};
-								});
-							} else {
-								return null;
-							}
-						})
-						.then(function (collection) {
-							if (collection) {
-								const { sessions } = collection;
-								return sessions;
-							} else {
-								throw new Error("Proxy session failed to exit proxy session");
-							}
-						});
-				} else {
-					throw new Error("Non-proxy session cannot exit a proxy session");
-				}
+				throw new Error("Proxy agent cannot exit environment session");
 			} else {
-				if (agent.proxy_id) {
-					throw new Error("Proxy session cannot exit a non-proxy session");
+				if (agent.agent_type === null) {
+					// exit the current session (agent.session_id), which is an environment session since the agent type is null
+					return self._delete_environment_session(context, scope, agent.session_id);
 				} else {
-					if (!agent.session_id) {
-						throw new Error("Non-proxy session is missing session id");
-					}
-					// exit the current non-proxy session
-					const session_attributes = {
-						gauze__session__id: agent.session_id,
-					};
-					const session_parameters = {
-						where: session_attributes,
-					};
-					return MODEL__SESSION__MODEL__ENVIRONMENT.delete(context, scope, session_parameters);
+					throw new Error("Proxy session cannot exit environment session");
 				}
 			}
 		} else {
-			if (target_agent) {
-				if (!target_agent.gauze__proxy__agent_type) {
-					throw new Error("Proxy argument requires field 'gauze__proxy__agent_type'");
-				}
-				if (!target_agent.gauze__proxy__agent_id) {
-					throw new Error("Proxy argument requires field 'gauze__proxy__agent_id'");
-				}
-				throw new Error("Session is required to exit a proxy session");
-			} else {
-				throw new Error("Session is required to exit a non-proxy session");
-			}
+			throw new Error("Session is required to exit environment session");
 		}
 	}
 }
