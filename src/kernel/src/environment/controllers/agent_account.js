@@ -13,6 +13,22 @@ class AgentAccountController {
 	verify_password(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
+
+		if (agent) {
+			if (agent.agent_type == self.proxy_type) {
+				// do
+			} else {
+				if (agent.proxy_id) {
+					// ignore because realm session
+					throw new Error("Non-realm session is required for verify password step")
+				} else {
+					// do
+				}
+			}
+		} else {
+			throw new Error("Session is required for verify password step")
+		}
+
 		if (agent) {
 			if (agent.proxy_id) {
 				throw new Error("Session is already authenticated");

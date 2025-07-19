@@ -1,4 +1,4 @@
-function validate (requirements, input, depth) {
+function VALIDATE_REQUIREMENTS (requirements, input, depth) {
 	depth = depth || 0
 	// turn input into a hash map first
 	const index = {}
@@ -8,11 +8,11 @@ function validate (requirements, input, depth) {
 	if (Array.isArray(requirements)) {
 		if (depth % 2) {
 			return requirements.reduce(function (accum, current) {
-				return accum || validate(current, input, depth + 1)
+				return accum || VALIDATE_REQUIREMENTS(current, input, depth + 1)
 			}, false)
 		} else {
 			return requirements.reduce(function (accum, current) {
-				return accum && validate(current, input, depth + 1)
+				return accum && VALIDATE_REQUIREMENTS(current, input, depth + 1)
 			}, true)
 		}
 	} else {
@@ -24,4 +24,8 @@ const input = ["x", "y", "z", "a", "b", "c"]
 
 const requirements = ["x", ["1", "2", "a"], "b"]
 
-console.log(validate(requirements, input))
+console.log(VALIDATE_REQUIREMENTS(requirements, input))
+
+export {
+	VALIDATE_REQUIREMENTS
+}
