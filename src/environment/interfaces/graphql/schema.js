@@ -12,9 +12,6 @@ const QUERY_TYPE = new GraphQLObjectType({
 	name: "Query",
 	fields: {
 		proxy: READ__PROXY__QUERY__GRAPHQL__INTERFACE__ENVIRONMENT,
-		read: {
-			type: GraphQLString,
-		},
 	},
 });
 
