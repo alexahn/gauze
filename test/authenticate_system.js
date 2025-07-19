@@ -192,7 +192,6 @@ execute("/environment/graphql", null, enter_login_session_query)
 					console.log("read_proxy.errors", proxies.errors);
 					return collection;
 				} else {
-					console.log("proxies", proxies)
 					if (proxies.data.proxy && proxies.data.proxy.length) {
 						const root_proxy = proxies.data.proxy.find(function (proxy) {
 							return proxy.attributes.gauze__proxy__agent_type === "gauze__agent_root";

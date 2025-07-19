@@ -6,7 +6,7 @@ const { randomBytes } = await import("node:crypto");
 
 import { v4 as uuidv4 } from "uuid";
 
-import { HASH_PASSWORD__AUTHENTICATION__ENVIRONMENT, SIGN_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT, SIGN_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT } from "./../authentication.js";
+import { HASH_PASSWORD__AUTHENTICATION__ENVIRONMENT, SIGN_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT, SIGN_PROXY_JWT__AUTHENTICATION__ENVIRONMENT } from "./../authentication.js";
 
 import { MODEL__RELATIONSHIP__MODEL__ENVIRONMENT } from "./../models/relationship.js";
 
@@ -716,8 +716,6 @@ class EnvironmentController {
 	}
 	_create_proxy_session(context, scope, { session_id, proxy_id, agent_id, agent_type }) {
 		const self = this;
-		// todo: change this realm to proxy after we add dedicated methods to read proxies from environment
-		// note: this has to be system for now so we can pull the list of proxies from the system interface
 		const session_realm = "proxy";
 		const seed = randomBytes(64).toString("hex");
 		const payload = {
@@ -727,7 +725,7 @@ class EnvironmentController {
 			session_id: session_id,
 			seed: seed,
 		};
-		return SIGN_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT(payload).then(function (jwt) {
+		return SIGN_PROXY_JWT__AUTHENTICATION__ENVIRONMENT(payload).then(function (jwt) {
 			const attributes = {
 				gauze__session__id: session_id,
 				gauze__session__agent_type: agent_type,
