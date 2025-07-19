@@ -99,7 +99,7 @@ class SessionEnvironmentModel extends $kernel.src.models.environment.Environment
 			code: true,
 		};
 		const valid_values = {
-			success: "boolean",
+			success: "string",
 			code: "string",
 		};
 

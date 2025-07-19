@@ -30,9 +30,10 @@ class EnvironmentController {
 		self.sign_in_requirements = ["steps.person.assert.email.success", "steps.account.verify.password.success"];
 	}
 	verify_requirements(data, requirements) {
+		const asserted = MODEL__SESSION__MODEL__ENVIRONMENT.get_data_field(data, "assert")
 		const passed = requirements
 			.map(function (step) {
-				return MODEL__SESSION__MODEL__ENVIRONMENT.get_data_field(data, step);
+				return MODEL__SESSION__MODEL__ENVIRONMENT.get_data_field(data, step) === asserted
 			})
 			.filter(function (x) {
 				return x;

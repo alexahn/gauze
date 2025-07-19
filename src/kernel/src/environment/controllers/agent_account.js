@@ -102,7 +102,8 @@ class AgentAccountController {
 				const { session } = collection;
 				if (!session) throw new Error("Missing session dependency for updating data fields")
 				const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
-				var updated_data = MODEL__SESSION__MODEL__ENVIRONMENT.set_data_field(parsed_data, "steps.account.verify.password.success", true);
+                const asserted_proxy = MODEL__SESSION__MODEL__ENVIRONMENT.get_data_field(parsed_data, "assert");
+				var updated_data = MODEL__SESSION__MODEL__ENVIRONMENT.set_data_field(parsed_data, "steps.account.verify.password.success", asserted_proxy);
 				const serialized_data = JSON.stringify(updated_data);
 				// update session data
 				const session_where = {
