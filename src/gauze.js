@@ -28,7 +28,7 @@ export default {
 		"steps.account.verify.password": ["steps.person.assert.email.success"],
 		"steps.person.assert.email": [] //["steps.account.verify.proof_of_work"]
 		
-	}
+	},
 	authentication: {
 		environment: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
 		realms: {
