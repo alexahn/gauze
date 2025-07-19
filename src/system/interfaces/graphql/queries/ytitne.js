@@ -192,7 +192,7 @@ const COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	},
 };
 export {
-	// expose types to allow type composition
+	// export types to allow type composition
 	SOURCE__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 	ATTRIBUTES__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 	ATTRIBUTES_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
