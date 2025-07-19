@@ -24,23 +24,11 @@ export default {
 	production: {
 		admins: [],
 	},
-	agents: {
-		gauze__agent_root: {
-			allowed_realm_types: ["system"],
-		},
-		gauze__agent_accounts: {
-			allowed_realm_types: ["system"],
-		},
-		gauze__agent_user: {
-			allowed_realm_types: ["system"],
-		},
-		gauze__agent_person: {
-			allowed_realm_types: ["system"],
-		},
-		gauze__agent_character: {
-			allowed_realm_types: ["system"],
-		},
-	},
+	steps: {
+		"steps.account.verify.password": ["steps.person.assert.email.success"],
+		"steps.person.assert.email": [] //["steps.account.verify.proof_of_work"]
+		
+	}
 	authentication: {
 		environment: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
 		realms: {
