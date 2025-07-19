@@ -412,7 +412,7 @@ mutation enter_session($proxy: Environment_Mutation__Proxy) {
 		const self = this;
 		const query = `
 query read_proxy($proxy: Proxy_Query__Where) {
-    read_proxy(where: $proxy) {
+	proxy(where: $proxy) {
         _metadata {
             id
             type
@@ -427,18 +427,16 @@ query read_proxy($proxy: Proxy_Query__Where) {
 }
 `;
 		const variables = {
-			proxy: {
-				gauze__proxy__root_id: proxy.gauze__proxy__id,
-			},
+			proxy: proxy
 		};
 		return self
-			.proxySystem({
+			.proxyEnvironment({
 				query: query,
 				variables: variables,
 				operationName: "read_proxy",
 			})
 			.then(function (data) {
-				return data.data.read_proxy;
+				return data.data.proxy;
 			});
 	}
 	header() {
