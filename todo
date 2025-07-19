@@ -926,6 +926,8 @@
 		[x] add database authentication to environment interface
 		[x] add kernel authentication functions
 		[x] add kernel authentication to environment interface
+	[x] split proxy jwt to its own audience
+	[x] expose proxy interface in environment and lock down system interface to no longer return results using the proxy jwt
 [ ] new step authentication constraint format
 	[ ] realm and agent level authentication constraints to specify required steps necessary to authenticate
 	[ ] steps themselves should have constraints (e.g. requiring another step)
