@@ -6,9 +6,12 @@ import { MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT } from
 
 import { MUTATION__REALM__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT } from "./mutations/realm.js";
 
+import { READ__PROXY__QUERY__GRAPHQL__INTERFACE__ENVIRONMENT } from "./queries/proxy.js";
+
 const QUERY_TYPE = new GraphQLObjectType({
 	name: "Query",
 	fields: {
+		proxy: READ__PROXY__QUERY__GRAPHQL__INTERFACE__ENVIRONMENT,
 		read: {
 			type: GraphQLString,
 		},

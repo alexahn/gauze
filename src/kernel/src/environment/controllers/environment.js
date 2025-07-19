@@ -716,6 +716,8 @@ class EnvironmentController {
 	}
 	_create_proxy_session(context, scope, { session_id, proxy_id, agent_id, agent_type }) {
 		const self = this;
+		// todo: change this realm to proxy after we add dedicated methods to read proxies from environment
+		// note: this has to be system for now so we can pull the list of proxies from the system interface
 		const session_realm = "system";
 		const seed = randomBytes(64).toString("hex");
 		const payload = {
