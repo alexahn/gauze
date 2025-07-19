@@ -718,7 +718,7 @@ class EnvironmentController {
 		const self = this;
 		// todo: change this realm to proxy after we add dedicated methods to read proxies from environment
 		// note: this has to be system for now so we can pull the list of proxies from the system interface
-		const session_realm = "system";
+		const session_realm = "proxy";
 		const seed = randomBytes(64).toString("hex");
 		const payload = {
 			proxy_id: proxy_id,

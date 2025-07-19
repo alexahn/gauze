@@ -177,7 +177,7 @@ execute("/environment/graphql", null, enter_login_session_query)
 			const agent_id = signin_session.gauze__session__agent_id;
 			const proxy_query = `
 			query {
-				read_proxy(where: {gauze__proxy__root_id: "${agent_id}"}) {
+				proxy(where: {gauze__proxy__root_id: "${agent_id}"}) {
 					attributes {
 						gauze__proxy__id
 						gauze__proxy__root_id
@@ -187,25 +187,26 @@ execute("/environment/graphql", null, enter_login_session_query)
 				}
 			}
 		`;
-			return execute("/system/graphql", signin_jwt, proxy_query).then(function (proxies) {
+			return execute("/environment/graphql", signin_jwt, proxy_query).then(function (proxies) {
 				if (proxies.errors && proxies.errors.length) {
 					console.log("read_proxy.errors", proxies.errors);
 					return collection;
 				} else {
-					if (proxies.data.read_proxy && proxies.data.read_proxy.length) {
-						const root_proxy = proxies.data.read_proxy.find(function (proxy) {
+					console.log("proxies", proxies)
+					if (proxies.data.proxy && proxies.data.proxy.length) {
+						const root_proxy = proxies.data.proxy.find(function (proxy) {
 							return proxy.attributes.gauze__proxy__agent_type === "gauze__agent_root";
 						});
-						const account_proxy = proxies.data.read_proxy.find(function (proxy) {
+						const account_proxy = proxies.data.proxy.find(function (proxy) {
 							return proxy.attributes.gauze__proxy__agent_type === "gauze__agent_account";
 						});
-						const user_proxy = proxies.data.read_proxy.find(function (proxy) {
+						const user_proxy = proxies.data.proxy.find(function (proxy) {
 							return proxy.attributes.gauze__proxy__agent_type === "gauze__agent_user";
 						});
-						const person_proxy = proxies.data.read_proxy.find(function (proxy) {
+						const person_proxy = proxies.data.proxy.find(function (proxy) {
 							return proxy.attributes.gauze__proxy__agent_type === "gauze__agent_person";
 						});
-						const character_proxy = proxies.data.read_proxy.find(function (proxy) {
+						const character_proxy = proxies.data.proxy.find(function (proxy) {
 							return proxy.attributes.gauze__proxy__agent_type === "gauze__agent_character";
 						});
 						if (!root_proxy) {
