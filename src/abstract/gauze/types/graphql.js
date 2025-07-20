@@ -1,4 +1,5 @@
-import { GraphQLNonNull, GraphQLInt, GraphQLList, GraphQLString, GraphQLObjectType, GraphQLInputObjectType } from "graphql";
+import { GraphQLScalarType, GraphQLNonNull, GraphQLInt, GraphQLList, GraphQLString, GraphQLObjectType, GraphQLInputObjectType } from "graphql";
+import { v4 as uuidv4 } from "uuid";
 
 import { DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT } from "./scalars/date.js";
 
@@ -15,7 +16,33 @@ function GAUZE_LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT (params) {
 }
 
 function GAUZE_STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT (params) {
-	return GraphQLString
+	const id = String(uuidv4()).replaceAll("-", "")
+    const scalar = new GraphQLScalarType({
+        name: "GauzeString_" + id,
+        // serialize from graphql value into json value
+        serialize: function (value) {
+            return value
+        },
+        // parse from json value to grapqhl value
+        parseValue: function (value) {
+			if (value.length > 1024) {
+				throw new Error("Field length is larger than 64")
+			}
+			return value
+        },
+        /**
+         * Parse ast literal to date
+         * @param  {Object} ast graphql ast
+         * @return {Date} date value
+         */
+        // parse from ast literal value to graphql value
+        parseLiteral: function (ast) {
+            //if (ast.kind !== Kind.STRING) throw new GraphQLError("Query error: Can only parse strings to dates but got a: " + ast.kind, [ast]);
+			return ast.value
+        },
+    })  
+    return scalar
+	//return GraphQLString
 }
 
 function GAUZE_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT (params) {
