@@ -5,6 +5,7 @@ import * as $project from "./../../../gauze.js";
 
 const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, database, authenticate, authenticators, schema }, ctx, next) {
 	// 404 is the default response status
+	console.log("REALM", $realm)
 	return new Promise(function (resolve, reject) {
 		const collection = {}
 		return resolve(collection)

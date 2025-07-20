@@ -13,8 +13,6 @@ class AgentPersonController {
 	assert_email(context, scope, parameters) {
 		const self = this;
 		const { agent, project } = context;
-		console.log("PROJECT", project)
-
 		function assert_email() {
 			// check that assert does not exist on session data already
 			// if it has been set, it should not be allowed to change
