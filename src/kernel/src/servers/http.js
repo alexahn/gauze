@@ -37,9 +37,7 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 	}).then(function (collection) {
 		const { agent } = collection
 		if (!agent) throw new Error("Missing agent dependency for creating context")
-		console.log("agent", agent)
 		return new Promise(function (resolve, reject) {
-
 			database.transaction(function (transaction) {
 				const context = {};
 				context.project = $project;
@@ -47,13 +45,11 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 				context.database = database;
 				context.transaction = transaction;
 				context.agent = agent;
-				console.log("context", context)
 				return resolve({
 					...collection,
 					context
 				})
 			})
-
 		})
 
 		/*.catch(function (err) {
@@ -73,7 +69,6 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 		const { transaction } = context
 		if (!transaction) throw new Error("Missing transaction dependency for verifying jwt")
 		return $gauze.environment.authentication.VERIFY_JWT_PAYLOAD(context, context.agent).then(function (session) {
-			console.log('session', session)
 			return {
 				...collection,
 				session
@@ -90,13 +85,7 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 						status: 401,
 						message: "Unauthorized",
 					});
-					throw err
-					/*
-					return {
-						...collection,
-						session_error: err
-					}
-					*/
+					return collection
 				})
 				.catch(function (rollback_err) {
 					$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION UNAUTHORIZED FAILED TO REVERT", rollback_err);
@@ -106,14 +95,9 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 						message: "Internal Server Error",
 					});
 					throw rollback_err
-					/*
-					return {
-						...collection,
-						session_error: err,
-						rollback_error: rollback_err
-					}
-					*/
-				});
+				}).then(function () {
+					throw err
+				})
 		})
 	}).then(function (collection) {
 		const { context } = collection
@@ -139,6 +123,7 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 							$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION REVERTED");
 							ctx.response.status = 400;
 							ctx.response.body = JSON.stringify(data);
+							// throw err
 							return {
 								...collection,
 								rollback: data
@@ -159,7 +144,7 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 								rollback_error: err
 							}
 							*/
-						});
+						})
 				} else {
 					// note: commit can error
 					return transaction
@@ -168,7 +153,6 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 							$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION COMMITTED");
 							//ctx.response.status = 200
 							ctx.response.body = JSON.stringify(data);
-							console.log('data', data)
 							return {
 								...collection,
 								commit: data
@@ -203,11 +187,7 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 					.rollback(err)
 					.then(function () {
 						$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION UNEXPECTED REVERTED");
-						//throw err
-						return {
-							...collection,
-							unexpected_error: err
-						}
+						return collection
 					})
 					.catch(function (rollback_err) {
 						$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION UNEXPECTED FAILED TO REVERT", rollback_err);
@@ -219,12 +199,21 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 							rollback_error: rollback_err
 						}
 						*/
-					});
+					}).then(function () {
+						throw err
+					})
 			})
 	}).then(function (collection) {
-		const { commit } = collection
-		if (!commit) throw new Error("Missing commit dependency for returning result")
-		ctx.response.body = JSON.stringify(commit)
+		const { rollback } = collection
+		if (rollback) {
+			// handle error response from graphql query/mutation
+			// rollback.errors is an array object
+			if (process.env.GAUZE_ENV === "development") {
+				// note: better to log instead of throwing a wrapped error becaused the wrapped error loses fidelity
+				console.error(rollback.errors)
+			}
+			//throw new Error("GraphQL query/mutation error")
+		}
 		return collection
 	}).catch(function (err) {
 		if (process.env.GAUZE_ENV === "development") {
