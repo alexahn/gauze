@@ -552,7 +552,6 @@ class SystemModel extends Model {
 	_validate_method(agent, method) {
 		const self = this;
 		if (self.allowed_method_agent_types[method]["*"]) {
-
 		} else {
 			if (!self.allowed_method_agent_types[method][agent.agent_type]) {
 				throw new Error("Authorization failed: agent type is not allowed for this method");

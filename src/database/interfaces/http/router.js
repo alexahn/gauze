@@ -1,6 +1,6 @@
 import Router from "@koa/router";
 
-import * as $realm from "./../../gauze.js"
+import * as $realm from "./../../gauze.js";
 
 export default function ($gauze) {
 	const ROUTER__HTTP__INTERFACE__DATABASE = new Router();

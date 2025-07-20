@@ -61,9 +61,13 @@ class EnvironmentController {
 					if (!session) throw new Error("Missing session dependency for checking session requirements");
 					// check the session data
 					const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
-					const requirements_passed = $kernel.src.authentication.VALIDATE_REQUIREMENTS({
-						session_model: MODEL__SESSION__MODEL__ENVIRONMENT
-					}, parsed_data, project.default.authentication.proxy)
+					const requirements_passed = $kernel.src.authentication.VALIDATE_REQUIREMENTS(
+						{
+							session_model: MODEL__SESSION__MODEL__ENVIRONMENT,
+						},
+						parsed_data,
+						project.default.authentication.proxy,
+					);
 					if (requirements_passed) {
 						return {
 							...collection,

@@ -2,7 +2,6 @@ export default {
 	name: "gauze",
 	type: "project",
 	version: "0.0.1",
-	realms: ["./kernel", "./database", "./system", "./environment"],
 	process_middlewares: [],
 	http_middlewares: [],
 	development: {
@@ -27,19 +26,18 @@ export default {
 	// we need to duplicate these configs (should be the only ones that we need to duplicate)
 	realms: {
 		kernel: {
-			mode: "closed"
+			mode: "closed",
 		},
 		database: {
-			mode: "closed"
+			mode: "closed",
 		},
 		system: {
-			mode: "closed"
-		}
+			mode: "closed",
+		},
 	},
 	steps: {
 		"steps.account.verify.password": ["steps.person.assert.email.success"],
-		"steps.person.assert.email": [] //["steps.account.verify.proof_of_work.success"]
-		
+		"steps.person.assert.email": [], //["steps.account.verify.proof_of_work.success"]
 	},
 	authentication: {
 		proxy: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
