@@ -5,7 +5,6 @@ import * as $project from "./../../../gauze.js";
 
 const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, database, authenticate, authenticators, schema }, ctx, next) {
 	// 404 is the default response status
-
 	return new Promise(function (resolve, reject) {
 		const collection = {}
 		return resolve(collection)
@@ -27,12 +26,6 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 				message: "Unauthorized",
 			});
 			throw err
-			/*
-			return {
-				...collection,
-				authentications_error: err
-			}
-			*/
 		})
 	}).then(function (collection) {
 		const { agent } = collection
@@ -51,18 +44,6 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 				})
 			})
 		})
-
-		/*.catch(function (err) {
-			console.error("WTF", err)
-			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "transaction", err);
-			ctx.response.status = 500;
-			ctx.response.body = JSON.stringify({
-				status: 500,
-				message: "Internal Server Error",
-			});
-			throw err
-		})
-		*/
 	}).then(function (collection) {
 		const { context } = collection
 		if (!context)  throw new Error("Missing context dependency for verifying jwt")
@@ -123,7 +104,6 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 							$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION REVERTED");
 							ctx.response.status = 400;
 							ctx.response.body = JSON.stringify(data);
-							// throw err
 							return {
 								...collection,
 								rollback: data
@@ -137,13 +117,6 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 								message: "Internal Server Error",
 							});
 							throw err
-							/*
-							return {
-								...collection,
-								rollback: data,
-								rollback_error: err
-							}
-							*/
 						})
 				} else {
 					// note: commit can error
@@ -166,13 +139,6 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 								message: "Internal Server Error",
 							});
 							throw err
-							/*
-							return {
-								...collection,
-								commit: data,
-								commit_error: err
-							}
-							*/
 						});
 				}
 			}).catch(function (err) {
@@ -192,13 +158,6 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 					.catch(function (rollback_err) {
 						$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION UNEXPECTED FAILED TO REVERT", rollback_err);
 						throw rollback_err
-						/*
-						return {
-							...collection,
-							unexpected_error: err,
-							rollback_error: rollback_err
-						}
-						*/
 					}).then(function () {
 						throw err
 					})
