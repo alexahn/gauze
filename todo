@@ -916,7 +916,6 @@
 [ ] documentation for cli and entity definitions
 [ ] commit the gauze spa files to the repo and serve it via the server application
 
-[ ] cli command to add and remove methods
 [ ] custom gauze parsers
 [x] realm level auth
 	[-] controls specified in entity definitions
@@ -928,8 +927,8 @@
 		[x] add kernel authentication to environment interface
 	[x] split proxy jwt to its own audience
 	[x] expose proxy interface in environment and lock down system interface to no longer return results using the proxy jwt
-[ ] new step authentication constraint format
-	[ ] realm and agent level authentication constraints to specify required steps necessary to authenticate
+[x] new step authentication constraint format
+	[x] realm and agent level authentication constraints to specify required steps necessary to authenticate
 	[x] steps themselves should have constraints (e.g. requiring another step)
 [ ] refactor serialize and deserialize middlewares to act on a passed in promise
 [x] refactor http server
@@ -942,9 +941,10 @@
 	[-] middlewares are defined according to the server plugin used
 	[x] taken care of by custom application command that allows the user to configure a koa app
 [ ] process middleware
-[ ] closed and open project modes
-	[ ] open mode would allow us to use graphql to create public facing sites, like documentation
-	[ ] closed by default (e.g. requires authentication)
+[x] closed and open project modes
+	[x] open mode would allow us to use graphql to create public facing sites, like documentation
+	[-] closed by default (e.g. requires authentication)
+		[x] no default, will error if the configuration for realm is not set
 [x] routing pattern
 	[x] modular applications/realms
 	[x] configure project to use koa and koa router
@@ -1017,3 +1017,6 @@
 [ ] fix proxy rendering bug on frontend
 	[ ] sometimes it shows the options multiple times (i'm guessing it might be related to acting on a button click)
 	[ ] something is populating the data multiple times
+[ ] cli command to add realm access to an agent
+[ ] cli command to update the structure and definition for an entity (without replacing controller and model code)
+[ ] cli command to add and remove methods

@@ -43,4 +43,12 @@ function pattern(params) {
 
 another pattern that we should maybe avoid (which we were doing before) is suppressing errors by returning a null collection. part of the reason i was doing this was to prevent the server from leaking any errors that could help an attacker understand the server's architecture. the obscurity is nice but the code becomes very ugly due to all the branching. maybe just throw errors and handle the error in one well placed promise.catch()
 
+-------------
+
+adding a way for users to add custom methods to entities would be nice but it would require us to abstract kernel/models/system.js and kernel/models/database.js
+technically the current implementation is still viable as a way to build applications, so long as changes are acted on in update. not allowing custom methods abides by the REST philosophy. for example updating the status field on an order entity could trigger downstream changes on other entities.
+changing the fields on an entity should trigger changes to other resources, not calling a custom method. even though this is the REST way, most people prefer to have custom methods. we have to think about this before we proceed. the logic for having dynamic method calls could be a pain to get working (with batching and caching all working as intended)
+the other way is we can generate a diff structure for the updated data against what is currently stored in the database, and have a convenient way to act on individual field changes. this is actually more convenient for frontend developers, since they dont need to wire up any additional logic for a custom method call.
+
+
 
