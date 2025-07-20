@@ -3,7 +3,7 @@ const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
 import * as $project from "./../../../gauze.js";
 
-const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, database, authenticate, authenticators, schema }, ctx, next) {
+const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, database, authenticate, authenticators, schema }, ctx, next) {
 	// 404 is the default response status
 	return Promise.any(
 		authenticators.map(function (authenticate) {
@@ -15,6 +15,7 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, data
 				.transaction(function (transaction) {
 					const context = {};
 					context.project = $project;
+					context.realm = $realm;
 					context.database = database;
 					context.transaction = transaction;
 					context.agent = agent;

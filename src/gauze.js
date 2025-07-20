@@ -26,7 +26,7 @@ export default {
 	},
 	steps: {
 		"steps.account.verify.password": ["steps.person.assert.email.success"],
-		"steps.person.assert.email": [] //["steps.account.verify.proof_of_work"]
+		"steps.person.assert.email": [] //["steps.account.verify.proof_of_work.success"]
 		
 	},
 	authentication: {
@@ -37,11 +37,11 @@ export default {
 			system: [],
 		},
 		agents: {
-			gauze__agent_root: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
-			gauze__agent_accounts: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
-			gauze__agent_user: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
-			gauze__agent_person: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
-			gauze__agent_character: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
+			gauze__agent_root: [], //["steps.account.verify.proof_of_work.success"],
+			gauze__agent_accounts: [],
+			gauze__agent_user: [],
+			gauze__agent_person: [],
+			gauze__agent_character: [],
 		},
 	},
 };
