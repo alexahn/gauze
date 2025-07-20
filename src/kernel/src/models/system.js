@@ -551,20 +551,31 @@ class SystemModel extends Model {
 	}
 	_validate_method(agent, method) {
 		const self = this;
-		if (!self.allowed_method_agent_types[method][agent.agent_type]) {
-			throw new Error("Authorization failed: agent type is not allowed for this method");
+		if (self.allowed_method_agent_types[method]["*"]) {
+
+		} else {
+			if (!self.allowed_method_agent_types[method][agent.agent_type]) {
+				throw new Error("Authorization failed: agent type is not allowed for this method");
+			}
 		}
 	}
 	agent_filter(agent, attributes) {
 		const self = this;
 		const filtered = {};
-		if (self.allowed_fields_agent_types[agent.agent_type]) {
-			self.allowed_fields_agent_types[agent.agent_type].forEach(function (field) {
+		if (self.allowed_fields_agent_types["*"]) {
+			self.allowed_fields_agent_types["*"].forEach(function (field) {
 				filtered[field] = attributes[field];
 			});
 			return filtered;
 		} else {
-			return filtered;
+			if (self.allowed_fields_agent_types[agent.agent_type]) {
+				self.allowed_fields_agent_types[agent.agent_type].forEach(function (field) {
+					filtered[field] = attributes[field];
+				});
+				return filtered;
+			} else {
+				return filtered;
+			}
 		}
 	}
 	_root_create(context, scope, parameters, realm) {

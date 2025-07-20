@@ -15,9 +15,6 @@ export default function ($gauze) {
 				database: database,
 				authenticators: [
 					$gauze.environment.authentication.AUTHENTICATE_ENVIRONMENT__AUTHENTICATION__ENVIRONMENT,
-					//$gauze.environment.authentication.AUTHENTICATE_SYSTEM__AUTHENTICATION__ENVIRONMENT,
-					//$gauze.environment.authentication.AUTHENTICATE_DATABASE__AUTHENTICATION__ENVIRONMENT,
-					//$gauze.environment.authentication.AUTHENTICATE_KERNEL__AUTHENTICATION__ENVIRONMENT,
 					$gauze.environment.authentication.AUTHENTICATE_PROXY__AUTHENTICATION__ENVIRONMENT,
 				],
 				schema: $gauze.environment.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__ENVIRONMENT,

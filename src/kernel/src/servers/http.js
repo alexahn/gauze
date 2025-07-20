@@ -92,6 +92,15 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 					})
 			})
 		} else {
+			if ($realm.default.mode === "open") {
+				context.agent = {}
+				context.agent.agent_id = "null"
+				context.agent.agent_type = "null"
+			} else if ($realm.default.mode === "closed") {
+				throw new Error("Agent is required if realm is in closed mode")
+			} else {
+				throw new Error("Invalid realm mode")
+			}
 			return collection
 		}
 	}).then(function (collection) {
