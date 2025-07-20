@@ -18,6 +18,15 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 				return undefined;
 			}
 		},
+		"GAUZE_DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT": function (v, field) {
+			// note: look into why we need an existence check here (system entity page)
+			if (v && typeof v === "string") {
+				const d = new Date(v).toISOString();
+				return d.slice(0, 16);
+			} else {
+				return undefined;
+			}
+		},
 		String: function (v) {
 			if (typeof v === "string") {
 				return v;
@@ -25,8 +34,24 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 				return undefined;
 			}
 		},
+		GAUZE_STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT: function (v) {
+			if (typeof v === "string") {
+				return v;
+			} else {
+				return undefined;
+			}
+		}
 	};
 	const serializeInputValueToGraphQLType = {
+		GAUZE_DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT: function (e, field) {
+			// treating the input as always representing a UTC date time
+			if (e.target.value) {
+				e.target.serialized = e.target.value + "Z";
+			} else {
+				e.target.serialized = e.target.value;
+			}
+			return e;
+		},
 		Date: function (e, field) {
 			// treating the input as always representing a UTC date time
 			if (e.target.value) {
@@ -36,15 +61,33 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 			}
 			return e;
 		},
+		GAUZE_STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT: function (e, field) {
+			e.target.serialized = e.target.value;
+			return e;
+		},
 		String: function (e, field) {
 			e.target.serialized = e.target.value;
 			return e;
 		},
 	};
 	const initializeValue = {
+		GAUZE_DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT: function (v, field) {
+			if (v === undefined) {
+				return new Date(0).toISOString().slice(0, 16);
+			} else {
+				return v;
+			}
+		},
 		Date: function (v, field) {
 			if (v === undefined) {
 				return new Date(0).toISOString().slice(0, 16);
+			} else {
+				return v;
+			}
+		},
+		GAUZE_STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT: function (v) {
+			if (v === undefined) {
+				return "";
 			} else {
 				return v;
 			}
@@ -77,6 +120,7 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 			}
 		}
 	});
+	console.log("FIELD", field)
 	const valueInput = (
 		<input
 			ref={inputRef}
