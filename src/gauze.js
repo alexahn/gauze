@@ -24,6 +24,18 @@ export default {
 	production: {
 		admins: [],
 	},
+	// we need to duplicate these configs (should be the only ones that we need to duplicate)
+	realms: {
+		kernel: {
+			mode: "closed"
+		},
+		database: {
+			mode: "closed"
+		},
+		system: {
+			mode: "closed"
+		}
+	},
 	steps: {
 		"steps.account.verify.password": ["steps.person.assert.email.success"],
 		"steps.person.assert.email": [] //["steps.account.verify.proof_of_work.success"]
@@ -38,7 +50,7 @@ export default {
 		},
 		agents: {
 			gauze__agent_root: [], //["steps.account.verify.proof_of_work.success"],
-			gauze__agent_accounts: [],
+			gauze__agent_account: [],
 			gauze__agent_user: [],
 			gauze__agent_person: [],
 			gauze__agent_character: [],

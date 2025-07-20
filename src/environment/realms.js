@@ -4,9 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import * as $kernel from "./../kernel/index.js";
 
-// helper function for realms
-// enter session
-// exit session
+// todo: rename realm to target_realm?
 const ENTER_SESSION__REALM__ENVIRONMENT = function ({ proxy_type, session_type, proxy_model, session_model, realm, sign_jwt }, context, scope, parameters) {
 	const { agent, project } = context;
 	const target_agent = parameters.proxy;
@@ -52,12 +50,12 @@ const ENTER_SESSION__REALM__ENVIRONMENT = function ({ proxy_type, session_type, 
 					throw new Error("Realm is not defined in project authentication configuration")
 				}
 
-				if (context.realm.default.mode === "open") {
+				if (project.default.realms[realm].mode === "open") {
 					// loose interpretation (agent does not need to be defined in authentication settings)
-					if (project.default.authentication.agents[agent.agent_type]) {
+					if (project.default.authentication.agents[target_agent.gauze__proxy__agent_type]) {
 						const agent_requirements = $kernel.src.authentication.VALIDATE_REQUIREMENTS({
 							session_model: session_model
-						}, parsed_data, project.default.authentication.agents[agent.agent_type])
+						}, parsed_data, project.default.authentication.agents[target_agent.gauze__proxy__agent_type])
 						if (agent_requirements) {
 							// ok
 						} else {
@@ -66,19 +64,20 @@ const ENTER_SESSION__REALM__ENVIRONMENT = function ({ proxy_type, session_type, 
 					} else {
 						// ok
 					}
-				} else if (context.realm.default.mode === "closed") {
+				} else if (project.default.realms[realm].mode === "closed") {
 					// strict interpretation (agent must be defined in authentication settings)
-					if (project.default.authentication.agents[agent.agent_type]) {
+					if (project.default.authentication.agents[target_agent.gauze__proxy__agent_type]) {
 						const agent_requirements = $kernel.src.authentication.VALIDATE_REQUIREMENTS({
 							session_model: session_model
-						}, parsed_data, project.default.authentication.agents[agent.agent_type])
+						}, parsed_data, project.default.authentication.agents[target_agent.gauze__proxy__agent_type])
 						if (agent_requirements) {
 							// ok
 						} else {
 							throw new Error("Agent step requirements are not met")
 						}
 					} else {
-						throw new Error("Realm is not defined in project authentication configuration")
+						console.log('target', target_agent)
+						throw new Error(`Agent is not defined in project authentication configuration: ${target_agent.gauze__proxy__agent_type}`)
 					}
 				} else {
 					throw new Error("Invalid realm mode")
