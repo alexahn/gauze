@@ -5,6 +5,236 @@ import * as $project from "./../../../gauze.js";
 
 const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, database, authenticate, authenticators, schema }, ctx, next) {
 	// 404 is the default response status
+
+	return new Promise(function (resolve, reject) {
+		const collection = {}
+		return resolve(collection)
+	}).then(function (collection) {
+		return Promise.any(
+			authenticators.map(function (authenticate) {
+				return authenticate(ctx.get("authorization"));
+			}),
+		).then(function (agent) {
+			return {
+				...collection,
+				agent
+			}
+		}).catch(function (err) {
+			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "authentications", err);
+			ctx.response.status = 401;
+			ctx.response.body = JSON.stringify({
+				status: 401,
+				message: "Unauthorized",
+			});
+			throw err
+			/*
+			return {
+				...collection,
+				authentications_error: err
+			}
+			*/
+		})
+	}).then(function (collection) {
+		const { agent } = collection
+		if (!agent) throw new Error("Missing agent dependency for creating context")
+		console.log("agent", agent)
+		return new Promise(function (resolve, reject) {
+
+			database.transaction(function (transaction) {
+				const context = {};
+				context.project = $project;
+				context.realm = $realm;
+				context.database = database;
+				context.transaction = transaction;
+				context.agent = agent;
+				console.log("context", context)
+				return resolve({
+					...collection,
+					context
+				})
+			})
+
+		})
+
+		/*.catch(function (err) {
+			console.error("WTF", err)
+			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "transaction", err);
+			ctx.response.status = 500;
+			ctx.response.body = JSON.stringify({
+				status: 500,
+				message: "Internal Server Error",
+			});
+			throw err
+		})
+		*/
+	}).then(function (collection) {
+		const { context } = collection
+		if (!context)  throw new Error("Missing context dependency for verifying jwt")
+		const { transaction } = context
+		if (!transaction) throw new Error("Missing transaction dependency for verifying jwt")
+		return $gauze.environment.authentication.VERIFY_JWT_PAYLOAD(context, context.agent).then(function (session) {
+			console.log('session', session)
+			return {
+				...collection,
+				session
+			}
+		}).catch(function (err) {
+			// note: rollback can error
+			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "session", err);
+			return transaction
+				.rollback(err)
+				.then(function () {
+					$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION UNAUTHORIZED REVERTED");
+					ctx.response.status = 401;
+					ctx.response.body = JSON.stringify({
+						status: 401,
+						message: "Unauthorized",
+					});
+					throw err
+					/*
+					return {
+						...collection,
+						session_error: err
+					}
+					*/
+				})
+				.catch(function (rollback_err) {
+					$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION UNAUTHORIZED FAILED TO REVERT", rollback_err);
+					ctx.response.status = 500;
+					ctx.response.body = JSON.stringify({
+						status: 500,
+						message: "Internal Server Error",
+					});
+					throw rollback_err
+					/*
+					return {
+						...collection,
+						session_error: err,
+						rollback_error: rollback_err
+					}
+					*/
+				});
+		})
+	}).then(function (collection) {
+		const { context } = collection
+		if (!context) throw new Error("Missing context dependency for executing graphql query")
+		const { transaction } = context
+		if (!transaction) throw new Error("Missing transaction dependency for executing graphql query")
+		return $gauze.kernel.src.shell.graphql
+			.EXECUTE__GRAPHQL__SHELL__SRC__KERNEL({
+				schema: schema,
+				context: context,
+				operation: ctx.request.body.query,
+				operation_name: ctx.request.body.operationName,
+				operation_variables: ctx.request.body.variables,
+			})
+			.then(function (data) {
+				// parse data here
+				if (data.errors && data.errors.length) {
+					$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "errors", data.errors);
+					// note: rollback can error
+					return transaction
+						.rollback()
+						.then(function () {
+							$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION REVERTED");
+							ctx.response.status = 400;
+							ctx.response.body = JSON.stringify(data);
+							return {
+								...collection,
+								rollback: data
+							}
+						})
+						.catch(function (err) {
+							$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO REVERT", err);
+							ctx.response.status = 500;
+							ctx.response.body = JSON.stringify({
+								status: 500,
+								message: "Internal Server Error",
+							});
+							throw err
+							/*
+							return {
+								...collection,
+								rollback: data,
+								rollback_error: err
+							}
+							*/
+						});
+				} else {
+					// note: commit can error
+					return transaction
+						.commit(data)
+						.then(function () {
+							$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION COMMITTED");
+							//ctx.response.status = 200
+							ctx.response.body = JSON.stringify(data);
+							console.log('data', data)
+							return {
+								...collection,
+								commit: data
+							}
+						})
+						.catch(function (err) {
+							$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION FAILED TO COMMIT", err);
+							ctx.response.status = 500;
+							ctx.response.body = JSON.stringify({
+								status: 500,
+								message: "Internal Server Error",
+							});
+							throw err
+							/*
+							return {
+								...collection,
+								commit: data,
+								commit_error: err
+							}
+							*/
+						});
+				}
+			}).catch(function (err) {
+				$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "graphql", err);
+				ctx.response.status = 500;
+				ctx.response.body = JSON.stringify({
+					status: 500,
+					message: "Internal Server Error",
+				});
+				// note: rollback can error
+				return transaction
+					.rollback(err)
+					.then(function () {
+						$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION UNEXPECTED REVERTED");
+						//throw err
+						return {
+							...collection,
+							unexpected_error: err
+						}
+					})
+					.catch(function (rollback_err) {
+						$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION UNEXPECTED FAILED TO REVERT", rollback_err);
+						throw rollback_err
+						/*
+						return {
+							...collection,
+							unexpected_error: err,
+							rollback_error: rollback_err
+						}
+						*/
+					});
+			})
+	}).then(function (collection) {
+		const { commit } = collection
+		if (!commit) throw new Error("Missing commit dependency for returning result")
+		ctx.response.body = JSON.stringify(commit)
+		return collection
+	}).catch(function (err) {
+		if (process.env.GAUZE_ENV === "development") {
+			console.error(err)
+		}
+	}).then(next).catch(function (err) {
+		return next()
+	})
+
+	/*
 	return Promise.any(
 		authenticators.map(function (authenticate) {
 			return authenticate(ctx.get("authorization"));
@@ -126,6 +356,7 @@ const HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $rea
 			});
 		})
 		.then(next);
+	*/
 };
 
 // all this logic is complicated because we don't want to create a transaction unless we have a valid jwt
