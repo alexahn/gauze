@@ -427,6 +427,9 @@ class SystemModel extends Model {
 	authorized_execute(context, scope, parameters, agent, entity, operation) {
 		const self = this;
 		function agent_is_admin(project, agent) {
+			// note: if we inject project config into context, then we can have a centralized configuration scheme
+			// note: the problem is that we actually want siloed configurations if we want reusable systems
+			// note: it would be better to import $project like we did before. why did we change it?
 			if (project) {
 				if (agent.agent_type && agent.agent_id) {
 					if (project.default[process.env.GAUZE_ENV]) {

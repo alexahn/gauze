@@ -29,20 +29,9 @@ class EnvironmentController {
 		self.session_type = $abstract.entities.session.default($abstract).table_name;
 		self.sign_in_requirements = ["steps.person.assert.email.success", "steps.account.verify.password.success"];
 	}
-	verify_requirements(data, requirements) {
-		const asserted = MODEL__SESSION__MODEL__ENVIRONMENT.get_data_field(data, "assert")
-		const passed = requirements
-			.map(function (step) {
-				return MODEL__SESSION__MODEL__ENVIRONMENT.get_data_field(data, step) === asserted
-			})
-			.filter(function (x) {
-				return x;
-			});
-		return passed.length === requirements.length;
-	}
 	sign_in(context, scope, parameters) {
 		const self = this;
-		const { agent } = context;
+		const { agent, project } = context;
 
 		function sign_in() {
 			return new Promise(function (resolve, reject) {
@@ -72,7 +61,9 @@ class EnvironmentController {
 					if (!session) throw new Error("Missing session dependency for checking session requirements");
 					// check the session data
 					const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
-					const requirements_passed = self.verify_requirements(parsed_data, self.sign_in_requirements);
+					const requirements_passed = $kernel.src.authentication.VALIDATE_REQUIREMENTS({
+						session_model: MODEL__SESSION__MODEL__ENVIRONMENT
+					}, parsed_data, project.default.authentication.proxy)
 					if (requirements_passed) {
 						return {
 							...collection,

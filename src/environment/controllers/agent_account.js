@@ -13,7 +13,7 @@ class AgentAccountController {
 	}
 	verify_password(context, scope, parameters) {
 		const self = this;
-		const { agent } = context;
+		const { agent, project } = context;
 
 		function verify() {
 			if (!parameters.agent_account) {
@@ -33,6 +33,19 @@ class AgentAccountController {
 				return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, scope, session_parameters).then(function (sessions) {
 					if (sessions && sessions.length) {
 						const session = sessions[0];
+                        // read data and check step requirements here
+                        const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
+                        const step_requirements = $kernel.src.authentication.VALIDATE_REQUIREMENTS({
+                            session_model: MODEL__SESSION__MODEL__ENVIRONMENT
+                        }, parsed_data, project.default.steps["steps.account.verify.password"])
+                        if (step_requirements) {
+                            return {
+                                ...collection,
+                                session: session,
+                            };
+                        } else {
+                            throw new Error("Requirements for step not met")
+                        }
 						return {
 							...collection,
 							session

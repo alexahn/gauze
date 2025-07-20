@@ -30,7 +30,7 @@ export default {
 		
 	},
 	authentication: {
-		environment: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
+		proxy: ["steps.person.assert.email.success", "steps.account.verify.password.success"],
 		realms: {
 			kernel: [],
 			database: [],
