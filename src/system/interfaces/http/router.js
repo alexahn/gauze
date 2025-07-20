@@ -13,7 +13,7 @@ export default function ($gauze) {
 	});
 
 	ROUTER__HTTP__INTERFACE__SYSTEM.post("/graphql", function (ctx, next) {
-		return $gauze.kernel.src.servers.http.HANDLE_REALM_GRAPHQL__HTTP__SERVER__SRC__KERNEL(
+		return $gauze.kernel.src.servers.http.HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL(
 			{
 				$gauze: $gauze,
 				$realm: $realm,
