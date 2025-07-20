@@ -930,7 +930,7 @@
 	[x] expose proxy interface in environment and lock down system interface to no longer return results using the proxy jwt
 [ ] new step authentication constraint format
 	[ ] realm and agent level authentication constraints to specify required steps necessary to authenticate
-	[ ] steps themselves should have constraints (e.g. requiring another step)
+	[x] steps themselves should have constraints (e.g. requiring another step)
 [ ] refactor serialize and deserialize middlewares to act on a passed in promise
 [x] refactor http server
 	[-] plugin architecture to configure to major low level frameworks (e.g. express, koa, hono)
@@ -1011,7 +1011,6 @@
 
 
 [ ] revisit sql column limits
-	[ ] this is kind of a pain in the ass to keep thinking about
 	[x] session data is 512 characters, which could overflow if we introduce many different authentication steps
 	[x] maybe change variable length fields to text field
 		[x] changed session data column to json field
