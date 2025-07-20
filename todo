@@ -916,7 +916,6 @@
 [ ] documentation for cli and entity definitions
 [ ] commit the gauze spa files to the repo and serve it via the server application
 
-[ ] custom gauze parsers
 [x] realm level auth
 	[-] controls specified in entity definitions
 		[x] controls specified on new column on proxy table (e.g. user level realm access control)
@@ -931,6 +930,8 @@
 	[x] realm and agent level authentication constraints to specify required steps necessary to authenticate
 	[x] steps themselves should have constraints (e.g. requiring another step)
 [ ] refactor serialize and deserialize middlewares to act on a passed in promise
+	[ ] similar to koa
+	[ ] does this have any benefit for us? we want a linear path to keep things functional
 [x] refactor http server
 	[-] plugin architecture to configure to major low level frameworks (e.g. express, koa, hono)
 		[x] might just go with koa since it has the router that best aligns with my vision
@@ -940,7 +941,6 @@
 [-] http middleware
 	[-] middlewares are defined according to the server plugin used
 	[x] taken care of by custom application command that allows the user to configure a koa app
-[ ] process middleware
 [x] closed and open project modes
 	[x] open mode would allow us to use graphql to create public facing sites, like documentation
 	[-] closed by default (e.g. requires authentication)
@@ -948,11 +948,8 @@
 [x] routing pattern
 	[x] modular applications/realms
 	[x] configure project to use koa and koa router
-[ ] server side rendering
-	[ ] env variable parsing for stores
-	[ ] write project documentation using server side rendering
-[ ] projects
-	[ ] self-contained modules that contain entity definitions, kernel realm, database realm, and system realm
+[x] project, systems, realms, areas
+	[x] systems are self-contained modules that contain entity definitions, kernel realm, database realm, and system realm
 	[x] would be ideal if every project returned a server or router object
 		[x] convention is to have a root router.js file
 	[x] projects are just a bundle of realms
@@ -965,6 +962,13 @@
 		[ ] we can go with convention over configuration for now
 		[ ] this ultimately comes down to whether or not we expect people to copy the code for sub-applications into their repository, or if we want to be able to load applications from node_modules
 			[ ] the simpler way is to copy (and probably more performant)
+[ ] process middleware
+[ ] custom gauze parsers
+	[ ] add validation at parser level (maximum string size, nullable, required, etc)
+	[ ] implemented as custom graphql types
+[ ] server side rendering
+	[ ] env variable parsing for stores
+	[ ] write project documentation using server side rendering
 
 [-] simple react app using koa-tree-router
 	[-] need to manually configure browser hooks and middleware for state management
