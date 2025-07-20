@@ -792,7 +792,8 @@ class EnvironmentController {
 		const self = this;
 		const { agent } = context;
 		const target_agent = parameters.proxy;
-		if (agent) {
+		// todo: put this value in a const file somewhere and reference it. it is also being used in server/http.js
+		if (agent && agent.agent_id !== "null" && agent.agent_type !== "null") {
 			throw new Error("Session cannot enter environment session");
 		} else {
 			if (target_agent) {

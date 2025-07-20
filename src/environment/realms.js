@@ -2,11 +2,13 @@ const { randomBytes } = await import("node:crypto");
 
 import { v4 as uuidv4 } from "uuid";
 
+import * as $kernel from "./../kernel/index.js";
+
 // helper function for realms
 // enter session
 // exit session
 const ENTER_SESSION__REALM__ENVIRONMENT = function ({ proxy_type, session_type, proxy_model, session_model, realm, sign_jwt }, context, scope, parameters) {
-	const { agent } = context;
+	const { agent, project } = context;
 	const target_agent = parameters.proxy;
 
 	function enter() {
@@ -31,6 +33,57 @@ const ENTER_SESSION__REALM__ENVIRONMENT = function ({ proxy_type, session_type, 
 						throw new Error("Session could not be found");
 					}
 				});
+			})
+			.then(function (collection) {
+				const { session } = collection
+				if (!session) throw new Error("Dependency session missing from validating step requirements")
+				const parsed_data = session_model.parse_data(session.gauze__session__data);
+
+				if (project.default.authentication.realms[realm]) {
+					const realm_requirements = $kernel.src.authentication.VALIDATE_REQUIREMENTS({
+						session_model: session_model
+					}, parsed_data, project.default.authentication.realms[realm])
+					if (realm_requirements) {
+						// ok
+					} else {
+						throw new Error("Realm step requirements are not met")
+					}
+				} else {
+					throw new Error("Realm is not defined in project authentication configuration")
+				}
+
+				if (context.realm.default.mode === "open") {
+					// loose interpretation (agent does not need to be defined in authentication settings)
+					if (project.default.authentication.agents[agent.agent_type]) {
+						const agent_requirements = $kernel.src.authentication.VALIDATE_REQUIREMENTS({
+							session_model: session_model
+						}, parsed_data, project.default.authentication.agents[agent.agent_type])
+						if (agent_requirements) {
+							// ok
+						} else {
+							throw new Error("Agent step requirements are not met")
+						}
+					} else {
+						// ok
+					}
+				} else if (context.realm.default.mode === "closed") {
+					// strict interpretation (agent must be defined in authentication settings)
+					if (project.default.authentication.agents[agent.agent_type]) {
+						const agent_requirements = $kernel.src.authentication.VALIDATE_REQUIREMENTS({
+							session_model: session_model
+						}, parsed_data, project.default.authentication.agents[agent.agent_type])
+						if (agent_requirements) {
+							// ok
+						} else {
+							throw new Error("Agent step requirements are not met")
+						}
+					} else {
+						throw new Error("Realm is not defined in project authentication configuration")
+					}
+				} else {
+					throw new Error("Invalid realm mode")
+				}
+				return collection
 			})
 			.then(function (collection) {
 				// ensure the proxy exists for target agent with proxy session's root as its root
