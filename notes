@@ -52,4 +52,3 @@ the other way is we can generate a diff structure for the updated data against w
 
 on closer inspection, i did a lot of the preliminary work to enable dynamic methods. it seems feasible, after some moderate refactoring. i'm not sure if this is worth our time. it won't work end to end unless we add a cli command to add and remove methods from entities. i can do AST manipulation for javascript, but i'm not sure how easy it is for graphql. there are operations that would need to be defined every time we add a method. maybe stick with the REST approach for now. there are other things we need to work on anyway.
 
-
