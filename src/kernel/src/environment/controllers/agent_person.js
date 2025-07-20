@@ -86,25 +86,6 @@ class AgentPersonController {
 					}
 				});
 			}).then(function (collection) {
-				/*
-				const session_attributes = {
-					gauze__session__id: agent.session_id,
-				};
-				const session_parameters = { where: session_attributes };
-				return MODEL__SESSION__MODEL__ENVIRONMENT.read(context, scope, session_parameters).then(function (sessions) {
-					if (sessions && sessions.length) {
-						const session = sessions[0];
-						return {
-							...collection,
-							session: session,
-						};
-					} else {
-						throw new Error("Session could not be found")
-					}
-				});
-				*/
-				return collection
-			}).then(function (collection) {
 				const { person, proxy, session } = collection;
 				// parse the JSON in session
 				const parsed_data = MODEL__SESSION__MODEL__ENVIRONMENT.parse_data(session.gauze__session__data);
