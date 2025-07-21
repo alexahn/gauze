@@ -2,6 +2,7 @@
 // taken from https://github.com/tjmehta/graphql-date/blob/master/index.js (MIT license)
 
 import { GraphQLScalarType, GraphQLError, Kind } from "graphql";
+import { v4 as uuidv4 } from "uuid";
 
 // note: not sure how this will work
 // i need to wrap this into a higher order function but i'm not sure how graphql deals with scalar types
