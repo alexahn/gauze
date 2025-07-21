@@ -6,7 +6,9 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 	const [lastChanged, setLastChanged] = useState(new Date().getTime());
 	const graphQLTypeToInputType = {
 		Date: "datetime-local",
+		GAUZE_DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT: "datetime-local",
 		String: "text",
+		GAUZE_STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT: "text"
 	};
 	const serializeGraphQLTypeToInputType = {
 		Date: function (v, field) {
@@ -18,7 +20,7 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 				return undefined;
 			}
 		},
-		"GAUZE_DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT": function (v, field) {
+		GAUZE_DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT: function (v, field) {
 			// note: look into why we need an existence check here (system entity page)
 			if (v && typeof v === "string") {
 				const d = new Date(v).toISOString();
