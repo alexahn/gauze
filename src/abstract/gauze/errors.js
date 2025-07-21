@@ -1,6 +1,11 @@
 // flat file for errors because codes need to be a monotonic sequence
 
-// codes alloted to this file: [0, 999] inclusive
+// codes alloted to this file:
+// [0, 999] inclusive for abstract
+// [2000, 2999] inclusive for kernel
+// [4000, 4999] inclusive for database
+// [6000, 6999] inclusive for system
+// [8000, 8999] inclusive for server
 
 // gauze errors
 
