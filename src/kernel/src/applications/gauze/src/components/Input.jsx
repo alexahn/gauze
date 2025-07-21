@@ -125,7 +125,6 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 			}
 		}
 	});
-	console.log("FIELD", field)
 	const valueInput = (
 		<input
 			ref={inputRef}
