@@ -6,7 +6,7 @@ function create_fields_array(fields) {
 	keys.forEach(function (key) {
 		const value = fields[key];
 		mapped[key] = {
-			type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(value.type),
+			type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(value.type),
 			description: value.description,
 		};
 	});
@@ -19,7 +19,7 @@ function create_fields_string(fields) {
 	keys.forEach(function (key) {
 		const value = fields[key];
 		mapped[key] = {
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: $abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 			description: value.description,
 		};
 	});

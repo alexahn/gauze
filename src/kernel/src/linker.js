@@ -28,7 +28,7 @@ function invert_relationships(relationships) {
 
 function HEADER__LINKER__SRC__KERNEL(realm, query_root, entities) {
 	const HEADER__HEADER__STRUCTURE = {
-		type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.header.HEADER_TYPE__HEADER__STRUCTURE),
+		type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.header.HEADER_TYPE__HEADER__STRUCTURE),
 		args: {},
 		resolve: function (source, query_arguments, context) {
 			let relationships_to;
@@ -55,6 +55,7 @@ function HEADER__LINKER__SRC__KERNEL(realm, query_root, entities) {
 								graphql_type: {
 									name: field.graphql_type.name,
 									description: field.graphql_type.description,
+									params: JSON.stringify(field.graphql_type.params)
 								},
 								description: field.description,
 							};

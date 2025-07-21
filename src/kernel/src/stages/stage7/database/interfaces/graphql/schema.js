@@ -89,12 +89,12 @@ const METHODS = {
 const QUERY_FIELDS = {};
 const MUTATION_FIELDS = {};
 
-const QUERY_TYPE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const QUERY_TYPE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Query",
 	fields: () => QUERY_FIELDS,
 });
 
-const MUTATION_TYPE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const MUTATION_TYPE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Mutation",
 	fields: () => MUTATION_FIELDS,
 });

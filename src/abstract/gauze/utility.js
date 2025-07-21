@@ -8,12 +8,12 @@ function create_graphql_attributes_fields(entity) {
 		// todo: update these to call the type with params
 		if (field.required) {
 			graphql_fields[key] = {
-				type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT(field.graphql_type()),
+				type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT(field.graphql_type),
 				description: field.description,
 			};
 		} else {
 			graphql_fields[key] = {
-				type: field.graphql_type(),
+				type: field.graphql_type,
 				description: field.description,
 			};
 		}
@@ -27,7 +27,7 @@ function create_graphql_where_fields(entity) {
 	Object.keys(entity.fields).forEach(function (key) {
 		const field = entity.fields[key];
 		graphql_fields[key] = {
-			type: field.graphql_type(),
+			type: field.graphql_type,
 			description: field.description,
 		};
 	});

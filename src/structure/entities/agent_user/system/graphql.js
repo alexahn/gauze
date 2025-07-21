@@ -6,16 +6,16 @@ const TYPE__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = $abstract.entities.agent_us
 
 const METADATA_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = {
 	id: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "id",
 	},
 	type: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "type",
 	},
 };
 
-const METADATA__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const METADATA__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User__Metadata",
 	description: "Agent_User Metadata",
 	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
@@ -27,13 +27,13 @@ const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = create_f
 
 const ATTRIBUTES_FIELDS_STRING__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = create_fields_string(ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE);
 
-const ATTRIBUTES__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User__Attributes",
 	description: "Agent_User Attributes",
 	fields: () => ATTRIBUTES_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
 });
 
-const SOURCE_METADATA__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const SOURCE_METADATA__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User__Source_Metadata",
 	description: "Agent_User Source Metadata",
 	fields: () => METADATA_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
@@ -45,12 +45,12 @@ const SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = {
 		description: "Agent_User Source Metadata",
 	},
 	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "Agent_User Source Direction",
 	},
 };
 
-const SOURCE__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const SOURCE__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User__Source",
 	description: "Agent_User Source",
 	fields: () => SOURCE_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
@@ -62,7 +62,7 @@ const WHERE_FIELDS_ARRAY__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = create_fields
 
 const WHERE_FIELDS_STRING__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = create_fields_string(WHERE_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE);
 
-const WHERE__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const WHERE__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User__Where",
 	description: "Agent_User Where",
 	fields: () => WHERE_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
@@ -74,13 +74,13 @@ const QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = {
 		description: "Agent_User Query Relationships To Metadata",
 	},
 	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "Agent_User Query Relationships To Direction",
 	},
 	//read_entity: ENTITY_READ_QUERY
 };
 
-const QUERY_RELATIONSHIPS_TO__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const QUERY_RELATIONSHIPS_TO__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User_Query__Relationships_To",
 	description: "Agent_User Query Relationships_To",
 	fields: () => QUERY_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
@@ -92,13 +92,13 @@ const QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = 
 		description: "Agent_User Query Relationships From Metadata",
 	},
 	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "Agent_User Query Relationships From Direction",
 	},
 	//read_entity: ENTITY_READ_QUERY
 };
 
-const QUERY_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const QUERY_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User_Query__Relationships_From",
 	description: "Agent_User Query Relationships_From",
 	fields: () => QUERY_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
@@ -106,7 +106,7 @@ const QUERY_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $ab
 
 const QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = {};
 
-const QUERY_QUERY__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const QUERY_QUERY__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User_Query__Query",
 	description: "Agent_User Query Query",
 	fields: () => QUERY_QUERY_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
@@ -118,13 +118,13 @@ const MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE =
 		description: "Agent_User Mutation Relationship To Metadata",
 	},
 	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "Agent_User Mutation Relationship To Direction",
 	},
 	//create_entity: ENTITY_CREATE_MUTATION
 };
 
-const MUTATION_RELATIONSHIPS_TO__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const MUTATION_RELATIONSHIPS_TO__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User_Mutation__Relationships_To",
 	description: "Agent_User Mutation Relationships To",
 	fields: () => MUTATION_RELATIONSHIPS_TO_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
@@ -136,13 +136,13 @@ const MUTATION_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE
 		description: "Agent_User Mutation Relationship From Metadata",
 	},
 	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "Agent_User Mutation Relationship From Direction",
 	},
 	//create_entity: ENTITY_CREATE_MUTATION
 };
 
-const MUTATION_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const MUTATION_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User_Mutation__Relationships_From",
 	description: "Agent_User Mutation Relationships From",
 	fields: () => MUTATION_RELATIONSHIPS_FROM_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
@@ -150,7 +150,7 @@ const MUTATION_RELATIONSHIPS_FROM__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new 
 
 const MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = {};
 
-const MUTATION_MUTATION__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const MUTATION_MUTATION__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User_Mutation__Mutation",
 	description: "Agent_User Mutation Mutation",
 	fields: () => MUTATION_MUTATION_FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE,
@@ -167,7 +167,7 @@ const FIELDS__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = {
 	},
 };
 
-const QUERY__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const QUERY__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User_Query",
 	description: "Agent_User Query",
 	fields: () => ({
@@ -188,7 +188,7 @@ const QUERY__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.
 	}),
 });
 
-const MUTATION__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const MUTATION__GRAPHQL__SYSTEM__AGENT_USER__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_User_Mutation",
 	description: "Agent_User Mutation",
 	fields: () => ({
