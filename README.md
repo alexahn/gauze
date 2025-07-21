@@ -8,7 +8,7 @@ A GraphQL server architecture.
 
 ## Usage
 
-1. Create a project using the cli: `npx gauze create project { project_directory }`
+1. Create a project using the CLI: `npx gauze create project { project_directory }`
 2. Update `example.env` and rename to `.env`
 3. Update `example.json` and rename `{ entity_name }.js`
 4. Create the migration file for your entity: `npx gauze project { project_directory } migrate make { entity_name }`
@@ -31,7 +31,7 @@ A GraphQL server architecture.
 	- Builds the web interface while using proxy environment variables
 - `npm run watch-ui-env`
 	- Watches the web interface source directory and rebuilds when any file is changed while using proxy environment variables
-- `serve-ui`
+- `npm run serve-ui`
 	- Serves the built web interface application on port `3000`
 
 ## Gauze Commands
@@ -42,8 +42,8 @@ A GraphQL server architecture.
 - `npx gauze run server`
 - `npx gauze project { project_directory } migrate run`
 - `npx gauze project { project_directory } migrate make`
-- `npx gauze project create project`
-- `npx gauze run server`
+- `npx gauze project { project_directory } create project`
+- `npx gauze project { project_directory } run server`
 
 ## Entity Definition
 
