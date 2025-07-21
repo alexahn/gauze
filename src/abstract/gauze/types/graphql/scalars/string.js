@@ -3,7 +3,7 @@
 import { GraphQLScalarType, GraphQLError, Kind } from "graphql";
 import { v4 as uuidv4 } from "uuid";
 
-import { ERROR_EXTENSION__JSON__ABSTRACT } from "./../../../../json.js"
+import { STRING_MINIMUM_LENGTH__ERROR__GAUZE__ABSTRACT, STRING_MAXIMUM_LENGTH__ERROR__GAUZE__ABSTRACT } from "./../../../errors.js"
 
 function SCALAR__STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT(entity, field, params = {}) {
 	const { minimum_length = 0, maximum_length = 1024 } = params;
@@ -18,13 +18,11 @@ function SCALAR__STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT(entity, field, p
 		// parse from json value to grapqhl value
 		parseValue: function (value) {
 			if (value.length < minimum_length) {
-				const err =  new Error(`Scalar string has a minimum length of: ${minimum_length}, received input of length: ${value.length}`);
-				err.extensions = ERROR_EXTENSION__JSON__ABSTRACT(entity, field, `Field has a minimum length of ${minimum_length}`);
+				const err = STRING_MINIMUM_LENGTH__ERROR__GAUZE__ABSTRACT(entity, field, value, minimum_length)
 				throw err
 			}
 			if (maximum_length < value.length) {
-				const err = new Error(`Scalar string has a maximum length of: ${maximum_length}, received input of length: ${value.length}`);
-				err.extensions = ERROR_EXTENSION__JSON__ABSTRACT(entity, field, `Field has a maximum length of ${maximum_length}`)
+				const err = STRING_MAXIMUM_LENGTH__ERROR__GAUZE__ABSTRACT(entity, field, value, maximum_length)
 				throw err
 			}
 			return value;

@@ -17,18 +17,4 @@ const REPLACER__JSON__ABSTRACT = function (key, value) {
 	return value;
 };
 
-function ERROR_EXTENSION__JSON__ABSTRACT(entity, field, readable) {
-    return {
-        entity: {
-            name: entity.name,
-        },
-        field: {
-            name: field.name,
-            graphql_type: field.graphql_type.name, // note: this is using the name attribute on a function
-            graphql_type_parameters: field.graphql_type_parameters
-        },
-		readable
-    }
-}
-
-export { REPLACER__JSON__ABSTRACT, ERROR_EXTENSION__JSON__ABSTRACT };
+export { REPLACER__JSON__ABSTRACT };

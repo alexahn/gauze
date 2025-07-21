@@ -1,18 +1,6 @@
 import * as $abstract from "./../../abstract/index.js";
 
 // todo: rename these to follow the same naming convention used in the rest of the codebase
-function create_graphql_error(entity, field) {
-    return {
-        entity: {
-            name: entity.name,
-        },
-        field: {
-            name: field.name,
-            graphql_type: field.graphql_type.name, // note: this is using the name attribute on a function
-            graphql_type_parameters: field.graphql_type_parameters
-        }
-    }
-}
 
 function create_graphql_attributes_fields(entity) {
 	// todo: add a boolean attributes property to field definition so we can expose a subset of fields to attributes argument?
@@ -70,4 +58,4 @@ function create_graphql_where_string(entity) {
 	return graphql_attributes_string;
 }
 
-export { create_graphql_error, create_graphql_attributes_fields, create_graphql_attributes_string, create_graphql_where_fields, create_graphql_where_string };
+export { create_graphql_attributes_fields, create_graphql_attributes_string, create_graphql_where_fields, create_graphql_where_string };
