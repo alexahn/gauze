@@ -256,6 +256,9 @@ class GauzeManager {
 				} else if (key === "graphql_type") {
 					const graphql_type = field[key];
 					if (typeof graphql_type !== "function") throw new Error(`Entity property '${path}' must be of type 'function', ${graphql_type} is not of type 'function'`);
+				} else if (key === "graphql_type_parameters") {
+					const graphql_type_parameters = field[key]
+					if (typeof graphql_type_parameters !== "object") throw new Error(`Entity property '${path}' must be of type 'object', ${graphql_type_parameters} is not of type 'object'`)
 				} else if (key === "description") {
 					const description = field[key];
 					if (typeof description !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${description} is not of type 'string'`);
