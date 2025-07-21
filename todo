@@ -700,10 +700,13 @@
 		[ ] always add the field at the end of every module definition so it shows up at the bottom in the repl
 	[x] rename rud protected middleware to ud protected middleware or (updated_delete_protected_middleware)
 	[x] eslint
-	[ ] errors directory per realm
-		[ ] realms can have their own custom errors, but only for the particular logic they are handling
-			[ ] in all other cases, we should just bubble up the error from below
-		[ ] use GraphQLError from the graphql module to supply an extensions property
+	[-] errors directory per realm
+		[ ] slowly refactor existing code to use custom errors
+		[x] realms can have their own custom errors, but only for the particular logic they are handling
+			[x] in all other cases, we should just bubble up the error from below
+		[x] use GraphQLError from the graphql module to supply an extensions property
+		[x] centralize all errors in abstract realm and partition code space according to realms
+			[x] this seems more scalable since we can have 2 flat files (one for gauze, and one for project) to manage monotonically increasing error codes
 	[ ] think about how to do field validation so that field errors can be abstracted
 		[ ] currently we will just throw hand crafted errors, but we could probably have a structured approach
 	[x] change var to const where we can
