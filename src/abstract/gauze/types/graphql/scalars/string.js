@@ -19,6 +19,15 @@ function SCALAR__STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT(params = {}) {
 				throw new Error(`Scalar string has a minimum length of: ${minimum_length}, received input of length: ${value.length}`);
 			}
 			if (maximum_length < value.length) {
+				const err = new Error(`Scalar string has a maximum length of: ${maximum_length}, received input of length: ${value.length}`);
+				// extensions can be added to errors to surface them in the response
+				// for useful errors we would need to change the function signature to scalar(entity, field, params)
+				/*
+				err.extensions = {
+					code: 10
+				}
+				*/
+				throw err
 				throw new Error(`Scalar string has a maximum length of: ${maximum_length}, received input of length: ${value.length}`);
 			}
 			return value;
