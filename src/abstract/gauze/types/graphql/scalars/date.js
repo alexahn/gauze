@@ -8,6 +8,7 @@ function SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT (params) {
 	const id = uuidv4().replaceAll("-", "")
 	const scalar = new GraphQLScalarType({
 		name: ["SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT", id].join("___"),
+		description: "Gauze Date Scalar",
 		/**
 		 * Serialize date value into string
 		 * @param  {Date} value date value
@@ -57,6 +58,8 @@ function SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT (params) {
 		if (ast.value !== result.toJSON()) return false;
 		return true;
 	}
+
+	scalar.params = params
 	return scalar
 }
 

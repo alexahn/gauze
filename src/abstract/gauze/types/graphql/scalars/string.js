@@ -8,6 +8,7 @@ function SCALAR__STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT (params = {}) {
     const id = String(uuidv4()).replaceAll("-", "")
     const scalar = new GraphQLScalarType({
         name: ["SCALAR__STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT", id].join("___"),
+		description: "Gauze String Scalar",
         // serialize from graphql value into json value
         serialize: function (value) {
             return value
@@ -36,6 +37,8 @@ function SCALAR__STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT (params = {}) {
 	scalar.match_ast = function (ast) {
 		return true;
 	};
+
+	scalar.params = params
     return scalar
 }
 

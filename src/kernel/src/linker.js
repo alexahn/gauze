@@ -55,6 +55,7 @@ function HEADER__LINKER__SRC__KERNEL(realm, query_root, entities) {
 								graphql_type: {
 									name: field.graphql_type.name,
 									description: field.graphql_type.description,
+									params: JSON.stringify(field.graphql_type.params)
 								},
 								description: field.description,
 							};
