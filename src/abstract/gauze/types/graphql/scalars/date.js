@@ -54,6 +54,10 @@ DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT.match_ast = function (ast) {
 	if (isNaN(result.getTime())) return false;
 	if (ast.value !== result.toJSON()) return false;
 	return true;
-};
+}
 
-export { DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT };
+function SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT (params) {
+	return DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT
+}
+
+export { DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT, SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT };

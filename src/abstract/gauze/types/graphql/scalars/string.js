@@ -94,4 +94,34 @@ STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT.match_ast = function (ast) {
 	return true;
 };
 
-export { STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT };
+function SCALAR__STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT (params) {
+    const id = String(uuidv4()).replaceAll("-", "")
+    const scalar = new GraphQLScalarType({
+        name: "GauzeString_" + id,
+        // serialize from graphql value into json value
+        serialize: function (value) {
+            return value
+        },
+        // parse from json value to grapqhl value
+        parseValue: function (value) {
+            if (value.length > 1024) {
+                throw new Error("Field length is larger than 64")
+            }
+            return value
+        },
+        /**
+         * Parse ast literal to date
+         * @param  {Object} ast graphql ast
+         * @return {Date} date value
+         */
+        // parse from ast literal value to graphql value
+        parseLiteral: function (ast) {
+            //if (ast.kind !== Kind.STRING) throw new GraphQLError("Query error: Can only parse strings to dates but got a: " + ast.kind, [ast]);
+            return ast.value
+        },
+    })
+    return scalar
+    //return GraphQLString
+}
+
+export { STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT, SCALAR__STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT};
