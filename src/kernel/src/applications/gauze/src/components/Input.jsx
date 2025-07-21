@@ -6,6 +6,8 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 	const [lastChanged, setLastChanged] = useState(new Date().getTime());
 	const graphQLTypeName = field.graphql_type.name.split("___")[0]
 	const graphQLTypeToInputType = {
+		GAUZE_DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT: "datetime-local",
+		GAUZE_STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT: "text",
 		Date: "datetime-local",
 		SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: "datetime-local",
 		String: "text",
