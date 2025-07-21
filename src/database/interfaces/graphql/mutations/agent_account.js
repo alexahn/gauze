@@ -55,7 +55,9 @@ const WHERE_STRING__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = new 
 });
 
 const CREATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_account.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+		$structure.entities.agent_account.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
+	),
 	args: {
 		source: {
 			description: "source",
@@ -104,7 +106,9 @@ const CREATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 };
 
 const UPDATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_account.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+		$structure.entities.agent_account.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
+	),
 	args: {
 		source: {
 			description: "source",
@@ -206,7 +210,9 @@ const UPDATE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 };
 
 const DELETE__AGENT_ACCOUNT__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_account.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+		$structure.entities.agent_account.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
+	),
 	args: {
 		source: {
 			description: "source",

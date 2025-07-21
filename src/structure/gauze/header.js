@@ -11,8 +11,8 @@ const GRAPHQL_TYPE_FIELDS__HEADER__STRUCTURE = {
 	},
 	params: {
 		type: $abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
-		description: "graphql type params"
-	}
+		description: "graphql type params",
+	},
 };
 
 const GRAPHQL_TYPE_TYPE__HEADER__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({

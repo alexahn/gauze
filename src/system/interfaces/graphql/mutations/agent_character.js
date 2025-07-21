@@ -43,7 +43,9 @@ const WHERE_ARRAY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM = new $
 });
 
 const CREATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
-	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_character.system.graphql.MUTATION__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+		$structure.entities.agent_character.system.graphql.MUTATION__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+	),
 	args: {
 		source: {
 			description: "source",
@@ -99,7 +101,9 @@ const CREATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 };
 
 const UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
-	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_character.system.graphql.MUTATION__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+		$structure.entities.agent_character.system.graphql.MUTATION__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+	),
 	args: {
 		source: {
 			description: "source",
@@ -200,7 +204,9 @@ const UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
 };
 
 const DELETE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__SYSTEM = {
-	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_character.system.graphql.MUTATION__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+		$structure.entities.agent_character.system.graphql.MUTATION__GRAPHQL__SYSTEM__AGENT_CHARACTER__STRUCTURE,
+	),
 	args: {
 		source: {
 			description: "source",

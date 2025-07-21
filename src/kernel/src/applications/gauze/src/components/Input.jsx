@@ -4,14 +4,14 @@ import { useState, useRef, useEffect } from "react";
 export default function Input({ field, className, defaultMode, defaultValue, value, onChange, onKeyDown, disabled, cache }) {
 	const inputRef = useRef();
 	const [lastChanged, setLastChanged] = useState(new Date().getTime());
-	const graphQLTypeName = field.graphql_type.name.split("___")[0]
+	const graphQLTypeName = field.graphql_type.name.split("___")[0];
 	const graphQLTypeToInputType = {
 		GAUZE_DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT: "datetime-local",
 		GAUZE_STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT: "text",
 		Date: "datetime-local",
 		SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: "datetime-local",
 		String: "text",
-		SCALAR__STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: "text"
+		SCALAR__STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: "text",
 	};
 	const serializeGraphQLTypeToInputType = {
 		Date: function (v, field) {
@@ -45,7 +45,7 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 			} else {
 				return undefined;
 			}
-		}
+		},
 	};
 	const serializeInputValueToGraphQLType = {
 		SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: function (e, field) {

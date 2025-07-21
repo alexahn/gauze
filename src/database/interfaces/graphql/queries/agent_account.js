@@ -55,7 +55,9 @@ const WHERE_STRING__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE = new $ab
 });
 
 const READ__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__DATABASE = {
-	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_account.database.graphql.QUERY__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+		$structure.entities.agent_account.database.graphql.QUERY__GRAPHQL__DATABASE__AGENT_ACCOUNT__STRUCTURE,
+	),
 	args: {
 		source: {
 			description: "source",

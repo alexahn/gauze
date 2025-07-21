@@ -73,7 +73,7 @@ export default function ($abstract) {
 				required: false,
 				sql_type: "string",
 				graphql_type: $abstract.gauze.types.graphql.scalars.string.SCALAR__STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT({
-					maximum_length: 16
+					maximum_length: 16,
 				}),
 				description: "text",
 				pre_serialize_middlewares: [],

@@ -1,1 +1,1 @@
-import * as scalars from "./scalars/index.js"
+import * as scalars from "./scalars/index.js";

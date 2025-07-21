@@ -4,8 +4,8 @@
 import { GraphQLScalarType, GraphQLError, Kind } from "graphql";
 import { v4 as uuidv4 } from "uuid";
 
-function SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT (params) {
-	const id = uuidv4().replaceAll("-", "")
+function SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT(params) {
+	const id = uuidv4().replaceAll("-", "");
 	const scalar = new GraphQLScalarType({
 		name: ["SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT", id].join("___"),
 		description: "Gauze Date Scalar",
@@ -57,10 +57,10 @@ function SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT (params) {
 		if (isNaN(result.getTime())) return false;
 		if (ast.value !== result.toJSON()) return false;
 		return true;
-	}
+	};
 
-	scalar.params = params
-	return scalar
+	scalar.params = params;
+	return scalar;
 }
 
 export { SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT };
