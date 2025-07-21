@@ -192,7 +192,7 @@ const COUNT__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	},
 };
 export {
-	// expose types to allow type composition
+	// export types to allow type composition
 	SOURCE__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 	ATTRIBUTES__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 	ATTRIBUTES_ARRAY__SECRET__QUERY__GRAPHQL__INTERFACE__SYSTEM,

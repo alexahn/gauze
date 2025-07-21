@@ -192,7 +192,7 @@ const COUNT__SESSION__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	},
 };
 export {
-	// expose types to allow type composition
+	// export types to allow type composition
 	SOURCE__SESSION__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 	ATTRIBUTES__SESSION__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 	ATTRIBUTES_ARRAY__SESSION__QUERY__GRAPHQL__INTERFACE__SYSTEM,
