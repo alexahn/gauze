@@ -14,7 +14,7 @@ const SERIALIZER__PROXY__QUERY__GRAPHQL__INTERFACE__ENVIRONMENT = new $structure
 });
 
 const READ__PROXY__QUERY__GRAPHQL__INTERFACE__ENVIRONMENT = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.proxy.system.graphql.QUERY__GRAPHQL__SYSTEM__PROXY__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.proxy.system.graphql.QUERY__GRAPHQL__SYSTEM__PROXY__STRUCTURE),
 	args: {
 		source: {
 			description: "source",
@@ -42,23 +42,23 @@ const READ__PROXY__QUERY__GRAPHQL__INTERFACE__ENVIRONMENT = {
 		},
 		limit: {
 			description: "limit",
-			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: $abstract.gauze.types.graphql.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		offset: {
 			description: "offset",
-			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: $abstract.gauze.types.graphql.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order: {
 			description: "order",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: $abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_direction: {
 			description: "order direction",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: $abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_nulls: {
 			description: "order nulls",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: $abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
 	resolve: (source, query_arguments, context) => {
@@ -91,7 +91,7 @@ const READ__PROXY__QUERY__GRAPHQL__INTERFACE__ENVIRONMENT = {
 };
 
 const COUNT__PROXY__QUERY__GRAPHQL__INTERFACE__ENVIRONMENT = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
+	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
 		source: {
 			description: "source",

@@ -6,16 +6,16 @@ const TYPE__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = $abstract.entities.whiteli
 
 const METADATA_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = {
 	id: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "id",
 	},
 	type: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "type",
 	},
 };
 
-const METADATA__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const METADATA__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist__Metadata",
 	description: "Whitelist Metadata",
 	fields: () => METADATA_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
@@ -27,13 +27,13 @@ const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = create_
 
 const ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = create_fields_string(ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE);
 
-const ATTRIBUTES__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist__Attributes",
 	description: "Whitelist Attributes",
 	fields: () => ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
-const SOURCE_METADATA__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const SOURCE_METADATA__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist__Source_Metadata",
 	description: "Whitelist Source Metadata",
 	fields: () => METADATA_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
@@ -45,12 +45,12 @@ const SOURCE_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = {
 		description: "Whitelist Source Metadata",
 	},
 	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "Whitelist Source Direction",
 	},
 };
 
-const SOURCE__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const SOURCE__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist__Source",
 	description: "Whitelist Source",
 	fields: () => SOURCE_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
@@ -62,7 +62,7 @@ const WHERE_FIELDS_ARRAY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = create_field
 
 const WHERE_FIELDS_STRING__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = create_fields_string(WHERE_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE);
 
-const WHERE__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const WHERE__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist__Where",
 	description: "Whitelist Where",
 	fields: () => WHERE_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
@@ -70,7 +70,7 @@ const WHERE__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types
 
 const QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = {};
 
-const QUERY_QUERY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const QUERY_QUERY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Query__Query",
 	description: "Whitelist Query Query",
 	fields: () => QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
@@ -78,13 +78,13 @@ const QUERY_QUERY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze
 
 const MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = {};
 
-const MUTATION_MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const MUTATION_MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Mutation__Mutation",
 	description: "Whitelist Mutation Mutation",
 	fields: () => MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__WHITELIST__STRUCTURE,
 });
 
-const QUERY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const QUERY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Query",
 	description: "Whitelist",
 	fields: () => ({
@@ -103,7 +103,7 @@ const QUERY__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types
 	}),
 });
 
-const MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const MUTATION__GRAPHQL__DATABASE__WHITELIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Whitelist_Mutation",
 	description: "Whitelist",
 	fields: () => ({

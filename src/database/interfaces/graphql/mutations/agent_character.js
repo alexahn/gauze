@@ -12,50 +12,50 @@ const SERIALIZER__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new 
 	sql_primary_key: $structure.entities.agent_character.database.sql.PRIMARY_KEY__SQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 });
 
-const SOURCE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const SOURCE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Character_Mutation__Source",
 	description: "Agent_Character Source",
 	fields: () => $structure.entities.agent_character.database.graphql.SOURCE_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 });
 
-const ATTRIBUTES__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Character_Mutation__Attributes",
 	description: "Agent_Character Mutation Attributes",
 	fields: $structure.entities.agent_character.database.graphql.ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 });
 
-const ATTRIBUTES_ARRAY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES_ARRAY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Character_Mutation__Attributes_Array",
 	description: "Agent_Character Mutation Attributes Array",
 	fields: $structure.entities.agent_character.database.graphql.ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 });
 
-const ATTRIBUTES_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Character_Mutation__Attributes_String",
 	description: "Agent_Character Mutation Attributes String",
 	fields: $structure.entities.agent_character.database.graphql.ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 });
 
-const WHERE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const WHERE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Character_Mutation__Where",
 	description: "Agent_Character Mutation Where",
 	fields: $structure.entities.agent_character.database.graphql.WHERE_FIELDS__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 });
 
-const WHERE_ARRAY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const WHERE_ARRAY__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Character_Mutation__Where_Array",
 	description: "Agent_Character Mutation Where Array",
 	fields: $structure.entities.agent_character.database.graphql.WHERE_FIELDS_ARRAY__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 });
 
-const WHERE_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const WHERE_STRING__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Agent_Character_Mutation__Where_String",
 	description: "Agent_Character Mutation Where String",
 	fields: $structure.entities.agent_character.database.graphql.WHERE_FIELDS_STRING__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 });
 
 const CREATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
 		$structure.entities.agent_character.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 	),
 	args: {
@@ -106,7 +106,7 @@ const CREATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 };
 
 const UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
 		$structure.entities.agent_character.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 	),
 	args: {
@@ -148,23 +148,23 @@ const UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		limit: {
 			description: "limit",
-			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: $abstract.gauze.types.graphql.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		offset: {
 			description: "offset",
-			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: $abstract.gauze.types.graphql.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order: {
 			description: "order",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: $abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_direction: {
 			description: "order direction",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: $abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_nulls: {
 			description: "order nulls",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: $abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
 	resolve: (source, mutation_arguments, context) => {
@@ -210,7 +210,7 @@ const UPDATE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 };
 
 const DELETE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
-	type: new $abstract.gauze.types.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
 		$structure.entities.agent_character.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 	),
 	args: {
@@ -248,23 +248,23 @@ const DELETE__AGENT_CHARACTER__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 		},
 		limit: {
 			description: "limit",
-			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: $abstract.gauze.types.graphql.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		offset: {
 			description: "offset",
-			type: $abstract.gauze.types.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: $abstract.gauze.types.graphql.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order: {
 			description: "order",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: $abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_direction: {
 			description: "order direction",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: $abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 		order_nulls: {
 			description: "order nulls",
-			type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+			type: $abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 		},
 	},
 	resolve: (source, mutation_arguments, context) => {

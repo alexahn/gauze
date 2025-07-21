@@ -6,16 +6,16 @@ const TYPE__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = $abstract.entities.blackli
 
 const METADATA_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = {
 	id: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "id",
 	},
 	type: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "type",
 	},
 };
 
-const METADATA__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const METADATA__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Blacklist__Metadata",
 	description: "Blacklist Metadata",
 	fields: () => METADATA_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
@@ -27,13 +27,13 @@ const ATTRIBUTES_FIELDS_ARRAY__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = create_
 
 const ATTRIBUTES_FIELDS_STRING__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = create_fields_string(ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE);
 
-const ATTRIBUTES__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const ATTRIBUTES__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Blacklist__Attributes",
 	description: "Blacklist Attributes",
 	fields: () => ATTRIBUTES_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
 });
 
-const SOURCE_METADATA__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const SOURCE_METADATA__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.INPUT_OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Blacklist__Source_Metadata",
 	description: "Blacklist Source Metadata",
 	fields: () => METADATA_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
@@ -45,12 +45,12 @@ const SOURCE_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = {
 		description: "Blacklist Source Metadata",
 	},
 	_direction: {
-		type: new $abstract.gauze.types.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "Blacklist Source Direction",
 	},
 };
 
-const SOURCE__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const SOURCE__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Blacklist__Source",
 	description: "Blacklist Source",
 	fields: () => SOURCE_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
@@ -62,7 +62,7 @@ const WHERE_FIELDS_ARRAY__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = create_field
 
 const WHERE_FIELDS_STRING__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = create_fields_string(WHERE_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE);
 
-const WHERE__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const WHERE__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Blacklist__Where",
 	description: "Blacklist Where",
 	fields: () => WHERE_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
@@ -70,7 +70,7 @@ const WHERE__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types
 
 const QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = {};
 
-const QUERY_QUERY__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const QUERY_QUERY__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Blacklist_Query__Query",
 	description: "Blacklist Query Query",
 	fields: () => QUERY_QUERY_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
@@ -78,13 +78,13 @@ const QUERY_QUERY__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze
 
 const MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = {};
 
-const MUTATION_MUTATION__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const MUTATION_MUTATION__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Blacklist_Mutation__Mutation",
 	description: "Blacklist Mutation Mutation",
 	fields: () => MUTATION_MUTATION_FIELDS__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE,
 });
 
-const QUERY__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const QUERY__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Blacklist_Query",
 	description: "Blacklist",
 	fields: () => ({
@@ -103,7 +103,7 @@ const QUERY__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types
 	}),
 });
 
-const MUTATION__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+const MUTATION__GRAPHQL__DATABASE__BLACKLIST__STRUCTURE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
 	name: "Blacklist_Mutation",
 	description: "Blacklist",
 	fields: () => ({
