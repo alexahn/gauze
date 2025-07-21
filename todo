@@ -963,9 +963,10 @@
 		[ ] this ultimately comes down to whether or not we expect people to copy the code for sub-applications into their repository, or if we want to be able to load applications from node_modules
 			[ ] the simpler way is to copy (and probably more performant)
 [ ] process middleware
-[ ] custom gauze parsers
-	[ ] add validation at parser level (maximum string size, nullable, required, etc)
-	[ ] implemented as custom graphql types
+[x] custom gauze parsers
+	[x] add validation at parser level (maximum string size, nullable, required, etc)
+	[x] implemented as custom graphql types
+	[x] expose field params in _header query
 [ ] server side rendering
 	[ ] env variable parsing for stores
 	[ ] write project documentation using server side rendering
@@ -1022,6 +1023,8 @@
 [ ] fix proxy rendering bug on frontend
 	[ ] sometimes it shows the options multiple times (i'm guessing it might be related to acting on a button click)
 	[ ] something is populating the data multiple times
+[ ] fix sign out bug
+	[ ] sometimes the ui gets stuck on the sign out screen
 [ ] cli command to add realm access to an agent
 [ ] cli command to update the structure and definition for an entity (without replacing controller and model code)
 [ ] cli command to add and remove methods
