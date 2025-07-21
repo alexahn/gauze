@@ -1,5 +1,19 @@
 import * as $abstract from "./../../abstract/index.js";
 
+// todo: rename these to follow the same naming convention used in the rest of the codebase
+function create_graphql_error(entity, field) {
+    return {
+        entity: {
+            name: entity.name,
+        },
+        field: {
+            name: field.name,
+            graphql_type: field.graphql_type.name, // note: this is using the name attribute on a function
+            graphql_type_parameters: field.graphql_type_parameters
+        }
+    }
+}
+
 function create_graphql_attributes_fields(entity) {
 	// todo: add a boolean attributes property to field definition so we can expose a subset of fields to attributes argument?
 	const graphql_fields = {};
@@ -8,12 +22,12 @@ function create_graphql_attributes_fields(entity) {
 		// todo: update these to call the type with params
 		if (field.required) {
 			graphql_fields[key] = {
-				type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT(field.graphql_type),
+				type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT(field.graphql_type(entity, field, field.graphql_type_parameters)),
 				description: field.description,
 			};
 		} else {
 			graphql_fields[key] = {
-				type: field.graphql_type,
+				type: field.graphql_type(entity, field, field.graphql_type_parameters),
 				description: field.description,
 			};
 		}
@@ -27,7 +41,7 @@ function create_graphql_where_fields(entity) {
 	Object.keys(entity.fields).forEach(function (key) {
 		const field = entity.fields[key];
 		graphql_fields[key] = {
-			type: field.graphql_type,
+			type: field.graphql_type(entity, field, field.graphql_type_parameters),
 			description: field.description,
 		};
 	});
@@ -56,4 +70,4 @@ function create_graphql_where_string(entity) {
 	return graphql_attributes_string;
 }
 
-export { create_graphql_attributes_fields, create_graphql_attributes_string, create_graphql_where_fields, create_graphql_where_string };
+export { create_graphql_error, create_graphql_attributes_fields, create_graphql_attributes_string, create_graphql_where_fields, create_graphql_where_string };

@@ -4,7 +4,7 @@
 import { GraphQLScalarType, GraphQLError, Kind } from "graphql";
 import { v4 as uuidv4 } from "uuid";
 
-function SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT(params) {
+function SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT(entity, field, params) {
 	const id = uuidv4().replaceAll("-", "");
 	const scalar = new GraphQLScalarType({
 		name: ["SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT", id].join("___"),
