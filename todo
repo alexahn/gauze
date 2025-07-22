@@ -1031,3 +1031,10 @@
 [ ] cli command to add realm access to an agent
 [ ] cli command to update the structure and definition for an entity (without replacing controller and model code)
 [ ] cli command to add and remove methods
+
+[ ] see how far we can get by mentally re-writing the frontend using basic react components
+	[ ] the router i'm using is no longer maintained, so it's kind of a pain to deal with
+		[ ] some of the code is too hard for an average person to deal with too
+	[ ] reducers are built into react now, but we need something to control the state from the outside
+		[ ] pub sub with hooks/effects might be the best approach
+	[ ] look into other routers or write our own
