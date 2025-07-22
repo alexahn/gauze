@@ -973,6 +973,7 @@
 [ ] server side rendering
 	[ ] env variable parsing for stores
 	[ ] write project documentation using server side rendering
+	[x] server side rendering still feels unnatural. the community seems fragmented on the best way forward. if jsx is a strict superset of js, then i need to find a jsx runtime. solving this problem any other way seems like a waste of time because i'm just going to get bogged down in configuration hell. maybe for now, i can emphasize the framework is for dynamic applications.
 
 [-] simple react app using koa-tree-router
 	[-] need to manually configure browser hooks and middleware for state management
@@ -989,6 +990,7 @@
 	[ ] koa middleware to serve files as pages (for a completely self-contained backend and frontend)
 	[ ] graphql ast manipulation (for queries/mutations)
 	[x] server side rendering
+	[ ] deno as a jsx runtime
 
 [ ] redesign authentication and authorization
 	[-] move authentication functions to kernel (kernel/authentication.js)
