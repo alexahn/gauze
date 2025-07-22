@@ -988,6 +988,7 @@
 [ ] research
 	[ ] koa middleware to serve files as pages (for a completely self-contained backend and frontend)
 	[ ] graphql ast manipulation (for queries/mutations)
+	[x] server side rendering
 
 [ ] redesign authentication and authorization
 	[-] move authentication functions to kernel (kernel/authentication.js)
