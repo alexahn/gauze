@@ -14,6 +14,27 @@ import etag from "@koa/etag";
 import compress from "koa-compress"
 import conditional from "koa-conditional-get"
 
+function gauzeIndex() {
+	const index = 
+`<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Gauze</title>
+        <link rel="stylesheet" href="${process.env.GAUZE_SERVER_PROTOCOL}://${process.env.GAUZE_SERVER_HOST}:${process.env.GAUZE_SERVER_PORT}/gauze/index.css" />
+    </head>
+    <body>
+        <div id="gauze"></div>
+        <script src="${process.env.GAUZE_SERVER_PROTOCOL}://${process.env.GAUZE_SERVER_HOST}:${process.env.GAUZE_SERVER_PORT}/gauze/index.js"></script>
+    </body>
+</html>`
+	return index
+}
+
+function projectIndex() {
+
+}
+
 export default function ($gauze) {
 	const ROUTER = new Router();
 
@@ -26,7 +47,7 @@ export default function ($gauze) {
 	ROUTER.use("/database", ROUTER__DATABASE($gauze).routes());
 	ROUTER.use("/environment", ROUTER__ENVIRONMENT($gauze).routes());
 
-	ROUTER.use("/gauze/(.*)", async function (ctx) {
+	ROUTER.use("/gauze/(.*)", async function (ctx, next) {
 		if (ctx.get('referrer')) {
 			const referrer_parsed = new url.URL(ctx.get('referrer'))
 			const referrer_directory = referrer_parsed.pathname[referrer_parsed.pathname.length - 1] === "/" ? referrer_parsed.pathname : path.dirname(referrer_parsed.pathname)
@@ -34,7 +55,10 @@ export default function ($gauze) {
 			if (path.extname(ctx.path)) {
 				await send(ctx, relative_path, { root: __RELATIVE_DIRECTORY + "/views/gauze/build", index: "index.html" });
 			} else {
-				await send(ctx, "/index.html", { root: __RELATIVE_DIRECTORY + "/views/gauze/build", index: "index.html" });
+				ctx.response.status = 200
+				ctx.response.body = gauzeIndex()
+				await next()
+				//await send(ctx, "/index.html", { root: __RELATIVE_DIRECTORY + "/views/gauze/build", index: "index.html" });
 			}
 		} else {
 			// remove /gauze prefix from path when accessing files from root directory
@@ -44,16 +68,24 @@ export default function ($gauze) {
 				const rebased_path = rebased_path_split.join('/')
 				await send(ctx, rebased_path, { root: __RELATIVE_DIRECTORY + "/views/gauze/build", index: "index.html" });	
 			} else {
-				await send(ctx, "/index.html", { root: __RELATIVE_DIRECTORY + "/views/gauze/build", index: "index.html" });	
+				ctx.response.status = 200
+				ctx.response.body = gauzeIndex()
+				await next()
+				//await send(ctx, "/index.html", { root: __RELATIVE_DIRECTORY + "/views/gauze/build", index: "index.html" });	
 			}
 		}
 	})
-	ROUTER.get("/gauze/(.*)", function (ctx, next) {
+	ROUTER.get("/gauze", function (ctx, next) {
+		if (ctx.path[ctx.path.length - 1] === "/") {
+			// nothing
+		} else {
+			ctx.status = 301;
+			ctx.redirect("/gauze/")
+			console.log("CALLED", ctx.path)
+		}
 		return next()
 	})
-	ROUTER.get("/gauze", function (ctx, next) {
-		ctx.status = 301;
-		ctx.redirect("/gauze/")
+	ROUTER.get("/gauze/(.*)", async function (ctx, next) {
 		return next()
 	})
 
