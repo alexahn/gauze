@@ -10,9 +10,17 @@ import ROUTER__ENVIRONMENT from "./environment/router.js";
 
 import Router from "@koa/router";
 import { send } from "@koa/send";
+import etag from "@koa/etag";
+import compress from "koa-compress"
+import conditional from "koa-conditional-get"
 
 export default function ($gauze) {
 	const ROUTER = new Router();
+
+	// todo: move these middleware outside to command level (or put it in project config)
+	ROUTER.use(compress());
+	ROUTER.use(conditional());
+	ROUTER.use(etag());
 
 	ROUTER.use("/system", ROUTER__SYSTEM($gauze).routes());
 	ROUTER.use("/database", ROUTER__DATABASE($gauze).routes());
