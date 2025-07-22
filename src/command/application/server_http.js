@@ -38,7 +38,8 @@ export const builder = function (yargs) {
 			//alias: 'p',
 			describe: "Port the server should use",
 			type: "number",
-			requiresArg: true,
+			default: "4000",
+			//requiresArg: false,
 		})
 		.demandOption(["port"]);
 	//.wrap(128)
