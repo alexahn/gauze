@@ -992,6 +992,7 @@
 	[ ] graphql ast manipulation (for queries/mutations)
 	[x] server side rendering
 	[ ] deno as a jsx runtime
+	[ ] new frontend state management (zustand, recoil, jotai, etc)
 
 [ ] redesign authentication and authorization
 	[-] move authentication functions to kernel (kernel/authentication.js)
