@@ -14,7 +14,7 @@ import * as $gauze from "./../../index.js";
 
 export const command = "example";
 
-export const describe = "An example application (project) command";
+export const describe = "A template for a custom application command";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_PROJECT");

@@ -18,9 +18,10 @@ A GraphQL server architecture.
 8. Update `{ project_directory }/database/interfaces/graphql/schema.js` to register your entity
 9. Update `{ project_directory }/system/interfaces/graphql/schema.js` to register your entity
 10. Update `{ project_directory }/structure/relationships.js` to define your relationships
-11. Run the server: `npx gauze project { project_directory } run server --port { port }`
-12. Send GraphQL queries to the server
-13. Visit http://localhost:4000/gauze/ in a browser
+11. Build the frontend application: `npx gauze project { project_directory } application build`
+12. Run the server: `npx gauze project { project_directory } application serve`
+13. Send GraphQL queries to the server (`http://localhost:4000/environment/graphql`, `http://localhost:4000/system/graphql`, `http://localhost:4000/database/graphql`)
+14. Visit `http://localhost:4000/gauze/` in the browser
 
 ## Development Commands
 

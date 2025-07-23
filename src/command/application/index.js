@@ -1,12 +1,14 @@
 import * as example from "./example.js";
-import * as server_http from "./server_http.js";
+import * as build from "./build.js";
+import * as watch from "./watch.js";
+import * as serve from "./serve.js";
 
 export const command = "application <command>";
 
-export const describe = "Execute a custom application (project) command";
+export const describe = "Execute an application command";
 
 export const builder = function (yargs) {
-	return yargs.command(example).command(server_http).demandCommand();
+	return yargs.command(build).command(serve).command(watch).command(example).demandCommand();
 	//.wrap(128)
 };
 

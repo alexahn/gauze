@@ -15,9 +15,9 @@ import cors from "@koa/cors";
 import * as $gauze from "./../../index.js";
 //import Router from "./../../router.js";
 
-export const command = "server_http";
+export const command = "serve";
 
-export const describe = "Run gauze application server http";
+export const describe = "Run gauze application HTTP server";
 
 export const builder = function (yargs) {
 	return yargs
