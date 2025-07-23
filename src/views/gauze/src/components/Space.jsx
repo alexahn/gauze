@@ -183,7 +183,7 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 			<div className="fixed bottom-1 right-1" style={{ zIndex: 1 }}>
 				{link ? <LinkBreak2Icon width={30} height={30} onClick={handleLink} /> : <Link2Icon width={30} height={30} onClick={handleLink} />}
 			</div>
-			<div className="fixed top-0 left-0 flex items-center mh-100 h-100 mw-100" style={{ zIndex: 3 }}>
+			<div className="fixed top-1 left-1 flex items-center mh-100 h-100 mw-100" style={{ zIndex: 3 }}>
 				<SpacesBar route={route} agentHeader={agentHeader} gauze={gauze} model={model} router={router} graph={graph} spaces={spaces} />
 			</div>
 			<Graph
