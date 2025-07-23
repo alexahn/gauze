@@ -127,7 +127,7 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 	//console.log("nodes", nodes);
 	return (
 		<div className="mw-100 mh-100 h-100 w-100">
-			<div className="fixed top-1 left-1" style={{ zIndex: 1 }}>
+			<div className="fixed top-1 left-1" style={{ zIndex: 4 }}>
 				<div className="relative">
 					<PlusCircledIcon width={30} height={30} onClick={toggleShare} />
 					<span className="dn bgx2 br3 w6 top-0 left-0 pa3 absolute f4" style={{ display: displayShare ? "block" : "none" }}>
