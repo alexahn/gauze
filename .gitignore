@@ -7,6 +7,5 @@ test.sqlite3
 development.sqlite3
 staging.sqlite3
 production.sqlite3
-src/kernel/applications/gauze/build/*
-src/kernel/src/applications/gauze/build/*
 src/views/gauze/build/*
+src/views/project/build/*
