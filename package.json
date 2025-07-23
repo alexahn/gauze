@@ -10,7 +10,7 @@
 	"scripts": {
 		"test": "LOG_LEVEL_MINIMUM=4 node test",
 		"gauze": "./src/command/gauze.js",
-		"start": "node --watch-path=./src ./src/command/gauze.js application server_http",
+		"start": "node --watch-path=./src ./src/command/gauze.js application serve",
 		"start-graphiql": "/bin/zsh -c \"npm run start-graphiql-database & ; npm run start-graphiql-system & ; npm run start-graphiql-environment & ; wait\"",
 		"start-graphiql-database": "npx ruru -SP -p 4001 -e http://localhost:4000/database/graphql",
 		"start-graphiql-system": "npx ruru -SP -p 4002 -e http://localhost:4000/system/graphql",
