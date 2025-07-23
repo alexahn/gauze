@@ -4,11 +4,7 @@ import * as React from "react";
 import * as Client from "react-dom/client";
 
 function App({}) {
-    return (
-        <div>
-			Application
-        </div>
-    );
+	return <div>Application</div>;
 }
 
 const root = Client.createRoot(document.getElementById("project"));
@@ -19,4 +15,3 @@ root.render(
 		<App />
 	</React.StrictMode>,
 );
-
