@@ -974,6 +974,7 @@
 	[ ] env variable parsing for stores
 	[ ] write project documentation using server side rendering
 	[x] server side rendering still feels unnatural. the community seems fragmented on the best way forward. if jsx is a strict superset of js, then i need to find a jsx runtime. solving this problem any other way seems like a waste of time because i'm just going to get bogged down in configuration hell. maybe for now, i can emphasize the framework is for dynamic applications.
+		[ ] the main problem seems to be that the build tooling on the frontend is not in alignment with the backend runtimes. all the things the build tools do on the frontend need to be turned into a specification that can be implemented universally. i have a feeling the build tooling will always be ahead because it is where the experimentation occurs, even if the experimentation is around the specific constraints of loading and consuming assets in a browser. but that doesn't mean there can't be some common ground between the backend runtimes and the frontend build tooling. someone conservative should be able to write code that works in both.
 
 [-] simple react app using koa-tree-router
 	[-] need to manually configure browser hooks and middleware for state management
