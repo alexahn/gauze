@@ -37,13 +37,13 @@ A GraphQL server architecture.
 ## Gauze Commands
 
 - `npx gauze migrate run`
-- `npx gauze migrate make`
+- `npx gauze migrate make { migration_name }`
 - `npx gauze create project`
-- `npx gauze run server`
-- `npx gauze project { project_directory } migrate run`
-- `npx gauze project { project_directory } migrate make`
-- `npx gauze project { project_directory } create project`
-- `npx gauze project { project_directory } run server`
+- `npx gauze create entity { project_directory } { entity_json }`
+- `npx gauze application build`
+- `npx gauze application serve`
+- `npx gauze application watch`
+- `npx gauze project { project_directory }`
 
 ## Entity Definition
 
@@ -63,6 +63,7 @@ Example definition can be found in [here](./gauze/entity.js):
                 required: false,
                 sql_type: "uuid",
                 graphql_type: $abstract.gauze.types.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				graphql_type_parameters: {},
                 description: "id",
                 pre_serialize_middlewares: [$abstract.gauze.middlewares.UPDATE_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("id")],
                 serializers: [],
@@ -113,6 +114,7 @@ Example definition can be found in [here](./gauze/entity.js):
 - `field.required` specifies whether the field is required for creation or not
 - `field.sql_type` is a framework specific type identifier for the field
 - `field.graphql_type` is a reference to a graphql type definition, which will usually be a scalar value type
+- `field.graphql_type_parameters` is a reference to the parameters passed to the function defined in `field.graphql_type`, which ultimately returns a GraphQL type
 - `field.description` is a framework specific field description
 - `field.pre_serialize_middlewares` is an array of pre-serialize middlewares, which will be run in order
 - `field.serializers` is an array of serializers, which will be run in order
