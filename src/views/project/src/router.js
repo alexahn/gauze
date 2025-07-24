@@ -125,6 +125,14 @@ class Pathfinder {
 		console.log("pathname", pathname)
 		return url
 	}
+	transitionByState(name, pathParams, searchParams) {
+		const self = this
+		// use self.current
+		
+	}
+	transitionByURL(url) {
+
+	}
 }
 
 class Director {
