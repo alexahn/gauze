@@ -8,7 +8,50 @@ class Pathfinder {
 		const self = this
 		self.states = states
 	}
-	URLToState(prefix, url) {
+	URLToState(url) {
+		const self = this
+		const host = "http://localhost:4000"
+		let fullURL = url
+		try {
+			const objURL = new URL(url)
+			fullURL = url
+		} catch (e) {
+			const objURL = new URL(host + url)
+			fullURL = host + url
+		}
+		const found = self._URLToState([], fullURL)
+		if (found) {
+			// we have enough information to construct a response
+			// flatten name, pathParams, and searchParams
+			const name = found.prefix.map(function (v) {
+				return v.state.name
+			}).concat(found.state.name).join('.')
+			let pathParams = {
+				...found.pathParams
+			}
+			let searchParams = {
+				...found.searchParams
+			}
+			found.prefix.forEach(function (prefix) {
+				pathParams = {
+					...pathParams,
+					...prefix.pathParams
+				}
+				searchParams = {
+					...searchParams,
+					...prefix.searchParams
+				}
+			})
+			return {
+				name,
+				pathParams,
+				searchParams
+			}
+		} else {
+			return found
+		}
+	}
+	_URLToState(prefix, url) {
 		const self = this
 		// only uses path, search, and hash
 		const objURL =  new URL(url)
@@ -25,13 +68,12 @@ class Pathfinder {
 			console.log("pathMatch", pathMatch)
 			console.log("searchMatch", searchMatch)
 			if (pathMatch && searchMatch) {
-				if (state.routes) {
+				if (state.pathfinder) {
 					// continue
 					// strip matched path from parsed.pathname
 					// strip matched params from parsed.search
 					const strippedObjURL = new URL(url)
 					strippedObjURL.pathname = objURL.pathname.replace(state.pathString(pathMatch.groups), "")
-					// need to add this to enable non-greedy parameter selection
 					/*
 					if (strippedObjURL.pathname[0] !== "/") {
 						strippedObjURL.pathname = "/" + strippedObjURL.pathname
@@ -43,12 +85,16 @@ class Pathfinder {
 					//strippedObjURL.search = strippedObjURL.searchParams.toString()
 					const strippedURL = strippedObjURL.toString()
 					console.log("strippedURL", strippedURL)
-					return state.routes.URLToState(prefix.concat(state), strippedURL)
+					return state.pathfinder._URLToState(prefix.concat({
+						state: state,
+						pathParams: pathMatch.groups,
+						searchParams: searchMatchParams
+					}), strippedURL)
 				} else {
 					// terminate
 					return {
 						prefix: prefix,
-						name: state.name,
+						state: state,
 						pathParams: pathMatch.groups,
 						searchParams: searchMatchParams
 					}
@@ -61,8 +107,23 @@ class Pathfinder {
 			return v
 		})
 	}
-	StateToURL() {
-
+	StateToURL(name, pathParams, searchParams) {
+		const self = this;
+		const names = name.split('.')
+		console.log("names", names)
+		const fragments = names.reduce(function ([pathfinder, pathname], name) {
+			console.log("pathfinder", pathfinder)
+			console.log("pathname", pathname)
+			const state = pathfinder.states.find(function (v) {
+				return v.name === name
+			})
+			return [state.pathfinder, pathname + state.pathString(pathParams)]
+		}, [self, ""])
+		const pathname = fragments[1]
+		const search = new URLSearchParams(searchParams)
+		const url = [pathname, search.toString()].join('?')
+		console.log("pathname", pathname)
+		return url
 	}
 }
 
