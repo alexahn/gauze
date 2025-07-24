@@ -10,16 +10,7 @@ class Pathfinder {
 	}
 	URLToState(url) {
 		const self = this
-		const host = "http://localhost:4000"
-		let fullURL = url
-		try {
-			const objURL = new URL(url)
-			fullURL = url
-		} catch (e) {
-			const objURL = new URL(host + url)
-			fullURL = host + url
-		}
-		const found = self._URLToState([], fullURL)
+		const found = self._URLToState([], url)
 		if (found) {
 			// we have enough information to construct a response
 			// flatten name, pathParams, and searchParams
@@ -54,7 +45,14 @@ class Pathfinder {
 	_URLToState(prefix, url) {
 		const self = this
 		// only uses path, search, and hash
-		const objURL =  new URL(url)
+		let objURL
+		const host = "http://localhost:4000"
+		let fullURL = url
+		try {
+			objURL = new URL(url)
+		} catch (e) {
+			objURL = new URL(host + url)
+		}
 		console.log(objURL)
 		return self.states.map(function (state) {
 			const pathMatch = state.pathRegex.exec(objURL.pathname)
@@ -72,7 +70,12 @@ class Pathfinder {
 					// continue
 					// strip matched path from parsed.pathname
 					// strip matched params from parsed.search
-					const strippedObjURL = new URL(url)
+					let strippedObjURL
+					try {
+						strippedObjURL = new URL(url)
+					} catch (e) {
+						strippedObjURL = new URL(host + url)
+					}
 					strippedObjURL.pathname = objURL.pathname.replace(state.pathString(pathMatch.groups), "")
 					/*
 					if (strippedObjURL.pathname[0] !== "/") {
@@ -128,10 +131,39 @@ class Pathfinder {
 	transitionByState(name, pathParams, searchParams) {
 		const self = this
 		// use self.current
-		
+		// convert to url and back to state
+		const url = self.StateToURL(name, pathParams, searchParams)
+		console.log("S", url)
+		// refactor state to found and recycle flattening logic
+		const state = self._URLToState([], url)
+		const states = state.prefix.concat(state)
+		return states.reduce(function (prev, next) {
+			console.log("prev", prev)
+			console.log('next', next)
+			return next.state.dependencies(prev, next.state, next.pathParams, next.searchParams).then(function (resolved) {
+				console.log("resolved", resolved, prev)
+				return prev.then(function (previousResolved) {
+					return {
+						...previousResolved,
+						[next.state.name]: resolved
+					}
+				})
+			})
+		}, new Promise(function (resolve, reject) {
+			return resolve({})
+		})).then(function (dependencies) {
+			return {
+				dependencies,
+				// construct state name
+				name: state.state.name,
+				// concat pathParams from prefix
+				pathParams: state.pathParams,
+				// concat searchParams from prefix
+				searchParams: state.searchParams
+			}
+		})
 	}
 	transitionByURL(url) {
-
 	}
 }
 
