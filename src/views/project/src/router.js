@@ -16,7 +16,7 @@ class Router {
 
 // routes class
 /*
-const router2 = new Router([{
+const pathfinder2 = new Pathfinder([{
 	name: "world",
 	regex: "/world",
 	string: function (groups) {
@@ -32,7 +32,7 @@ const router2 = new Router([{
 	routes: []
 }])
 
-const router = new Router([{
+const pathfinder = new Pathfinder([{
 	name: "hello",
 	regex: "/hello",
 	string: function (groups) {
@@ -44,7 +44,7 @@ const router = new Router([{
 			x: 10
 		}
 	},
-	routes: router2
+	routes: pathfinder2
 }])
 */
 
