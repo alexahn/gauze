@@ -993,6 +993,7 @@
 	[x] server side rendering
 	[ ] deno as a jsx runtime
 	[ ] new frontend state management (zustand, recoil, jotai, etc)
+	[ ] custom router
 
 [ ] redesign authentication and authorization
 	[-] move authentication functions to kernel (kernel/authentication.js)
@@ -1043,3 +1044,6 @@
 	[ ] reducers are built into react now, but we need something to control the state from the outside
 		[ ] pub sub with hooks/effects might be the best approach
 	[ ] look into other routers or write our own
+
+[ ] start designing our own router
+	[ ] universal design
