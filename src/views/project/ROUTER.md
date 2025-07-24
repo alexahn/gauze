@@ -52,4 +52,60 @@ const voyager = new Voyager({
 const route = pathfinder.getState(URL)
 
 
+// create routers
+// instantiate routes (will create array structured lookup)
+
+// routes class
+const pathfinder2 = new Pathfinder([{
+    name: "world",
+    pathRegex: "/world",
+    pathString: function (groups) {
+        return "/world"
+    },
+    searchParams: ["goodbye"],
+    searchParamsString: function (params) {
+        return `goodbye=${params.goodbye}`
+    },
+    method: "GET",
+    dependencies: function (ctx, route, pathParams, searchParams) {
+        // ctx is resolved parent dependencies (e.g. ctx.hello.10)
+        return {
+            y: 20
+        }
+    },
+    routes: []
+}])
+
+const pathfinder = new Pathfinder([{
+    name: "hello",
+    regex: "/hello",
+    string: function (groups) {
+        return "/hello"
+    },
+    method: "GET",
+    dependencies: function (ctx) {
+        return {
+            x: 10
+        }
+    },
+    routes: pathfinder2
+}])
+
+const director = new Director({
+    
+})
+director.handle("hello.world", function (route, params, dependencies) {
+
+})
+director.handle("hello", function (route, params, dependencies) {
+    redirect(pathfinder.StateToURL("hello.world", params, dependencies)
+})
+
+pathfinder.URLtoState()
+pathfinder.StateToURL()
+pathfinder.navigateToURL(URL).then(function (route, params, dependencies) {})
+pathfinder.navigateToState(name, params).then(function (route, params, dependencies) {
+    director.navigate(route, params, dependencies);
+})
+
 ```

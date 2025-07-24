@@ -1,70 +1,76 @@
-class Router {
-	constructor() {
+// note: conditional import when used from the browser (or have a build config that overrides this import)
+import { URL, URLSearchParams } from "url"
+
+class Pathfinder {
+	constructor(states) {
 		// routes
 		// current
+		const self = this
+		self.states = states
 	}
-	URLToState() {
-
+	URLToState(prefix, url) {
+		const self = this
+		// only uses path, search, and hash
+		const objURL =  new URL(url)
+		console.log(objURL)
+		return self.states.map(function (state) {
+			const pathMatch = state.pathRegex.exec(objURL.pathname)
+			const searchMatch = state.search.every(function (param) {
+				return typeof objURL.searchParams.get(param) === "string"
+			})
+			const searchMatchParams = {}
+			state.search.forEach(function (param) {
+				searchMatchParams[param] = objURL.searchParams.get(param)
+			})
+			console.log("pathMatch", pathMatch)
+			console.log("searchMatch", searchMatch)
+			if (pathMatch && searchMatch) {
+				if (state.routes) {
+					// continue
+					// strip matched path from parsed.pathname
+					// strip matched params from parsed.search
+					const strippedObjURL = new URL(url)
+					strippedObjURL.pathname = objURL.pathname.replace(state.pathString(pathMatch.groups), "")
+					// need to add this to enable non-greedy parameter selection
+					/*
+					if (strippedObjURL.pathname[0] !== "/") {
+						strippedObjURL.pathname = "/" + strippedObjURL.pathname
+					}
+					*/
+					state.search.forEach(function (param) {
+						strippedObjURL.searchParams.delete(param)
+					})
+					//strippedObjURL.search = strippedObjURL.searchParams.toString()
+					const strippedURL = strippedObjURL.toString()
+					console.log("strippedURL", strippedURL)
+					return state.routes.URLToState(prefix.concat(state), strippedURL)
+				} else {
+					// terminate
+					return {
+						prefix: prefix,
+						name: state.name,
+						pathParams: pathMatch.groups,
+						searchParams: searchMatchParams
+					}
+				}	
+			} else {
+				// null value represents search attempted but did not match
+				return null
+			}
+		}).find(function (v) {
+			return v
+		})
 	}
 	StateToURL() {
 
 	}
 }
 
-// create routers
-// instantiate routes (will create array structured lookup)
+class Director {
 
-// routes class
-/*
-const pathfinder2 = new Pathfinder([{
-	name: "world",
-	regex: "/world",
-	string: function (groups) {
-		return "/world"
-	},
-	method: "GET",
-	dependencies: function (ctx) {
-		// ctx is resolved parent dependencies (e.g. ctx.hello.10)
-		return {
-			y: 20
-		}
-	},
-	routes: []
-}])
+}
 
-const pathfinder = new Pathfinder([{
-	name: "hello",
-	regex: "/hello",
-	string: function (groups) {
-		return "/hello"
-	},
-	method: "GET",
-	dependencies: function (ctx) {
-		return {
-			x: 10
-		}
-	},
-	routes: pathfinder2
-}])
-*/
-
-/*
-const director = new Director({
-	
-})
-director.handle("hello.world", function (route, params, dependencies) {
-
-})
-director.handle("hello", function (route, params, dependencies) {
-	redirect(pathfinder.StateToURL("hello.world", params, dependencies)
-})
-*/
-
-/*
-URLtoState()
-StateToURL()
-pathfinder.navigateToURL(URL).then(function (route, params, dependencies) {})
-pathfinder.navigateToState(name, params).then(function (route, params, dependencies) {}
-	director.navigate(route, params, dependencies);
-})
-*/
+export {
+	Pathfinder,
+	Director
+}
