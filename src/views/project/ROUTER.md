@@ -7,10 +7,13 @@ const route = {
 	regex: "/?<var>(.*)",
 	string: function (groups) {
 		return "/${groups.var}"
+	},
+	data: function () {
+
 	}
 }
 
-
+const root = React.createRoot(document.getElementById("root"))
 
 const pathfinder = new Pathfinder({
 	// route name
@@ -27,6 +30,7 @@ const voyager = new Voyager({
 		// params and data
 		service.updateDate(data)
 		if (ENVIRONMENT === "BROWSER") {
+			/*
 			setState(function (state) {
 				return {
 					...state,
@@ -36,6 +40,8 @@ const voyager = new Voyager({
 					}
 				}
 			})
+			*/
+			root.render(<layout state={state} router={pathfinder} route={route} views={views} />)
 		} else if (ENVIRONMENT === "SERVER") {
 			ctx.response.body = Server.renderToString(<layout state={state} router={pathfinder} route={path} views={views} />)
 		} else {
