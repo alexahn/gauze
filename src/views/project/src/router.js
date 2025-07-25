@@ -40,7 +40,7 @@ class Pathfinder {
 		if (found) {
 			return self._concatMatch(found)
 		} else {
-			return found
+			throw new Error(`State could not be found for URL "${url}"`)
 		}
 	}
 	_URLToState(prefix, url) {
@@ -48,7 +48,6 @@ class Pathfinder {
 		// only uses path, search, and hash
 		let objURL
 		const host = "http://localhost:4000"
-		let fullURL = url
 		try {
 			objURL = new URL(url)
 		} catch (e) {
@@ -98,14 +97,18 @@ class Pathfinder {
 			return v
 		})
 	}
-	StateToURL(name, pathParams, searchParams) {
+	StateToURL(stateName, pathParams, searchParams) {
 		const self = this;
-		const names = name.split('.')
+		const names = stateName.split('.')
 		const fragments = names.reduce(function ([pathfinder, pathname], name) {
 			const state = pathfinder.states.find(function (v) {
 				return v.name === name
 			})
-			return [state.pathfinder, pathname + state.pathString(pathParams)]
+			if (state) {
+				return [state.pathfinder, pathname + state.pathString(pathParams)]
+			} else {
+				throw new Error(`State "${name}" does not exist in "${stateName}"`)
+			}
 		}, [self, ""])
 		const pathname = fragments[1]
 		const search = new URLSearchParams(searchParams)
