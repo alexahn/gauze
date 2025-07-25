@@ -3,110 +3,74 @@
 ## Architecture
 
 ```
-const route = {
-	name: "route1",
-	regex: "/?<var>(.*)",
-	string: function (groups) {
-		return "/${groups.var}"
-	},
-	data: function () {
+import { Pathfinder, Director } from "./router.js";
 
-	}
-}
-
-const root = React.createRoot(document.getElementById("root"))
-
-const pathfinder = new Pathfinder({
-	// route name
-	"/regex_for_path_for_route1": function () {
-		// route data
-		return await fetch()
-	}
-})
-// ctx only exists within a route change (context for request/response)
-// state exists outside of a route change (state of the application)
-// route is output from pathfinder (holds route name, route params, route data)
-const voyager = new Voyager({
-	"route1": function (ctx, state, route) {
-		// params and data
-		service.updateDate(data)
-		if (ENVIRONMENT === "BROWSER") {
-			/*
-			setState(function (state) {
-				return {
-					...state,
-					view: {
-						layout: layout,
-						views: views
-					}
-				}
-			})
-			*/
-			root.render(<layout state={state} router={pathfinder} route={route} views={views} />)
-		} else if (ENVIRONMENT === "SERVER") {
-			ctx.response.body = Server.renderToString(<layout state={state} router={pathfinder} route={path} views={views} />)
-		} else {
-
-		}
-	}
-})
-const route = pathfinder.getState(URL)
-
-
-// create routers
-// instantiate routes (will create array structured lookup)
-
-// routes class
-const pathfinder2 = new Pathfinder([{
-    name: "world",
-    pathRegex: "/world",
-    pathString: function (groups) {
-        return "/world"
+const pathfinder2 = new Pathfinder([
+    {
+        name: "world",
+        path: ["q"],
+        pathRegex: new RegExp("/world(?<q>.*)"),
+        pathString: function (groups) {
+            return `/world${groups.q}`;
+        },
+        search: ["b"],
+        dependencies: async function (dependencies, state, routeParams, searchParams) {
+            console.log("world dependency called", dependencies);
+            return {
+                y: 20,
+            };
+        },
     },
-    searchParams: ["goodbye"],
-    searchParamsString: function (params) {
-        return `goodbye=${params.goodbye}`
+    {
+        name: "universe",
+        path: ["e"],
+        pathRegex: new RegExp("/universe(?<e>.*)"),
+        pathString: function (groups) {
+            return `/universe${groups.e}`;
+        },
+        search: ["b"],
+        dependencies: async function (dependencies, state, routeParams, searchParams) {
+            console.log("universe dependency called", dependencies, state, routeParams, searchParams);
+            return {
+                z: 30,
+            };
+        },
     },
-    method: "GET",
-    dependencies: function (ctx, route, pathParams, searchParams) {
-        // ctx is resolved parent dependencies (e.g. ctx.hello.10)
-        return {
-            y: 20
-        }
+]);
+var pathfinder1 = new Pathfinder([
+    {
+        name: "hello",
+        path: ["w"],
+        pathRegex: new RegExp("/hello(?<w>.*?)/"),
+        pathString: function (groups) {
+            return `/hello${groups.w}`;
+        },
+        search: ["a"],
+        dependencies: async function (dependencies, state, routeParams, searchParams) {
+            console.log("hello dependency called", dependencies, state, routeParams, searchParams);
+            return {
+                x: 10,
+            };
+        },
+        pathfinder: pathfinder2,
     },
-    routes: []
-}])
+]);
 
-const pathfinder = new Pathfinder([{
-    name: "hello",
-    regex: "/hello",
-    string: function (groups) {
-        return "/hello"
-    },
-    method: "GET",
-    dependencies: function (ctx) {
-        return {
-            x: 10
-        }
-    },
-    routes: pathfinder2
-}])
+const state1 = pathfinder1.URLToState("/hello1/world2?a=30&b=40");
+console.log("state1", state1);
 
-const director = new Director({
+const url1 = pathfinder1.StateToURL(state1.name, state1.pathParams, state1.searchParams);
+console.log("url1", url1);
 
-})
-director.handle("hello.world", function (route, params, dependencies) {
-
-})
-director.handle("hello", function (route, params, dependencies) {
-    redirect(pathfinder.StateToURL("hello.world", params, dependencies)
-})
-
-pathfinder.URLtoState()
-pathfinder.StateToURL()
-pathfinder.navigateToURL(URL).then(function (route, params, dependencies) {})
-pathfinder.navigateToState(name, params).then(function (route, params, dependencies) {
-    director.navigate(route, params, dependencies);
-})
-
+pathfinder1.transitionByState("hello.world", { q: 2, w: 1 }, { a: 30, b: 40 }).then(function ({ dependencies, name, pathParams, searchParams }) {
+    console.log("REACHED", dependencies, name, pathParams, searchParams);
+    return pathfinder1.transitionByURL("/hello1/universe3?a=30&b=40").then(function ({ dependencies, name, pathParams, searchParams }) {
+        console.log("REACHED2", dependencies, name, pathParams, searchParams);
+    });
+    /*
+    return pathfinder1.transitionByState("hello.universe", {q: 1, w: 2, e: 3}, {a: 30, b: 40}).then(function ({ dependencies, name, pathParams, searchParams }) {
+        console.log("REACHED2", dependencies, name, pathParams, searchParams)
+    })
+    */
+});
 ```
