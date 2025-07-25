@@ -5,12 +5,13 @@ class Pathfinder {
 	constructor(config, states) {
 		const self = this;
 		// raw config
-		const { context = {}, hash = false, base = "http://localhost:4000" } = config;
+		const { context = {}, hash = false, base = "http://localhost:4000", basePath = "/" } = config;
 		// parsed and loaded config
 		self.config = {
 			context,
 			hash,
 			base,
+			basePath
 		};
 		self.states = states;
 		self.current = {
@@ -52,7 +53,7 @@ class Pathfinder {
 	}
 	_URLToState(prefix, url) {
 		const self = this;
-		const { base } = self.config;
+		const { hash, base } = self.config;
 		// only uses path, search, and hash
 		let parsedURL;
 		try {
@@ -60,9 +61,10 @@ class Pathfinder {
 		} catch (e) {
 			parsedURL = new URL(base + url);
 		}
+		console.log("parsedURL", parsedURL)
 		return self.states
 			.map(function (state) {
-				const pathMatch = state.pathRegex.exec(parsedURL.pathname);
+				const pathMatch = state.pathRegex.exec(hash ? parsedURL.hash : parsedURL.pathname);
 				const pathMatchParams = {};
 				const pathMatchGroup = pathMatch ? pathMatch.groups : {};
 				state.path.forEach(function (param) {
@@ -88,7 +90,11 @@ class Pathfinder {
 						} catch (e) {
 							parsedStrippedURL = new URL(base + url);
 						}
-						parsedStrippedURL.pathname = parsedURL.pathname.replace(state.pathString(pathMatch.groups), "");
+						if (hash) {
+							parsedStrippedURL.hash = parsedURL.hash.replace(state.pathString(pathMatch.groups), "");
+						} else {
+							parsedStrippedURL.pathname = parsedURL.pathname.replace(state.pathString(pathMatch.groups), "");
+						}
 						state.search.forEach(function (param) {
 							parsedStrippedURL.searchParams.delete(param);
 						});
@@ -130,6 +136,7 @@ class Pathfinder {
 	}
 	_stateToURL(stateName, pathParams, searchParams) {
 		const self = this;
+		const { hash, basePath } = self.config
 		const names = stateName.split(".");
 		const fragments = names.reduce(
 			function ([pathfinder, pathname, search], name) {
@@ -180,7 +187,7 @@ class Pathfinder {
 		const searchParamsFiltered = fragments[2];
 		const search = new URLSearchParams(searchParamsFiltered);
 		const url = [pathname, search.toString()].join("?");
-		return url;
+		return hash ? basePath + "#" + url : url;
 	}
 	transitionByState(name, pathParams, searchParams) {
 		const self = this;
