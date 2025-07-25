@@ -1048,4 +1048,6 @@
 [ ] start designing our own router
 	[x] universal design
 	[x] initial implementation
-	[ ] rewrite router according to project conventions (and also to refactor to make it more consistent)
+	[-] rewrite router according to project conventions (and also to refactor to make it more consistent)
+		[x] only write in the convention if we need meta-programming capabilities
+		[x] otherwise just stuck to camel case

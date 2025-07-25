@@ -1,31 +1,31 @@
 // note: conditional import when used from the browser (or have a build config that overrides this import)
 import { URL, URLSearchParams } from "url";
 
-/*
-	note: currently pathParams values will get coerced into a string and used as a group variable during URL construction
-*/
-
 class Pathfinder {
-	constructor(states) {
-		// routes
-		// current
+	constructor(config, states) {
 		const self = this;
+		// raw config
+		const { context = {}, hash = false, base = "http://localhost:4000" } = config;
+		// parsed and loaded config
+		self.config = {
+			context,
+			hash,
+			base,
+		};
 		self.states = states;
+		self.current = {
+			states: [],
+		};
 	}
-	_concatMatch(match) {
-		const name = match.prefix
+	_formatMatch(match) {
+		const name = match.states
 			.map(function (v) {
 				return v.state.name;
 			})
-			.concat(match.state.name)
 			.join(".");
-		let pathParams = {
-			...match.pathParams,
-		};
-		let searchParams = {
-			...match.searchParams,
-		};
-		match.prefix.forEach(function (prefix) {
+		let pathParams = {};
+		let searchParams = {};
+		match.states.forEach(function (prefix) {
 			pathParams = {
 				...pathParams,
 				...prefix.pathParams,
@@ -43,65 +43,75 @@ class Pathfinder {
 	}
 	URLToState(url) {
 		const self = this;
-		const found = self._URLToState([], url);
-		if (found) {
-			return self._concatMatch(found);
+		const match = self._URLToState([], url);
+		if (match) {
+			return self._formatMatch(match);
 		} else {
-			throw new Error(`State could not be found for URL "${url}"`);
+			throw new Error(`State could not be match for URL "${url}"`);
 		}
 	}
 	_URLToState(prefix, url) {
 		const self = this;
+		const { base } = self.config;
 		// only uses path, search, and hash
-		let objURL;
-		const host = "http://localhost:4000";
+		let parsedURL;
 		try {
-			objURL = new URL(url);
+			parsedURL = new URL(url);
 		} catch (e) {
-			objURL = new URL(host + url);
+			parsedURL = new URL(base + url);
 		}
 		return self.states
 			.map(function (state) {
-				const pathMatch = state.pathRegex.exec(objURL.pathname);
+				const pathMatch = state.pathRegex.exec(parsedURL.pathname);
+				const pathMatchParams = {};
+				const pathMatchGroup = pathMatch ? pathMatch.groups : {};
+				state.path.forEach(function (param) {
+					if (param in pathMatchGroup) {
+						pathMatchParams[param] = pathMatchGroup[param];
+					}
+				});
 				const searchMatch = state.search.every(function (param) {
-					return typeof objURL.searchParams.get(param) === "string";
+					return typeof parsedURL.searchParams.get(param) === "string";
 				});
 				const searchMatchParams = {};
 				state.search.forEach(function (param) {
-					searchMatchParams[param] = objURL.searchParams.get(param);
+					if (parsedURL.searchParams.has(param)) {
+						searchMatchParams[param] = parsedURL.searchParams.get(param);
+					}
 				});
 				if (pathMatch && searchMatch) {
 					if (state.pathfinder) {
-						let strippedObjURL;
+						// recurse
+						let parsedStrippedURL;
 						try {
-							strippedObjURL = new URL(url);
+							parsedStrippedURL = new URL(url);
 						} catch (e) {
-							strippedObjURL = new URL(host + url);
+							parsedStrippedURL = new URL(base + url);
 						}
-						strippedObjURL.pathname = objURL.pathname.replace(state.pathString(pathMatch.groups), "");
+						parsedStrippedURL.pathname = parsedURL.pathname.replace(state.pathString(pathMatch.groups), "");
 						state.search.forEach(function (param) {
-							strippedObjURL.searchParams.delete(param);
+							parsedStrippedURL.searchParams.delete(param);
 						});
-						const strippedURL = strippedObjURL.toString();
+						const stripped_url = parsedStrippedURL.toString();
 						return state.pathfinder._URLToState(
 							prefix.concat({
 								state: state,
-								pathParams: pathMatch.groups,
+								pathParams: pathMatchParams,
 								searchParams: searchMatchParams,
 							}),
-							strippedURL,
+							stripped_url,
 						);
 					} else {
 						// terminate
 						return {
-							prefix: prefix,
-							state: state,
-							pathParams: pathMatch.groups,
-							searchParams: searchMatchParams,
+							states: prefix.concat({
+								state: state,
+								pathParams: pathMatchParams,
+								searchParams: searchMatchParams,
+							}),
 						};
 					}
 				} else {
-					// null value represents search attempted but did not match
 					return null;
 				}
 			})
@@ -109,20 +119,48 @@ class Pathfinder {
 				return v;
 			});
 	}
-	StateToURL(stateName, pathParams, searchParams) {
+	stateToURL(stateName, pathParams, searchParams) {
+		const self = this;
+		const match = self._stateToURL(stateName, pathParams, searchParams);
+		if (match) {
+			return match;
+		} else {
+			throw new Error(`URL could not be match for state "${stateName}"`);
+		}
+	}
+	_stateToURL(stateName, pathParams, searchParams) {
 		const self = this;
 		const names = stateName.split(".");
 		const fragments = names.reduce(
-			function ([pathfinder, pathname], name) {
+			function ([pathfinder, pathname, search], name) {
 				const state = pathfinder.states.find(function (v) {
 					return v.name === name;
 				});
 				if (state) {
-					const paramsExist = state.path.every(function (path) {
-						return path in pathParams;
+					const pathParamsExist = state.path.every(function (param) {
+						return param in pathParams;
 					});
-					if (paramsExist) {
-						return [state.pathfinder, pathname + state.pathString(pathParams)];
+					if (pathParamsExist) {
+						const searchParamsExist = state.search.every(function (param) {
+							return param in searchParams;
+						});
+						if (searchParamsExist) {
+							const searchParamsFiltered = {
+								...searchParams,
+							};
+							state.search.forEach(function (param) {
+								searchParamsFiltered[param] = searchParams[param];
+							});
+							return [state.pathfinder, pathname + state.pathString(pathParams), searchParamsFiltered];
+						} else {
+							throw new Error(
+								`Search parameters ${state.search
+									.map(function (v) {
+										return `"${v}"`;
+									})
+									.join(", ")} missing from ${JSON.stringify(searchParams)} for state "${state.name}"`,
+							);
+						}
 					} else {
 						throw new Error(
 							`Path parameters ${state.path
@@ -136,54 +174,55 @@ class Pathfinder {
 					throw new Error(`State "${name}" does not exist in "${stateName}"`);
 				}
 			},
-			[self, ""],
+			[self, "", {}],
 		);
 		const pathname = fragments[1];
-		const search = new URLSearchParams(searchParams);
+		const searchParamsFiltered = fragments[2];
+		const search = new URLSearchParams(searchParamsFiltered);
 		const url = [pathname, search.toString()].join("?");
 		return url;
 	}
 	transitionByState(name, pathParams, searchParams) {
 		const self = this;
+		const { context } = self.config;
 		// use self.current
 		// convert to url and back to state
-		const url = self.StateToURL(name, pathParams, searchParams);
-		const found = self._URLToState([], url);
-		if (found) {
-			let currentStates = [];
-			if (self.current) {
-				currentStates = self.current.prefix.concat(self.current);
-			}
+		const url = self.stateToURL(name, pathParams, searchParams);
+		const match = self._URLToState([], url);
+		if (match) {
 			// remove common current states from new states (mimics a graph transition)
-			const states = found.prefix.concat(found).map(function (state) {
-				const exist = currentStates.some(function (currentState) {
-					const pathParamsExist = currentState.state.path.every(function (key) {
-						return state.pathParams[key] === currentState.pathParams[key];
+			const states = match.states.map(function (nextState) {
+				const exist = self.current.states.some(function (previousState) {
+					const pathParamsExist = previousState.state.path.every(function (key) {
+						return nextState.pathParams[key] === previousState.pathParams[key];
 					});
-					return state.state === currentState.state && pathParamsExist;
+					const searchParamsExist = previousState.state.search.every(function (key) {
+						return nextState.searchParams[key] === previousState.searchParams[key];
+					});
+					return nextState.state === previousState.state && pathParamsExist && searchParamsExist;
 				});
 				if (exist) {
 					return {
-						type: "EXISTING",
-						state: state,
+						type: "PREVIOUS",
+						state: nextState,
 					};
 				} else {
 					return {
-						type: "NEW",
-						state: state,
+						type: "NEXT",
+						state: nextState,
 					};
 				}
 			});
 			const existingStates = states
 				.filter(function (v) {
-					return v.type === "EXISTING";
+					return v.type === "PREVIOUS";
 				})
 				.map(function (v) {
 					return v.state;
 				});
 			const newStates = states
 				.filter(function (v) {
-					return v.type === "NEW";
+					return v.type === "NEXT";
 				})
 				.map(function (v) {
 					return v.state;
@@ -198,7 +237,7 @@ class Pathfinder {
 				.reduce(
 					function (prev, next) {
 						return prev.then(function (previousResolved) {
-							return next.state.dependencies(previousResolved, next.state, next.pathParams, next.searchParams).then(function (resolved) {
+							return next.state.dependencies(context, previousResolved, next.state, next.pathParams, next.searchParams).then(function (resolved) {
 								return {
 									...previousResolved,
 									[next.state.name]: resolved,
@@ -211,11 +250,12 @@ class Pathfinder {
 					}),
 				)
 				.then(function (dependencies) {
-					const concat = self._concatMatch(found);
-					concat.dependencies = dependencies;
-					self.current = found;
+					const result = self._formatMatch(match);
+					result.context = context;
+					result.dependencies = dependencies;
+					self.current = match;
 					self.current.dependencies = dependencies;
-					return concat;
+					return result;
 				});
 		} else {
 			throw new Error(`Invalid transition: name=${name} pathParams=${JSON.stringify(pathParams)} searchParams=${JSON.stringify(searchParams)}`);
