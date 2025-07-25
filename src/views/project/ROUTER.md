@@ -1,6 +1,7 @@
 # Router (Sinew or Zenith)
 
 ## Architecture
+
 ```
 const route = {
 	name: "route1",
@@ -92,7 +93,7 @@ const pathfinder = new Pathfinder([{
 }])
 
 const director = new Director({
-    
+
 })
 director.handle("hello.world", function (route, params, dependencies) {
 
