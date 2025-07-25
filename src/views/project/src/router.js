@@ -1,6 +1,10 @@
 // note: conditional import when used from the browser (or have a build config that overrides this import)
 import { URL, URLSearchParams } from "url"
 
+/*
+	note: currently pathParams values will get coerced into a string and used as a group variable during URL construction
+*/
+
 class Pathfinder {
 	constructor(states) {
 		// routes
@@ -105,7 +109,14 @@ class Pathfinder {
 				return v.name === name
 			})
 			if (state) {
-				return [state.pathfinder, pathname + state.pathString(pathParams)]
+				const paramsExist = state.path.every(function (path) {
+					return path in pathParams
+				})
+				if (paramsExist) {
+					return [state.pathfinder, pathname + state.pathString(pathParams)]
+				} else {
+					throw new Error(`Path parameters ${state.path.map(function (v) { return `"${v}"` }).join(", ")} missing from ${JSON.stringify(pathParams)} for state "${state.name}"`)
+				}
 			} else {
 				throw new Error(`State "${name}" does not exist in "${stateName}"`)
 			}
@@ -151,9 +162,9 @@ class Pathfinder {
 			}).filter(function (v) {
 				return v
 			})
-			const existingDependencies = existingStates.reduce(function (current, next) {
+			const existingDependencies = existingStates.reduce(function (dependencies, next) {
 				return {
-					...current,
+					...dependencies,
 					[next.state.name]: self.current.dependencies[next.state.name]
 				}
 			}, {})
@@ -176,7 +187,7 @@ class Pathfinder {
 				return concat
 			})
 		} else {
-			throw new Error("Invalid transition")
+			throw new Error(`Invalid transition: name=${name} pathParams=${JSON.stringify(pathParams)} searchParams=${JSON.stringify(searchParams)}`)
 		}
 	}
 	transitionByURL(url) {
@@ -185,7 +196,7 @@ class Pathfinder {
 		if (state) {
 			return self.transitionByState(state.name, state.pathParams, state.searchParams)
 		} else {
-			throw new Error("Invalid transition")
+			throw new Error(`Invalid transition: url=${url}`)
 		}
 	}
 }
