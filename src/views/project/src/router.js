@@ -138,29 +138,34 @@ class Pathfinder {
 				currentStates = self.current.prefix.concat(self.current)
 			}
 			// remove common current states from new states (mimics a graph transition)
-			const newStates = found.prefix.concat(found).map(function (state) {
+			const states = found.prefix.concat(found).map(function (state) {
 				const exist = currentStates.some(function (currentState) {
-					return state.state === currentState.state
+					const pathParamsExist = currentState.state.path.every(function (key) {
+						return state.pathParams[key] === currentState.pathParams[key]
+					})
+					return state.state === currentState.state && pathParamsExist
 				})
 				if (exist) {
-					return null
+					return {
+						type: "EXISTING",
+						state: state
+					}
 				} else {
-					return state
+					return {
+						type: "NEW",
+						state: state
+					}
 				}
-			}).filter(function (v) {
-				return v
 			})
-			const existingStates = found.prefix.concat(found).map(function (state) {
-				const exist = currentStates.some(function (currentState) {
-					return state.state === currentState.state
-				})
-				if (exist) {
-					return state
-				} else {
-					return null
-				}
-			}).filter(function (v) {
-				return v
+			const existingStates = states.filter(function (v) {
+				return v.type === "EXISTING"
+			}).map(function (v) {
+				return v.state
+			})
+			const newStates = states.filter(function (v) {
+				return v.type === "NEW"
+			}).map(function (v) {
+				return v.state
 			})
 			const existingDependencies = existingStates.reduce(function (dependencies, next) {
 				return {
