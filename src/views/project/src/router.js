@@ -38,35 +38,7 @@ class Pathfinder {
 		const self = this
 		const found = self._URLToState([], url)
 		if (found) {
-			// we have enough information to construct a response
-			// flatten name, pathParams, and searchParams
 			return self._concatMatch(found)
-			/*
-			const name = found.prefix.map(function (v) {
-				return v.state.name
-			}).concat(found.state.name).join('.')
-			let pathParams = {
-				...found.pathParams
-			}
-			let searchParams = {
-				...found.searchParams
-			}
-			found.prefix.forEach(function (prefix) {
-				pathParams = {
-					...pathParams,
-					...prefix.pathParams
-				}
-				searchParams = {
-					...searchParams,
-					...prefix.searchParams
-				}
-			})
-			return {
-				name,
-				pathParams,
-				searchParams
-			}
-			*/
 		} else {
 			return found
 		}
@@ -92,13 +64,8 @@ class Pathfinder {
 			state.search.forEach(function (param) {
 				searchMatchParams[param] = objURL.searchParams.get(param)
 			})
-			console.log("pathMatch", pathMatch)
-			console.log("searchMatch", searchMatch)
 			if (pathMatch && searchMatch) {
 				if (state.pathfinder) {
-					// continue
-					// strip matched path from parsed.pathname
-					// strip matched params from parsed.search
 					let strippedObjURL
 					try {
 						strippedObjURL = new URL(url)
@@ -106,17 +73,10 @@ class Pathfinder {
 						strippedObjURL = new URL(host + url)
 					}
 					strippedObjURL.pathname = objURL.pathname.replace(state.pathString(pathMatch.groups), "")
-					/*
-					if (strippedObjURL.pathname[0] !== "/") {
-						strippedObjURL.pathname = "/" + strippedObjURL.pathname
-					}
-					*/
 					state.search.forEach(function (param) {
 						strippedObjURL.searchParams.delete(param)
 					})
-					//strippedObjURL.search = strippedObjURL.searchParams.toString()
 					const strippedURL = strippedObjURL.toString()
-					console.log("strippedURL", strippedURL)
 					return state.pathfinder._URLToState(prefix.concat({
 						state: state,
 						pathParams: pathMatch.groups,
@@ -142,10 +102,7 @@ class Pathfinder {
 	StateToURL(name, pathParams, searchParams) {
 		const self = this;
 		const names = name.split('.')
-		console.log("names", names)
 		const fragments = names.reduce(function ([pathfinder, pathname], name) {
-			console.log("pathfinder", pathfinder)
-			console.log("pathname", pathname)
 			const state = pathfinder.states.find(function (v) {
 				return v.name === name
 			})
@@ -154,7 +111,6 @@ class Pathfinder {
 		const pathname = fragments[1]
 		const search = new URLSearchParams(searchParams)
 		const url = [pathname, search.toString()].join('?')
-		console.log("pathname", pathname)
 		return url
 	}
 	transitionByState(name, pathParams, searchParams) {
@@ -162,8 +118,6 @@ class Pathfinder {
 		// use self.current
 		// convert to url and back to state
 		const url = self.StateToURL(name, pathParams, searchParams)
-		console.log("S", url)
-		// refactor state to found and recycle flattening logic
 		const found = self._URLToState([], url)
 		if (found) {
 			let currentStates = []
@@ -171,8 +125,7 @@ class Pathfinder {
 				currentStates = self.current.prefix.concat(self.current)
 			}
 			// remove common current states from new states (mimics a graph transition)
-			const states = found.prefix.concat(found).map(function (state) {
-				console.log("ZXC", state)
+			const newStates = found.prefix.concat(found).map(function (state) {
 				const exist = currentStates.some(function (currentState) {
 					return state.state === currentState.state
 				})
@@ -184,37 +137,35 @@ class Pathfinder {
 			}).filter(function (v) {
 				return v
 			})
-			console.log("STATES", states)
-			console.log("CURRENT STATES", currentStates)
-			// filter states according to current states
-			// intersect currentStates with states and remove common states
-
-			// todo: refactor and use newStates and existingStates
-			// filter twice
-			// bootstrap the initial dependencies based on the existingStates, by picking the attributes from current.dependencies (according to the state traversal)
-			
-			return states.reduce(function (prev, next) {
-				console.log("prev", prev)
-				console.log('next', next)
+			const existingStates = found.prefix.concat(found).map(function (state) {
+				const exist = currentStates.some(function (currentState) {
+					return state.state === currentState.state
+				})
+				if (exist) {
+					return state
+				} else {
+					return null
+				}
+			}).filter(function (v) {
+				return v
+			})
+			const existingDependencies = existingStates.reduce(function (current, next) {
+				return {
+					...current,
+					[next.state.name]: self.current.dependencies[next.state.name]
+				}
+			}, {})
+			return newStates.reduce(function (prev, next) {
 				return prev.then(function (previousResolved) {
 					return next.state.dependencies(previousResolved, next.state, next.pathParams, next.searchParams).then(function (resolved) {
-						console.log("resolved", resolved, prev)
 						return {
 							...previousResolved,
 							[next.state.name]: resolved
 						}
-						/*
-						return prev.then(function (previousResolved) {
-							return {
-								...previousResolved,
-								[next.state.name]: resolved
-							}
-						})
-						*/
 					})
 				})
 			}, new Promise(function (resolve, reject) {
-				return resolve(self.current ? self.current.dependencies : {})
+				return resolve(existingDependencies)
 			})).then(function (dependencies) {
 				const concat = self._concatMatch(found)
 				concat.dependencies = dependencies
