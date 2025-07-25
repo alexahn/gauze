@@ -1046,4 +1046,6 @@
 	[ ] look into other routers or write our own
 
 [ ] start designing our own router
-	[ ] universal design
+	[x] universal design
+	[x] initial implementation
+	[ ] rewrite router according to project conventions (and also to refactor to make it more consistent)
