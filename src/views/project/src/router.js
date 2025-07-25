@@ -8,12 +8,40 @@ class Pathfinder {
 		const self = this
 		self.states = states
 	}
+	_concatMatch(match) {
+		const name = match.prefix.map(function (v) {
+			return v.state.name
+		}).concat(match.state.name).join('.')
+		let pathParams = {
+			...match.pathParams
+		}
+		let searchParams = {
+			...match.searchParams
+		}
+		match.prefix.forEach(function (prefix) {
+			pathParams = {
+				...pathParams,
+				...prefix.pathParams
+			}
+			searchParams = {
+				...searchParams,
+				...prefix.searchParams
+			}
+		})
+		return {
+			name,
+			pathParams,
+			searchParams
+		}
+	}
 	URLToState(url) {
 		const self = this
 		const found = self._URLToState([], url)
 		if (found) {
 			// we have enough information to construct a response
 			// flatten name, pathParams, and searchParams
+			return self._concatMatch(found)
+			/*
 			const name = found.prefix.map(function (v) {
 				return v.state.name
 			}).concat(found.state.name).join('.')
@@ -38,6 +66,7 @@ class Pathfinder {
 				pathParams,
 				searchParams
 			}
+			*/
 		} else {
 			return found
 		}
@@ -135,35 +164,63 @@ class Pathfinder {
 		const url = self.StateToURL(name, pathParams, searchParams)
 		console.log("S", url)
 		// refactor state to found and recycle flattening logic
-		const state = self._URLToState([], url)
-		const states = state.prefix.concat(state)
-		return states.reduce(function (prev, next) {
-			console.log("prev", prev)
-			console.log('next', next)
-			return next.state.dependencies(prev, next.state, next.pathParams, next.searchParams).then(function (resolved) {
-				console.log("resolved", resolved, prev)
-				return prev.then(function (previousResolved) {
-					return {
-						...previousResolved,
-						[next.state.name]: resolved
-					}
-				})
-			})
-		}, new Promise(function (resolve, reject) {
-			return resolve({})
-		})).then(function (dependencies) {
-			return {
-				dependencies,
-				// construct state name
-				name: state.state.name,
-				// concat pathParams from prefix
-				pathParams: state.pathParams,
-				// concat searchParams from prefix
-				searchParams: state.searchParams
+		const found = self._URLToState([], url)
+		if (found) {
+			let currentStates = []
+			if (self.current) {
+				currentStates = self.current.prefix.concat(self.current)
 			}
-		})
+			// remove common current states from new states (mimics a graph transition)
+			const states = found.prefix.concat(found).map(function (state) {
+				console.log("ZXC", state)
+				const exist = currentStates.some(function (currentState) {
+					return state.state === currentState.state
+				})
+				if (exist) {
+					return null
+				} else {
+					return state
+				}
+			}).filter(function (v) {
+				return v
+			})
+			console.log("STATES", states)
+			console.log("CURRENT STATES", currentStates)
+			// filter states according to current states
+			// intersect currentStates with states and remove common states
+			
+			return states.reduce(function (prev, next) {
+				console.log("prev", prev)
+				console.log('next', next)
+				return next.state.dependencies(prev, next.state, next.pathParams, next.searchParams).then(function (resolved) {
+					console.log("resolved", resolved, prev)
+					return prev.then(function (previousResolved) {
+						return {
+							...previousResolved,
+							[next.state.name]: resolved
+						}
+					})
+				})
+			}, new Promise(function (resolve, reject) {
+				return resolve({})
+			})).then(function (dependencies) {
+				const concat = self._concatMatch(found)
+				concat.dependencies = dependencies
+				self.current = found
+				return concat
+			})
+		} else {
+			throw new Error("Invalid transition")
+		}
 	}
 	transitionByURL(url) {
+		const self = this
+		const state = self.URLToState(url)
+		if (state) {
+			return self.transitionByState(state.name, state.pathParams, state.searchParams)
+		} else {
+			throw new Error("Invalid transition")
+		}
 	}
 }
 
