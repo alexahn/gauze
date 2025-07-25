@@ -54,7 +54,6 @@ class Pathfinder {
 		} catch (e) {
 			objURL = new URL(host + url)
 		}
-		console.log(objURL)
 		return self.states.map(function (state) {
 			const pathMatch = state.pathRegex.exec(objURL.pathname)
 			const searchMatch = state.search.every(function (param) {
