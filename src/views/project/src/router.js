@@ -188,25 +188,38 @@ class Pathfinder {
 			console.log("CURRENT STATES", currentStates)
 			// filter states according to current states
 			// intersect currentStates with states and remove common states
+
+			// todo: refactor and use newStates and existingStates
+			// filter twice
+			// bootstrap the initial dependencies based on the existingStates, by picking the attributes from current.dependencies (according to the state traversal)
 			
 			return states.reduce(function (prev, next) {
 				console.log("prev", prev)
 				console.log('next', next)
-				return next.state.dependencies(prev, next.state, next.pathParams, next.searchParams).then(function (resolved) {
-					console.log("resolved", resolved, prev)
-					return prev.then(function (previousResolved) {
+				return prev.then(function (previousResolved) {
+					return next.state.dependencies(previousResolved, next.state, next.pathParams, next.searchParams).then(function (resolved) {
+						console.log("resolved", resolved, prev)
 						return {
 							...previousResolved,
 							[next.state.name]: resolved
 						}
+						/*
+						return prev.then(function (previousResolved) {
+							return {
+								...previousResolved,
+								[next.state.name]: resolved
+							}
+						})
+						*/
 					})
 				})
 			}, new Promise(function (resolve, reject) {
-				return resolve({})
+				return resolve(self.current ? self.current.dependencies : {})
 			})).then(function (dependencies) {
 				const concat = self._concatMatch(found)
 				concat.dependencies = dependencies
 				self.current = found
+				self.current.dependencies = dependencies
 				return concat
 			})
 		} else {
