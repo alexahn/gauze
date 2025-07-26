@@ -87,7 +87,7 @@ export default function ($abstract) {
 				indexed: true,
 				required: true,
 				sql_type: "uuid",
-				graphql_type: $abstract.gauze.types.graphql.id.string.SCALAR__ID__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				graphql_type: $abstract.gauze.types.graphql.id.SCALAR__ID__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "agent_id",
 				pre_serialize_middlewares: [$abstract.gauze.middlewares.UPDATE_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("gauze__secret__agent_id")],
 				serializers: [],
