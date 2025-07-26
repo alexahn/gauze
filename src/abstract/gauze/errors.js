@@ -48,4 +48,19 @@ const STRING_MAXIMUM_LENGTH__ERROR__GAUZE__ABSTRACT = function (entity, field, v
 	return err;
 };
 
-export { ID_REGEX__ERROR__GAUZE__ABSTRACT, STRING_MINIMUM_LENGTH__ERROR__GAUZE__ABSTRACT, STRING_MAXIMUM_LENGTH__ERROR__GAUZE__ABSTRACT };
+// code 4000
+const UNIQUE_CONSTRAINT__ERROR_GAUZE__ABSTRACT = function (entity, field, message) {
+	const err = new Error(`Field has a unique constraint: ${message}`);
+	err.extensions = ENTITY_FIELD_ERROR_EXTENSIONS("UNIQUE_CONSTRAINT__ERROR_GAUZE__ABSTRACT", 4000, entity, field);
+	err.extensions.readable = `Field must be unique`;
+	return err;
+};
+
+export {
+	// 0 - 1000
+	ID_REGEX__ERROR__GAUZE__ABSTRACT,
+	STRING_MINIMUM_LENGTH__ERROR__GAUZE__ABSTRACT,
+	STRING_MAXIMUM_LENGTH__ERROR__GAUZE__ABSTRACT,
+	// 4000 - 5000
+	UNIQUE_CONSTRAINT__ERROR_GAUZE__ABSTRACT,
+};

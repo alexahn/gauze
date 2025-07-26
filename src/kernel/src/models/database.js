@@ -13,6 +13,26 @@ import TTLLRUCache from "./../lru.js";
 
 import { Model } from "./class.js";
 
+function process_knex_error_sqlite3(self, err) {
+	const unique_constraint_regex = new RegExp("UNIQUE constraint failed: (?<column>(.*))$");
+	const unique_constraint = err.message.match(unique_constraint_regex);
+	if (unique_constraint) {
+		const unique_constraint_split = unique_constraint.groups.column.split(".");
+		const unique_constraint_table = unique_constraint_split[0];
+		const unique_constraint_column = unique_constraint_split[1];
+		if (unique_constraint_table === self.entity.table_name && self.entity.fields[unique_constraint_column]) {
+			const constraint_err = $abstract.gauze.errors.UNIQUE_CONSTRAINT__ERROR_GAUZE__ABSTRACT(self.entity, self.entity.fields[unique_constraint_column], err.message);
+			throw constraint_err;
+		}
+	}
+	// additional constraints go here
+	throw err;
+}
+
+function process_knex_error_postgresql(self, err) {
+	throw err;
+}
+
 class DatabaseModel extends Model {
 	constructor(root_config, database_config) {
 		super(root_config);
@@ -391,7 +411,12 @@ class DatabaseModel extends Model {
 			})
 			.catch(function (err) {
 				LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.create:failure`, "err", err);
-				throw err;
+				if (process.env.KNEX_CLIENT === "better-sqlite3") {
+					process_knex_error_sqlite3(self, err);
+				} else {
+					// different dialects here to parse database errors (to turn them into field errors)
+					throw err;
+				}
 			});
 	}
 	_relationship_create(context, scope, parameters) {
@@ -682,7 +707,12 @@ class DatabaseModel extends Model {
 			})
 			.catch(function (err) {
 				LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.update:failure`, "err", err);
-				throw err;
+				if (process.env.KNEX_CLIENT === "better-sqlite3") {
+					process_knex_error_sqlite3(self, err);
+				} else {
+					// different dialects here to parse database errors (to turn them into field errors)
+					throw err;
+				}
 			});
 	}
 	_relationship_update(context, scope, parameters) {
