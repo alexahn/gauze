@@ -68,7 +68,15 @@ class GauzeService {
 				// todo: rethink error flows if we add field validation. for now we don't have any actionable errors from the backend, so this is sufficient.
 				// todo: if we add field validation errors, we need to change this because errors are now part of the user experience.
 				if (data.errors && data.errors.length) {
-					throw new Error(data.errors);
+					data.errors.forEach(function (err) {
+						console.error("GRAPHQL ERROR", err)
+					})
+					const first = data.errors[0]
+					const error = new Error(first.message)
+					error.extensions = first.extensions
+					error.location = first.location
+					error.message = first.message
+					throw error;
 				} else {
 					return data;
 				}

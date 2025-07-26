@@ -42,9 +42,14 @@ export default memo(function Table({
 	const spaceID = route.params.space;
 	const header = model.read("HEADER", type);
 	const [localWhere, setLocalWhere] = useState(variables.where || {});
+	// match error
 	const [localWhereLike, setLocalWhereLike] = useState(variables.where_like || {});
+	// search error
 	const [localWhereBetween, setLocalWhereBetween] = useState(variables.where_between || {});
+	// between error
+	// submit filter
 	const [createItem, setCreateItem] = useState({});
+	const [createError, setCreateError] = useState({})
 	const [submitCreate, setSubmitCreate] = useState(false);
 	const [syncing, setSyncing] = useState(false);
 
@@ -424,6 +429,7 @@ export default memo(function Table({
 		const selectedNode = graph.selectNode(nodeID);
 		// for convenience to avoid backend issues
 		delete attributes[selectedNode.props.primary_key];
+		setCreateError({})
 		if (input === expected) {
 			return gauze
 				.create(header, {
@@ -465,6 +471,14 @@ export default memo(function Table({
 				})
 				.catch(function (err) {
 					setSubmitCreate(false);
+					if (err.extensions && err.extensions.code < 1000) {
+						// scalar error
+						setCreateError({
+							...createError,
+							[err.extensions.field.name]: err.extensions.readable
+						})
+					}
+					console.log("ERROR CAUGHT", err)
 					throw err;
 				});
 		} else {
@@ -1255,7 +1269,8 @@ export default memo(function Table({
 											);
 										})}
 										<td className={cellWideTableClass}>
-											<Input field={field} className={inputTableClass} value={createItem[field.name]} onChange={updateCreateItem(field.name)} disabled={submitCreate} />
+											<Input field={field} className={createError[field.name] ? inputErrorTableClass : inputTableClass} value={createItem[field.name]} onChange={updateCreateItem(field.name)} disabled={submitCreate} />
+											{createError[field.name] ? (<span className="absolute right-3 w5 bgxyz7 pa1 br2">{createError[field.name]}</span>) : null}
 										</td>
 									</tr>
 								);
