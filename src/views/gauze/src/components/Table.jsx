@@ -46,10 +46,11 @@ export default memo(function Table({
 	const [localWhereLike, setLocalWhereLike] = useState(variables.where_like || {});
 	// search error
 	const [localWhereBetween, setLocalWhereBetween] = useState(variables.where_between || {});
+	const [filterError, setFilterError] = useState({});
 	// between error
 	// submit filter
 	const [createItem, setCreateItem] = useState({});
-	const [createError, setCreateError] = useState({})
+	const [createError, setCreateError] = useState({});
 	const [submitCreate, setSubmitCreate] = useState(false);
 	const [syncing, setSyncing] = useState(false);
 
@@ -166,6 +167,7 @@ export default memo(function Table({
 			...variables,
 			offset: 0,
 		};
+		setFilterError({});
 		return orchestrate
 			.read({ gauze, model }, header, localVariables)
 			.then(function (results) {
@@ -185,6 +187,13 @@ export default memo(function Table({
 			})
 			.catch(function (err) {
 				setSyncing(false);
+				if (err.extensions && err.extensions.code < 1000) {
+					// scalar error
+					setFilterError({
+						...filterError,
+						[err.extensions.field.name]: err.extensions.readable,
+					});
+				}
 				throw err;
 			});
 	}
@@ -429,7 +438,7 @@ export default memo(function Table({
 		const selectedNode = graph.selectNode(nodeID);
 		// for convenience to avoid backend issues
 		delete attributes[selectedNode.props.primary_key];
-		setCreateError({})
+		setCreateError({});
 		if (input === expected) {
 			return gauze
 				.create(header, {
@@ -475,10 +484,10 @@ export default memo(function Table({
 						// scalar error
 						setCreateError({
 							...createError,
-							[err.extensions.field.name]: err.extensions.readable
-						})
+							[err.extensions.field.name]: err.extensions.readable,
+						});
 					}
-					console.log("ERROR CAUGHT", err)
+					console.log("ERROR CAUGHT", err);
 					throw err;
 				});
 		} else {
@@ -883,12 +892,17 @@ export default memo(function Table({
 						<Input
 							defaultMode={true}
 							field={field}
-							className={inputTableClass}
+							className={filterError[field.name] ? inputErrorTableClass : inputTableClass}
 							defaultValue={variables.where ? variables.where[field.name] : null}
 							onChange={updateMatchFilter(field.name)}
 							onKeyDown={applyFilterEnter(field.name)}
 							disabled={syncing}
 						/>
+						{filterError[field.name] ? (
+							<span className="absolute right-3 w5 bgxyz7 pa1 br2" style={{ zIndex: 100 }}>
+								{filterError[field.name]}
+							</span>
+						) : null}
 					</td>
 				);
 			case "where_like":
@@ -898,12 +912,17 @@ export default memo(function Table({
 						<Input
 							defaultMode={true}
 							field={field}
-							className={inputTableClass}
+							className={filterError[field.name] ? inputErrorTableClass : inputTableClass}
 							defaultValue={variables.where_like ? variables.where_like[field.name] : null}
 							onChange={updateSearchFilter(field.name)}
 							onKeyDown={applyFilterEnter(field.name)}
 							disabled={syncing}
 						/>
+						{filterError[field.name] ? (
+							<span className="absolute right-3 w5 bgxyz7 pa1 br2" style={{ zIndex: 100 }}>
+								{filterError[field.name]}
+							</span>
+						) : null}
 					</td>
 				);
 			case "where_between":
@@ -925,7 +944,7 @@ export default memo(function Table({
 							<Input
 								defaultMode={true}
 								field={field}
-								className={inputTableClass}
+								className={filterError[field.name] ? inputErrorTableClass : inputTableClass}
 								defaultValue={variables.where_between ? (variables.where_between[field.name] ? variables.where_between[field.name][0] : null) : null}
 								onChange={updateBetweenFilter(field.name, 0)}
 								onKeyDown={applyFilterEnter(field.name)}
@@ -936,13 +955,18 @@ export default memo(function Table({
 							<Input
 								defaultMode={true}
 								field={field}
-								className={inputTableClass}
+								className={filterError[field.name] ? inputErrorTableClass : inputTableClass}
 								defaultValue={variables.where_between ? (variables.where_between[field.name] ? variables.where_between[field.name][1] : null) : null}
 								onChange={updateBetweenFilter(field.name, 1)}
 								onKeyDown={applyFilterEnter(field.name)}
 								disabled={syncing}
 							/>
 						</td>
+						{filterError[field.name] ? (
+							<span className="absolute right-3 w5 bgxyz7 pa1 br2" style={{ zIndex: 100 }}>
+								{filterError[field.name]}
+							</span>
+						) : null}
 					</>
 				);
 			default:
@@ -1269,8 +1293,14 @@ export default memo(function Table({
 											);
 										})}
 										<td className={cellWideTableClass}>
-											<Input field={field} className={createError[field.name] ? inputErrorTableClass : inputTableClass} value={createItem[field.name]} onChange={updateCreateItem(field.name)} disabled={submitCreate} />
-											{createError[field.name] ? (<span className="absolute right-3 w5 bgxyz7 pa1 br2">{createError[field.name]}</span>) : null}
+											<Input
+												field={field}
+												className={createError[field.name] ? inputErrorTableClass : inputTableClass}
+												value={createItem[field.name]}
+												onChange={updateCreateItem(field.name)}
+												disabled={submitCreate}
+											/>
+											{createError[field.name] ? <span className="absolute right-3 w5 bgxyz7 pa1 br2">{createError[field.name]}</span> : null}
 										</td>
 									</tr>
 								);
