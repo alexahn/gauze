@@ -143,7 +143,7 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 					})
 					.catch(function (err) {
 						setSubmitCreate(false);
-						if (err.extensions && err.extensions.code < 1000) {
+						if (err.extensions && err.extensions.field && err.extensions.readable) {
 							// scalar error
 							setCreateError(err.extensions);
 						}

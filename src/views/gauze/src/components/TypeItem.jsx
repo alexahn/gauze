@@ -106,7 +106,7 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 				})
 				.catch(function (err) {
 					setSubmitUpdate(false);
-					if (err.extensions && err.extensions.code < 1000) {
+					if (err.extensions && err.extensions.field && err.extensions.readable) {
 						// scalar error
 						setUpdateError(err.extensions);
 					}

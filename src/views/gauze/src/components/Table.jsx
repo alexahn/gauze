@@ -187,7 +187,7 @@ export default memo(function Table({
 			})
 			.catch(function (err) {
 				setSyncing(false);
-				if (err.extensions && err.extensions.code < 1000) {
+				if (err.extensions && err.extensions.field && err.extensions.readable) {
 					// scalar error
 					setFilterError({
 						...filterError,
@@ -482,7 +482,7 @@ export default memo(function Table({
 				})
 				.catch(function (err) {
 					setSubmitCreate(false);
-					if (err.extensions && err.extensions.code < 1000) {
+					if (err.extensions && err.extensions.field && err.extensions.readable) {
 						// scalar error
 						setCreateError({
 							...createError,
