@@ -11,7 +11,7 @@ class Pathfinder {
 			context,
 			hash,
 			base,
-			basePath
+			basePath,
 		};
 		self.states = states;
 		self.current = {
@@ -61,7 +61,7 @@ class Pathfinder {
 		} catch (e) {
 			parsedURL = new URL(base + url);
 		}
-		console.log("parsedURL", parsedURL)
+		console.log("parsedURL", parsedURL);
 		return self.states
 			.map(function (state) {
 				const pathMatch = state.pathRegex.exec(hash ? parsedURL.hash : parsedURL.pathname);
@@ -136,7 +136,7 @@ class Pathfinder {
 	}
 	_stateToURL(stateName, pathParams, searchParams) {
 		const self = this;
-		const { hash, basePath } = self.config
+		const { hash, basePath } = self.config;
 		const names = stateName.split(".");
 		const fragments = names.reduce(
 			function ([pathfinder, pathname, search], name) {
@@ -281,23 +281,25 @@ class Pathfinder {
 
 class Director {
 	constructor() {
-		const self = this
+		const self = this;
 		self.handlers = {};
 	}
 	register(stateName, handler) {
-		const self = this
+		const self = this;
 		if (self.handlers[stateName]) {
-			self.handlers[stateName].push(handler)
+			self.handlers[stateName].push(handler);
 		} else {
-			self.handlers[stateName] = [handler]
+			self.handlers[stateName] = [handler];
 		}
 	}
 	handle(stateName, context, dependencies, pathParams, searchParams) {
-		const self = this
-		const handlers = self.handlers[stateName] ? self.handlers[stateName] : []
-		return Promise.all(handlers.map(function (handler) {
-			return handler(context, dependencies, pathParams, searchParams)
-		}))
+		const self = this;
+		const handlers = self.handlers[stateName] ? self.handlers[stateName] : [];
+		return Promise.all(
+			handlers.map(function (handler) {
+				return handler(context, dependencies, pathParams, searchParams);
+			}),
+		);
 	}
 }
 

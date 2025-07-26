@@ -74,6 +74,13 @@ var pathfinder1 = new Pathfinder(
     ],
 );
 
+const director1 = new Director()
+director1.register("hello.world", function (context, dependencies, pathParams, searchParams) {
+    console.log("hello.world director handler", context, dependencies, pathParams, searchParams)
+})
+director1.register("hello.universe", function (context, dependencies, pathParams, searchParams) {
+    console.log("hello.universe director handler", context, dependencies, pathParams, searchParams)
+})
 
 const state1 = pathfinder1.URLToState("/hello1/world2?a=30&b=40");
 console.log("state1", state1);
@@ -83,8 +90,10 @@ console.log("url1", url1);
 
 pathfinder1.transitionByState("hello.world", { q: 2, w: 1 }, { a: 30, b: 40 }).then(function ({ context, dependencies, name, pathParams, searchParams }) {
     console.log("REACHED", dependencies, name, pathParams, searchParams);
+	director1.handle(name, context, dependencies, pathParams, searchParams)
     return pathfinder1.transitionByURL("/hello1/universe3?a=30&b=40").then(function ({ context, dependencies, name, pathParams, searchParams }) {
         console.log("REACHED2", dependencies, name, pathParams, searchParams);
+		director1.handle(name, context, dependencies, pathParams, searchParams)
     });
     /*
     return pathfinder1.transitionByState("hello.universe", {q: 1, w: 2, e: 3}, {a: 30, b: 40}).then(function ({ dependencies, name, pathParams, searchParams }) {
