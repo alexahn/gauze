@@ -437,7 +437,9 @@ export default memo(function Table({
 		const attributes = { ...createItem };
 		const selectedNode = graph.selectNode(nodeID);
 		// for convenience to avoid backend issues
-		delete attributes[selectedNode.props.primary_key];
+		if (attributes[selectedNode.props.primary_key] === "") {
+			delete attributes[selectedNode.props.primary_key];
+		}
 		setCreateError({});
 		if (input === expected) {
 			return gauze
