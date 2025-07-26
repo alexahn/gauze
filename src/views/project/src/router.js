@@ -279,6 +279,26 @@ class Pathfinder {
 	}
 }
 
-class Director {}
+class Director {
+	constructor() {
+		const self = this
+		self.handlers = {};
+	}
+	register(stateName, handler) {
+		const self = this
+		if (self.handlers[stateName]) {
+			self.handlers[stateName].push(handler)
+		} else {
+			self.handlers[stateName] = [handler]
+		}
+	}
+	handle(stateName, context, dependencies, pathParams, searchParams) {
+		const self = this
+		const handlers = self.handlers[stateName] ? self.handlers[stateName] : []
+		return Promise.all(handlers.map(function (handler) {
+			return handler(context, dependencies, pathParams, searchParams)
+		})
+	}
+}
 
 export { Pathfinder, Director };
