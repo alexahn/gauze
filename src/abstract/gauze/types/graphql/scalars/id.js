@@ -26,13 +26,13 @@ function SCALAR__ID__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT(entity, field, param
 				throw err;
 			}
 			// add constraint that id must be of the form 8-4-4-12
-			var uuid_regex = new RegExp("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
-			var valid_uuid = value.match(uuid_regex)
+			var uuid_regex = new RegExp("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$");
+			var valid_uuid = value.match(uuid_regex);
 			if (valid_uuid) {
 				return value;
 			} else {
-				const err = ID_REGEX__ERROR__GAUZE__ABSTRACT(entity, field, value, uuid_regex)
-				throw err
+				const err = ID_REGEX__ERROR__GAUZE__ABSTRACT(entity, field, value, uuid_regex);
+				throw err;
 			}
 		},
 		// parse from ast literal value to graphql value
