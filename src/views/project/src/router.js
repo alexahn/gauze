@@ -297,7 +297,7 @@ class Director {
 		const handlers = self.handlers[stateName] ? self.handlers[stateName] : []
 		return Promise.all(handlers.map(function (handler) {
 			return handler(context, dependencies, pathParams, searchParams)
-		})
+		}))
 	}
 }
 
