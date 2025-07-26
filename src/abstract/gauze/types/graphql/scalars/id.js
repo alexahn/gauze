@@ -3,7 +3,7 @@
 import { GraphQLScalarType, GraphQLError, Kind } from "graphql";
 import { v4 as uuidv4 } from "uuid";
 
-import { ID_REGEX__ERROR__GAUZE__ABSTRACT, STRING_MINIMUM_LENGTH__ERROR__GAUZE__ABSTRACT, STRING_MAXIMUM_LENGTH__ERROR__GAUZE__ABSTRACT } from "./../../../errors.js";
+import { ID_REGEX__ERROR__GAUZE__ABSTRACT } from "./../../../errors.js";
 
 function SCALAR__ID__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT(entity, field, params = {}) {
 	const { minimum_length = 36, maximum_length = 36 } = params;
@@ -17,15 +17,6 @@ function SCALAR__ID__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT(entity, field, param
 		},
 		// parse from json value to grapqhl value
 		parseValue: function (value) {
-			if (value.length < minimum_length) {
-				console.log("value", value)
-				const err = STRING_MINIMUM_LENGTH__ERROR__GAUZE__ABSTRACT(entity, field, value, 36);
-				throw err;
-			}
-			if (maximum_length < value.length) {
-				const err = STRING_MAXIMUM_LENGTH__ERROR__GAUZE__ABSTRACT(entity, field, value, 36);
-				throw err;
-			}
 			// add constraint that id must be of the form 8-4-4-12
 			var uuid_regex = new RegExp("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$");
 			var valid_uuid = value.match(uuid_regex);
