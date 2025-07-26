@@ -17,6 +17,7 @@ function SCALAR__ID__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT(entity, field, param
 		},
 		// parse from json value to grapqhl value
 		parseValue: function (value) {
+			console.log("value", value)
 			if (value.length < minimum_length) {
 				const err = STRING_MINIMUM_LENGTH__ERROR__GAUZE__ABSTRACT(entity, field, value, 36);
 				throw err;
