@@ -9,9 +9,10 @@
 
 // gauze errors
 
-const ENTITY_FIELD_ERROR_EXTENSIONS = function (code, entity, field) {
+const ENTITY_FIELD_ERROR_EXTENSIONS = function (name, code, entity, field) {
 	return {
 		code,
+		name: name,
 		entity: {
 			name: entity.name,
 		},
@@ -26,7 +27,7 @@ const ENTITY_FIELD_ERROR_EXTENSIONS = function (code, entity, field) {
 // code 0
 const STRING_MINIMUM_LENGTH__ERROR__GAUZE__ABSTRACT = function (entity, field, value, minimum_length) {
 	const err = new Error(`Scalar string has a minimum length of: ${minimum_length}, received input of length: ${value.length}`);
-	err.extensions = ENTITY_FIELD_ERROR_EXTENSIONS(0, entity, field);
+	err.extensions = ENTITY_FIELD_ERROR_EXTENSIONS("STRING_MINIMUM_LENGTH__ERROR__GAUZE__ABSTRACT", 0, entity, field);
 	err.extensions.readable = `Field has a minimum length of ${minimum_length}`;
 	return err;
 };
@@ -34,7 +35,7 @@ const STRING_MINIMUM_LENGTH__ERROR__GAUZE__ABSTRACT = function (entity, field, v
 // code 1
 const STRING_MAXIMUM_LENGTH__ERROR__GAUZE__ABSTRACT = function (entity, field, value, maximum_length) {
 	const err = new Error(`Scalar string has a maximum length of: ${maximum_length}, received input of length: ${value.length}`);
-	err.extensions = ENTITY_FIELD_ERROR_EXTENSIONS(1, entity, field);
+	err.extensions = ENTITY_FIELD_ERROR_EXTENSIONS("STRING_MAXIMUM_LENGTH__ERROR__GAUZE__ABSTRACT", 1, entity, field);
 	err.extensions.readable = `Field has a maximum length of ${maximum_length}`;
 	return err;
 };
