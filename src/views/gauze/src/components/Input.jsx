@@ -6,14 +6,22 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 	const [lastChanged, setLastChanged] = useState(new Date().getTime());
 	const graphQLTypeName = field.graphql_type.name.split("___")[0];
 	const graphQLTypeToInputType = {
-		GAUZE_DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT: "datetime-local",
-		GAUZE_STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT: "text",
+		//GAUZE_DATE__GRAPHQL__TYPE__GAUZE__ABSTRACT: "datetime-local",
+		//GAUZE_STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT: "text",
 		Date: "datetime-local",
-		SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: "datetime-local",
 		String: "text",
+		SCALAR__ID__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: "text",
+		SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: "datetime-local",
 		SCALAR__STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: "text",
 	};
 	const serializeGraphQLTypeToInputType = {
+		SCALAR__ID__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: function (v) {
+			if (typeof v === "string") {
+				return v;
+			} else {
+				return undefined;
+			}
+		},
 		Date: function (v, field) {
 			// note: look into why we need an existence check here (system entity page)
 			if (v && typeof v === "string") {
@@ -48,6 +56,10 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 		},
 	};
 	const serializeInputValueToGraphQLType = {
+        SCALAR__ID__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: function (e, field) {
+            e.target.serialized = e.target.value;
+            return e;
+        },
 		SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: function (e, field) {
 			// treating the input as always representing a UTC date time
 			if (e.target.value) {
@@ -76,6 +88,13 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 		},
 	};
 	const initializeValue = {
+        SCALAR__ID__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: function (v) {
+            if (v === undefined) {
+                return "";
+            } else {
+                return v;
+            }
+        },
 		SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: function (v, field) {
 			if (v === undefined) {
 				return new Date(0).toISOString().slice(0, 16);
