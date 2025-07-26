@@ -17,6 +17,7 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 	});
 	const [createItem, setCreateItem] = useState({});
 	const [submitCreate, setSubmitCreate] = useState(false);
+	const [createError, setCreateError] = useState(null);
 
 	// use pagination record once we implement it
 	const pagination_key = router.buildUrl(route.name, route.params);
@@ -122,6 +123,7 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 			setSubmitCreate(true);
 			const expected = "create";
 			const input = prompt(`Confirm create by entering '${expected}'`, "");
+			setCreateError(null);
 			if (input === expected) {
 				return gauze
 					.create(header, {
@@ -138,6 +140,13 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 							// alert the user that something went wrong
 							setSubmitCreate(false);
 						}
+					})
+					.catch(function (err) {
+						setSubmitCreate(false);
+						if (err.extensions && err.extensions.code < 1000) {
+							// scalar error
+							setCreateError(err.extensions);
+						}
 					});
 			} else {
 				setSubmitCreate(false);
@@ -153,6 +162,13 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 					<div className="flex fr">
 						<Pagination page={page_current} count={page_max} href={href} reverse={true} />
 					</div>
+				</div>
+				<div align="right">
+					{createError ? (
+						<div>
+							Create failed on field "{createError.field.name}": {createError.readable}
+						</div>
+					) : null}
 				</div>
 				<hr />
 				{/*<div className="mw-100 overflow-x-auto"> */}

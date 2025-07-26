@@ -14,6 +14,7 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 	const item = model.read(header.graphql_meta_type, route.params.id) || {};
 	const [readItem, setReadItem] = useState(item);
 	const [updateItem, setUpdateItem] = useState(item);
+	const [updateError, setUpdateError] = useState(null);
 
 	useEffect(() => {
 		const subscriptionID = uuidv4();
@@ -84,6 +85,7 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 		setSubmitUpdate(true);
 		const expected = "update";
 		const input = prompt(`Confirm update by entering '${expected}'`, "");
+		setUpdateError(null);
 		if (input === expected) {
 			return gauze
 				.update(header, {
@@ -100,6 +102,13 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 					} else {
 						// alert the user that something went wrong
 						setSubmitUpdate(false);
+					}
+				})
+				.catch(function (err) {
+					setSubmitUpdate(false);
+					if (err.extensions && err.extensions.code < 1000) {
+						// scalar error
+						setUpdateError(err.extensions);
 					}
 				});
 		} else {
@@ -228,6 +237,13 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 						</div>
 					</div>
 				</nav>
+			</div>
+			<div align="right">
+				{updateError ? (
+					<div>
+						Update failed on field "{updateError.field.name}": {updateError.readable}
+					</div>
+				) : null}
 			</div>
 			<hr />
 			<div className="flex fr">
