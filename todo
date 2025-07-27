@@ -1057,3 +1057,4 @@
 [ ] rewrite the current ui using a new minimal architecture
 	[ ] move away from router5 since i think it has a broken routing implementation
 	[ ] try to use our own router
+		[x] the new router reloads the page on query parameter change since the query parameters precede the hash anchor
