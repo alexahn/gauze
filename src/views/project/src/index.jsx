@@ -84,7 +84,7 @@ function Navigation({ pathfinder }) {
 	console.log('pathfinder', pathfinder)
 	return (<div>
 		<a href={pathfinder.stateToURL("hello.world", {w : 1, q: 2}, {a: 30, b: 40})}>Hello.World</a>
-		<a href={pathfinder.stateToURL("hello.universe", {w: 1,q: 2, e: 3}, {a: 30, b: 40})}>Hello.Universe</a>
+		<a href={pathfinder.stateToURL("hello.universe", {w: 1,q: 2, e: 3}, {a: 30, b: 50})}>Hello.Universe</a>
 	</div>)
 }
 
@@ -132,11 +132,9 @@ parsedLocationURL.pathname = parsedStateURL.pathname
 watch(pathfinder1, director1)
 
 // strict mode causes an additional render
-/*
 root.render(
 	<React.StrictMode>
-		<App />
+		<Navigation pathfinder={pathfinder1} />
 	</React.StrictMode>,
 );
-*/
 
