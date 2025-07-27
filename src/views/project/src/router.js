@@ -1,5 +1,5 @@
 // note: conditional import when used from the browser (or have a build config that overrides this import)
-import { URL, URLSearchParams } from "url";
+//import { URL, URLSearchParams } from "url";
 
 class Pathfinder {
 	constructor(config, states) {
