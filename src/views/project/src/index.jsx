@@ -73,6 +73,23 @@ var pathfinder1 = new Pathfinder(
             },
             pathfinder: pathfinder2,
         },
+		{
+
+            name: "root",
+            path: [],
+            pathRegex: new RegExp("/"),
+            pathString: function (groups) {
+                return `/`;
+            },
+            search: [],
+            dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+                console.log("root dependency context", context);
+                console.log("root dependency called", dependencies, state, routeParams, searchParams);
+                return {
+                };
+            },
+            pathfinder: null
+		}
     ],
 );
 
@@ -118,18 +135,28 @@ director1.register("hello.universe", function (context, dependencies, pathParams
 	)
 });
 
-const state = pathfinder1.URLToState("/project/?a=30&b=40#/hello1/world2");
-console.log('state', state)
-const url = pathfinder1.stateToURL(state.name, state.pathParams, state.searchParams);
-console.log('url', url)
-const parsedLocationURL = new URL(location.href)
-const parsedStateURL = new URL("http://localhost:4000" + url)
-parsedLocationURL.hash = parsedStateURL.hash
-parsedLocationURL.searchParams = parsedStateURL.searchParams
-parsedLocationURL.pathname = parsedStateURL.pathname
-//location.href = parsedLocationURL.toString()
 
 watch(pathfinder1, director1)
+
+try {
+	const current = pathfinder1.URLToState(location.href)
+} catch (e) {
+	//pathfinder1.transitionByState("hello.world", {q: 2: w: 1}, {a: 30, b: 40})
+	//const state = pathfinder1.URLToState("/project/?a=30&b=40#/hello1/world2");
+	//console.log('state', state)
+	//const url = pathfinder1.stateToURL(state.name, state.pathParams, state.searchParams);
+	const url = pathfinder1.stateToURL("hello.world", {w: 1, q: 2}, {a: 30, b: 40})
+	console.log('url', url)
+	const parsedLocationURL = new URL(location.href)
+	const parsedStateURL = new URL("http://localhost:4000" + url)
+	console.log("parsedStateURL", parsedStateURL)
+	parsedLocationURL.hash = parsedStateURL.hash
+	//parsedLocationURL.searchParams = parsedStateURL.searchParams
+	parsedLocationURL.search = parsedStateURL.search
+	parsedLocationURL.pathname = parsedStateURL.pathname
+	console.log("p", parsedLocationURL)
+	location.href = parsedLocationURL.toString()
+}
 
 // strict mode causes an additional render
 root.render(
