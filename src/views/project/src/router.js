@@ -303,4 +303,26 @@ class Director {
 	}
 }
 
-export { Pathfinder, Director };
+function watch(pathfinder, director) {
+	let previous
+	let next
+	let attempt = 0
+	setInterval(function () {
+		if (next !== location.href && attempt < 4) {
+			previous = next
+			next = location.href
+			return pathfinder.transitionByURL(location.href).then(function ({ context, dependencies, name, pathParams, searchParams }) {
+				return director.handle(name, context, dependencies, pathParams, searchParams).then(function () {
+					attempt = 0
+				})
+			}).catch(function (err) {
+				next = previous
+				previous = null
+				attempt += 1
+				console.error(err)
+			})
+		}
+	}, 128)
+}
+
+export { Pathfinder, Director, watch };
