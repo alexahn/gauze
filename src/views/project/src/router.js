@@ -5,7 +5,7 @@ class Pathfinder {
 	constructor(config, states) {
 		const self = this;
 		// raw config
-		const { context = {}, hash = false, base = "http://localhost:4000", basePath = "/" } = config;
+		const { context = {}, hash = false, base = "http://localhost:4000", basePath = "" } = config;
 		// parsed and loaded config
 		self.config = {
 			context,
@@ -61,10 +61,9 @@ class Pathfinder {
 		} catch (e) {
 			parsedURL = new URL(base + url);
 		}
-		console.log("parsedURL", parsedURL);
 		return self.states
 			.map(function (state) {
-				const pathMatch = state.pathRegex.exec(hash ? parsedURL.hash : parsedURL.pathname);
+				const pathMatch = state.pathRegex.exec(hash ? parsedURL.hash.slice(1) : parsedURL.pathname);
 				const pathMatchParams = {};
 				const pathMatchGroup = pathMatch ? pathMatch.groups : {};
 				state.path.forEach(function (param) {
@@ -186,8 +185,9 @@ class Pathfinder {
 		const pathname = fragments[1];
 		const searchParamsFiltered = fragments[2];
 		const search = new URLSearchParams(searchParamsFiltered);
-		const url = [pathname, search.toString()].join("?");
-		return hash ? basePath + "#" + url : url;
+		// note: query parameters must come before hash
+		const url = hash ? '?' + [search.toString(), pathname].join('#') : [pathname, search.toString()].join("?");
+		return basePath + url;
 	}
 	transitionByState(name, pathParams, searchParams) {
 		const self = this;

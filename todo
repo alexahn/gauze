@@ -1051,3 +1051,6 @@
 	[-] rewrite router according to project conventions (and also to refactor to make it more consistent)
 		[x] only write in the convention if we need meta-programming capabilities
 		[x] otherwise just stuck to camel case
+[ ] the current router i'm using is incorrectly parsing the hash fragment i think
+	[ ] the query parameters must come before the hash anchor (based off how URL parses urls)
+	[ ] we should find a new minimal frontend architecture and remove the things we don't want to depend on
