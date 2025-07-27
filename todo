@@ -1054,3 +1054,6 @@
 [ ] the current router i'm using is incorrectly parsing the hash fragment i think
 	[ ] the query parameters must come before the hash anchor (based off how URL parses urls)
 	[ ] we should find a new minimal frontend architecture and remove the things we don't want to depend on
+[ ] rewrite the current ui using a new minimal architecture
+	[ ] move away from router5 since i think it has a broken routing implementation
+	[ ] try to use our own router
