@@ -187,7 +187,7 @@ class Pathfinder {
 		const search = new URLSearchParams(searchParamsFiltered);
 		// note: query parameters must come before hash
 		const url = hash ? '?' + [search.toString(), pathname].join('#') : [pathname, search.toString()].join("?");
-		return basePath + url;
+		return hash ? basePath + url : url;
 	}
 	transitionByState(name, pathParams, searchParams) {
 		const self = this;
