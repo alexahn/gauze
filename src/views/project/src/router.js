@@ -90,14 +90,24 @@ class Pathfinder {
 							parsedStrippedURL = new URL(base + url);
 						}
 						if (hash) {
+							// note: why is URL.hash set to empty string if i set the hash to '#'?
 							parsedStrippedURL.hash = parsedURL.hash.replace(state.pathString(pathMatch.groups), "");
+							// add leading slash if necessary
+							if (parsedStrippedURL.hash && parsedStrippedURL.hash[1] !== "/") {
+								parsedStrippedURL.hash = "#/" + parsedStrippedURL.hash.slice(1)
+							}
 						} else {
 							parsedStrippedURL.pathname = parsedURL.pathname.replace(state.pathString(pathMatch.groups), "");
+							// add leading slash if necessary
+							if (parsedStrippedURL.pathname && parsedStrippedURL.pathname[0] !== "/") {
+								parsedStrippedURL.pathname = "/" + parsedStrippedURL.pathname
+							}
 						}
 						state.search.forEach(function (param) {
 							parsedStrippedURL.searchParams.delete(param);
 						});
 						const stripped_url = parsedStrippedURL.toString();
+						/*
 						return state.pathfinder._URLToState(
 							prefix.concat({
 								state: state,
@@ -106,6 +116,48 @@ class Pathfinder {
 							}),
 							stripped_url,
 						);
+						*/
+						if (hash) {
+							if (parsedStrippedURL.hash === '') {
+								// terminate
+								return {
+									states: prefix.concat({
+										state: state,
+										pathParams: pathMatchParams,
+										searchParams: searchMatchParams,
+									}),
+								};
+							} else {
+								return state.pathfinder._URLToState(
+									prefix.concat({
+										state: state,
+										pathParams: pathMatchParams,
+										searchParams: searchMatchParams,
+									}),
+									stripped_url,
+								);
+							}
+						} else {
+							if (parsedStrippedURL.pathname === '') {
+								// terminate
+								return {
+									states: prefix.concat({
+										state: state,
+										pathParams: pathMatchParams,
+										searchParams: searchMatchParams,
+									}),
+								};
+							} else {
+								return state.pathfinder._URLToState(
+									prefix.concat({
+										state: state,
+										pathParams: pathMatchParams,
+										searchParams: searchMatchParams,
+									}),
+									stripped_url,
+								);
+							}
+						}	
 					} else {
 						// terminate
 						return {

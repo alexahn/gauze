@@ -59,7 +59,7 @@ var pathfinder1 = new Pathfinder(
             path: ["w"],
             pathRegex: new RegExp("/hello(?<w>.*?)/"),
             pathString: function (groups) {
-                return `/hello${groups.w}`;
+                return `/hello${groups.w}/`;
             },
             search: ["a"],
             dependencies: async function (context, dependencies, state, routeParams, searchParams) {
