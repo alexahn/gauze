@@ -77,8 +77,9 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 						.catch(function (err) {
 							// note: rollback can error
 							$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "session", err);
+							// note: passing in an error to the rollback call somehow causes an uncaught exception (do not pass anything in)
 							return transaction
-								.rollback(err)
+								.rollback()
 								.then(function () {
 									$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION UNAUTHORIZED REVERTED");
 									ctx.response.status = 401;
@@ -192,7 +193,7 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 						});
 						// note: rollback can error
 						return transaction
-							.rollback(err)
+							.rollback()
 							.then(function () {
 								$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION UNEXPECTED REVERTED");
 								return collection;
@@ -221,16 +222,10 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 						// note: better to log instead of throwing a wrapped error becaused the wrapped error loses fidelity
 						console.error(rollback.errors);
 					}
-					//throw new Error("GraphQL query/mutation error")
 				}
 				return collection;
 			})
 			.catch(function (err) {
-				// note: if we sign out from two different tabs and navigate to the graph on the one that failed to sign out, we encounter an uncaught promise exception
-				// note: i'm not sure how this could be uncaught because we're suppressing it here in a promise.catch
-				// note: the error is logged here before the uncaught exception error surfaces, and its the same error as the one that surfaces in the uncaught exception
-				// note: it seems unlikely that somehow the same error can propagate through this promise, but also be uncaught somewhere else
-				// note: i suspect there is something i'm missing in regard to how i connect this to koa (maybe how next works)
 				if (process.env.GAUZE_ENV === "development") {
 					console.error(err);
 				}
