@@ -18,6 +18,18 @@ class Pathfinder {
 			states: [],
 		};
 	}
+	_formatPathString(pathString) {
+		// strip ending slash
+		if (pathString.length > 1) {
+			if (pathString[pathString.length - 1] === "/") {
+				return pathString.slice(0, pathString.length - 1)
+			} else {
+				return pathString
+			}
+		} else {
+			return pathString
+		}
+	}
 	_formatMatch(match) {
 		const name = match.states
 			.map(function (v) {
@@ -91,17 +103,21 @@ class Pathfinder {
 						}
 						if (hash) {
 							// note: why is URL.hash set to empty string if i set the hash to '#'?
-							parsedStrippedURL.hash = parsedURL.hash.replace(state.pathString(pathMatch.groups), "");
+							parsedStrippedURL.hash = parsedURL.hash.replace(self._formatPathString(state.pathString(pathMatch.groups)), "");
 							// add leading slash if necessary
+							/*
 							if (parsedStrippedURL.hash && parsedStrippedURL.hash[1] !== "/") {
 								parsedStrippedURL.hash = "#/" + parsedStrippedURL.hash.slice(1);
 							}
+							*/
 						} else {
-							parsedStrippedURL.pathname = parsedURL.pathname.replace(state.pathString(pathMatch.groups), "");
+							parsedStrippedURL.pathname = parsedURL.pathname.replace(self._formatPathString(state.pathString(pathMatch.groups)), "");
 							// add leading slash if necessary
+							/*
 							if (parsedStrippedURL.pathname && parsedStrippedURL.pathname[0] !== "/") {
 								parsedStrippedURL.pathname = "/" + parsedStrippedURL.pathname;
 							}
+							*/
 						}
 						state.search.forEach(function (param) {
 							parsedStrippedURL.searchParams.delete(param);
@@ -209,7 +225,7 @@ class Pathfinder {
 							state.search.forEach(function (param) {
 								searchParamsFiltered[param] = searchParams[param];
 							});
-							return [state.pathfinder, pathname + state.pathString(pathParams), searchParamsFiltered];
+							return [state.pathfinder, pathname + self._formatPathString(state.pathString(pathParams)), searchParamsFiltered];
 						} else {
 							throw new Error(
 								`Search parameters ${state.search
