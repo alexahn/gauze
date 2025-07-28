@@ -355,10 +355,11 @@ class Director {
 	}
 }
 
-function watch(pathfinder, director) {
+function watch(pathfinder, director, initial) {
 	let previous
 	let next
 	let attempt = 0
+	const { name, pathParams = {}, searchParams = {} } = initial
 	setInterval(function () {
 		if (next !== location.href && attempt < 4) {
 			previous = next
@@ -375,6 +376,19 @@ function watch(pathfinder, director) {
 			})
 		}
 	}, 128)
+
+	// render initial if it is not a valid state
+	try {
+		const current = pathfinder.URLToState(location.href)
+	} catch (e) {
+		const url = pathfinder.stateToURL(name, pathParams, searchParams)
+		const parsedLocationURL = new URL(location.href)
+		const parsedStateURL = new URL(pathfinder.config.base + url)
+		parsedLocationURL.hash = parsedStateURL.hash
+		parsedLocationURL.search = parsedStateURL.search
+		parsedLocationURL.pathname = parsedStateURL.pathname
+		location.href = parsedLocationURL.toString()
+	}
 }
 
 export { Pathfinder, Director, watch };

@@ -115,13 +115,28 @@ function Universe({}) {
 
 const root = Client.createRoot(document.getElementById("project"));
 
+function Layout({ children }) {
+	if (Array.isArray(children)) {
+		return (<div>
+			{ children[0]  ? <div><h1>Header</h1><div>{ children[0] }</div></div> : null }
+			{ children[1]  ? <div><h1>Body</h1><div>{ children[1] }</div></div> : null }
+		</div>)
+	} else {
+		return (<div>
+			<div><h1>Header</h1><div>{ children }</div></div>
+		</div>)
+	}
+}
+
 const director1 = new Director();
 director1.register("hello.world", function (context, dependencies, pathParams, searchParams) {
 	console.log("hello.world rendered")
 	root.render(
 		<React.StrictMode>
-			<Navigation pathfinder={pathfinder1} />
-			<World/>
+			<Layout>
+				<Navigation pathfinder={pathfinder1} />
+				<World/>
+			</Layout>
 		</React.StrictMode>
 	)
 });
@@ -129,39 +144,36 @@ director1.register("hello.universe", function (context, dependencies, pathParams
 	console.log("hello.universe rendered")
 	root.render(
 		<React.StrictMode>
-			<Navigation pathfinder={pathfinder1} />
-			<Universe />
+			<Layout>
+				<Navigation pathfinder={pathfinder1} />
+				<Universe />
+			</Layout>
 		</React.StrictMode>
 	)
 });
+director1.register("root", function (context, dependencies, pathParams, searchParams) {
+	console.log("root rendered")
+	root.render(
+		<React.StrictMode>
+			<Layout>
+				<Navigation pathfinder={pathfinder1} />
+			</Layout>
+		</React.StrictMode>
+	)
+})
 
 
-watch(pathfinder1, director1)
-
-try {
-	const current = pathfinder1.URLToState(location.href)
-} catch (e) {
-	//pathfinder1.transitionByState("hello.world", {q: 2: w: 1}, {a: 30, b: 40})
-	//const state = pathfinder1.URLToState("/project/?a=30&b=40#/hello1/world2");
-	//console.log('state', state)
-	//const url = pathfinder1.stateToURL(state.name, state.pathParams, state.searchParams);
-	const url = pathfinder1.stateToURL("hello.world", {w: 1, q: 2}, {a: 30, b: 40})
-	console.log('url', url)
-	const parsedLocationURL = new URL(location.href)
-	const parsedStateURL = new URL("http://localhost:4000" + url)
-	console.log("parsedStateURL", parsedStateURL)
-	parsedLocationURL.hash = parsedStateURL.hash
-	//parsedLocationURL.searchParams = parsedStateURL.searchParams
-	parsedLocationURL.search = parsedStateURL.search
-	parsedLocationURL.pathname = parsedStateURL.pathname
-	console.log("p", parsedLocationURL)
-	location.href = parsedLocationURL.toString()
-}
+watch(pathfinder1, director1, {
+	name: "root",
+	pathParams: {},
+	searchParams: {}
+})
 
 // strict mode causes an additional render
+/*
 root.render(
 	<React.StrictMode>
 		<Navigation pathfinder={pathfinder1} />
 	</React.StrictMode>,
 );
-
+*/
