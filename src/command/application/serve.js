@@ -61,8 +61,7 @@ export const handler = function (argv) {
 		process.exit(143);
 	});
 
-	// note: "Session could not be found for agent" unhandled promise exception (i'm not sure how this is possible)
-	// note: we need to add this handler so the server doesn't crash when we cant find a session for a user
+	// note: there should technically be zero unhandled rejections, so this is mostly a sanity check for development
 	process.on("unhandledRejection", function (reason, promise) {
 		console.log("Unhandled Rejection at:", promise, "reason:", reason);
 	});
