@@ -14,6 +14,12 @@ import etag from "@koa/etag";
 import compress from "koa-compress";
 import conditional from "koa-conditional-get";
 
+// note: "Session could not be found for agent" unhandled promise exception (i'm not sure how this is possible)
+// note: we need to add this handler so the server doesn't crash
+process.on("unhandledRejection", function (reason, promise) {
+	console.log("Unhandled Rejection at:", promise, "reason:", reason);
+});
+
 // note: currently unused (edit src/views/gauze/build/index.html instead)
 function gauzeIndex() {
 	const index = `<html>

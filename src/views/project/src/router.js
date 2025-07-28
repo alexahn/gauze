@@ -94,13 +94,13 @@ class Pathfinder {
 							parsedStrippedURL.hash = parsedURL.hash.replace(state.pathString(pathMatch.groups), "");
 							// add leading slash if necessary
 							if (parsedStrippedURL.hash && parsedStrippedURL.hash[1] !== "/") {
-								parsedStrippedURL.hash = "#/" + parsedStrippedURL.hash.slice(1)
+								parsedStrippedURL.hash = "#/" + parsedStrippedURL.hash.slice(1);
 							}
 						} else {
 							parsedStrippedURL.pathname = parsedURL.pathname.replace(state.pathString(pathMatch.groups), "");
 							// add leading slash if necessary
 							if (parsedStrippedURL.pathname && parsedStrippedURL.pathname[0] !== "/") {
-								parsedStrippedURL.pathname = "/" + parsedStrippedURL.pathname
+								parsedStrippedURL.pathname = "/" + parsedStrippedURL.pathname;
 							}
 						}
 						state.search.forEach(function (param) {
@@ -118,7 +118,7 @@ class Pathfinder {
 						);
 						*/
 						if (hash) {
-							if (parsedStrippedURL.hash === '') {
+							if (parsedStrippedURL.hash === "") {
 								// terminate
 								return {
 									states: prefix.concat({
@@ -138,7 +138,7 @@ class Pathfinder {
 								);
 							}
 						} else {
-							if (parsedStrippedURL.pathname === '') {
+							if (parsedStrippedURL.pathname === "") {
 								// terminate
 								return {
 									states: prefix.concat({
@@ -157,7 +157,7 @@ class Pathfinder {
 									stripped_url,
 								);
 							}
-						}	
+						}
 					} else {
 						// terminate
 						return {
@@ -238,7 +238,7 @@ class Pathfinder {
 		const searchParamsFiltered = fragments[2];
 		const search = new URLSearchParams(searchParamsFiltered);
 		// note: query parameters must come before hash
-		const url = hash ? '?' + [search.toString(), pathname].join('#') : [pathname, search.toString()].join("?");
+		const url = hash ? "?" + [search.toString(), pathname].join("#") : [pathname, search.toString()].join("?");
 		return hash ? basePath + url : url;
 	}
 	transitionByState(name, pathParams, searchParams) {
@@ -356,52 +356,55 @@ class Director {
 }
 
 function start(pathfinder, director, initial) {
-	let previous
-	let next
-	let attempt = 0
-	const { name, pathParams = {}, searchParams = {} } = initial
+	let previous;
+	let next;
+	let attempt = 0;
+	const { name, pathParams = {}, searchParams = {} } = initial;
 
 	function load(name, pathParams, searchParams) {
-		const url = pathfinder.stateToURL(name, pathParams, searchParams)
-		const parsedLocationURL = new URL(location.href)
-		const parsedStateURL = new URL(pathfinder.config.base + url)
-		parsedLocationURL.hash = parsedStateURL.hash
-		parsedLocationURL.search = parsedStateURL.search
-		parsedLocationURL.pathname = parsedStateURL.pathname
+		const url = pathfinder.stateToURL(name, pathParams, searchParams);
+		const parsedLocationURL = new URL(location.href);
+		const parsedStateURL = new URL(pathfinder.config.base + url);
+		parsedLocationURL.hash = parsedStateURL.hash;
+		parsedLocationURL.search = parsedStateURL.search;
+		parsedLocationURL.pathname = parsedStateURL.pathname;
 		//location.href = parsedLocationURL.toString()
 		// note: use replace to preserve browser history
-		location.replace(parsedLocationURL.toString())
+		location.replace(parsedLocationURL.toString());
 	}
 
 	setInterval(function () {
 		if (next !== location.href && attempt < 4) {
-			previous = next
-			next = location.href
-			return pathfinder.transitionByURL(location.href).then(function ({ context, dependencies, name, pathParams, searchParams }) {
-				return director.handle(name, context, dependencies, pathParams, searchParams).then(function () {
-					attempt = 0
+			previous = next;
+			next = location.href;
+			return pathfinder
+				.transitionByURL(location.href)
+				.then(function ({ context, dependencies, name, pathParams, searchParams }) {
+					return director.handle(name, context, dependencies, pathParams, searchParams).then(function () {
+						attempt = 0;
+					});
 				})
-			}).catch(function (err) {
-				if (err.transitionByState) {
-					load(err.transitionByState.name, err.transitionByState.pathParams, err.transitionByState.searchParams)
-				} else if (err.transitionByURL) {
-					const state = pathfinder.URLToState(err.transitionByURL)
-					load(state.name, state,pathParams, state.searchParams)
-				} else {
-					next = previous
-					previous = null
-					attempt += 1
-					console.error(err)
-				}
-			})
+				.catch(function (err) {
+					if (err.transitionByState) {
+						load(err.transitionByState.name, err.transitionByState.pathParams, err.transitionByState.searchParams);
+					} else if (err.transitionByURL) {
+						const state = pathfinder.URLToState(err.transitionByURL);
+						load(state.name, state, pathParams, state.searchParams);
+					} else {
+						next = previous;
+						previous = null;
+						attempt += 1;
+						console.error(err);
+					}
+				});
 		}
-	}, 128)
+	}, 128);
 
 	// render initial if it is not a valid state
 	try {
-		const current = pathfinder.URLToState(location.href)
+		const current = pathfinder.URLToState(location.href);
 	} catch (e) {
-		load(name, pathParams, searchParams)
+		load(name, pathParams, searchParams);
 	}
 }
 
