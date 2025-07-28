@@ -355,11 +355,24 @@ class Director {
 	}
 }
 
-function watch(pathfinder, director, initial) {
+function start(pathfinder, director, initial) {
 	let previous
 	let next
 	let attempt = 0
 	const { name, pathParams = {}, searchParams = {} } = initial
+
+	function load(name, pathParams, searchParams) {
+		const url = pathfinder.stateToURL(name, pathParams, searchParams)
+		const parsedLocationURL = new URL(location.href)
+		const parsedStateURL = new URL(pathfinder.config.base + url)
+		parsedLocationURL.hash = parsedStateURL.hash
+		parsedLocationURL.search = parsedStateURL.search
+		parsedLocationURL.pathname = parsedStateURL.pathname
+		//location.href = parsedLocationURL.toString()
+		// note: use replace to preserve browser history
+		location.replace(parsedLocationURL.toString())
+	}
+
 	setInterval(function () {
 		if (next !== location.href && attempt < 4) {
 			previous = next
@@ -369,10 +382,17 @@ function watch(pathfinder, director, initial) {
 					attempt = 0
 				})
 			}).catch(function (err) {
-				next = previous
-				previous = null
-				attempt += 1
-				console.error(err)
+				if (err.transitionByState) {
+					load(err.transitionByState.name, err.transitionByState.pathParams, err.transitionByState.searchParams)
+				} else if (err.transitionByURL) {
+					const state = pathfinder.URLToState(err.transitionByURL)
+					load(state.name, state,pathParams, state.searchParams)
+				} else {
+					next = previous
+					previous = null
+					attempt += 1
+					console.error(err)
+				}
 			})
 		}
 	}, 128)
@@ -381,14 +401,8 @@ function watch(pathfinder, director, initial) {
 	try {
 		const current = pathfinder.URLToState(location.href)
 	} catch (e) {
-		const url = pathfinder.stateToURL(name, pathParams, searchParams)
-		const parsedLocationURL = new URL(location.href)
-		const parsedStateURL = new URL(pathfinder.config.base + url)
-		parsedLocationURL.hash = parsedStateURL.hash
-		parsedLocationURL.search = parsedStateURL.search
-		parsedLocationURL.pathname = parsedStateURL.pathname
-		location.href = parsedLocationURL.toString()
+		load(name, pathParams, searchParams)
 	}
 }
 
-export { Pathfinder, Director, watch };
+export { Pathfinder, Director, start };

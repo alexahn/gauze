@@ -3,7 +3,7 @@ import * as React from "react";
 //import * as Server from "react-dom/server";
 import * as Client from "react-dom/client";
 
-import { Pathfinder, Director, watch } from "./router.js"
+import { Pathfinder, Director, start } from "./router.js"
 
 const pathfinder2 = new Pathfinder(
     {
@@ -85,6 +85,15 @@ var pathfinder1 = new Pathfinder(
             dependencies: async function (context, dependencies, state, routeParams, searchParams) {
                 console.log("root dependency context", context);
                 console.log("root dependency called", dependencies, state, routeParams, searchParams);
+				/*
+				const err = new Error("Transition")
+				err.transitionByState = {
+					name: "hello.world",
+					pathParams: {q: 2, w: 1},
+					searchParams: {a: 30, b: 40}
+				}
+				throw err
+				*/
                 return {
                 };
             },
@@ -163,7 +172,7 @@ director1.register("root", function (context, dependencies, pathParams, searchPa
 })
 
 
-watch(pathfinder1, director1, {
+start(pathfinder1, director1, {
 	name: "root",
 	pathParams: {},
 	searchParams: {}
