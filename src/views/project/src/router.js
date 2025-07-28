@@ -123,16 +123,6 @@ class Pathfinder {
 							parsedStrippedURL.searchParams.delete(param);
 						});
 						const stripped_url = parsedStrippedURL.toString();
-						/*
-						return state.pathfinder._URLToState(
-							prefix.concat({
-								state: state,
-								pathParams: pathMatchParams,
-								searchParams: searchMatchParams,
-							}),
-							stripped_url,
-						);
-						*/
 						if (hash) {
 							if (parsedStrippedURL.hash === "") {
 								// terminate
@@ -414,9 +404,9 @@ function start(pathfinder, director, initial) {
 					}
 				});
 		}
-	}, 128);
+	}, 32);
 
-	// render initial if it is not a valid state
+	// render initial if the initial url is not a valid state
 	try {
 		const current = pathfinder.URLToState(location.href);
 	} catch (e) {
