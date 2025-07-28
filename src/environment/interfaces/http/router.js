@@ -8,6 +8,7 @@ export default function ($gauze) {
 	const database = $gauze.database.knex.create_connection();
 
 	ROUTER__HTTP__INTERFACE__ENVIRONMENT.post("/graphql", function (ctx, next) {
+		// note: for some reason, this endpoint does not work if we don't return the promise value, even though i'm calling next at the end of the promise (like a manual callback)
 		return $gauze.kernel.src.servers.http.HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL(
 			{
 				$gauze: $gauze,

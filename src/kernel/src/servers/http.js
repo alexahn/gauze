@@ -109,6 +109,7 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 			} else {
 				if ($realm.default.mode === "open") {
 					context.agent = {};
+					// note: open mode allows public entities to be queries without a session
 					context.agent.agent_id = "null";
 					context.agent.agent_type = "null";
 				} else if ($realm.default.mode === "closed") {
@@ -218,14 +219,16 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 			return collection;
 		})
 		.catch(function (err) {
+			// note: if we sign out from two different tabs and navigate to the graph on the one that failed to sign out, we encounter an uncaught promise exception
+			// note: i'm not sure how this could be uncaught because we're suppressing it here in a promise.catch
+			// note: the error is logged here before the uncaught exception error surfaces, and its the same error as the one that surfaces in the uncaught exception
+			// note: it seems unlikely that somehow the same error can propagate through this promise, but also be uncaught somewhere else
+			// note: i suspect there is something i'm missing in regard to how i connect this to koa (maybe how next works)
 			if (process.env.GAUZE_ENV === "development") {
 				console.error(err);
 			}
 		})
-		.then(next)
-		.catch(function (err) {
-			return next();
-		});
+		.finally(next) // note: if i return a promise in a koa middleware, maybe i don't need to manually call next?
 };
 
 export { HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL };
