@@ -107,10 +107,12 @@ function App({}) {
 function Navigation({ pathfinder }) {
 	console.log("pathfinder", pathfinder);
 	return (
-		<div>
-			<a href={pathfinder.stateToURL("hello.world", { w: 1, q: 2 }, { a: 30, b: 40 })}>Hello.World</a>
-			<a href={pathfinder.stateToURL("hello.universe", { w: 1, q: 2, e: 3 }, { a: 30, b: 50 })}>Hello.Universe</a>
-		</div>
+		<ul>
+			<li><a href={pathfinder.stateToURL("hello.world", { w: 1, q: 2 }, { a: 30, b: 40 })}>hello.world 1</a></li>
+			<li><a href={pathfinder.stateToURL("hello.universe", { w: 1, q: 2, e: 3 }, { a: 30, b: 40 })}>hello.universe 1</a></li>
+			<li><a href={pathfinder.stateToURL("hello.world", { w: 1, q: 2 }, { a: 30, b: 50 })}>hello.world 2</a></li>
+			<li><a href={pathfinder.stateToURL("hello.universe", { w: 1, q: 2, e: 3 }, { a: 30, b: 50 })}>hello.universe 2</a></li>
+		</ul>
 	);
 }
 
