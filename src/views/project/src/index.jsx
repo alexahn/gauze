@@ -5,20 +5,20 @@ import * as Client from "react-dom/client";
 
 import { Pathfinder, Director, start } from "./router.js";
 
-const pathfinder2 = new Pathfinder(
+const helloPathfinder = new Pathfinder(
 	{
-		hash: true,
+		hash: false,
 		base: "http://localhost:4000",
-		basePath: "/project/",
+		//basePath: "/project/",
 		context: {},
 	},
 	[
 		{
 			name: "world",
-			path: ["q"],
-			pathRegex: new RegExp("/world(?<q>.*)"),
+			path: ["w"],
+			pathRegex: new RegExp("/world(?<w>.*)"),
 			pathString: function (groups) {
-				return `/world${groups.q}`;
+				return `/world${groups.w}`;
 			},
 			search: ["b"],
 			dependencies: async function (context, dependencies, state, routeParams, searchParams) {
@@ -48,42 +48,25 @@ const pathfinder2 = new Pathfinder(
 	],
 );
 
-var pathfinder1 = new Pathfinder(
+var projectPathfinder = new Pathfinder(
 	{
-		hash: true,
+		hash: false,
 		base: "http://localhost:4000",
-		basePath: "/project/",
+		//basePath: "/project/",
 		context: {},
 	},
 	[
-		{
-			name: "hello",
-			path: ["w"],
-			pathRegex: new RegExp("/hello(?<w>.*?)/"),
-			pathString: function (groups) {
-				return `/hello${groups.w}/`;
-			},
-			search: ["a"],
-			dependencies: async function (context, dependencies, state, routeParams, searchParams) {
-				console.log("hello dependency context", context);
-				console.log("hello dependency called", dependencies, state, routeParams, searchParams);
-				return {
-					x: 10,
-				};
-			},
-			pathfinder: pathfinder2,
-		},
 		{
 			name: "root",
 			path: [],
 			pathRegex: new RegExp("/"),
 			pathString: function (groups) {
-				return `/`;
+				return "/"
 			},
 			search: [],
 			dependencies: async function (context, dependencies, state, routeParams, searchParams) {
-				console.log("root dependency context", context);
-				console.log("root dependency called", dependencies, state, routeParams, searchParams);
+				console.log("root dependency context", context)
+				console.log("root dependency called", dependencies, state, routeParams, searchParams)
 				/*
 				const err = new Error("Transition")
 				err.transitionByState = {
@@ -93,9 +76,52 @@ var pathfinder1 = new Pathfinder(
 				}
 				throw err
 				*/
-				return {};
+				return {}
 			},
-			pathfinder: null,
+			pathfinder: null
+		},
+		{
+			name: "hello",
+			path: ["q"],
+			pathRegex: new RegExp("/hello(?<q>.*?)/"),
+			pathString: function (groups) {
+				return `/hello${groups.q}/`
+			},
+			search: ["a"],
+			dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+				console.log("hello dependency context", context)
+				console.log("hello dependency called", dependencies, state, routeParams, searchParams)
+				return {
+					x: 10
+				}
+			},
+			pathfinder: helloPathfinder,
+		}
+	]
+)
+
+var pathfinder1 = new Pathfinder(
+	{
+		hash: false,
+		base: "http://localhost:4000",
+		//basePath: "/project/",
+		context: {},
+	},
+	[
+		{
+			name: "project",
+			path: [],
+			pathRegex: new RegExp("/project"),
+			pathString: function (groups) {
+				return `/project`;
+			},
+			search: [],
+			dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+				console.log("project dependency context", context)
+				console.log("project dependency called", dependencies, state, routeParams, searchParams)
+				return {}
+			},
+			pathfinder: projectPathfinder,
 		},
 	],
 );
@@ -108,10 +134,10 @@ function Navigation({ pathfinder }) {
 	console.log("pathfinder", pathfinder);
 	return (
 		<ul>
-			<li><a href={pathfinder.stateToURL("hello.world", { w: 1, q: 2 }, { a: 30, b: 40 })}>hello.world 1</a></li>
-			<li><a href={pathfinder.stateToURL("hello.universe", { w: 1, q: 2, e: 3 }, { a: 30, b: 40 })}>hello.universe 1</a></li>
-			<li><a href={pathfinder.stateToURL("hello.world", { w: 1, q: 2 }, { a: 30, b: 50 })}>hello.world 2</a></li>
-			<li><a href={pathfinder.stateToURL("hello.universe", { w: 1, q: 2, e: 3 }, { a: 30, b: 50 })}>hello.universe 2</a></li>
+			<li><a href={pathfinder.stateToURL("project.hello.world", { w: 1, q: 2 }, { a: 30, b: 40 })}>project.hello.world 1</a></li>
+			<li><a href={pathfinder.stateToURL("project.hello.universe", { w: 1, q: 2, e: 3 }, { a: 30, b: 40 })}>project.hello.universe 1</a></li>
+			<li><a href={pathfinder.stateToURL("project.hello.world", { w: 1, q: 2 }, { a: 30, b: 50 })}>project.hello.world 2</a></li>
+			<li><a href={pathfinder.stateToURL("project.hello.universe", { w: 1, q: 2, e: 3 }, { a: 30, b: 50 })}>project.hello.universe 2</a></li>
 		</ul>
 	);
 }
@@ -157,8 +183,8 @@ function Layout({ children }) {
 }
 
 const director1 = new Director();
-director1.register("hello.world", function (context, dependencies, pathParams, searchParams) {
-	console.log("hello.world rendered");
+director1.register("project.hello.world", function (context, dependencies, pathParams, searchParams) {
+	console.log("project.hello.world rendered");
 	root.render(
 		<React.StrictMode>
 			<Layout>
@@ -168,8 +194,8 @@ director1.register("hello.world", function (context, dependencies, pathParams, s
 		</React.StrictMode>,
 	);
 });
-director1.register("hello.universe", function (context, dependencies, pathParams, searchParams) {
-	console.log("hello.universe rendered");
+director1.register("project.hello.universe", function (context, dependencies, pathParams, searchParams) {
+	console.log("project.hello.universe rendered");
 	root.render(
 		<React.StrictMode>
 			<Layout>
@@ -179,8 +205,8 @@ director1.register("hello.universe", function (context, dependencies, pathParams
 		</React.StrictMode>,
 	);
 });
-director1.register("root", function (context, dependencies, pathParams, searchParams) {
-	console.log("root rendered");
+director1.register("project.root", function (context, dependencies, pathParams, searchParams) {
+	console.log("project.root rendered");
 	root.render(
 		<React.StrictMode>
 			<Layout>
@@ -191,7 +217,7 @@ director1.register("root", function (context, dependencies, pathParams, searchPa
 });
 
 start(pathfinder1, director1, {
-	name: "root",
+	name: "project.root",
 	pathParams: {},
 	searchParams: {},
 });

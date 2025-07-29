@@ -166,13 +166,40 @@ class Pathfinder {
 						}
 					} else {
 						// terminate
-						return {
-							states: prefix.concat({
-								state: state,
-								pathParams: pathMatchParams,
-								searchParams: searchMatchParams,
-							}),
-						};
+						let strippedURL;
+						if (hash) {
+							strippedURL = parsedURL.hash.replace(self._formatPathString(state.pathString(pathMatch.groups)), "");
+						} else {
+							strippedURL = parsedURL.pathname.replace(self._formatPathString(state.pathString(pathMatch.groups)), "");
+						}
+						if (hash) {
+							// todo: make sure hash urls still work
+							if (strippedURL === "#") {
+								// terminate
+								return {
+									states: prefix.concat({
+										state: state,
+										pathParams: pathMatchParams,
+										searchParams: searchMatchParams,
+									}),
+								};
+							} else {
+								return null
+							}
+						} else {
+							if (strippedURL === "") {
+								// terminate
+								return {
+									states: prefix.concat({
+										state: state,
+										pathParams: pathMatchParams,
+										searchParams: searchMatchParams,
+									}),
+								};
+							} else {
+								return null
+							}
+						}
 					}
 				} else {
 					return null;
@@ -409,8 +436,9 @@ function start(pathfinder, director, initial) {
 	// render initial if the initial url is not a valid state
 	try {
 		const current = pathfinder.URLToState(location.href);
+		console.log("current", current)
 	} catch (e) {
-		load(name, pathParams, searchParams);
+		//load(name, pathParams, searchParams);
 	}
 }
 
