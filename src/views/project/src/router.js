@@ -439,9 +439,8 @@ function start(pathfinder, director, initial) {
 	// render initial if the initial url is not a valid state
 	try {
 		const current = pathfinder.URLToState(location.href);
-		console.log("current", current)
 	} catch (e) {
-		//load(name, pathParams, searchParams);
+		load(name, pathParams, searchParams);
 	}
 }
 
