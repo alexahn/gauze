@@ -3,6 +3,7 @@ import { GAUZE_PROTOCOL, GAUZE_HOST, GAUZE_PORT } from "env";
 import * as jose from "jose";
 
 class GauzeService {
+	// todo: use dataloader
 	constructor() {
 		const self = this;
 		self.base = `${GAUZE_PROTOCOL}://${GAUZE_HOST}:${GAUZE_PORT}`;
