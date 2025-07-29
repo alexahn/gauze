@@ -1,6 +1,7 @@
 import { GAUZE_PROTOCOL, GAUZE_HOST, GAUZE_PORT } from "env";
 
 import * as jose from "jose";
+import Dataloader from "dataloader";
 
 class GauzeService {
 	// todo: use dataloader
@@ -13,6 +14,25 @@ class GauzeService {
 		console.log("local proxy jwt", localStorage.getItem("proxyJWT"));
 		self.systemJWT = localStorage.getItem("systemJWT");
 		console.log("local system jwt", localStorage.getItem("systemJWT"));
+		self.fetchLoader = new Dataloader(function (keys) {
+			const parsed = keys.map(function (key) {
+				return JSON.parse(key);
+			});
+			// note: for now we can map to fetch, but later we can squash all requests to a single graphql query
+			return Promise.all(
+				parsed.map(function (request) {
+					return self.fetch(request.path, request.jwt, request.body);
+				}),
+			);
+		});
+	}
+	fetchLoaderKey(path, jwt, body) {
+		const key = {
+			path,
+			jwt,
+			body,
+		};
+		return JSON.stringify(key);
 	}
 	fetch(path, jwt, body) {
 		const self = this;
@@ -77,15 +97,21 @@ class GauzeService {
 	}
 	environment(body) {
 		const self = this;
-		return self.fetch("environment/graphql", self.environmentJWT, body);
+		const key = self.fetchLoaderKey("environment/graphql", self.environmentJWT, body);
+		return self.fetchLoader.load(key);
+		//return self.fetch("environment/graphql", self.environmentJWT, body);
 	}
 	proxy(body) {
 		const self = this;
-		return self.fetch("environment/graphql", self.proxyJWT, body);
+		const key = self.fetchLoaderKey("environment/graphql", self.proxyJWT, body);
+		return self.fetchLoader.load(key);
+		//return self.fetch("environment/graphql", self.proxyJWT, body);
 	}
 	system(body) {
 		const self = this;
-		return self.fetch("system/graphql", self.systemJWT, body);
+		const key = self.fetchLoaderKey("system/graphql", self.systemJWT, body);
+		return self.fetchLoader.load(key);
+		//return self.fetch("system/graphql", self.systemJWT, body);
 	}
 	setEnvironmentJWT(jwt) {
 		const self = this;

@@ -5,6 +5,9 @@ import * as Client from "react-dom/client";
 
 import { Pathfinder, Director, start } from "./router.js";
 
+import gauze from "./services/gauze.js";
+console.log("gauze", gauze);
+
 const helloPathfinder = new Pathfinder(
 	{
 		hash: false,
@@ -61,12 +64,12 @@ var projectPathfinder = new Pathfinder(
 			path: [],
 			pathRegex: new RegExp("/"),
 			pathString: function (groups) {
-				return "/"
+				return "/";
 			},
 			search: [],
 			dependencies: async function (context, dependencies, state, routeParams, searchParams) {
-				console.log("root dependency context", context)
-				console.log("root dependency called", dependencies, state, routeParams, searchParams)
+				console.log("root dependency context", context);
+				console.log("root dependency called", dependencies, state, routeParams, searchParams);
 				/*
 				const err = new Error("Transition")
 				err.transitionByState = {
@@ -76,29 +79,29 @@ var projectPathfinder = new Pathfinder(
 				}
 				throw err
 				*/
-				return {}
+				return {};
 			},
-			pathfinder: null
+			pathfinder: null,
 		},
 		{
 			name: "hello",
 			path: ["q"],
 			pathRegex: new RegExp("/hello(?<q>.*?)/"),
 			pathString: function (groups) {
-				return `/hello${groups.q}/`
+				return `/hello${groups.q}/`;
 			},
 			search: ["a"],
 			dependencies: async function (context, dependencies, state, routeParams, searchParams) {
-				console.log("hello dependency context", context)
-				console.log("hello dependency called", dependencies, state, routeParams, searchParams)
+				console.log("hello dependency context", context);
+				console.log("hello dependency called", dependencies, state, routeParams, searchParams);
 				return {
-					x: 10
-				}
+					x: 10,
+				};
 			},
 			pathfinder: helloPathfinder,
-		}
-	]
-)
+		},
+	],
+);
 
 var pathfinder1 = new Pathfinder(
 	{
@@ -117,9 +120,9 @@ var pathfinder1 = new Pathfinder(
 			},
 			search: [],
 			dependencies: async function (context, dependencies, state, routeParams, searchParams) {
-				console.log("project dependency context", context)
-				console.log("project dependency called", dependencies, state, routeParams, searchParams)
-				return {}
+				console.log("project dependency context", context);
+				console.log("project dependency called", dependencies, state, routeParams, searchParams);
+				return {};
 			},
 			pathfinder: projectPathfinder,
 		},
@@ -134,10 +137,18 @@ function Navigation({ pathfinder }) {
 	console.log("pathfinder", pathfinder);
 	return (
 		<ul>
-			<li><a href={pathfinder.stateToURL("project.hello.world", { w: 1, q: 2 }, { a: 30, b: 40 })}>project.hello.world 1</a></li>
-			<li><a href={pathfinder.stateToURL("project.hello.universe", { w: 1, q: 2, e: 3 }, { a: 30, b: 40 })}>project.hello.universe 1</a></li>
-			<li><a href={pathfinder.stateToURL("project.hello.world", { w: 1, q: 2 }, { a: 30, b: 50 })}>project.hello.world 2</a></li>
-			<li><a href={pathfinder.stateToURL("project.hello.universe", { w: 1, q: 2, e: 3 }, { a: 30, b: 50 })}>project.hello.universe 2</a></li>
+			<li>
+				<a href={pathfinder.stateToURL("project.hello.world", { w: 1, q: 2 }, { a: 30, b: 40 })}>project.hello.world 1</a>
+			</li>
+			<li>
+				<a href={pathfinder.stateToURL("project.hello.universe", { w: 1, q: 2, e: 3 }, { a: 30, b: 40 })}>project.hello.universe 1</a>
+			</li>
+			<li>
+				<a href={pathfinder.stateToURL("project.hello.world", { w: 1, q: 2 }, { a: 30, b: 50 })}>project.hello.world 2</a>
+			</li>
+			<li>
+				<a href={pathfinder.stateToURL("project.hello.universe", { w: 1, q: 2, e: 3 }, { a: 30, b: 50 })}>project.hello.universe 2</a>
+			</li>
 		</ul>
 	);
 }

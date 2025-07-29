@@ -25,12 +25,12 @@ class Pathfinder {
 		// strip ending slash
 		if (pathString.length > 1) {
 			if (pathString[pathString.length - 1] === "/") {
-				return pathString.slice(0, pathString.length - 1)
+				return pathString.slice(0, pathString.length - 1);
 			} else {
-				return pathString
+				return pathString;
 			}
 		} else {
-			return pathString
+			return pathString;
 		}
 	}
 	_formatMatch(match) {
@@ -187,7 +187,7 @@ class Pathfinder {
 									}),
 								};
 							} else {
-								return null
+								return null;
 							}
 						} else {
 							if (strippedURL === "") {
@@ -200,7 +200,7 @@ class Pathfinder {
 									}),
 								};
 							} else {
-								return null
+								return null;
 							}
 						}
 					}
