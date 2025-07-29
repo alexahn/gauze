@@ -177,7 +177,7 @@ class Pathfinder {
 						}
 						if (hash) {
 							// todo: make sure hash urls still work
-							if (strippedURL === "#") {
+							if (strippedURL === "" || strippedURL === "#") {
 								// terminate
 								return {
 									states: prefix.concat({
