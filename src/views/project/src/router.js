@@ -1,6 +1,9 @@
 // note: conditional import when used from the browser (or have a build config that overrides this import)
 //import { URL, URLSearchParams } from "url";
 
+// note: URL.pathname cannot be set to empty string, it will default to "/"
+// note: URL.hash cannot be set to "#", it will instead be set to the emtpy string (e.g. "#hello" includes the hash but removing hello will lead to a hash value of "")
+
 class Pathfinder {
 	constructor(config, states) {
 		const self = this;
