@@ -25,6 +25,36 @@ function createPathfinder(context) {
 				},
 				pathfinder: null
 			},
+			{
+				name: "signup",
+				path: [],
+				pathRegex: new RegExp("/signup"),
+				pathString: function (groups) {
+					return "/signup";
+				},
+				search: [],
+				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+					console.log("signup dependency context", context);
+					console.log("signup dependency called", dependencies, state, routeParams, searchParams);
+					return {};
+				},
+				pathfinder: null
+			},
+			{
+				name: "signin",
+				path: [],
+				pathRegex: new RegExp("/signin"),
+				pathString: function (groups) {
+					return "/signin";
+				},
+				search: [],
+				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+					console.log("signin dependency context", context);
+					console.log("signin dependency called", dependencies, state, routeParams, searchParams);
+					return {};
+				},
+				pathfinder: null
+			},
 		]
 	)
 	const proxyPathfinder = new Pathfinder(
@@ -45,6 +75,36 @@ function createPathfinder(context) {
 				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
 					console.log("proxy_root dependency context", context);
 					console.log("proxy_root dependency called", dependencies, state, routeParams, searchParams);
+					return {};
+				},
+				pathfinder: null
+			},
+			{
+				name: "signout",
+				path: [],
+				pathRegex: new RegExp("/signout"),
+				pathString: function (groups) {
+					return "/signout";
+				},
+				search: [],
+				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+					console.log("signout dependency context", context);
+					console.log("signout dependency called", dependencies, state, routeParams, searchParams);
+					return {};
+				},
+				pathfinder: null
+			},
+			{
+				name: "proxies",
+				path: [],
+				pathRegex: new RegExp("/proxies"),
+				pathString: function (groups) {
+					return "/proxies";
+				},
+				search: [],
+				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+					console.log("proxies dependency context", context);
+					console.log("proxies dependency called", dependencies, state, routeParams, searchParams);
 					return {};
 				},
 				pathfinder: null
