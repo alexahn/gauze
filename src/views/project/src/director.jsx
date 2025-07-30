@@ -30,6 +30,18 @@ function createDirector(context) {
 		);
 	});
 
+	director.register("project.environment.signin", function (context, dependencies, pathParams, searchParams) {
+		console.log("project.environment.signin rendered");
+		root.render(
+			<React.StrictMode>
+				<layouts.azurite.default>
+					<components.navigation.default pathfinder={pathfinder} />
+					<components.signin.default />
+				</layouts.azurite.default>
+			</React.StrictMode>,
+		);
+	});
+
 	director.register("project.proxy.proxy_root", function (context, dependencies, pathParams, searchParams) {
 		console.log("project.proxy.proxy_root rendered");
 		root.render(
