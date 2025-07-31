@@ -19,6 +19,9 @@ const pathfinderContext = {
 }
 const pathfinder = createPathfinder(pathfinderContext)
 
+// set pathfinder on gauze
+services.gauze.default.setPathfinder(pathfinder)
+
 const directorContext = {
 	services,
 	root,

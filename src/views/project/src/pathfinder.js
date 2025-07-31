@@ -32,7 +32,7 @@ function createPathfinder(context) {
 				pathString: function (groups) {
 					return "/signup";
 				},
-				search: [],
+				search: ["next"],
 				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
 					console.log("signup dependency context", context);
 					console.log("signup dependency called", dependencies, state, routeParams, searchParams);
@@ -86,7 +86,7 @@ function createPathfinder(context) {
 				pathString: function (groups) {
 					return "/signout";
 				},
-				search: [],
+				search: ["next"],
 				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
 					console.log("signout dependency context", context);
 					console.log("signout dependency called", dependencies, state, routeParams, searchParams);

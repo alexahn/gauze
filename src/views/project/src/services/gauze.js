@@ -26,6 +26,14 @@ class GauzeService {
 			);
 		});
 	}
+	setPathfinder(pathfinder) {
+		const self = this
+		self.pathfinder = pathfinder
+	}
+	getPathfinder() {
+		const self = this
+		return self.pathfinder
+	}
 	fetchLoaderKey(path, jwt, body) {
 		const key = {
 			path,
@@ -58,21 +66,29 @@ class GauzeService {
 					// destroy this jwt
 					if (self.getEnvironmentJWT() === jwt) {
 						self.deleteEnvironmentJWT();
+						// reload the page
+						location.replace(location.href)
 					} else if (self.getProxyJWT() === jwt) {
 						self.deleteProxyJWT();
-						self.deleteEnvironmentJWT();
+						//self.deleteEnvironmentJWT();
+						// load sign in page
+						location.replace(self.getPathfinder().stateToURL("project.environment.signin", {}, { next: location.href }))
 					} else if (self.getSystemJWT() === jwt) {
 						self.deleteSystemJWT();
-						self.deleteProxyJWT();
-						self.deleteEnvironmentJWT();
+						//self.deleteProxyJWT();
+						//self.deleteEnvironmentJWT();
+						// load proxies page
+						location.replace(self.getPathfinder().stateToURL("project.proxy.proxies", {}, { next: location.href }))
 					} else {
 						// delete all
 						self.deleteSystemJWT();
 						self.deleteProxyJWT();
 						self.deleteEnvironmentJWT();
-						//throw new Error("Internal error: invalid jwt");
+						location.replace(self.getPathfinder().stateToURL("project.environment.signin", {}, { next: location.href }))
 					}
 					// redirect to auth page
+					
+					return res.json();
 				} else {
 					return res.json();
 				}

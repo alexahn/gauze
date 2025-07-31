@@ -1,29 +1,23 @@
 import * as React from "react";
 import { useState } from "react";
 
-function SignIn({ pathfinder, services, next }) {
+function SignUp({ pathfinder, services, next }) {
 	const { gauze } = services
 	const [step, setStep] = useState(0)
 	const [person, setPerson] = useState({})
 	const [submitPerson, setSubmitPerson] = useState(false)
 	const [account, setAccount] = useState({})
 	const [submitAccount, setSubmitAccount] = useState(false)
-	const [submitSignIn, setSubmitSignIn] = useState(false)
+	const [submitSignUp, setSubmitSignUp] = useState(false)
 	function handlePerson(formData) {
 		setSubmitPerson(true)
 		const email = formData.get("email")
 		setPerson({
 			email
 		})
-		return gauze.default.assertPerson({
-			email: email
-		}).then(function () {
-			setSubmitPerson(false)
-			setStep((step + 1) % 3)
+		setSubmitPerson(false)
+		setStep((step + 1) % 3)
 			
-		}).catch(function (err) {
-			setSubmitPerson(false)
-		})
 	}
 	function handleAccount(formData) {
 		setSubmitAccount(true)
@@ -31,26 +25,22 @@ function SignIn({ pathfinder, services, next }) {
 		setAccount({
 			password
 		})
-		return gauze.default.verifyAccount({
-			password: password
-		}).then(function () {
-			setSubmitAccount(false)
-			setStep((step + 1) % 3)
-			
-		}).catch(function (err) {
-			setSubmitAccount(false)
-		})
+		setSubmitAccount(false)
+		setStep((step + 1) % 3)
 	}
-	function handleSignIn(formData) {
-		setSubmitSignIn(true)
-		return gauze.default.signIn().then(function (session) {
+	function handleSignUp(formData) {
+		setSubmitSignUp(true)
+		return gauze.default.signUp({
+			person,
+			account
+		}).then(function (session) {
 			gauze.default.setProxyJWT(session.gauze__session__value)
-			setSubmitSignIn(false)
+			setSubmitSignUp(false)
 			setStep((step + 1) % 3)
 			// redirect to next
 			location.replace(next)
 		}).catch(function (err) {
-			setSubmitSignIn(false)
+			setSubmitSignUp(false)
 		})
 	}
 	function handlePrevious() {
@@ -76,10 +66,10 @@ function SignIn({ pathfinder, services, next }) {
 		)
 	} else if (step === 2) {
 		return (
-			<form key={step} action={handleSignIn}>
-				<label>Sign In</label>
-				<button type="submit" disabled={submitSignIn}>Next</button>
-				<button onClick={handlePrevious} disabled={submitSignIn}>Prev</button>
+			<form key={step} action={handleSignUp}>
+				<label>Sign Up</label>
+				<button type="submit" disabled={submitSignUp}>Next</button>
+				<button onClick={handlePrevious} disabled={submitSignUp}>Prev</button>
 			</form>
 		)
 	} else {
@@ -87,4 +77,4 @@ function SignIn({ pathfinder, services, next }) {
 	}
 }
 
-export default SignIn
+export default SignUp
