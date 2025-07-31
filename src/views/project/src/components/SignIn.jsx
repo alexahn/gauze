@@ -70,16 +70,16 @@ function SignIn({ pathfinder, services, next }) {
 			<form key={step} action={handleAccount}>
 				<label>Password</label>
 				<input name="password" type="password" defaultValue={account.password}/>
+				<button type="button" onClick={handlePrevious} disabled={submitAccount}>Prev</button>
 				<button type="submit" disabled={submitAccount}>Next</button>
-				<button onClick={handlePrevious} disabled={submitAccount}>Prev</button>
 			</form>
 		)
 	} else if (step === 2) {
 		return (
 			<form key={step} action={handleSignIn}>
 				<label>Sign In</label>
+				<button type="button" onClick={handlePrevious} disabled={submitSignIn}>Prev</button>
 				<button type="submit" disabled={submitSignIn}>Next</button>
-				<button onClick={handlePrevious} disabled={submitSignIn}>Prev</button>
 			</form>
 		)
 	} else {
