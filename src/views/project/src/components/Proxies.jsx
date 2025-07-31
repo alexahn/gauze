@@ -3,14 +3,25 @@ import { useState } from "react";
 
 function Proxies({ pathfinder, services, proxies, next }) {
 	const { gauze } = services
-	// render each proxy as a button
-	// on click use gauze service to enter system session
-	// on success, redirect to next
+	const [submitProxy, setSubmitProxy] = useState(false)
+	function handleProxy(proxy) {
+		return function (e) {
+			setSubmitProxy(true)
+			return gauze.default.enterSystemSession(proxy.attributes).then(function (session) {
+				console.log("system session", session)
+				gauze.default.setSystemJWT(session.gauze__session__value)
+				setSubmitProxy(false)
+				location.replace(next)
+			}).catch(function (err) {
+				setSubmitProxy(false)
+			})
+		}
+	}
     return (
 		<div>
 			<h2>Proxies</h2>
 			{proxies.map(function (proxy) {
-				return (<div>{proxy._metadata.id}</div>)
+				return (<button onClick={handleProxy(proxy)}>{proxy._metadata.id}</button>)
 			})}
 		</div>
     );

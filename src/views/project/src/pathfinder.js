@@ -147,7 +147,7 @@ function createPathfinder(context) {
 			base,
 			context,
 		},
-		[
+		[	/*
 			{
 				name: "root",
 				path: [],
@@ -159,7 +159,6 @@ function createPathfinder(context) {
 				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
 					console.log("root dependency context", context);
 					console.log("root dependency called", dependencies, state, routeParams, searchParams);
-					/*
 					const err = new Error("Transition")
 					err.transitionByState = {
 						name: "hello.world",
@@ -167,11 +166,10 @@ function createPathfinder(context) {
 						searchParams: {a: 30, b: 40}
 					}
 					throw err
-					*/
-					return {};
 				},
 				pathfinder: null,
 			},
+			*/
 			{
 				name: "environment",
 				path: [],
@@ -226,6 +224,7 @@ function createPathfinder(context) {
 						const next = location.href
 						// transition to sign in
 						location.replace(pathfinder.stateToURL("project.environment.signin", {}, { next }))
+						throw new Error("Proxy JWT could not be found")
 					}
 					return {};
 				},
@@ -242,7 +241,21 @@ function createPathfinder(context) {
 				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
 					console.log("system dependency context", context);
 					console.log("system dependency called", dependencies, state, routeParams, searchParams);
-					return {};
+					const { services, pathfinder } = context
+					const { gauze } = services
+					const jwt = gauze.default.getSystemJWT()
+					if (jwt) {
+						console.log("existing system jwt found!", jwt)
+						return {
+							jwt, 
+						}
+					} else {
+						const next = location.href
+						// transition to sign in
+						location.replace(pathfinder.stateToURL("project.proxy.proxies", {}, { next }))
+						throw new Error("System JWT could not be found")
+					}
+					return {}
 				},
 				pathfinder: systemPathfinder
 			},

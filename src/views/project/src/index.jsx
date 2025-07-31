@@ -29,7 +29,7 @@ const directorContext = {
 const director = createDirector(directorContext)
 
 start(pathfinder, director, {
-	name: "project.root",
+	name: "project.system.system_root",
 	pathParams: {},
 	searchParams: {},
 });
