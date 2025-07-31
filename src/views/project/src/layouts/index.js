@@ -1,1 +1,1 @@
-export * as azurite from "./Azurite.jsx"
+export * as azurite from "./Azurite.jsx";

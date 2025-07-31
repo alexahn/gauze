@@ -27,12 +27,12 @@ class GauzeService {
 		});
 	}
 	setPathfinder(pathfinder) {
-		const self = this
-		self.pathfinder = pathfinder
+		const self = this;
+		self.pathfinder = pathfinder;
 	}
 	getPathfinder() {
-		const self = this
-		return self.pathfinder
+		const self = this;
+		return self.pathfinder;
 	}
 	fetchLoaderKey(path, jwt, body) {
 		const key = {
@@ -67,27 +67,27 @@ class GauzeService {
 					if (self.getEnvironmentJWT() === jwt) {
 						self.deleteEnvironmentJWT();
 						// reload the page
-						location.replace(location.href)
+						location.replace(location.href);
 					} else if (self.getProxyJWT() === jwt) {
 						self.deleteProxyJWT();
 						//self.deleteEnvironmentJWT();
 						// load sign in page
-						location.replace(self.getPathfinder().stateToURL("project.environment.signin", {}, { next: location.href }))
+						location.replace(self.getPathfinder().stateToURL("project.environment.signin", {}, { next: location.href }));
 					} else if (self.getSystemJWT() === jwt) {
 						self.deleteSystemJWT();
 						//self.deleteProxyJWT();
 						//self.deleteEnvironmentJWT();
 						// load proxies page
-						location.replace(self.getPathfinder().stateToURL("project.proxy.proxies", {}, { next: location.href }))
+						location.replace(self.getPathfinder().stateToURL("project.proxy.proxies", {}, { next: location.href }));
 					} else {
 						// delete all
 						self.deleteSystemJWT();
 						self.deleteProxyJWT();
 						self.deleteEnvironmentJWT();
-						location.replace(self.getPathfinder().stateToURL("project.environment.signin", {}, { next: location.href }))
+						location.replace(self.getPathfinder().stateToURL("project.environment.signin", {}, { next: location.href }));
 					}
 					// redirect to auth page
-					
+
 					return res.json();
 				} else {
 					return res.json();

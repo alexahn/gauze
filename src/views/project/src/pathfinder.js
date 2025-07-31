@@ -1,8 +1,8 @@
 import { Pathfinder } from "./router.js";
 
 function createPathfinder(context) {
-	const hash = false
-	const base = "http://localhost:4000"
+	const hash = false;
+	const base = "http://localhost:4000";
 	const environmentPathfinder = new Pathfinder(
 		{
 			hash,
@@ -23,7 +23,7 @@ function createPathfinder(context) {
 					console.log("environment_root dependency called", dependencies, state, routeParams, searchParams);
 					return {};
 				},
-				pathfinder: null
+				pathfinder: null,
 			},
 			{
 				name: "signup",
@@ -38,7 +38,7 @@ function createPathfinder(context) {
 					console.log("signup dependency called", dependencies, state, routeParams, searchParams);
 					return {};
 				},
-				pathfinder: null
+				pathfinder: null,
 			},
 			{
 				name: "signin",
@@ -53,10 +53,10 @@ function createPathfinder(context) {
 					console.log("signin dependency called", dependencies, state, routeParams, searchParams);
 					return {};
 				},
-				pathfinder: null
+				pathfinder: null,
 			},
-		]
-	)
+		],
+	);
 	const proxyPathfinder = new Pathfinder(
 		{
 			hash,
@@ -77,7 +77,7 @@ function createPathfinder(context) {
 					console.log("proxy_root dependency called", dependencies, state, routeParams, searchParams);
 					return {};
 				},
-				pathfinder: null
+				pathfinder: null,
 			},
 			{
 				name: "signout",
@@ -92,7 +92,7 @@ function createPathfinder(context) {
 					console.log("signout dependency called", dependencies, state, routeParams, searchParams);
 					return {};
 				},
-				pathfinder: null
+				pathfinder: null,
 			},
 			{
 				name: "proxies",
@@ -105,18 +105,18 @@ function createPathfinder(context) {
 				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
 					console.log("proxies dependency context", context);
 					console.log("proxies dependency called", dependencies, state, routeParams, searchParams);
-					const { services, pathfinder } = context
-                    const { gauze } = services
+					const { services, pathfinder } = context;
+					const { gauze } = services;
 					//return {};
 					return gauze.default.proxies().then(function (proxies) {
-						console.log('proxies', proxies)
-						return { proxies }
-					})
+						console.log("proxies", proxies);
+						return { proxies };
+					});
 				},
-				pathfinder: null
+				pathfinder: null,
 			},
-		]
-	)
+		],
+	);
 	const systemPathfinder = new Pathfinder(
 		{
 			hash,
@@ -139,15 +139,16 @@ function createPathfinder(context) {
 				},
 				pathfinder: null,
 			},
-		]
-	)
+		],
+	);
 	const projectPathfinder = new Pathfinder(
 		{
 			hash,
 			base,
 			context,
 		},
-		[	/*
+		[
+			/*
 			{
 				name: "root",
 				path: [],
@@ -181,25 +182,25 @@ function createPathfinder(context) {
 				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
 					console.log("environment dependency context", context);
 					console.log("environment dependency called", dependencies, state, routeParams, searchParams);
-					const { services } = context
-					const { gauze } = services
-					const jwt = gauze.default.getEnvironmentJWT()
+					const { services } = context;
+					const { gauze } = services;
+					const jwt = gauze.default.getEnvironmentJWT();
 					if (jwt) {
-						console.log("existing environment jwt found!", jwt)
+						console.log("existing environment jwt found!", jwt);
 						return {
-							jwt, 
-						}
+							jwt,
+						};
 					} else {
 						return gauze.default.enterEnvironmentSession().then(function (session) {
-							console.log("entering environment session!", session)
-							gauze.default.setEnvironmentJWT(session.gauze__session__value)
+							console.log("entering environment session!", session);
+							gauze.default.setEnvironmentJWT(session.gauze__session__value);
 							return {
-								jwt: session.gauze__session__value
-							}
-						})
+								jwt: session.gauze__session__value,
+							};
+						});
 					}
 				},
-				pathfinder: environmentPathfinder
+				pathfinder: environmentPathfinder,
 			},
 			{
 				name: "proxy",
@@ -212,23 +213,22 @@ function createPathfinder(context) {
 				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
 					console.log("proxy dependency context", context);
 					console.log("proxy dependency called", dependencies, state, routeParams, searchParams);
-					const { services, pathfinder } = context
-					const { gauze } = services
-					const jwt = gauze.default.getProxyJWT()
+					const { services, pathfinder } = context;
+					const { gauze } = services;
+					const jwt = gauze.default.getProxyJWT();
 					if (jwt) {
-						console.log("existing proxy jwt found!", jwt)
+						console.log("existing proxy jwt found!", jwt);
 						return {
-							jwt, 
-						}
+							jwt,
+						};
 					} else {
-						const next = location.href
+						const next = location.href;
 						// transition to sign in
-						location.replace(pathfinder.stateToURL("project.environment.signin", {}, { next }))
-						throw new Error("Proxy JWT could not be found")
+						location.replace(pathfinder.stateToURL("project.environment.signin", {}, { next }));
+						throw new Error("Proxy JWT could not be found");
 					}
-					return {};
 				},
-				pathfinder: proxyPathfinder
+				pathfinder: proxyPathfinder,
 			},
 			{
 				name: "system",
@@ -241,26 +241,25 @@ function createPathfinder(context) {
 				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
 					console.log("system dependency context", context);
 					console.log("system dependency called", dependencies, state, routeParams, searchParams);
-					const { services, pathfinder } = context
-					const { gauze } = services
-					const jwt = gauze.default.getSystemJWT()
+					const { services, pathfinder } = context;
+					const { gauze } = services;
+					const jwt = gauze.default.getSystemJWT();
 					if (jwt) {
-						console.log("existing system jwt found!", jwt)
+						console.log("existing system jwt found!", jwt);
 						return {
-							jwt, 
-						}
+							jwt,
+						};
 					} else {
-						const next = location.href
+						const next = location.href;
 						// transition to sign in
-						location.replace(pathfinder.stateToURL("project.proxy.proxies", {}, { next }))
-						throw new Error("System JWT could not be found")
+						location.replace(pathfinder.stateToURL("project.proxy.proxies", {}, { next }));
+						throw new Error("System JWT could not be found");
 					}
-					return {}
 				},
-				pathfinder: systemPathfinder
+				pathfinder: systemPathfinder,
 			},
-		]
-	)
+		],
+	);
 	const pathfinder = new Pathfinder(
 		{
 			hash,
@@ -284,10 +283,8 @@ function createPathfinder(context) {
 				pathfinder: projectPathfinder,
 			},
 		],
-	)
-	return pathfinder
+	);
+	return pathfinder;
 }
 
-export {
-	createPathfinder
-}
+export { createPathfinder };

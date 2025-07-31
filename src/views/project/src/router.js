@@ -21,7 +21,7 @@ class Pathfinder {
 			states: [],
 		};
 		// patch context to include self
-		self.config.context.pathfinder = self
+		self.config.context.pathfinder = self;
 	}
 	_formatPathString(pathString) {
 		// strip ending slash
