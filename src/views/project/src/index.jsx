@@ -20,6 +20,7 @@ const pathfinderContext = {
 const pathfinder = createPathfinder(pathfinderContext)
 
 const directorContext = {
+	services,
 	root,
 	layouts,
 	components,

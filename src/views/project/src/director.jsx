@@ -31,12 +31,16 @@ function createDirector(context) {
 	});
 
 	director.register("project.environment.signin", function (context, dependencies, pathParams, searchParams) {
+		const { services } = context
+		// todo: define next as a search parameter in pathfinder
+		const { next } = searchParams
+		console.log("SEARCH PARAMS", searchParams)
 		console.log("project.environment.signin rendered");
 		root.render(
 			<React.StrictMode>
 				<layouts.azurite.default>
 					<components.navigation.default pathfinder={pathfinder} />
-					<components.signin.default />
+					<components.signin.default pathfinder={pathfinder} services={services} next={next} />
 				</layouts.azurite.default>
 			</React.StrictMode>,
 		);
@@ -49,6 +53,21 @@ function createDirector(context) {
 				<layouts.azurite.default>
 					<components.navigation.default pathfinder={pathfinder} />
 					<div>Proxy</div>
+				</layouts.azurite.default>
+			</React.StrictMode>,
+		);
+	});
+
+	director.register("project.proxy.proxies", function (context, dependencies, pathParams, searchParams) {
+		console.log("project.proxy.proxies rendered");
+		const { services } = context
+		const { next } = searchParams
+		const proxies = dependencies.proxies.proxies
+		root.render(
+			<React.StrictMode>
+				<layouts.azurite.default>
+					<components.navigation.default pathfinder={pathfinder} />
+					<components.proxies.default pathfinder={pathfinder} services={services} proxies={proxies} next={next} />
 				</layouts.azurite.default>
 			</React.StrictMode>,
 		);

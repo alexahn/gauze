@@ -47,7 +47,7 @@ function createPathfinder(context) {
 				pathString: function (groups) {
 					return "/signin";
 				},
-				search: [],
+				search: ["next"],
 				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
 					console.log("signin dependency context", context);
 					console.log("signin dependency called", dependencies, state, routeParams, searchParams);
@@ -101,11 +101,17 @@ function createPathfinder(context) {
 				pathString: function (groups) {
 					return "/proxies";
 				},
-				search: [],
+				search: ["next"],
 				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
 					console.log("proxies dependency context", context);
 					console.log("proxies dependency called", dependencies, state, routeParams, searchParams);
-					return {};
+					const { services, pathfinder } = context
+                    const { gauze } = services
+					//return {};
+					return gauze.default.proxies().then(function (proxies) {
+						console.log('proxies', proxies)
+						return { proxies }
+					})
 				},
 				pathfinder: null
 			},
@@ -177,7 +183,23 @@ function createPathfinder(context) {
 				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
 					console.log("environment dependency context", context);
 					console.log("environment dependency called", dependencies, state, routeParams, searchParams);
-					return {};
+					const { services } = context
+					const { gauze } = services
+					const jwt = gauze.default.getEnvironmentJWT()
+					if (jwt) {
+						console.log("existing environment jwt found!", jwt)
+						return {
+							jwt, 
+						}
+					} else {
+						return gauze.default.enterEnvironmentSession().then(function (session) {
+							console.log("entering environment session!", session)
+							gauze.default.setEnvironmentJWT(session.gauze__session__value)
+							return {
+								jwt: session.gauze__session__value
+							}
+						})
+					}
 				},
 				pathfinder: environmentPathfinder
 			},
@@ -192,6 +214,19 @@ function createPathfinder(context) {
 				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
 					console.log("proxy dependency context", context);
 					console.log("proxy dependency called", dependencies, state, routeParams, searchParams);
+					const { services, pathfinder } = context
+					const { gauze } = services
+					const jwt = gauze.default.getProxyJWT()
+					if (jwt) {
+						console.log("existing proxy jwt found!", jwt)
+						return {
+							jwt, 
+						}
+					} else {
+						const next = location.href
+						// transition to sign in
+						location.replace(pathfinder.stateToURL("project.environment.signin", {}, { next }))
+					}
 					return {};
 				},
 				pathfinder: proxyPathfinder
