@@ -54,7 +54,10 @@ function createDirector(context) {
 		root.render(
 			<React.StrictMode>
 				<layouts.azurite.default>
-					<components.navigation.default pathfinder={pathfinder} services={services} />
+					<div>
+						<components.logo.default header={true} clouds={true} />
+						<components.navigation.default pathfinder={pathfinder} services={services} />
+					</div>
 					<components.signin.default pathfinder={pathfinder} services={services} next={next} />
 				</layouts.azurite.default>
 			</React.StrictMode>,
