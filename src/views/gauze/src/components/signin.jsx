@@ -107,7 +107,7 @@ export default function SignIn({ route, router, gauze, model }) {
 	const errorClass = "clouds athelas bgx10 bdx10 cx7 ba br2 bw1 pa1 f6";
 	if (step === 0) {
 		return (
-			<div>
+			<div key={step}>
 				{/*<div>Sign In</div>*/}
 				<hr />
 				<form method="post" onSubmit={handleSubmitAssert}>
@@ -137,7 +137,7 @@ export default function SignIn({ route, router, gauze, model }) {
 		);
 	} else if (step === 1) {
 		return (
-			<div>
+			<div key={step}>
 				{/*<div>Sign In</div>*/}
 				<hr />
 				<form method="post" onSubmit={handleSubmitVerify}>
@@ -170,7 +170,7 @@ export default function SignIn({ route, router, gauze, model }) {
 		);
 	} else if (step === 2) {
 		return (
-			<div>
+			<div key={step}>
 				{/*<div>Sign In</div>*/}
 				<hr />
 				<form method="post" onSubmit={handleSignIn}>
