@@ -151,7 +151,7 @@ export default function SignIn({ route, router, gauze, model }) {
 					</div>
 					<hr />
 					<div align="right">
-						<button className={previousButtonClass} onClick={previous} disabled={submitVerify}>
+						<button className={previousButtonClass} type="button" onClick={previous} disabled={submitVerify}>
 							Previous
 						</button>
 						<button className={resetButtonClass} type="reset" disabled={submitVerify}>
@@ -184,7 +184,7 @@ export default function SignIn({ route, router, gauze, model }) {
 					</div>
 					<hr />
 					<div align="right">
-						<button className={previousButtonClass} onClick={previous} disabled={submitSignIn}>
+						<button className={previousButtonClass} type="button" onClick={previous} disabled={submitSignIn}>
 							Previous
 						</button>
 						<button className={nextButtonClass} type="submit" disabled={submitSignIn}>
