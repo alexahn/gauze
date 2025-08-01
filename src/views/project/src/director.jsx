@@ -93,11 +93,15 @@ function createDirector(context) {
 	director.register("project.system.headers", function (context, dependencies, pathParams, searchParams) {
 		console.log("project.system.headers rendered");
 		const { services } = context;
+		const { headers } = dependencies;
 		root.render(
 			<React.StrictMode>
 				<layouts.azurite.default>
-					<components.navigation.default pathfinder={pathfinder} services={services} />
-					<div>System Headers</div>
+					<div>
+						<components.logo.default header={true} clouds={true} />
+						<components.navigation.default pathfinder={pathfinder} services={services} />
+					</div>
+					<components.headers.default headers={headers.headers} />
 				</layouts.azurite.default>
 			</React.StrictMode>,
 		);

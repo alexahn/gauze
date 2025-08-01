@@ -1,7 +1,6 @@
 import * as React from "react";
 
 function Navigation({ pathfinder, services }) {
-	console.log("pathfinder", pathfinder);
 	const { gauze } = services;
 	const proxyJWT = gauze.default.getProxyJWT();
 	const systemJWT = gauze.default.getSystemJWT();

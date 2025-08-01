@@ -3,7 +3,6 @@ import { useState } from "react";
 
 function SignOut({ pathfinder, services, next }) {
 	const { gauze } = services;
-	console.log("gauze", gauze.default);
 	const [error, setError] = useState("");
 	const [submitSignOut, setSubmitSignOut] = useState(false);
 	function handleSignOut(formData) {

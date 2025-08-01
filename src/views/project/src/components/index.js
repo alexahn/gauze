@@ -4,3 +4,4 @@ export * as signup from "./SignUp.jsx";
 export * as signin from "./SignIn.jsx";
 export * as signout from "./SignOut.jsx";
 export * as proxies from "./Proxies.jsx";
+export * as headers from "./Headers.jsx";
