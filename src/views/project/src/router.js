@@ -223,7 +223,7 @@ class Pathfinder {
 			throw new Error(`URL could not be match for state "${stateName}"`);
 		}
 	}
-	_stateToURL(stateName, pathParams={}, searchParams={}) {
+	_stateToURL(stateName, pathParams = {}, searchParams = {}) {
 		const self = this;
 		const { hash, basePath } = self.config;
 		const names = stateName.split(".");

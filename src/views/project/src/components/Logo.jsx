@@ -17,7 +17,7 @@ function Logo({ header, clouds }) {
 					<div className={classE}>E</div>
 				</div>
 			</h1>
-		)
+		);
 	} else {
 		return (
 			<div className="athelas f1 b" align="center">
@@ -29,7 +29,7 @@ function Logo({ header, clouds }) {
 					<div className={classE}>E</div>
 				</div>
 			</div>
-		)
+		);
 	}
 }
 
