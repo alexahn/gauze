@@ -25,20 +25,6 @@ function Azurite({ children }) {
             </div>
         </div>
 	)
-	/*
-	return (
-		<div>
-			<div>
-				<h1>Header</h1>
-				<div>{header}</div>
-			</div>
-				<div>
-					<h1>Body</h1>
-					<div>{children[1]}</div>
-				</div>
-		</div>
-	);
-	*/
 }
 
 export default Azurite;

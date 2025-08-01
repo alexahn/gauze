@@ -40,7 +40,10 @@ function createDirector(context) {
 		root.render(
 			<React.StrictMode>
 				<layouts.azurite.default>
-					<components.navigation.default pathfinder={pathfinder} services={services} />
+					<div>
+						<components.logo.default header={true} clouds={true} />
+						<components.navigation.default pathfinder={pathfinder} services={services} />
+					</div>
 					<components.signup.default pathfinder={pathfinder} services={services} next={next} />
 				</layouts.azurite.default>
 			</React.StrictMode>,
@@ -85,7 +88,10 @@ function createDirector(context) {
 		root.render(
 			<React.StrictMode>
 				<layouts.azurite.default>
-					<components.navigation.default pathfinder={pathfinder} services={services} />
+					<div>
+						<components.logo.default header={true} clouds={true} />
+						<components.navigation.default pathfinder={pathfinder} services={services} />
+					</div>
 					<components.proxies.default pathfinder={pathfinder} services={services} proxies={proxies} next={next} />
 				</layouts.azurite.default>
 			</React.StrictMode>,
@@ -99,7 +105,10 @@ function createDirector(context) {
 		root.render(
 			<React.StrictMode>
 				<layouts.azurite.default>
-					<components.navigation.default pathfinder={pathfinder} services={services} />
+					<div>
+						<components.logo.default header={true} clouds={true} />
+						<components.navigation.default pathfinder={pathfinder} services={services} />
+					</div>
 					<components.signout.default pathfinder={pathfinder} services={services} next={next} />
 				</layouts.azurite.default>
 			</React.StrictMode>,

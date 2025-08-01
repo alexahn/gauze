@@ -16,13 +16,15 @@ function SignOut({ pathfinder, services, next }) {
 			location.replace(next);
 		});
 	}
+	const buttonClass = "clouds athelas bgx10 bdx10 bgx9h bdx9h ba br2 bw1 cx6 w-100 f6";
 	return (
 		<form action={handleSignOut}>
-			<button type="submit" disabled={submitSignOut}>
+			<hr />
+			<button className={buttonClass} type="submit" disabled={submitSignOut}>
 				Sign Out
 			</button>
 		</form>
-	);
+	)
 }
 
 export default SignOut;
