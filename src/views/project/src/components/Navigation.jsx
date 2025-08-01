@@ -5,7 +5,7 @@ function Navigation({ pathfinder, services }) {
 	const { gauze } = services;
 	const proxyJWT = gauze.default.getProxyJWT();
 	const systemJWT = gauze.default.getSystemJWT();
-	const next = pathfinder.stateToURL("project.system.system_root", {}, {});
+	const next = pathfinder.stateToURL("project.system.headers", {}, {});
 	const state = pathfinder.URLToState(location.href);
 	const signUpClass =
 		state.name === "project.environment.signup" ? "w3 athelas clouds ba bw1 br2 bgx4 bdx1 cxyz6 b--dotted f6" : "f6 w3 athelas clouds ba bw1 br2 bgx4 bdx4 cx6 bgx3h bdx3h";
@@ -16,7 +16,7 @@ function Navigation({ pathfinder, services }) {
 	const proxyClass =
 		state.name === "project.proxy.proxies" ? "w4 athelas clouds ba bw1 br2 bgx6 bdx1 cx2 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx6 bdx6 cxyz7 bgx5h bdx5h cx6h";
 	const systemClass =
-		state.name == "project.system.system_root" ? "w4 athelas clouds ba bw1 br2 bgx10 bdx1 cxyz6 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx10 bdx10 cx6 bgx8h bdx8h";
+		state.name == "project.system.headers" ? "w4 athelas clouds ba bw1 br2 bgx10 bdx1 cxyz6 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx10 bdx10 cx6 bgx8h bdx8h";
 
 	const signUp = (
 		<div>
@@ -56,8 +56,8 @@ function Navigation({ pathfinder, services }) {
 	);
 	const system = (
 		<div>
-			<a href={pathfinder.stateToURL("project.system.system_root", {}, {})}>
-				<button className={systemClass} style={{ opacity: state.name === "project.system.system_root" ? "0.5" : "1" }} disabled={state.name === "project.system.system_root"}>
+			<a href={pathfinder.stateToURL("project.system.headers", {}, {})}>
+				<button className={systemClass} style={{ opacity: state.name === "project.system.headers" ? "0.5" : "1" }} disabled={state.name === "project.system.headers"}>
 					System
 				</button>
 			</a>

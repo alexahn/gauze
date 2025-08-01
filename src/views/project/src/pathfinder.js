@@ -11,21 +11,6 @@ function createPathfinder(context) {
 		},
 		[
 			{
-				name: "environment_root",
-				path: [],
-				pathRegex: new RegExp("/"),
-				pathString: function (groups) {
-					return "/";
-				},
-				search: [],
-				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
-					console.log("environment_root dependency context", context);
-					console.log("environment_root dependency called", dependencies, state, routeParams, searchParams);
-					return {};
-				},
-				pathfinder: null,
-			},
-			{
 				name: "signup",
 				path: [],
 				pathRegex: new RegExp("/signup"),
@@ -64,21 +49,6 @@ function createPathfinder(context) {
 			context,
 		},
 		[
-			{
-				name: "proxy_root",
-				path: [],
-				pathRegex: new RegExp("/"),
-				pathString: function (groups) {
-					return "/";
-				},
-				search: [],
-				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
-					console.log("proxy_root dependency context", context);
-					console.log("proxy_root dependency called", dependencies, state, routeParams, searchParams);
-					return {};
-				},
-				pathfinder: null,
-			},
 			{
 				name: "signout",
 				path: [],
@@ -125,16 +95,16 @@ function createPathfinder(context) {
 		},
 		[
 			{
-				name: "system_root",
+				name: "headers",
 				path: [],
 				pathRegex: new RegExp("/"),
 				pathString: function (groups) {
-					return "/";
+					return "/headers";
 				},
 				search: [],
 				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
-					console.log("system_root dependency context", context);
-					console.log("system_root dependency called", dependencies, state, routeParams, searchParams);
+					console.log("headers dependency context", context);
+					console.log("headers dependency called", dependencies, state, routeParams, searchParams);
 					return {};
 				},
 				pathfinder: null,

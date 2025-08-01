@@ -7,6 +7,7 @@ function createDirector(context) {
 
 	const director = new Director();
 
+	/*
 	director.register("project.root", function (context, dependencies, pathParams, searchParams) {
 		console.log("project.root rendered");
 		const { services } = context;
@@ -18,25 +19,12 @@ function createDirector(context) {
 			</React.StrictMode>,
 		);
 	});
-
-	director.register("project.environment.environment_root", function (context, dependencies, pathParams, searchParams) {
-		console.log("project.environment.environment_root rendered");
-		const { services } = context;
-		root.render(
-			<React.StrictMode>
-				<layouts.azurite.default>
-					<components.navigation.default pathfinder={pathfinder} services={services} />
-					<div>Environment</div>
-				</layouts.azurite.default>
-			</React.StrictMode>,
-		);
-	});
+	*/
 
 	director.register("project.environment.signup", function (context, dependencies, pathParams, searchParams) {
 		console.log("project.environment.signup rendered");
 		const { services } = context;
 		const { next } = searchParams;
-		//const next = pathfinder.stateToURL("project.system.system_root", {}, {})
 		root.render(
 			<React.StrictMode>
 				<layouts.azurite.default>
@@ -62,19 +50,6 @@ function createDirector(context) {
 						<components.navigation.default pathfinder={pathfinder} services={services} />
 					</div>
 					<components.signin.default pathfinder={pathfinder} services={services} next={next} />
-				</layouts.azurite.default>
-			</React.StrictMode>,
-		);
-	});
-
-	director.register("project.proxy.proxy_root", function (context, dependencies, pathParams, searchParams) {
-		console.log("project.proxy.proxy_root rendered");
-		const { services } = context;
-		root.render(
-			<React.StrictMode>
-				<layouts.azurite.default>
-					<components.navigation.default pathfinder={pathfinder} services={services} />
-					<div>Proxy</div>
 				</layouts.azurite.default>
 			</React.StrictMode>,
 		);
@@ -115,14 +90,14 @@ function createDirector(context) {
 		);
 	});
 
-	director.register("project.system.system_root", function (context, dependencies, pathParams, searchParams) {
-		console.log("project.system.system_root rendered");
+	director.register("project.system.headers", function (context, dependencies, pathParams, searchParams) {
+		console.log("project.system.headers rendered");
 		const { services } = context;
 		root.render(
 			<React.StrictMode>
 				<layouts.azurite.default>
 					<components.navigation.default pathfinder={pathfinder} services={services} />
-					<div>System</div>
+					<div>System Headers</div>
 				</layouts.azurite.default>
 			</React.StrictMode>,
 		);
