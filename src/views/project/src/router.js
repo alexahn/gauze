@@ -275,9 +275,14 @@ class Pathfinder {
 		const pathname = fragments[1];
 		const searchParamsFiltered = fragments[2];
 		const search = new URLSearchParams(searchParamsFiltered);
-		// note: query parameters must come before hash
-		const url = hash ? "?" + [search.toString(), pathname].join("#") : [pathname, search.toString()].join("?");
-		return hash ? basePath + url : url;
+		if (search.toString()) {
+			// note: query parameters must come before hash
+			const url = hash ? "?" + [search.toString(), pathname].join("#") : [pathname, search.toString()].join("?");
+			return hash ? basePath + url : url;
+		} else {
+			const url = hash ? "#" + pathname : pathname;
+			return hash ? basePath + url : url;
+		}
 	}
 	transitionByState(name, pathParams, searchParams) {
 		const self = this;

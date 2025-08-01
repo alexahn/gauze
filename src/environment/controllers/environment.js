@@ -167,12 +167,15 @@ class EnvironmentController {
 				.then(function (collection) {
 					const { agent_sessions } = collection;
 					if (!agent_sessions) throw new Error("Missing agent sessions dependency for deleting proxy session");
-					return self._delete_proxy_session(context, scope, { session_id: agent.session_id, agent_id: agent.agent_id, agent_type: self.proxy_type }).then(function (proxy_session) {
-						return {
-							...collection,
-							proxy_session,
-						};
-					});
+					// note: deletes all proxy sessions instead of just this one
+					return self
+						._delete_proxy_session(context, scope, { /*session_id: agent.session_id,*/ agent_id: agent.agent_id, agent_type: self.proxy_type })
+						.then(function (proxy_session) {
+							return {
+								...collection,
+								proxy_session,
+							};
+						});
 				})
 				.then(function (collection) {
 					const { agent_sessions, proxy_session } = collection;
@@ -739,10 +742,10 @@ class EnvironmentController {
 			});
 		});
 	}
-	_delete_proxy_session(context, scope, { session_id, agent_id, agent_type }) {
+	_delete_proxy_session(context, scope, { /*session_id,*/ agent_id, agent_type }) {
 		// sign out of the root proxy
 		const session_attributes = {
-			gauze__session__id: session_id,
+			//gauze__session__id: session_id,
 			gauze__session__agent_id: agent_id,
 			gauze__session__agent_type: agent_type,
 		};

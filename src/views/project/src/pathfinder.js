@@ -105,7 +105,15 @@ function createPathfinder(context) {
 				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
 					console.log("headers dependency context", context);
 					console.log("headers dependency called", dependencies, state, routeParams, searchParams);
-					return {};
+					const { services, pathfinder } = context;
+					const { gauze } = services;
+					return gauze.default.header().then(function (headers) {
+						console.log("headers", headers);
+						return {
+							headers,
+						};
+					});
+					//return {};
 				},
 				pathfinder: null,
 			},
