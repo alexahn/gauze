@@ -110,6 +110,7 @@ class ModelService {
 		self.collection[index] = attributes;
 		self.writeKey(self.index, key, index);
 		self.trigger(metadata);
+		return attributes
 	}
 	read(metadata) {
 		const self = this;
@@ -134,6 +135,7 @@ class ModelService {
 			self.deleteKey(self.index, key);
 			self.collection[itemIndex] = undefined;
 			self.trigger(metadata);
+			// maybe use null here to differentiate between something that has been deleted and something that never existed
 			return undefined;
 		}
 	}
