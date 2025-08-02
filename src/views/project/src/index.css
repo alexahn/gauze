@@ -893,3 +893,14 @@
 	grid-column: 10 / span 2;
 	grid-row: 1 / span 1;
 }
+
+/*
+.type-item .type-list table,
+tr,
+th,
+td {
+    border: 1px solid black;
+    border-spacing: 1px;
+	-webkit-border-vertical-spacing: 0px;
+}
+*/

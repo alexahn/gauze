@@ -160,6 +160,23 @@ function createPathfinder(context) {
 										search: [],
 										dependencies: async function (context, dependencies, state, pathParams, searchParams) {
 											console.log("dependencies", dependencies);
+											const header = dependencies.header.header
+											const { services } = context
+											const { gauzemodel } = services
+											return gauzemodel.default.read(header, { where: {} }).then(function (items) {
+												return {
+													items
+												}
+											}).catch(function (err) {
+												// todo: filter errors here so we only act on proper errors
+												// note: we are going to return an empty array because some entities have restrictions on how they can be queried (e.g. relationships requires from_entity_id or to_entity_id as an example)
+												// note: figure out if we can loosen those restrictions (and short circuit the query on the backend)
+												// note: either we do it here, and the code is ugly here, or we make the code ugly on the backend
+												// note: i think it's better to make it ugly here
+												return {
+													items: []
+												}
+											})
 										},
 										pathfinder: null,
 									},
