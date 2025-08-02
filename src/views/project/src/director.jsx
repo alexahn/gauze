@@ -96,13 +96,15 @@ function createDirector(context) {
 		const { headers } = dependencies;
 		root.render(
 			<React.StrictMode>
-				<layouts.azurite.default>
-					<div>
-						<components.logo.default header={true} clouds={true} />
-						<components.navigation.default pathfinder={pathfinder} services={services} />
+				<layouts.amethyst.default>
+					<div className="pa2">
+						<components.logo.default header={false} clouds={false} />
+						{/*<components.navigation.default pathfinder={pathfinder} services={services} />*/}
 					</div>
-					<components.headers.default headers={headers.headers} />
-				</layouts.azurite.default>
+					<div className="pl2 pr2 pb2">
+						<components.headers.default headers={headers.headers} />
+					</div>
+				</layouts.amethyst.default>
 			</React.StrictMode>,
 		);
 	});
