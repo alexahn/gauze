@@ -894,6 +894,12 @@
 	grid-row: 1 / span 1;
 }
 
+.tooltip-container:focus .tooltip {
+    display: block;
+    /*border: 1px solid black;*/
+    z-index: 1;
+}
+
 /*
 .type-item .type-list table,
 tr,
