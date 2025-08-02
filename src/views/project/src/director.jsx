@@ -102,13 +102,32 @@ function createDirector(context) {
 						{/*<components.navigation.default pathfinder={pathfinder} services={services} />*/}
 					</div>
 					<div className="pl2 pr2 pb2">
-						<components.headers.default headers={headers.headers} />
+						<components.headers.default pathfinder={pathfinder} headers={headers.headers} />
 					</div>
 				</layouts.amethyst.default>
 			</React.StrictMode>,
 		);
 	});
 
+	director.register("project.system.headers.header.list", function (context, dependencies, pathParams, searchParams) {
+		console.log("project.system.headers.header.list rendered");
+		const { services } = context;
+		const { headers, header } = dependencies;
+		root.render(
+			<React.StrictMode>
+				<layouts.amethyst.default>
+					<div className="pa2">
+						<components.logo.default header={false} clouds={false} />
+						{/*<components.navigation.default pathfinder={pathfinder} services={services} />*/}
+					</div>
+					<div className="pl2 pr2 pb2">
+						<components.headers.default pathfinder={pathfinder} headers={headers.headers} />
+						{/*<components.table.default pathfinder={pathfinder} header={header.header} variables={searchParams.variables} />*/}
+					</div>
+				</layouts.amethyst.default>
+			</React.StrictMode>,
+		);
+	});
 	return director;
 }
 

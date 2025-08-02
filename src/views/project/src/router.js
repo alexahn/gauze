@@ -106,30 +106,20 @@ class Pathfinder {
 						} catch (e) {
 							parsedStrippedURL = new URL(base + url);
 						}
+						let strippedPathname
 						if (hash) {
-							// note: why is URL.hash set to empty string if i set the hash to '#'?
-							parsedStrippedURL.hash = parsedURL.hash.replace(self._formatPathString(state.pathString(pathMatch.groups)), "");
-							// add leading slash if necessary
-							/*
-							if (parsedStrippedURL.hash && parsedStrippedURL.hash[1] !== "/") {
-								parsedStrippedURL.hash = "#/" + parsedStrippedURL.hash.slice(1);
-							}
-							*/
+							strippedPathname = parsedURL.hash.replace(self._formatPathString(state.pathString(pathMatch.groups)), "")
+							parsedStrippedURL.hash = strippedPathname
 						} else {
-							parsedStrippedURL.pathname = parsedURL.pathname.replace(self._formatPathString(state.pathString(pathMatch.groups)), "");
-							// add leading slash if necessary
-							/*
-							if (parsedStrippedURL.pathname && parsedStrippedURL.pathname[0] !== "/") {
-								parsedStrippedURL.pathname = "/" + parsedStrippedURL.pathname;
-							}
-							*/
+							strippedPathname = parsedURL.pathname.replace(self._formatPathString(state.pathString(pathMatch.groups)), "")
+							parsedStrippedURL.pathname = strippedPathname
 						}
 						state.search.forEach(function (param) {
 							parsedStrippedURL.searchParams.delete(param);
 						});
 						const stripped_url = parsedStrippedURL.toString();
 						if (hash) {
-							if (parsedStrippedURL.hash === "") {
+							if (strippedPathname === "" || strippedPathname === "#") {
 								// terminate
 								return {
 									states: prefix.concat({
@@ -149,7 +139,7 @@ class Pathfinder {
 								);
 							}
 						} else {
-							if (parsedStrippedURL.pathname === "") {
+							if (strippedPathname === "") {
 								// terminate
 								return {
 									states: prefix.concat({
@@ -229,42 +219,46 @@ class Pathfinder {
 		const names = stateName.split(".");
 		const fragments = names.reduce(
 			function ([pathfinder, pathname, search], name) {
-				const state = pathfinder.states.find(function (v) {
-					return v.name === name;
-				});
-				if (state) {
-					const pathParamsExist = state.path.every(function (param) {
-						return param in pathParams;
+				if (pathfinder) {
+					const state = pathfinder.states.find(function (v) {
+						return v.name === name;
 					});
-					if (pathParamsExist) {
-						const searchParamsExist = state.search.every(function (param) {
-							return param in searchParams;
+					if (state) {
+						const pathParamsExist = state.path.every(function (param) {
+							return param in pathParams;
 						});
-						if (searchParamsExist) {
-							const searchParamsFiltered = {
-								...searchParams,
-							};
-							state.search.forEach(function (param) {
-								searchParamsFiltered[param] = searchParams[param];
+						if (pathParamsExist) {
+							const searchParamsExist = state.search.every(function (param) {
+								return param in searchParams;
 							});
-							return [state.pathfinder, pathname + self._formatPathString(state.pathString(pathParams)), searchParamsFiltered];
+							if (searchParamsExist) {
+								const searchParamsFiltered = {
+									...searchParams,
+								};
+								state.search.forEach(function (param) {
+									searchParamsFiltered[param] = searchParams[param];
+								});
+								return [state.pathfinder, pathname + self._formatPathString(state.pathString(pathParams)), searchParamsFiltered];
+							} else {
+								throw new Error(
+									`Search parameters ${state.search
+										.map(function (v) {
+											return `"${v}"`;
+										})
+										.join(", ")} missing from ${JSON.stringify(searchParams)} for state "${state.name}"`,
+								);
+							}
 						} else {
 							throw new Error(
-								`Search parameters ${state.search
+								`Path parameters ${state.path
 									.map(function (v) {
 										return `"${v}"`;
 									})
-									.join(", ")} missing from ${JSON.stringify(searchParams)} for state "${state.name}"`,
+									.join(", ")} missing from ${JSON.stringify(pathParams)} for state "${state.name}"`,
 							);
 						}
 					} else {
-						throw new Error(
-							`Path parameters ${state.path
-								.map(function (v) {
-									return `"${v}"`;
-								})
-								.join(", ")} missing from ${JSON.stringify(pathParams)} for state "${state.name}"`,
-						);
+						throw new Error(`State "${name}" does not exist in "${stateName}"`);
 					}
 				} else {
 					throw new Error(`State "${name}" does not exist in "${stateName}"`);

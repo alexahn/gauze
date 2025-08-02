@@ -18,9 +18,9 @@ function createPathfinder(context) {
 					return "/signup";
 				},
 				search: ["next"],
-				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+				dependencies: async function (context, dependencies, state, pathParams, searchParams) {
 					console.log("signup dependency context", context);
-					console.log("signup dependency called", dependencies, state, routeParams, searchParams);
+					console.log("signup dependency called", dependencies, state, pathParams, searchParams);
 					return {};
 				},
 				pathfinder: null,
@@ -33,9 +33,9 @@ function createPathfinder(context) {
 					return "/signin";
 				},
 				search: ["next"],
-				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+				dependencies: async function (context, dependencies, state, pathParams, searchParams) {
 					console.log("signin dependency context", context);
-					console.log("signin dependency called", dependencies, state, routeParams, searchParams);
+					console.log("signin dependency called", dependencies, state, pathParams, searchParams);
 					return {};
 				},
 				pathfinder: null,
@@ -57,9 +57,9 @@ function createPathfinder(context) {
 					return "/signout";
 				},
 				search: ["next"],
-				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+				dependencies: async function (context, dependencies, state, pathParams, searchParams) {
 					console.log("signout dependency context", context);
-					console.log("signout dependency called", dependencies, state, routeParams, searchParams);
+					console.log("signout dependency called", dependencies, state, pathParams, searchParams);
 					return {};
 				},
 				pathfinder: null,
@@ -72,9 +72,9 @@ function createPathfinder(context) {
 					return "/proxies";
 				},
 				search: ["next"],
-				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+				dependencies: async function (context, dependencies, state, pathParams, searchParams) {
 					console.log("proxies dependency context", context);
-					console.log("proxies dependency called", dependencies, state, routeParams, searchParams);
+					console.log("proxies dependency called", dependencies, state, pathParams, searchParams);
 					const { services, pathfinder } = context;
 					const { gauze } = services;
 					//return {};
@@ -97,14 +97,14 @@ function createPathfinder(context) {
 			{
 				name: "headers",
 				path: [],
-				pathRegex: new RegExp("/"),
+				pathRegex: new RegExp("/headers"),
 				pathString: function (groups) {
 					return "/headers";
 				},
 				search: [],
-				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+				dependencies: async function (context, dependencies, state, pathParams, searchParams) {
 					console.log("headers dependency context", context);
-					console.log("headers dependency called", dependencies, state, routeParams, searchParams);
+					console.log("headers dependency called", dependencies, state, pathParams, searchParams);
 					const { services, pathfinder } = context;
 					const { gauze } = services;
 					return gauze.default.header().then(function (headers) {
@@ -115,7 +115,73 @@ function createPathfinder(context) {
 					});
 					//return {};
 				},
-				pathfinder: null,
+				pathfinder: new Pathfinder(
+					{
+						hash,
+						base,
+						context
+					},
+					[
+						{
+							name: "header",
+							path: ["header"],
+							pathRegex: new RegExp("/(?<header>.*?)/"),
+							pathString: function (groups) {
+								return `/${groups.header}/`
+							},
+							search: [],
+							dependencies: async function (context, dependencies, state, pathParams, searchParams) {
+								const header = dependencies.headers.headers.find(function (header) {
+									// note: force both to lower case
+									return header.graphql_meta_type.toLowerCase() === pathParams.header.toLowerCase()
+								})
+								if (header) {
+									return {
+										header
+									}
+								} else {
+									throw new Error("Header could not be found")
+								}
+							},
+							pathfinder: new Pathfinder(
+								{
+									hash,
+									base,
+									context
+								},
+								[
+									{
+										name: "list",
+										path: [],
+										pathRegex: new RegExp("/list"),
+										pathString: function (groups) {
+											return `/list`
+										},
+										search: [],
+										dependencies: async function (context, dependencies, state, pathParams, searchParams) {
+											console.log("dependencies", dependencies)
+										},
+										pathfinder: null
+									},
+									{
+										name: "create",
+										path: [],
+										pathRegex: new RegExp("/create"),
+										pathString: function (groups) {
+											return `/create`
+										},
+										search: [],
+										dependencies: async function (context, dependencies, state, pathParams, searchParams) {
+
+										},
+										pathfinder: null
+									},
+
+								]
+							)
+						}
+					]
+				)
 			},
 		],
 	);
@@ -135,9 +201,9 @@ function createPathfinder(context) {
 					return "/";
 				},
 				search: [],
-				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+				dependencies: async function (context, dependencies, state, pathParams, searchParams) {
 					console.log("root dependency context", context);
-					console.log("root dependency called", dependencies, state, routeParams, searchParams);
+					console.log("root dependency called", dependencies, state, pathParams, searchParams);
 					const err = new Error("Transition")
 					err.transitionByState = {
 						name: "hello.world",
@@ -157,9 +223,9 @@ function createPathfinder(context) {
 					return "/z";
 				},
 				search: [],
-				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+				dependencies: async function (context, dependencies, state, pathParams, searchParams) {
 					console.log("environment dependency context", context);
-					console.log("environment dependency called", dependencies, state, routeParams, searchParams);
+					console.log("environment dependency called", dependencies, state, pathParams, searchParams);
 					const { services } = context;
 					const { gauze } = services;
 					const jwt = gauze.default.getEnvironmentJWT();
@@ -188,9 +254,9 @@ function createPathfinder(context) {
 					return "/y";
 				},
 				search: [],
-				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+				dependencies: async function (context, dependencies, state, pathParams, searchParams) {
 					console.log("proxy dependency context", context);
-					console.log("proxy dependency called", dependencies, state, routeParams, searchParams);
+					console.log("proxy dependency called", dependencies, state, pathParams, searchParams);
 					const { services, pathfinder } = context;
 					const { gauze } = services;
 					const jwt = gauze.default.getProxyJWT();
@@ -216,9 +282,9 @@ function createPathfinder(context) {
 					return "/x";
 				},
 				search: [],
-				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+				dependencies: async function (context, dependencies, state, pathParams, searchParams) {
 					console.log("system dependency context", context);
-					console.log("system dependency called", dependencies, state, routeParams, searchParams);
+					console.log("system dependency called", dependencies, state, pathParams, searchParams);
 					const { services, pathfinder } = context;
 					const { gauze } = services;
 					const jwt = gauze.default.getSystemJWT();
@@ -253,9 +319,9 @@ function createPathfinder(context) {
 					return `/project`;
 				},
 				search: [],
-				dependencies: async function (context, dependencies, state, routeParams, searchParams) {
+				dependencies: async function (context, dependencies, state, pathParams, searchParams) {
 					console.log("project dependency context", context);
-					console.log("project dependency called", dependencies, state, routeParams, searchParams);
+					console.log("project dependency called", dependencies, state, pathParams, searchParams);
 					return {};
 				},
 				pathfinder: projectPathfinder,
