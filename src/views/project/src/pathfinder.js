@@ -119,7 +119,7 @@ function createPathfinder(context) {
 					{
 						hash,
 						base,
-						context
+						context,
 					},
 					[
 						{
@@ -127,27 +127,27 @@ function createPathfinder(context) {
 							path: ["header"],
 							pathRegex: new RegExp("/(?<header>.*?)/"),
 							pathString: function (groups) {
-								return `/${groups.header}/`
+								return `/${groups.header}/`;
 							},
 							search: [],
 							dependencies: async function (context, dependencies, state, pathParams, searchParams) {
 								const header = dependencies.headers.headers.find(function (header) {
 									// note: force both to lower case
-									return header.graphql_meta_type.toLowerCase() === pathParams.header.toLowerCase()
-								})
+									return header.graphql_meta_type.toLowerCase() === pathParams.header.toLowerCase();
+								});
 								if (header) {
 									return {
-										header
-									}
+										header,
+									};
 								} else {
-									throw new Error("Header could not be found")
+									throw new Error("Header could not be found");
 								}
 							},
 							pathfinder: new Pathfinder(
 								{
 									hash,
 									base,
-									context
+									context,
 								},
 								[
 									{
@@ -155,33 +155,30 @@ function createPathfinder(context) {
 										path: [],
 										pathRegex: new RegExp("/list"),
 										pathString: function (groups) {
-											return `/list`
+											return `/list`;
 										},
 										search: [],
 										dependencies: async function (context, dependencies, state, pathParams, searchParams) {
-											console.log("dependencies", dependencies)
+											console.log("dependencies", dependencies);
 										},
-										pathfinder: null
+										pathfinder: null,
 									},
 									{
 										name: "create",
 										path: [],
 										pathRegex: new RegExp("/create"),
 										pathString: function (groups) {
-											return `/create`
+											return `/create`;
 										},
 										search: [],
-										dependencies: async function (context, dependencies, state, pathParams, searchParams) {
-
-										},
-										pathfinder: null
+										dependencies: async function (context, dependencies, state, pathParams, searchParams) {},
+										pathfinder: null,
 									},
-
-								]
-							)
-						}
-					]
-				)
+								],
+							),
+						},
+					],
+				),
 			},
 		],
 	);

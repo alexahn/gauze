@@ -106,13 +106,13 @@ class Pathfinder {
 						} catch (e) {
 							parsedStrippedURL = new URL(base + url);
 						}
-						let strippedPathname
+						let strippedPathname;
 						if (hash) {
-							strippedPathname = parsedURL.hash.replace(self._formatPathString(state.pathString(pathMatch.groups)), "")
-							parsedStrippedURL.hash = strippedPathname
+							strippedPathname = parsedURL.hash.replace(self._formatPathString(state.pathString(pathMatch.groups)), "");
+							parsedStrippedURL.hash = strippedPathname;
 						} else {
-							strippedPathname = parsedURL.pathname.replace(self._formatPathString(state.pathString(pathMatch.groups)), "")
-							parsedStrippedURL.pathname = strippedPathname
+							strippedPathname = parsedURL.pathname.replace(self._formatPathString(state.pathString(pathMatch.groups)), "");
+							parsedStrippedURL.pathname = strippedPathname;
 						}
 						state.search.forEach(function (param) {
 							parsedStrippedURL.searchParams.delete(param);

@@ -52,7 +52,7 @@ class ModelService {
 	}
 	subscribe(metadata, subscriptionID, handler) {
 		const self = this;
-		const { type, id } = metadata
+		const { type, id } = metadata;
 		const key = [type, id, subscriptionID].join(".");
 		const existing = self.readKey(self.subscriptions, key);
 		if (existing) {
@@ -66,7 +66,7 @@ class ModelService {
 	}
 	unsubscribe(metadata, subscriptionID) {
 		const self = this;
-		const { type, id } = metadata
+		const { type, id } = metadata;
 		const key = [type, id, subscriptionID].join(".");
 		const existing = self.readKey(self.subscriptions, key);
 		if (existing) {
@@ -78,7 +78,7 @@ class ModelService {
 	}
 	trigger(metadata) {
 		const self = this;
-		const { type, id } = metadata
+		const { type, id } = metadata;
 		const key = [type, id].join(".");
 		const itemIndex = self.readKey(self.index, key);
 		const handlers = self.readKey(self.subscriptions, key);
@@ -98,7 +98,7 @@ class ModelService {
 	// upsert, read, delete
 	upsert(metadata, attributes) {
 		const self = this;
-		const { type, id } = metadata
+		const { type, id } = metadata;
 		const key = [type, id].join(".");
 		const existing_index = self.readKey(self.index, key);
 		var index;
@@ -110,11 +110,11 @@ class ModelService {
 		self.collection[index] = attributes;
 		self.writeKey(self.index, key, index);
 		self.trigger(metadata);
-		return attributes
+		return attributes;
 	}
 	read(metadata) {
 		const self = this;
-		const { type, id } = metadata
+		const { type, id } = metadata;
 		const key = [type, id].join(".");
 		const itemIndex = self.readKey(self.index, key);
 		if (typeof itemIndex === "undefined") {
@@ -126,7 +126,7 @@ class ModelService {
 	}
 	delete(metadata) {
 		const self = this;
-		const { type, id } = metadata
+		const { type, id } = metadata;
 		const key = [type, id].join(".");
 		const itemIndex = self.readKey(self.index, key);
 		if (typeof itemIndex === "undefined") {
