@@ -142,7 +142,7 @@ function Table({ pathfinder, services, header, variables = {}, items, count }) {
 					})}
 				</tr>
 				<tr>
-					<th>Y</th>
+					<th><button type="button">Fields</button></th>
 					{header.fields.map(function (field) {
 						return (
 							<th key={field.name} className={cellClass} tabIndex="0">
@@ -155,7 +155,7 @@ function Table({ pathfinder, services, header, variables = {}, items, count }) {
 			<tbody>
 				{items.map(function (item) {
 					return (<tr key={item._metadata.id}>
-						<td>Z</td>
+						<td><button type="button">Edit</button></td>
 						{header.fields.map(function (field) {
 							return (
 								<td key={field.name}  className={cellClass} tabIndex="0">
