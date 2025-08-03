@@ -163,7 +163,7 @@ function createPathfinder(context) {
 											const header = dependencies.header.header
 											const { services } = context
 											const { gauzemodel } = services
-											return gauzemodel.default.read(header, { where: {} }).then(function (items) {
+											const read = gauzemodel.default.read(header, { where: {} }).then(function (items) {
 												return {
 													items
 												}
@@ -175,6 +175,24 @@ function createPathfinder(context) {
 												// note: i think it's better to make it ugly here
 												return {
 													items: []
+												}
+											})
+											const count = gauzemodel.default.count(header, { where: {} }).then(function (counts) {
+												console.log('count result', counts)
+												return {
+													count: counts.count
+												}
+											}).catch(function (err) {
+												return {
+													count: 0
+												}
+											})
+											return Promise.all([read, count]).then(function (results) {
+												const readResult = results[0]
+												const countResult = results[1]
+												return {
+													items: readResult.items,
+													count: countResult.count
 												}
 											})
 										},

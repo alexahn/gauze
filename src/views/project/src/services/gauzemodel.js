@@ -11,7 +11,9 @@ class GauzeModelService {
 		});
 	}
 	count(header, variables) {
-		return gauze.default.count(header, variables).then(function (rows) {});
+		return gauze.default.count(header, variables).then(function (rows) {
+			return rows
+		});
 	}
 	read(header, variables) {
 		return gauze.default.read(header, variables).then(function (rows) {
