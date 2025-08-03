@@ -164,7 +164,6 @@ function createPathfinder(context) {
 											const { services } = context;
 											const { gauzemodel } = services;
 											const variables = JSON.parse(searchParams.variables);
-											console.log("VARIABLES", variables);
 											const read = gauzemodel.default
 												.read(header, variables)
 												.then(function (items) {
@@ -185,7 +184,6 @@ function createPathfinder(context) {
 											const count = gauzemodel.default
 												.count(header, variables)
 												.then(function (counts) {
-													console.log("count result", counts);
 													return {
 														count: counts[0].count,
 													};
