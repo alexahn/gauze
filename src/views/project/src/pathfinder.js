@@ -164,6 +164,7 @@ function createPathfinder(context) {
 											const { services } = context
 											const { gauzemodel } = services
 											const variables = JSON.parse(searchParams.variables)
+											console.log("VARIABLES", variables)
 											const read = gauzemodel.default.read(header, variables).then(function (items) {
 												return {
 													items

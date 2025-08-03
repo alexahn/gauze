@@ -44,7 +44,7 @@ function Table({ pathfinder, services, header, variables = {}, items, count }) {
 		const state = pathfinder.URLToState(location.href)
 		const url = pathfinder.stateToURL(state.name, state.pathParams, {
 			variables: JSON.stringify({
-				//...state.searchParams.variables,
+				...variables,
 				...paginate
 			})
 		})
