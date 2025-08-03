@@ -14,7 +14,7 @@ function Headers({ pathfinder, headers }) {
 	return (
 		<div>
 			{headers.map(function (header) {
-				const variables = JSON.stringify({ where: {} })
+				const variables = JSON.stringify({ where: {}, limit: 3 })
 				return (
 					<div key={header.name} className="mb0">
 						<a href={pathfinder.stateToURL("project.system.headers.header.list", { header: header.graphql_meta_type.toLowerCase() }, { variables })}>
