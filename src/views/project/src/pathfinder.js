@@ -157,13 +157,14 @@ function createPathfinder(context) {
 										pathString: function (groups) {
 											return `/list`;
 										},
-										search: [],
+										search: ["variables"],
 										dependencies: async function (context, dependencies, state, pathParams, searchParams) {
 											console.log("dependencies", dependencies);
 											const header = dependencies.header.header
 											const { services } = context
 											const { gauzemodel } = services
-											const read = gauzemodel.default.read(header, { where: {} }).then(function (items) {
+											const variables = JSON.parse(searchParams.variables)
+											const read = gauzemodel.default.read(header, variables).then(function (items) {
 												return {
 													items
 												}
@@ -177,7 +178,7 @@ function createPathfinder(context) {
 													items: []
 												}
 											})
-											const count = gauzemodel.default.count(header, { where: {} }).then(function (counts) {
+											const count = gauzemodel.default.count(header, variables).then(function (counts) {
 												console.log('count result', counts)
 												return {
 													count: counts[0].count

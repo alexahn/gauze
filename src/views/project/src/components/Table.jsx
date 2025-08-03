@@ -58,7 +58,6 @@ function Table({ pathfinder, services, header, variables = {}, items, count }) {
 
 	}
 	return (<div>
-		<Pagination page={pageCurrent} count={pageMax} href={href} reverse={false}/>
 		<table className="type-list">
 			<thead>
 				<tr>
@@ -106,6 +105,7 @@ function Table({ pathfinder, services, header, variables = {}, items, count }) {
 				})}
 			</tbody>
 		</table>
+		<Pagination page={pageCurrent} count={pageMax} href={href} reverse={false}/>
 	</div>)
 }
 

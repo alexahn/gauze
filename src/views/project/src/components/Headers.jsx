@@ -14,9 +14,10 @@ function Headers({ pathfinder, headers }) {
 	return (
 		<div>
 			{headers.map(function (header) {
+				const variables = JSON.stringify({ where: {} })
 				return (
 					<div key={header.name} className="mb0">
-						<a href={pathfinder.stateToURL("project.system.headers.header.list", { header: header.graphql_meta_type.toLowerCase() }, {})}>
+						<a href={pathfinder.stateToURL("project.system.headers.header.list", { header: header.graphql_meta_type.toLowerCase() }, { variables })}>
 							<button className={buttonClass} type="button" disabled={submitHeader}>
 								{header.graphql_meta_type}
 							</button>
