@@ -180,7 +180,7 @@ function createPathfinder(context) {
 											const count = gauzemodel.default.count(header, { where: {} }).then(function (counts) {
 												console.log('count result', counts)
 												return {
-													count: counts.count
+													count: counts[0].count
 												}
 											}).catch(function (err) {
 												return {
