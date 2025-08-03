@@ -12,7 +12,7 @@ class GauzeModelService {
 	}
 	count(header, variables) {
 		return gauze.default.count(header, variables).then(function (rows) {
-			return rows
+			return rows;
 		});
 	}
 	read(header, variables) {

@@ -113,9 +113,9 @@ function createDirector(context) {
 		console.log("project.system.headers.header.list rendered");
 		const { services } = context;
 		const { headers, header, list } = dependencies;
-		const { items, count } = list
-		console.log("items", items, 'count', count)
-		const variables = JSON.parse(searchParams.variables)
+		const { items, count } = list;
+		console.log("items", items, "count", count);
+		const variables = JSON.parse(searchParams.variables);
 		root.render(
 			<React.StrictMode>
 				<layouts.amethyst.default>

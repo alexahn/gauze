@@ -123,16 +123,16 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 		},
 	};
 	if (!graphQLTypeToInputType[graphQLTypeName]) {
-		throw new Error(`GraphQL type ${graphQLTypeName} does not have a defined input type`)
+		throw new Error(`GraphQL type ${graphQLTypeName} does not have a defined input type`);
 	}
 	if (!serializeGraphQLTypeToInputType[graphQLTypeName]) {
-		throw new Error(`GraphQL type ${graphQLTypeName} does not have a GraphQL to input serializer`)
+		throw new Error(`GraphQL type ${graphQLTypeName} does not have a GraphQL to input serializer`);
 	}
 	if (!serializeInputValueToGraphQLType[graphQLTypeName]) {
-		throw new Error(`GraphQL type ${graphQLTypeName} does not have an input to GraphQL serializer`)
+		throw new Error(`GraphQL type ${graphQLTypeName} does not have an input to GraphQL serializer`);
 	}
 	if (!initializeValue[graphQLTypeName]) {
-		throw new Error(`GraphQL type ${graphQLTypeName} does not have a value initializer`)
+		throw new Error(`GraphQL type ${graphQLTypeName} does not have a value initializer`);
 	}
 	function handleChange(e) {
 		setLastChanged(new Date().getTime());

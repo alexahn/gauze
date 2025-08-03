@@ -160,43 +160,49 @@ function createPathfinder(context) {
 										search: ["variables"],
 										dependencies: async function (context, dependencies, state, pathParams, searchParams) {
 											console.log("dependencies", dependencies);
-											const header = dependencies.header.header
-											const { services } = context
-											const { gauzemodel } = services
-											const variables = JSON.parse(searchParams.variables)
-											console.log("VARIABLES", variables)
-											const read = gauzemodel.default.read(header, variables).then(function (items) {
-												return {
-													items
-												}
-											}).catch(function (err) {
-												// todo: filter errors here so we only act on proper errors
-												// note: we are going to return an empty array because some entities have restrictions on how they can be queried (e.g. relationships requires from_entity_id or to_entity_id as an example)
-												// note: figure out if we can loosen those restrictions (and short circuit the query on the backend)
-												// note: either we do it here, and the code is ugly here, or we make the code ugly on the backend
-												// note: i think it's better to make it ugly here
-												return {
-													items: []
-												}
-											})
-											const count = gauzemodel.default.count(header, variables).then(function (counts) {
-												console.log('count result', counts)
-												return {
-													count: counts[0].count
-												}
-											}).catch(function (err) {
-												return {
-													count: 0
-												}
-											})
+											const header = dependencies.header.header;
+											const { services } = context;
+											const { gauzemodel } = services;
+											const variables = JSON.parse(searchParams.variables);
+											console.log("VARIABLES", variables);
+											const read = gauzemodel.default
+												.read(header, variables)
+												.then(function (items) {
+													return {
+														items,
+													};
+												})
+												.catch(function (err) {
+													// todo: filter errors here so we only act on proper errors
+													// note: we are going to return an empty array because some entities have restrictions on how they can be queried (e.g. relationships requires from_entity_id or to_entity_id as an example)
+													// note: figure out if we can loosen those restrictions (and short circuit the query on the backend)
+													// note: either we do it here, and the code is ugly here, or we make the code ugly on the backend
+													// note: i think it's better to make it ugly here
+													return {
+														items: [],
+													};
+												});
+											const count = gauzemodel.default
+												.count(header, variables)
+												.then(function (counts) {
+													console.log("count result", counts);
+													return {
+														count: counts[0].count,
+													};
+												})
+												.catch(function (err) {
+													return {
+														count: 0,
+													};
+												});
 											return Promise.all([read, count]).then(function (results) {
-												const readResult = results[0]
-												const countResult = results[1]
+												const readResult = results[0];
+												const countResult = results[1];
 												return {
 													items: readResult.items,
-													count: countResult.count
-												}
-											})
+													count: countResult.count,
+												};
+											});
 										},
 										pathfinder: null,
 									},

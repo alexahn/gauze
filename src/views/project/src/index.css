@@ -895,9 +895,9 @@
 }
 
 .tooltip-container:focus .tooltip {
-    display: block;
-    /*border: 1px solid black;*/
-    z-index: 1;
+	display: block;
+	/*border: 1px solid black;*/
+	z-index: 1;
 }
 
 /*
