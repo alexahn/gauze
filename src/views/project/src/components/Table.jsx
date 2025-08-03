@@ -111,10 +111,12 @@ function Table({ pathfinder, services, header, variables = {}, items, count }) {
 				...localVariables
 			}
 			if (variables[filterMode]) {
-				variables[filterMode][field] = e.target.value
+				// note: should we use e.target.serialized?
+				variables[filterMode][field] = e.target.serialized
 			} else {
 				variables[filterMode] = {
-					[field]: e.target.value
+					// note: should we use e.target.serialized?
+					[field]: e.target.serialized
 				}
 			}
 			setLocalVariables(variables)
@@ -127,16 +129,19 @@ function Table({ pathfinder, services, header, variables = {}, items, count }) {
 			}
 			if (variables[filterMode]) {
 				if (variables[filterMode][field]) {
-					variables[filterMode][field][index] = e.target.value
+					// note: should we use e.target.serialized?
+					variables[filterMode][field][index] = e.target.serialized
 				} else {
 					variables[filterMode][field] = []
-					variables[filterMode][field][index] = e.target.value
+					// note: should we use e.target.serialized?
+					variables[filterMode][field][index] = e.target.serialized
 				}
 			} else {
 				variables[filterMode] = {
 					[field]: []
 				}
-				variables[filterMode][field][index] = e.target.value
+				// note: should we use e.target.serialized?
+				variables[filterMode][field][index] = e.target.serialized
 			}
 			setLocalVariables(variables)
 		}
