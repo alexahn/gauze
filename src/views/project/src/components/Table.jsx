@@ -303,9 +303,11 @@ function Table({ pathfinder, services, header, variables = {}, items, count }) {
 						return (
 							<tr key={item._metadata.id}>
 								<td align="center" className={cellClass}>
-									<button className="athelas f6" type="button">
-										Edit
-									</button>
+									<a href={pathfinder.stateToURL("project.system.headers.header.item", { header: header.graphql_meta_type.toLowerCase(), id: item._metadata.id }, {})}>
+										<button className="athelas f6" type="button">
+											Edit
+										</button>
+									</a>
 								</td>
 								{header.fields.map(function (field) {
 									return (

@@ -65,7 +65,7 @@ class Pathfinder {
 		if (match) {
 			return self._formatMatch(match);
 		} else {
-			throw new Error(`State could not be match for URL "${url}"`);
+			throw new Error(`State could not be matched for URL "${url}"`);
 		}
 	}
 	_URLToState(prefix, url) {
@@ -441,7 +441,8 @@ function start(pathfinder, director, initial) {
 	try {
 		const current = pathfinder.URLToState(location.href);
 	} catch (e) {
-		load(name, pathParams, searchParams);
+		console.error(e)
+		//load(name, pathParams, searchParams);
 	}
 }
 

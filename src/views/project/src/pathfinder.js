@@ -218,9 +218,9 @@ function createPathfinder(context) {
 									{
 										name: "item",
 										path: ["id"],
-										pathRegex: new RegExp("/item/(?<id>.*?)/"),
+										pathRegex: new RegExp("/item/(?<id>.*)"),
 										pathString: function (groups) {
-											return `/item/${groups.id}/`;
+											return `/item/${groups.id}`;
 										},
 										search: [],
 										dependencies: async function (context, dependencies, state, pathParams, searchParams) {
@@ -233,11 +233,10 @@ function createPathfinder(context) {
 													[header.primary_key]: id
 												}
 											}
-											return gauzemodel.default.read(header, variables).then(function (row) {
-												console.log('item', item)
-												if (row && row.length) {
+											return gauzemodel.default.read(header, variables).then(function (rows) {
+												if (rows && rows.length) {
 													return {
-														item: row[0]
+														item: rows[0]
 													}
 												} else {
 													return {
@@ -245,6 +244,7 @@ function createPathfinder(context) {
 													}
 												}
 											}).catch(function (err) {
+												console.error(err)
 												return {
 													item: undefined
 												}
