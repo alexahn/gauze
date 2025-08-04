@@ -6,7 +6,8 @@ import Input from "./Input.jsx";
 function Item({ pathfinder, services, header, item, mode, variables }) {
 	const [localMode, setLocalMode] = useState(mode);
 	const [localItem, setLocalItem] = useState(item);
-	const [localCreateItem, setLocalCreateItem] = useState({ attributes: {} });
+	// note: we are populating the initial attributes from where_like, so that the selection is preserved when going from table view to item view
+	const [localCreateItem, setLocalCreateItem] = useState({ attributes: variables.where_like || {} });
 	const [createFieldError, setCreateFieldError] = useState({});
 	const [createModelError, setCreateModelError] = useState("");
 	const [updateFieldError, setUpdateFieldError] = useState({});

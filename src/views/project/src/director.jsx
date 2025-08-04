@@ -99,7 +99,6 @@ function createDirector(context) {
 				<layouts.amethyst.default>
 					<div className="pa2">
 						<components.logo.default header={false} clouds={false} />
-						{/*<components.navigation.default pathfinder={pathfinder} services={services} />*/}
 					</div>
 					<div className="pl2 pr2 pb2">
 						<components.headers.default pathfinder={pathfinder} headers={headers.headers} />
@@ -121,7 +120,6 @@ function createDirector(context) {
 				<layouts.amethyst.default>
 					<div className="pa2">
 						<components.logo.default header={false} clouds={false} />
-						{/*<components.navigation.default pathfinder={pathfinder} services={services} />*/}
 					</div>
 					<div className="pl2 pr2 pb2 flex">
 						<components.headers.default pathfinder={pathfinder} headers={headers.headers} />
@@ -156,8 +154,6 @@ function createDirector(context) {
 		console.log("project.system.headers.header.item rendered");
 		const { services } = context;
 		const { headers, header, item } = dependencies;
-		console.log("item", item);
-		//const variables = JSON.parse(searchParams.variables);
 		root.render(
 			<React.StrictMode>
 				<layouts.amethyst.default>
