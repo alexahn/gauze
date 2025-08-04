@@ -271,7 +271,7 @@ function Table({ pathfinder, services, header, variables = {}, items, count }) {
 	}
 	return (
 		<div>
-			<table className="type-list">
+			<table>
 				<thead>
 					{renderFilters()}
 					<tr>
@@ -292,10 +292,18 @@ function Table({ pathfinder, services, header, variables = {}, items, count }) {
 				</thead>
 				<tbody>
 					<tr>
-						<td align="center" className={cellClass}><button className="athelas f6" type="button">Create</button></td>
+						<td align="center" className={cellClass}>
+							{/*
+							<a href={pathfinder.stateToURL("project.system.headers.header.create", { header: header.graphql_meta_type.toLowerCase() }, { variables: JSON.stringify(variables) })}>
+								<button className="athelas f6" type="button">Create</button>
+							</a>
+							*/}
+						</td>
 						{header.fields.map(function (field) {
 							return (<td key={field.name} className={cellClass} tabIndex="0" align="center">
-								<button className="athelas f6" type="button">Create</button>
+								<a href={pathfinder.stateToURL("project.system.headers.header.create", { header: header.graphql_meta_type.toLowerCase() }, { variables: JSON.stringify(variables) })}>
+									<button className="athelas f6" type="button">Create</button>
+								</a>
 							</td>)
 						})}
 					</tr>

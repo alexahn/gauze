@@ -132,6 +132,26 @@ function createDirector(context) {
 		);
 	});
 
+	director.register("project.system.headers.header.create", function (context, dependencies, pathParams, searchParams) {
+		console.log("project.system.headers.header.create rendered");
+		const { services } = context;
+		const { headers, header, create } = dependencies;
+		const variables = JSON.parse(searchParams.variables);
+		root.render(
+			<React.StrictMode>
+				<layouts.amethyst.default>
+					<div className="pa2">
+						<components.logo.default header={false} clouds={false} />
+					</div>
+					<div className="pl2 pr2 pb2 flex">
+						<components.headers.default pathfinder={pathfinder} headers={headers.headers} />
+						<components.item.default pathfinder={pathfinder} services={services} header={header.header} item={undefined} mode={"create"} variables={variables} />
+					</div>
+				</layouts.amethyst.default>
+			</React.StrictMode>,
+		);
+	});
+
 	director.register("project.system.headers.header.item", function (context, dependencies, pathParams, searchParams) {
 		console.log("project.system.headers.header.item rendered");
 		const { services } = context;
@@ -146,7 +166,7 @@ function createDirector(context) {
 					</div>
 					<div className="pl2 pr2 pb2 flex">
 						<components.headers.default pathfinder={pathfinder} headers={headers.headers} />
-						<components.item.default pathfinder={pathfinder} services={services} header={header.header} item={item.item} />
+						<components.item.default pathfinder={pathfinder} services={services} header={header.header} item={item.item} mode={"update"}/>
 					</div>
 				</layouts.amethyst.default>
 			</React.StrictMode>,

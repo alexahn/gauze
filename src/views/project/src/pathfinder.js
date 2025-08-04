@@ -211,7 +211,7 @@ function createPathfinder(context) {
 										pathString: function (groups) {
 											return `/create`;
 										},
-										search: [],
+										search: ["variables"],
 										dependencies: async function (context, dependencies, state, pathParams, searchParams) {},
 										pathfinder: null,
 									},
