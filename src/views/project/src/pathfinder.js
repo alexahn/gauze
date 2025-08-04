@@ -224,31 +224,34 @@ function createPathfinder(context) {
 										},
 										search: [],
 										dependencies: async function (context, dependencies, state, pathParams, searchParams) {
-											const { services } = context
-											const { gauzemodel } = services
-											const { id } = pathParams
-											const header = dependencies.header.header
+											const { services } = context;
+											const { gauzemodel } = services;
+											const { id } = pathParams;
+											const header = dependencies.header.header;
 											const variables = {
 												where: {
-													[header.primary_key]: id
-												}
-											}
-											return gauzemodel.default.read(header, variables).then(function (rows) {
-												if (rows && rows.length) {
-													return {
-														item: rows[0]
+													[header.primary_key]: id,
+												},
+											};
+											return gauzemodel.default
+												.read(header, variables)
+												.then(function (rows) {
+													if (rows && rows.length) {
+														return {
+															item: rows[0],
+														};
+													} else {
+														return {
+															item: undefined,
+														};
 													}
-												} else {
+												})
+												.catch(function (err) {
+													console.error(err);
 													return {
-														item: undefined
-													}
-												}
-											}).catch(function (err) {
-												console.error(err)
-												return {
-													item: undefined
-												}
-											})
+														item: undefined,
+													};
+												});
 										},
 										pathfinder: null,
 									},

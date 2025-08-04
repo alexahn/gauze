@@ -300,11 +300,21 @@ function Table({ pathfinder, services, header, variables = {}, items, count }) {
 							*/}
 						</td>
 						{header.fields.map(function (field) {
-							return (<td key={field.name} className={cellClass} tabIndex="0" align="center">
-								<a href={pathfinder.stateToURL("project.system.headers.header.create", { header: header.graphql_meta_type.toLowerCase() }, { variables: JSON.stringify(variables) })}>
-									<button className="athelas f6" type="button">Create</button>
-								</a>
-							</td>)
+							return (
+								<td key={field.name} className={cellClass} tabIndex="0" align="center">
+									<a
+										href={pathfinder.stateToURL(
+											"project.system.headers.header.create",
+											{ header: header.graphql_meta_type.toLowerCase() },
+											{ variables: JSON.stringify(variables) },
+										)}
+									>
+										<button className="athelas f6" type="button">
+											Create
+										</button>
+									</a>
+								</td>
+							);
 						})}
 					</tr>
 					{items.map(function (item) {

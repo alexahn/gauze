@@ -441,7 +441,7 @@ function start(pathfinder, director, initial) {
 	try {
 		const current = pathfinder.URLToState(location.href);
 	} catch (e) {
-		console.error(e)
+		console.error(e);
 		//load(name, pathParams, searchParams);
 	}
 }

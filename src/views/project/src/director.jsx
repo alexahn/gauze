@@ -156,7 +156,7 @@ function createDirector(context) {
 		console.log("project.system.headers.header.item rendered");
 		const { services } = context;
 		const { headers, header, item } = dependencies;
-		console.log("item", item)
+		console.log("item", item);
 		//const variables = JSON.parse(searchParams.variables);
 		root.render(
 			<React.StrictMode>
@@ -166,7 +166,7 @@ function createDirector(context) {
 					</div>
 					<div className="pl2 pr2 pb2 flex">
 						<components.headers.default pathfinder={pathfinder} headers={headers.headers} />
-						<components.item.default pathfinder={pathfinder} services={services} header={header.header} item={item.item} mode={"update"}/>
+						<components.item.default pathfinder={pathfinder} services={services} header={header.header} item={item.item} mode={"update"} />
 					</div>
 				</layouts.amethyst.default>
 			</React.StrictMode>,
