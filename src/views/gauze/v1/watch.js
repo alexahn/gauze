@@ -5,8 +5,6 @@ config({
 	path: findConfig(".env"),
 });
 
-import fs from "fs";
-
 import * as esbuild from "esbuild";
 
 const ALLOWED_PROCESS_ENV = ["GAUZE_PROTOCOL", "GAUZE_HOST", "GAUZE_PORT", "GAUZE_DEBUG_UI"];
@@ -43,20 +41,19 @@ let envPlugin = {
 	},
 };
 
-const result = await esbuild.build({
-	entryPoints: ["src/views/gauze/src/index.jsx"],
-	bundle: true,
-	minify: true,
-	sourcemap: true,
-	metafile: true,
-	loader: {
-		".svg": "dataurl",
-	},
-	outfile: "./src/views/gauze/build/index.js",
-	plugins: [envPlugin],
-});
-
-if (result.metafile) {
-	// use https://bundle-buddy.com/esbuild to analyses
-	fs.writeFileSync("./metafile.json", JSON.stringify(result.metafile));
+async function watch() {
+	let ctx = await esbuild.context({
+		entryPoints: ["src/views/gauze/v1/src/index.jsx"],
+		bundle: true,
+		minify: false,
+		logLevel: "info",
+		sourcemap: true,
+		loader: {
+			".svg": "dataurl",
+		},
+		outfile: "./src/views/gauze/v1/build/index.js",
+		plugins: [envPlugin],
+	});
+	await ctx.watch();
 }
+watch();

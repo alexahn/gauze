@@ -4,7 +4,7 @@ import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
 
 export default [
 	{
-		ignores: ["src/views/gauze/build", "src/views/project/build"],
+		ignores: ["src/views/gauze/v1/build", "src/views/gauze/v2/build", "src/views/project/build"],
 	},
 	{
 		languageOptions: { globals: { ...globals.browser, ...globals.node } },

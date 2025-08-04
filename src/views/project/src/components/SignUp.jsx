@@ -1,6 +1,8 @@
 import * as React from "react";
 import { useState } from "react";
 
+import navigate from "./../navigate.js"
+
 function SignUp({ pathfinder, services, next }) {
 	const { gauze } = services;
 	const [step, setStep] = useState(0);
@@ -59,7 +61,10 @@ function SignUp({ pathfinder, services, next }) {
 				setSubmitSignUp(false);
 				setStep((step + 1) % 3);
 				// redirect to next
-				location.replace(next);
+				//location.replace(next);
+				navigate(next, {
+					replace: true
+				})
 			})
 			.catch(function (err) {
 				setSubmitSignUp(false);

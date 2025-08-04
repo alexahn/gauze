@@ -1,7 +1,7 @@
 // will synchronize state between local storage and services
 
 // todo: pass in a package path from process.env
-import * as packageJSON from "./../../../../package.json";
+import * as packageJSON from "./../../../../../package.json";
 
 function migrateGraph(services, components) {
 	// fetch the freshest version and attempt a migration if necessary

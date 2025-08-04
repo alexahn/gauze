@@ -1,6 +1,8 @@
 import * as React from "react";
 import { useState } from "react";
 
+import navigate from "./../navigate.js"
+
 function SignOut({ pathfinder, services, next }) {
 	const { gauze } = services;
 	const [error, setError] = useState("");
@@ -18,7 +20,10 @@ function SignOut({ pathfinder, services, next }) {
 				gauze.default.deleteProxyJWT();
 				gauze.default.deleteSystemJWT();
 				// redirect to next
-				location.replace(next);
+				//location.replace(next);
+				navigate(next, {
+					replace: true
+				})
 			})
 			.catch(function (err) {
 				setSubmitSignOut(false);

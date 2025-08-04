@@ -442,7 +442,7 @@ function start(pathfinder, director, initial) {
 		const current = pathfinder.URLToState(location.href);
 	} catch (e) {
 		console.error(e);
-		//load(name, pathParams, searchParams);
+		load(name, pathParams, searchParams);
 	}
 }
 
