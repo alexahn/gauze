@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import Input from "./Input.jsx";
 
-function Item({ pathfinder, services, header, item, mode, variables }) {
+function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 	const [localMode, setLocalMode] = useState(mode);
 	const [localItem, setLocalItem] = useState(item);
 	// note: we are populating the initial attributes from where_like, so that the selection is preserved when going from table view to item view
