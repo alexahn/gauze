@@ -18,19 +18,19 @@ sed -i '' 's/DATABASE/SYSTEM/g' ./src/structure/entities/ytitne/system/graphql.j
 
 # base migrations (follows staging order)
 
-cp ./src/kernel/src/migrations/ezuag.js ./src/database/migrations/00000000000001_ezuag.js
-cp ./src/kernel/src/migrations/ytitne.js ./src/database/migrations/00000000000002_ytitne.js
-cp ./src/kernel/src/migrations/relationship.js ./src/database/migrations/00000000000003_relationship.js
-cp ./src/kernel/src/migrations/whitelist.js ./src/database/migrations/00000000000004_whitelist.js
-cp ./src/kernel/src/migrations/blacklist.js ./src/database/migrations/00000000000005_blacklist.js
-cp ./src/kernel/src/migrations/secret.js ./src/database/migrations/00000000000006_secret.js
-cp ./src/kernel/src/migrations/session.js ./src/database/migrations/00000000000007_session.js
-cp ./src/kernel/src/migrations/proxy.js ./src/database/migrations/00000000000008_proxy.js
-cp ./src/kernel/src/migrations/agent_root.js ./src/database/migrations/00000000000009_agent_root.js
-cp ./src/kernel/src/migrations/agent_account.js ./src/database/migrations/00000000000010_agent_account.js
-cp ./src/kernel/src/migrations/agent_user.js ./src/database/migrations/00000000000011_agent_user.js
-cp ./src/kernel/src/migrations/agent_person.js ./src/database/migrations/00000000000012_agent_person.js
-cp ./src/kernel/src/migrations/agent_character.js ./src/database/migrations/00000000000013_agent_character.js
+cp ./src/kernel/src/migrations/relationship.js ./src/database/migrations/00000000000001_relationship.js
+cp ./src/kernel/src/migrations/whitelist.js ./src/database/migrations/00000000000002_whitelist.js
+cp ./src/kernel/src/migrations/blacklist.js ./src/database/migrations/00000000000003_blacklist.js
+cp ./src/kernel/src/migrations/secret.js ./src/database/migrations/00000000000004_secret.js
+cp ./src/kernel/src/migrations/session.js ./src/database/migrations/00000000000005_session.js
+cp ./src/kernel/src/migrations/proxy.js ./src/database/migrations/00000000000006_proxy.js
+cp ./src/kernel/src/migrations/agent_root.js ./src/database/migrations/00000000000007_agent_root.js
+cp ./src/kernel/src/migrations/agent_account.js ./src/database/migrations/00000000000008_agent_account.js
+cp ./src/kernel/src/migrations/agent_user.js ./src/database/migrations/00000000000009_agent_user.js
+cp ./src/kernel/src/migrations/agent_person.js ./src/database/migrations/00000000000010_agent_person.js
+cp ./src/kernel/src/migrations/agent_character.js ./src/database/migrations/00000000000011_agent_character.js
+cp ./src/kernel/src/migrations/ezuag.js ./src/database/migrations/00000000000012_ezuag.js
+cp ./src/kernel/src/migrations/ytitne.js ./src/database/migrations/00000000000013_ytitne.js
 cp ./src/kernel/src/migrations/entity.js ./src/database/migrations/00000000000014_entity.js
 cp ./src/kernel/src/migrations/gauze.js ./src/database/migrations/00000000000015_gauze.js
 
