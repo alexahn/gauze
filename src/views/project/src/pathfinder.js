@@ -215,6 +215,43 @@ function createPathfinder(context) {
 										dependencies: async function (context, dependencies, state, pathParams, searchParams) {},
 										pathfinder: null,
 									},
+									{
+										name: "item",
+										path: ["id"],
+										pathRegex: new RegExp("/item/(?<id>.*?)/"),
+										pathString: function (groups) {
+											return `/item/${groups.id}/`;
+										},
+										search: [],
+										dependencies: async function (context, dependencies, state, pathParams, searchParams) {
+											const { services } = context
+											const { gauzemodel } = services
+											const { id } = pathParams
+											const header = dependencies.header.header
+											const variables = {
+												where: {
+													[header.primary_key]: id
+												}
+											}
+											return gauzemodel.default.read(header, variables).then(function (row) {
+												console.log('item', item)
+												if (row && row.length) {
+													return {
+														item: row[0]
+													}
+												} else {
+													return {
+														item: undefined
+													}
+												}
+											}).catch(function (err) {
+												return {
+													item: undefined
+												}
+											})
+										},
+										pathfinder: null,
+									},
 								],
 							),
 						},

@@ -291,6 +291,14 @@ function Table({ pathfinder, services, header, variables = {}, items, count }) {
 					</tr>
 				</thead>
 				<tbody>
+					<tr>
+						<td align="center" className={cellClass}><button className="athelas f6" type="button">Create</button></td>
+						{header.fields.map(function (field) {
+							return (<td key={field.name} className={cellClass} tabIndex="0" align="center">
+								<button className="athelas f6" type="button">Create</button>
+							</td>)
+						})}
+					</tr>
 					{items.map(function (item) {
 						return (
 							<tr key={item._metadata.id}>
