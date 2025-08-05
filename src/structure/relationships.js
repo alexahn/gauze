@@ -1,11 +1,11 @@
 // relationships are defined using the graphql type constant
 
+// agent user
+import { TYPE__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE } from "./entities/agent_user/database/graphql.js";
 // ytitne
 import { TYPE__GRAPHQL__DATABASE__YTITNE__STRUCTURE } from "./entities/ytitne/database/graphql.js";
 // entity
 import { TYPE__GRAPHQL__DATABASE__ENTITY__STRUCTURE } from "./entities/entity/database/graphql.js";
-// agent user
-import { TYPE__GRAPHQL__DATABASE__AGENT_USER__STRUCTURE } from "./entities/agent_user/database/graphql.js";
 
 /*
 	ytitne <-> ytitne

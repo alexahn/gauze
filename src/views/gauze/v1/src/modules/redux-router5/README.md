@@ -6,8 +6,8 @@
 
 You have two ways to use redux-router5, depending on how you want to navigate:
 
-- Using the router5 plugin (named `reduxPlugin`)
-- Using the redux middleware (named `router5Middleware`)
+-   Using the router5 plugin (named `reduxPlugin`)
+-   Using the redux middleware (named `router5Middleware`)
 
 In both cases, **use the provided reducer (`router5Reducer`).**
 
@@ -16,54 +16,52 @@ In both cases, **use the provided reducer (`router5Reducer`).**
 If you choose to not use the middleware, you need to add `reduxPlugin` to your router. The plugin simply syncs the router state with redux. To navigate, you will need to invoke `router.navigate`. If you use React, you can use `Link` from `react-router5`.
 
 ```js
-import { reduxPlugin } from 'redux-router5'
+import { reduxPlugin } from "redux-router5";
 
 // You need a router instance and a store instance
-router.usePlugin(reduxPlugin(store.dispatch))
+router.usePlugin(reduxPlugin(store.dispatch));
 ```
 
 ## Using the redux middleware
 
 The redux middleware automatically adds the redux plugin to the provided router instance. It will convert a set of redux actions to routing instructions. The available action creators are:
 
-- `navigateTo(routeName, routeParams = {}, routeOptions = {})`
-- `cancelTransition()`
-- `clearErrors()`
-- `canActivate(routeName, true | false)`
-- `canDeactivate(routeName, true | false)`
+-   `navigateTo(routeName, routeParams = {}, routeOptions = {})`
+-   `cancelTransition()`
+-   `clearErrors()`
+-   `canActivate(routeName, true | false)`
+-   `canDeactivate(routeName, true | false)`
 
 ```javascript
-import { actions } from 'redux-router5'
+import { actions } from "redux-router5";
 ```
 
 Use `router5Middleware` alongside your other middlewares:
 
 ```javascript
-import { createStore, applyMiddleware } from 'redux'
-import { router5Middleware } from 'redux-router5'
+import { createStore, applyMiddleware } from "redux";
+import { router5Middleware } from "redux-router5";
 
-const createStoreWithMiddleware = applyMiddleware(router5Middleware(router))(
-  createStore
-)
+const createStoreWithMiddleware = applyMiddleware(router5Middleware(router))(createStore);
 ```
 
 ## Reducer
 
 This packages exposes a reducer (`router5Reducer`) that you can add to your application. It contains four properties:
 
-- `route`
-- `previousRoute`
-- `transitionRoute` (the current transitioning route)
-- `transitionError` (the last error which occured)
+-   `route`
+-   `previousRoute`
+-   `transitionRoute` (the current transitioning route)
+-   `transitionError` (the last error which occured)
 
 ```js
-import { combineReducers } from 'redux'
-import { router5Reducer } from 'redux-router5'
+import { combineReducers } from "redux";
+import { router5Reducer } from "redux-router5";
 
 const reducers = combineReducers({
-  router: router5Reducer
-  // ...add your other reducers
-})
+	router: router5Reducer,
+	// ...add your other reducers
+});
 ```
 
 ## Route node selector
@@ -75,27 +73,27 @@ const reducers = combineReducers({
 If your routes are nested, you'll have a few route nodes in your application. On each route change, not all components need to be re-rendered. `createRouteNodeSelector` will only output a new state value if the provided node is concerned by a route change.
 
 ```javascript
-import { connect } from 'react-redux'
-import { createRouteNodeSelector } from 'redux-router5'
-import { Home, About, Contact } from './components'
-import { startsWithSegment } from 'router5-helpers'
+import { connect } from "react-redux";
+import { createRouteNodeSelector } from "redux-router5";
+import { Home, About, Contact } from "./components";
+import { startsWithSegment } from "router5-helpers";
 
 function Root({ route }) {
-  const { params, name } = route
-  const testRoute = startsWithSegment(name)
+	const { params, name } = route;
+	const testRoute = startsWithSegment(name);
 
-  if (testRoute('home')) {
-    return <Home params={params} />
-  } else if (testRoute('about')) {
-    return <About params={params} />
-  } else if (testRoute('contact')) {
-    return <Contact params={params} />
-  }
+	if (testRoute("home")) {
+		return <Home params={params} />;
+	} else if (testRoute("about")) {
+		return <About params={params} />;
+	} else if (testRoute("contact")) {
+		return <Contact params={params} />;
+	}
 
-  return null
+	return null;
 }
 
-export default connect(createRouteNodeSelector(''))(Root)
+export default connect(createRouteNodeSelector(""))(Root);
 ```
 
 Using `createRouteNodeSelector` with other connect properties:
