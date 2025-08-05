@@ -26,7 +26,7 @@ export const builder = function (yargs) {
 export const handler = function (argv) {
 	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
 	// call a application level application here
-	const gauze_watch_path = path.resolve(path.dirname(__FILEPATH), "./../../views/gauze/watch.js");
+	const gauze_v1_watch_path = path.resolve(path.dirname(__FILEPATH), "./../../views/gauze/v1/watch.js");
 	const project_watch_path = path.resolve(path.dirname(__FILEPATH), "./../../views/project/watch.js");
 	return new Promise(function (resolve, reject) {
 		const collection = {};
@@ -34,7 +34,7 @@ export const handler = function (argv) {
 	})
 		.then(function (collection) {
 			return new Promise(function (resolve, reject) {
-				const spawned = spawn(`node ${gauze_watch_path}`, { shell: true });
+				const spawned = spawn(`node ${gauze_v1_watch_path}`, { shell: true });
 				spawned.stdout.on("data", function (data) {
 					console.log(data.toString("utf8"));
 				});

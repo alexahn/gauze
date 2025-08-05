@@ -26,7 +26,7 @@ export const builder = function (yargs) {
 export const handler = function (argv) {
 	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
 	// call a application level application here
-	const gauze_build_path = path.resolve(path.dirname(__FILEPATH), "./../../views/gauze/build.js");
+	const gauze_v1_build_path = path.resolve(path.dirname(__FILEPATH), "./../../views/gauze/v1/build.js");
 	const project_build_path = path.resolve(path.dirname(__FILEPATH), "./../../views/project/build.js");
 	return new Promise(function (resolve, reject) {
 		const collection = {};
@@ -34,7 +34,7 @@ export const handler = function (argv) {
 	})
 		.then(function (collection) {
 			return new Promise(function (resolve, reject) {
-				exec(`node ${gauze_build_path}`, function (err, stdout, stderr) {
+				exec(`node ${gauze_v1_build_path}`, function (err, stdout, stderr) {
 					if (err) {
 						return reject(err);
 					}

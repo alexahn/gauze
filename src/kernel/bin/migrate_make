@@ -21,4 +21,4 @@ fi
 gauze_root=$1
 migration_name=$2
 
-npx knex --knexfile=$gauze_root/database/knexfile.js --esm migrate:make $migration_name
+npx knex --knexfile=$gauze_root/database/knexfile.js migrate:make $migration_name
