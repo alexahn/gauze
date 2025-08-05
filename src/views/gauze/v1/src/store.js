@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from "redux";
-//import { router5Middleware } from "./redux-router5/dist/index.es.js";
-import { router5Middleware } from "redux-router5";
+import { router5Middleware } from "./modules/redux-router5/dist/index.es.js";
+//import { router5Middleware } from "redux-router5";
 
 import router from "./router.js";
 import reducers from "./reducers.js";
