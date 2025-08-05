@@ -1,15 +1,10 @@
-.DS_Store
 .env
-*.swp
 node_modules
 tmp
 test.sqlite3
 development.sqlite3
 staging.sqlite3
 production.sqlite3
-#src/views/gauze/v1/build/*
-#src/views/gauze/v2/build/*
-#src/views/project/build/*
 src/views/gauze/v1/build/*.js
 src/views/gauze/v2/build/*.js
 src/views/project/build/*.js
