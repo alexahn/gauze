@@ -85,8 +85,10 @@ export default function ($gauze) {
 		} else {
 			// remove /gauze prefix from path when accessing files from root directory
 			if (path.extname(ctx.path)) {
+				// note: prefix length is 2 because /gauze/v1 has 2 segments
+				const prefix_length = 2
 				const path_split = ctx.path.split("/");
-				const rebased_path_split = path_split.slice(0, 1).concat(path_split.slice(2));
+				const rebased_path_split = path_split.slice(0, 1).concat(path_split.slice(prefix_length + 1));
 				const rebased_path = rebased_path_split.join("/");
 				await send(ctx, rebased_path, { root: __RELATIVE_DIRECTORY + "/views/gauze/v1/build", index: "index.html" });
 			} else {
@@ -123,8 +125,9 @@ export default function ($gauze) {
 		} else {
 			// remove /project prefix from path when accessing files from root directory
 			if (path.extname(ctx.path)) {
+				const prefix_length = 1
 				const path_split = ctx.path.split("/");
-				const rebased_path_split = path_split.slice(0, 1).concat(path_split.slice(2));
+				const rebased_path_split = path_split.slice(0, 1).concat(path_split.slice(prefix_length + 1));
 				const rebased_path = rebased_path_split.join("/");
 				await send(ctx, rebased_path, { root: __RELATIVE_DIRECTORY + "/views/project/build", index: "index.html" });
 			} else {
