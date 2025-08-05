@@ -1,6 +1,6 @@
 {
 	"name": "@ahn/gauze",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "graphql server framework",
 	"engines": {
 		"node": "21.7.3"
