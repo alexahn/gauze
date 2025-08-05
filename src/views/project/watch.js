@@ -5,6 +5,8 @@ config({
 	path: findConfig(".env"),
 });
 
+import path from "path";
+
 import * as esbuild from "esbuild";
 
 const ALLOWED_PROCESS_ENV = ["GAUZE_PROTOCOL", "GAUZE_HOST", "GAUZE_PORT", "GAUZE_DEBUG_UI"];
