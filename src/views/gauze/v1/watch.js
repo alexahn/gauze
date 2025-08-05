@@ -5,6 +5,8 @@ config({
 	path: findConfig(".env"),
 });
 
+import path from "path";
+
 import * as esbuild from "esbuild";
 
 const ALLOWED_PROCESS_ENV = ["GAUZE_PROTOCOL", "GAUZE_HOST", "GAUZE_PORT", "GAUZE_DEBUG_UI"];
@@ -43,7 +45,7 @@ let envPlugin = {
 
 async function watch() {
 	let ctx = await esbuild.context({
-		entryPoints: ["src/views/gauze/v1/src/index.jsx"],
+		entryPoints: [path.resolve(import.meta.dirname, "./src/index.jsx")], //["src/views/gauze/v1/src/index.jsx"],
 		bundle: true,
 		minify: false,
 		logLevel: "info",
@@ -51,7 +53,7 @@ async function watch() {
 		loader: {
 			".svg": "dataurl",
 		},
-		outfile: "./src/views/gauze/v1/build/index.js",
+		outfile: path.resolve(import.meta.dirname, "./build/index.js"), //"./src/views/gauze/v1/build/index.js",
 		plugins: [envPlugin],
 	});
 	await ctx.watch();

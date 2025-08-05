@@ -6,6 +6,7 @@ config({
 });
 
 import fs from "fs";
+import path from "path";
 
 import * as esbuild from "esbuild";
 
@@ -44,7 +45,7 @@ let envPlugin = {
 };
 
 const result = await esbuild.build({
-	entryPoints: ["src/views/gauze/v1/src/index.jsx"],
+	entryPoints: [path.resolve(import.meta.dirname, "./src/index.jsx")], //["src/views/gauze/v1/src/index.jsx"],
 	bundle: true,
 	minify: true,
 	sourcemap: true,
@@ -52,7 +53,7 @@ const result = await esbuild.build({
 	loader: {
 		".svg": "dataurl",
 	},
-	outfile: "./src/views/gauze/v1/build/index.js",
+	outfile: path.resolve(import.meta.dirname, "./build/index.js"), //"./src/views/gauze/v1/build/index.js",
 	plugins: [envPlugin],
 });
 
