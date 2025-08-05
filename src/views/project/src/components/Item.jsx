@@ -72,7 +72,7 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 					} else if (err.extensions && err.extensions.entity && err.extensions.readable) {
 						setCreateModelError(err.extensions.readable);
 					} else {
-						setCreateModelError("Something went wrong!")
+						setCreateModelError("Something went wrong!");
 					}
 				});
 		}
@@ -108,7 +108,7 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 					} else if (err.extensions && err.extensions.entity && err.extensions.readable) {
 						setUpdateModelError(err.extensions.readable);
 					} else {
-						setUpdateModelError("Something went wrong!")
+						setUpdateModelError("Something went wrong!");
 					}
 				});
 		}
@@ -136,7 +136,7 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 					if (err.extensions && err.extensions.entity && err.extensions.readable) {
 						setDeleteModelError(err.extensions.readable);
 					} else {
-						setDeleteModelError("Something went wrong!")
+						setDeleteModelError("Something went wrong!");
 					}
 				});
 		}
