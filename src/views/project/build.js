@@ -44,7 +44,7 @@ let envPlugin = {
 };
 
 const result = await esbuild.build({
-	entryPoints: ["src/views/project/src/index.jsx"],
+	entryPoints: [path.resolve(import.meta.dirname, "./src/index.jsx")],
 	bundle: true,
 	minify: true,
 	sourcemap: true,
@@ -52,7 +52,7 @@ const result = await esbuild.build({
 	loader: {
 		".svg": "dataurl",
 	},
-	outfile: "./src/views/project/build/index.js",
+	outfile: path.resolve(import.meta.dirname, "./build/index.js"),
 	plugins: [envPlugin],
 });
 

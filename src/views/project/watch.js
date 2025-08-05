@@ -43,7 +43,7 @@ let envPlugin = {
 
 async function watch() {
 	let ctx = await esbuild.context({
-		entryPoints: ["src/views/project/src/index.jsx"],
+		entryPoints: [path.resolve(import.meta.dirname, "./src/index.jsx")],
 		bundle: true,
 		minify: false,
 		logLevel: "info",
@@ -51,7 +51,7 @@ async function watch() {
 		loader: {
 			".svg": "dataurl",
 		},
-		outfile: "./src/views/project/build/index.js",
+		outfile: path.resolve(import.meta.dirname, "./build/index.js"),
 		plugins: [envPlugin],
 	});
 	await ctx.watch();
