@@ -9,7 +9,7 @@ A structured GraphQL framework.
 
 ## Quick Start
 
-1. Create a project using the CLI by running: `npx gauze create project { project_directory }`. A new directory will be created at `{ project_directory }` that contains the code for the project. All the code in the project is self-contained thereafter.
+1. Create a project using the CLI by running: `npx gauze create project { project_directory }`. A new directory will be created at `{ project_directory }` that contains the code for the project. All the code in the project is self-contained thereafter. The root `package.json` for the project must have `"type": "module"` set because the project uses ES6 modules.
 2. Create an `.env` file to hold the project environment variables. The template `example.env` can be used as a starting point.
 3. Create an entity definition file `{ entity_name }.js` based off the template `example.js`.
 4. Create the migration file for the entity: `npx gauze project { project_directory } migrate make { entity_name }`
