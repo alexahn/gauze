@@ -7,22 +7,52 @@ A structured GraphQL framework.
 - `nodejs` version `22.18.0`
 - `zsh`
 
-## Usage
+## Quick Start
 
-1. Create a project using the CLI: `npx gauze create project { project_directory }`
-2. Update `example.env` and rename to `.env`
-3. Update `example.json` and rename `{ entity_name }.js`
-4. Create the migration file for your entity: `npx gauze project { project_directory } migrate make { entity_name }`
-5. Update `{ project_directory }/database/migrations/.*{ entity_name }.js`
+1. Create a project using the CLI by running: `npx gauze create project { project_directory }`. A new directory will be created at `{ project_directory }` that contains the code for the project. All the code in the project is self-contained thereafter.
+2. Create an `.env` file to hold the project environment variables. The template `example.env` can be used as a starting point.
+3. Create an entity definition file `{ entity_name }.js` based off the template `example.js`.
+4. Create the migration file for the entity: `npx gauze project { project_directory } migrate make { entity_name }`
+5. Update `{ project_directory }/database/migrations/.*{ entity_name }.js`. The exports should be changed from ```/**
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<void> }
+ */
+exports.up = function(knex) {
+
+};
+
+/**
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<void> }
+ */
+exports.down = function(knex) {
+
+};``` to ```
+/**
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<void> }
+ */
+export function up(knex) {
+
+};
+
+/**
+ * @param { import("knex").Knex } knex
+ * @returns { Promise<void> }
+ */
+export function down(knex) {
+
+};
+``` because the project uses ES6 modules.
 6. Run the migration file: `npx gauze project { project_directory } migrate run`
-7. Create the project code for your entity: `npx gauze project { project_directory } create entity { project_directory } { entity_name }.json`
-8. Update `{ project_directory }/database/interfaces/graphql/schema.js` to register your entity
-9. Update `{ project_directory }/system/interfaces/graphql/schema.js` to register your entity
-10. Update `{ project_directory }/structure/relationships.js` to define your relationships
-11. Build the frontend application: `npx gauze project { project_directory } application build`
-12. Run the server: `npx gauze project { project_directory } application serve`
-13. Send GraphQL queries to the server (`http://localhost:4000/environment/graphql`, `http://localhost:4000/system/graphql`, `http://localhost:4000/database/graphql`)
-14. Visit `http://localhost:4000/gauze/` in the browser
+7. Create the project code for the entity: `npx gauze project { project_directory } create entity { project_directory } { entity_name }.json`. The models, controllers, and interfaces will be generated for the entity.
+8. Update `{ project_directory }/database/interfaces/graphql/schema.js` to register your entity. Entities and their methods can be registered here for the database realm. Add an entry to `ENTITIES` and `METHODS` using the type name (which is defined in structure). The shape of the type name should be `$structure.entities.{ entity_name }.database.graphql.TYPE__GRAPHQL__DATABASE__{ ENTITY_NAME}__STRUCTURE`.
+9. Update `{ project_directory }/system/interfaces/graphql/schema.js` to register your entity. Entities and their methods can be registered here for the system realm. Add an entry to `ENTITIES` and `METHODS` using the type name (which is defined in structure). The shape of the type name should be `$structure.entities.{ entity_name }.system.graphql.TYPE__GRAPHQL__SYSTEM__{ ENTITY_NAME}__STRUCTURE`.
+10. Update `{ project_directory }/structure/relationships.js` to define your relationships. Relationships are defined in a simple map, where the key specifies the from target and the value represents the to target. 
+11. Build the frontend application: `npx gauze project { project_directory } application build`. The frontend will be compiled to a single JavaScript file and a single CSS file. 
+12. Run the server: `npx gauze project { project_directory } application serve`. The default port is 4000. The server will have endpoints to handle GraphQL queries and mutations, and also serve assets for the frontend application.
+13. Send GraphQL queries to the server (`http://localhost:4000/environment/graphql`, `http://localhost:4000/system/graphql`, `http://localhost:4000/database/graphql`). Each realm has its own GraphQL endpoint, and each realm requires its own JWT. 
+14. Visit `http://localhost:4000/gauze/v1` in the browser. 
 
 ## Development Commands
 
