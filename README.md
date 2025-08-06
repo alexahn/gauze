@@ -14,42 +14,42 @@ A structured GraphQL framework.
 3. Create an entity definition file `{ entity_name }.js` based off the template `example.js`.
 4. Create the migration file for the entity: `npx gauze project { project_directory } migrate make { entity_name }`
 5. Update `{ project_directory }/database/migrations/.*{ entity_name }.js`. The exports should be changed from
-~~~
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-exports.up = function(knex) {
+	~~~
+	/**
+	 * @param { import("knex").Knex } knex
+	 * @returns { Promise<void> }
+	 */
+	exports.up = function(knex) {
 
-};
+	};
 
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-exports.down = function(knex) {
+	/**
+	 * @param { import("knex").Knex } knex
+	 * @returns { Promise<void> }
+	 */
+	exports.down = function(knex) {
 
-};
-~~~
-to
-~~~
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-export function up(knex) {
+	};
+	~~~
+	to
+	~~~
+	/**
+	 * @param { import("knex").Knex } knex
+	 * @returns { Promise<void> }
+	 */
+	export function up(knex) {
 
-};
+	};
 
-/**
- * @param { import("knex").Knex } knex
- * @returns { Promise<void> }
- */
-export function down(knex) {
+	/**
+	 * @param { import("knex").Knex } knex
+	 * @returns { Promise<void> }
+	 */
+	export function down(knex) {
 
-};
-~~~
-because the project uses ES6 modules.
+	};
+	~~~
+	because the project uses ES6 modules.
 6. Run the migration file: `npx gauze project { project_directory } migrate run`
 7. Create the project code for the entity: `npx gauze project { project_directory } create entity { project_directory } { entity_name }.json`. The models, controllers, and interfaces will be generated for the entity.
 8. Update `{ project_directory }/database/interfaces/graphql/schema.js` to register your entity. Entities and their methods can be registered here for the database realm. Add an entry to `ENTITIES` and `METHODS` using the type name (which is defined in structure). The shape of the type name should be `$structure.entities.{ entity_name }.database.graphql.TYPE__GRAPHQL__DATABASE__{ ENTITY_NAME}__STRUCTURE`.
