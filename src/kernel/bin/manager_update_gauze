@@ -41,15 +41,27 @@ arg4=$(echo "$arg1" | node $gauze_root/kernel/bin/format_string.js pascal_case)
 # create staging directory
 cp -r $base $staging
 
-find $staging -type f -name '*.js' -exec sed -i '' "s/a543731262804f64adcc0eae1a225acc/$arg1/g" {} +
-find $staging -type f -name '*.js' -exec sed -i '' "s/bb95d174a16f4ddd935ff3a802f7c7bc/$arg2/g" {} +
-find $staging -type f -name '*.js' -exec sed -i '' "s/caf5342ac38d41a6a02bb81d2d2b21a4/$arg3/g" {} +
-find $staging -type f -name '*.js' -exec sed -i '' "s/dd6fb00f485c4397add38780939d6923/$arg4/g" {} +
+if [[ "$OSTYPE" =~ ^darwin ]]; then
+	find $staging -type f -name '*.js' -exec sed -i '' "s/a543731262804f64adcc0eae1a225acc/$arg1/g" {} +
+	find $staging -type f -name '*.js' -exec sed -i '' "s/bb95d174a16f4ddd935ff3a802f7c7bc/$arg2/g" {} +
+	find $staging -type f -name '*.js' -exec sed -i '' "s/caf5342ac38d41a6a02bb81d2d2b21a4/$arg3/g" {} +
+	find $staging -type f -name '*.js' -exec sed -i '' "s/dd6fb00f485c4397add38780939d6923/$arg4/g" {} +
 
-find $staging -type f -name '*.graphql' -exec sed -i '' "s/a543731262804f64adcc0eae1a225acc/$arg1/g" {} +
-find $staging -type f -name '*.graphql' -exec sed -i '' "s/bb95d174a16f4ddd935ff3a802f7c7bc/$arg2/g" {} +
-find $staging -type f -name '*.graphql' -exec sed -i '' "s/caf5342ac38d41a6a02bb81d2d2b21a4/$arg3/g" {} +
-find $staging -type f -name '*.graphql' -exec sed -i '' "s/dd6fb00f485c4397add38780939d6923/$arg4/g" {} +
+	find $staging -type f -name '*.graphql' -exec sed -i '' "s/a543731262804f64adcc0eae1a225acc/$arg1/g" {} +
+	find $staging -type f -name '*.graphql' -exec sed -i '' "s/bb95d174a16f4ddd935ff3a802f7c7bc/$arg2/g" {} +
+	find $staging -type f -name '*.graphql' -exec sed -i '' "s/caf5342ac38d41a6a02bb81d2d2b21a4/$arg3/g" {} +
+	find $staging -type f -name '*.graphql' -exec sed -i '' "s/dd6fb00f485c4397add38780939d6923/$arg4/g" {} +
+else
+	find $staging -type f -name '*.js' -exec sed -i "s/a543731262804f64adcc0eae1a225acc/$arg1/g" {} +
+	find $staging -type f -name '*.js' -exec sed -i "s/bb95d174a16f4ddd935ff3a802f7c7bc/$arg2/g" {} +
+	find $staging -type f -name '*.js' -exec sed -i "s/caf5342ac38d41a6a02bb81d2d2b21a4/$arg3/g" {} +
+	find $staging -type f -name '*.js' -exec sed -i "s/dd6fb00f485c4397add38780939d6923/$arg4/g" {} +
+
+	find $staging -type f -name '*.graphql' -exec sed -i "s/a543731262804f64adcc0eae1a225acc/$arg1/g" {} +
+	find $staging -type f -name '*.graphql' -exec sed -i "s/bb95d174a16f4ddd935ff3a802f7c7bc/$arg2/g" {} +
+	find $staging -type f -name '*.graphql' -exec sed -i "s/caf5342ac38d41a6a02bb81d2d2b21a4/$arg3/g" {} +
+	find $staging -type f -name '*.graphql' -exec sed -i "s/dd6fb00f485c4397add38780939d6923/$arg4/g" {} +
+fi
 
 # database
 cp $staging/database/models/gauze.js $project_root/database/models/$arg1.js
