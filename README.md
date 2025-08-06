@@ -1,6 +1,6 @@
 # gauze
 
-A GraphQL server architecture.
+A structured GraphQL framework.
 
 ## Prerequisites
 
