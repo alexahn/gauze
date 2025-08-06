@@ -4,7 +4,7 @@ A GraphQL server architecture.
 
 ## Prerequisites
 
-- `nodejs` version `21.7.3`
+- `nodejs` version `22.18.0`
 - `zsh`
 
 ## Usage

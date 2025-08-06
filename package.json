@@ -3,7 +3,7 @@
 	"version": "0.0.2",
 	"description": "graphql server framework",
 	"engines": {
-		"node": "21.7.3"
+		"node": "22.18.0"
 	},
 	"main": "src/index.js",
 	"bin": "./src/command/gauze.js",
