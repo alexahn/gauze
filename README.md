@@ -25,16 +25,16 @@ npm install @ahn/gauze
 ### Koa and Knex
 The framework uses `koa` as the underlying web server and `knex` as the database manager. 
 
-### MVC
+### MVIC
 Gauze implements an abstract model view controller architecture. One addition to the pattern is the introduction of interfaces. Agents interact with HTTP GraphQL endpoints (representing the "interface" in MVIC) or the graphical user interface (representing the "view" in MVIC). Entity definitions create models, which are the union of structural information with a concrete database. Controllers primarily handle interactions from the interface layer. Views can be thought of as translating agent inputs to interface actions. 
 
 ### Realm
 A realm is a processing layer in the framework, and also a self-contained API layer. Every realm interacts with realms below it, but never with realms above it. In a way, realms are an extension of the import hierarchy for the framework. Every realm contains its own GraphQL schema, and every realm can handle GraphQL queries from realms above it. As an example, the system realm interacts with the database realm to store and retrieve model data. Every realm requires its own JWT to interact with directly, but applications should be engineered to mostly interact with the system level realm. Realms can have specific authentication requirements. There are three primary realms currently: `kernel`, `database`, and `system`. Every realm requires a JWT with the corresponding realm audience, and these JWTs are generated via authenticating in the `environment` realm. The `environment` realm is a special realm as it is outermost layer, and the first point of contact for any agent. An agent will authenticate in the `environment` realm and then create a session for a realm they wish to interact with, such as the `system` realm.
 
-Every realm is represented by a directory which holds the code for the realm. Every realm exposes a root level `koa` router in `router.js`, which turns the realm into a composoable unit.
+Every realm is represented by a directory which holds the code for the realm. Every realm exposes a root level `koa` router in `router.js`, which turns the realm into a composable unit.
 
 ### Agent
-An agent is something that interacts with a realm. Five agent types are created when signing up: the root agent, the account agent, the user agent, the person agent, and the character agent. Currently, there is an informal hierarchy in that accounts should be thought of as holding users, and persons should be thought of as holding characters. An account is the internal representation of identity (self-contained) and a person is the external representation of identity (not self-contained). Access to realms can be limited by agent type. Access to entities can be limited by agent type.
+An agent is anything that interacts with a realm. Five agent types are created when signing up: the root agent, the account agent, the user agent, the person agent, and the character agent. Currently, there is an informal hierarchy in that accounts should be thought of as holding users, and persons should be thought of as holding characters. An account is the internal representation of identity (self-contained) and a person is the external representation of identity (not self-contained). Access to realms can be limited by agent type. Access to entities can be limited by agent type.
 
 Every agent is represented by a JWT. Information about the agent is encoded in the JWT payload in the format:
 ```
@@ -352,76 +352,6 @@ The command will serve the application (on port `4000` by default). The React us
 - `/kernel/graphql` serves the GraphQL schema for the `kernel` realm.
 
 It is recommended to use a GraphQL integrated development environment like `graphiql` to explore these schemas. An authorization header must be set with `Bearer { JWT }` to interact with non-environment realms.
-
-## Quick Start
-
-1. Create a project using the CLI by running: `npx gauze create project { project_directory }`. A new directory will be created at `{ project_directory }` that contains the code for the project. All the code in the project is self-contained thereafter. The root `package.json` for the project must have `"type": "module"` set because the project uses ES6 modules.
-2. Create an `.env` file to hold the project environment variables. The template `example.env` can be used as a starting point.
-3. Create an entity definition file `{ entity_name }.js` based off the template `example.js`.
-4. Create the migration file for the entity: `npx gauze project { project_directory } migrate make { entity_name }`
-5. Update `{ project_directory }/database/migrations/.*{ entity_name }.js`. The exports should be changed from
-	~~~
-	/**
-	 * @param { import("knex").Knex } knex
-	 * @returns { Promise<void> }
-	 */
-	exports.up = function(knex) {
-
-	};
-
-	/**
-	 * @param { import("knex").Knex } knex
-	 * @returns { Promise<void> }
-	 */
-	exports.down = function(knex) {
-
-	};
-	~~~
-	to
-	~~~
-	/**
-	 * @param { import("knex").Knex } knex
-	 * @returns { Promise<void> }
-	 */
-	export function up(knex) {
-
-	};
-
-	/**
-	 * @param { import("knex").Knex } knex
-	 * @returns { Promise<void> }
-	 */
-	export function down(knex) {
-
-	};
-	~~~
-	because the project uses ES6 modules.
-6. Run the migration file: `npx gauze project { project_directory } migrate run`
-7. Create the project code for the entity: `npx gauze project { project_directory } create entity { project_directory } { entity_name }.json`. The models, controllers, and interfaces will be generated for the entity.
-8. Update `{ project_directory }/database/interfaces/graphql/schema.js` to register your entity. Entities and their methods can be registered here for the database realm. Add an entry to `ENTITIES` and `METHODS` using the type name (which is defined in structure). The shape of the type name should be `$structure.entities.{ entity_name }.database.graphql.TYPE__GRAPHQL__DATABASE__{ ENTITY_NAME }__STRUCTURE`.
-9. Update `{ project_directory }/system/interfaces/graphql/schema.js` to register your entity. Entities and their methods can be registered here for the system realm. Add an entry to `ENTITIES` and `METHODS` using the type name (which is defined in structure). The shape of the type name should be `$structure.entities.{ entity_name }.system.graphql.TYPE__GRAPHQL__SYSTEM__{ ENTITY_NAME }__STRUCTURE`.
-10. Update `{ project_directory }/structure/relationships.js` to define your relationships. Relationships are defined in a simple map, where the key specifies the from target and the value represents the to target. 
-11. Build the frontend application: `npx gauze project { project_directory } application build`. The frontend will be compiled to a single JavaScript file and a single CSS file. 
-12. Run the server: `npx gauze project { project_directory } application serve`. The default port is 4000. The server will have endpoints to handle GraphQL queries and mutations, and also serve assets for the frontend application.
-13. Send GraphQL queries to the server (`http://localhost:4000/environment/graphql`, `http://localhost:4000/system/graphql`, `http://localhost:4000/database/graphql`). Each realm has its own GraphQL endpoint, and each realm requires its own JWT. 
-14. Visit `http://localhost:4000/gauze/v1` in the browser. 
-
-## Usage
-
-### CLI
-The CLI is the main interface for the framework. The CLI is primarily used to create new projects, manage entity definitions, manage database migrations, and handle the project application. Every project hosts an application. A project contains multiple realms. Realms are processing layers in the framework's architecture, and currently there are 3 main realms: kernel, database, and system. Most application code will be written in the system realm.
-
-### Project
-All code for a project was designed to be self-contained, so creating a new project is akin to ejecting from a kernel (such that the project has its own kernel). The root level directories in a project all have significance. `abstract` hosts abstract definitions like errors and entities. `command` hosts CLI commands. `database` is the database realm, and primarily concerns itself with dealing with an underlying database. The framework currently uses SQL as the database. `environment` is the environment realm, and is the initial external interface for an agent. An agent authenticates in the `environment` realm before interacting with other realms. `kernel` hosts the kernel, which contains the majority of the framework code. `structure` hosts structural information for the entities, such that they can be turned into models that interact with a database. `system` is the system realm, and is the realm in which most application code will be written. `views` hosts the user interface for the project. Every realm contains the three directories: `controllers`, `interfaces`, and `models`. Every structural realm (such as `abstract` and `structure`) contains the three directories: `entities` (for entity definitions), `gauze` (for framework definitions), `project` (for project definitions). The `views` realm contains two directories: `gauze` (for internal framework user interface), and `project` (for project specific user interface). Every project can contains multiple systems (not to be confused with the system realm), which are basically modular projects.
-
-### Realm
-A realm is a processing layer in the framework, and also a self-contained API layer. Every realm interacts with realms below it, but never with realms above it. In a way, realms are an extension of the import hierarchy for the framework. Every realm contains its own GraphQL schema, and every realm can handle GraphQL queries from realms above it. As an example, the system realm interacts with the database realm to store and retrieve model data. Every realm requires its own JWT to interact with directly, but applications should be engineered to mostly interact with the system level realm. Realms can have specific authentication requirements. There are three primary realms currently: `kernel`, `database`, and `system`.
-
-### Agent
-An agent is someone who interacts with the system. The system is represented by the system realm, and each project can be thought of as a system that can be used along other systems. Five agent types are created when signing up: the root agent, the account agent, the user agent, the person agent, and the character agent. Entities and realms can be limited to particular agents. Currently, there is an informal hierarchy in that accounts should be thought of as holding users, and persons should be thought of as holding characters. An account is the internal representation of identity (self-contained) and a person is the external representation of identity (not self-contained).
-
-### Entity
-Entities are abstract definitions of data. An entity definition is turned into a useable model in the framework. Every entity currently supports five methods: create, read, update, delete, and count. Method access on entities are controlled by either whitelists or blacklists, dependening on whether the method is public or private. If a method is private, then whitelists are used to allow access. If a method is public, then blacklists are used to disallow access. Relationships are defined between entities to allow graph traversal. Whitelists and blacklists have their own hierarchy for self-management. There are three levels of authority: root, trunk, and leaf. There is only one root and it associated with whoever creates a piece of data. Trunk can manage other trunks and leaves. Leaf level cannot manage anyone else.
 
 ## Gauze Commands
 
