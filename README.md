@@ -108,7 +108,7 @@ The environment variables above are required to interact with a project. Create 
 ```
 npx gauze project { project_name } create entity { entity_name }.js
 ```
-The command will create the relevant models, controllers, and structural files in the project using the entity definition in `{ entity_name }.js`. An entity definition file typically looks like:
+The command will create the relevant models, controllers, and structural files in the project using the entity definition in `{ entity_name }.js`. After creating a project, there will be an example entity definition file called `example.js`. An entity definition file typically looks like:
 ```
 export default function ($abstract) {
 	const ENTITY = {
@@ -330,6 +330,12 @@ Database migrations are defined using `knex`. Populate the `up` and `down` funct
 npx gauze project { project_name } migrate run
 ```
 The command will run the database migrations for the project. The command ensures that the corresponding tables and columns will exist for every entity, so long as the migration files have been defined properly. 
+
+Update `{ project_directory }/database/interfaces/graphql/schema.js` to register your entity. Entities and their methods can be registered here for the database realm. Add an entry to `ENTITIES` and `METHODS` using the type name (which is defined in structure). The shape of the type name should be `$structure.entities.{ entity_name }.database.graphql.TYPE__GRAPHQL__DATABASE__{ ENTITY_NAME }__STRUCTURE`.
+
+Update `{ project_directory }/system/interfaces/graphql/schema.js` to register your entity. Entities and their methods can be registered here for the system realm. Add an entry to `ENTITIES` and `METHODS` using the type name (which is defined in structure). The shape of the type name should be `$structure.entities.{ entity_name }.system.graphql.TYPE__GRAPHQL__SYSTEM__{ ENTITY_NAME }__STRUCTURE`.
+
+Update `{ project_directory }/structure/relationships.js` to define your relationships. Relationships are defined in a simple map, where the key specifies the from target and the value represents the to target. 
 
 ### Run the project application
 ```
