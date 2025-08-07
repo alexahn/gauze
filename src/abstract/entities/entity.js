@@ -1,0 +1,123 @@
+export default function ($abstract) {
+	const ENTITY = {
+		name: "entity",
+		table_name: "gauze__entity",
+		primary_key: "id",
+		graphql_meta_type: "ENTITY",
+		default_order: "created_at",
+		default_order_direction: "asc",
+		fields: {
+			id: {
+				name: "id",
+				indexed: true,
+				required: false,
+				sql_type: "uuid",
+				graphql_type: $abstract.gauze.types.graphql.scalars.id.SCALAR__ID__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				description: "id",
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.UPDATE_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("id")],
+				serializers: [],
+				post_serialize_middlewares: [],
+				pre_deserialize_middlewares: [],
+				deserializers: [],
+				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__agent_user"],
+			},
+			created_at: {
+				name: "created_at",
+				indexed: true,
+				required: false,
+				sql_type: "datetime",
+				graphql_type: $abstract.gauze.types.graphql.scalars.date.SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				description: "created_at",
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.CREATED_AT_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("created_at")],
+				serializers: [$abstract.gauze.serializers.CREATED_AT__SERIALIZER__GAUZE__ABSTRACT("created_at")],
+				post_serialize_middlewares: [],
+				pre_deserialize_middlewares: [],
+				deserializers: [$abstract.gauze.deserializers.CREATED_AT__DESERIALIZER__GAUZE__ABSTRACT("created_at")],
+				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__agent_user"],
+			},
+			updated_at: {
+				name: "updated_at",
+				indexed: true,
+				required: false,
+				sql_type: "datetime",
+				graphql_type: $abstract.gauze.types.graphql.scalars.date.SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				description: "updated_at",
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.UPDATED_AT_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("updated_at")],
+				serializers: [$abstract.gauze.serializers.UPDATED_AT__SERIALIZER__GAUZE__ABSTRACT("updated_at")],
+				post_serialize_middlewares: [],
+				pre_deserialize_middlewares: [],
+				deserializers: [$abstract.gauze.deserializers.UPDATED_AT__DESERIALIZER__GAUZE__ABSTRACT("updated_at")],
+				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__agent_user"],
+			},
+			deleted_at: {
+				name: "deleted_at",
+				indexed: true,
+				required: false,
+				sql_type: "datetime",
+				graphql_type: $abstract.gauze.types.graphql.scalars.date.SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				description: "deleted_at",
+				pre_serialize_middlewares: [$abstract.gauze.middlewares.DELETED_AT_PROTECTED__MIDDLEWARE__GAUZE__ABSTRACT("deleted_at")],
+				serializers: [$abstract.gauze.serializers.DELETED_AT__SERIALIZER__GAUZE__ABSTRACT("deleted_at")],
+				post_serialize_middlewares: [],
+				pre_deserialize_middlewares: [],
+				deserializers: [$abstract.gauze.deserializers.DELETED_AT__DESERIALIZER__GAUZE__ABSTRACT("deleted_at")],
+				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__agent_user"],
+			},
+			text: {
+				name: "text",
+				indexed: true,
+				required: false,
+				sql_type: "string",
+				graphql_type: $abstract.gauze.types.graphql.scalars.string.SCALAR__STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				graphql_type_parameters: {
+					maximum_length: 16,
+				},
+				description: "text",
+				pre_serialize_middlewares: [],
+				serializers: [],
+				post_serialize_middlewares: [],
+				pre_deserialize_middlewares: [],
+				deserializers: [],
+				post_deserialize_middlewares: [],
+				allowed_agent_types: ["gauze__agent_user"],
+			},
+		},
+		// todo: update these names to match the graphql operation names, or add a new field called graphql_operation_name
+		methods: {
+			create: {
+				name: "create",
+				privacy: "public",
+				allowed_agent_types: ["gauze__agent_user"],
+			},
+			read: {
+				name: "read",
+				privacy: "public",
+				allowed_agent_types: ["gauze__agent_user"],
+			},
+			update: {
+				name: "update",
+				privacy: "public",
+				allowed_agent_types: ["gauze__agent_user"],
+			},
+			delete: {
+				name: "delete",
+				privacy: "public",
+				allowed_agent_types: ["gauze__agent_user"],
+			},
+			count: {
+				name: "count",
+				privacy: "public",
+				allowed_agent_types: ["gauze__agent_user"],
+			},
+		},
+	};
+	ENTITY.graphql_attributes_fields = $abstract.gauze.utility.create_graphql_attributes_fields(ENTITY);
+	ENTITY.graphql_attributes_string = $abstract.gauze.utility.create_graphql_attributes_string(ENTITY);
+	ENTITY.graphql_where_fields = $abstract.gauze.utility.create_graphql_where_fields(ENTITY);
+	ENTITY.graphql_where_string = $abstract.gauze.utility.create_graphql_where_string(ENTITY);
+	return ENTITY;
+}
