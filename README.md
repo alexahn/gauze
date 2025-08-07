@@ -7,6 +7,19 @@ A structured GraphQL framework.
 - `nodejs` version `22.18.0`
 - `zsh`
 
+## Installation
+```
+npm install @ahn/gauze
+```
+
+## Quick Start
+1. `npx gauze create project { project_name }`
+2. `mv example.env .env`
+3. `npx gauze project { project_name } migrate run`
+4. `npx gauze project { project_name } application build`
+5. `npx gauze project { project_name } application serve`
+6. `http://localhost:4000/gauze/v1`
+
 ## Quick Start
 
 1. Create a project using the CLI by running: `npx gauze create project { project_directory }`. A new directory will be created at `{ project_directory }` that contains the code for the project. All the code in the project is self-contained thereafter. The root `package.json` for the project must have `"type": "module"` set because the project uses ES6 modules.
