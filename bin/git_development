@@ -9,3 +9,18 @@ npx gauze create entity ./src ./gauze/ytitne.js
 npx gauze create gauze ./src ./gauze/ezuag.js
 
 cp -r ./env/development/* ./src/
+
+# class name fix for pascal case
+find ./src/database/models/ezuag.js -type f -name "*.js" -exec sed -i '' "s/EzuagDatabaseModel/EzuagEzuagDatabaseModel/g" {} +
+find ./src/database/models/ytitne.js -type f -name "*.js" -exec sed -i '' "s/YtitneDatabaseModel/YtitneYtitneDatabaseModel/g" {} +
+
+find ./src/database/controllers/ezuag.js -type f -name "*.js" -exec sed -i '' "s/EzuagDatabaseController/EzuagEzuagDatabaseController/g" {} +
+find ./src/database/controllers/ytitne.js -type f -name "*.js" -exec sed -i '' "s/YtitneDatabaseController/YtitneYtitneDatabaseController/g" {} +
+
+find ./src/system/models/ezuag.js -type f -name "*.js" -exec sed -i '' "s/EzuagSystemModel/EzuagEzuagSystemModel/g" {} +
+find ./src/system/models/ytitne.js -type f -name "*.js" -exec sed -i '' "s/YtitneSystemModel/YtitneYtitneSystemModel/g" {} +
+
+find ./src/system/controllers/ezuag.js -type f -name "*.js" -exec sed -i '' "s/EzuagSystemController/EzuagEzuagSystemController/g" {} +
+find ./src/system/controllers/ytitne.js -type f -name "*.js" -exec sed -i '' "s/YtitneSystemController/YtitneYtitneSystemController/g" {} +
+
+
