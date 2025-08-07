@@ -20,8 +20,6 @@ src/views/gauze/v2/build/*.map
 src/views/project/build/*.map
 test
 /gauze
-/release
-/development
 /bin
 /env
 eslint.config.js
