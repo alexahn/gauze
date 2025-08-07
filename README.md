@@ -68,7 +68,7 @@ Every project is represented by a directory that holds the code for the entire p
 ```
 npx gauze create project { project_name }
 ```
-The command will create a new directory at `{ project_ name }` that houses the project code. A project is designed to be as self-contained as possible, and therefore has its own kernel and CLI. The command `npx gauze project { project_name } { sub_command }` will be used to pass execution control to the project's CLI. A project is a collection of realms and abstract definitions, along with a functioning kernel and CLI.
+The command will create a new directory at `{ project_name }` that houses the project code. A project is designed to be as self-contained as possible, and therefore has its own kernel and CLI. The command `npx gauze project { project_name } { sub_command }` will be used to pass execution control to the project's CLI. A project is a collection of realms and abstract definitions, along with a functioning kernel and CLI.
 
 ### Create environment variables file
 ```
