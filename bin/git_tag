@@ -7,3 +7,4 @@ if [ "$#" -eq 0 ]; then
 fi
 
 git tag -a v$1 -m "Release version $1"
+git push origin v$1
