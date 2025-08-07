@@ -1,0 +1,12 @@
+#!/bin/zsh
+
+cp -r ./release/* ./src/
+
+npx gauze delete gauze ./src ./gauze/gauze.js
+
+npx gauze delete entity ./src ./gauze/entity.js
+
+npx gauze delete entity ./src ./gauze/ytitne.js
+
+npx gauze delete gauze ./src ./gauze/ezuag.js
+

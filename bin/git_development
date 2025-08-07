@@ -1,0 +1,11 @@
+#!/bin/zsh
+
+npx gauze create gauze ./src ./gauze/gauze.js
+
+npx gauze create entity ./src ./gauze/entity.js
+
+npx gauze create entity ./src ./gauze/ytitne.js
+
+npx gauze create gauze ./src ./gauze/ezuag.js
+
+cp -r ./development/* ./src/
