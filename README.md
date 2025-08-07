@@ -1,6 +1,6 @@
 # gauze
 
-A structured GraphQL framework.
+Gauze is a structured GraphQL framework, with a focus on modularity. It offers a unified way to define and interact with data, and comes with a built in authentication and authorization system. The framework has been designed as a fractal architecture, and there is a strong motivation for conceptual recurrence.
 
 ## Prerequisites
 
