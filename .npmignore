@@ -5,6 +5,9 @@ test.sqlite3
 development.sqlite3
 staging.sqlite3
 production.sqlite3
+metafile.json
+Makefile
+todo
 src/views/gauze/v1/build/*.js
 src/views/gauze/v2/build/*.js
 src/views/project/build/*.js
@@ -15,3 +18,8 @@ src/views/gauze/v1/build/*.map
 src/views/gauze/v2/build/*.map
 src/views/project/build/*.map
 test
+./gauze
+./release
+./development
+./bin
+./env
