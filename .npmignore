@@ -8,6 +8,7 @@ production.sqlite3
 metafile.json
 Makefile
 todo
+notes
 src/views/gauze/v1/build/*.js
 src/views/gauze/v2/build/*.js
 src/views/project/build/*.js
@@ -18,8 +19,9 @@ src/views/gauze/v1/build/*.map
 src/views/gauze/v2/build/*.map
 src/views/project/build/*.map
 test
-./gauze
-./release
-./development
-./bin
-./env
+/gauze
+/release
+/development
+/bin
+/env
+eslint.config.js
