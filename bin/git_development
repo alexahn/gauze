@@ -8,4 +8,4 @@ npx gauze create entity ./src ./gauze/ytitne.js
 
 npx gauze create gauze ./src ./gauze/ezuag.js
 
-cp -r ./development/* ./src/
+cp -r ./env/development/* ./src/
