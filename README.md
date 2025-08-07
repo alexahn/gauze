@@ -30,10 +30,12 @@ Gauze implements an abstract model view controller architecture. One addition to
 
 ### Realm
 A realm is a processing layer in the framework, and also a self-contained API layer. Every realm interacts with realms below it, but never with realms above it. In a way, realms are an extension of the import hierarchy for the framework. Every realm contains its own GraphQL schema, and every realm can handle GraphQL queries from realms above it. As an example, the system realm interacts with the database realm to store and retrieve model data. Every realm requires its own JWT to interact with directly, but applications should be engineered to mostly interact with the system level realm. Realms can have specific authentication requirements. There are three primary realms currently: `kernel`, `database`, and `system`. Every realm requires a JWT with the corresponding realm audience, and these JWTs are generated via authenticating in the `environment` realm. The `environment` realm is a special realm as it is outermost layer, and the first point of contact for any agent. An agent will authenticate in the `environment` realm and then create a session for a realm they wish to interact with, such as the `system` realm.
+
 Every realm is represented by a directory which holds the code for the realm. Every realm exposes a root level `koa` router in `router.js`, which turns the realm into a composoable unit.
 
 ### Agent
 An agent is something that interacts with a realm. Five agent types are created when signing up: the root agent, the account agent, the user agent, the person agent, and the character agent. Currently, there is an informal hierarchy in that accounts should be thought of as holding users, and persons should be thought of as holding characters. An account is the internal representation of identity (self-contained) and a person is the external representation of identity (not self-contained). Access to realms can be limited by agent type. Access to entities can be limited by agent type.
+
 Every agent is represented by a JWT. Information about the agent is encoded in the JWT payload in the format:
 ```
 {
@@ -50,11 +52,13 @@ Every agent is represented by a JWT. Information about the agent is encoded in t
 ```
 
 ### Entity
-Entities are abstract definitions of data. An entity definition is turned into a useable model by the framework by joining its structural information with an underlying database. Every entity currently supports five methods: create, read, update, delete, and count. Method access on entities are controlled by either whitelists or blacklists, dependening on whether the method is public or private. If a method is private, then whitelists are used to allow access. If a method is public, then blacklists are used to disallow access. Whitelists and blacklists have their own hierarchy for self-management. There are three levels of authority: root, trunk, and leaf. There is only one root and it associated with the agent that creates the model. Trunk can manage other trunks and leaves. Leaf level cannot manage anyone else. Relationships can be defined to allow graph traversal. Relationships can be traversed via the `relationships_to` and `relationships_from` queries and mutations in GraphQL.
+Entities are abstract definitions of data. An entity definition is turned into a useable model by the framework by joining its structural information with an underlying database. Every entity currently supports five methods: `create`, `read`, `update`, `delete`, and `count`. Method access on entities are controlled by either whitelists or blacklists, dependening on whether the method is public or private. If a method is private, then whitelists are used to allow access. If a method is public, then blacklists are used to disallow access. Whitelists and blacklists have their own hierarchy for self-management. There are three levels of authority: root, trunk, and leaf. There is only one root and it associated with the agent that creates the model. Trunk can manage other trunks and leaves. Leaf level cannot manage anyone else. Relationships can be defined to allow graph traversal. Relationships can be traversed via the `relationships_to` and `relationships_from` queries and mutations in GraphQL.
+
 Every entity is represented by a JavaScript file that holds a function which returns the structural information for the entity.
 
 ### Project
 A project is a self-contained kernel and CLI, along with a collection of realms, abstract definitions, user interfaces, and sub-projects. The root level directories in a project all have significance. `abstract` hosts abstract definitions like errors and entities. `command` hosts CLI commands. `database` is the database realm which holds the migration files and relevant database interaction code. `environment` is the environment realm, and is the initial external interface for an agent. An agent authenticates in the `environment` realm before interacting with other realms. `kernel` hosts the kernel, which contains the majority of the framework code. `structure` hosts structural information for entities. `system` is the system realm, and is the realm in which most application code will be written. `views` hosts the user interface for the project. Every realm contains the three directories: `controllers`, `interfaces`, and `models`. Every structural realm (such as `abstract` and `structure`) contains the three directories: `entities` (for entity definitions), `gauze` (for framework definitions), `project` (for project definitions). The `views` realm contains two directories: `gauze` (for internal framework user interface), and `project` (for project specific user interface). Every project can contains multiple sub-projects, which can be placed in a `projects` directory.
+
 Every project is represented by a directory that holds the code for the entire project. Every project exposes a root level `koa` router in `router.js`, which turns the project into a composable unit.
 
 
@@ -250,27 +254,27 @@ export default function ($abstract) {
 Field middlewares are objects with the following fields:
 ```
 {
-		create: function (attributes) {
-			// do something with attributes
-			return attributes;
-		},
-		update: function (attributes) {
-			// do something with attributes
-			return attributes;
-		},
-		read: function (attributes) {
-			// do something with attributes
-			return attributes;
-		},
-		delete: function (attributes) {
-			// do something with attributes
-			return attributes;
-		},
-		count: function (attributes) {
-			// do something with attributes
-			return attributes;
-		},
-	}
+	create: function (attributes) {
+		// do something with attributes
+		return attributes;
+	},
+	update: function (attributes) {
+		// do something with attributes
+		return attributes;
+	},
+	read: function (attributes) {
+		// do something with attributes
+		return attributes;
+	},
+	delete: function (attributes) {
+		// do something with attributes
+		return attributes;
+	},
+	count: function (attributes) {
+		// do something with attributes
+		return attributes;
+	},
+}
 ```
 Higher order functions can be used to define middlewares so that the individual middleware functions have access to the field that it is acting on:
 ```
@@ -340,6 +344,7 @@ The command will serve the application (on port `4000` by default). The React us
 - `/system/graphql` serves the GraphQL schema for the `system` realm.
 - `/database/graphql` serves the GraphQL schema for the `database` realm.
 - `/kernel/graphql` serves the GraphQL schema for the `kernel` realm.
+
 It is recommended to use a GraphQL integrated development environment like `graphiql` to explore these schemas. An authorization header must be set with `Bearer { JWT }` to interact with non-environment realms.
 
 ## Quick Start
