@@ -2,7 +2,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__AGENT_ACCOUNT__MODEL__SYSTEM } from "./../models/agent_account.js";
 
-class AgentAccountSystemController extends $kernel.src.controllers.system.SystemController {
+class Agent_AccountSystemController extends $kernel.src.controllers.system.SystemController {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
@@ -34,6 +34,6 @@ const CONFIG__AGENT_ACCOUNT__CONTROLLER__SYSTEM = {
 	model: MODEL__AGENT_ACCOUNT__MODEL__SYSTEM,
 	model_name: "MODEL__AGENT_ACCOUNT__MODEL__SYSTEM",
 };
-const CONTROLLER__AGENT_ACCOUNT__CONTROLLER__SYSTEM = new AgentAccountSystemController(ROOT_CONFIG__AGENT_ACCOUNT__CONTROLLER__SYSTEM, CONFIG__AGENT_ACCOUNT__CONTROLLER__SYSTEM);
+const CONTROLLER__AGENT_ACCOUNT__CONTROLLER__SYSTEM = new Agent_AccountSystemController(ROOT_CONFIG__AGENT_ACCOUNT__CONTROLLER__SYSTEM, CONFIG__AGENT_ACCOUNT__CONTROLLER__SYSTEM);
 
 export { CONTROLLER__AGENT_ACCOUNT__CONTROLLER__SYSTEM };

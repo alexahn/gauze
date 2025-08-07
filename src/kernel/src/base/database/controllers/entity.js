@@ -2,7 +2,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__cd637bc32c364580be5cc28396d3dee8__MODEL__DATABASE } from "./../models/a2b8dbc3427b41a9899e11671c2422c7.js";
 
-class d741787fe14145d79bbdd8ad8057ca28DatabaseController extends $kernel.src.controllers.database.DatabaseController {
+class ba381b0cc764c4c9a187b716ae94ed96DatabaseController extends $kernel.src.controllers.database.DatabaseController {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
@@ -34,7 +34,7 @@ const CONFIG__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__DATABASE = {
 	model: MODEL__cd637bc32c364580be5cc28396d3dee8__MODEL__DATABASE,
 	model_name: "MODEL__cd637bc32c364580be5cc28396d3dee8__MODEL__DATABASE",
 };
-const CONTROLLER__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__DATABASE = new d741787fe14145d79bbdd8ad8057ca28DatabaseController(
+const CONTROLLER__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__DATABASE = new ba381b0cc764c4c9a187b716ae94ed96DatabaseController(
 	ROOT_CONFIG__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__DATABASE,
 	CONFIG__cd637bc32c364580be5cc28396d3dee8__CONTROLLER__DATABASE,
 );

@@ -2,7 +2,7 @@ import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-class YtitneDatabaseModel extends $kernel.src.models.database.DatabaseModel {
+class YtitneYtitneDatabaseModel extends $kernel.src.models.database.DatabaseModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
@@ -37,6 +37,6 @@ const CONFIG__YTITNE__MODEL__DATABASE = {
 	table_name: $structure.entities.ytitne.database.sql.TABLE_NAME__SQL__DATABASE__YTITNE__STRUCTURE,
 	primary_key: $structure.entities.ytitne.database.sql.PRIMARY_KEY__SQL__DATABASE__YTITNE__STRUCTURE,
 };
-const MODEL__YTITNE__MODEL__DATABASE = new YtitneDatabaseModel(ROOT_CONFIG__YTITNE__MODEL__DATABASE, CONFIG__YTITNE__MODEL__DATABASE);
+const MODEL__YTITNE__MODEL__DATABASE = new YtitneYtitneDatabaseModel(ROOT_CONFIG__YTITNE__MODEL__DATABASE, CONFIG__YTITNE__MODEL__DATABASE);
 
 export { MODEL__YTITNE__MODEL__DATABASE };

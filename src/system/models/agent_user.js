@@ -5,7 +5,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__RELATIONSHIP__MODEL__SYSTEM } from "./relationship.js";
 
-class AgentUserSystemModel extends $kernel.src.models.system.SystemModel {
+class Agent_UserSystemModel extends $kernel.src.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
@@ -114,6 +114,6 @@ const CONFIG__AGENT_USER__MODEL__SYSTEM = {
 	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 	relationship_model: MODEL__RELATIONSHIP__MODEL__SYSTEM,
 };
-const MODEL__AGENT_USER__MODEL__SYSTEM = new AgentUserSystemModel(ROOT_CONFIG__AGENT_USER__MODEL__SYSTEM, CONFIG__AGENT_USER__MODEL__SYSTEM);
+const MODEL__AGENT_USER__MODEL__SYSTEM = new Agent_UserSystemModel(ROOT_CONFIG__AGENT_USER__MODEL__SYSTEM, CONFIG__AGENT_USER__MODEL__SYSTEM);
 
 export { MODEL__AGENT_USER__MODEL__SYSTEM };

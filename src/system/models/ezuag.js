@@ -3,7 +3,7 @@ import * as $structure from "./../../structure/index.js";
 import * as $database from "./../../database/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-class EzuagSystemModel extends $kernel.src.models.system.SystemModel {
+class EzuagEzuagSystemModel extends $kernel.src.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
@@ -111,6 +111,6 @@ const CONFIG__EZUAG__MODEL__SYSTEM = {
 	schema: $database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 };
-const MODEL__EZUAG__MODEL__SYSTEM = new EzuagSystemModel(ROOT_CONFIG__EZUAG__MODEL__SYSTEM, CONFIG__EZUAG__MODEL__SYSTEM);
+const MODEL__EZUAG__MODEL__SYSTEM = new EzuagEzuagSystemModel(ROOT_CONFIG__EZUAG__MODEL__SYSTEM, CONFIG__EZUAG__MODEL__SYSTEM);
 
 export { MODEL__EZUAG__MODEL__SYSTEM };

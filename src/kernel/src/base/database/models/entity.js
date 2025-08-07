@@ -2,7 +2,7 @@ import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-class d741787fe14145d79bbdd8ad8057ca28DatabaseModel extends $kernel.src.models.database.DatabaseModel {
+class ba381b0cc764c4c9a187b716ae94ed96DatabaseModel extends $kernel.src.models.database.DatabaseModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
@@ -37,7 +37,7 @@ const CONFIG__cd637bc32c364580be5cc28396d3dee8__MODEL__DATABASE = {
 	table_name: $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.sql.TABLE_NAME__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 	primary_key: $structure.entities.a2b8dbc3427b41a9899e11671c2422c7.database.sql.PRIMARY_KEY__SQL__DATABASE__cd637bc32c364580be5cc28396d3dee8__STRUCTURE,
 };
-const MODEL__cd637bc32c364580be5cc28396d3dee8__MODEL__DATABASE = new d741787fe14145d79bbdd8ad8057ca28DatabaseModel(
+const MODEL__cd637bc32c364580be5cc28396d3dee8__MODEL__DATABASE = new ba381b0cc764c4c9a187b716ae94ed96DatabaseModel(
 	ROOT_CONFIG__cd637bc32c364580be5cc28396d3dee8__MODEL__DATABASE,
 	CONFIG__cd637bc32c364580be5cc28396d3dee8__MODEL__DATABASE,
 );

@@ -5,7 +5,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__RELATIONSHIP__MODEL__SYSTEM } from "./relationship.js";
 
-class d741787fe14145d79bbdd8ad8057ca28SystemModel extends $kernel.src.models.system.SystemModel {
+class ba381b0cc764c4c9a187b716ae94ed96SystemModel extends $kernel.src.models.system.SystemModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
@@ -118,7 +118,7 @@ const CONFIG__cd637bc32c364580be5cc28396d3dee8__MODEL__SYSTEM = {
 	schema_name: "SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE",
 	relationship_model: MODEL__RELATIONSHIP__MODEL__SYSTEM,
 };
-const MODEL__cd637bc32c364580be5cc28396d3dee8__MODEL__SYSTEM = new d741787fe14145d79bbdd8ad8057ca28SystemModel(
+const MODEL__cd637bc32c364580be5cc28396d3dee8__MODEL__SYSTEM = new ba381b0cc764c4c9a187b716ae94ed96SystemModel(
 	ROOT_CONFIG__cd637bc32c364580be5cc28396d3dee8__MODEL__SYSTEM,
 	CONFIG__cd637bc32c364580be5cc28396d3dee8__MODEL__SYSTEM,
 );

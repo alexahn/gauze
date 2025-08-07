@@ -2,7 +2,7 @@ import * as $kernel from "./../../kernel/index.js";
 
 import { MODEL__YTITNE__MODEL__SYSTEM } from "./../models/ytitne.js";
 
-class YtitneSystemController extends $kernel.src.controllers.system.SystemController {
+class YtitneYtitneSystemController extends $kernel.src.controllers.system.SystemController {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
@@ -34,6 +34,6 @@ const CONFIG__YTITNE__CONTROLLER__SYSTEM = {
 	model: MODEL__YTITNE__MODEL__SYSTEM,
 	model_name: "MODEL__YTITNE__MODEL__SYSTEM",
 };
-const CONTROLLER__YTITNE__CONTROLLER__SYSTEM = new YtitneSystemController(ROOT_CONFIG__YTITNE__CONTROLLER__SYSTEM, CONFIG__YTITNE__CONTROLLER__SYSTEM);
+const CONTROLLER__YTITNE__CONTROLLER__SYSTEM = new YtitneYtitneSystemController(ROOT_CONFIG__YTITNE__CONTROLLER__SYSTEM, CONFIG__YTITNE__CONTROLLER__SYSTEM);
 
 export { CONTROLLER__YTITNE__CONTROLLER__SYSTEM };
