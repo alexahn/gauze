@@ -3,9 +3,8 @@
 
 | Project   |     | Status 
 |-----------|:----|----------
-| CI/CD     |     | ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/alexahn/gauze/node.js.yml)
-| Package   |     | ![NPM Version](https://img.shields.io/npm/v/%40ahn%2Fgauze) ![Node LTS](https://img.shields.io/node/v-lts/%40ahn%2Fgauze)
-| Community |     |
+| CI/CD     |     | [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/alexahn/gauze/node.js.yml)](https://github.com/alexahn/gauze/actions/workflows/node.js.yml)
+| Package   |     | [![NPM Version](https://img.shields.io/npm/v/%40ahn%2Fgauze)](https://www.npmjs.com/package/@ahn/gauze) ![Node LTS](https://img.shields.io/node/v-lts/%40ahn%2Fgauze)
 
 Gauze is a structured GraphQL framework, with a focus on modularity. It offers a unified way to define and interact with data, and comes with a flexible authentication and authorization system. The framework has been designed with a fractal architecture.
 
