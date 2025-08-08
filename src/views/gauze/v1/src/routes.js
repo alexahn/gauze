@@ -216,9 +216,9 @@ const routes = [
 			const { gauze, model } = services;
 			const systemJWT = gauze.default.getSystemJWT();
 			const proxyJWT = gauze.default.getProxyJWT();
+			const now = new Date().getTime() / 1000;
 			if (systemJWT) {
 				// check expiration
-				const now = new Date().getTime() / 1000;
 				const decodedSystem = jose.decodeJwt(systemJWT);
 				if (now < decodedSystem.exp) {
 					// valid
