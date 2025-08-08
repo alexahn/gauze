@@ -4,7 +4,7 @@
 | Project   |     | Status 
 |-----------|:----|----------
 | CI/CD     |     | [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/alexahn/gauze/node.js.yml)](https://github.com/alexahn/gauze/actions/workflows/node.js.yml)
-| Activity  |     | [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/alexahn/gauze)](https://github.com/alexahn/gauze/commits/main/) [![GitHub contributors](https://img.shields.io/github/contributors/alexahn/gauze)](https://github.com/alexahn/gauze/graphs/contributors)
+| Activity  |     | [![GitHub last commit](https://img.shields.io/github/last-commit/alexahn/gauze)](https://github.com/alexahn/gauze/commits/main/) [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/alexahn/gauze)](https://github.com/alexahn/gauze/graphs/commit-activity) [![GitHub contributors](https://img.shields.io/github/contributors/alexahn/gauze)](https://github.com/alexahn/gauze/graphs/contributors)
 | Package   |     | [![NPM Version](https://img.shields.io/npm/v/%40ahn%2Fgauze)](https://www.npmjs.com/package/@ahn/gauze) ![Node LTS](https://img.shields.io/node/v-lts/%40ahn%2Fgauze)
 
 Gauze is a structured GraphQL framework, with a focus on modularity. It offers a unified way to define and interact with data, and includes a flexible authentication and authorization system. The framework has a fractal architecture, which enables modular reusability.
