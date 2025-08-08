@@ -1,0 +1,76 @@
+// current
+// assert, request, verify
+{
+	agent {
+		account {
+			verify {
+				password(input_agent_account)
+			}
+		}
+		person {
+			assert {
+				email(input_agent_person)
+			}
+		}
+	}
+	environment {
+		sign_in
+		sign_out
+		sign_up
+		enter_session
+		exit_session
+	}
+}
+
+// future
+// assert, request, verify
+{
+	agent {
+		account {
+			verify {
+				password(input_agent_account)
+				totp(input_agent_account)
+			}
+		}
+		user {
+			assert {
+				username(input_agent_account)
+			}
+		}
+		person {
+			request {
+				email(input_agent_person)
+				phone(input_agent_person)
+			}
+			assert {
+				email(input_agent_person)
+				phone(input_agent_person)
+			}
+			verify {
+				email(input_agent_person)
+				phone(input_agent_person)
+			}
+		}
+	}
+	realm {
+		system {
+			enter_session
+			exit_session
+		}
+		database {
+			enter_session
+			exit_session
+		}
+		kernel {
+			enter_session
+			exit_session
+		}
+	}
+	environment {
+		sign_in
+		sign_out
+		sign_up
+		enter_session
+		exit_session
+	}
+}
