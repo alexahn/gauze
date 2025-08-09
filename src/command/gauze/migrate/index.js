@@ -1,9 +1,9 @@
-import * as list from "./list.js"
+import * as list from "./list.js";
 import * as make from "./make.js";
 import * as run from "./run.js";
-import * as rollback from "./rollback.js"
-import * as up from "./up.js"
-import * as down from "./down.js"
+import * as rollback from "./rollback.js";
+import * as up from "./up.js";
+import * as down from "./down.js";
 
 export const command = "migrate <command>";
 

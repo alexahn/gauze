@@ -18,8 +18,8 @@ export const builder = function (yargs) {
 	return yargs.env("GAUZE_PROJECT_MIGRATE").option("migration", {
 		describe: "The name of the migration file",
 		type: "string",
-		requiresArgs: false
-	})
+		requiresArgs: false,
+	});
 	//.wrap(128)
 };
 

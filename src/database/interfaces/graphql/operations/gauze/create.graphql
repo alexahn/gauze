@@ -1,0 +1,12 @@
+mutation CreateGauze($attributes: Gauze_Mutation__Attributes) {
+	create_gauze(attributes: $attributes) {
+		attributes {
+			gauze__gauze__id
+			gauze__gauze__created_at
+			gauze__gauze__updated_at
+			gauze__gauze__deleted_at
+			gauze__gauze__text1
+			gauze__gauze__text2
+		}
+	}
+}

@@ -631,7 +631,7 @@ class GauzeManager {
 	}
 	migrate_up(migration) {
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_up");
-		const parsed_migration = typeof migration === "undefined" ? "" : migration
+		const parsed_migration = typeof migration === "undefined" ? "" : migration;
 		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${parsed_migration}`;
 		this.execute(COMMAND).catch(function (err) {
 			console.error(err);
@@ -640,7 +640,7 @@ class GauzeManager {
 	}
 	migrate_down(migration) {
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_down");
-		const parsed_migration = typeof migration === "undefined" ? "" : migration
+		const parsed_migration = typeof migration === "undefined" ? "" : migration;
 		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${parsed_migration}`;
 		this.execute(COMMAND).catch(function (err) {
 			console.error(err);
