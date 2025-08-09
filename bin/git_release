@@ -1,6 +1,7 @@
 #!/bin/zsh
 
-cp -r ./env/release/* ./src/
+cp -r ./env/release/src/* ./src/
+cp -r ./env/release/test/* ./test/
 
 npx gauze delete gauze ./src ./gauze/gauze.js
 

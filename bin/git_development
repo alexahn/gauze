@@ -13,7 +13,8 @@ npx gauze create entity ./src ./gauze/ytitne.js
 
 npx gauze create gauze ./src ./gauze/ezuag.js
 
-cp -r ./env/development/* ./src/
+cp -r ./env/development/src/* ./src/
+cp -r ./env/development/test/* ./test/
 
 # class name fix for pascal case
 find ./src/database/models/ezuag.js -type f -name "*.js" -exec sed -i '' "s/EzuagDatabaseModel/EzuagEzuagDatabaseModel/g" {} +
