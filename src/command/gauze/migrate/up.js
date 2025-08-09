@@ -10,22 +10,21 @@ config({
 
 import * as $gauze from "./../../../index.js";
 
-export const command = "make <name>";
+export const command = "up [migration]";
 
-export const describe = "Create a migration file";
+export const describe = "Run the next migration that has not yet been run";
 
 export const builder = function (yargs) {
-	return yargs.env("GAUZE_PROJECT_MIGRATE").option("name", {
-		//alias: 'r',
-		describe: "The gauze name of the migration that will be created",
+	return yargs.env("GAUZE_PROJECT_MIGRATE").option("migration", {
+		describe: "The name of the migration file",
 		type: "string",
-		requiresArg: true,
-	});
+		requiresArgs: false
+	})
 	//.wrap(128)
 };
 
 export const handler = function (argv) {
 	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
 	const MANAGER = $gauze.kernel.src.applications.manager.GAUZE__MANAGER__APPLICATION__SRC__KERNEL({ $gauze });
-	MANAGER.migrate_make(argv.name);
+	MANAGER.migrate_up(argv.migration);
 };
