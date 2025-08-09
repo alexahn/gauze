@@ -10,3 +10,7 @@ npx gauze delete entity ./src ./gauze/ytitne.js
 
 npx gauze delete gauze ./src ./gauze/ezuag.js
 
+rm ./src/database/migrations/00000000000012_ezuag.js
+rm ./src/database/migrations/00000000000013_ytitne.js
+rm ./src/database/migrations/00000000000014_entity.js
+rm ./src/database/migrations/00000000000015_gauze.js

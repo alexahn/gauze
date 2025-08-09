@@ -1,5 +1,10 @@
 #!/bin/zsh
 
+cp ./src/kernel/src/migrations/ezuag.js ./src/database/migrations/00000000000012_ezuag.js
+cp ./src/kernel/src/migrations/ytitne.js ./src/database/migrations/00000000000013_ytitne.js
+cp ./src/kernel/src/migrations/entity.js ./src/database/migrations/00000000000014_entity.js
+cp ./src/kernel/src/migrations/gauze.js ./src/database/migrations/00000000000015_gauze.js
+
 npx gauze create gauze ./src ./gauze/gauze.js
 
 npx gauze create entity ./src ./gauze/entity.js
