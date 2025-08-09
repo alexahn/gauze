@@ -629,6 +629,30 @@ class GauzeManager {
 			process.exit(1);
 		});
 	}
+	migrate_up(migration) {
+		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_up");
+		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${migration}`;
+		this.execute(COMMAND).catch(function (err) {
+			console.error(err);
+			process.exit(1);
+		});
+	}
+	migrate_down(migration) {
+		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_down");
+		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${migration}`;
+		this.execute(COMMAND).catch(function (err) {
+			console.error(err);
+			process.exit(1);
+		});
+	}
+	migrate_list(name) {
+		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_list");
+		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR}`;
+		this.execute(COMMAND).catch(function (err) {
+			console.error(err);
+			process.exit(1);
+		});
+	}
 	migrate_make(name) {
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_make");
 		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${name}`;
