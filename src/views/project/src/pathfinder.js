@@ -311,9 +311,9 @@ function createPathfinder(context) {
 					const { services } = context;
 					const { gauze } = services;
 					const jwt = gauze.default.getEnvironmentJWT();
-					const agent = jose.decodeJwt(jwt);
 					if (jwt) {
 						console.log("existing environment jwt found!", jwt);
+						const agent = jose.decodeJwt(jwt);
 						return {
 							jwt,
 							agent,
@@ -344,9 +344,9 @@ function createPathfinder(context) {
 					const { services, pathfinder } = context;
 					const { gauze } = services;
 					const jwt = gauze.default.getProxyJWT();
-					const agent = jose.decodeJwt(jwt);
 					if (jwt) {
 						console.log("existing proxy jwt found!", jwt);
+						const agent = jose.decodeJwt(jwt);
 						return {
 							jwt,
 							agent,
@@ -377,9 +377,9 @@ function createPathfinder(context) {
 					const { services, pathfinder } = context;
 					const { gauze } = services;
 					const jwt = gauze.default.getSystemJWT();
-					const agent = jose.decodeJwt(jwt);
 					if (jwt) {
 						console.log("existing system jwt found!", jwt);
+						const agent = jose.decodeJwt(jwt);
 						return {
 							jwt,
 							agent,
