@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 
-import { Share1Icon, Pencil2Icon, Cross1Icon, BookmarkIcon, BookmarkFilledIcon, PlusIcon, MinusIcon } from "@radix-ui/react-icons";
+import { BookmarkIcon, BookmarkFilledIcon } from "@radix-ui/react-icons";
 
 import navigate from "./../navigate.js";
 

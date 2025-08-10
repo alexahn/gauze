@@ -254,7 +254,6 @@ class AccessSystemModel extends SystemModel {
 		// filter list of records based on role hierarchy
 		// root initiator can see everything, trunk can see trunk and leaf, leaf can only see itself
 		return self._initiator_records(context, input.where, agent).then(function (access_records) {
-			console.log("AGENT", agent);
 			if (access_records && access_records.length) {
 				// get record for the highest role
 				const highest_record = self._highest_record(access_records);
