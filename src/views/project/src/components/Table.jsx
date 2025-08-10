@@ -367,6 +367,7 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 						const isGauzeEntity = ["RELATIONSHIP", "WHITELIST", "BLACKLIST"].indexOf(header.graphql_meta_type) >= 0;
 						const hasWhitelist = !isGauzeEntity;
 						const hasBlacklist = !isGauzeEntity;
+						// todo: fix whitelist and blacklist to be split by method and not tied to the current agent
 						const whitelist = hasWhitelist
 							? pathfinder.stateToURL(
 									"project.system.headers.header.list",
