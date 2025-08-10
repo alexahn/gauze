@@ -11,7 +11,7 @@ import Pagination from "./Pagination.jsx";
 function Table({ pathfinder, services, agent, headers, header, variables = {}, items, count }) {
 	const { gauze } = services;
 	// note: infer the filter mode based on the structure of variables
-	const defaultFilterMode = variables.where_like ? "where_like" : variables.where_between ? "where_between" : "where_like";
+	const defaultFilterMode = variables.where ? "where" : variables.where_like ? "where_like" : variables.where_between ? "where_between" : "where";
 	const [filterMode, setFilterMode] = useState(defaultFilterMode);
 	const [localVariables, setLocalVariables] = useState(variables);
 	const cellClass = "relative tooltip-container ba bw1 br2 mb1 bgx2 bdx2 cx6 bgx3h bdx3h cx6h w100";
@@ -96,7 +96,10 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 		});
 		// note: the last version of filtering was too advanced
 		// note: the new version is very basic, and only the values visible on the screen apply to the filter
-		if (mode === "where_like") {
+		if (mode === "where") {
+			delete stripped.where_like;
+			delete stripped.where_between;
+		} else if (mode === "where_like") {
 			delete stripped.where;
 			delete stripped.where_between;
 		} else if (mode === "where_between") {
@@ -164,7 +167,45 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 		};
 	}
 	function renderFilters() {
-		if (filterMode === "where_like") {
+		if (filterMode === "where") {
+			return (
+				<tr>
+					<th className={cellClass} tabIndex="0">
+						<button className="athelas f6" type="button">
+							Match
+						</button>
+						<span className={tooltipClass}>
+							<button type="button" onClick={handleFilterMode("where")}>
+								Match
+							</button>
+							<button type="button" onClick={handleFilterMode("where_like")}>
+								Search
+							</button>
+							<button type="button" onClick={handleFilterMode("where_between")}>
+								Range
+							</button>
+						</span>
+					</th>
+					{header.fields.map(function (field) {
+						const defaultValue = localVariables[filterMode] ? localVariables[filterMode][field.name] : undefined;
+						return (
+							<th key={field.name} className={cellClass} tabIndex="0">
+								<div key={filterMode} className={itemClass}>
+									<Input
+										defaultMode={true}
+										field={field}
+										className="w-100 mw5"
+										onChange={handleFilterChange(field.name)}
+										onKeyDown={handleFilterKeyDown(field.name)}
+										defaultValue={defaultValue}
+									/>
+								</div>
+							</th>
+						);
+					})}
+				</tr>
+			);
+		} else if (filterMode === "where_like") {
 			return (
 				<tr>
 					<th className={cellClass} tabIndex="0">
@@ -172,6 +213,9 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 							Search
 						</button>
 						<span className={tooltipClass}>
+							<button type="button" onClick={handleFilterMode("where")}>
+								Match
+							</button>
 							<button type="button" onClick={handleFilterMode("where_like")}>
 								Search
 							</button>
@@ -208,6 +252,9 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 								Start
 							</button>
 							<span className={tooltipClass}>
+								<button type="button" onClick={handleFilterMode("where")}>
+									Match
+								</button>
 								<button type="button" onClick={handleFilterMode("where_like")}>
 									Search
 								</button>
@@ -240,6 +287,9 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 								End
 							</button>
 							<span className={tooltipClass}>
+								<button type="button" onClick={handleFilterMode("where")}>
+									Match
+								</button>
 								<button type="button" onClick={handleFilterMode("where_like")}>
 									Search
 								</button>
@@ -329,6 +379,7 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 									{
 										variables: JSON.stringify({
 											where: {
+												gauze__whitelist__realm: agent.aud,
 												gauze__whitelist__agent_id: agent.agent_id,
 												gauze__whitelist__agent_type: agent.agent_type,
 												gauze__whitelist__entity_id: item._metadata.id,
@@ -351,6 +402,7 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 									{
 										variables: JSON.stringify({
 											where: {
+												gauze__blacklist__realm: agent.aud,
 												gauze__blacklist__agent_id: agent.agent_id,
 												gauze__blacklist__agent_type: agent.agent_type,
 												gauze__blacklist__entity_id: item._metadata.id,
