@@ -274,29 +274,6 @@ function createPathfinder(context) {
 			context,
 		},
 		[
-			/*
-			{
-				name: "root",
-				path: [],
-				pathRegex: new RegExp("/"),
-				pathString: function (groups) {
-					return "/";
-				},
-				search: [],
-				dependencies: async function (context, dependencies, state, pathParams, searchParams) {
-					console.log("root dependency context", context);
-					console.log("root dependency called", dependencies, state, pathParams, searchParams);
-					const err = new Error("Transition")
-					err.transitionByState = {
-						name: "hello.world",
-						pathParams: {q: 2, w: 1},
-						searchParams: {a: 30, b: 40}
-					}
-					throw err
-				},
-				pathfinder: null,
-			},
-			*/
 			{
 				name: "environment",
 				path: [],
