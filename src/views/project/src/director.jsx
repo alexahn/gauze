@@ -111,10 +111,11 @@ function createDirector(context) {
 	director.register("project.system.headers.header.list", function (context, dependencies, pathParams, searchParams) {
 		console.log("project.system.headers.header.list rendered");
 		const { services } = context;
-		const { headers, header, list } = dependencies;
+		const { system, headers, header, list } = dependencies;
+		const { agent } = system;
 		const { items, count } = list;
-		console.log("items", items, "count", count);
 		const variables = JSON.parse(searchParams.variables);
+		console.log("AGENT", agent);
 		root.render(
 			<React.StrictMode>
 				<layouts.amethyst.default>
@@ -123,7 +124,16 @@ function createDirector(context) {
 					</div>
 					<div className="pl2 pr2 pb2 flex">
 						<components.headers.default pathfinder={pathfinder} headers={headers.headers} />
-						<components.table.default pathfinder={pathfinder} services={services} header={header.header} variables={variables} items={items} count={count} />
+						<components.table.default
+							pathfinder={pathfinder}
+							services={services}
+							agent={agent}
+							headers={headers.headers}
+							header={header.header}
+							variables={variables}
+							items={items}
+							count={count}
+						/>
 					</div>
 				</layouts.amethyst.default>
 			</React.StrictMode>,

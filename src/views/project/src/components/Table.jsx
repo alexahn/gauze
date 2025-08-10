@@ -1,12 +1,14 @@
 import * as React from "react";
 import { useState } from "react";
 
+import { Share1Icon, Pencil2Icon, Cross1Icon, BookmarkIcon, BookmarkFilledIcon, PlusIcon, MinusIcon } from "@radix-ui/react-icons";
+
 import navigate from "./../navigate.js";
 
 import Input from "./Input.jsx";
 import Pagination from "./Pagination.jsx";
 
-function Table({ pathfinder, services, header, variables = {}, items, count }) {
+function Table({ pathfinder, services, agent, headers, header, variables = {}, items, count }) {
 	const { gauze } = services;
 	// note: infer the filter mode based on the structure of variables
 	const defaultFilterMode = variables.where_like ? "where_like" : variables.where_between ? "where_between" : "where_like";
@@ -312,14 +314,76 @@ function Table({ pathfinder, services, header, variables = {}, items, count }) {
 						})}
 					</tr>
 					{items.map(function (item) {
+						const hasWhitelist = ["RELATIONSHIP", "WHITELIST", "BLACKLIST"].indexOf(header.graphql_meta_type) < 0;
+						const hasBlacklist = ["RELATIONSHIP", "WHITELIST", "BLACKLIST"].indexOf(header.graphql_meta_type) < 0;
+						const whitelist = hasWhitelist
+							? pathfinder.stateToURL(
+									"project.system.headers.header.list",
+									{
+										header: headers
+											.find(function (header) {
+												return header.graphql_meta_type === "WHITELIST";
+											})
+											.graphql_meta_type.toLowerCase(),
+									},
+									{
+										variables: JSON.stringify({
+											where: {
+												gauze__whitelist__agent_id: agent.agent_id,
+												gauze__whitelist__agent_type: agent.agent_type,
+												gauze__whitelist__entity_id: item._metadata.id,
+												gauze__whitelist__entity_type: header.table_name,
+											},
+										}),
+									},
+								)
+							: null;
+						const blacklist = hasBlacklist
+							? pathfinder.stateToURL(
+									"project.system.headers.header.list",
+									{
+										header: headers
+											.find(function (header) {
+												return header.graphql_meta_type === "BLACKLIST";
+											})
+											.graphql_meta_type.toLowerCase(),
+									},
+									{
+										variables: JSON.stringify({
+											where: {
+												gauze__blacklist__agent_id: agent.agent_id,
+												gauze__blacklist__agent_type: agent.agent_type,
+												gauze__blacklist__entity_id: item._metadata.id,
+												gauze__blacklist__entity_type: header.table_name,
+											},
+										}),
+									},
+								)
+							: null;
 						return (
 							<tr key={item._metadata.id}>
 								<td align="center" className={cellClass}>
-									<a href={pathfinder.stateToURL("project.system.headers.header.item", { header: header.graphql_meta_type.toLowerCase(), id: item._metadata.id }, {})}>
-										<button className="athelas f6" type="button">
-											Edit
-										</button>
-									</a>
+									<div className="flex justify-center">
+										<a href={pathfinder.stateToURL("project.system.headers.header.item", { header: header.graphql_meta_type.toLowerCase(), id: item._metadata.id }, {})}>
+											<button className="athelas f6" type="button">
+												Edit
+											</button>
+										</a>
+										{whitelist ? (
+											<a href={whitelist}>
+												<button type="button">
+													<BookmarkIcon />
+												</button>
+											</a>
+										) : null}
+										{blacklist ? (
+											<a href={blacklist}>
+												<button type="button">
+													<BookmarkFilledIcon />
+												</button>
+											</a>
+										) : null}
+									</div>
 								</td>
 								{header.fields.map(function (field) {
 									return (
