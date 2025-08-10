@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 
-import { BookmarkIcon, BookmarkFilledIcon } from "@radix-ui/react-icons";
+import { Pencil2Icon, Link2Icon, BookmarkIcon, BookmarkFilledIcon } from "@radix-ui/react-icons";
 
 import navigate from "./../navigate.js";
 
@@ -364,8 +364,9 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 						})}
 					</tr>
 					{items.map(function (item) {
-						const hasWhitelist = ["RELATIONSHIP", "WHITELIST", "BLACKLIST"].indexOf(header.graphql_meta_type) < 0;
-						const hasBlacklist = ["RELATIONSHIP", "WHITELIST", "BLACKLIST"].indexOf(header.graphql_meta_type) < 0;
+						const isGauzeEntity = ["RELATIONSHIP", "WHITELIST", "BLACKLIST"].indexOf(header.graphql_meta_type) >= 0;
+						const hasWhitelist = !isGauzeEntity;
+						const hasBlacklist = !isGauzeEntity;
 						const whitelist = hasWhitelist
 							? pathfinder.stateToURL(
 									"project.system.headers.header.list",
@@ -412,15 +413,71 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 									},
 								)
 							: null;
+						const hasFromRelationships = !isGauzeEntity;
+						const hasToRelationships = !isGauzeEntity;
+						const fromRelationships = hasFromRelationships
+							? pathfinder.stateToURL(
+									"project.system.headers.header.list",
+									{
+										header: headers
+											.find(function (header) {
+												return header.graphql_meta_type === "RELATIONSHIP";
+											})
+											.graphql_meta_type.toLowerCase(),
+									},
+									{
+										variables: JSON.stringify({
+											where: {
+												gauze__relationship__from_id: item._metadata.id,
+												gauze__relationship__from_type: header.table_name,
+											},
+										}),
+									},
+								)
+							: null;
+						const toRelationships = hasToRelationships
+							? pathfinder.stateToURL(
+									"project.system.headers.header.list",
+									{
+										header: headers
+											.find(function (header) {
+												return header.graphql_meta_type === "RELATIONSHIP";
+											})
+											.graphql_meta_type.toLowerCase(),
+									},
+									{
+										variables: JSON.stringify({
+											where: {
+												gauze__relationship__to_id: item._metadata.id,
+												gauze__relationship__to_type: header.table_name,
+											},
+										}),
+									},
+								)
+							: null;
 						return (
 							<tr key={item._metadata.id}>
 								<td align="center" className={cellClass}>
 									<div className="flex justify-center">
 										<a href={pathfinder.stateToURL("project.system.headers.header.item", { header: header.graphql_meta_type.toLowerCase(), id: item._metadata.id }, {})}>
-											<button className="athelas f6" type="button">
-												Edit
+											<button type="button">
+												<Pencil2Icon />
 											</button>
 										</a>
+										{toRelationships ? (
+											<a href={toRelationships}>
+												<button type="button">
+													<Link2Icon />
+												</button>
+											</a>
+										) : null}
+										{fromRelationships ? (
+											<a href={fromRelationships}>
+												<button type="button">
+													<Link2Icon />
+												</button>
+											</a>
+										) : null}
 										{whitelist ? (
 											<a href={whitelist}>
 												<button type="button">
