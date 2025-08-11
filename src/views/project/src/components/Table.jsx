@@ -367,95 +367,87 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 						const isGauzeEntity = ["RELATIONSHIP", "WHITELIST", "BLACKLIST"].indexOf(header.graphql_meta_type) >= 0;
 						const hasWhitelist = !isGauzeEntity;
 						const hasBlacklist = !isGauzeEntity;
-						// todo: fix whitelist and blacklist to be split by method and not tied to the current agent
-						const whitelist = hasWhitelist
-							? pathfinder.stateToURL(
-									"project.system.headers.header.list",
-									{
-										header: headers
-											.find(function (header) {
-												return header.graphql_meta_type === "WHITELIST";
-											})
-											.graphql_meta_type.toLowerCase(),
+						const hasRelationships = !isGauzeEntity;
+						const whitelist = function (method) {
+							return pathfinder.stateToURL(
+								"project.system.headers.header.list",
+								{
+									header: headers
+										.find(function (header) {
+											return header.graphql_meta_type === "WHITELIST";
+										})
+										.graphql_meta_type.toLowerCase(),
+								},
+								{
+									variables: JSON.stringify({
+										where: {
+											gauze__whitelist__realm: agent.aud,
+											gauze__whitelist__entity_id: item._metadata.id,
+											gauze__whitelist__entity_type: header.table_name,
+											gauze__whitelist__method: method,
+										},
+									}),
+								},
+							);
+						};
+						const blacklist = function (method) {
+							return pathfinder.stateToURL(
+								"project.system.headers.header.list",
+								{
+									header: headers
+										.find(function (header) {
+											return header.graphql_meta_type === "BLACKLIST";
+										})
+										.graphql_meta_type.toLowerCase(),
+								},
+								{
+									variables: JSON.stringify({
+										where: {
+											gauze__blacklist__realm: agent.aud,
+											gauze__blacklist__entity_id: item._metadata.id,
+											gauze__blacklist__entity_type: header.table_name,
+											gauze__blacklist__method: method,
+										},
+									}),
+								},
+							);
+						};
+						const fromRelationships = pathfinder.stateToURL(
+							"project.system.headers.header.list",
+							{
+								header: headers
+									.find(function (header) {
+										return header.graphql_meta_type === "RELATIONSHIP";
+									})
+									.graphql_meta_type.toLowerCase(),
+							},
+							{
+								variables: JSON.stringify({
+									where: {
+										gauze__relationship__from_id: item._metadata.id,
+										gauze__relationship__from_type: header.table_name,
 									},
-									{
-										variables: JSON.stringify({
-											where: {
-												gauze__whitelist__realm: agent.aud,
-												gauze__whitelist__agent_id: agent.agent_id,
-												gauze__whitelist__agent_type: agent.agent_type,
-												gauze__whitelist__entity_id: item._metadata.id,
-												gauze__whitelist__entity_type: header.table_name,
-											},
-										}),
+								}),
+							},
+						);
+						const toRelationships = pathfinder.stateToURL(
+							"project.system.headers.header.list",
+							{
+								header: headers
+									.find(function (header) {
+										return header.graphql_meta_type === "RELATIONSHIP";
+									})
+									.graphql_meta_type.toLowerCase(),
+							},
+							{
+								variables: JSON.stringify({
+									where: {
+										gauze__relationship__to_id: item._metadata.id,
+										gauze__relationship__to_type: header.table_name,
 									},
-								)
-							: null;
-						const blacklist = hasBlacklist
-							? pathfinder.stateToURL(
-									"project.system.headers.header.list",
-									{
-										header: headers
-											.find(function (header) {
-												return header.graphql_meta_type === "BLACKLIST";
-											})
-											.graphql_meta_type.toLowerCase(),
-									},
-									{
-										variables: JSON.stringify({
-											where: {
-												gauze__blacklist__realm: agent.aud,
-												gauze__blacklist__agent_id: agent.agent_id,
-												gauze__blacklist__agent_type: agent.agent_type,
-												gauze__blacklist__entity_id: item._metadata.id,
-												gauze__blacklist__entity_type: header.table_name,
-											},
-										}),
-									},
-								)
-							: null;
-						const hasFromRelationships = !isGauzeEntity;
-						const hasToRelationships = !isGauzeEntity;
-						const fromRelationships = hasFromRelationships
-							? pathfinder.stateToURL(
-									"project.system.headers.header.list",
-									{
-										header: headers
-											.find(function (header) {
-												return header.graphql_meta_type === "RELATIONSHIP";
-											})
-											.graphql_meta_type.toLowerCase(),
-									},
-									{
-										variables: JSON.stringify({
-											where: {
-												gauze__relationship__from_id: item._metadata.id,
-												gauze__relationship__from_type: header.table_name,
-											},
-										}),
-									},
-								)
-							: null;
-						const toRelationships = hasToRelationships
-							? pathfinder.stateToURL(
-									"project.system.headers.header.list",
-									{
-										header: headers
-											.find(function (header) {
-												return header.graphql_meta_type === "RELATIONSHIP";
-											})
-											.graphql_meta_type.toLowerCase(),
-									},
-									{
-										variables: JSON.stringify({
-											where: {
-												gauze__relationship__to_id: item._metadata.id,
-												gauze__relationship__to_type: header.table_name,
-											},
-										}),
-									},
-								)
-							: null;
+								}),
+							},
+						);
 						return (
 							<tr key={item._metadata.id}>
 								<td align="center" className={cellClass}>
@@ -465,33 +457,104 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 												<Pencil2Icon />
 											</button>
 										</a>
-										{toRelationships ? (
-											<a href={toRelationships}>
-												<button type="button">
-													<Link2Icon />
-												</button>
-											</a>
+										{hasRelationships ? (
+											<div className={"relative tooltip-container"} tabIndex="0">
+												<div className={itemClass}>
+													<button type="button">
+														<Link2Icon />
+													</button>
+												</div>
+												<span className={tooltipClass}>
+													<div className={"flex flex-column mw3"}>
+														<a href={toRelationships}>
+															<button className="athelas f6 w3" type="button">
+																To
+															</button>
+														</a>
+														<a href={fromRelationships}>
+															<button className="athelas f6 w3" type="button">
+																From
+															</button>
+														</a>
+													</div>
+												</span>
+											</div>
 										) : null}
-										{fromRelationships ? (
-											<a href={fromRelationships}>
-												<button type="button">
-													<Link2Icon />
-												</button>
-											</a>
+										{hasWhitelist ? (
+											<div className={"relative tooltip-container"} tabIndex="0">
+												<div className={itemClass}>
+													<button type="button">
+														<BookmarkIcon />
+													</button>
+												</div>
+												<span className={tooltipClass}>
+													<div className={"flex flex-column mw3"}>
+														<a href={whitelist("create")}>
+															<button className="athelas f6 w3" type="button">
+																Create
+															</button>
+														</a>
+														<a href={whitelist("read")}>
+															<button className="athelas f6 w3" type="button">
+																Read
+															</button>
+														</a>
+														<a href={whitelist("update")}>
+															<button className="athelas f6 w3" type="button">
+																Update
+															</button>
+														</a>
+														<a href={whitelist("delete")}>
+															<button className="athelas f6 w3" type="button">
+																Delete
+															</button>
+														</a>
+														<a href={whitelist("count")}>
+															<button className="athelas f6 w3" type="button">
+																Count
+															</button>
+														</a>
+													</div>
+												</span>
+											</div>
 										) : null}
-										{whitelist ? (
-											<a href={whitelist}>
-												<button type="button">
-													<BookmarkIcon />
-												</button>
-											</a>
-										) : null}
-										{blacklist ? (
-											<a href={blacklist}>
-												<button type="button">
-													<BookmarkFilledIcon />
-												</button>
-											</a>
+										{hasBlacklist ? (
+											<div className={"relative tooltip-container"} tabIndex="0">
+												<div className={itemClass}>
+													<button type="button">
+														<BookmarkFilledIcon />
+													</button>
+												</div>
+												<span className={tooltipClass}>
+													<div className={"flex flex-column mw3"}>
+														<a href={blacklist("create")}>
+															<button className="athelas f6 w3" type="button">
+																Create
+															</button>
+														</a>
+														<a href={blacklist("read")}>
+															<button className="athelas f6 w3" type="button">
+																Read
+															</button>
+														</a>
+														<a href={blacklist("update")}>
+															<button className="athelas f6 w3" type="button">
+																Update
+															</button>
+														</a>
+														<a href={blacklist("delete")}>
+															<button className="athelas f6 w3" type="button">
+																Delete
+															</button>
+														</a>
+														<a href={blacklist("count")}>
+															<button className="athelas f6 w3" type="button">
+																Count
+															</button>
+														</a>
+													</div>
+												</span>
+											</div>
 										) : null}
 									</div>
 								</td>
