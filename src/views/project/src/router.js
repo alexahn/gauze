@@ -354,7 +354,14 @@ class Pathfinder {
 					return result;
 				});
 		} else {
-			throw new Error(`Invalid transition: name=${name} pathParams=${JSON.stringify(pathParams)} searchParams=${JSON.stringify(searchParams)}`);
+			const err = new Error(`Invalid transition: name=${name} pathParams=${JSON.stringify(pathParams)} searchParams=${JSON.stringify(searchParams)}`);
+			err.stateNotFound = {
+				mode: "state",
+				name,
+				pathParams,
+				searchParams,
+			};
+			throw err;
 		}
 	}
 	transitionByURL(url) {
@@ -363,7 +370,12 @@ class Pathfinder {
 		if (state) {
 			return self.transitionByState(state.name, state.pathParams, state.searchParams);
 		} else {
-			throw new Error(`Invalid transition: url=${url}`);
+			const err = new Error(`Invalid transition: url=${url}`);
+			err.stateNotFound = {
+				mode: "url",
+				url,
+			};
+			throw err;
 		}
 	}
 }
@@ -392,11 +404,11 @@ class Director {
 	}
 }
 
-function start(pathfinder, director, initial) {
+function start(pathfinder, director, config = {}) {
 	let previous;
 	let next;
 	let attempt = 0;
-	const { name, pathParams = {}, searchParams = {} } = initial;
+	const { initial, push = false, retry = 4, frequency = 32 } = config;
 
 	function load(name, pathParams, searchParams) {
 		const url = pathfinder.stateToURL(name, pathParams, searchParams);
@@ -405,13 +417,23 @@ function start(pathfinder, director, initial) {
 		parsedLocationURL.hash = parsedStateURL.hash;
 		parsedLocationURL.search = parsedStateURL.search;
 		parsedLocationURL.pathname = parsedStateURL.pathname;
-		//location.href = parsedLocationURL.toString()
-		// note: use replace to preserve browser history
-		location.replace(parsedLocationURL.toString());
+		if (push) {
+			history.replaceState(
+				{
+					name,
+					pathParams,
+					searchParams,
+				},
+				"",
+				parsedLocationURL.toString(),
+			);
+		} else {
+			location.replace(parsedLocationURL.toString());
+		}
 	}
 
 	setInterval(function () {
-		if (next !== location.href && attempt < 4) {
+		if (next !== location.href && attempt < retry) {
 			previous = next;
 			next = location.href;
 			return pathfinder
@@ -427,6 +449,13 @@ function start(pathfinder, director, initial) {
 					} else if (err.transitionByURL) {
 						const state = pathfinder.URLToState(err.transitionByURL);
 						load(state.name, state, pathParams, state.searchParams);
+					} else if (err.stateNotFound) {
+						// load initial state if state not found
+						if (initial) {
+							load(initial.name, initial.pathParams, initial.searchParams);
+						} else {
+							console.error(err);
+						}
 					} else {
 						next = previous;
 						previous = null;
@@ -435,15 +464,54 @@ function start(pathfinder, director, initial) {
 					}
 				});
 		}
-	}, 32);
+	}, frequency);
 
-	// render initial if the initial url is not a valid state
+	// render initial state if the initial url is not a valid state
 	try {
 		const current = pathfinder.URLToState(location.href);
 	} catch (e) {
-		console.error(e);
-		load(name, pathParams, searchParams);
+		if (initial) {
+			load(initial.name, initial.pathParams, initial.searchParams);
+		} else {
+			console.error(e);
+		}
 	}
 }
 
-export { Pathfinder, Director, start };
+function navigate(url, options) {
+	const { replace, push, state, pathfinder } = options;
+	if (push) {
+		// use pushstate api
+		if (replace) {
+			if (state) {
+				history.replaceState(state, "", url);
+			} else {
+				if (pathfinder) {
+					const URLstate = pathfinder.URLToState(url);
+					history.replaceState(URLstate, "", url);
+				} else {
+					history.replaceState({}, "", url);
+				}
+			}
+		} else {
+			if (state) {
+				history.pushState(state, "", url);
+			} else {
+				if (pathfinder) {
+					const URLstate = pathfinder.URLToState(url);
+					history.pushState(URLstate, "", url);
+				} else {
+					history.pushState({}, "", url);
+				}
+			}
+		}
+	} else {
+		if (replace) {
+			location.replace(url);
+		} else {
+			location.href = url;
+		}
+	}
+}
+
+export { Pathfinder, Director, start, navigate };

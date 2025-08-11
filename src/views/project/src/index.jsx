@@ -34,7 +34,11 @@ const directorContext = {
 const director = createDirector(directorContext);
 
 start(pathfinder, director, {
-	name: "project.system.headers",
-	pathParams: {},
-	searchParams: {},
+	initial: {
+		name: "project.system.headers",
+		pathParams: {},
+		searchParams: {},
+	},
+	push: true,
+	retry: 4,
 });
