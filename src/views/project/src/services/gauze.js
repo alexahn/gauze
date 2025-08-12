@@ -3,7 +3,7 @@ import { GAUZE_PROTOCOL, GAUZE_HOST, GAUZE_PORT } from "env";
 import * as jose from "jose";
 import Dataloader from "dataloader";
 
-import navigate from "./../navigate.js";
+import { navigate } from "./../router.js";
 
 class GauzeService {
 	// todo: use dataloader
@@ -69,24 +69,61 @@ class GauzeService {
 					if (self.getEnvironmentJWT() === jwt) {
 						self.deleteEnvironmentJWT();
 						// reload the page
+						// note: keep this as a location.replace to cause a full page reload since we don't have event listeners attached to push state
 						location.replace(location.href);
 					} else if (self.getProxyJWT() === jwt) {
 						self.deleteProxyJWT();
 						//self.deleteEnvironmentJWT();
 						// load sign in page
-						location.replace(self.getPathfinder().stateToURL("project.environment.signin", {}, { next: location.href }));
+						//location.replace(self.getPathfinder().stateToURL("project.environment.signin", {}, { next: location.href }));
+						const state = {
+							name: "project.environment.signin",
+							pathParams: {},
+							searchParams: {
+								next: location.href
+							}
+						}
+						navigate(self.getPathfinder().stateToURL(state.name, state.pathParams, state.searchParams), {
+							push: true,
+							replace: true,
+							state: state
+						})
 					} else if (self.getSystemJWT() === jwt) {
 						self.deleteSystemJWT();
 						//self.deleteProxyJWT();
 						//self.deleteEnvironmentJWT();
 						// load proxies page
-						location.replace(self.getPathfinder().stateToURL("project.proxy.proxies", {}, { next: location.href }));
+						//location.replace(self.getPathfinder().stateToURL("project.proxy.proxies", {}, { next: location.href }));
+						const state = {
+							name: "project.proxy.proxies",
+							pathParams: {},
+							searchParams: {
+								next: location.href
+							}
+						}
+						navigate(self.getPathfinder().stateToURL(state.name, state.pathParams, state.searchParams), {
+							push: true,
+							replace: true,
+							state: state
+						})
 					} else {
 						// delete all
 						self.deleteSystemJWT();
 						self.deleteProxyJWT();
 						self.deleteEnvironmentJWT();
-						location.replace(self.getPathfinder().stateToURL("project.environment.signin", {}, { next: location.href }));
+						//location.replace(self.getPathfinder().stateToURL("project.environment.signin", {}, { next: location.href }));
+						const state = {
+							name: "project.environment.signin",
+							pathParams: {},
+							searchParams: {
+								next: location.href
+							}
+						}
+						navigate(self.getPathfinder().stateToURL(state.name, state.pathParams, state.searchParams), {
+							push: true,
+							replace: true,
+							state: state
+						})
 					}
 					// redirect to auth page
 

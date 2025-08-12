@@ -1,8 +1,6 @@
 import * as jose from "jose";
 
-import { Pathfinder } from "./router.js";
-
-import navigate from "./navigate.js";
+import { Pathfinder, navigate } from "./router.js";
 
 function createPathfinder(context) {
 	const hash = false;
@@ -331,9 +329,17 @@ function createPathfinder(context) {
 					} else {
 						const next = location.href;
 						// transition to sign in
-						//location.replace(pathfinder.stateToURL("project.environment.signin", {}, { next }));
-						navigate(pathfinder.stateToURL("project.environment.signin", {}, { next }), {
+						const state = {
+							name: "project.environment.signin",
+							pathParams: {},
+							searchParams: {
+								next
+							}
+						}
+						navigate(pathfinder.stateToURL(state.name, state.pathParams, state.searchParams), {
+							push: true,
 							replace: true,
+							state: state
 						});
 						throw new Error("Proxy JWT could not be found");
 					}
@@ -364,9 +370,17 @@ function createPathfinder(context) {
 					} else {
 						const next = location.href;
 						// transition to sign in
-						//location.replace(pathfinder.stateToURL("project.proxy.proxies", {}, { next }));
-						navigate(pathfinder.stateToURL("project.proxy.proxies", {}, { next }), {
+						const state = {
+							name: "project.proxy.proxies",
+							pathParams: {},
+							searchParams: {
+								next
+							}
+						}
+						navigate(pathfinder.stateToURL(state.name, state.pathParams, state.searchParams), {
+							push: true,
 							replace: true,
+							state: state
 						});
 						throw new Error("System JWT could not be found");
 					}

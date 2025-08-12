@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 
-import navigate from "./../navigate.js";
+import { navigate } from "./../router.js";
 
 function SignOut({ pathfinder, services, next }) {
 	const { gauze } = services;
@@ -20,9 +20,10 @@ function SignOut({ pathfinder, services, next }) {
 				gauze.default.deleteProxyJWT();
 				gauze.default.deleteSystemJWT();
 				// redirect to next
-				//location.replace(next);
 				navigate(next, {
+					push: true,
 					replace: true,
+					pathfinder: pathfinder
 				});
 			})
 			.catch(function (err) {

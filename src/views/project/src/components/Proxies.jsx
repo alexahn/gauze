@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import * as jose from "jose";
 
-import navigate from "./../navigate.js";
+import { navigate } from "./../router.js";
 
 function Proxies({ pathfinder, services, proxies, next }) {
 	const { gauze } = services;
@@ -45,9 +45,10 @@ function Proxies({ pathfinder, services, proxies, next }) {
 				.then(function (session) {
 					gauze.default.setSystemJWT(session.gauze__session__value);
 					setSubmitProxy(false);
-					//location.replace(next);
 					navigate(next, {
+						push: true,
 						replace: true,
+						pathfinder: pathfinder
 					});
 				})
 				.catch(function (err) {

@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import { Pencil2Icon, Link2Icon, BookmarkIcon, BookmarkFilledIcon } from "@radix-ui/react-icons";
 
-import navigate from "./../navigate.js";
+import { navigate } from "./../router.js";
 
 import Input from "./Input.jsx";
 import Pagination from "./Pagination.jsx";
@@ -153,15 +153,15 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 	function handleFilterKeyDown(field) {
 		return function (e) {
 			if (e.key === "Enter") {
-				// navigate
 				const state = pathfinder.URLToState(location.href);
 				const url = pathfinder.stateToURL(state.name, state.pathParams, {
 					...state.searchParams,
 					variables: JSON.stringify(stripVariables(localVariables, filterMode)),
 				});
 				navigate(url, {
+					push: true,
 					replace: false,
-					push: false, // set to true later
+					state: state
 				});
 			}
 		};

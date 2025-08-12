@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 
-import navigate from "./../navigate.js";
+import { navigate } from "./../router.js";
 
 function SignIn({ pathfinder, services, next }) {
 	const { gauze } = services;
@@ -70,9 +70,10 @@ function SignIn({ pathfinder, services, next }) {
 				setSubmitSignIn(false);
 				setStep((step + 1) % 3);
 				// redirect to next
-				//location.replace(next);
 				navigate(next, {
+					push: true,
 					replace: true,
+					pathfinder: pathfinder
 				});
 			})
 			.catch(function (err) {
