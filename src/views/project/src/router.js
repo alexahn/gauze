@@ -408,7 +408,7 @@ function start(pathfinder, director, config = {}) {
 	let previous;
 	let next;
 	let attempt = 0;
-	const { initial, push = false, retry = 4, frequency = 32 } = config;
+	const { initial, error, push = false, retry = 4, frequency = 32 } = config;
 
 	function load(name, pathParams, searchParams) {
 		const url = pathfinder.stateToURL(name, pathParams, searchParams);
@@ -463,6 +463,12 @@ function start(pathfinder, director, config = {}) {
 						console.error(err);
 					}
 				});
+		} else {
+			if (error) {
+				load(error.name, error.pathParams, error.searchParams);
+			} else {
+				console.error(new Error(`State failed to load after ${retry} attempts`));
+			}
 		}
 	}, frequency);
 
@@ -491,7 +497,7 @@ function navigate(url, options) {
 						const URLstate = pathfinder.URLToState(url);
 						history.replaceState(URLstate, "", url);
 					} catch (e) {
-						history.replaceState({}, "", url)
+						history.replaceState({}, "", url);
 					}
 				} else {
 					history.replaceState({}, "", url);
@@ -506,7 +512,7 @@ function navigate(url, options) {
 						const URLstate = pathfinder.URLToState(url);
 						history.pushState(URLstate, "", url);
 					} catch (e) {
-						history.pushState({}, "", url)
+						history.pushState({}, "", url);
 					}
 				} else {
 					history.pushState({}, "", url);

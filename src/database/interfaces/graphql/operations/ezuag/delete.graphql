@@ -1,0 +1,38 @@
+mutation DeleteEzuag(
+	$where: Ezuag_Mutation__Where
+	$where_in: Ezuag_Mutation__Where_Array
+	$cache_where_in: Ezuag_Mutation__Where_String
+	$where_not_in: Ezuag_Mutation__Where_Array
+	$cache_where_not_in: Ezuag_Mutation__Where_String
+	$where_like: Ezuag_Mutation__Where
+	$where_between: Ezuag_Mutation__Where_Array
+	$limit: Int
+	$offset: Int
+	$order: String
+	$order_direction: String
+	$order_nulls: String
+) {
+	delete_ezuag(
+		where: $where
+		where_in: $where_in
+		cache_where_in: $cache_where_in
+		where_not_in: $where_not_in
+		cache_where_not_in: $cache_where_not_in
+		where_like: $where_like
+		where_between: $where_between
+		limit: $limit
+		offset: $offset
+		order: $order
+		order_direction: $order_direction
+		order_nulls: $order_nulls
+	) {
+		attributes {
+			gauze__ezuag__id
+			gauze__ezuag__created_at
+			gauze__ezuag__updated_at
+			gauze__ezuag__deleted_at
+			gauze__ezuag__text1
+			gauze__ezuag__text2
+		}
+	}
+}
