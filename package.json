@@ -1,7 +1,7 @@
 {
 	"author": "Alex Ahn",
 	"name": "@ahn/gauze",
-	"version": "0.0.9",
+	"version": "0.0.10",
 	"description": "GraphQL server framework",
 	"engines": {
 		"node": "22.18.0"
