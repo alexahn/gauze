@@ -23,7 +23,7 @@ function SignOut({ pathfinder, services, next }) {
 				navigate(next, {
 					push: true,
 					replace: true,
-					pathfinder: pathfinder
+					pathfinder: pathfinder,
 				});
 			})
 			.catch(function (err) {

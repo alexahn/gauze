@@ -48,7 +48,7 @@ function Proxies({ pathfinder, services, proxies, next }) {
 					navigate(next, {
 						push: true,
 						replace: true,
-						pathfinder: pathfinder
+						pathfinder: pathfinder,
 					});
 				})
 				.catch(function (err) {

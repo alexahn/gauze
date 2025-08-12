@@ -80,14 +80,14 @@ class GauzeService {
 							name: "project.environment.signin",
 							pathParams: {},
 							searchParams: {
-								next: location.href
-							}
-						}
+								next: location.href,
+							},
+						};
 						navigate(self.getPathfinder().stateToURL(state.name, state.pathParams, state.searchParams), {
 							push: true,
 							replace: true,
-							state: state
-						})
+							state: state,
+						});
 					} else if (self.getSystemJWT() === jwt) {
 						self.deleteSystemJWT();
 						//self.deleteProxyJWT();
@@ -98,14 +98,14 @@ class GauzeService {
 							name: "project.proxy.proxies",
 							pathParams: {},
 							searchParams: {
-								next: location.href
-							}
-						}
+								next: location.href,
+							},
+						};
 						navigate(self.getPathfinder().stateToURL(state.name, state.pathParams, state.searchParams), {
 							push: true,
 							replace: true,
-							state: state
-						})
+							state: state,
+						});
 					} else {
 						// delete all
 						self.deleteSystemJWT();
@@ -116,14 +116,14 @@ class GauzeService {
 							name: "project.environment.signin",
 							pathParams: {},
 							searchParams: {
-								next: location.href
-							}
-						}
+								next: location.href,
+							},
+						};
 						navigate(self.getPathfinder().stateToURL(state.name, state.pathParams, state.searchParams), {
 							push: true,
 							replace: true,
-							state: state
-						})
+							state: state,
+						});
 					}
 					// redirect to auth page
 

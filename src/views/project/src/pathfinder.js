@@ -333,13 +333,13 @@ function createPathfinder(context) {
 							name: "project.environment.signin",
 							pathParams: {},
 							searchParams: {
-								next
-							}
-						}
+								next,
+							},
+						};
 						navigate(pathfinder.stateToURL(state.name, state.pathParams, state.searchParams), {
 							push: true,
 							replace: true,
-							state: state
+							state: state,
 						});
 						throw new Error("Proxy JWT could not be found");
 					}
@@ -374,13 +374,13 @@ function createPathfinder(context) {
 							name: "project.proxy.proxies",
 							pathParams: {},
 							searchParams: {
-								next
-							}
-						}
+								next,
+							},
+						};
 						navigate(pathfinder.stateToURL(state.name, state.pathParams, state.searchParams), {
 							push: true,
 							replace: true,
-							state: state
+							state: state,
 						});
 						throw new Error("System JWT could not be found");
 					}

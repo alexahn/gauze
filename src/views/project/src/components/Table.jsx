@@ -161,7 +161,7 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 				navigate(url, {
 					push: true,
 					replace: false,
-					state: state
+					state: state,
 				});
 			}
 		};
