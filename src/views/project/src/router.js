@@ -487,8 +487,12 @@ function navigate(url, options) {
 				history.replaceState(state, "", url);
 			} else {
 				if (pathfinder) {
-					const URLstate = pathfinder.URLToState(url);
-					history.replaceState(URLstate, "", url);
+					try {
+						const URLstate = pathfinder.URLToState(url);
+						history.replaceState(URLstate, "", url);
+					} catch (e) {
+						history.replaceState({}, "", url)
+					}
 				} else {
 					history.replaceState({}, "", url);
 				}
@@ -498,8 +502,12 @@ function navigate(url, options) {
 				history.pushState(state, "", url);
 			} else {
 				if (pathfinder) {
-					const URLstate = pathfinder.URLToState(url);
-					history.pushState(URLstate, "", url);
+					try {
+						const URLstate = pathfinder.URLToState(url);
+						history.pushState(URLstate, "", url);
+					} catch (e) {
+						history.pushState({}, "", url)
+					}
 				} else {
 					history.pushState({}, "", url);
 				}
