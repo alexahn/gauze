@@ -463,7 +463,7 @@ function start(pathfinder, director, config = {}) {
 						console.error(err);
 					}
 				});
-		} else {
+		} else if (next !== location.href && attempt >= retry) {
 			if (error) {
 				load(error.name, error.pathParams, error.searchParams);
 			} else {
