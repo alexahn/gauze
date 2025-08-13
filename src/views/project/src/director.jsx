@@ -7,20 +7,6 @@ function createDirector(context) {
 
 	const director = new Director();
 
-	/*
-	director.register("project.root", function (context, dependencies, pathParams, searchParams) {
-		console.log("project.root rendered");
-		const { services } = context;
-		root.render(
-			<React.StrictMode>
-				<layouts.azurite.default>
-					<components.navigation.default pathfinder={pathfinder} services={services} />
-				</layouts.azurite.default>
-			</React.StrictMode>,
-		);
-	});
-	*/
-
 	director.register("project.environment.signup", function (context, dependencies, pathParams, searchParams) {
 		console.log("project.environment.signup rendered");
 		const { services } = context;

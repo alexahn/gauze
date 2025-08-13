@@ -75,7 +75,6 @@ class GauzeService {
 						self.deleteProxyJWT();
 						//self.deleteEnvironmentJWT();
 						// load sign in page
-						//location.replace(self.getPathfinder().stateToURL("project.environment.signin", {}, { next: location.href }));
 						const state = {
 							name: "project.environment.signin",
 							pathParams: {},
@@ -93,7 +92,6 @@ class GauzeService {
 						//self.deleteProxyJWT();
 						//self.deleteEnvironmentJWT();
 						// load proxies page
-						//location.replace(self.getPathfinder().stateToURL("project.proxy.proxies", {}, { next: location.href }));
 						const state = {
 							name: "project.proxy.proxies",
 							pathParams: {},
@@ -111,7 +109,6 @@ class GauzeService {
 						self.deleteSystemJWT();
 						self.deleteProxyJWT();
 						self.deleteEnvironmentJWT();
-						//location.replace(self.getPathfinder().stateToURL("project.environment.signin", {}, { next: location.href }));
 						const state = {
 							name: "project.environment.signin",
 							pathParams: {},
@@ -125,8 +122,6 @@ class GauzeService {
 							state: state,
 						});
 					}
-					// redirect to auth page
-
 					return res.json();
 				} else {
 					return res.json();
