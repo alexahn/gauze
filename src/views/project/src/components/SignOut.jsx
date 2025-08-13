@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 
-import { navigate } from "./../router.js";
+import { navigate } from "@ahn/sinew";
 
 function SignOut({ pathfinder, services, next }) {
 	const { gauze } = services;

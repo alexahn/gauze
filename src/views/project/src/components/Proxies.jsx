@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import * as jose from "jose";
 
-import { navigate } from "./../router.js";
+import { navigate } from "@ahn/sinew";
 
 function Proxies({ pathfinder, services, proxies, next }) {
 	const { gauze } = services;

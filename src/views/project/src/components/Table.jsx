@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import { Pencil2Icon, Link2Icon, BookmarkIcon, BookmarkFilledIcon } from "@radix-ui/react-icons";
 
-import { navigate } from "./../router.js";
+import { navigate } from "@ahn/sinew";
 
 import Input from "./Input.jsx";
 import Pagination from "./Pagination.jsx";

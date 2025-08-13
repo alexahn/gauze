@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Director } from "./router.js";
+import { Director } from "@ahn/sinew";
 
 function createDirector(context) {
 	const { root, layouts, components, pathfinder } = context;

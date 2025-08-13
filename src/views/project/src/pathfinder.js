@@ -1,6 +1,6 @@
 import * as jose from "jose";
 
-import { Pathfinder, navigate } from "./router.js";
+import { Pathfinder, navigate } from "@ahn/sinew";
 
 function createPathfinder(context) {
 	const hash = false;

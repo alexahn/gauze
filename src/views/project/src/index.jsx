@@ -5,7 +5,7 @@ import * as React from "react";
 //import * as Server from "react-dom/server";
 import * as Client from "react-dom/client";
 
-import { start } from "./router.js";
+import { start } from "@ahn/sinew";
 
 import * as services from "./services/index.js";
 import * as layouts from "./layouts/index.js";

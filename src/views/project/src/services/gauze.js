@@ -3,7 +3,7 @@ import { GAUZE_PROTOCOL, GAUZE_HOST, GAUZE_PORT } from "env";
 import * as jose from "jose";
 import Dataloader from "dataloader";
 
-import { navigate } from "./../router.js";
+import { navigate } from "@ahn/sinew";
 
 class GauzeService {
 	// todo: use dataloader
