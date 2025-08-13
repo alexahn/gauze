@@ -6,6 +6,7 @@
 	"engines": {
 		"node": "22.18.0"
 	},
+	"type": "module",
 	"main": "src/index.js",
 	"bin": "./src/command/gauze.js",
 	"scripts": {
@@ -37,7 +38,6 @@
 		"ruru": "^2.0.0-beta.11",
 		"typescript": "^5.4.5"
 	},
-	"type": "module",
 	"dependencies": {
 		"@koa/cors": "^5.0.0",
 		"@koa/etag": "^5.0.1",
@@ -66,6 +66,9 @@
 		"tachyons": "^4.12.0",
 		"uuid": "^9.0.1",
 		"yargs": "^17.7.2"
+	},
+	"bugs": {
+		"url": "https://github.com/alexahn/gauze/issues"
 	},
 	"homepage": "https://github.com/alexahn/gauze"
 }
