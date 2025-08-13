@@ -2,16 +2,22 @@
 	"name": "@ahn/gauze",
 	"version": "0.0.10",
 	"description": "GraphQL server framework",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/alexahn/gauze.git"
-    },
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/alexahn/gauze.git"
+	},
 	"author": "Alex Ahn",
 	"bugs": {
 		"url": "https://github.com/alexahn/gauze/issues"
 	},
 	"homepage": "https://github.com/alexahn/gauze",
-	"keywords": ["gauze", "graphql", "framework", "structure", "server"],
+	"keywords": [
+		"gauze",
+		"graphql",
+		"framework",
+		"structure",
+		"server"
+	],
 	"engines": {
 		"node": "22.18.0"
 	},
@@ -75,5 +81,5 @@
 		"tachyons": "^4.12.0",
 		"uuid": "^9.0.1",
 		"yargs": "^17.7.2"
-	},
+	}
 }

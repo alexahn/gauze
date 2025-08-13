@@ -171,16 +171,16 @@ class GauzeService {
 	getEnvironmentJWT() {
 		const self = this;
 		if (self.environmentJWT) {
-			const payload = jose.decodeJwt(self.environmentJWT)
-			const now = Math.ceil(new Date().getTime() / 1000)
+			const payload = jose.decodeJwt(self.environmentJWT);
+			const now = Math.ceil(new Date().getTime() / 1000);
 			if (now < payload.exp) {
-				return self.environmentJWT
+				return self.environmentJWT;
 			} else {
-				self.deleteEnvironmentJWT()
-				return self.environmentJWT
+				self.deleteEnvironmentJWT();
+				return self.environmentJWT;
 			}
 		} else {
-			return self.environmentJWT
+			return self.environmentJWT;
 		}
 	}
 	deleteEnvironmentJWT() {
@@ -196,16 +196,16 @@ class GauzeService {
 	getProxyJWT() {
 		const self = this;
 		if (self.proxyJWT) {
-			const payload = jose.decodeJwt(self.proxyJWT)
-			const now = Math.ceil(new Date().getTime() / 1000)
+			const payload = jose.decodeJwt(self.proxyJWT);
+			const now = Math.ceil(new Date().getTime() / 1000);
 			if (now < payload.exp) {
-				return self.proxyJWT
+				return self.proxyJWT;
 			} else {
-				self.deleteProxyJWT()
-				return self.proxyJWT
+				self.deleteProxyJWT();
+				return self.proxyJWT;
 			}
 		} else {
-			return self.proxyJWT
+			return self.proxyJWT;
 		}
 	}
 	deleteProxyJWT() {
@@ -221,16 +221,16 @@ class GauzeService {
 	getSystemJWT() {
 		const self = this;
 		if (self.systemJWT) {
-			const payload = jose.decodeJwt(self.systemJWT)
-			const now = Math.ceil(new Date().getTime() / 1000)
+			const payload = jose.decodeJwt(self.systemJWT);
+			const now = Math.ceil(new Date().getTime() / 1000);
 			if (now < payload.exp) {
-				return self.systemJWT
+				return self.systemJWT;
 			} else {
-				self.deleteSystemJWT()
-				return self.systemJWT
+				self.deleteSystemJWT();
+				return self.systemJWT;
 			}
 		} else {
-			return self.systemJWT
+			return self.systemJWT;
 		}
 	}
 	deleteSystemJWT() {
