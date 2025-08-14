@@ -115,17 +115,6 @@ function SignIn({ pathfinder, services, next }) {
 				</div>
 			</form>
 		);
-		/*
-		return (
-			<form key={step} action={handlePerson}>
-				<label>Email</label>
-				<input name="email" defaultValue={person.email} autoFocus />
-				<button type="submit" disabled={submitPerson}>
-					Next
-				</button>
-			</form>
-		);
-		*/
 	} else if (step === 1) {
 		return (
 			<form key={step} action={handleAccount}>
@@ -153,20 +142,6 @@ function SignIn({ pathfinder, services, next }) {
 				</div>
 			</form>
 		);
-		/*
-		return (
-			<form key={step} action={handleAccount}>
-				<label>Password</label>
-				<input name="password" type="password" defaultValue={account.password} autoFocus />
-				<button type="button" onClick={handlePrevious} disabled={submitAccount}>
-					Prev
-				</button>
-				<button type="submit" disabled={submitAccount}>
-					Next
-				</button>
-			</form>
-		);
-		*/
 	} else if (step === 2) {
 		return (
 			<form key={step} action={handleSignIn}>
@@ -194,19 +169,6 @@ function SignIn({ pathfinder, services, next }) {
 				</div>
 			</form>
 		);
-		/*
-		return (
-			<form key={step} action={handleSignIn}>
-				<label>Sign In</label>
-				<button type="button" onClick={handlePrevious} disabled={submitSignIn}>
-					Prev
-				</button>
-				<button type="submit" disabled={submitSignIn}>
-					Next
-				</button>
-			</form>
-		);
-		*/
 	} else {
 		return null;
 	}

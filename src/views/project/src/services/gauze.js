@@ -70,7 +70,6 @@ class GauzeService {
 						location.replace(location.href);
 					} else if (self.getProxyJWT() === jwt) {
 						self.deleteProxyJWT();
-						//self.deleteEnvironmentJWT();
 						// load sign in page
 						const state = {
 							name: "project.environment.signin",
@@ -86,8 +85,6 @@ class GauzeService {
 						});
 					} else if (self.getSystemJWT() === jwt) {
 						self.deleteSystemJWT();
-						//self.deleteProxyJWT();
-						//self.deleteEnvironmentJWT();
 						// load proxies page
 						const state = {
 							name: "project.proxy.proxies",
@@ -146,19 +143,16 @@ class GauzeService {
 		const self = this;
 		const key = self.fetchLoaderKey("environment/graphql", self.environmentJWT, body);
 		return self.fetchLoader.load(key);
-		//return self.fetch("environment/graphql", self.environmentJWT, body);
 	}
 	proxy(body) {
 		const self = this;
 		const key = self.fetchLoaderKey("environment/graphql", self.proxyJWT, body);
 		return self.fetchLoader.load(key);
-		//return self.fetch("environment/graphql", self.proxyJWT, body);
 	}
 	system(body) {
 		const self = this;
 		const key = self.fetchLoaderKey("system/graphql", self.systemJWT, body);
 		return self.fetchLoader.load(key);
-		//return self.fetch("system/graphql", self.systemJWT, body);
 	}
 	setEnvironmentJWT(jwt) {
 		const self = this;
