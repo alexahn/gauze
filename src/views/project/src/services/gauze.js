@@ -11,11 +11,8 @@ class GauzeService {
 		const self = this;
 		self.base = `${GAUZE_PROTOCOL}://${GAUZE_HOST}:${GAUZE_PORT}`;
 		self.environmentJWT = localStorage.getItem("environmentJWT");
-		console.log("local environment jwt", localStorage.getItem("environmentJWT"));
 		self.proxyJWT = localStorage.getItem("proxyJWT");
-		console.log("local proxy jwt", localStorage.getItem("proxyJWT"));
 		self.systemJWT = localStorage.getItem("systemJWT");
-		console.log("local system jwt", localStorage.getItem("systemJWT"));
 		self.fetchLoader = new Dataloader(function (keys) {
 			const parsed = keys.map(function (key) {
 				return JSON.parse(key);

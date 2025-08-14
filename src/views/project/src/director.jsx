@@ -8,7 +8,6 @@ function createDirector(context) {
 	const director = new Director();
 
 	director.register("project.environment.signup", function (context, dependencies, pathParams, searchParams) {
-		console.log("project.environment.signup rendered");
 		const { services } = context;
 		const { next } = searchParams;
 		root.render(
@@ -25,7 +24,6 @@ function createDirector(context) {
 	});
 
 	director.register("project.environment.signin", function (context, dependencies, pathParams, searchParams) {
-		console.log("project.environment.signin rendered");
 		const { services } = context;
 		const { next } = searchParams;
 		root.render(
@@ -42,7 +40,6 @@ function createDirector(context) {
 	});
 
 	director.register("project.proxy.proxies", function (context, dependencies, pathParams, searchParams) {
-		console.log("project.proxy.proxies rendered");
 		const { services } = context;
 		const { next } = searchParams;
 		const proxies = dependencies.proxies.proxies;
@@ -60,7 +57,6 @@ function createDirector(context) {
 	});
 
 	director.register("project.proxy.signout", function (context, dependencies, pathParams, searchParams) {
-		console.log("project.proxy.signout rendered");
 		const { services } = context;
 		const { next } = searchParams;
 		root.render(
@@ -77,7 +73,6 @@ function createDirector(context) {
 	});
 
 	director.register("project.system.headers", function (context, dependencies, pathParams, searchParams) {
-		console.log("project.system.headers rendered");
 		const { services } = context;
 		const { headers } = dependencies;
 		root.render(
@@ -95,13 +90,11 @@ function createDirector(context) {
 	});
 
 	director.register("project.system.headers.header.list", function (context, dependencies, pathParams, searchParams) {
-		console.log("project.system.headers.header.list rendered");
 		const { services } = context;
 		const { system, headers, header, list } = dependencies;
 		const { agent } = system;
 		const { items, count } = list;
 		const variables = JSON.parse(searchParams.variables);
-		console.log("AGENT", agent);
 		root.render(
 			<React.StrictMode>
 				<layouts.amethyst.default>
@@ -127,7 +120,6 @@ function createDirector(context) {
 	});
 
 	director.register("project.system.headers.header.create", function (context, dependencies, pathParams, searchParams) {
-		console.log("project.system.headers.header.create rendered");
 		const { services } = context;
 		const { headers, header, create } = dependencies;
 		const variables = JSON.parse(searchParams.variables);
@@ -147,7 +139,6 @@ function createDirector(context) {
 	});
 
 	director.register("project.system.headers.header.item", function (context, dependencies, pathParams, searchParams) {
-		console.log("project.system.headers.header.item rendered");
 		const { services } = context;
 		const { headers, header, item } = dependencies;
 		root.render(
