@@ -75,7 +75,7 @@ function Proxies({ pathfinder, services, proxies, next }) {
 			{proxies.map(function (proxy) {
 				const isActive = proxy.attributes.gauze__proxy__agent_type === currentAgent;
 				return (
-					<form key={proxy.gauze__proxy__id} className="mb0" action={handleProxy(proxy)}>
+					<form key={proxy.attributes.gauze__proxy__id} className="mb0" action={handleProxy(proxy)}>
 						<button className={classes[proxy.attributes.gauze__proxy__agent_type]} style={{ opacity: isActive ? "0.25" : "1" }} type="submit" disabled={submitProxy || isActive}>
 							{readable[proxy.attributes.gauze__proxy__agent_type]}
 						</button>
