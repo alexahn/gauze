@@ -6,6 +6,7 @@ import { Pencil2Icon, Link2Icon, BookmarkIcon, BookmarkFilledIcon } from "@radix
 import { navigate } from "@ahn/sinew";
 
 import Input from "./Input.jsx";
+import Link from "./Link.jsx"
 import Pagination from "./Pagination.jsx";
 
 function Table({ pathfinder, services, agent, headers, header, variables = {}, items, count }) {
@@ -348,17 +349,18 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 						{header.fields.map(function (field) {
 							return (
 								<td key={field.name} className={cellClass} tabIndex="0" align="center">
-									<a
+									<Link
 										href={pathfinder.stateToURL(
 											"project.system.headers.header.create",
 											{ header: header.graphql_meta_type.toLowerCase() },
 											{ variables: JSON.stringify(localVariables) },
 										)}
+										push={true}
 									>
 										<button className="athelas f6" type="button">
 											Create
 										</button>
-									</a>
+									</Link>
 								</td>
 							);
 						})}
@@ -368,6 +370,7 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 						const hasWhitelist = !isGauzeEntity;
 						const hasBlacklist = !isGauzeEntity;
 						const hasRelationships = !isGauzeEntity;
+						const detail = pathfinder.stateToURL("project.system.headers.header.item", { header: header.graphql_meta_type.toLowerCase(), id: item._metadata.id }, {})
 						const whitelist = function (method) {
 							return pathfinder.stateToURL(
 								"project.system.headers.header.list",
@@ -452,11 +455,11 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 							<tr key={item._metadata.id}>
 								<td align="center" className={cellClass}>
 									<div className="flex justify-center">
-										<a href={pathfinder.stateToURL("project.system.headers.header.item", { header: header.graphql_meta_type.toLowerCase(), id: item._metadata.id }, {})}>
+										<Link href={detail} push={true}>
 											<button type="button">
 												<Pencil2Icon />
 											</button>
-										</a>
+										</Link>
 										{hasRelationships ? (
 											<div className={"relative tooltip-container"} tabIndex="0">
 												<div className={itemClass}>
@@ -466,16 +469,16 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 												</div>
 												<span className={tooltipClass}>
 													<div className={"flex flex-column mw3"}>
-														<a href={toRelationships}>
+														<Link href={toRelationships} push={true}>
 															<button className="athelas f6 w3" type="button">
 																To
 															</button>
-														</a>
-														<a href={fromRelationships}>
+														</Link>
+														<Link href={fromRelationships} push={true}>
 															<button className="athelas f6 w3" type="button">
 																From
 															</button>
-														</a>
+														</Link>
 													</div>
 												</span>
 											</div>
@@ -489,31 +492,31 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 												</div>
 												<span className={tooltipClass}>
 													<div className={"flex flex-column mw3"}>
-														<a href={whitelist("create")}>
+														<Link href={whitelist("create")} push={true}>
 															<button className="athelas f6 w3" type="button">
 																Create
 															</button>
-														</a>
-														<a href={whitelist("read")}>
+														</Link>
+														<Link href={whitelist("read")} push={true}>
 															<button className="athelas f6 w3" type="button">
 																Read
 															</button>
-														</a>
-														<a href={whitelist("update")}>
+														</Link>
+														<Link href={whitelist("update")} push={true}>
 															<button className="athelas f6 w3" type="button">
 																Update
 															</button>
-														</a>
-														<a href={whitelist("delete")}>
+														</Link>
+														<Link href={whitelist("delete")} push={true}>
 															<button className="athelas f6 w3" type="button">
 																Delete
 															</button>
-														</a>
-														<a href={whitelist("count")}>
+														</Link>
+														<Link href={whitelist("count")} push={true}>
 															<button className="athelas f6 w3" type="button">
 																Count
 															</button>
-														</a>
+														</Link>
 													</div>
 												</span>
 											</div>
@@ -527,31 +530,31 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 												</div>
 												<span className={tooltipClass}>
 													<div className={"flex flex-column mw3"}>
-														<a href={blacklist("create")}>
+														<Link href={blacklist("create")} push={true}>
 															<button className="athelas f6 w3" type="button">
 																Create
 															</button>
-														</a>
-														<a href={blacklist("read")}>
+														</Link>
+														<Link href={blacklist("read")} push={true}>
 															<button className="athelas f6 w3" type="button">
 																Read
 															</button>
-														</a>
-														<a href={blacklist("update")}>
+														</Link>
+														<Link href={blacklist("update")} push={true}>
 															<button className="athelas f6 w3" type="button">
 																Update
 															</button>
-														</a>
-														<a href={blacklist("delete")}>
+														</Link>
+														<Link href={blacklist("delete")} push={true}>
 															<button className="athelas f6 w3" type="button">
 																Delete
 															</button>
-														</a>
-														<a href={blacklist("count")}>
+														</Link>
+														<Link href={blacklist("count")} push={true}>
 															<button className="athelas f6 w3" type="button">
 																Count
 															</button>
-														</a>
+														</Link>
 													</div>
 												</span>
 											</div>

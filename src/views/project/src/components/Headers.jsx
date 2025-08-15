@@ -1,6 +1,8 @@
 import * as React from "react";
 import { useState } from "react";
 
+import Link from "./Link.jsx"
+
 function Headers({ pathfinder, headers }) {
 	const buttonClass = "clouds w-100 ba bw1 br2 truncate-ns mb1 f6 athelas bgx2 bdx2 cx6 bgx3h bdx3h cx6h truncate-ns mw4";
 	const buttonActiveClass = "clouds w-100 ba bw1 br2 truncate-ns mb1 f6 athelas bgx3 bdx3 cx6 bgx3h bdx3h cx6h truncate-ns mw4";
@@ -13,11 +15,11 @@ function Headers({ pathfinder, headers }) {
 				const isActive = state.pathParams.header === header.graphql_meta_type.toLowerCase()
 				return (
 					<div key={header.name} className="mb0">
-						<a href={pathfinder.stateToURL("project.system.headers.header.list", { header: header.graphql_meta_type.toLowerCase() }, { variables })}>
+						<Link href={pathfinder.stateToURL("project.system.headers.header.list", { header: header.graphql_meta_type.toLowerCase() }, { variables })} push={true}>
 							<button className={isActive ? buttonActiveClass : buttonClass} type="button">
 								{header.graphql_meta_type}
 							</button>
-						</a>
+						</Link>
 					</div>
 				);
 			})}
