@@ -146,13 +146,45 @@ class GauzeService {
 	}
 	proxy(body) {
 		const self = this;
-		const key = self.fetchLoaderKey("environment/graphql", self.proxyJWT, body);
-		return self.fetchLoader.load(key);
+		if (self.proxyJWT) {
+			const key = self.fetchLoaderKey("environment/graphql", self.proxyJWT, body);
+			return self.fetchLoader.load(key);
+		} else {
+			const state = {
+				name: "project.environment.signin",
+				pathParams: {},
+				searchParams: {
+					next: location.href,
+				},
+			};
+			navigate(self.getPathfinder().stateToURL(state.name, state.pathParams, state.searchParams), {
+				push: true,
+				replace: true,
+				state: state,
+			});
+			throw new Error("Cannot send request without proxy JWT")
+		}
 	}
 	system(body) {
 		const self = this;
-		const key = self.fetchLoaderKey("system/graphql", self.systemJWT, body);
-		return self.fetchLoader.load(key);
+		if (self.systemJWT) {
+			const key = self.fetchLoaderKey("system/graphql", self.systemJWT, body);
+			return self.fetchLoader.load(key);
+		} else {
+			const state = {
+				name: "project.proxy.proxies",
+				pathParams: {},
+				searchParams: {
+					next: location.href,
+				},
+			};
+			navigate(self.getPathfinder().stateToURL(state.name, state.pathParams, state.searchParams), {
+				push: true,
+				replace: true,
+				state: state,
+			});
+			throw new Error("Cannot send request without system JWT")
+		}
 	}
 	setEnvironmentJWT(jwt) {
 		const self = this;

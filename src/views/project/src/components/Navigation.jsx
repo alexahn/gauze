@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import Link from "./Link.jsx"
+
 function Navigation({ pathfinder, services }) {
 	const { gauze } = services;
 	const proxyJWT = gauze.default.getProxyJWT();
@@ -18,47 +20,47 @@ function Navigation({ pathfinder, services }) {
 
 	const signUp = (
 		<div>
-			<a href={pathfinder.stateToURL("project.environment.signup", {}, { next })}>
+			<Link href={pathfinder.stateToURL("project.environment.signup", {}, { next })} push={true}>
 				<button className={signUpClass} style={{ opacity: state.name === "project.environment.signup" ? "0.5" : "1" }} disabled={state.name === "project.environment.signup"}>
 					Sign Up
 				</button>
-			</a>
+			</Link>
 		</div>
 	);
 	const signIn = (
 		<div>
-			<a href={pathfinder.stateToURL("project.environment.signin", {}, { next })}>
+			<Link href={pathfinder.stateToURL("project.environment.signin", {}, { next })} push={true}>
 				<button className={signInClass} style={{ opacity: state.name === "project.environment.signin" ? "0.5" : "1" }} disabled={state.name === "project.environment.signin"}>
 					Sign In
 				</button>
-			</a>
+			</Link>
 		</div>
 	);
 	const signOut = (
 		<div>
-			<a href={pathfinder.stateToURL("project.proxy.signout", {}, { next })}>
+			<Link href={pathfinder.stateToURL("project.proxy.signout", {}, { next })} push={true}>
 				<button className={signOutClass} style={{ opacity: state.name === "project.proxy.signout" ? "0.5" : "1" }} disabled={state.name === "project.proxy.signout"}>
 					Sign Out
 				</button>
-			</a>
+			</Link>
 		</div>
 	);
 	const proxy = (
 		<div>
-			<a href={pathfinder.stateToURL("project.proxy.proxies", {}, { next })}>
+			<Link href={pathfinder.stateToURL("project.proxy.proxies", {}, { next })} push={true}>
 				<button className={proxyClass} style={{ opacity: state.name === "project.proxy.proxies" ? "0.5" : "1" }} disabled={state.name === "project.proxy.proxies"}>
 					Proxy
 				</button>
-			</a>
+			</Link>
 		</div>
 	);
 	const system = (
 		<div>
-			<a href={pathfinder.stateToURL("project.system.headers", {}, {})}>
+			<Link href={pathfinder.stateToURL("project.system.headers", {}, {})} push={true}>
 				<button className={systemClass} style={{ opacity: state.name === "project.system.headers" ? "0.5" : "1" }} disabled={state.name === "project.system.headers"}>
 					System
 				</button>
-			</a>
+			</Link>
 		</div>
 	);
 	return (
