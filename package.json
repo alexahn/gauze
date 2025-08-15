@@ -1,6 +1,6 @@
 {
 	"name": "@ahn/gauze",
-	"version": "0.0.10",
+	"version": "0.0.11",
 	"description": "GraphQL server framework",
 	"repository": {
 		"type": "git",
