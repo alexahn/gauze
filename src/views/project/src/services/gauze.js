@@ -162,7 +162,7 @@ class GauzeService {
 				replace: true,
 				state: state,
 			});
-			throw new Error("Cannot send request without proxy JWT")
+			throw new Error("Cannot send request without proxy JWT");
 		}
 	}
 	system(body) {
@@ -183,7 +183,7 @@ class GauzeService {
 				replace: true,
 				state: state,
 			});
-			throw new Error("Cannot send request without system JWT")
+			throw new Error("Cannot send request without system JWT");
 		}
 	}
 	setEnvironmentJWT(jwt) {

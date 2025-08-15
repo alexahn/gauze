@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import Link from "./Link.jsx"
+import Link from "./Link.jsx";
 
 function Navigation({ pathfinder, services }) {
 	const { gauze } = services;

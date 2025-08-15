@@ -6,7 +6,7 @@ import { Pencil2Icon, Link2Icon, BookmarkIcon, BookmarkFilledIcon } from "@radix
 import { navigate } from "@ahn/sinew";
 
 import Input from "./Input.jsx";
-import Link from "./Link.jsx"
+import Link from "./Link.jsx";
 import Pagination from "./Pagination.jsx";
 
 function Table({ pathfinder, services, agent, headers, header, variables = {}, items, count }) {
@@ -370,7 +370,7 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 						const hasWhitelist = !isGauzeEntity;
 						const hasBlacklist = !isGauzeEntity;
 						const hasRelationships = !isGauzeEntity;
-						const detail = pathfinder.stateToURL("project.system.headers.header.item", { header: header.graphql_meta_type.toLowerCase(), id: item._metadata.id }, {})
+						const detail = pathfinder.stateToURL("project.system.headers.header.item", { header: header.graphql_meta_type.toLowerCase(), id: item._metadata.id }, {});
 						const whitelist = function (method) {
 							return pathfinder.stateToURL(
 								"project.system.headers.header.list",

@@ -1,17 +1,16 @@
 import * as React from "react";
 
-import { navigate } from "@ahn/sinew"
+import { navigate } from "@ahn/sinew";
 
 function Link({ href, push, children }) {
 	function handleClick(e) {
 		if (push) {
-			e.preventDefault()
+			e.preventDefault();
 			navigate(href, {
 				push: true,
-				replace: false
-			})
+				replace: false,
+			});
 		} else {
-
 		}
 	}
 	return (
