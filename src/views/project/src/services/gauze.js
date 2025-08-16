@@ -14,6 +14,9 @@ class GauzeService {
 		self.proxyJWT = localStorage.getItem("proxyJWT");
 		self.systemJWT = localStorage.getItem("systemJWT");
 		self.fetchLoader = new Dataloader(function (keys) {
+			// note: clear cache between batches
+			// note: make sure this doesn't break our query normalization from batching
+			self.fetchLoader.clearAll()
 			const parsed = keys.map(function (key) {
 				return JSON.parse(key);
 			});
