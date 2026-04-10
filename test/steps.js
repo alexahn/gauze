@@ -189,6 +189,8 @@ function run_layers(environment, layers) {
 				});
 			}, Promise.resolve(true))
 			.then(function () {
+				// sharding note: we need to rollback all active transactions for the context
+				// sharding note: 
 				return transaction.rollback();
 			})
 			.catch(function (err) {

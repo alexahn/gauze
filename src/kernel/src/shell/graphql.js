@@ -7,8 +7,8 @@ const EXECUTE__GRAPHQL__SHELL__SRC__KERNEL = function ({ schema, context, operat
 		operation_name,
 		operation_variables,
 	});
-	context.breadth = 0;
-	context.transactions = 0;
+	context.breadth = context.breadth || 0;
+	context.transactions = context.transactions || 0;
 	return graphql({
 		schema: schema,
 		contextValue: context,
