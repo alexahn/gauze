@@ -59,6 +59,21 @@ class GauzeProjectManager {
 			}
 		});
 		const GAUZE_SUB_COMMAND = sub_command_argv.join(" ");
+		/*
+			// todo: runtime check
+			let runtime = "unknown";
+
+			if (typeof Deno !== "undefined") {
+			  runtime = "deno";
+			} else if (typeof Bun !== "undefined") {
+			  runtime = "bun";
+			} else if (typeof process !== "undefined" && process.versions?.node) {
+			  runtime = "node";
+			}
+
+			console.log(`Current runtime: ${runtime}`);
+		*/
+		// e.g. `deno run ${GAUZE_PROJECT_DIR}/command/gauze.ts ${GAUZE_SUB_COMMAND}`
 		const COMMAND = `node ${GAUZE_PROJECT_DIR}/command/gauze.js ${GAUZE_SUB_COMMAND}`;
 		return this.execute(COMMAND).catch(function (err) {
 			console.error(err);
