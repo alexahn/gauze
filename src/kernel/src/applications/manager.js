@@ -624,6 +624,7 @@ class GauzeManager {
 	migrate_run() {
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_run");
 		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR}`;
+		// sharding note: instead of executing a command, iterate over all databases defined in our custom configuration file and use knex manually
 		this.execute(COMMAND).catch(function (err) {
 			console.error(err);
 			process.exit(1);

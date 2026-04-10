@@ -5,36 +5,74 @@
 				id: 1,
 				start: 0n,
 				end: 170141183460469231731687303715884105726n,
-				config: {
-					client: "better-sqlite3",
-					connection: {
-						filename: path.join(__dirname, "../../",  "{ENVIRONMENT}.{SQL_TABLE}.{id}.sqlite3"),
-					},
-					migrations: {
-						tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
-						directory: path.join(__dirname, "migrations"),
-					},
-					seeds: {
-						directory: path.join(__dirname, "seeds", "{ENVIRONMENT}", "{SQL_TABLE"),
+				// read slaves
+				read: [
+					config: {
+						client: "better-sqlite3",
+						connection: {
+							filename: path.join(__dirname, "../../",  "{ENVIRONMENT}.{SQL_TABLE}.{id}.sqlite3"),
+						},
+						migrations: {
+							tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
+							directory: path.join(__dirname, "migrations"),
+						},
+						seeds: {
+							directory: path.join(__dirname, "seeds", "{ENVIRONMENT}", "{SQL_TABLE"),
+						}
 					}
-				}
+				}],
+				// write masters
+				write: [{
+					config: {
+						client: "better-sqlite3",
+						connection: {
+							filename: path.join(__dirname, "../../",  "{ENVIRONMENT}.{SQL_TABLE}.{id}.sqlite3"),
+						},
+						migrations: {
+							tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
+							directory: path.join(__dirname, "migrations"),
+						},
+						seeds: {
+							directory: path.join(__dirname, "seeds", "{ENVIRONMENT}", "{SQL_TABLE"),
+						}
+					}
+
+				}]
 			}, {
 				id: 2,
 				start: 170141183460469231731687303715884105727n,
 				end: 340282366920938463463374607431768211455n,
-				config: {
-					client: "better-sqlite3",
-					connection: {
-						filename: path.join(__dirname, "../../",  "{ENVIRONMENT}.{SQL_TABLE}.{id}.sqlite3"),
-					},
-					migrations: {
-						tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
-						directory: path.join(__dirname, "migrations"),
-					},
-					seeds: {
-						directory: path.join(__dirname, "seeds", "{ENVIRONMENT}", "{SQL_TABLE"),
+				read: [
+					config: {
+						client: "better-sqlite3",
+						connection: {
+							filename: path.join(__dirname, "../../",  "{ENVIRONMENT}.{SQL_TABLE}.{id}.sqlite3"),
+						},
+						migrations: {
+							tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
+							directory: path.join(__dirname, "migrations"),
+						},
+						seeds: {
+							directory: path.join(__dirname, "seeds", "{ENVIRONMENT}", "{SQL_TABLE"),
+						}
 					}
-				}
+				}],
+				write: [{
+					config: {
+						client: "better-sqlite3",
+						connection: {
+							filename: path.join(__dirname, "../../",  "{ENVIRONMENT}.{SQL_TABLE}.{id}.sqlite3"),
+						},
+						migrations: {
+							tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
+							directory: path.join(__dirname, "migrations"),
+						},
+						seeds: {
+							directory: path.join(__dirname, "seeds", "{ENVIRONMENT}", "{SQL_TABLE"),
+						}
+					}
+
+				}]
 			}]
 		}
 	}
