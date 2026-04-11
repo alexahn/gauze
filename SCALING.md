@@ -17,6 +17,10 @@ Look into latency for creating a connection on major databases (like PostgreSQL)
 
 Gauze assumes there is a connection pooler in front of the database server, such as PgBouncer or RDS Proxy. Without a connection pooler, the number of application connections per database server is limited. PgBouncer and RDS Proxy can handle more than 10000 application connections per instance. There should be a connection pooler in front of every read slave and write master.
 
+## Transactions
+
+Gauze has an all or nothing architecture. Only valid execution can modify the database. Transaction duration should be minimized to increase performance. Transaction duration is proportional to GraphQL query depth (as in how many nested calls there are), as each layer is serial with the previous. The total response time for the server request can be an approximation of the transaction duration. We should aim for response times under 1024 milliseconds. 
+
 ## Rewrite
 
 Most of Gauze's code is already hardened, and introducing sharding will require substantial changes to the kernel models. More importantly, it will break the concept of pagination, as the number of elements returned for a query will depend on the number of sharded servers involved in the query. A complete rewrite of the project in TypeScript may be more productive. We can replace Knex with Kysely during the rewrite. We can recycle most of the architecture from Gauze.
