@@ -390,6 +390,7 @@ class DatabaseModel extends Model {
 		// sharding note: use attributes[primary_key] to find the shard node to run the query below
 		// sharding note: relationship model is special and shards on from_entity_id and to_entity_id (put relationships on the entity shards)
 		// sharding note: we will only be able to edit relationships if we have the from_entity_id and to_entity_id, which is a divergence from the current implementation
+		// sharding note: we cannot clean up relationships on entity deletion without querying every shard node for every entity type
 		const sql = database(self.table_name).insert(attributes, [self.primary_key]).transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.create:debug_sql`, sql.toString());
