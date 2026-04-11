@@ -67,9 +67,11 @@ function load_steps(base_path, directory) {
 		});
 }
 
-function make_step_error(step) {
-	const message = `Step ${step.step} failed at: ${step.file_path}:
-Error: Step description: ${step.description}`;
+function make_step_error(step, errors) {
+	const message = `Step ${step.step} failed at: ${step.file_path}
+Error: Step description: ${step.description}
+Response: 
+${errors}`;
 	return new Error(message);
 }
 
@@ -103,7 +105,7 @@ function run_step(environment, step) {
 					console.log(step.expected);
 					console.log("error:");
 					console.log(data.errors);
-					throw make_step_error(step);
+					throw make_step_error(step, data.errors);
 				}
 				return data;
 			} else {
@@ -190,7 +192,7 @@ function run_layers(environment, layers) {
 			}, Promise.resolve(true))
 			.then(function () {
 				// sharding note: we need to rollback all active transactions for the context
-				// sharding note: 
+				// sharding note:
 				return transaction.rollback();
 			})
 			.catch(function (err) {

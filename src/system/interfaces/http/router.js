@@ -5,6 +5,8 @@ import * as $realm from "./../../gauze.js";
 export default function ($gauze) {
 	const ROUTER__HTTP__INTERFACE__SYSTEM = new Router();
 
+	// sharding note: replace database here with a new database object
+	// sharding note: new database object has methods: get_connections, create_connections, route_connection(context), route_transaction(context)
 	const database = $gauze.database.knex.create_connection();
 
 	// this is called once the exit trajectory has been set

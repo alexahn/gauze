@@ -305,6 +305,14 @@ class DatabaseModel extends Model {
 				return result;
 			});
 	}
+	// makes sure we are below the maximum breadth (number of rows returned from the database) and transaction limit
+	_check_constraints(context) {
+		const self = this;
+		context.breadth_count = context.breadth_count || 0;
+		context.transaction_count = context.transaction_count || 0;
+		if (self.breadth_max < context.breadth_count) throw new Error(`Maximum breadth exceeded: (current: ${context.breadth_count}, max: ${self.breadth_max})`);
+		if (self.transactions_max < context.transaction_count) throw new Error(`Maximum transactions exceeded (current: ${context.transaction_count}, max: ${self.transactions_max})`);
+	}
 	// todo: see if we can remove the conditional checks before we unwrap the keys (the default value might always be an empty object)
 	_validate_parameters(parameters) {
 		const self = this;
@@ -381,6 +389,7 @@ class DatabaseModel extends Model {
 		}
 	}
 	_root_create(context, scope, parameters) {
+		context.transaction_count += 1;
 		const self = this;
 		const { database, transaction } = context;
 		//const { source } = scope
@@ -398,7 +407,7 @@ class DatabaseModel extends Model {
 		return sql
 			.then(function (data) {
 				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.create:success`, "data", data);
-				context.breadth += data.length;
+				context.breadth_count += data.length;
 				return self.read(
 					context,
 					{ source: undefined },
@@ -425,6 +434,8 @@ class DatabaseModel extends Model {
 			});
 	}
 	_relationship_create(context, scope, parameters) {
+		context.transaction_count += 1;
+		// todo: move logic from system model here
 		const self = this;
 		return self._root_create(context, scope, parameters);
 	}
@@ -433,15 +444,15 @@ class DatabaseModel extends Model {
 		const self = this;
 		const relationship_source = self._parse_source(scope, parameters);
 		const key = self._batch_key(relationship_source, parameters, "create");
-		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
-		if (self.transactions_max < context.transactions) throw new Error("Maximum transactions exceeded");
-		context.transactions += 1;
+		self._check_constraints(context);
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
+		// we need to fetch the parameters for the key in the batch function
 		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, scope, key);
 	}
 	_root_read(context, scope, parameters) {
+		context.transaction_count += 1;
 		const self = this;
 		const { database, transaction } = context;
 		const {
@@ -503,7 +514,7 @@ class DatabaseModel extends Model {
 		return sql
 			.then(function (data) {
 				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
-				context.breadth += data.length;
+				context.breadth_count += data.length;
 				return Promise.resolve(data);
 			})
 			.catch(function (err) {
@@ -512,6 +523,7 @@ class DatabaseModel extends Model {
 			});
 	}
 	_relationship_read(context, scope, parameters) {
+		context.transaction_count += 1;
 		const self = this;
 		const { database, transaction } = context;
 		const {
@@ -606,7 +618,7 @@ class DatabaseModel extends Model {
 			return sql
 				.then(function (data) {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
-					context.breadth += data.length;
+					context.breadth_count += data.length;
 					return Promise.resolve(data);
 				})
 				.catch(function (err) {
@@ -646,7 +658,7 @@ class DatabaseModel extends Model {
 			return sql
 				.then(function (data) {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
-					context.breadth += data.length;
+					context.breadth_count += data.length;
 					return Promise.resolve(data);
 				})
 				.catch(function (err) {
@@ -662,16 +674,16 @@ class DatabaseModel extends Model {
 		const self = this;
 		const relationship_source = self._parse_source(scope, parameters);
 		const key = self._batch_key(relationship_source, parameters, "read");
-		if (self.breadth_max < context.breadth) throw new Error(`Maximum breadth exceeded: (current: ${context.breadth}, max: ${self.breadth_max})`);
-		if (self.transactions_max < context.transactions) throw new Error(`Maximum transactions exceeded (current: ${context.transactions}, max: ${self.transactions_max})`);
+		self._check_constraints(context);
 		self._validate_parameters(parameters);
-		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
+		// we need to fetch the parameters for the key in the batch function
 		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, scope, key);
 	}
 	_root_update(context, scope, parameters) {
+		context.transaction_count += 1;
 		var self = this;
 		const { database, transaction } = context;
 		var { attributes, where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
@@ -707,7 +719,7 @@ class DatabaseModel extends Model {
 		return sql
 			.then(function (data) {
 				LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
-				context.breadth += data.length;
+				context.breadth_count += data.length;
 				return self.read(context, scope, parameters);
 			})
 			.catch(function (err) {
@@ -721,6 +733,7 @@ class DatabaseModel extends Model {
 			});
 	}
 	_relationship_update(context, scope, parameters) {
+		context.transaction_count += 1;
 		const self = this;
 		const { database, transaction } = context;
 		const { attributes } = parameters;
@@ -741,7 +754,7 @@ class DatabaseModel extends Model {
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
 				}
-				context.breadth += data.length;
+				context.breadth_count += data.length;
 				return sql.then(function (data) {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
 					return self.read(context, scope, parameters);
@@ -757,12 +770,11 @@ class DatabaseModel extends Model {
 		const self = this;
 		const relationship_source = self._parse_source(scope, parameters);
 		const key = self._batch_key(relationship_source, parameters, "update");
-		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
-		if (self.transactions_max < context.transactions) throw new Error("Maximum transactions exceeded");
+		self._check_constraints(context);
 		self._validate_parameters(parameters);
-		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
+		// we need to fetch the parameters for the key in the batch function
 		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, scope, key);
 	}
@@ -826,6 +838,7 @@ class DatabaseModel extends Model {
 		);
 	}
 	_root_delete(context, scope, parameters) {
+		context.transaction_count += 1;
 		const self = this;
 		const { database, transaction } = context;
 		const { where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {}, limit = 16 } = parameters;
@@ -873,7 +886,7 @@ class DatabaseModel extends Model {
 				}
 				return sql.then(function (delete_data) {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
-					context.breadth += read_data.length;
+					context.breadth_count += read_data.length;
 					return self._cleanup_delete(context, valid_ids).then(function () {
 						return read_data.slice(0, Math.min(limit, self.limit_max));
 					});
@@ -885,6 +898,7 @@ class DatabaseModel extends Model {
 			});
 	}
 	_relationship_delete(context, scope, parameters) {
+		context.transaction_count += 1;
 		const self = this;
 		const { database, transaction } = context;
 		const { limit = 16 } = parameters;
@@ -907,7 +921,7 @@ class DatabaseModel extends Model {
 				return sql.then(function (delete_data) {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
 					return self._cleanup_delete(context, valid_ids).then(function () {
-						context.breadth += read_data.length;
+						context.breadth_count += read_data.length;
 						return read_data.slice(0, limit);
 					});
 				});
@@ -922,16 +936,16 @@ class DatabaseModel extends Model {
 		const self = this;
 		const relationship_source = self._parse_source(scope, parameters);
 		const key = self._batch_key(relationship_source, parameters, "delete");
-		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
-		if (self.transactions_max < context.transactions) throw new Error("Maximum transactions exceeded");
+		self._check_constraints(context);
 		self._validate_parameters(parameters);
-		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
+		// we need to fetch the parameters for the key in the batch function
 		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, scope, key);
 	}
 	_root_count(context, scope, parameters) {
+		context.transaction_count += 1;
 		const self = this;
 		const { database, transaction } = context;
 		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
@@ -975,7 +989,7 @@ class DatabaseModel extends Model {
 		return sql
 			.then(function (data) {
 				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
-				context.breadth += data.length;
+				context.breadth_count += data.length;
 				return Promise.resolve(data);
 			})
 			.catch(function (err) {
@@ -984,6 +998,7 @@ class DatabaseModel extends Model {
 			});
 	}
 	_relationship_count(context, scope, parameters) {
+		context.transaction_count += 1;
 		const self = this;
 		const { database, transaction } = context;
 		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
@@ -1099,7 +1114,7 @@ class DatabaseModel extends Model {
 			return sql
 				.then(function (data) {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
-					context.breadth += data.length;
+					context.breadth_count += data.length;
 					return Promise.resolve(data);
 				})
 				.catch(function (err) {
@@ -1114,12 +1129,11 @@ class DatabaseModel extends Model {
 		const self = this;
 		const relationship_source = self._parse_source(scope, parameters);
 		const key = self._batch_key(relationship_source, parameters, "count");
-		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
-		if (self.transactions_max < context.transactions) throw new Error("Maximum transactions exceeded");
+		self._check_constraints(context);
 		self._validate_parameters(parameters);
-		context.transactions += 1;
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
+		// we need to fetch the parameters for the key in the batch function
 		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, scope, key);
 	}
