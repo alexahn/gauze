@@ -6,8 +6,8 @@
 
 You have two ways to use redux-router5, depending on how you want to navigate:
 
--   Using the router5 plugin (named `reduxPlugin`)
--   Using the redux middleware (named `router5Middleware`)
+- Using the router5 plugin (named `reduxPlugin`)
+- Using the redux middleware (named `router5Middleware`)
 
 In both cases, **use the provided reducer (`router5Reducer`).**
 
@@ -26,11 +26,11 @@ router.usePlugin(reduxPlugin(store.dispatch));
 
 The redux middleware automatically adds the redux plugin to the provided router instance. It will convert a set of redux actions to routing instructions. The available action creators are:
 
--   `navigateTo(routeName, routeParams = {}, routeOptions = {})`
--   `cancelTransition()`
--   `clearErrors()`
--   `canActivate(routeName, true | false)`
--   `canDeactivate(routeName, true | false)`
+- `navigateTo(routeName, routeParams = {}, routeOptions = {})`
+- `cancelTransition()`
+- `clearErrors()`
+- `canActivate(routeName, true | false)`
+- `canDeactivate(routeName, true | false)`
 
 ```javascript
 import { actions } from "redux-router5";
@@ -49,10 +49,10 @@ const createStoreWithMiddleware = applyMiddleware(router5Middleware(router))(cre
 
 This packages exposes a reducer (`router5Reducer`) that you can add to your application. It contains four properties:
 
--   `route`
--   `previousRoute`
--   `transitionRoute` (the current transitioning route)
--   `transitionError` (the last error which occured)
+- `route`
+- `previousRoute`
+- `transitionRoute` (the current transitioning route)
+- `transitionError` (the last error which occured)
 
 ```js
 import { combineReducers } from "redux";
