@@ -469,4 +469,4 @@ Example definition can be found in [here](./gauze/entity.js):
 
 ### Development process
 
-Run `npm start`, which starts the backend server, two watch processes for building the user interface, and three graphiql servers (port 4001, 4002, 4003). Changes to the `src` directory will automatically restart the backend server. Changes to the user interface code (for both gauze and project applications) will rebuild the frontend(s).
+Run `npm start`, which starts the backend server, two watch processes for building the user interface, and three graphiql servers (port 4001, 4002, 4003). Changes to the `src` directory will automatically restart the backend server. Changes to the user interface code (for both gauze and project applications) will rebuild the frontend(s). Run `npm test` and make sure all tests pass before committing.
