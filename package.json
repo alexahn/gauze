@@ -67,7 +67,7 @@
 		"@koa/router": "^13.1.1",
 		"@koa/send": "^6.0.0",
 		"@radix-ui/react-icons": "^1.3.2",
-		"better-sqlite3": "^9.5.0",
+		"better-sqlite3": "^12.8.0",
 		"dataloader": "^2.2.3",
 		"dotenv": "^16.4.5",
 		"esbuild": "^0.25.6",
