@@ -27,7 +27,8 @@
 	"scripts": {
 		"test": "LOG_LEVEL_MINIMUM=4 node test",
 		"gauze": "./src/command/gauze.js",
-		"start": "node --watch-path=./src ./src/command/gauze.js application serve",
+		"start": "/bin/zsh -c \"npm run start-server & ; npm run start-ui & ; npm run start-graphiql & ; wait\"",
+		"start-server": "/bin/zsh -c \"npm run watch-server & ; wait\"",
 		"start-graphiql": "/bin/zsh -c \"npm run start-graphiql-database & ; npm run start-graphiql-system & ; npm run start-graphiql-environment & ; wait\"",
 		"start-graphiql-database": "npx ruru -SP -p 4001 -e http://localhost:4000/database/graphql",
 		"start-graphiql-system": "npx ruru -SP -p 4002 -e http://localhost:4000/system/graphql",
@@ -37,6 +38,8 @@
 		"build-ui-gauze-v1": "node ./src/views/gauze/v1/build.js",
 		"build-ui-gauze-v2": "node ./src/views/gauze/v2/build.js",
 		"build-ui-project": "node ./src/views/project/build.js",
+		"watch": "/bin/zsh -c \"npm run watch-server & ; npm run watch-ui & ; wait\"",
+		"watch-server": "node --watch-path=./src ./src/command/gauze.js application serve",
 		"watch-ui": "/bin/zsh -c \"npm run watch-ui-gauze-v1 & ; npm run watch-ui-project & ; wait\"",
 		"watch-ui-gauze-v1": "node ./src/views/gauze/v1/watch.js",
 		"watch-ui-gauze-v2": "node ./src/views/gauze/v2/watch.js",

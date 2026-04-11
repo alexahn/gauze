@@ -1059,3 +1059,9 @@
 	[ ] move away from router5 since i think it has a broken routing implementation
 	[ ] try to use our own router
 		[x] the new router reloads the page on query parameter change since the query parameters precede the hash anchor
+
+[ ] remove dependency on zsh
+	[ ] replace kernel/bin scripts with pure nodejs alternatives
+
+[ ] add runtime awareness (e.g. deno, bun, node)
+	[ ] replace hardcoded "node" in shell commands executed by cli

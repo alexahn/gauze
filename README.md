@@ -453,13 +453,20 @@ Example definition can be found in [here](./gauze/entity.js):
 - `method.privacy` is privacy mode for the method (either `public` or `private`)
 - `method.allowed_agent_types` is an array of allowed agent types for the method
 
-## Development Commands
+## Development
+
+### Development Commands
 
 - `npm run start`
-	- Starts the `gauze` server on port `4000`
+	- Runs `start-server` and `start-ui` and `start-graphiql`
+- `npm run start-server` (proxies to `npm run watch-server`)
+	- Starts the `gauze` server on port `4000` and watches for file changes on `src` directory
+- `npm run start-ui` (proxies to `npm run watch-ui`)
+	- Builds the gauze and project web interface and recompile the applications on code change
 - `npm run start-graphiql`
 	- Starts three `graphiql` instances on port `4001` (`database` realm), `4002` (`system` realm), and `4003` (`environment` realm)
 - `npm run start-ui`
-	- Builds the web interface and recompile the application on code change
-- `npm run serve-ui`
-	- Serves the built web interface application on port `3000`
+
+### Development process
+
+Run `npm start`, which starts the backend server, two watch processes for building the user interface, and three graphiql servers (port 4001, 4002, 4003). Changes to the `src` directory will automatically restart the backend server. Changes to the user interface code (for both gauze and project applications) will rebuild the frontend(s).
