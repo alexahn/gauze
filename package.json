@@ -41,7 +41,10 @@
 		"watch-ui-gauze-v1": "node ./src/views/gauze/v1/watch.js",
 		"watch-ui-gauze-v2": "node ./src/views/gauze/v2/watch.js",
 		"watch-ui-project": "node ./src/views/project/watch.js",
-		"serve-ui": "./node_modules/.bin/http-server ./src/views/gauze/build -c-1 --port 3000"
+		"serve-ui": "./node_modules/.bin/http-server ./src/views/gauze/build -c-1 --port 3000",
+		"docs:dev": "vitepress dev docs",
+		"docs:build": "vitepress build docs",
+		"docs:serve": "vitepress serve docs"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.2.0",
@@ -50,7 +53,9 @@
 		"globals": "^15.2.0",
 		"http-server": "^14.1.1",
 		"prettier": "3.2.5",
-		"ruru": "^2.0.0-beta.11"
+		"ruru": "^2.0.0-beta.11",
+		"vitepress": "^1.6.4",
+		"vue": "^3.5.32"
 	},
 	"dependencies": {
 		"@ahn/sinew": "^0.0.4",
