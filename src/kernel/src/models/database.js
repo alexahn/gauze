@@ -386,6 +386,10 @@ class DatabaseModel extends Model {
 		//const { source } = scope
 		const { attributes } = parameters;
 		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.create.enter`, "parameters", parameters);
+		// sharding note: check if there is an active transactions, and if not create one
+		// sharding note: use attributes[primary_key] to find the shard node to run the query below
+		// sharding note: relationship model is special and shards on from_entity_id and to_entity_id (put relationships on the entity shards)
+		// sharding note: we will only be able to edit relationships if we have the from_entity_id and to_entity_id, which is a divergence from the current implementation
 		const sql = database(self.table_name).insert(attributes, [self.primary_key]).transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.create:debug_sql`, sql.toString());

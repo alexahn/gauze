@@ -675,6 +675,8 @@ class SystemModel extends Model {
 			gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
 			gauze__blacklist__method: "count",
 		};
+		// relationship note: can we move this logic to _relationship_create on the database model?
+		// relationship note: we might not be able to because the database layer has no concept of agent
 		if (parameters.source && parameters.source._metadata && parameters.source._direction) {
 			return self.authorized_execute(context, scope, parameters, agent, entity, operation).then(function (data) {
 				let relationship_attributes;
