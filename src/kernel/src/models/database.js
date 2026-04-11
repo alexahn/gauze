@@ -662,8 +662,8 @@ class DatabaseModel extends Model {
 		const self = this;
 		const relationship_source = self._parse_source(scope, parameters);
 		const key = self._batch_key(relationship_source, parameters, "read");
-		if (self.breadth_max < context.breadth) throw new Error("Maximum breadth exceeded");
-		if (self.transactions_max < context.transactions) throw new Error("Maximum transactions exceeded");
+		if (self.breadth_max < context.breadth) throw new Error(`Maximum breadth exceeded: (current: ${context.breadth}, max: ${self.breadth_max})`);
+		if (self.transactions_max < context.transactions) throw new Error(`Maximum transactions exceeded (current: ${context.transactions}, max: ${self.transactions_max})`);
 		self._validate_parameters(parameters);
 		context.transactions += 1;
 		// use the batch key as the cache key
