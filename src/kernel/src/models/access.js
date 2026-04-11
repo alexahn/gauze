@@ -118,6 +118,7 @@ class AccessSystemModel extends SystemModel {
 			trunk: 1,
 			leaf: 2,
 		};
+		// sorted in descending authority (root first, trunk second, leaf last)
 		const sorted = records.sort(function (a, b) {
 			return ranking[a[self.key_agent_role]] - ranking[b[self.key_agent_role]];
 		});
