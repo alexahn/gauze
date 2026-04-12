@@ -1,6 +1,7 @@
 {
 	[ENVIRONMENT]: {
 		[SQL_TABLE]: {
+			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [{
 				id: 1,
