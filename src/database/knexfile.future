@@ -1,6 +1,7 @@
 {
 	[ENVIRONMENT]: {
 		[SQL_TABLE]: {
+			previous: [],
 			current: [{
 				id: 1,
 				start: 0n,
