@@ -8,7 +8,7 @@
 				start: 0n,
 				end: 170141183460469231731687303715884105726n,
 				// read slaves
-				read: [
+				read: [{
 					config: {
 						client: "better-sqlite3",
 						connection: {
