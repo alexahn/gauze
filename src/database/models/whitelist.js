@@ -2,6 +2,8 @@ import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
+import MANAGER__DATABASE from "./../manager.js";
+
 class WhitelistDatabaseModel extends $kernel.src.models.database.DatabaseModel {
 	constructor(root_config, config) {
 		super(root_config, config);
@@ -37,6 +39,6 @@ const CONFIG__WHITELIST__MODEL__DATABASE = {
 	table_name: $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE,
 	primary_key: $structure.entities.whitelist.database.sql.PRIMARY_KEY__SQL__DATABASE__WHITELIST__STRUCTURE,
 };
-const MODEL__WHITELIST__MODEL__DATABASE = new WhitelistDatabaseModel(ROOT_CONFIG__WHITELIST__MODEL__DATABASE, CONFIG__WHITELIST__MODEL__DATABASE);
+const MODEL__WHITELIST__MODEL__DATABASE = new WhitelistDatabaseModel(ROOT_CONFIG__WHITELIST__MODEL__DATABASE, CONFIG__WHITELIST__MODEL__DATABASE, MANAGER__DATABASE);
 
 export { MODEL__WHITELIST__MODEL__DATABASE };

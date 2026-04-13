@@ -2,6 +2,8 @@ import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
+import MANAGER__DATABASE from "./../manager.js";
+
 class SessionDatabaseModel extends $kernel.src.models.database.DatabaseModel {
 	constructor(root_config, config) {
 		super(root_config, config);
@@ -37,6 +39,6 @@ const CONFIG__SESSION__MODEL__DATABASE = {
 	table_name: $structure.entities.session.database.sql.TABLE_NAME__SQL__DATABASE__SESSION__STRUCTURE,
 	primary_key: $structure.entities.session.database.sql.PRIMARY_KEY__SQL__DATABASE__SESSION__STRUCTURE,
 };
-const MODEL__SESSION__MODEL__DATABASE = new SessionDatabaseModel(ROOT_CONFIG__SESSION__MODEL__DATABASE, CONFIG__SESSION__MODEL__DATABASE);
+const MODEL__SESSION__MODEL__DATABASE = new SessionDatabaseModel(ROOT_CONFIG__SESSION__MODEL__DATABASE, CONFIG__SESSION__MODEL__DATABASE, MANAGER__DATABASE);
 
 export { MODEL__SESSION__MODEL__DATABASE };

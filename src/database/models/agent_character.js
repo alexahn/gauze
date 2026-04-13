@@ -2,7 +2,9 @@ import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-class Agent_CharacterDatabaseModel extends $kernel.src.models.database.DatabaseModel {
+import MANAGER__DATABASE from "./../manager.js";
+
+class AgentCharacterDatabaseModel extends $kernel.src.models.database.DatabaseModel {
 	constructor(root_config, config) {
 		super(root_config, config);
 		const self = this;
@@ -37,6 +39,6 @@ const CONFIG__AGENT_CHARACTER__MODEL__DATABASE = {
 	table_name: $structure.entities.agent_character.database.sql.TABLE_NAME__SQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 	primary_key: $structure.entities.agent_character.database.sql.PRIMARY_KEY__SQL__DATABASE__AGENT_CHARACTER__STRUCTURE,
 };
-const MODEL__AGENT_CHARACTER__MODEL__DATABASE = new Agent_CharacterDatabaseModel(ROOT_CONFIG__AGENT_CHARACTER__MODEL__DATABASE, CONFIG__AGENT_CHARACTER__MODEL__DATABASE);
+const MODEL__AGENT_CHARACTER__MODEL__DATABASE = new AgentCharacterDatabaseModel(ROOT_CONFIG__AGENT_CHARACTER__MODEL__DATABASE, CONFIG__AGENT_CHARACTER__MODEL__DATABASE, MANAGER__DATABASE);
 
 export { MODEL__AGENT_CHARACTER__MODEL__DATABASE };
