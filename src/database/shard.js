@@ -22,3 +22,19 @@ console.log(bigIntToUUID(maxInt / 2n));
 
 console.log(maxInt / 2n - 1n);
 console.log(bigIntToUUID(maxInt / 2n - 1n));
+
+//[0, 340282366920938463463374607431768211455n]
+function split(ranges) {
+	return ranges
+		.map(function (range) {
+			const first_end = range[1] % 2n === 0 ? range[1] / 2n - 1n : range[1] / 2n - 1n;
+			const second_start = range[1] % 2n === 0 ? range[1] / 2n : range[1] / 2n;
+			return [
+				[range[0], first_end],
+				[second_start, range[1]],
+			];
+		})
+		.flat();
+}
+
+console.log(split(split([[0, 340282366920938463463374607431768211455n]])));
