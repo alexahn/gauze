@@ -1,1 +1,1 @@
-import * as manager from "./manager.js";
+export * as manager from "./manager.js";

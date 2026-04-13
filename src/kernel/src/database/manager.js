@@ -6,10 +6,10 @@ class DatabaseManager {
 	// config is top level database config
 	constructor(config) {
 		const self = this;
+		self.connections = {};
 		self.config = config;
 		self.databases = self.create_connections(config);
 		// key for connections map is the shard key
-		self.connections = {};
 	}
 	get_shard_node_key(shard_node_config) {
 		if (shard_node_config.client === "better-sqlite3") {
@@ -29,9 +29,10 @@ class DatabaseManager {
 		const self = this;
 		const database_environment = config[process.env.GAUZE_ENV];
 		const database_tables = Object.keys(database_environment);
-		database_tables.forEach(function (table) {
+		database_tables.forEach(function (table_name) {
+			const table = config[process.env.GAUZE_ENV][table_name];
 			const current_shards = table.current;
-			current_shard.forEach(function (shard) {
+			current_shards.forEach(function (shard) {
 				const read_nodes = shard.read;
 				const write_nodes = shard.write;
 				function create_connections(node) {
