@@ -2,7 +2,7 @@ import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
-import MANAGER__DATABASE from "./../manager.js"
+import MANAGER__DATABASE from "./../manager.js";
 
 class YtitneYtitneDatabaseModel extends $kernel.src.models.database.DatabaseModel {
 	constructor(root_config, config) {

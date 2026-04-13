@@ -11,21 +11,21 @@ const DEVELOPMENT_ENVIRONMENT = "development";
 const STAGING_ENVIRONMENT = "staging";
 const PRODUCTION_ENVIRONMENT = "production";
 
-const relationship__table = $abstract.entities.relationship.default($abstract).table_name;
-const whitelist__table = $abstract.entities.whitelist.default($abstract).table_name;
-const blacklist__table = $abstract.entities.blacklist.default($abstract).table_name;
-const proxy__table = $abstract.entities.proxy.default($abstract).table_name;
-const secret__table = $abstract.entities.secret.default($abstract).table_name;
-const session__table = $abstract.entities.session.default($abstract).table_name;
-const agent_root__table = $abstract.entities.agent_root.default($abstract).table_name;
-const agent_account__table = $abstract.entities.agent_account.default($abstract).table_name;
-const agent_user__table = $abstract.entities.agent_user.default($abstract).table_name;
-const agent_person__table = $abstract.entities.agent_person.default($abstract).table_name;
-const agent_character__table = $abstract.entities.agent_character.default($abstract).table_name;
-const ezuag__table = $abstract.entities.ezuag.default($abstract).table_name;
-const ytitne__table = $abstract.entities.ytitne.default($abstract).table_name;
-const entity__table = $abstract.entities.entity.default($abstract).table_name;
-const gauze__table = $abstract.entities.gauze.default($abstract).table_name;
+const relationship__table = $abstract.entities.relationship ? $abstract.entities.relationship.default($abstract).table_name : "undefined";
+const whitelist__table = $abstract.entities.whitelist ? $abstract.entities.whitelist.default($abstract).table_name : "undefined";
+const blacklist__table = $abstract.entities.blacklist ? $abstract.entities.blacklist.default($abstract).table_name : "undefined";
+const proxy__table = $abstract.entities.proxy ? $abstract.entities.proxy.default($abstract).table_name : "undefined";
+const secret__table = $abstract.entities.secret ? $abstract.entities.secret.default($abstract).table_name : "undefined";
+const session__table = $abstract.entities.session ? $abstract.entities.session.default($abstract).table_name : "undefined";
+const agent_root__table = $abstract.entities.agent_root ? $abstract.entities.agent_root.default($abstract).table_name : "undefined";
+const agent_account__table = $abstract.entities.agent_account ? $abstract.entities.agent_account.default($abstract).table_name : "undefined";
+const agent_user__table = $abstract.entities.agent_user ? $abstract.entities.agent_user.default($abstract).table_name : "undefined";
+const agent_person__table = $abstract.entities.agent_person ? $abstract.entities.agent_person.default($abstract).table_name : "undefined";
+const agent_character__table = $abstract.entities.agent_character ? $abstract.entities.agent_character.default($abstract).table_name : "undefined";
+const ezuag__table = $abstract.entities.ezuag ? $abstract.entities.ezuag.default($abstract).table_name : "undefined";
+const ytitne__table = $abstract.entities.ytitne ? $abstract.entities.ytitne.default($abstract).table_name : "undefined";
+const entity__table = $abstract.entities.entity ? $abstract.entities.entity.default($abstract).table_name : "undefined";
+const gauze__table = $abstract.entities.gauze ? $abstract.entities.gauze.default($abstract).table_name : "undefined";
 
 const CONFIG__DATABASE = {
 	[DEVELOPMENT_ENVIRONMENT]: {
