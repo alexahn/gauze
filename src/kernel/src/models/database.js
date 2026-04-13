@@ -34,12 +34,16 @@ function process_knex_error_postgresql(self, err) {
 }
 
 class DatabaseModel extends Model {
-	constructor(root_config, database_config) {
+	constructor(root_config, database_config, manager) {
+		if (!root_config) throw new Error("DatabaseModel cannot be instantiated without root config")
 		super(root_config);
 		const self = this;
+		if (!database_config) throw new Error("DatabaseModel cannot be instantiated without database config")
 		const { table_name, primary_key } = database_config;
 		self.table_name = table_name;
 		self.primary_key = primary_key;
+		//if (!manager) throw new Error("DatabaseModel cannot be instantiated without a database manager")
+		//self.manager = manager
 		self.limit_max = parseInt(process.env.GAUZE_SQL_MAX_LIMIT, 10);
 		self.breadth_max = parseInt(process.env.GAUZE_SQL_MAX_BREADTH, 10);
 		self.transactions_max = parseInt(process.env.GAUZE_SQL_MAX_TRANSACTIONS, 10);
