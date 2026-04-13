@@ -27,8 +27,8 @@ console.log(bigIntToUUID(maxInt / 2n - 1n));
 function split(ranges) {
 	return ranges
 		.map(function (range) {
-			const first_end = range[1] % 2n === 0 ? range[1] / 2n - 1n : range[1] / 2n - 1n;
-			const second_start = range[1] % 2n === 0 ? range[1] / 2n : range[1] / 2n;
+			const first_end = range[0] + (range[1] - range[0]) / 2n - 1n;
+			const second_start = range[0] + (range[1] - range[0]) / 2n;
 			return [
 				[range[0], first_end],
 				[second_start, range[1]],
@@ -37,4 +37,24 @@ function split(ranges) {
 		.flat();
 }
 
-console.log(split(split([[0, 340282366920938463463374607431768211455n]])));
+// spliting on ordered_test_ranges and ordering again will return the ranges in the order when the config file is incremented by splitting half the existing nodes at each step
+function order_ranges(ranges) {
+	const even = ranges.filter(function (range, idx) {
+		return idx % 2 === 0;
+	});
+	const odd = ranges.filter(function (range, idx) {
+		return idx % 2 === 1;
+	});
+	return even.concat(odd);
+}
+
+const test_ranges = split(split([[0n, 340282366920938463463374607431768211455n]]));
+const ordered_test_ranges = order_ranges(test_ranges);
+console.log("test_ranges", ordered_test_ranges);
+
+const test_ranges2 = split(ordered_test_ranges);
+const ordered_test_ranges2 = order_ranges(test_ranges2);
+console.log("test_ranges2", ordered_test_ranges2);
+
+//console.log(split([[0n, 340282366920938463463374607431768211455n]]))
+//console.log(split(split([[0n, 340282366920938463463374607431768211455n]])))
