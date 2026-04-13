@@ -35,10 +35,10 @@ function process_knex_error_postgresql(self, err) {
 
 class DatabaseModel extends Model {
 	constructor(root_config, database_config, manager) {
-		if (!root_config) throw new Error("DatabaseModel cannot be instantiated without root config")
+		if (!root_config) throw new Error("DatabaseModel cannot be instantiated without root config");
 		super(root_config);
 		const self = this;
-		if (!database_config) throw new Error("DatabaseModel cannot be instantiated without database config")
+		if (!database_config) throw new Error("DatabaseModel cannot be instantiated without database config");
 		const { table_name, primary_key } = database_config;
 		self.table_name = table_name;
 		self.primary_key = primary_key;

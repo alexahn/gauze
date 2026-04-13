@@ -5,8 +5,8 @@ import * as $kernel from "./../../kernel/index.js";
 import MANAGER__DATABASE from "./../manager.js";
 
 class dd6fb00f485c4397add38780939d6923DatabaseModel extends $kernel.src.models.database.DatabaseModel {
-	constructor(root_config, config) {
-		super(root_config, config);
+	constructor(root_config, config, manager) {
+		super(root_config, config, manager);
 		const self = this;
 	}
 	create(context, scope, parameters) {

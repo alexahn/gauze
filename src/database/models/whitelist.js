@@ -5,8 +5,8 @@ import * as $kernel from "./../../kernel/index.js";
 import MANAGER__DATABASE from "./../manager.js";
 
 class WhitelistDatabaseModel extends $kernel.src.models.database.DatabaseModel {
-	constructor(root_config, config) {
-		super(root_config, config);
+	constructor(root_config, config, manager) {
+		super(root_config, config, manager);
 		const self = this;
 	}
 	create(context, scope, parameters) {
