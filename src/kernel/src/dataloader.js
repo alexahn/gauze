@@ -292,7 +292,7 @@ function dispatchBatch(loader, batch) {
 			new TypeError(
 				"DataLoader must be constructed with a function which accepts " +
 					"Array<key> and returns Promise<Array<value>>, but the function " +
-					("errored synchronously: " + String(e) + "."),
+					("errored synchronously: " + String(e) + "." + "\nStack: " + String(e.stack)),
 			),
 		);
 	} // Assert the expected response from batchLoadFn
@@ -304,7 +304,7 @@ function dispatchBatch(loader, batch) {
 			new TypeError(
 				"DataLoader must be constructed with a function which accepts " +
 					"Array<key> and returns Promise<Array<value>>, but the function did " +
-					("not return a Promise: " + String(batchPromise) + "."),
+					("not return a Promise: " + String(batchPromise) + "." + "\nStack: " + String(e.stack)),
 			),
 		);
 	} // Await the resolution of the call to batchLoadFn.

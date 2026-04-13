@@ -52,6 +52,7 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 						context.realm = $realm;
 						context.database = database;
 						context.transaction = transaction;
+						context.transactions = {};
 						context.agent = agent;
 						return resolve({
 							...collection,

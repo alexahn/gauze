@@ -80,6 +80,7 @@ function run_step(environment, step) {
 	const context = {
 		database,
 		transaction,
+		transactions: {},
 	};
 	Object.keys(step.context).forEach(function (key) {
 		context[key] = step.context[key];
