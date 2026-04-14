@@ -13,6 +13,8 @@ import TTLLRUCache from "./../lru.js";
 
 import { Model } from "./class.js";
 
+import { v4 as uuidv4 } from "uuid";
+
 function process_knex_error_sqlite3(self, err) {
 	const unique_constraint_regex = new RegExp("UNIQUE constraint failed: (?<column>(.*))$");
 	const unique_constraint = err.message.match(unique_constraint_regex);
@@ -397,35 +399,32 @@ class DatabaseModel extends Model {
 		// do routing here and apply a map to transactions returned from manager
 		// e.g. return Promise.all(transactions.map(function (transaction) { return self._root_create_transaction(context, scope, parameters, database, transaction) }))
 		const { database, transaction } = context;
-		/*
-		self.manager.route_transactions(context, scope, parameters, self, "write").then(function (shards) {
+		// create id on primary key if it does not exist
+		if (!parameters.attributes[self.primary_key]) {
+			const primary_key = uuidv4();
+			console.log("PRIMARY_KEY", primary_key);
+			parameters.attributes[self.primary_key] = primary_key;
+		}
+		return context.database_manager.route_transactions(context, scope, parameters, self, "write").then(function (shards) {
 			console.log("shards", shards);
-			//self.manager.rollback_transactions(context)
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._root_create_transaction(context, scope, parameters, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				console.log("results", results);
+				return results.flat();
+			});
 		});
-		*/
 		/*
-		return manager.route_transactions(context, scope, parameters, self, "write").then(function (shards) {
-			return Promise.all(shards.map(function (shard) {
-				const { connection, transaction } = shard
-				return self._root_create_transaction(context, scope, parameters, connection, transaction)
-			})).then(function (results) {
-				return results.flatten()
-			})
-		})
-		*/
 		return self._root_create_transaction(context, scope, parameters, database, transaction).then(function (data) {
 			return context.database_manager
 				.route_transactions(context, scope, parameters, self, "write")
 				.then(function (shards) {
-					//console.log("shards", shards);
 					return data;
-					//self.manager.rollback_transactions(context)
 				})
-				.catch(function (err) {
-					console.log("err", err);
-					console.log(err);
-				});
 		});
+		*/
 	}
 	_root_create_transaction(context, scope, parameters, database, transaction) {
 		context.transaction_count += 1;
@@ -444,6 +443,7 @@ class DatabaseModel extends Model {
 		}
 		return sql
 			.then(function (data) {
+				console.log("zxc", data);
 				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.create:success`, "data", data);
 				context.breadth_count += data.length;
 				return self.read(
@@ -471,11 +471,68 @@ class DatabaseModel extends Model {
 				}
 			});
 	}
-	_relationship_create(context, scope, parameters) {
+	_entity_relationships(context, scope, parameters) {
+		const self = this;
+		const source = self._parse_source(scope, parameters);
+		const entity_table_name = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[source._metadata.type];
+		const entity_primary_key = $abstract.entities[$structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity_table_name]].default($abstract).primary_key;
+		const entity_model = {
+			table_name: entity_table_name,
+			primary_key: entity_primary_key,
+		};
+		console.log("entity_model", entity_model);
+		const entity_parameters = {
+			where: {
+				[entity_primary_key]: source._metadata.id,
+			},
+		};
+		console.log("entity_parameters", entity_parameters);
+		return context.database_manager.route_transactions(context, scope, entity_parameters, entity_model, "read").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._entity_relationships_transaction(context, scope, entity_parameters, shard.connection, shard.transaction);
+				}),
+			);
+		});
+	}
+	_entity_relationships_transaction(context, scope, parameters, database, transaction) {
 		context.transaction_count += 1;
+		const self = this;
+		const MAXIMUM_ROWS = 4294967296;
+		const query = {};
+		const source = self._parse_source(scope, parameters);
+		if (source._direction === "to") {
+			query.gauze__relationship__from_id = source._metadata.id;
+			query.gauze__relationship__from_type = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[source._metadata.type];
+		} else if (source._direction === "from") {
+			query.gauze__relationship__to_id = source._metadata.id;
+			query.gauze__relationship__to_type = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[source._metadata.type];
+		} else {
+			throw new Error("Invalid relationship direction");
+		}
+		const sql = database(self.relationship_table_name).where(query).limit(MAXIMUM_ROWS).offset(0).transacting(transaction);
+		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._entity_relationships_transaction:debug_sql`, sql.toString());
+		}
+		return sql.then(function (data) {
+			console.log("REL DATA", data);
+			return data;
+		});
+	}
+	_relationship_create(context, scope, parameters) {
 		// todo: move logic from system model here
 		const self = this;
-		return self._root_create(context, scope, parameters);
+		const { database, transaction } = context;
+		// flow: fetch relationships based on scope from database, pass relationships to route_transactions
+		console.log("CALLED", scope);
+		return self._entity_relationships(context, scope, parameters).then(function (relationships) {
+			return self._root_create_transaction(context, scope, parameters, database, transaction);
+		});
+	}
+	_relationship_create_transaction(context, scope, database, transaction) {
+		//context.transaction_count += 1;
+		const self = this;
+		return self._root_create_transaction(context, scope, parameters, database, transaction);
 	}
 	// create a row
 	_create(context, scope, parameters) {
@@ -490,9 +547,23 @@ class DatabaseModel extends Model {
 		return self.loader.load(context, scope, key);
 	}
 	_root_read(context, scope, parameters) {
-		context.transaction_count += 1;
 		const self = this;
 		const { database, transaction } = context;
+		return context.database_manager.route_transactions(context, scope, parameters, self, "read").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._root_read_transaction(context, scope, parameters, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				return results.flat();
+			});
+			//return self._root_read(context, scope, parameters, database, transaction)
+		});
+	}
+	_root_read_transaction(context, scope, parameters, database, transaction) {
+		context.transaction_count += 1;
+		const self = this;
+		//const { database, transaction } = context;
 		const {
 			where = {},
 			where_in = {},

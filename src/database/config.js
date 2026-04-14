@@ -31,6 +31,7 @@ const CONFIG__DATABASE = {
 	[DEVELOPMENT_ENVIRONMENT]: {
 		[relationship__table]: {
 			transaction_isolation_level: "read committed",
+			// connection_router: function () {},
 			previous: [],
 			current: [
 				{

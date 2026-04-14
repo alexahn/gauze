@@ -1065,3 +1065,5 @@
 
 [ ] add runtime awareness (e.g. deno, bun, node)
 	[ ] replace hardcoded "node" in shell commands executed by cli
+
+[ ] add caching for abstract entity usage (it can be memoized if stateless)

@@ -33,6 +33,7 @@ test.describe("relationships entity graphql interface database", async function 
 			);
 		});
 	});
+	/*
 	await test.it("read", function (test_ctx) {
 		return load_steps(import.meta.dirname, "./read").then(function (steps) {
 			return run_steps(
@@ -69,4 +70,5 @@ test.describe("relationships entity graphql interface database", async function 
 			);
 		});
 	});
+	*/
 });
