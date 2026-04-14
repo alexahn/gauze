@@ -229,7 +229,7 @@ class DatabaseManager {
 	}
 	destroy_connections() {
 		const self = this;
-		console.log("destroying connections")
+		console.log("destroying connections");
 		return Object.values(self.connections).map(function (connection) {
 			delete self.connections[connection.key];
 			return connection.destroy();

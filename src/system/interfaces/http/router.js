@@ -8,7 +8,7 @@ export default function ($gauze) {
 	// sharding note: replace database here with a new database object
 	// sharding note: new database object has methods: get_connections, create_connections, route_connection(context), route_transaction(context)
 	const database = $gauze.database.knex.create_connection();
-	const database_manager = $gauze.database.manager.default
+	const database_manager = $gauze.database.manager.default;
 
 	// this is called once the exit trajectory has been set
 	process.on("exit", function (val) {

@@ -147,7 +147,7 @@ function run_steps(environment, steps) {
 									schema,
 									transaction,
 									transactions,
-									database_manager
+									database_manager,
 								},
 								step,
 							);
@@ -158,7 +158,7 @@ function run_steps(environment, steps) {
 			.then(function () {
 				return transaction.rollback().then(function () {
 					return $gauze.database.manager.default.rollback_transactions(transactions);
-				})
+				});
 			})
 			.catch(function (err) {
 				return transaction
@@ -166,12 +166,12 @@ function run_steps(environment, steps) {
 					.then(function () {
 						return $gauze.database.manager.default.rollback_transactions(transactions).then(function () {
 							throw err;
-						})
+						});
 					})
 					.catch(function (err) {
 						throw err;
 					});
-			})
+			});
 	});
 }
 
@@ -206,7 +206,7 @@ function run_layers(environment, layers) {
 			.then(function () {
 				return transaction.rollback().then(function () {
 					return $gauze.database.manager.default.rollback_transactions(transactions);
-				})
+				});
 			})
 			.catch(function (err) {
 				return transaction
@@ -214,12 +214,12 @@ function run_layers(environment, layers) {
 					.then(function () {
 						return $gauze.database.manager.default.rollback_transactions(transactions).then(function () {
 							throw err;
-						})
+						});
 					})
 					.catch(function (err) {
 						throw err;
 					});
-			})
+			});
 	});
 }
 
