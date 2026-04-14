@@ -76,11 +76,12 @@ ${errors}`;
 }
 
 function run_step(environment, step) {
-	const { database, schema, transaction } = environment;
+	const { transactions, database, database_manager, schema, transaction } = environment;
 	const context = {
 		database,
+		database_manager,
 		transaction,
-		transactions: {},
+		transactions,
 	};
 	Object.keys(step.context).forEach(function (key) {
 		context[key] = step.context[key];
@@ -131,8 +132,10 @@ function run_step(environment, step) {
 function run_steps(environment, steps) {
 	// make transaction here
 	// augment context with database and transaction
-	const { database, schema } = environment;
+	const { database, database_manager, schema } = environment;
 	return database.transaction(function (transaction) {
+		const transactions = {};
+		// const manager = new DatabaseManager(config)
 		return steps
 			.reduce(function (prev, next) {
 				return prev.then(function () {
@@ -143,6 +146,8 @@ function run_steps(environment, steps) {
 									database,
 									schema,
 									transaction,
+									transactions,
+									database_manager
 								},
 								step,
 							);
@@ -151,24 +156,29 @@ function run_steps(environment, steps) {
 				});
 			}, Promise.resolve([]))
 			.then(function () {
-				return transaction.rollback();
+				return transaction.rollback().then(function () {
+					return $gauze.database.manager.default.rollback_transactions(transactions);
+				})
 			})
 			.catch(function (err) {
 				return transaction
 					.rollback(err)
 					.then(function () {
-						throw err;
+						return $gauze.database.manager.default.rollback_transactions(transactions).then(function () {
+							throw err;
+						})
 					})
 					.catch(function (err) {
 						throw err;
 					});
-			});
+			})
 	});
 }
 
 function run_layers(environment, layers) {
-	const { database } = environment;
+	const { database, database_manager } = environment;
 	return database.transaction(function (transaction) {
+		const transactions = {};
 		return layers
 			.reduce(function (prev, next) {
 				return prev.then(function () {
@@ -180,8 +190,10 @@ function run_layers(environment, layers) {
 									return run_step(
 										{
 											database,
+											database_manager,
 											schema,
 											transaction,
+											transactions,
 										},
 										step,
 									);
@@ -192,20 +204,22 @@ function run_layers(environment, layers) {
 				});
 			}, Promise.resolve(true))
 			.then(function () {
-				// sharding note: we need to rollback all active transactions for the context
-				// sharding note:
-				return transaction.rollback();
+				return transaction.rollback().then(function () {
+					return $gauze.database.manager.default.rollback_transactions(transactions);
+				})
 			})
 			.catch(function (err) {
 				return transaction
 					.rollback(err)
 					.then(function () {
-						throw err;
+						return $gauze.database.manager.default.rollback_transactions(transactions).then(function () {
+							throw err;
+						})
 					})
 					.catch(function (err) {
 						throw err;
 					});
-			});
+			})
 	});
 }
 

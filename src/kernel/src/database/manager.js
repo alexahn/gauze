@@ -37,6 +37,10 @@ class DatabaseManager {
 			});
 		}
 	}
+	get_connection(shard_node_key) {
+		const self = this;
+		return self.connections[shard_node_key];
+	}
 	// create knex connections for every shard, every shard node will have a knex attribute with the instantiated knex object
 	create_connections(config) {
 		if (!config[process.env.GAUZE_ENV]) throw new Error(`Database config is not defined for environment ${process.env.GAUZE_ENV}`);
@@ -161,21 +165,37 @@ class DatabaseManager {
 	route_transactions(context, scope, parameters, model, shard_type) {
 		const self = this;
 		const connections = self.route_connections(context, scope, parameters, model, shard_type);
+		const unique_connections = [
+			...new Map(
+				connections.map(function (connection) {
+					return [connection.key, connection];
+				}),
+			).values(),
+		];
 		// use context.transactions
 		// for each connection, check to see if we have an open transaction on it for the context
+		//console.log('unique connections in route_transactions', unique_connections)
 		return Promise.all(
-			connections.map(function (connection) {
+			unique_connections.map(function (connection) {
 				// key is shard node key
 				if (context.transactions[connection.key]) {
-					return context.transactions[connection.key];
+					console.log("FOUND");
+					return {
+						connection: self.get_connection(connection.key),
+						transaction: context.transactions[connection.key],
+					};
+					//return context.transactions[connection.key];
 				} else {
-					/*
-				return connection.knex.transaction(function (transaction) {
-					context.transactions[connection.key] = transaction
-					return transaction
-				})
-				*/
-					return null;
+					return new Promise(function (resolve, reject) {
+						connection.knex.transaction(function (transaction) {
+							context.transactions[connection.key] = transaction;
+							resolve({
+								connection: self.get_connection(connection.key),
+								transaction,
+							});
+						});
+					});
+					//return null;
 				}
 			}),
 		);
@@ -186,10 +206,34 @@ class DatabaseManager {
 		/*
 			context.transactions = { [shard_node_key]: transaction }
 		*/
+		return Promise.all(
+			Object.values(context.transactions).map(function (transaction) {
+				return transaction.commit();
+			}),
+		);
+	}
+	rollback_transactions(transactions) {
+		//console.log("t", Object.values(transactions));
+		return Promise.all(
+			Object.values(transactions).map(function (transaction) {
+				//console.log("r");
+				return transaction.rollback();
+			}),
+		);
 	}
 	// context is graphql context
-	rollback_transactions(context) {
-		// use context.transactions
+	rollback_context_transactions(context) {
+		console.log("rolling back context transactions", context.transactions);
+		const self = this;
+		return self.rollback_transactions(context.transactions);
+	}
+	destroy_connections() {
+		const self = this;
+		console.log("destroying connections")
+		return Object.values(self.connections).map(function (connection) {
+			delete self.connections[connection.key];
+			return connection.destroy();
+		});
 	}
 }
 

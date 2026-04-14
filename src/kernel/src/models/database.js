@@ -397,9 +397,12 @@ class DatabaseModel extends Model {
 		// do routing here and apply a map to transactions returned from manager
 		// e.g. return Promise.all(transactions.map(function (transaction) { return self._root_create_transaction(context, scope, parameters, database, transaction) }))
 		const { database, transaction } = context;
+		/*
 		self.manager.route_transactions(context, scope, parameters, self, "write").then(function (shards) {
 			console.log("shards", shards);
+			//self.manager.rollback_transactions(context)
 		});
+		*/
 		/*
 		return manager.route_transactions(context, scope, parameters, self, "write").then(function (shards) {
 			return Promise.all(shards.map(function (shard) {
@@ -410,7 +413,18 @@ class DatabaseModel extends Model {
 			})
 		})
 		*/
-		return self._root_create_transaction(context, scope, parameters, database, transaction);
+		return self._root_create_transaction(context, scope, parameters, database, transaction).then(function (data) {
+			return context.database_manager
+				.route_transactions(context, scope, parameters, self, "write")
+				.then(function (shards) {
+					//console.log("shards", shards);
+					return data;
+					//self.manager.rollback_transactions(context)
+				})
+				.catch(function (err) {
+					console.log(err);
+				});
+		});
 	}
 	_root_create_transaction(context, scope, parameters, database, transaction) {
 		context.transaction_count += 1;
