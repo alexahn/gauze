@@ -422,6 +422,7 @@ class DatabaseModel extends Model {
 					//self.manager.rollback_transactions(context)
 				})
 				.catch(function (err) {
+					console.log("err", err);
 					console.log(err);
 				});
 		});

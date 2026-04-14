@@ -180,50 +180,53 @@ class DatabaseManager {
 				// key is shard node key
 				if (context.transactions[connection.key]) {
 					console.log("FOUND");
-					return {
-						connection: self.get_connection(connection.key),
-						transaction: context.transactions[connection.key],
-					};
-					//return context.transactions[connection.key];
+					return context.transactions[connection.key].then(function (transaction) {
+						return {
+							connection: self.get_connection(connection.key),
+							transaction: transaction,
+						};
+					});
 				} else {
-					return new Promise(function (resolve, reject) {
+					console.log("NOT FOUND");
+					const transaction_promise = new Promise(function (resolve, reject) {
 						connection.knex.transaction(function (transaction) {
-							context.transactions[connection.key] = transaction;
-							resolve({
-								connection: self.get_connection(connection.key),
-								transaction,
-							});
+							resolve(transaction);
 						});
 					});
-					//return null;
+					context.transactions[connection.key] = transaction_promise;
+					return transaction_promise.then(function (transaction) {
+						return {
+							connection: self.get_connection(connection.key),
+							transaction,
+						};
+					});
 				}
 			}),
 		);
 	}
 	// context is graphql context
 	commit_transactions(context) {
-		// use context.transactions
-		/*
-			context.transactions = { [shard_node_key]: transaction }
-		*/
-		return Promise.all(
-			Object.values(context.transactions).map(function (transaction) {
-				return transaction.commit();
-			}),
-		);
+		console.log("committing transactions");
+		return Promise.all(Object.values(transactions)).then(function (transactions) {
+			return Promise.all(
+				transactions.map(function (transaction) {
+					return transaction.commit();
+				}),
+			);
+		});
 	}
 	rollback_transactions(transactions) {
-		//console.log("t", Object.values(transactions));
-		return Promise.all(
-			Object.values(transactions).map(function (transaction) {
-				//console.log("r");
-				return transaction.rollback();
-			}),
-		);
+		console.log("rolling back transactions");
+		return Promise.all(Object.values(transactions)).then(function (transactions) {
+			return Promise.all(
+				transactions.map(function (transaction) {
+					return transaction.rollback();
+				}),
+			);
+		});
 	}
 	// context is graphql context
 	rollback_context_transactions(context) {
-		console.log("rolling back context transactions", context.transactions);
 		const self = this;
 		return self.rollback_transactions(context.transactions);
 	}
