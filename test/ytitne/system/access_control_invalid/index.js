@@ -17,7 +17,7 @@ test.describe("invalid access control ytitne graphql interface system", async fu
 		});
 	});
 	test.after(function () {
-		suite_ctx.database.destroy();
+		suite_ctx.database.destroy(); suite_ctx.database_manager.destroy_connections()
 	});
 	await test.it("create", function (test_ctx) {
 		return load_steps(import.meta.dirname, "./create").then(function (steps) {

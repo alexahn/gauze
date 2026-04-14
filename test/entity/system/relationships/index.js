@@ -18,7 +18,7 @@ test.describe("relationships entity graphql interface system", async function (s
 		});
 	});
 	test.after(function () {
-		suite_ctx.database.destroy();
+		suite_ctx.database.destroy(); suite_ctx.database_manager.destroy_connections()
 		suite_ctx.database_manager.destroy_connections()
 	});
 	await test.it("create", function (test_ctx) {

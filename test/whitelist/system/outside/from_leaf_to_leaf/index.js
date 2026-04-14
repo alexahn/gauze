@@ -18,7 +18,7 @@ test.describe("(outside - from leaf to leaf) whitelist graphql interface system"
 		});
 	});
 	test.after(function () {
-		suite_ctx.database.destroy();
+		suite_ctx.database.destroy(); suite_ctx.database_manager.destroy_connections()
 	});
 	await test.it("create", function (test_ctx) {
 		return load_steps(import.meta.dirname, "./environment").then(function (environment_steps) {

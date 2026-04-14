@@ -17,7 +17,7 @@ test.describe("(from private to private - from valid to valid) relationship grap
 		});
 	});
 	test.after(function () {
-		suite_ctx.database.destroy();
+		suite_ctx.database.destroy(); suite_ctx.database_manager.destroy_connections()
 	});
 	await test.it("create", function (test_ctx) {
 		return load_steps(import.meta.dirname, "./create").then(function (steps) {
