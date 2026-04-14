@@ -34,12 +34,16 @@ function process_knex_error_postgresql(self, err) {
 }
 
 class DatabaseModel extends Model {
-	constructor(root_config, database_config) {
+	constructor(root_config, database_config, manager) {
+		if (!root_config) throw new Error("DatabaseModel cannot be instantiated without root config");
 		super(root_config);
 		const self = this;
+		if (!database_config) throw new Error("DatabaseModel cannot be instantiated without database config");
 		const { table_name, primary_key } = database_config;
 		self.table_name = table_name;
 		self.primary_key = primary_key;
+		if (!manager) throw new Error("DatabaseModel cannot be instantiated without a database manager");
+		self.manager = manager;
 		self.limit_max = parseInt(process.env.GAUZE_SQL_MAX_LIMIT, 10);
 		self.breadth_max = parseInt(process.env.GAUZE_SQL_MAX_BREADTH, 10);
 		self.transactions_max = parseInt(process.env.GAUZE_SQL_MAX_TRANSACTIONS, 10);
@@ -389,9 +393,43 @@ class DatabaseModel extends Model {
 		}
 	}
 	_root_create(context, scope, parameters) {
+		const self = this;
+		// do routing here and apply a map to transactions returned from manager
+		// e.g. return Promise.all(transactions.map(function (transaction) { return self._root_create_transaction(context, scope, parameters, database, transaction) }))
+		const { database, transaction } = context;
+		/*
+		self.manager.route_transactions(context, scope, parameters, self, "write").then(function (shards) {
+			console.log("shards", shards);
+			//self.manager.rollback_transactions(context)
+		});
+		*/
+		/*
+		return manager.route_transactions(context, scope, parameters, self, "write").then(function (shards) {
+			return Promise.all(shards.map(function (shard) {
+				const { connection, transaction } = shard
+				return self._root_create_transaction(context, scope, parameters, connection, transaction)
+			})).then(function (results) {
+				return results.flatten()
+			})
+		})
+		*/
+		return self._root_create_transaction(context, scope, parameters, database, transaction).then(function (data) {
+			return context.database_manager
+				.route_transactions(context, scope, parameters, self, "write")
+				.then(function (shards) {
+					//console.log("shards", shards);
+					return data;
+					//self.manager.rollback_transactions(context)
+				})
+				.catch(function (err) {
+					console.log("err", err);
+					console.log(err);
+				});
+		});
+	}
+	_root_create_transaction(context, scope, parameters, database, transaction) {
 		context.transaction_count += 1;
 		const self = this;
-		const { database, transaction } = context;
 		//const { source } = scope
 		const { attributes } = parameters;
 		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.create.enter`, "parameters", parameters);

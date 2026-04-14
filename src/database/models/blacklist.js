@@ -2,9 +2,11 @@ import * as $abstract from "./../../abstract/index.js";
 import * as $structure from "./../../structure/index.js";
 import * as $kernel from "./../../kernel/index.js";
 
+import MANAGER__DATABASE from "./../manager.js";
+
 class BlacklistDatabaseModel extends $kernel.src.models.database.DatabaseModel {
-	constructor(root_config, config) {
-		super(root_config, config);
+	constructor(root_config, config, manager) {
+		super(root_config, config, manager);
 		const self = this;
 	}
 	create(context, scope, parameters) {
@@ -37,6 +39,6 @@ const CONFIG__BLACKLIST__MODEL__DATABASE = {
 	table_name: $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
 	primary_key: $structure.entities.blacklist.database.sql.PRIMARY_KEY__SQL__DATABASE__BLACKLIST__STRUCTURE,
 };
-const MODEL__BLACKLIST__MODEL__DATABASE = new BlacklistDatabaseModel(ROOT_CONFIG__BLACKLIST__MODEL__DATABASE, CONFIG__BLACKLIST__MODEL__DATABASE);
+const MODEL__BLACKLIST__MODEL__DATABASE = new BlacklistDatabaseModel(ROOT_CONFIG__BLACKLIST__MODEL__DATABASE, CONFIG__BLACKLIST__MODEL__DATABASE, MANAGER__DATABASE);
 
 export { MODEL__BLACKLIST__MODEL__DATABASE };

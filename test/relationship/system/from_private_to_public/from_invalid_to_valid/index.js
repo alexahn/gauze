@@ -12,18 +12,21 @@ const SCHEMA = $gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__
 test.describe("(from private to public - from invalid to valid) relationship graphql interface system", async function (suite_ctx) {
 	test.before(function (ctx) {
 		suite_ctx.database = $gauze.database.knex.create_connection("test");
+		suite_ctx.database_manager = new $gauze.kernel.src.database.manager.DATABASE_MANAGER__MANAGER__DATABASE__SRC__KERNEL($gauze.database.config.default);
 		return suite_ctx.database.migrate.latest().then(function () {
 			return suite_ctx.database.seed.run();
 		});
 	});
 	test.after(function () {
 		suite_ctx.database.destroy();
+		suite_ctx.database_manager.destroy_connections();
 	});
 	await test.it("create", function (test_ctx) {
 		return load_steps(import.meta.dirname, "./create").then(function (steps) {
 			return run_steps(
 				{
 					database: suite_ctx.database,
+					database_manager: suite_ctx.database_manager,
 					schema: SCHEMA,
 				},
 				steps,
@@ -35,6 +38,7 @@ test.describe("(from private to public - from invalid to valid) relationship gra
 			return run_steps(
 				{
 					database: suite_ctx.database,
+					database_manager: suite_ctx.database_manager,
 					schema: SCHEMA,
 				},
 				steps,
@@ -46,6 +50,7 @@ test.describe("(from private to public - from invalid to valid) relationship gra
 			return run_steps(
 				{
 					database: suite_ctx.database,
+					database_manager: suite_ctx.database_manager,
 					schema: SCHEMA,
 				},
 				steps,
@@ -57,6 +62,7 @@ test.describe("(from private to public - from invalid to valid) relationship gra
 			return run_steps(
 				{
 					database: suite_ctx.database,
+					database_manager: suite_ctx.database_manager,
 					schema: SCHEMA,
 				},
 				steps,

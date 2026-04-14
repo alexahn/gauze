@@ -13,12 +13,14 @@ const SYSTEM_SCHEMA = $gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GR
 test.describe("(inside - from root to root) blacklist graphql interface system", async function (suite_ctx) {
 	test.before(function (ctx) {
 		suite_ctx.database = $gauze.database.knex.create_connection("test");
+		suite_ctx.database_manager = new $gauze.kernel.src.database.manager.DATABASE_MANAGER__MANAGER__DATABASE__SRC__KERNEL($gauze.database.config.default);
 		return suite_ctx.database.migrate.latest().then(function () {
 			return suite_ctx.database.seed.run();
 		});
 	});
 	test.after(function () {
 		suite_ctx.database.destroy();
+		suite_ctx.database_manager.destroy_connections();
 	});
 	await test.it("create", function (test_ctx) {
 		return load_steps(import.meta.dirname, "./environment").then(function (environment_steps) {
@@ -26,6 +28,7 @@ test.describe("(inside - from root to root) blacklist graphql interface system",
 				return run_layers(
 					{
 						database: suite_ctx.database,
+						database_manager: suite_ctx.database_manager,
 					},
 					[
 						{ schema: DATABASE_SCHEMA, steps: environment_steps },
@@ -41,6 +44,7 @@ test.describe("(inside - from root to root) blacklist graphql interface system",
 				return run_layers(
 					{
 						database: suite_ctx.database,
+						database_manager: suite_ctx.database_manager,
 					},
 					[
 						{ schema: DATABASE_SCHEMA, steps: environment_steps },
@@ -56,6 +60,7 @@ test.describe("(inside - from root to root) blacklist graphql interface system",
 				return run_layers(
 					{
 						database: suite_ctx.database,
+						database_manager: suite_ctx.database_manager,
 					},
 					[
 						{ schema: DATABASE_SCHEMA, steps: environment_steps },
@@ -71,6 +76,7 @@ test.describe("(inside - from root to root) blacklist graphql interface system",
 				return run_layers(
 					{
 						database: suite_ctx.database,
+						database_manager: suite_ctx.database_manager,
 					},
 					[
 						{ schema: DATABASE_SCHEMA, steps: environment_steps },

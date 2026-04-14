@@ -3,7 +3,7 @@ const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
 import * as $project from "./../../../gauze.js";
 
-const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, database, authenticators, schema }, ctx, next) {
+const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, database, database_manager, authenticators, schema }, ctx, next) {
 	// 404 is the default response status
 	return (
 		new Promise(function (resolve, reject) {
@@ -51,7 +51,9 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 						context.project = $project;
 						context.realm = $realm;
 						context.database = database;
+						// context.database_manager = database_manager;
 						context.transaction = transaction;
+						context.transactions = {};
 						context.agent = agent;
 						return resolve({
 							...collection,
