@@ -140,8 +140,20 @@ class DatabaseManager {
 					// update
 					return [];
 				} else {
-					// should be impossible
-					return [];
+					// delete
+					if (parameters.where[model.primary_key]) {
+						const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
+						const model_shards = self.find_shards(model.table_name, primary_key_number);
+						const model_shard = model_shards[0];
+						if (model_shard) {
+							return [self.get_one_shard_node(model_shard, shard_type)];
+						} else {
+							throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
+						}
+					} else {
+						// not allowed to edit relationships across multiple nodes
+						return [];
+					}
 				}
 			} else {
 				if (parameters.attributes) {
@@ -286,47 +298,23 @@ class DatabaseManager {
 			if (parameters.where) {
 				if (parameters.where[model.primary_key]) {
 					const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
-					/*
-					const model_shard = self.databases[model.table_name].current.find(function (shard) {
-						return shard.start <= primary_key_number && primary_key_number <= shard.end;
-					});
-					*/
 					const model_shards = self.find_shards(model.table_name, primary_key_number);
 					const model_shard = model_shards[0];
 					if (model_shard) {
-						/*
-						const model_shard_nodes = model_shard[shard_type];
-						return [model_shard_nodes[Math.floor(Math.random() * model_shard_nodes.length)]];
-						*/
 						return [self.get_one_shard_node(model_shard, shard_type)];
 					} else {
 						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
 					}
 				} else {
 					// return all shards, selecting one random per shard type allocation
-					/*
-					return self.databases[model.table_name].current.map(function (model_shard) {
-						const model_shard_nodes = model_shard[shard_type];
-						return model_shard_nodes[Math.floor(Math.random() * model_shard_nodes.length)];
-					});
-					*/
 					return self.get_all_shards_nodes(model.table_name, shard_type);
 				}
 			} else if (parameters.attributes) {
 				if (parameters.attributes[model.primary_key]) {
 					const primary_key_number = self.uuid_to_big_int(parameters.attributes[model.primary_key]);
-					/*
-					const model_shard = self.databases[model.table_name].current.find(function (shard) {
-						return shard.start <= primary_key_number && primary_key_number <= shard.end;
-					});
-					*/
 					const model_shards = self.find_shards(model.table_name, primary_key_number);
 					const model_shard = model_shards[0];
 					if (model_shard) {
-						/*
-						const model_shard_nodes = model_shard[shard_type];
-						return [model_shard_nodes[Math.floor(Math.random() * model_shard_nodes.length)]];
-						*/
 						return [self.get_one_shard_node(model_shard, shard_type)];
 					} else {
 						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
@@ -334,13 +322,6 @@ class DatabaseManager {
 				} else {
 					// should not be possible
 					return [];
-					// return all shards, selecting one random per shard type allocation
-					/*
-					return self.databases[model.table_name].current.map(function (model_shard) {
-						const model_shard_nodes = model_shard[shard_type];
-						return model_shard_nodes[Math.floor(Math.random() * model_shard_nodes.length)];
-					});
-					*/
 				}
 			} else {
 				return [];
@@ -350,18 +331,9 @@ class DatabaseManager {
 			if (parameters.where) {
 				if (parameters.where[model.primary_key]) {
 					const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
-					/*
-					const model_shard = self.databases[model.table_name].current.find(function (shard) {
-						return shard.start <= primary_key_number && primary_key_number <= shard.end;
-					});
-					*/
 					const model_shards = self.find_shards(model.table_name, primary_key_number);
 					const model_shard = model_shards[0];
 					if (model_shard) {
-						/*
-						const model_shard_nodes = model_shard[shard_type];
-						return [model_shard_nodes[Math.floor(Math.random() * model_shard_nodes.length)]];
-						*/
 						return [self.get_one_shard_node(model_shard, shard_type)];
 					} else {
 						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
@@ -373,18 +345,9 @@ class DatabaseManager {
 			} else if (parameters.attributes) {
 				if (parameters.attributes[model.primary_key]) {
 					const primary_key_number = self.uuid_to_big_int(parameters.attributes[model.primary_key]);
-					/*
-					const model_shard = self.databases[model.table_name].current.find(function (shard) {
-						return shard.start <= primary_key_number && primary_key_number <= shard.end;
-					});
-					*/
 					const model_shards = self.find_shards(model.table_name, primary_key_number);
 					const model_shard = model_shards[0];
 					if (model_shard) {
-						/*
-						const model_shard_nodes = model_shard[shard_type];
-						return [model_shard_nodes[Math.floor(Math.random() * model_shard_nodes.length)]];
-						*/
 						return [self.get_one_shard_node(model_shard, shard_type)];
 					} else {
 						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
