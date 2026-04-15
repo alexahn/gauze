@@ -1115,9 +1115,22 @@ class DatabaseModel extends Model {
 		return self.loader.load(context, scope, key);
 	}
 	_root_count(context, scope, parameters) {
+		const self = this;
+		return context.database_manager.route_transactions(context, scope, parameters, self, "write").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._root_count_transaction(context, scope, parameters, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				console.log("COUNT RESULTS", results);
+				return results.flat();
+			});
+		});
+	}
+	_root_count_transaction(context, scope, parameters, database, transaction) {
 		context.transaction_count += 1;
 		const self = this;
-		const { database, transaction } = context;
+		//const { database, transaction } = context;
 		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
 		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
 		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;

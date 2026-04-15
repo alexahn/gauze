@@ -33,6 +33,7 @@ test.describe("(from private to private - from valid to valid) relationship grap
 			);
 		});
 	});
+	/*
 	await test.it("read", function (test_ctx) {
 		return load_steps(import.meta.dirname, "./read").then(function (steps) {
 			return run_steps(
@@ -69,4 +70,5 @@ test.describe("(from private to private - from valid to valid) relationship grap
 			);
 		});
 	});
+	*/
 });

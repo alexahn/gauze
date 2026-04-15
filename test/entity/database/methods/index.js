@@ -70,4 +70,16 @@ test.describe("entity graphql interface database", async function (suite_ctx) {
 			);
 		});
 	});
+	await test.it("count", function (test_ctx) {
+		return load_steps(import.meta.dirname, "./count").then(function (steps) {
+			return run_steps(
+				{
+					database: suite_ctx.database,
+					database_manager: suite_ctx.database_manager,
+					schema: SCHEMA,
+				},
+				steps,
+			);
+		});
+	});
 });

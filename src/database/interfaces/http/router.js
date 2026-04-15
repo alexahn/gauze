@@ -6,6 +6,7 @@ export default function ($gauze) {
 	const ROUTER__HTTP__INTERFACE__DATABASE = new Router();
 
 	const database = $gauze.database.knex.create_connection();
+	const database_manager = $gauze.database.manager.default;
 
 	// this is called once the exit trajectory has been set
 	process.on("exit", function (val) {
@@ -18,6 +19,7 @@ export default function ($gauze) {
 				$gauze: $gauze,
 				$realm: $realm,
 				database: database,
+				database_manager: database_manager,
 				authenticators: [$gauze.environment.authentication.AUTHENTICATE_DATABASE__AUTHENTICATION__ENVIRONMENT],
 				schema: $gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
 			},

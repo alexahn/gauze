@@ -116,7 +116,6 @@ class DatabaseManager {
 	route_relationship_connections(context, scope, parameters, model, shard_type, relationships) {
 		const self = this;
 		if (shard_type === "read") {
-			console.log("hit");
 			if (parameters.where) {
 				if (parameters.where[model.primary_key]) {
 					const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
@@ -184,7 +183,100 @@ class DatabaseManager {
 	}
 	// for blacklist and whitelist
 	route_access_connections(context, scope, parameters, model, shard_type, relationships) {
-		return [];
+		const self = this;
+		if (shard_type === "read") {
+			if (parameters.where) {
+				if (parameters.where[model.primary_key]) {
+					const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
+					const model_shards = self.find_shards(model.table_name, primary_key_number);
+					const model_shard = model_shards[0];
+					if (model_shard) {
+						return [self.get_one_shard_node(model_shard, shard_type)];
+					} else {
+						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
+					}
+				} else {
+					// return all sets
+					return self.get_all_shards_nodes(model.table_name, shard_type);
+				}
+			} else {
+				// return all sets
+				return self.get_all_shards_nodes(model.table_name, shard_type);
+			}
+		} else if (shard_type === "write") {
+			if (parameters.where) {
+				if (parameters.attributes) {
+					// update
+					return [];
+				} else {
+					// should be impossible
+					return [];
+				}
+			} else {
+				if (parameters.attributes) {
+					// create
+					console.log("X", parameters.attributes);
+					console.log("Y", model.table_name);
+					let agent_id_attribute;
+					let agent_type_attribute;
+					let entity_id_attribute;
+					let entity_type_attribute;
+					if (model.table_name === "gauze__whitelist") {
+						agent_id_attribute = "gauze__whitelist__agent_id";
+						agent_type_attribute = "gauze__whitelist__agent_type";
+						entity_id_attribute = "gauze__whitelist__entity_id";
+						entity_type_attribute = "gauze__whitelist__entity_type";
+					} else if (model.table_name === "gauze__blacklist") {
+						agent_id_attribute = "gauze__blacklist__agent_id";
+						agent_type_attribute = "gauze__blacklist__agent_type";
+						entity_id_attribute = "gauze__blacklist__entity_id";
+						entity_type_attribute = "gauze__blacklist__entity_type";
+					} else {
+						throw new Error(`Invalid access model type: ${model.table_name}`);
+					}
+					const required_attributes = [agent_id_attribute, agent_type_attribute, entity_id_attribute, entity_type_attribute];
+					console.log("required attributes", required_attributes);
+					const required_attributes_exist = required_attributes.every(function (key) {
+						return key in parameters.attributes;
+					});
+					if (parameters.attributes[model.primary_key] && required_attributes_exist) {
+						console.log("REACHED");
+						const access_id = parameters.attributes[model.primary_key];
+						const access_type = model.table_name;
+						const access_primary_key_number = self.uuid_to_big_int(access_id);
+
+						const entity_id = parameters.attributes[entity_id_attribute];
+						const entity_type = parameters.attributes[entity_type_attribute];
+						const entity_primary_key_number = self.uuid_to_big_int(entity_id);
+
+						const agent_id = parameters.attributes[agent_id_attribute];
+						const agent_type = parameters.attributes[agent_type_attribute];
+						const agent_primary_key_number = self.uuid_to_big_int(agent_id);
+
+						const access_shards = self.find_shards(access_type, access_primary_key_number);
+						const access_shard = access_shards[0];
+
+						const entity_shards = self.find_shards(entity_type, entity_primary_key_number);
+						const entity_shard = entity_shards[0];
+
+						const agent_shards = self.find_shards(agent_type, agent_primary_key_number);
+						const agent_shard = agent_shards[0];
+
+						const access_shard_node = self.get_one_shard_node(access_shard, shard_type);
+						const entity_shard_node = self.get_one_shard_node(entity_shard, shard_type);
+						const agent_shard_node = self.get_one_shard_node(agent_shard, shard_type);
+
+						return [access_shard_node, entity_shard_node, agent_shard_node];
+					} else {
+						return [];
+					}
+				} else {
+					return [];
+				}
+			}
+		} else {
+			throw new Error("Invalid shard type, must be either read or write");
+		}
 	}
 	route_entity_connections(context, scope, parameters, model, shard_type, relationships) {
 		const self = this;
@@ -371,7 +463,7 @@ class DatabaseManager {
 		);
 	}
 	// context is graphql context
-	commit_transactions(context) {
+	commit_transactions(transactions) {
 		console.log("committing transactions");
 		return Promise.all(Object.values(transactions)).then(function (transactions) {
 			return Promise.all(
@@ -380,6 +472,10 @@ class DatabaseManager {
 				}),
 			);
 		});
+	}
+	commit_context_transactions(context) {
+		const self = this;
+		return self.commit_transactions(context.transactions);
 	}
 	rollback_transactions(transactions) {
 		console.log("rolling back transactions");
