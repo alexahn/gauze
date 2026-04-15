@@ -127,6 +127,8 @@ class DatabaseManager {
 						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
 					}
 				} else {
+					// TODO: if from_id and from_type are provided, query the from node
+					// TODO: if to_id and to_type are provided, query the to_node
 					// return all sets
 					return self.get_all_shards_nodes(model.table_name, shard_type);
 				}
@@ -166,21 +168,28 @@ class DatabaseManager {
 						const entity_id = parameters.attributes[model.primary_key];
 						const entity_type = model.table_name;
 						const entity_primary_key_number = self.uuid_to_big_int(entity_id);
+
 						const from_id = parameters.attributes.gauze__relationship__from_id;
 						const from_type = parameters.attributes.gauze__relationship__from_type;
 						const from_primary_key_number = self.uuid_to_big_int(from_id);
+
 						const to_id = parameters.attributes.gauze__relationship__to_id;
 						const to_type = parameters.attributes.gauze__relationship__to_type;
 						const to_primary_key_number = self.uuid_to_big_int(to_id);
+
 						const entity_shards = self.find_shards(entity_type, entity_primary_key_number);
 						const entity_shard = entity_shards[0];
+
 						const from_shards = self.find_shards(from_type, from_primary_key_number);
 						const from_shard = from_shards[0];
+
 						const to_shards = self.find_shards(to_type, to_primary_key_number);
 						const to_shard = to_shards[0];
+
 						const entity_shard_node = self.get_one_shard_node(entity_shard, shard_type);
 						const to_shard_node = self.get_one_shard_node(to_shard, shard_type);
 						const from_shard_node = self.get_one_shard_node(from_shard, shard_type);
+
 						return [entity_shard_node, to_shard_node, from_shard_node];
 					} else {
 						return [];
@@ -196,6 +205,23 @@ class DatabaseManager {
 	// for blacklist and whitelist
 	route_access_connections(context, scope, parameters, model, shard_type, relationships) {
 		const self = this;
+		let agent_id_attribute;
+		let agent_type_attribute;
+		let entity_id_attribute;
+		let entity_type_attribute;
+		if (model.table_name === "gauze__whitelist") {
+			agent_id_attribute = "gauze__whitelist__agent_id";
+			agent_type_attribute = "gauze__whitelist__agent_type";
+			entity_id_attribute = "gauze__whitelist__entity_id";
+			entity_type_attribute = "gauze__whitelist__entity_type";
+		} else if (model.table_name === "gauze__blacklist") {
+			agent_id_attribute = "gauze__blacklist__agent_id";
+			agent_type_attribute = "gauze__blacklist__agent_type";
+			entity_id_attribute = "gauze__blacklist__entity_id";
+			entity_type_attribute = "gauze__blacklist__entity_type";
+		} else {
+			throw new Error(`Invalid access model type: ${model.table_name}`);
+		}
 		if (shard_type === "read") {
 			if (parameters.where) {
 				if (parameters.where[model.primary_key]) {
@@ -208,6 +234,8 @@ class DatabaseManager {
 						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
 					}
 				} else {
+					// TODO: if entity_id and entity_type are provided, then query the entity node
+					// TODO: if agent_id and agent_type are provided, then query the agent node
 					// return all sets
 					return self.get_all_shards_nodes(model.table_name, shard_type);
 				}
@@ -221,38 +249,29 @@ class DatabaseManager {
 					// update
 					return [];
 				} else {
-					// should be impossible
-					return [];
+					// delete
+					if (parameters.where[model.primary_key]) {
+						const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
+						const model_shards = self.find_shards(model.table_name, primary_key_number);
+						const model_shard = model_shards[0];
+						if (model_shard) {
+							return [self.get_one_shard_node(model_shard, shard_type)];
+						} else {
+							throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
+						}
+					} else {
+						// not allowed to edit whitelist or blacklist across multiple nodes
+						return [];
+					}
 				}
 			} else {
 				if (parameters.attributes) {
 					// create
-					console.log("X", parameters.attributes);
-					console.log("Y", model.table_name);
-					let agent_id_attribute;
-					let agent_type_attribute;
-					let entity_id_attribute;
-					let entity_type_attribute;
-					if (model.table_name === "gauze__whitelist") {
-						agent_id_attribute = "gauze__whitelist__agent_id";
-						agent_type_attribute = "gauze__whitelist__agent_type";
-						entity_id_attribute = "gauze__whitelist__entity_id";
-						entity_type_attribute = "gauze__whitelist__entity_type";
-					} else if (model.table_name === "gauze__blacklist") {
-						agent_id_attribute = "gauze__blacklist__agent_id";
-						agent_type_attribute = "gauze__blacklist__agent_type";
-						entity_id_attribute = "gauze__blacklist__entity_id";
-						entity_type_attribute = "gauze__blacklist__entity_type";
-					} else {
-						throw new Error(`Invalid access model type: ${model.table_name}`);
-					}
 					const required_attributes = [agent_id_attribute, agent_type_attribute, entity_id_attribute, entity_type_attribute];
-					console.log("required attributes", required_attributes);
 					const required_attributes_exist = required_attributes.every(function (key) {
 						return key in parameters.attributes;
 					});
 					if (parameters.attributes[model.primary_key] && required_attributes_exist) {
-						console.log("REACHED");
 						const access_id = parameters.attributes[model.primary_key];
 						const access_type = model.table_name;
 						const access_primary_key_number = self.uuid_to_big_int(access_id);

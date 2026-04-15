@@ -28,11 +28,13 @@ class SystemModel extends Model {
 		self.relationship_model = relationship_model;
 		if ($structure.entities.whitelist) {
 			self.whitelist_table = $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE;
+			self.whitelist_primary_key = $abstract.entities.whitelist.default($abstract).primary_key;
 		} else {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Whitelist structure not found"));
 		}
 		if ($structure.entities.blacklist) {
 			self.blacklist_table = $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE;
+			self.blacklist_primary_key = $abstract.entities.blacklist.default($abstract).primary_key;
 		} else {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Blacklist structure not found"));
 		}
@@ -197,7 +199,7 @@ class SystemModel extends Model {
 					return self.authorization_element(context, scope, realm, agent, entity);
 				}
 			} else {
-				new Error("Authorization failed: privacy policy does not exist for this method");
+				throw new Error("Authorization failed: privacy policy does not exist for this method");
 			}
 		});
 	}
@@ -208,10 +210,72 @@ class SystemModel extends Model {
 		const key = self._auth_batch_key(realm, agent, entity, "authorization_element");
 		return self.auth_loader.load(context, scope, key);
 	}
-	// only checks element authorization (e.g. entity id cannot be null)
 	_authorization_element(context, scope, realm, agent, entity) {
 		const self = this;
-		const { database, transaction } = context;
+		// note: code is going to be ugly because we need to check method privacy to figure out database connection routing
+		// TODO: figure out a way to avoid the redundant privacy check and redundant where construction
+		const entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity.entity_type];
+		const entity_module = $abstract.entities[entity_module_name].default($abstract);
+		const method_privacy = entity_module.methods[entity.entity_method].privacy;
+		if (method_privacy === "private") {
+			const parameters = {
+				where: {
+					gauze__whitelist__realm: realm,
+					gauze__whitelist__agent_id: agent.agent_id,
+					gauze__whitelist__agent_type: agent.agent_type,
+					gauze__whitelist__entity_type: entity.entity_type,
+					gauze__whitelist__entity_id: entity.entity_id,
+					gauze__whitelist__method: entity.entity_method,
+				},
+			};
+			const model = {
+				table_name: self.whitelist_table,
+				primary_key: self.whitelist_primary_key,
+			};
+			return context.database_manager.route_transactions(context, scope, parameters, model, "read").then(function (shards) {
+				return Promise.all(
+					shards.map(function (shard) {
+						return self._authorization_element_transaction(context, scope, realm, agent, entity, shard.connection, shard.transaction);
+					}),
+				).then(function (results) {
+					// pick first element assuming we resolve to a single node
+					return results.flat()[0];
+				});
+			});
+		} else if (method_privacy === "public") {
+			const parameters = {
+				where: {
+					gauze__blacklist__realm: realm,
+					// note: only leaf is applied to blacklist authorization
+					gauze__blacklist__agent_role: "leaf",
+					gauze__blacklist__agent_id: agent.agent_id,
+					gauze__blacklist__agent_type: agent.agent_type,
+					gauze__blacklist__entity_type: entity.entity_type,
+					gauze__blacklist__entity_id: entity.entity_id,
+					gauze__blacklist__method: entity.entity_method,
+				},
+			};
+			const model = {
+				table_name: self.blacklist_table,
+				primary_key: self.blacklist_primary_key,
+			};
+			return context.database_manager.route_transactions(context, scope, parameters, model, "read").then(function (shards) {
+				return Promise.all(
+					shards.map(function (shard) {
+						return self._authorization_element_transaction(context, scope, realm, agent, entity, shard.connection, shard.transaction);
+					}),
+				).then(function (results) {
+					// pick first element assuming we resolve to a single node
+					return results.flat()[0];
+				});
+			});
+		} else {
+			throw new Error("Authorization failed: privacy policy does not exist for this method");
+		}
+	}
+	// only checks element authorization (e.g. entity id cannot be null)
+	_authorization_element_transaction(context, scope, realm, agent, entity, database, transaction) {
+		const self = this;
 		const entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity.entity_type];
 		const entity_module = $abstract.entities[entity_module_name].default($abstract);
 		const method_privacy = entity_module.methods[entity.entity_method].privacy;
@@ -270,7 +334,7 @@ class SystemModel extends Model {
 				};
 			});
 		} else {
-			new Error("Authorization failed: privacy policy does not exist for this method");
+			throw new Error("Authorization failed: privacy policy does not exist for this method");
 		}
 	}
 	authorization_set(context, scope, realm, agent, entity) {
@@ -280,10 +344,70 @@ class SystemModel extends Model {
 		const key = self._auth_batch_key(realm, agent, entity, "authorization_set");
 		return self.auth_loader.load(context, scope, key);
 	}
-	// only checks set authorization (e.g. entity_id must be null)
 	_authorization_set(context, scope, realm, agent, entity) {
 		const self = this;
-		const { database, transaction } = context;
+		// note: code is going to be ugly because we need to check method privacy to figure out database connection routing
+		// TODO: figure out a way to avoid the redundant privacy check and redundant where construction
+		const entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity.entity_type];
+		const entity_module = $abstract.entities[entity_module_name].default($abstract);
+		const method_privacy = entity_module.methods[entity.entity_method].privacy;
+		if (method_privacy === "private") {
+			const parameters = {
+				where: {
+					gauze__whitelist__realm: realm,
+					gauze__whitelist__agent_id: agent.agent_id,
+					gauze__whitelist__agent_type: agent.agent_type,
+					gauze__whitelist__entity_type: entity.entity_type,
+					gauze__whitelist__method: entity.entity_method,
+				},
+			};
+			const model = {
+				table_name: self.whitelist_table,
+				primary_key: self.whitelist_primary_key,
+			};
+			return context.database_manager.route_transactions(context, scope, parameters, model, "read").then(function (shards) {
+				return Promise.all(
+					shards.map(function (shard) {
+						return self._authorization_set_transaction(context, scope, realm, agent, entity, shard.connection, shard.transaction);
+					}),
+				).then(function (results) {
+					// pick first element assuming we resolve to a single node
+					return results.flat()[0];
+				});
+			});
+		} else if (method_privacy === "public") {
+			const parameters = {
+				where: {
+					gauze__blacklist__realm: realm,
+					// note: only leaf is applied to black list filter
+					gauze__blacklist__agent_role: "leaf",
+					gauze__blacklist__agent_id: agent.agent_id,
+					gauze__blacklist__agent_type: agent.agent_type,
+					gauze__blacklist__entity_type: entity.entity_type,
+					gauze__blacklist__method: entity.entity_method,
+				},
+			};
+			const model = {
+				table_name: self.blacklist_table,
+				primary_key: self.blacklist_primary_key,
+			};
+			return context.database_manager.route_transactions(context, scope, parameters, model, "read").then(function (shards) {
+				return Promise.all(
+					shards.map(function (shard) {
+						return self._authorization_set_transaction(context, scope, realm, agent, entity, shard.connection, shard.transaction);
+					}),
+				).then(function (results) {
+					// pick first element assuming we resolve to a single node
+					return results.flat()[0];
+				});
+			});
+		} else {
+			throw new Error("Authorization failed: privacy policy does not exist for this method");
+		}
+	}
+	// only checks set authorization (e.g. entity_id must be null)
+	_authorization_set_transaction(context, scope, realm, agent, entity, database, transaction) {
+		const self = this;
 		const entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity.entity_type];
 		const entity_module = $abstract.entities[entity_module_name].default($abstract);
 		const method_privacy = entity_module.methods[entity.entity_method].privacy;
@@ -341,7 +465,7 @@ class SystemModel extends Model {
 				};
 			});
 		} else {
-			new Error("Authorization failed: privacy policy does not exist for this method");
+			throw new Error("Authorization failed: privacy policy does not exist for this method");
 		}
 	}
 	authorization_filter(context, scope, realm, agent, entity) {
@@ -351,11 +475,70 @@ class SystemModel extends Model {
 		const key = self._auth_batch_key(realm, agent, entity, "authorization_filter");
 		return self.auth_loader.load(context, scope, key);
 	}
-	// method and entity_type must be set
-	// this function is used to set where in and where not in
 	_authorization_filter(context, scope, realm, agent, entity) {
 		const self = this;
-		const { database, transaction } = context;
+		// note: code is going to be ugly because we need to check method privacy to figure out database connection routing
+		// TODO: figure out a way to avoid the redundant privacy check and redundant where construction
+		const entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity.entity_type];
+		const entity_module = $abstract.entities[entity_module_name].default($abstract);
+		const method_privacy = entity_module.methods[entity.entity_method].privacy;
+		if (method_privacy === "private") {
+			const parameters = {
+				where: {
+					gauze__whitelist__realm: realm,
+					gauze__whitelist__agent_id: agent.agent_id,
+					gauze__whitelist__agent_type: agent.agent_type,
+					gauze__whitelist__entity_type: entity.entity_type,
+					gauze__whitelist__method: entity.entity_method,
+				},
+			};
+			const model = {
+				table_name: self.whitelist_table,
+				primary_key: self.whitelist_primary_key,
+			};
+			return context.database_manager.route_transactions(context, scope, parameters, model, "read").then(function (shards) {
+				return Promise.all(
+					shards.map(function (shard) {
+						return self._authorization_filter_transaction(context, scope, realm, agent, entity, shard.connection, shard.transaction);
+					}),
+				).then(function (results) {
+					// pick first element assuming we resolve to a single node
+					return results.flat()[0];
+				});
+			});
+		} else if (method_privacy === "public") {
+			const parameters = {
+				where: {
+					gauze__blacklist__realm: realm,
+					gauze__blacklist__agent_role: "leaf",
+					gauze__blacklist__agent_id: agent.agent_id,
+					gauze__blacklist__agent_type: agent.agent_type,
+					gauze__blacklist__entity_type: entity.entity_type,
+					gauze__blacklist__method: entity.entity_method,
+				},
+			};
+			const model = {
+				table_name: self.blacklist_table,
+				primary_key: self.blacklist_primary_key,
+			};
+			return context.database_manager.route_transactions(context, scope, parameters, model, "read").then(function (shards) {
+				return Promise.all(
+					shards.map(function (shard) {
+						return self._authorization_filter_transaction(context, scope, realm, agent, entity, shard.connection, shard.transaction);
+					}),
+				).then(function (results) {
+					// pick first element assuming we resolve to a single node
+					return results.flat()[0];
+				});
+			});
+		} else {
+			throw new Error("Authorization failed: privacy policy does not exist for this method");
+		}
+	}
+	// method and entity_type must be set
+	// this function is used to set where in and where not in
+	_authorization_filter_transaction(context, scope, realm, agent, entity, database, transaction) {
+		const self = this;
 		const entity_module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity.entity_type];
 		const entity_module = $abstract.entities[entity_module_name].default($abstract);
 		const method_privacy = entity_module.methods[entity.entity_method].privacy;
@@ -420,7 +603,7 @@ class SystemModel extends Model {
 					});
 				}
 			} else {
-				new Error("Authorization failed: privacy policy does not exist for this method");
+				throw new Error("Authorization failed: privacy policy does not exist for this method");
 			}
 		});
 	}
