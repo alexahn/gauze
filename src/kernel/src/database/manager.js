@@ -224,7 +224,27 @@ class DatabaseManager {
 		}
 		if (shard_type === "read") {
 			if (parameters.where) {
-				if (parameters.where[model.primary_key]) {
+				if (parameters.where[entity_id_attribute] && parameters.where[entity_type_attribute]) {
+					const entity_primary_key_number = self.uuid_to_big_int(parameters.where[entity_id_attribute]);
+					const entity_table_name = parameters.where[entity_type_attribute];
+					const model_shards = self.find_shards(entity_table_name, entity_primary_key_number);
+					const model_shard = model_shards[0];
+					if (model_shard) {
+						return [self.get_one_shard_node(model_shard, shard_type)];
+					} else {
+						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
+					}
+				} else if (parameters.where[agent_id_attribute] && parameters.where[agent_type_attribute]) {
+					const agent_primary_key_number = self.uuid_to_big_int(parameters.where[agent_id_attribute]);
+					const agent_table_name = parameters.where[agent_type_attribute];
+					const model_shards = self.find_shards(agent_table_name, agent_primary_key_number);
+					const model_shard = model_shards[0];
+					if (model_shard) {
+						return [self.get_one_shard_node(model_shard, shard_type)];
+					} else {
+						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
+					}
+				} else if (parameters.where[model.primary_key]) {
 					const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
 					const model_shards = self.find_shards(model.table_name, primary_key_number);
 					const model_shard = model_shards[0];
@@ -234,8 +254,6 @@ class DatabaseManager {
 						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
 					}
 				} else {
-					// TODO: if entity_id and entity_type are provided, then query the entity node
-					// TODO: if agent_id and agent_type are provided, then query the agent node
 					// return all sets
 					return self.get_all_shards_nodes(model.table_name, shard_type);
 				}
@@ -250,7 +268,51 @@ class DatabaseManager {
 					return [];
 				} else {
 					// delete
-					if (parameters.where[model.primary_key]) {
+					const required_attributes = [agent_id_attribute, agent_type_attribute, entity_id_attribute, entity_type_attribute];
+					const required_attributes_exist = required_attributes.every(function (key) {
+						return key in parameters.attributes;
+					});
+					if (parameters.where[model.primary_key] && required_attributes_exist) {
+						const access_id = parameters.attributes[model.primary_key];
+						const access_type = model.table_name;
+						const access_primary_key_number = self.uuid_to_big_int(access_id);
+
+						const entity_id = parameters.attributes[entity_id_attribute];
+						const entity_type = parameters.attributes[entity_type_attribute];
+						const entity_primary_key_number = self.uuid_to_big_int(entity_id);
+
+						const agent_id = parameters.attributes[agent_id_attribute];
+						const agent_type = parameters.attributes[agent_type_attribute];
+						const agent_primary_key_number = self.uuid_to_big_int(agent_id);
+
+						const access_shards = self.find_shards(access_type, access_primary_key_number);
+						const access_shard = access_shards[0];
+
+						const entity_shards = self.find_shards(entity_type, entity_primary_key_number);
+						const entity_shard = entity_shards[0];
+
+						const agent_shards = self.find_shards(agent_type, agent_primary_key_number);
+						const agent_shard = agent_shards[0];
+
+						if (access_shard && entity_shard && agent_shard) {
+							const access_shard_node = self.get_one_shard_node(access_shard, shard_type);
+							const entity_shard_node = self.get_one_shard_node(entity_shard, shard_type);
+							const agent_shard_node = self.get_one_shard_node(agent_shard, shard_type);
+							return [access_shard_node, entity_shard_node, agent_shard_node];
+						} else {
+							if (!access_shard) {
+								throw new Error(`Could not find shard for table: ${access_type} and primary key: ${access_id}`);
+							}
+							if (!entity_shard) {
+								throw new Error(`Could not find shard for table: ${entity_type} and primary key: ${entity_id}`);
+							}
+							if (!agent_shard) {
+								throw new Error(`Could not find shard for table: ${agent_type} and primary key: ${agent_id}`);
+							}
+						}
+
+						// TODO: delete on all 3 locations
+						/*
 						const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
 						const model_shards = self.find_shards(model.table_name, primary_key_number);
 						const model_shard = model_shards[0];
@@ -259,6 +321,7 @@ class DatabaseManager {
 						} else {
 							throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
 						}
+						*/
 					} else {
 						// not allowed to edit whitelist or blacklist across multiple nodes
 						return [];
@@ -293,11 +356,22 @@ class DatabaseManager {
 						const agent_shards = self.find_shards(agent_type, agent_primary_key_number);
 						const agent_shard = agent_shards[0];
 
-						const access_shard_node = self.get_one_shard_node(access_shard, shard_type);
-						const entity_shard_node = self.get_one_shard_node(entity_shard, shard_type);
-						const agent_shard_node = self.get_one_shard_node(agent_shard, shard_type);
-
-						return [access_shard_node, entity_shard_node, agent_shard_node];
+						if (access_shard && entity_shard && agent_shard) {
+							const access_shard_node = self.get_one_shard_node(access_shard, shard_type);
+							const entity_shard_node = self.get_one_shard_node(entity_shard, shard_type);
+							const agent_shard_node = self.get_one_shard_node(agent_shard, shard_type);
+							return [access_shard_node, entity_shard_node, agent_shard_node];
+						} else {
+							if (!access_shard) {
+								throw new Error(`Could not find shard for table: ${access_type} and primary key: ${access_id}`);
+							}
+							if (!entity_shard) {
+								throw new Error(`Could not find shard for table: ${entity_type} and primary key: ${entity_id}`);
+							}
+							if (!agent_shard) {
+								throw new Error(`Could not find shard for table: ${agent_type} and primary key: ${agent_id}`);
+							}
+						}
 					} else {
 						return [];
 					}
