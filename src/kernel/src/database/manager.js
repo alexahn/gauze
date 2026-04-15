@@ -117,30 +117,41 @@ class DatabaseManager {
 		const self = this;
 		if (shard_type === "read") {
 			console.log("hit");
+			if (parameters.where) {
+				if (parameters.where[model.primary_key]) {
+					const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
+					const model_shards = self.find_shards(model.table_name, primary_key_number);
+					const model_shard = model_shards[0];
+					if (model_shard) {
+						return [self.get_one_shard_node(model_shard, shard_type)];
+					} else {
+						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
+					}
+				} else {
+					// return all sets
+					return self.get_all_shards_nodes(model.table_name, shard_type);
+				}
+			} else {
+				// return all sets
+				return self.get_all_shards_nodes(model.table_name, shard_type);
+			}
 		} else if (shard_type === "write") {
 			if (parameters.where) {
 				if (parameters.attributes) {
 					// update
-					if (parameters.where[model.primary_key]) {
-					} else {
-						return [];
-					}
+					return [];
 				} else {
+					// should be impossible
 					return [];
 				}
 			} else {
 				if (parameters.attributes) {
-					console.log("yyy");
 					// create
 					const required_attributes = ["gauze__relationship__from_id", "gauze__relationship__from_type", "gauze__relationship__to_id", "gauze__relationship__to_type"];
 					const required_attributes_exist = required_attributes.every(function (key) {
 						return key in parameters.attributes;
 					});
-					console.log("required_attributes_exist", required_attributes_exist);
-					console.log("model.primary_key", model.primary_key);
-					console.log("parameters.attributes", parameters.attributes);
 					if (parameters.attributes[model.primary_key] && required_attributes_exist) {
-						console.log("zzz");
 						const entity_id = parameters.attributes[model.primary_key];
 						const entity_type = model.table_name;
 						const entity_primary_key_number = self.uuid_to_big_int(entity_id);
@@ -159,7 +170,6 @@ class DatabaseManager {
 						const entity_shard_node = self.get_one_shard_node(entity_shard, shard_type);
 						const to_shard_node = self.get_one_shard_node(to_shard, shard_type);
 						const from_shard_node = self.get_one_shard_node(from_shard, shard_type);
-						console.log("XXXX");
 						return [entity_shard_node, to_shard_node, from_shard_node];
 					} else {
 						return [];
@@ -171,7 +181,6 @@ class DatabaseManager {
 		} else {
 			throw new Error("Invalid shard type, must be either read or write");
 		}
-		return [];
 	}
 	// for blacklist and whitelist
 	route_access_connections(context, scope, parameters, model, shard_type, relationships) {
@@ -321,7 +330,7 @@ class DatabaseManager {
 	route_transactions(context, scope, parameters, model, shard_type, relationships) {
 		const self = this;
 		const connections = self.route_connections(context, scope, parameters, model, shard_type, relationships);
-		console.log("connections", connections);
+		//console.log("connections", connections);
 		const unique_connections = [
 			...new Map(
 				connections.map(function (connection) {
@@ -331,7 +340,7 @@ class DatabaseManager {
 		];
 		// use context.transactions
 		// for each connection, check to see if we have an open transaction on it for the context
-		console.log("unique connections in route_transactions", unique_connections);
+		//console.log("unique connections in route_transactions", unique_connections);
 		return Promise.all(
 			unique_connections.map(function (connection) {
 				// key is shard node key
@@ -346,7 +355,6 @@ class DatabaseManager {
 				} else {
 					console.log("NOT FOUND");
 					const transaction_promise = new Promise(function (resolve, reject) {
-						console.log("connection", connection);
 						connection.knex.transaction(function (transaction) {
 							resolve(transaction);
 						});

@@ -396,9 +396,7 @@ class DatabaseModel extends Model {
 	}
 	_root_create(context, scope, parameters) {
 		const self = this;
-		// do routing here and apply a map to transactions returned from manager
-		// e.g. return Promise.all(transactions.map(function (transaction) { return self._root_create_transaction(context, scope, parameters, database, transaction) }))
-		const { database, transaction } = context;
+		//const { database, transaction } = context;
 		// create id on primary key if it does not exist
 		if (!parameters.attributes[self.primary_key]) {
 			const primary_key = uuidv4();
@@ -406,25 +404,14 @@ class DatabaseModel extends Model {
 			parameters.attributes[self.primary_key] = primary_key;
 		}
 		return context.database_manager.route_transactions(context, scope, parameters, self, "write").then(function (shards) {
-			console.log("shards", shards);
 			return Promise.all(
 				shards.map(function (shard) {
 					return self._root_create_transaction(context, scope, parameters, shard.connection, shard.transaction);
 				}),
 			).then(function (results) {
-				console.log("results", results);
 				return results.flat();
 			});
 		});
-		/*
-		return self._root_create_transaction(context, scope, parameters, database, transaction).then(function (data) {
-			return context.database_manager
-				.route_transactions(context, scope, parameters, self, "write")
-				.then(function (shards) {
-					return data;
-				})
-		});
-		*/
 	}
 	_root_create_transaction(context, scope, parameters, database, transaction) {
 		context.transaction_count += 1;
@@ -443,7 +430,6 @@ class DatabaseModel extends Model {
 		}
 		return sql
 			.then(function (data) {
-				console.log("zxc", data);
 				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.create:success`, "data", data);
 				context.breadth_count += data.length;
 				return self.read(
@@ -480,17 +466,15 @@ class DatabaseModel extends Model {
 			table_name: entity_table_name,
 			primary_key: entity_primary_key,
 		};
-		console.log("entity_model", entity_model);
 		const entity_parameters = {
 			where: {
 				[entity_primary_key]: source._metadata.id,
 			},
 		};
-		console.log("entity_parameters", entity_parameters);
 		return context.database_manager.route_transactions(context, scope, entity_parameters, entity_model, "read").then(function (shards) {
 			return Promise.all(
 				shards.map(function (shard) {
-					return self._entity_relationships_transaction(context, scope, entity_parameters, shard.connection, shard.transaction);
+					return self._entity_relationships_transaction(context, scope, parameters, shard.connection, shard.transaction);
 				}),
 			);
 		});
@@ -504,9 +488,11 @@ class DatabaseModel extends Model {
 		if (source._direction === "to") {
 			query.gauze__relationship__from_id = source._metadata.id;
 			query.gauze__relationship__from_type = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[source._metadata.type];
+			query.gauze__relationship__to_type = self.table_name;
 		} else if (source._direction === "from") {
 			query.gauze__relationship__to_id = source._metadata.id;
 			query.gauze__relationship__to_type = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[source._metadata.type];
+			query.gauze__relationship__from_type = self.table_name;
 		} else {
 			throw new Error("Invalid relationship direction");
 		}
@@ -515,7 +501,6 @@ class DatabaseModel extends Model {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._entity_relationships_transaction:debug_sql`, sql.toString());
 		}
 		return sql.then(function (data) {
-			console.log("REL DATA", data);
 			return data;
 		});
 	}
@@ -524,12 +509,20 @@ class DatabaseModel extends Model {
 		const self = this;
 		const { database, transaction } = context;
 		// flow: fetch relationships based on scope from database, pass relationships to route_transactions
-		console.log("CALLED", scope);
 		return self._entity_relationships(context, scope, parameters).then(function (relationships) {
-			return self._root_create_transaction(context, scope, parameters, database, transaction);
+			return context.database_manager.route_transactions(context, scope, parameters, self, "write", relationships).then(function (shards) {
+				return Promise.all(
+					shards.map(function (shard) {
+						return self._relationship_create_transaction(context, scope, parameters, shard.connection, shard.transaction);
+					}),
+				).then(function (results) {
+					return results.flat();
+				});
+			});
+			//return self._root_create_transaction(context, scope, parameters, database, transaction);
 		});
 	}
-	_relationship_create_transaction(context, scope, database, transaction) {
+	_relationship_create_transaction(context, scope, parameters, database, transaction) {
 		//context.transaction_count += 1;
 		const self = this;
 		return self._root_create_transaction(context, scope, parameters, database, transaction);
@@ -632,9 +625,24 @@ class DatabaseModel extends Model {
 			});
 	}
 	_relationship_read(context, scope, parameters) {
-		context.transaction_count += 1;
 		const self = this;
 		const { database, transaction } = context;
+		return self._entity_relationships(context, scope, parameters).then(function (relationships) {
+			return context.database_manager.route_transactions(context, scope, parameters, self, "read", relationships).then(function (shards) {
+				return Promise.all(
+					shards.map(function (shard) {
+						return self._relationship_read_transaction(context, scope, parameters, shard.connection, shard.transaction);
+					}),
+				).then(function (results) {
+					return results.flat();
+				});
+			});
+		});
+	}
+	_relationship_read_transaction(context, scope, parameters, database, transaction) {
+		context.transaction_count += 1;
+		const self = this;
+		//const { database, transaction } = context;
 		const {
 			where = {},
 			where_in = {},
@@ -792,9 +800,21 @@ class DatabaseModel extends Model {
 		return self.loader.load(context, scope, key);
 	}
 	_root_update(context, scope, parameters) {
+		const self = this;
+		return context.database_manager.route_transactions(context, scope, parameters, self, "write").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._root_update_transaction(context, scope, parameters, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				return results.flat();
+			});
+		});
+	}
+	_root_update_transaction(context, scope, parameters, database, transaction) {
 		context.transaction_count += 1;
 		var self = this;
-		const { database, transaction } = context;
+		//const { database, transaction } = context;
 		var { attributes, where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
 		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
 		const sql = database(self.table_name)
@@ -842,9 +862,23 @@ class DatabaseModel extends Model {
 			});
 	}
 	_relationship_update(context, scope, parameters) {
+		const self = this;
+		return self._entity_relationships(context, scope, parameters).then(function (relationships) {
+			return context.database_manager.route_transactions(context, scope, parameters, self, "write", relationships).then(function (shards) {
+				return Promise.all(
+					shards.map(function (shard) {
+						return self._relationship_update_transaction(context, scope, parameters, shard.connection, shard.transaction);
+					}),
+				).then(function (results) {
+					return results.flat();
+				});
+			});
+		});
+	}
+	_relationship_update_transaction(context, scope, parameters, database, transaction) {
 		context.transaction_count += 1;
 		const self = this;
-		const { database, transaction } = context;
+		//const { database, transaction } = context;
 		const { attributes } = parameters;
 		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
 		// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
@@ -887,9 +921,10 @@ class DatabaseModel extends Model {
 		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, scope, key);
 	}
-	_cleanup_delete(context, valid_ids) {
+	// TODO: refactor cleanup_delete to delete things one by one (because relationships, whitelists, and blacklists are spread across multiple nodes)
+	_cleanup_delete(context, valid_ids, database, transaction) {
 		const self = this;
-		const { database, transaction } = context;
+		//const { database, transaction } = context;
 		const transactions = [
 			// to relationship
 			function () {
@@ -947,9 +982,21 @@ class DatabaseModel extends Model {
 		);
 	}
 	_root_delete(context, scope, parameters) {
+		const self = this;
+		return context.database_manager.route_transactions(context, scope, parameters, self, "write").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._root_delete_transaction(context, scope, parameters, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				return results.flat();
+			});
+		});
+	}
+	_root_delete_transaction(context, scope, parameters, database, transaction) {
 		context.transaction_count += 1;
 		const self = this;
-		const { database, transaction } = context;
+		//const { database, transaction } = context;
 		const { where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {}, limit = 16 } = parameters;
 		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
@@ -996,7 +1043,7 @@ class DatabaseModel extends Model {
 				return sql.then(function (delete_data) {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
 					context.breadth_count += read_data.length;
-					return self._cleanup_delete(context, valid_ids).then(function () {
+					return self._cleanup_delete(context, valid_ids, database, transaction).then(function () {
 						return read_data.slice(0, Math.min(limit, self.limit_max));
 					});
 				});
@@ -1007,9 +1054,23 @@ class DatabaseModel extends Model {
 			});
 	}
 	_relationship_delete(context, scope, parameters) {
+		const self = this;
+		return self._entity_relationships(context, scope, parameters).then(function (relationships) {
+			return context.database_manager.route_transactions(context, scope, parameters, self, "write", relationships).then(function (shards) {
+				return Promise.all(
+					shards.map(function (shard) {
+						return self._relationship_delete_transaction(context, scope, parameters, shard.connection, shard.transaction);
+					}),
+				).then(function (results) {
+					return results.flat();
+				});
+			});
+		});
+	}
+	_relationship_delete_transaction(context, scope, parameters, database, transaction) {
 		context.transaction_count += 1;
 		const self = this;
-		const { database, transaction } = context;
+		//const { database, transaction } = context;
 		const { limit = 16 } = parameters;
 		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 		const MAXIMUM_ROWS = 4294967296;
@@ -1029,7 +1090,7 @@ class DatabaseModel extends Model {
 				}
 				return sql.then(function (delete_data) {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
-					return self._cleanup_delete(context, valid_ids).then(function () {
+					return self._cleanup_delete(context, valid_ids, database, transaction).then(function () {
 						context.breadth_count += read_data.length;
 						return read_data.slice(0, limit);
 					});
