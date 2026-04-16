@@ -10,6 +10,8 @@ import { LOGGER__IO__LOGGER__SRC__KERNEL } from "./../logger/io.js";
 
 import { EXECUTE__GRAPHQL__SHELL__SRC__KERNEL } from "./../shell/graphql.js";
 
+import { v4 as uuidv4 } from "uuid";
+
 // todo: replace sql queries with database graphql queries?
 class RelationshipSystemModel extends SystemModel {
 	constructor(root_config, relationship_config) {
@@ -18,6 +20,19 @@ class RelationshipSystemModel extends SystemModel {
 		self.name = self.__name();
 		self.relations_map = self._create_relations_map();
 		self.types_map = self._create_types_map();
+		self.table_name = self.entity.table_name;
+		self.key_to_id = `${self.entity.table_name}__to_id`;
+		self.key_to_type = `${self.entity.table_name}__to_type`;
+		self.key_from_id = `${self.entity.table_name}__from_id`;
+		self.key_from_type = `${self.entity.table_name}__from_type`;
+		self.primary_key = self.entity.primary_key;
+		self.generate_response = function (method, rows) {
+			return {
+				data: {
+					[`${method}_${self.entity.name}`]: rows,
+				},
+			};
+		};
 	}
 	static _class_name(schema_name) {
 		return schema_name ? `(${schema_name})[${super._class_name()}]RelationshipSystemModel` : `[${super._class_name()}]RelationshipSystemModel`;
@@ -168,7 +183,35 @@ class RelationshipSystemModel extends SystemModel {
 		}
 		return sql;
 	}
+	// make symmetric even though we don't need transaction
 	_root_create(context, scope, parameters, realm) {
+		const self = this;
+		if (!parameters.attributes[self.primary_key]) {
+			const primary_key = uuidv4();
+			parameters.attributes[self.primary_key] = primary_key;
+		}
+		// skip getting a transaction since _root_create_transaction doesn't use one
+		// note: shard type is read because if we used write, we could potentially get three transactions, and we would execute three graphql queries, which each would get three transactions
+		/*
+		return context.database_manager.route_transactions(context, scope, parameters, self, "read").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._root_create_transaction(context, scope, parameters, realm, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				// stitch together results and build response
+				const rows = results
+					.map(function (result) {
+						return result.data[`create_${self.entity.name}`];
+					})
+					.flat();
+				return self.generate_response("create", rows);
+			});
+		});
+		*/
+		return self._root_create_transaction(context, scope, parameters, realm, null, null);
+	}
+	_root_create_transaction(context, scope, parameters, realm, database, transaction) {
 		const self = this;
 		const { agent, entity, operation } = realm;
 		const access = { ...agent, ...entity };
@@ -185,12 +228,37 @@ class RelationshipSystemModel extends SystemModel {
 		const key = self._model_batch_key(parameters, realm, "create");
 		return self.model_loader.load(context, scope, key);
 	}
-	// todo: parallelize the sql queries
 	_filter_access(context, scope, parameters, realm, relationship_rows, method) {
 		const self = this;
-		const { database, transaction } = context;
+		const { agent } = realm;
+		const { agent_id, agent_type } = agent;
+		const agent_primary_key = $structure.gauze.resolvers.SQL_TABLE_TO_SQL_PRIMARY_KEY__RESOLVER__STRUCTURE[agent_type];
+		const agent_parameters = {
+			where: {
+				[agent_primary_key]: agent_id,
+			},
+		};
+		const agent_model = {
+			table_name: agent_type,
+			primary_key: agent_primary_key,
+		};
+		return context.database_manager.route_transactions(context, {}, agent_parameters, agent_model, "read").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._filter_access_transaction(context, scope, parameters, realm, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				console.log("filter_access_results", results);
+				return results.flat();
+			});
+		});
+	}
+	// todo: parallelize the sql queries
+	_filter_access_transaction(context, scope, parameters, realm, relationship_rows, method, database, transaction) {
+		const self = this;
+		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
-		const { agent_id } = agent;
+		const { agent_id, agent_type } = agent;
 		const valid_from_ids = relationship_rows.map(function (relationship) {
 			return relationship.gauze__relationship__from_id;
 		});
@@ -202,6 +270,7 @@ class RelationshipSystemModel extends SystemModel {
 		const sql = database(self.whitelist_table)
 			.where({
 				gauze__whitelist__agent_id: agent_id,
+				gauze__whitelist__agent_type: agent_type,
 				gauze__whitelist__method: method,
 			})
 			.whereIn("gauze__whitelist__entity_id", valid_entity_ids)
@@ -213,6 +282,7 @@ class RelationshipSystemModel extends SystemModel {
 			const sql = database(self.blacklist_table)
 				.where({
 					gauze__blacklist__agent_id: agent_id,
+					gauze__blacklist__agent_type: agent_type,
 					gauze__blacklist__method: method,
 				})
 				.whereIn("gauze__blacklist__entity_id", valid_entity_ids)
@@ -307,9 +377,9 @@ class RelationshipSystemModel extends SystemModel {
 			});
 		});
 	}
-	_read_entity(context, scope, parameters, realm) {
+	_read_entity_transaction(context, scope, parameters, realm, database, transaction) {
 		const self = this;
-		const { database, transaction } = context;
+		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const { agent_id } = agent;
 		const method = "read";
@@ -328,9 +398,9 @@ class RelationshipSystemModel extends SystemModel {
 			});
 		});
 	}
-	_read_entity_in(context, scope, parameters, realm) {
+	_read_entity_in_transaction(context, scope, parameters, realm, database, transaction) {
 		const self = this;
-		const { database, transaction } = context;
+		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const { agent_id } = agent;
 		const method = "read";
@@ -358,7 +428,7 @@ class RelationshipSystemModel extends SystemModel {
 			});
 		});
 	}
-	_read_from(context, scope, parameters, realm) {
+	_read_from_transaction(context, scope, parameters, realm, database, transaction) {
 		// check that from policy aligns
 		// get list of relationship
 		// intersect with agent whitelist or blacklist based on policy by doing a where in query (this could work if we leverage the fact that uuids rarely have collisions)
@@ -366,7 +436,7 @@ class RelationshipSystemModel extends SystemModel {
 		// do an in memory join basically
 		// final set of relationships the user has access to
 		const self = this;
-		const { database, transaction } = context;
+		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const { agent_id } = agent;
 		const method = "read";
@@ -402,7 +472,7 @@ class RelationshipSystemModel extends SystemModel {
 				}
 			});
 	}
-	_read_to(context, scope, parameters, realm) {
+	_read_to_transaction(context, scope, parameters, realm, database, transaction) {
 		// check that from policy aligns
 		// get list of relationship
 		// intersect with agent whitelist or blacklist based on policy by doing a where in query (this could work if we leverage the fact that uuids rarely have collisions)
@@ -410,7 +480,7 @@ class RelationshipSystemModel extends SystemModel {
 		// do an in memory join basically
 		// final set of relationships the user has access to
 		const self = this;
-		const { database, transaction } = context;
+		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const { agent_id } = agent;
 		const method = "read";
@@ -446,13 +516,31 @@ class RelationshipSystemModel extends SystemModel {
 				}
 			});
 	}
+	_root_read(context, scope, parameters, realm) {
+		const self = this;
+		return context.database_manager.route_transactions(context, scope, parameters, self, "read").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._root_read_transaction(context, scope, parameters, realm, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				// stitch together results and build response
+				const rows = results
+					.map(function (result) {
+						return result.data[`read_${self.entity.name}`];
+					})
+					.flat();
+				return self.generate_response("read", rows);
+			});
+		});
+	}
 	// note: this method will not be able to navigate relationships
 	// note: for private methods, user will have to use the whitelist methods to see what entities they have read access to
 	// note: for public methods, user will need to have exposure to an entity before they can explore its relationships
 	// requires where.id or where.from_id and where.from_type
-	_root_read(context, scope, parameters, realm) {
+	_root_read_transaction(context, scope, parameters, realm, database, transaction) {
 		const self = this;
-		const { database, transaction } = context;
+		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const method = "read";
 		entity.entity_method = method;
@@ -466,14 +554,23 @@ class RelationshipSystemModel extends SystemModel {
 						return self._execute(context, operation, parameters);
 					});
 				} else {
+					return self.generate_response("read", []);
+					/*
 					return {
 						data: {
 							read_relationship: [],
 						},
 					};
+					*/
 				}
 			});
-		} else if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__to_id) {
+		} else if (
+			parameters.where &&
+			parameters.where.gauze__relationship__from_id &&
+			parameters.where.gauze__relationship__from_type &&
+			parameters.where.gauze__relationship__to_id &&
+			parameters.where.gauze__relationship__to_type
+		) {
 			self._validate_entity_types(parameters.where);
 			return self._read_entity(context, scope, parameters, realm);
 		} else if (
@@ -483,11 +580,11 @@ class RelationshipSystemModel extends SystemModel {
 			parameters.where_in.gauze__relationship__to_id &&
 			parameters.where_in.gauze__relationship__to_id.length
 		) {
-			return self._read_entity_in(context, scope, parameters, realm);
+			return self._read_entity_in_transaction(context, scope, parameters, realm, database, transaction);
 		} else if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__from_type) {
-			return self._read_from(context, scope, parameters, realm);
+			return self._read_from_transaction(context, scope, parameters, realm, database, transaction);
 		} else if (parameters.where && parameters.where.gauze__relationship__to_id && parameters.where.gauze__relationship__to_type) {
-			return self._read_to(context, scope, parameters, realm);
+			return self._read_to_transaction(context, scope, parameters, realm, database, transaction);
 		} else {
 			throw new Error(
 				"Field 'where.gauze__relationship__id' is required or (Field 'where_in.gauze__relationship__from_id' and where_in.gauze__relationship__to_id' are required) or (Field 'where.gauze__relationship__from_id' and 'where.gauze__relationship__from_type' are required) or (Field 'where.gauze__relationship__to_id' and 'where.gauze__relationship__to_type' are required)",
@@ -499,10 +596,28 @@ class RelationshipSystemModel extends SystemModel {
 		const key = self._model_batch_key(parameters, realm, "read");
 		return self.model_loader.load(context, scope, key);
 	}
-	// requires where.id
 	_root_update(context, scope, parameters, realm) {
 		const self = this;
-		const { database, transaction } = context;
+		return context.database_manager.route_transactions(context, scope, parameters, self, "read").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._root_update_transaction(context, scope, parameters, realm, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				// stitch together results and build response
+				const rows = results
+					.map(function (result) {
+						return result.data[`update_${self.entity.name}`];
+					})
+					.flat();
+				return self.generate_response("update", rows);
+			});
+		});
+	}
+	// requires where.id
+	_root_update_transaction(context, scope, parameters, realm, database, transaction) {
+		const self = this;
+		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const method = "update";
 		entity.entity_method = method;
@@ -514,15 +629,19 @@ class RelationshipSystemModel extends SystemModel {
 					self._connected_relationship(staged);
 					return self._authorized_relationship(context, scope, relationship, agent, method).then(function () {
 						return self._authorized_relationship(context, scope, staged, agent, method).then(function () {
-							return self._execute(context, operation, parameters);
+							return self.generate_response("update", []);
+							//return self._execute(context, operation, parameters);
 						});
 					});
 				} else {
+					return self.generate_response("update", []);
+					/*
 					return {
 						data: {
 							update_relationship: [],
 						},
 					};
+					*/
 				}
 			});
 		} else {
@@ -534,10 +653,29 @@ class RelationshipSystemModel extends SystemModel {
 		const key = self._model_batch_key(parameters, realm, "update");
 		return self.model_loader.load(context, scope, key);
 	}
-	// requires where.id
 	_root_delete(context, scope, parameters, realm) {
 		const self = this;
-		const { database, transaction } = context;
+		// note: shard type is read because _root_delete_transaction only does a read
+		return context.database_manager.route_transactions(context, scope, parameters, self, "read").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._root_delete_transaction(context, scope, parameters, realm, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				// stitch together results and build response
+				const rows = results
+					.map(function (result) {
+						return result.data[`delete_${self.entity.name}`];
+					})
+					.flat();
+				return self.generate_response("delete", rows);
+			});
+		});
+	}
+	// requires where.id
+	_root_delete_transaction(context, scope, parameters, realm, database, transaction) {
+		const self = this;
+		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const method = "delete";
 		entity.entity_method = method;
@@ -546,14 +684,37 @@ class RelationshipSystemModel extends SystemModel {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
 					return self._authorized_relationship(context, scope, relationship, agent, method).then(function () {
+						if (parameters.where[self.key_to_id] && parameters.where[self.key_to_id] !== target_record[self.key_to_id]) {
+							return self.generate_response("delete", []);
+						} else {
+							parameters.where[self.key_to_id] = relationship[self.key_to_id];
+						}
+						if (parameters.where[self.key_to_type] && parameters.where[self.key_to_type] !== target_record[self.key_to_type]) {
+							return self.generate_response("delete", []);
+						} else {
+							parameters.where[self.key_to_type] = relationship[self.key_to_type];
+						}
+						if (parameters.where[self.key_from_id] && parameters.where[self.key_from_id] !== target_record[self.key_from_id]) {
+							return self.generate_response("delete", []);
+						} else {
+							parameters.where[self.key_from_id] = relationship[self.key_from_id];
+						}
+						if (parameters.where[self.key_from_type] && parameters.where[self.key_from_type] !== target_record[self.key_from_type]) {
+							return self.generate_response("delete", []);
+						} else {
+							parameters.where[self.key_from_type] = relationship[self.key_from_type];
+						}
 						return self._execute(context, operation, parameters);
 					});
 				} else {
+					return self.generate_response("delete", []);
+					/*
 					return {
 						data: {
 							delete_relationship: [],
 						},
 					};
+					*/
 				}
 			});
 		} else {
@@ -647,6 +808,7 @@ class RelationshipSystemModel extends SystemModel {
 					}
 					return sql.then(function (relationship_rows) {
 						return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
+							// TODO: intersect with existing where_in
 							parameters.where_in = {
 								[self.entity.primary_key]: valid_ids,
 							};
@@ -718,11 +880,14 @@ class RelationshipSystemModel extends SystemModel {
 						return self._execute(context, operation, parameters);
 					});
 				} else {
+					return self.generate_response("count", []);
+					/*
 					return {
 						data: {
-							read_relationship: [],
+							count_relationship: [],
 						},
 					};
+					*/
 				}
 			});
 		} else if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__to_id) {

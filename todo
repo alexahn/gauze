@@ -1067,3 +1067,10 @@
 	[ ] replace hardcoded "node" in shell commands executed by cli
 
 [ ] add caching for abstract entity usage (it can be memoized if stateless)
+	[ ] might be unecessary since we mostly needed abstract entity for finding the primary key and we added SQL_TABLE_TO_SQL_PRIMARY_KEY__RESOLVER__STRUCTURE
+[ ] sql bind limit multiplexing
+	[ ] remove 512 (we assume some reasonable number of columns on the table that will use bind parameters) from GAUZE_SQL_BIND_LIMIT and use this number to create a set of queries
+		[ ] mostly we will be splitting where_in[primary_key] into buckets so we can get around the bind limit
+[ ] if write transaction is already open for a shard, then use it instead of getting a read transaction
+[ ] gauze migrate refactoring
+	[ ] we need to run all knex commands over every shard

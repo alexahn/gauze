@@ -400,7 +400,6 @@ class DatabaseModel extends Model {
 		// create id on primary key if it does not exist
 		if (!parameters.attributes[self.primary_key]) {
 			const primary_key = uuidv4();
-			console.log("PRIMARY_KEY", primary_key);
 			parameters.attributes[self.primary_key] = primary_key;
 		}
 		return context.database_manager.route_transactions(context, scope, parameters, self, "write").then(function (shards) {

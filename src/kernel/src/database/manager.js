@@ -186,11 +186,23 @@ class DatabaseManager {
 						const to_shards = self.find_shards(to_type, to_primary_key_number);
 						const to_shard = to_shards[0];
 
-						const entity_shard_node = self.get_one_shard_node(entity_shard, shard_type);
-						const to_shard_node = self.get_one_shard_node(to_shard, shard_type);
-						const from_shard_node = self.get_one_shard_node(from_shard, shard_type);
+						if (entity_shard && from_shard && to_shard) {
+							const entity_shard_node = self.get_one_shard_node(entity_shard, shard_type);
+							const from_shard_node = self.get_one_shard_node(from_shard, shard_type);
+							const to_shard_node = self.get_one_shard_node(to_shard, shard_type);
 
-						return [entity_shard_node, to_shard_node, from_shard_node];
+							return [entity_shard_node, from_shard_node, to_shard_node];
+						} else {
+							if (!entity_shard) {
+								throw new Error(`Could not find shard for table: ${entity_type} and primary key: ${entity_id}`);
+							}
+							if (!from_shard) {
+								throw new Error(`Could not find shard for table: ${from_type} and primary key: ${from_id}`);
+							}
+							if (!to_shard) {
+								throw new Error(`Could not find shard for table: ${to_type} and primary key: ${to_id}`);
+							}
+						}
 					} else {
 						return [];
 					}

@@ -32,7 +32,7 @@ class AccessSystemModel extends SystemModel {
 				[`create_${self.entity.name}`]: [],
 			},
 		};
-		self.create_create_response = function (rows) {
+		self.generate_create_response = function (rows) {
 			return {
 				data: {
 					[`create_${self.entity.name}`]: rows,
@@ -44,7 +44,7 @@ class AccessSystemModel extends SystemModel {
 				[`read_${self.entity.name}`]: [],
 			},
 		};
-		self.create_read_response = function (rows) {
+		self.generate_read_response = function (rows) {
 			return {
 				data: {
 					[`read_${self.entity.name}`]: rows,
@@ -56,7 +56,7 @@ class AccessSystemModel extends SystemModel {
 				[`update_${self.entity.name}`]: [],
 			},
 		};
-		self.create_update_response = function (rows) {
+		self.generate_update_response = function (rows) {
 			return {
 				data: {
 					[`update_${self.entity.name}`]: rows,
@@ -68,7 +68,7 @@ class AccessSystemModel extends SystemModel {
 				[`delete_${self.entity.name}`]: [],
 			},
 		};
-		self.create_delete_response = function (rows) {
+		self.generate_delete_response = function (rows) {
 			return {
 				data: {
 					[`delete_${self.entity.name}`]: rows,
@@ -80,7 +80,7 @@ class AccessSystemModel extends SystemModel {
 				[`count_${self.entity.name}`]: [],
 			},
 		};
-		self.create_count_response = function (rows) {
+		self.generate_count_response = function (rows) {
 			return {
 				data: {
 					[`count_${self.entity.name}`]: rows,
@@ -298,13 +298,13 @@ class AccessSystemModel extends SystemModel {
 	}
 	_root_create(context, scope, input, realm) {
 		const self = this;
-		//const { database, transaction } = context;
-		//return self._root_create_transaction(context, scope, input, realm, database, transaction);
 		if (!input.attributes[self.primary_key]) {
 			const primary_key = uuidv4();
 			input.attributes[self.primary_key] = primary_key;
 		}
-		// note: shard type is read because _root_create_transaction could read permissions
+		// skip getting a transaction since _root_create_transaction doesn't use one
+		// note: shard type is read because if we used write, we could potentially get three transactions, and we would execute three graphql queries, which each would get three transactions
+		/*
 		return context.database_manager.route_transactions(context, {}, input, self, "read").then(function (shards) {
 			return Promise.all(
 				shards.map(function (shard) {
@@ -317,10 +317,12 @@ class AccessSystemModel extends SystemModel {
 						return result.data[`create_${self.entity.name}`];
 					})
 					.flat();
-				return self.create_create_response(rows);
+				return self.generate_create_response(rows);
 				//return results.flat();
 			});
 		});
+		*/
+		return self._root_create_transaction(context, {}, input, realm, null, null);
 	}
 	// requires a valid record
 	_root_create_transaction(context, scope, input, realm, database, transaction) {
@@ -471,7 +473,7 @@ class AccessSystemModel extends SystemModel {
 						return result.data[`read_${self.entity.name}`];
 					})
 					.flat();
-				return self.create_read_response(rows);
+				return self.generate_read_response(rows);
 			});
 		});
 	}
@@ -522,7 +524,7 @@ class AccessSystemModel extends SystemModel {
 						return result.data[`update_${self.entity.name}`];
 					})
 					.flat();
-				return self.create_update_response(rows);
+				return self.generate_update_response(rows);
 			});
 		});
 	}
@@ -576,7 +578,7 @@ class AccessSystemModel extends SystemModel {
 						return result.data[`delete_${self.entity.name}`];
 					})
 					.flat();
-				return self.create_delete_response(rows);
+				return self.generate_delete_response(rows);
 			});
 		});
 	}
@@ -691,7 +693,7 @@ class AccessSystemModel extends SystemModel {
 						return result.data[`count_${self.entity.name}`];
 					})
 					.flat();
-				return self.create_count_response(rows);
+				return self.generate_count_response(rows);
 			});
 		});
 	}
@@ -763,7 +765,7 @@ class AccessSystemModel extends SystemModel {
 						return result.data[`count_${self.entity.name}`];
 					})
 					.flat();
-				return self.create_count_response(rows);
+				return self.generate_count_response(rows);
 			});
 		});
 	}
