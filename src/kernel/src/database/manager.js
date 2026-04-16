@@ -473,7 +473,6 @@ class DatabaseManager {
 	route_connections(context, scope, parameters, model, shard_type, relationships) {
 		const self = this;
 		if (!self.databases[model.table_name]) {
-			console.log("MISSING", model.table_name, parameters, shard_type);
 			throw new Error(`Database routing/sharding configuration is not defined for table: ${model.table_name}`);
 		}
 		if (self.databases[model.table_name].connection_router) {
@@ -510,7 +509,6 @@ class DatabaseManager {
 			unique_connections.map(function (connection) {
 				// key is shard node key
 				if (context.transactions[connection.key]) {
-					console.log("FOUND");
 					return context.transactions[connection.key].then(function (transaction) {
 						return {
 							connection: self.get_connection(connection.key),
@@ -518,7 +516,6 @@ class DatabaseManager {
 						};
 					});
 				} else {
-					console.log("NOT FOUND");
 					const transaction_promise = new Promise(function (resolve, reject) {
 						connection.knex.transaction(function (transaction) {
 							resolve(transaction);
