@@ -270,19 +270,20 @@ class DatabaseManager {
 					// delete
 					const required_attributes = [agent_id_attribute, agent_type_attribute, entity_id_attribute, entity_type_attribute];
 					const required_attributes_exist = required_attributes.every(function (key) {
-						return key in parameters.attributes;
+						return key in parameters.where;
 					});
+
 					if (parameters.where[model.primary_key] && required_attributes_exist) {
-						const access_id = parameters.attributes[model.primary_key];
+						const access_id = parameters.where[model.primary_key];
 						const access_type = model.table_name;
 						const access_primary_key_number = self.uuid_to_big_int(access_id);
 
-						const entity_id = parameters.attributes[entity_id_attribute];
-						const entity_type = parameters.attributes[entity_type_attribute];
+						const entity_id = parameters.where[entity_id_attribute];
+						const entity_type = parameters.where[entity_type_attribute];
 						const entity_primary_key_number = self.uuid_to_big_int(entity_id);
 
-						const agent_id = parameters.attributes[agent_id_attribute];
-						const agent_type = parameters.attributes[agent_type_attribute];
+						const agent_id = parameters.where[agent_id_attribute];
+						const agent_type = parameters.where[agent_type_attribute];
 						const agent_primary_key_number = self.uuid_to_big_int(agent_id);
 
 						const access_shards = self.find_shards(access_type, access_primary_key_number);
@@ -334,6 +335,7 @@ class DatabaseManager {
 					const required_attributes_exist = required_attributes.every(function (key) {
 						return key in parameters.attributes;
 					});
+
 					if (parameters.attributes[model.primary_key] && required_attributes_exist) {
 						const access_id = parameters.attributes[model.primary_key];
 						const access_type = model.table_name;
@@ -458,7 +460,10 @@ class DatabaseManager {
 	}
 	route_connections(context, scope, parameters, model, shard_type, relationships) {
 		const self = this;
-		if (!self.databases[model.table_name]) throw new Error(`Database routing/sharding configuration is not defined for table: ${model.table_name}`);
+		if (!self.databases[model.table_name]) {
+			console.log("MISSING", model.table_name, parameters, shard_type);
+			throw new Error(`Database routing/sharding configuration is not defined for table: ${model.table_name}`);
+		}
 		if (self.databases[model.table_name].connection_router) {
 			// note: allows for custom connection routing (for instances where someone wants to set up their own sharding scheme)
 			return self.database[model.table_name].connection_router(context, scope, parameters, model, shard_type, relationships, self);

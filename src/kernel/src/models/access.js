@@ -10,6 +10,8 @@ import { LOGGER__IO__LOGGER__SRC__KERNEL } from "./../logger/io.js";
 
 import { EXECUTE__GRAPHQL__SHELL__SRC__KERNEL } from "./../shell/graphql.js";
 
+import { v4 as uuidv4 } from "uuid";
+
 class AccessSystemModel extends SystemModel {
 	constructor(root_config, access_config) {
 		super(root_config, access_config);
@@ -23,20 +25,67 @@ class AccessSystemModel extends SystemModel {
 		self.key_entity_type = `${self.entity.table_name}__entity_type`;
 		self.key_entity_id = `${self.entity.table_name}__entity_id`;
 		self.key_method = `${self.entity.table_name}__method`;
+		self.table_name = self.entity.table_name;
+		self.primary_key = self.entity.primary_key;
+		self.empty_create_response = {
+			data: {
+				[`create_${self.entity.name}`]: [],
+			},
+		};
+		self.create_create_response = function (rows) {
+			return {
+				data: {
+					[`create_${self.entity.name}`]: rows,
+				},
+			};
+		};
 		self.empty_read_response = {
 			data: {
 				[`read_${self.entity.name}`]: [],
 			},
+		};
+		self.create_read_response = function (rows) {
+			return {
+				data: {
+					[`read_${self.entity.name}`]: rows,
+				},
+			};
 		};
 		self.empty_update_response = {
 			data: {
 				[`update_${self.entity.name}`]: [],
 			},
 		};
+		self.create_update_response = function (rows) {
+			return {
+				data: {
+					[`update_${self.entity.name}`]: rows,
+				},
+			};
+		};
 		self.empty_delete_response = {
 			data: {
 				[`delete_${self.entity.name}`]: [],
 			},
+		};
+		self.create_delete_response = function (rows) {
+			return {
+				data: {
+					[`delete_${self.entity.name}`]: rows,
+				},
+			};
+		};
+		self.empty_count_response = {
+			data: {
+				[`count_${self.entity.name}`]: [],
+			},
+		};
+		self.create_count_response = function (rows) {
+			return {
+				data: {
+					[`count_${self.entity.name}`]: rows,
+				},
+			};
 		};
 		self.valid_realm = {
 			system: true,
@@ -98,7 +147,7 @@ class AccessSystemModel extends SystemModel {
 			},
 		};
 		// route transactions here
-		return context.database_manager.route_transactions(context, scope, parameters, model, "read").then(function (shards) {
+		return context.database_manager.route_transactions(context, {}, parameters, self, "read").then(function (shards) {
 			return Promise.all(
 				shards.map(function (shard) {
 					return self._valid_access_transaction(context, agent, method, record, shard.connection, shard.transaction);
@@ -249,8 +298,29 @@ class AccessSystemModel extends SystemModel {
 	}
 	_root_create(context, scope, input, realm) {
 		const self = this;
-		const { database, transaction } = context;
-		return self._root_create_transaction(context, scope, input, realm, database, transaction);
+		//const { database, transaction } = context;
+		//return self._root_create_transaction(context, scope, input, realm, database, transaction);
+		if (!input.attributes[self.primary_key]) {
+			const primary_key = uuidv4();
+			input.attributes[self.primary_key] = primary_key;
+		}
+		// note: shard type is read because _root_create_transaction could read permissions
+		return context.database_manager.route_transactions(context, {}, input, self, "read").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._root_create_transaction(context, {}, input, realm, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				// stitch together results and build response
+				const rows = results
+					.map(function (result) {
+						return result.data[`create_${self.entity.name}`];
+					})
+					.flat();
+				return self.create_create_response(rows);
+				//return results.flat();
+			});
+		});
 	}
 	// requires a valid record
 	_root_create_transaction(context, scope, input, realm, database, transaction) {
@@ -394,7 +464,14 @@ class AccessSystemModel extends SystemModel {
 					return self._root_read_transaction(context, scope, input, realm, shard.connection, shard.transaction);
 				}),
 			).then(function (results) {
-				return results.flat();
+				//return results.flat();
+				// stitch together results and build response
+				const rows = results
+					.map(function (result) {
+						return result.data[`read_${self.entity.name}`];
+					})
+					.flat();
+				return self.create_read_response(rows);
 			});
 		});
 	}
@@ -430,13 +507,34 @@ class AccessSystemModel extends SystemModel {
 		const key = self._model_batch_key(parameters, realm, "read");
 		return self.model_loader.load(context, scope, key);
 	}
-	// requires where.id
 	_root_update(context, scope, input, realm) {
+		const self = this;
+		// note: shard type is read because _root_create_transaction could read permissions
+		return context.database_manager.route_transactions(context, {}, input, self, "read").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._root_update_transaction(context, {}, input, realm, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				// stitch together results and build response
+				const rows = results
+					.map(function (result) {
+						return result.data[`update_${self.entity.name}`];
+					})
+					.flat();
+				return self.create_update_response(rows);
+			});
+		});
+	}
+	// requires where.id
+	_root_update_transaction(context, scope, input, realm, database, transaction) {
 		const self = this;
 		// new access records cannot be updated, due to distributed storage
 		// should we throw an error or return an empty set?
-		throw new Error("Access record cannot be modified");
-		//return self.empty_update_response;
+		//throw new Error("Access record cannot be modified");
+		return new Promise(function (resolve, reject) {
+			return resolve(self.empty_update_response);
+		});
 
 		/*
 		const { database, transaction } = context;
@@ -468,10 +566,29 @@ class AccessSystemModel extends SystemModel {
 		const key = self._model_batch_key(parameters, realm, "update");
 		return self.model_loader.load(context, scope, key);
 	}
-	// requires where.id
-	_root_delete(context, scope, input, realm) {
+	_root_delete(context, scope, input, realm, database, transaction) {
 		const self = this;
-		const { database, transaction } = context;
+		// note: shard type is read because _root_delete_transaction only does a read
+		return context.database_manager.route_transactions(context, scope, input, self, "read").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._root_delete_transaction(context, scope, input, realm, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				// stitch together results and build response
+				const rows = results
+					.map(function (result) {
+						return result.data[`delete_${self.entity.name}`];
+					})
+					.flat();
+				return self.create_delete_response(rows);
+			});
+		});
+	}
+	// requires where.id
+	_root_delete_transaction(context, scope, input, realm, database, transaction) {
+		const self = this;
+		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const method = "delete";
 		if (input && input.where && input.where[self.key_id]) {
@@ -515,9 +632,77 @@ class AccessSystemModel extends SystemModel {
 		const key = self._model_batch_key(parameters, realm, "delete");
 		return self.model_loader.load(context, scope, key);
 	}
+	_count_agent(context, input, realm) {
+		const self = this;
+		const agent_id = input.where[self.key_agent_id];
+		const agent_table_name = input.where[self.key_agent_type];
+		const agent_primary_key = $structure.gauze.resolvers.SQL_TABLE_TO_SQL_PRIMARY_KEY__RESOLVER__STRUCTURE[agent_table_name];
+		const parameters = {
+			where: {
+				[agent_primary_key]: agent_id,
+			},
+		};
+		const model = {
+			table_name: agent_table_name,
+			primary_key: agent_primary_key,
+		};
+		// route transactions here
+		return context.database_manager.route_transactions(context, scope, parameters, model, "read").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._count_agent_transaction(context, input, realm, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				return results.flat();
+			});
+		});
+	}
+	_count_agent_transaction(context, input, realm, database, transaction) {
+		const self = this;
+		const { agent, entity, operation } = realm;
+		if (input.where[self.key_agent_id] === agent.agent_id) {
+			// agent should be able to see all their own records
+			return self._execute(context, operation, input);
+		} else {
+			// agent should not be able to see anyone else's records
+			throw new Error(`Field '${self.key_agent_id}' must be equal to the initiating agent's id`);
+		}
+	}
 	_count_entity(context, input, realm) {
 		const self = this;
-		const { database, transaction } = context;
+		const entity_id = input.where[self.key_entity_id];
+		const entity_table_name = input.where[self.key_entity_type];
+		const entity_primary_key = $structure.gauze.resolvers.SQL_TABLE_TO_SQL_PRIMARY_KEY__RESOLVER__STRUCTURE[entity_table_name];
+		const parameters = {
+			where: {
+				[entity_primary_key]: entity_id,
+			},
+		};
+		const model = {
+			table_name: entity_table_name,
+			primary_key: entity_primary_key,
+		};
+		// route transactions here
+		return context.database_manager.route_transactions(context, {}, parameters, model, "read").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._count_entity_transaction(context, input, realm, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				//return results.flat();
+				// stitch together results and build response
+				const rows = results
+					.map(function (result) {
+						return result.data[`count_${self.entity.name}`];
+					})
+					.flat();
+				return self.create_count_response(rows);
+			});
+		});
+	}
+	_count_entity_transaction(context, input, realm, database, transaction) {
+		const self = this;
+		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		// get highest record for initiator
 		// get list of records based on entity_id, entity_type, and method
@@ -556,6 +741,7 @@ class AccessSystemModel extends SystemModel {
 					const valid_ids = filtered.map(function (record) {
 						return record[self.key_id];
 					});
+					// TODO: intersect with existing where_in
 					input.where_in = {
 						[self.key_id]: valid_ids,
 					};
@@ -567,10 +753,29 @@ class AccessSystemModel extends SystemModel {
 			}
 		});
 	}
-	// requires where.id or where.agent_id or (where.entity_id and where.entity_type and where.method)
-	_count_read(context, scope, input, realm) {
+	_root_count(context, scope, input, realm) {
 		const self = this;
-		const { database, transaction } = context;
+		return context.database_manager.route_transactions(context, scope, input, self, "read").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._count_read_transaction(context, scope, input, realm, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				//return results.flat();
+				// stitch together results and build response
+				const rows = results
+					.map(function (result) {
+						return result.data[`count_${self.entity.name}`];
+					})
+					.flat();
+				return self.create_count_response(rows);
+			});
+		});
+	}
+	// requires where.id or where.agent_id or (where.entity_id and where.entity_type and where.method)
+	_root_count_transaction(context, scope, input, realm, database, transaction) {
+		const self = this;
+		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const method = "count";
 		if (input.where && input.where[self.key_id]) {
@@ -581,13 +786,13 @@ class AccessSystemModel extends SystemModel {
 						return self._execute(context, operation, input);
 					});
 				} else {
-					return self.empty_read_response;
+					return self.empty_count_response;
 				}
 			});
 		} else if (input.where && input.where[self.key_agent_id]) {
-			return self._count_agent(context, input, realm);
+			return self._count_agent_transaction(context, input, realm);
 		} else if (input.where && input.where[self.key_entity_id] && input.where[self.key_entity_type] && input.where[self.key_method]) {
-			return self._count_entity(context, input, realm);
+			return self._count_entity_transaction(context, input, realm);
 		} else {
 			// todo: move this to system interface
 			throw new Error(
