@@ -37,7 +37,7 @@ const expected = `{
     "data": {
         "update_relationship": []
     }
-}`
+}`;
 
 export default {
 	step: 2,

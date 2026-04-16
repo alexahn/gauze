@@ -40,7 +40,7 @@ const expected = `{
             }
         ]
     }
-}`
+}`;
 
 export default {
 	step: 3,
