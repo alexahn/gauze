@@ -1180,9 +1180,23 @@ class DatabaseModel extends Model {
 			});
 	}
 	_relationship_count(context, scope, parameters) {
-		context.transaction_count += 1;
 		const self = this;
 		const { database, transaction } = context;
+		return self._entity_relationships(context, scope, parameters).then(function (relationships) {
+			return context.database_manager.route_transactions(context, scope, parameters, self, "read", relationships).then(function (shards) {
+				return Promise.all(
+					shards.map(function (shard) {
+						return self._relationship_count_transaction(context, scope, parameters, shard.connection, shard.transaction);
+					}),
+				).then(function (results) {
+					return results.flat();
+				});
+			});
+		});
+	}
+	_relationship_count_transaction(context, scope, parameters, database, transaction) {
+		context.transaction_count += 1;
+		const self = this;
 		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
 		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
 		const relationship_source = self._parse_source(scope, parameters);
