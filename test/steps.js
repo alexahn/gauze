@@ -67,11 +67,16 @@ function load_steps(base_path, directory) {
 		});
 }
 
-function make_step_error(step, errors) {
+function make_step_error(step, errors, actual, expected) {
 	const message = `Step ${step.step} failed at: ${step.file_path}
 Error: Step description: ${step.description}
 Response: 
-${errors}`;
+${errors}
+
+Actual:
+${actual}
+Expected:
+${expected}`;
 	return new Error(message);
 }
 
@@ -107,7 +112,7 @@ function run_step(environment, step) {
 					console.log(step.expected);
 					console.log("error:");
 					console.log(data.errors);
-					throw make_step_error(step, data.errors);
+					throw make_step_error(step, data.errors, result, step.expected);
 				}
 				return data;
 			} else {
@@ -122,7 +127,7 @@ function run_step(environment, step) {
 					console.log("expected:");
 					console.log(step.expected);
 					//console.error(err)
-					throw make_step_error(step);
+					throw make_step_error(step, err, result, step.expected);
 				}
 				return data;
 			}

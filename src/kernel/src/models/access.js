@@ -530,14 +530,6 @@ class AccessSystemModel extends SystemModel {
 	_root_update_transaction(context, scope, input, realm, database, transaction) {
 		const self = this;
 		// new access records cannot be updated, due to distributed storage
-		// should we throw an error or return an empty set?
-		//throw new Error("Access record cannot be modified");
-		return new Promise(function (resolve, reject) {
-			return resolve(self.empty_update_response);
-		});
-
-		/*
-		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const method = "update";
 		const change_record = input.attributes;
@@ -549,7 +541,12 @@ class AccessSystemModel extends SystemModel {
 						const staged = { ...target_record, ...change_record };
 						self._validate_model(staged);
 						return self._valid_access(context, agent, method, staged).then(function () {
-							return self._execute(context, operation, input);
+
+							// should we throw an error or return an empty set?
+							//throw new Error("Access record cannot be modified")
+							return self.empty_update_response
+
+							//return self._execute(context, operation, input);
 						});
 					});
 				} else {
@@ -559,7 +556,6 @@ class AccessSystemModel extends SystemModel {
 		} else {
 			throw new Error(`Field 'where.${self.key_id}' is required`);
 		}
-		*/
 	}
 	_update(context, scope, parameters, realm) {
 		const self = this;
