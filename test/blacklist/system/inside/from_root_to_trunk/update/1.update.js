@@ -45,7 +45,7 @@ const expected = `{
     "data": {
         "update_blacklist": []
     }
-}`
+}`;
 
 export default {
 	step: 1,

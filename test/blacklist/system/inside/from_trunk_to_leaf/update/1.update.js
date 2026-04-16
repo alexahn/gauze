@@ -45,7 +45,7 @@ const expected = `{
     "data": {
         "update_blacklist": []
     }
-}`
+}`;
 /*
 const expected = `{
     "data": {

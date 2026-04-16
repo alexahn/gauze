@@ -34,7 +34,7 @@ const expected = `{
                     "id": "55c29b50-5e24-447d-8505-75e82c2aa8cc"
                 },
                 "attributes": {
-                    "gauze__whitelist__agent_id": "00000000-0000-0000-0000-000000000003",
+                    "gauze__whitelist__agent_id": "00000000-0000-0000-0000-000000000002",
                     "gauze__whitelist__agent_role": "trunk"
                 }
             }
