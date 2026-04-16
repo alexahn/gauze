@@ -1115,25 +1115,25 @@ class DatabaseModel extends Model {
 	}
 	_root_count(context, scope, parameters) {
 		const self = this;
-		return context.database_manager.route_transactions(context, scope, parameters, self, "write").then(function (shards) {
+		return context.database_manager.route_transactions(context, scope, parameters, self, "read").then(function (shards) {
 			return Promise.all(
 				shards.map(function (shard) {
 					return self._root_count_transaction(context, scope, parameters, shard.connection, shard.transaction);
 				}),
 			).then(function (results) {
 				// merge results
-				const merged = {}
+				const merged = {};
 				results.forEach(function (result) {
-					const keys = Object.keys(result)
+					const keys = Object.keys(result);
 					keys.forEach(function (key) {
 						if (merged[key]) {
-							merged[key] += result[key]
+							merged[key] += result[key];
 						} else {
-							merged[key] = result[key]
+							merged[key] = result[key];
 						}
-					})
-				})
-				return merged
+					});
+				});
+				return merged;
 			});
 		});
 	}
@@ -1200,7 +1200,20 @@ class DatabaseModel extends Model {
 						return self._relationship_count_transaction(context, scope, parameters, shard.connection, shard.transaction);
 					}),
 				).then(function (results) {
-					return results.flat();
+					// merge results
+					const merged = {};
+					results.forEach(function (result) {
+						const keys = Object.keys(result);
+						keys.forEach(function (key) {
+							if (merged[key]) {
+								merged[key] += result[key];
+							} else {
+								merged[key] = result[key];
+							}
+						});
+					});
+					return merged;
+					//return results.flat();
 				});
 			});
 		});

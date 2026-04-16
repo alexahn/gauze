@@ -245,10 +245,9 @@ class RelationshipSystemModel extends SystemModel {
 		return context.database_manager.route_transactions(context, {}, agent_parameters, agent_model, "read").then(function (shards) {
 			return Promise.all(
 				shards.map(function (shard) {
-					return self._filter_access_transaction(context, scope, parameters, realm, shard.connection, shard.transaction);
+					return self._filter_access_transaction(context, scope, parameters, realm, relationship_rows, method, shard.connection, shard.transaction);
 				}),
 			).then(function (results) {
-				console.log("filter_access_results", results);
 				return results.flat();
 			});
 		});
@@ -726,9 +725,8 @@ class RelationshipSystemModel extends SystemModel {
 		const key = self._model_batch_key(parameters, realm, "delete");
 		return self.model_loader.load(context, scope, key);
 	}
-	_count_entity(context, scope, parameters, realm) {
+	_count_entity_transaction(context, scope, parameters, realm, database, transaction) {
 		const self = this;
-		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const { agent_id } = agent;
 		const method = "count";
@@ -747,9 +745,8 @@ class RelationshipSystemModel extends SystemModel {
 			});
 		});
 	}
-	_count_entity_in(context, scope, parameters, realm) {
+	_count_entity_in_transaction(context, scope, parameters, realm, database, transaction) {
 		const self = this;
-		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const { agent_id } = agent;
 		const method = "count";
@@ -777,7 +774,7 @@ class RelationshipSystemModel extends SystemModel {
 			});
 		});
 	}
-	_count_from(context, scope, parameters, realm) {
+	_count_from_transaction(context, scope, parameters, realm, database, transaction) {
 		// check that from policy aligns
 		// get list of relationship
 		// intersect with agent whitelist or blacklist based on policy by doing a where in query (this could work if we leverage the fact that uuids rarely have collisions)
@@ -785,7 +782,6 @@ class RelationshipSystemModel extends SystemModel {
 		// do an in memory join basically
 		// final set of relationships the user has access to
 		const self = this;
-		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const { agent_id } = agent;
 		const method = "count";
@@ -821,7 +817,7 @@ class RelationshipSystemModel extends SystemModel {
 				}
 			});
 	}
-	_count_to(context, scope, parameters, realm) {
+	_count_to_transaction(context, scope, parameters, realm, database, transaction) {
 		// check that from policy aligns
 		// get list of relationship
 		// intersect with agent whitelist or blacklist based on policy by doing a where in query (this could work if we leverage the fact that uuids rarely have collisions)
@@ -829,7 +825,6 @@ class RelationshipSystemModel extends SystemModel {
 		// do an in memory join basically
 		// final set of relationships the user has access to
 		const self = this;
-		const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const { agent_id } = agent;
 		const method = "count";
@@ -865,9 +860,23 @@ class RelationshipSystemModel extends SystemModel {
 			});
 	}
 	_root_count(context, scope, parameters, realm) {
-		const self = this
-		const { database, transaction } = context
-		return self._root_count_transaction(context, scope, parameters, realm, database, transaction)
+		const self = this;
+		// note: shard type is read because _root_count_transaction only does a read
+		return context.database_manager.route_transactions(context, scope, parameters, self, "read").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._root_count_transaction(context, scope, parameters, realm, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				// stitch together results and build response
+				const rows = results
+					.map(function (result) {
+						return result.data[`count_${self.entity.name}`];
+					})
+					.flat();
+				return self.generate_response("count", rows);
+			});
+		});
 	}
 	_root_count_transaction(context, scope, parameters, realm, database, transaction) {
 		const self = this;
@@ -897,7 +906,7 @@ class RelationshipSystemModel extends SystemModel {
 			});
 		} else if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__to_id) {
 			self._validate_entity_types(parameters.where);
-			return self._count_entity(context, scope, parameters, realm);
+			return self._count_entity_transaction(context, scope, parameters, realm, database, transaction);
 		} else if (
 			parameters.where_in &&
 			parameters.where_in.gauze__relationship__from_id &&
@@ -905,11 +914,11 @@ class RelationshipSystemModel extends SystemModel {
 			parameters.where_in.gauze__relationship__to_id &&
 			parameters.where_in.gauze__relationship__to_id.length
 		) {
-			return self._read_entity_in(context, scope, parameters, realm);
+			return self._count_entity_in_transaction(context, scope, parameters, realm, database, transaction);
 		} else if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__from_type) {
-			return self._count_from(context, scope, parameters, realm);
+			return self._count_from_transaction(context, scope, parameters, realm, database, transaction);
 		} else if (parameters.where && parameters.where.gauze__relationship__to_id && parameters.where.gauze__relationship__to_type) {
-			return self._count_to(context, scope, parameters, realm);
+			return self._count_to_transaction(context, scope, parameters, realm, database, transaction);
 		} else {
 			throw new Error(
 				"Field 'where.gauze__relationship__id' is required or (Field 'where_in.gauze__relationship__from_id' and where_in.gauze__relationship__to_id' are required) or (Field 'where.gauze__relationship__from_id' and 'where.gauze__relationship__from_type' are required) or (Field 'where.gauze__relationship__to_id' and 'where.gauze__relationship__to_type' are required)",

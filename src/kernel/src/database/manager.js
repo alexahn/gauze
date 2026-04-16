@@ -451,7 +451,8 @@ class DatabaseManager {
 					}
 				} else {
 					// use relationships to constrain the set of connections we need to check
-					return [];
+					return self.get_all_shards_nodes(model.table_name, shard_type);
+					//return [];
 				}
 			} else if (parameters.attributes) {
 				if (parameters.attributes[model.primary_key]) {
