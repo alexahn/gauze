@@ -6,7 +6,7 @@ import * as $abstract from "./../abstract/index.js";
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const TEST_ENVIRONMENT = "TEST";
+const TEST_ENVIRONMENT = "test";
 const DEVELOPMENT_ENVIRONMENT = "development";
 const STAGING_ENVIRONMENT = "staging";
 const PRODUCTION_ENVIRONMENT = "production";
@@ -812,14 +812,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -831,14 +831,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -863,14 +863,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -882,14 +882,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -914,14 +914,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -933,14 +933,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -965,14 +965,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -984,14 +984,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1016,14 +1016,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1035,14 +1035,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1067,14 +1067,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1086,14 +1086,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1118,14 +1118,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1137,14 +1137,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1169,14 +1169,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1188,14 +1188,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1220,14 +1220,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1239,14 +1239,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1271,14 +1271,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1290,14 +1290,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1322,14 +1322,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1341,14 +1341,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1373,14 +1373,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1392,14 +1392,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1424,14 +1424,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1443,14 +1443,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1475,14 +1475,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1494,14 +1494,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1526,14 +1526,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},
@@ -1545,14 +1545,14 @@ const CONFIG__DATABASE = {
 							config: {
 								client: "better-sqlite3",
 								connection: {
-									filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
+									filename: path.join(__dirname, "../../", `${TEST_ENVIRONMENT}.sqlite3`),
 								},
 								migrations: {
 									tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
 									directory: path.join(__dirname, "migrations"),
 								},
 								seeds: {
-									directory: path.join(__dirname, "seeds", DEVELOPMENT_ENVIRONMENT),
+									directory: path.join(__dirname, "seeds", TEST_ENVIRONMENT),
 								},
 							},
 						},

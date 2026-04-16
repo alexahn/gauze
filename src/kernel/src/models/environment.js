@@ -76,7 +76,7 @@ class EnvironmentModel extends Model {
 				}
 			}),
 		).then(function (results) {
-			if (process.env.GAUZE_ENV === "TEST") {
+			if (process.env.GAUZE_ENV === "test") {
 				self.clearAll();
 			}
 			return results;
