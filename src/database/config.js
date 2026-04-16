@@ -30,7 +30,6 @@ const gauze__table = $abstract.entities.gauze ? $abstract.entities.gauze.default
 const CONFIG__DATABASE = {
 	[DEVELOPMENT_ENVIRONMENT]: {
 		[relationship__table]: {
-			transaction_isolation_level: "read committed",
 			// connection_router: function () {},
 			previous: [],
 			current: [
@@ -42,6 +41,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${relationship__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -61,6 +61,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${relationship__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -82,7 +83,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[whitelist__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -93,6 +93,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${whitelist__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -112,6 +113,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${whitelist__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -133,7 +135,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[blacklist__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -144,6 +145,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${blacklist__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -163,6 +165,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${blacklist__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -184,7 +187,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[proxy__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -195,6 +197,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${proxy__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -214,6 +217,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${proxy__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -235,7 +239,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[secret__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -246,6 +249,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${secret__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -265,6 +269,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${secret__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -286,7 +291,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[session__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -297,6 +301,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${session__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -316,6 +321,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${session__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -337,7 +343,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[agent_root__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -348,6 +353,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_root__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -367,6 +373,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_root__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -388,7 +395,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[agent_account__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -399,6 +405,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_account__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -418,6 +425,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_account__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -439,7 +447,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[agent_user__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -450,6 +457,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_user__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -469,6 +477,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_user__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -490,7 +499,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[agent_person__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -501,6 +509,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_person__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -520,6 +529,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_person__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -541,7 +551,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[agent_character__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -552,6 +561,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_character__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -571,6 +581,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_character__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -592,7 +603,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[ezuag__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -603,6 +613,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${ezuag__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -622,6 +633,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${ezuag__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -643,7 +655,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[ytitne__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -654,6 +665,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${ytitne__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -673,6 +685,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${ytitne__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -694,7 +707,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[entity__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -705,6 +717,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${entity__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -724,6 +737,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${entity__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -745,7 +759,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[gauze__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -756,6 +769,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${gauze__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -775,6 +789,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${gauze__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -798,7 +813,6 @@ const CONFIG__DATABASE = {
 	},
 	[TEST_ENVIRONMENT]: {
 		[relationship__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -809,6 +823,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${relationship__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -828,6 +843,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${relationship__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -849,7 +865,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[whitelist__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -860,6 +875,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${whitelist__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -879,6 +895,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${whitelist__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -900,7 +917,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[blacklist__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -911,6 +927,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${blacklist__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -930,6 +947,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${blacklist__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -951,7 +969,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[proxy__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -962,6 +979,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${proxy__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -981,6 +999,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${proxy__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1002,7 +1021,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[secret__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -1013,6 +1031,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${secret__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1032,6 +1051,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${secret__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1053,7 +1073,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[session__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -1064,6 +1083,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${session__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1083,6 +1103,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${session__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1104,7 +1125,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[agent_root__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -1115,6 +1135,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_root__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1134,6 +1155,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_root__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1155,7 +1177,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[agent_account__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -1166,6 +1187,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_account__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1185,6 +1207,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_account__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1206,7 +1229,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[agent_user__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -1217,6 +1239,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_user__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1236,6 +1259,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_user__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1257,7 +1281,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[agent_person__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -1268,6 +1291,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_person__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1287,6 +1311,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_person__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1308,7 +1333,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[agent_character__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -1319,6 +1343,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_character__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1338,6 +1363,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${agent_character__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1359,7 +1385,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[ezuag__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -1370,6 +1395,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${ezuag__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1389,6 +1415,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${ezuag__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1410,7 +1437,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[ytitne__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -1421,6 +1447,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${ytitne__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1440,6 +1467,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${ytitne__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1461,7 +1489,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[entity__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -1472,6 +1499,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${entity__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1491,6 +1519,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${entity__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1512,7 +1541,6 @@ const CONFIG__DATABASE = {
 			next: [],
 		},
 		[gauze__table]: {
-			transaction_isolation_level: "read committed",
 			previous: [],
 			current: [
 				{
@@ -1523,6 +1551,7 @@ const CONFIG__DATABASE = {
 					read: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${gauze__table}.shard.1.read.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {
@@ -1542,6 +1571,7 @@ const CONFIG__DATABASE = {
 					write: [
 						{
 							id: `${DEVELOPMENT_ENVIRONMENT}.${gauze__table}.shard.1.write.1`,
+							transaction_isolation_level: "read committed",
 							config: {
 								client: "better-sqlite3",
 								connection: {

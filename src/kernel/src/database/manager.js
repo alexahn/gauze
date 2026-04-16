@@ -25,15 +25,19 @@ class DatabaseManager {
 		// Insert hyphens at 8-4-4-4-12 positions
 		return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 	}
-	get_shard_node_key(shard_node_config) {
-		if (shard_node_config.client === "better-sqlite3") {
-			return shard_node_config.connection.filename;
+	get_shard_node_key(shard_node) {
+		if (shard_node.config.client === "better-sqlite3") {
+			return JSON.stringify({
+				transaction_isolation_level: shard_node.transaction_isolation_level,
+				filename: shard_node.config.connection.filename,
+			});
 		} else {
 			return JSON.stringify({
-				host: shard_node_config.connection.host,
-				port: shard_node_config.connection.port,
-				user: shard_node_config.connection.user,
-				database: shard_node_config.connection.database,
+				transaction_isolation_level: shard_node.transaction_isolation_level,
+				host: shard_node.config.connection.host,
+				port: shard_node.config.connection.port,
+				user: shard_node.config.connection.user,
+				database: shard_node.config.connection.database,
 			});
 		}
 	}
@@ -54,7 +58,7 @@ class DatabaseManager {
 				const read_nodes = shard.read;
 				const write_nodes = shard.write;
 				function create_connections(node) {
-					const node_key = self.get_shard_node_key(node.config);
+					const node_key = self.get_shard_node_key(node);
 					node.key = node_key;
 					if (self.connections[node_key]) {
 						node.knex = self.connections[node_key];
@@ -517,9 +521,20 @@ class DatabaseManager {
 					});
 				} else {
 					const transaction_promise = new Promise(function (resolve, reject) {
+						// TODO: read isolation level from database config
+						return connection.knex
+							.transaction({ isolationLevel: "read committed" })
+							.then(function (trx) {
+								return resolve(trx);
+							})
+							.catch(function (err) {
+								return reject(err);
+							});
+						/*
 						connection.knex.transaction(function (transaction) {
 							resolve(transaction);
 						});
+						*/
 					});
 					context.transactions[connection.key] = transaction_promise;
 					return transaction_promise.then(function (transaction) {
