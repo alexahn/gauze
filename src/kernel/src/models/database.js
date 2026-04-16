@@ -1121,8 +1121,19 @@ class DatabaseModel extends Model {
 					return self._root_count_transaction(context, scope, parameters, shard.connection, shard.transaction);
 				}),
 			).then(function (results) {
-				console.log("COUNT RESULTS", results);
-				return results.flat();
+				// merge results
+				const merged = {}
+				results.forEach(function (result) {
+					const keys = Object.keys(result)
+					keys.forEach(function (key) {
+						if (merged[key]) {
+							merged[key] += result[key]
+						} else {
+							merged[key] = result[key]
+						}
+					})
+				})
+				return merged
 			});
 		});
 	}

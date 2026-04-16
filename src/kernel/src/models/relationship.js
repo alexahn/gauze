@@ -865,8 +865,13 @@ class RelationshipSystemModel extends SystemModel {
 			});
 	}
 	_root_count(context, scope, parameters, realm) {
+		const self = this
+		const { database, transaction } = context
+		return self._root_count_transaction(context, scope, parameters, realm, database, transaction)
+	}
+	_root_count_transaction(context, scope, parameters, realm, database, transaction) {
 		const self = this;
-		const { database, transaction } = context;
+		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const method = "count";
 		entity.entity_method = method;
