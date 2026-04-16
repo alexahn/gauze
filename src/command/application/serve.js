@@ -66,6 +66,11 @@ export const handler = function (argv) {
 		console.log("Unhandled Rejection at:", promise, "reason:", reason);
 	});
 
+	// this is called once the exit trajectory has been set
+	process.on("exit", function (val) {
+		$gauze.database.manager.default.destroy_connections();
+	});
+
 	// asynchronous import here to avoid static dependency linking failing
 	import("./../../router.js").then(function (module) {
 		const Router = module.default;

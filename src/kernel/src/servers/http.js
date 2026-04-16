@@ -3,7 +3,7 @@ const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
 import * as $project from "./../../../gauze.js";
 
-const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, database, database_manager, authenticators, schema }, ctx, next) {
+const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, database_manager, authenticators, schema }, ctx, next) {
 	// 404 is the default response status
 	return (
 		new Promise(function (resolve, reject) {
@@ -46,27 +46,22 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 				const { agent } = collection;
 				//if (!agent) throw new Error("Missing agent dependency for creating context")
 				return new Promise(function (resolve, reject) {
-					database.transaction(function (transaction) {
-						const context = {};
-						context.project = $project;
-						context.realm = $realm;
-						context.database = database;
-						context.database_manager = database_manager;
-						context.transaction = transaction;
-						context.transactions = {};
-						context.agent = agent;
-						return resolve({
-							...collection,
-							context,
-						});
+					const context = {};
+					context.project = $project;
+					context.realm = $realm;
+					context.database_manager = database_manager;
+					context.transactions = {};
+					context.agent = agent;
+					return resolve({
+						...collection,
+						context,
 					});
 				});
 			})
 			.then(function (collection) {
 				const { context } = collection;
 				if (!context) throw new Error("Missing context dependency for verifying jwt");
-				const { transaction, agent } = context;
-				if (!transaction) throw new Error("Missing transaction dependency for verifying jwt");
+				const { agent, database_manager } = context;
 				if (agent) {
 					return $gauze.environment.authentication
 						.VERIFY_JWT_PAYLOAD(context, context.agent)
@@ -80,8 +75,9 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 							// note: rollback can error
 							$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "session", err);
 							// note: passing in an error to the rollback call somehow causes an uncaught exception (do not pass anything in)
-							return transaction
-								.rollback()
+
+							return database_manager
+								.rollback_context_transactions(context)
 								.then(function () {
 									$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION UNAUTHORIZED REVERTED");
 									ctx.response.status = 401;
@@ -127,8 +123,7 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 			.then(function (collection) {
 				const { context } = collection;
 				if (!context) throw new Error("Missing context dependency for executing graphql query");
-				const { transaction } = context;
-				if (!transaction) throw new Error("Missing transaction dependency for executing graphql query");
+				const { database_manager } = context;
 				return $gauze.kernel.src.shell.graphql
 					.EXECUTE__GRAPHQL__SHELL__SRC__KERNEL({
 						schema: schema,
@@ -142,8 +137,8 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 						if (data.errors && data.errors.length) {
 							$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "errors", data.errors);
 							// note: rollback can error
-							return transaction
-								.rollback()
+							return database_manager
+								.rollback_context_transactions(context)
 								.then(function () {
 									$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION REVERTED");
 									ctx.response.status = 400;
@@ -164,8 +159,8 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 								});
 						} else {
 							// note: commit can error
-							return transaction
-								.commit(data)
+							return database_manager
+								.commit_context_transactions(context)
 								.then(function () {
 									$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION COMMITTED");
 									//ctx.response.status = 200
@@ -194,8 +189,8 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 							message: "Internal Server Error",
 						});
 						// note: rollback can error
-						return transaction
-							.rollback()
+						return database_manager
+							.rollback_context_transactions(context)
 							.then(function () {
 								$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("2", __RELATIVE_FILEPATH, "request", "TRANSACTION UNEXPECTED REVERTED");
 								return collection;

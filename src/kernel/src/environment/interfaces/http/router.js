@@ -5,7 +5,6 @@ import * as $realm from "./../../gauze.js";
 export default function ($gauze) {
 	const ROUTER__HTTP__INTERFACE__ENVIRONMENT = new Router();
 
-	const database = $gauze.database.knex.create_connection();
 	const database_manager = $gauze.database.manager.default;
 
 	ROUTER__HTTP__INTERFACE__ENVIRONMENT.post("/graphql", function (ctx, next) {
@@ -13,7 +12,6 @@ export default function ($gauze) {
 			{
 				$gauze: $gauze,
 				$realm: $realm,
-				database: database,
 				database_manager: database_manager,
 				authenticators: [
 					$gauze.environment.authentication.AUTHENTICATE_ENVIRONMENT__AUTHENTICATION__ENVIRONMENT,
