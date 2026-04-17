@@ -25,12 +25,13 @@ class GauzeTerminal {
 		// this is called once the exit trajectory has been set
 		process.on("exit", function (val) {
 			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `process.exit: ${val}`);
+			$gauze.database.manager.default.destroy_connections();
 		});
 	}
-	create_graphql_shell(schema, database) {
+	create_graphql_shell(schema, database_manager) {
 		return function (operation, operation_name, operation_variables) {
 			return $gauze.kernel.src.shell.graphql
-				.TRANSACTION_EXECUTE__GRAPHQL__SHELL__SRC__KERNEL(database, {
+				.TRANSACTION_EXECUTE__GRAPHQL__SHELL__SRC__KERNEL(database_manager, {
 					schema,
 					operation,
 					operation_name,
@@ -47,18 +48,17 @@ class GauzeTerminal {
 		// todo: gauze vs $gauze?
 		shell.context.$gauze = this.$gauze;
 		shell.context.gauze = {};
-		shell.context.gauze.database = this.$gauze.database.knex.create_connection();
 		shell.context.gauze.modules = this.$gauze;
 		shell.context.gauze.execute_database_graphql = this.create_graphql_shell(
 			this.$gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
-			shell.context.gauze.database,
+			this.$gauze.database.manager.default,
 		);
+		// TODO: figure out how we can get agent passed into here. systems calls will fail without context.agent
 		shell.context.gauze.execute_system_graphql = this.create_graphql_shell(
 			this.$gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE,
-			shell.context.gauze.database,
+			this.$gauze.database.manager.default,
 		);
 		shell.context.gauze._description = {
-			database: "A Knex database connection",
 			modules: "The gauze root module (src/index.js)",
 			execute_database_graphql: "A function that accepts an operation, operation_name, and operation_variables that executes the combination against the database graphql interface",
 			execute_system_graphq: "A function that accepts an operation, operation_name, and operation_variables that executes the combination against the system graphql interface",
