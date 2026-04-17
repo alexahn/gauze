@@ -25,7 +25,6 @@ test.describe("relationships entity graphql interface system", async function (s
 		return load_steps(import.meta.dirname, "./create").then(function (steps) {
 			return run_steps(
 				{
-					database: suite_ctx.database,
 					database_manager: suite_ctx.database_manager,
 					schema: SCHEMA,
 				},
@@ -37,7 +36,6 @@ test.describe("relationships entity graphql interface system", async function (s
 		return load_steps(import.meta.dirname, "./read").then(function (steps) {
 			return run_steps(
 				{
-					database: suite_ctx.database,
 					database_manager: suite_ctx.database_manager,
 					schema: SCHEMA,
 				},
@@ -49,7 +47,6 @@ test.describe("relationships entity graphql interface system", async function (s
 		return load_steps(import.meta.dirname, "./update").then(function (steps) {
 			return run_steps(
 				{
-					database: suite_ctx.database,
 					database_manager: suite_ctx.database_manager,
 					schema: SCHEMA,
 				},
@@ -61,7 +58,6 @@ test.describe("relationships entity graphql interface system", async function (s
 		return load_steps(import.meta.dirname, "./delete").then(function (steps) {
 			return run_steps(
 				{
-					database: suite_ctx.database,
 					database_manager: suite_ctx.database_manager,
 					schema: SCHEMA,
 				},

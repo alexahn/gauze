@@ -25,7 +25,6 @@ test.describe("(inside - from root to trunk) blacklist graphql interface system"
 			return load_steps(import.meta.dirname, "./create").then(function (steps) {
 				return run_layers(
 					{
-						database: suite_ctx.database,
 						database_manager: suite_ctx.database_manager,
 					},
 					[
@@ -41,7 +40,6 @@ test.describe("(inside - from root to trunk) blacklist graphql interface system"
 			return load_steps(import.meta.dirname, "./read").then(function (steps) {
 				return run_layers(
 					{
-						database: suite_ctx.database,
 						database_manager: suite_ctx.database_manager,
 					},
 					[
@@ -57,7 +55,6 @@ test.describe("(inside - from root to trunk) blacklist graphql interface system"
 			return load_steps(import.meta.dirname, "./update").then(function (steps) {
 				return run_layers(
 					{
-						database: suite_ctx.database,
 						database_manager: suite_ctx.database_manager,
 					},
 					[
@@ -73,7 +70,6 @@ test.describe("(inside - from root to trunk) blacklist graphql interface system"
 			return load_steps(import.meta.dirname, "./delete").then(function (steps) {
 				return run_layers(
 					{
-						database: suite_ctx.database,
 						database_manager: suite_ctx.database_manager,
 					},
 					[
