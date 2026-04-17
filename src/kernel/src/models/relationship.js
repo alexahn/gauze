@@ -571,7 +571,7 @@ class RelationshipSystemModel extends SystemModel {
 			parameters.where.gauze__relationship__to_type
 		) {
 			self._validate_entity_types(parameters.where);
-			return self._read_entity(context, scope, parameters, realm);
+			return self._read_entity_transaction(context, scope, parameters, realm, database, transaction);
 		} else if (
 			parameters.where_in &&
 			parameters.where_in.gauze__relationship__from_id &&
