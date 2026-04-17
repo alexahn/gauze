@@ -24,7 +24,7 @@ const expected = `{
             }
         ]
     }
-}`
+}`;
 
 export default {
 	step: 1,
