@@ -1073,4 +1073,7 @@
 		[ ] mostly we will be splitting where_in[primary_key] into buckets so we can get around the bind limit
 [ ] if write transaction is already open for a shard, then use it instead of getting a read transaction
 [ ] gauze migrate refactoring
-	[ ] we need to run all knex commands over every shard
+	[ ] we need to run all knex commands over every shardq
+[ ] get rid of test seed data
+	[ ] every test should be self-contained
+	[ ] the seeds are only used for ytitne (since the methods are private)

@@ -586,6 +586,132 @@ class DatabaseManager {
 			return connection.destroy();
 		});
 	}
+	get_write_shard_nodes() {
+		const self = this;
+		const write_shards = Object.keys(self.databases)
+			.map(function (table_name) {
+				const table = self.databases[table_name];
+				const shards = table.current;
+				return shards
+					.map(function (shard) {
+						const write_shards = shard.write;
+						return write_shards.map(function (write_shard) {
+							return {
+								table_name: table_name,
+								shard: shard,
+								shard_node: write_shard,
+							};
+						});
+					})
+					.flat();
+			})
+			.flat();
+		return write_shards;
+	}
+	run_with_first_write_shard_node(run) {
+		const self = this;
+		const write_shards = self.get_write_shard_nodes();
+		if (write_shards && write_shards.length) {
+			const first_write_shard = write_shards[0];
+			return run(first_write_shard.table_name, first_write_shard.shard, first_write_shard.shard_node);
+		} else {
+			throw new Error("No write shards found in database configuration");
+		}
+	}
+	// accepts a function (table_name, shard, shard_node)
+	run_with_write_shard_nodes(run) {
+		const self = this;
+		const write_shards = self.get_write_shard_nodes();
+		return Promise.all(
+			write_shards.map(function (write_shard) {
+				return run(write_shard.table_name, write_shard.shard, write_shard.shard_node);
+			}),
+		);
+	}
+	migrate_make(name) {
+		const self = this;
+		return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
+			return shard_node.knex.migrate.make(name, shard_node.config.migrations);
+		});
+	}
+	migrate_latest() {
+		const self = this;
+		return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
+			return shard_node.knex.migrate.latest(shard_node.config.migrations);
+		});
+	}
+	migrate_rollback() {
+		const self = this;
+		return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
+			return shard_node.knex.migrate.rollback(shard_node.config.migrations);
+		});
+	}
+	migrate_up(name) {
+		const self = this;
+		return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
+			const config = JSON.parse(JSON.stringify(shard_node.config.migrations));
+			config.name = name;
+			return shard_node.knex.migrate.up(config);
+		});
+	}
+	migrate_down(name) {
+		const self = this;
+		return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
+			const config = JSON.parse(JSON.stringify(shard_node.config.migrations));
+			config.name = name;
+			return shard_node.knex.migrate.down(config);
+		});
+	}
+	migrate_current_version() {
+		const self = this;
+		const write_shards = self.get_write_shard_nodes();
+		return Promise.all(
+			write_shards.map(function (write_shard) {
+				return write_shard.shard_node.knex.migrate.currentVersion(write_shard.shard_node.config.migrations).then(function (version) {
+					return {
+						table_name: write_shard.table_name,
+						shard_id: write_shard.shard.id,
+						shard_node_id: write_shard.shard_node.id,
+						version: version,
+					};
+				});
+			}),
+		);
+	}
+	migrate_list() {
+		const self = this;
+		const write_shards = self.get_write_shard_nodes();
+		return Promise.all(
+			write_shards.map(function (write_shard) {
+				return write_shard.shard_node.knex.migrate.list(write_shard.shard_node.config.migrations).then(function (list) {
+					return {
+						table_name: write_shard.table_name,
+						shard_id: write_shard.shard.id,
+						shard_node_id: write_shard.shard_node.id,
+						completed_migrations: list[0],
+						pending_migrations: list[1],
+					};
+				});
+			}),
+		);
+	}
+	migrate_unlock() {
+		const self = this;
+		return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
+			return shard_node.knex.migrate.unlock(shard_node.config.migrations);
+		});
+	}
+	seed_make(name) {
+		return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
+			return shard_node.knex.seed.make(name, shard_node.config.seeds);
+		});
+	}
+	seed_run() {
+		const self = this;
+		return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
+			return shard_node.knex.seed.run(shard_node.config.seeds);
+		});
+	}
 }
 
 const DATABASE_MANAGER__MANAGER__DATABASE__SRC__KERNEL = DatabaseManager;
