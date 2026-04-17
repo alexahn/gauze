@@ -25,7 +25,7 @@ class DatabaseManager {
 		// Insert hyphens at 8-4-4-4-12 positions
 		return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 	}
-	get_shard_node_key(shard_node) {
+	get_shard_node_connection_key(shard_node) {
 		if (shard_node.config.client === "better-sqlite3") {
 			return JSON.stringify({
 				transaction_isolation_level: shard_node.transaction_isolation_level,
@@ -38,6 +38,41 @@ class DatabaseManager {
 				port: shard_node.config.connection.port,
 				user: shard_node.config.connection.user,
 				database: shard_node.config.connection.database,
+			});
+		}
+	}
+	get_shard_node_migration_key(shard_node) {
+		const self = this;
+		if (shard_node.config.client === "better-sqlite3") {
+			return JSON.stringify({
+				filename: shard_node.config.connection.filename,
+				directory: shard_node.config.migrations.directory,
+			});
+		} else {
+			return JSON.stringify({
+				host: shard_node.config.connection.host,
+				port: shard_node.config.connection.port,
+				user: shard_node.config.connection.user,
+				database: shard_node.config.connection.database,
+				directory: shard_node.config.migrations.directory,
+			});
+		}
+	}
+	get_shard_node_seed_key(shard_node) {
+		const self = this;
+		const connection_key = self.get_shard_node_connection_key(shard_node);
+		if (shard_node.config.client === "better-sqlite3") {
+			return JSON.stringify({
+				filename: shard_node.config.connection.filename,
+				directory: shard_node.config.seeds.directory,
+			});
+		} else {
+			return JSON.stringify({
+				host: shard_node.config.connection.host,
+				port: shard_node.config.connection.port,
+				user: shard_node.config.connection.user,
+				database: shard_node.config.connection.database,
+				directory: shard_node.config.seeds.directory,
 			});
 		}
 	}
@@ -58,7 +93,7 @@ class DatabaseManager {
 				const read_nodes = shard.read;
 				const write_nodes = shard.write;
 				function create_connections(node) {
-					const node_key = self.get_shard_node_key(node);
+					const node_key = self.get_shard_node_connection_key(node);
 					node.key = node_key;
 					if (self.connections[node_key]) {
 						node.knex = self.connections[node_key];
@@ -608,6 +643,42 @@ class DatabaseManager {
 			.flat();
 		return write_shards;
 	}
+	get_migration_nodes() {
+		const self = this;
+		const write_shards = self.get_write_shard_nodes();
+		const write_shards_with_keys = write_shards.map(function (write_shard) {
+			return {
+				...write_shard,
+				key: self.get_shard_node_migration_key(write_shard.shard_node),
+			};
+		});
+		const migration_nodes = [
+			...new Map(
+				write_shards_with_keys.map(function (item) {
+					return [item.key, item];
+				}),
+			).values(),
+		];
+		return migration_nodes;
+	}
+	get_seed_nodes() {
+		const self = this;
+		const write_shards = self.get_write_shard_nodes();
+		const write_shards_with_keys = write_shards.map(function (write_shard) {
+			return {
+				...write_shard,
+				key: self.get_shard_node_seed_key(write_shard.shard_node),
+			};
+		});
+		const seed_nodes = [
+			...new Map(
+				write_shards_with_keys.map(function (item) {
+					return [item.key, item];
+				}),
+			).values(),
+		];
+		return seed_nodes;
+	}
 	run_with_first_write_shard_node(run) {
 		const self = this;
 		const write_shards = self.get_write_shard_nodes();
@@ -628,163 +699,106 @@ class DatabaseManager {
 			}),
 		);
 	}
+	run_with_nodes(nodes, run) {
+		const self = this;
+		return Promise.all(
+			nodes.map(function (node) {
+				return run(node.table_name, node.shard, node.shard_node);
+			}),
+		);
+	}
 	migrate_make(name) {
 		const self = this;
-		return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
+		const migration_nodes = self.get_migration_nodes();
+		return self.run_with_nodes(migration_nodes, function (table_name, shard, shard_node) {
 			return shard_node.knex.migrate.make(name, shard_node.config.migrations);
 		});
 	}
-	migrate_latest(mode) {
+	migrate_latest() {
 		const self = this;
-		if (mode === "single") {
-			return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
-				return shard_node.knex.migrate.latest(shard_node.config.migrations);
-			});
-		} else if (mode === "all") {
-			return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
-				return shard_node.knex.migrate.latest(shard_node.config.migrations);
-			});
-		}
+		const migration_nodes = self.get_migration_nodes();
+		return self.run_with_nodes(migration_nodes, function (table_name, shard, shard_node) {
+			return shard_node.knex.migrate.latest(shard_node.config.migrations);
+		});
 	}
-	migrate_rollback(mode) {
+	migrate_rollback() {
 		const self = this;
-		if (mode === "single") {
-			return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
-				return shard_node.knex.migrate.rollback(shard_node.config.migrations);
-			});
-		} else if (mode === "all") {
-			return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
-				return shard_node.knex.migrate.rollback(shard_node.config.migrations);
-			});
-		}
+		const migration_nodes = self.get_migration_nodes();
+		return self.run_with_nodes(migration_nodes, function (table_name, shard, shard_node) {
+			return shard_node.knex.migrate.rollback(shard_node.config.migrations);
+		});
 	}
-	migrate_up(mode, name) {
+	migrate_up(name) {
 		const self = this;
-		if (mode === "single") {
-			return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
-				const config = JSON.parse(JSON.stringify(shard_node.config.migrations));
-				config.name = name;
-				return shard_node.knex.migrate.up(config);
-			});
-		} else if (mode === "all") {
-			return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
-				const config = JSON.parse(JSON.stringify(shard_node.config.migrations));
-				config.name = name;
-				return shard_node.knex.migrate.up(config);
-			});
-		}
+		const migration_nodes = self.get_migration_nodes();
+		return self.run_with_nodes(migration_nodes, function (table_name, shard, shard_node) {
+			const config = JSON.parse(JSON.stringify(shard_node.config.migrations));
+			config.name = name;
+			return shard_node.knex.migrate.up(config);
+		});
 	}
-	migrate_down(mode, name) {
+	migrate_down(name) {
 		const self = this;
-		if (mode === "single") {
-			return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
-				const config = JSON.parse(JSON.stringify(shard_node.config.migrations));
-				config.name = name;
-				return shard_node.knex.migrate.down(config);
-			});
-		} else if (mode === "all") {
-			return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
-				const config = JSON.parse(JSON.stringify(shard_node.config.migrations));
-				config.name = name;
-				return shard_node.knex.migrate.down(config);
-			});
-		}
+		const migration_nodes = self.get_migration_nodes();
+		return self.run_with_nodes(migration_nodes, function (table_name, shard, shard_node) {
+			const config = JSON.parse(JSON.stringify(shard_node.config.migrations));
+			config.name = name;
+			return shard_node.knex.migrate.down(config);
+		});
 	}
-	migrate_current_version(mode) {
+	migrate_current_version() {
 		const self = this;
 		const write_shards = self.get_write_shard_nodes();
-		if (mode === "single") {
-			return Promise.all(
-				write_shards.slice(0, 1).map(function (write_shard) {
-					return write_shard.shard_node.knex.migrate.currentVersion(write_shard.shard_node.config.migrations).then(function (version) {
-						return {
-							table_name: write_shard.table_name,
-							shard_id: write_shard.shard.id,
-							shard_node_id: write_shard.shard_node.id,
-							version: version,
-						};
-					});
-				}),
-			);
-		} else if (mode === "all") {
-			return Promise.all(
-				write_shards.map(function (write_shard) {
-					return write_shard.shard_node.knex.migrate.currentVersion(write_shard.shard_node.config.migrations).then(function (version) {
-						return {
-							table_name: write_shard.table_name,
-							shard_id: write_shard.shard.id,
-							shard_node_id: write_shard.shard_node.id,
-							version: version,
-						};
-					});
-				}),
-			);
-		}
+		return Promise.all(
+			write_shards.map(function (write_shard) {
+				return write_shard.shard_node.knex.migrate.currentVersion(write_shard.shard_node.config.migrations).then(function (version) {
+					return {
+						table_name: write_shard.table_name,
+						shard_id: write_shard.shard.id,
+						shard_node_id: write_shard.shard_node.id,
+						version: version,
+					};
+				});
+			}),
+		);
 	}
-	migrate_list(mode) {
+	migrate_list() {
 		const self = this;
 		const write_shards = self.get_write_shard_nodes();
-		if (mode === "single") {
-			return Promise.all(
-				write_shards.slice(0, 1).map(function (write_shard) {
-					return write_shard.shard_node.knex.migrate.list(write_shard.shard_node.config.migrations).then(function (list) {
-						return {
-							table_name: write_shard.table_name,
-							shard_id: write_shard.shard.id,
-							shard_node_id: write_shard.shard_node.id,
-							completed_migrations: list[0],
-							pending_migrations: list[1],
-						};
-					});
-				}),
-			);
-		} else if (mode === "all") {
-			return Promise.all(
-				write_shards.map(function (write_shard) {
-					return write_shard.shard_node.knex.migrate.list(write_shard.shard_node.config.migrations).then(function (list) {
-						return {
-							table_name: write_shard.table_name,
-							shard_id: write_shard.shard.id,
-							shard_node_id: write_shard.shard_node.id,
-							completed_migrations: list[0],
-							pending_migrations: list[1],
-						};
-					});
-				}),
-			);
-		}
+		return Promise.all(
+			write_shards.map(function (write_shard) {
+				return write_shard.shard_node.knex.migrate.list(write_shard.shard_node.config.migrations).then(function (list) {
+					return {
+						table_name: write_shard.table_name,
+						shard_id: write_shard.shard.id,
+						shard_node_id: write_shard.shard_node.id,
+						completed_migrations: list[0],
+						pending_migrations: list[1],
+					};
+				});
+			}),
+		);
 	}
-	migrate_unlock(mode) {
+	migrate_unlock() {
 		const self = this;
-		if (mode === "single") {
-			return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
-				return shard_node.knex.migrate.unlock(shard_node.config.migrations);
-			});
-		} else if (mode === "all") {
-			return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
-				return shard_node.knex.migrate.unlock(shard_node.config.migrations);
-			});
-		}
+		const migration_nodes = self.get_migration_nodes();
+		return self.run_with_nodes(migration_nodes, function (table_name, shard, shard_node) {
+			return shard_node.knex.migrate.unlock(shard_node.config.migrations);
+		});
 	}
 	seed_make(name) {
 		const self = this;
-		return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
+		const seed_nodes = self.get_seed_nodes();
+		return self.run_with_nodes(seed_nodes, function (table_name, shard, shard_node) {
 			return shard_node.knex.seed.make(name, shard_node.config.seeds);
 		});
 	}
 	seed_run(mode) {
 		const self = this;
-		if (mode === "single") {
-			return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
-				return shard_node.knex.seed.run(shard_node.config.seeds);
-			});
-		} else if (mode === "all") {
-			return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
-				return shard_node.knex.seed.run(shard_node.config.seeds);
-			});
-		} else {
-			throw new Error("Invalid seed run mode");
-		}
+		const seed_nodes = self.get_seed_nodes();
+		return self.run_with_nodes(seed_nodes, function (table_name, shard, shard_node) {
+			return shard_node.knex.seed.run(shard_node.config.seeds);
+		});
 	}
 }
 

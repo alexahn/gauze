@@ -622,74 +622,46 @@ class GauzeManager {
 			});
 	}
 	migrate_make(name) {
+		const self = this;
+		return self.$gauze.database.manager.default.migrate_make(name).then(function () {
+			self.$gauze.database.manager.default.destroy_connections();
+		});
+		/*
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_make");
 		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${name}`;
 		this.execute(COMMAND).catch(function (err) {
 			console.error(err);
 			process.exit(1);
 		});
-	}
-	migrate_run(mode) {
-		const self = this;
-		return self.$gauze.database.manager.default.migrate_latest(mode).then(function () {
-			self.$gauze.database.manager.default.destroy_connections();
-		});
-		/*
-		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_run");
-		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR}`;
-		this.execute(COMMAND).catch(function (err) {
-			console.error(err);
-			process.exit(1);
-		});
 		*/
 	}
-	migrate_rollback(mode) {
+	migrate_run() {
 		const self = this;
-		return self.$gauze.database.manager.default.migrate_rollback(mode).then(function () {
+		return self.$gauze.database.manager.default.migrate_latest().then(function () {
 			self.$gauze.database.manager.default.destroy_connections();
 		});
-		/*
-		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_rollback");
-		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR}`;
-		this.execute(COMMAND).catch(function (err) {
-			console.error(err);
-			process.exit(1);
-		});
-		*/
 	}
-	migrate_up(mode, migration) {
+	migrate_rollback() {
 		const self = this;
-		return self.$gauze.database.manager.default.migrate_up(mode, migration).then(function () {
+		return self.$gauze.database.manager.default.migrate_rollback().then(function () {
 			self.$gauze.database.manager.default.destroy_connections();
 		});
-		/*
-		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_up");
-		const parsed_migration = typeof migration === "undefined" ? "" : migration;
-		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${parsed_migration}`;
-		this.execute(COMMAND).catch(function (err) {
-			console.error(err);
-			process.exit(1);
-		});
-		*/
 	}
-	migrate_down(mode, migration) {
+	migrate_up(migration) {
 		const self = this;
-		return self.$gauze.database.manager.default.migrate_down(mode, migration).then(function () {
+		return self.$gauze.database.manager.default.migrate_up(migration).then(function () {
 			self.$gauze.database.manager.default.destroy_connections();
 		});
-		/*
-		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_down");
-		const parsed_migration = typeof migration === "undefined" ? "" : migration;
-		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${parsed_migration}`;
-		this.execute(COMMAND).catch(function (err) {
-			console.error(err);
-			process.exit(1);
-		});
-		*/
 	}
-	migrate_current_version(mode) {
+	migrate_down(migration) {
 		const self = this;
-		return self.$gauze.database.manager.default.migrate_current_version(mode).then(function (shard_nodes) {
+		return self.$gauze.database.manager.default.migrate_down(migration).then(function () {
+			self.$gauze.database.manager.default.destroy_connections();
+		});
+	}
+	migrate_current_version() {
+		const self = this;
+		return self.$gauze.database.manager.default.migrate_current_version().then(function (shard_nodes) {
 			console.log("OBJECT:");
 			console.dir(shard_nodes, { depth: 256 });
 			const versions = shard_nodes.map(function (shard_node) {
@@ -706,9 +678,9 @@ class GauzeManager {
 			self.$gauze.database.manager.default.destroy_connections();
 		});
 	}
-	migrate_list(mode) {
+	migrate_list() {
 		const self = this;
-		return self.$gauze.database.manager.default.migrate_list(mode).then(function (shard_nodes) {
+		return self.$gauze.database.manager.default.migrate_list().then(function (shard_nodes) {
 			console.log("OBJECT:");
 			console.dir(shard_nodes, { depth: 256 });
 			// note: we probably want to change this to return JSON
@@ -716,18 +688,10 @@ class GauzeManager {
 			console.log(JSON.stringify(shard_nodes));
 			self.$gauze.database.manager.default.destroy_connections();
 		});
-		/*
-		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/migrate_list");
-		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR}`;
-		this.execute(COMMAND).catch(function (err) {
-			console.error(err);
-			process.exit(1);
-		});
-		*/
 	}
-	migrate_unlock(mode) {
+	migrate_unlock() {
 		const self = this;
-		return self.$gauze.database.manager.default.migrate_unlock(mode).then(function () {
+		return self.$gauze.database.manager.default.migrate_unlock().then(function () {
 			self.$gauze.database.manager.default.destroy_connections();
 		});
 	}
@@ -736,28 +700,12 @@ class GauzeManager {
 		return self.$gauze.database.manager.default.seed_make(name).then(function () {
 			self.$gauze.database.manager.default.destroy_connections();
 		});
-		/*
-		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/seed_make");
-		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${name}`;
-		this.execute(COMMAND).catch(function (err) {
-			console.error(err);
-			process.exit(1);
-		});
-		*/
 	}
-	seed_run(mode) {
+	seed_run() {
 		const self = this;
-		return self.$gauze.database.manager.default.seed_run(mode).then(function () {
+		return self.$gauze.database.manager.default.seed_run().then(function () {
 			self.$gauze.database.manager.default.destroy_connections();
 		});
-		/*
-		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/seed_run");
-		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR}`;
-		this.execute(COMMAND).catch(function (err) {
-			console.error(err);
-			process.exit(1);
-		});
-		*/
 	}
 }
 

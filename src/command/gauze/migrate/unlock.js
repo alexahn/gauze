@@ -10,24 +10,19 @@ config({
 
 import * as $gauze from "./../../../index.js";
 
-export const command = "make <name>";
+export const command = "unlock";
 
-export const describe = "Create a migration file";
+export const describe = "Forcibly unlock the migrations lock table";
 
 export const builder = function (yargs) {
-	return yargs.env("GAUZE_PROJECT_MIGRATE").option("name", {
-		//alias: 'r',
-		describe: "The gauze name of the migration that will be created",
-		type: "string",
-		requiresArg: true,
-	});
+	return yargs.env("GAUZE_PROJECT_MIGRATE");
 	//.wrap(128)
 };
 
 export const handler = function (argv) {
 	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
 	const MANAGER = $gauze.kernel.src.applications.manager.GAUZE__MANAGER__APPLICATION__SRC__KERNEL({ $gauze });
-	return MANAGER.migrate_make(argv.name).then(function () {
-		console.log("Migration file created successfully");
+	return MANAGER.migrate_unlock().then(function () {
+		console.log("Migrate unlock completed successfully");
 	});
 };

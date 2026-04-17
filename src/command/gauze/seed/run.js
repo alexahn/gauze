@@ -10,22 +10,19 @@ config({
 
 import * as $gauze from "./../../../index.js";
 
-export const command = "run <mode>";
+export const command = "run";
 
 export const describe = "Run gauze seeds";
 
 export const builder = function (yargs) {
-	return yargs.env("GAUZE_PROJECT_SEED").option("mode", {
-		alias: "m",
-		describe: "The run mode. Single will run the seeds for the first shard node. All will run the seeds for every shard node.",
-		choices: ["single", "all"], // Fixed set of options
-		type: "string",
-	});
+	return yargs.env("GAUZE_PROJECT_SEED");
 	//.wrap(128)
 };
 
 export const handler = function (argv) {
 	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
 	const MANAGER = $gauze.kernel.src.applications.manager.GAUZE__MANAGER__APPLICATION__SRC__KERNEL({ $gauze });
-	MANAGER.seed_run(argv.mode);
+	return MANAGER.seed_run().then(function () {
+		console.log("Seeds ran successfully");
+	});
 };
