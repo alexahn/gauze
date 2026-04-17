@@ -1017,8 +1017,8 @@
 				[ ] e.g. if a group has user 1 (on server 1), user 2 (on server 2), and user 3 (on server 2), we need to copy the group's data to server 1 and server 2
 				[ ] it's the same as how we were planning to copy the relationships to every sharded user database
 				[ ] there is a write penalty when we update these informations, but on the other side, these are datas that should rarely be modified. they are more likely to be deleted than updated
-	[ ] database connection router
-		[ ] simplest initial configuration is one connection per database instance per application server instance. so if we have n application servers, and m database servers, we would have n * m connections
+	[x] database connection router
+		[x] simplest initial configuration is one connection per database instance per application server instance. so if we have n application servers, and m database servers, we would have n * m connections
 		[ ] the routing would use the relationship data to form grouped transactions for private entities
 		[ ] the routing would have to ping all servers for public entities, so we would need to cache those results
 		[ ] need to figure out the garbage collection algorithm (for entities that have all links severed)
@@ -1077,3 +1077,13 @@
 [ ] get rid of test seed data
 	[ ] every test should be self-contained
 	[ ] the seeds are only used for ytitne (since the methods are private)
+[ ] sharding
+	[x] new database config file to specify sharded nodes
+		[x] read and write nodes separated
+		[x] transaction isolation level per shard node
+	[x] database connection router
+		[x] use the shape of the graphql query to route to a set of shard nodes
+	[x] refactor kernel models to use new database connection router
+	[ ] harden database connection routing logic
+		[ ] should minimize the set of nodes we interact with, for example by reading where_in[primary_key] to get a set of nodes, or using the relationships to get a set of nodes
+		[ ] should prefer to use the write shard node if the connection is already open (so update queries dont fetch stale data once the update is complete)
