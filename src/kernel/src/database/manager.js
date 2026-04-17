@@ -154,9 +154,28 @@ class DatabaseManager {
 	*/
 	route_relationship_connections(context, scope, parameters, model, shard_type, relationships) {
 		const self = this;
+		const from_id_key = "gauze__relationship__from_id"
+		const from_type_key = "gauze__relationship__from_type"
+		const to_id_key = "gauze__relationship__to_id"
+		const to_type_key = "gauze__relationship__to_type"
 		if (shard_type === "read") {
 			if (parameters.where) {
-				if (parameters.where[model.primary_key]) {
+				const from_required_parameters = [from_id_key, from_type_key]
+				const to_required_parameters = [to_id_key, to_type_key]
+				const from_required_parameters_exist = from_required_parameters.every(function (key) {
+					return key in parameters.where
+				})
+				const to_required_parameters_exist = to_required_parameters.every(function (key) {
+					return key in parameters.where
+				})
+				if (from_required_parameters_exist && to_required_parameters_exist) {
+					// flip a coin and route
+					return self.get_all_shards_nodes(model.table_name, shard_type);
+				} else if (from_required_parameters_exist) {
+					return self.get_all_shards_nodes(model.table_name, shard_type);
+				} else if (to_required_parameters_exist) {
+					return self.get_all_shards_nodes(model.table_name, shard_type);
+				} else if (parameters.where[model.primary_key]) {
 					const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
 					const model_shards = self.find_shards(model.table_name, primary_key_number);
 					const model_shard = model_shards[0];
@@ -171,6 +190,12 @@ class DatabaseManager {
 					// return all sets
 					return self.get_all_shards_nodes(model.table_name, shard_type);
 				}
+			} else if (parameters.where_in) {
+				if (parameters.where_in[model.primary_key]) {
+					return self.get_all_shards_nodes(model.table_name, shard_type);
+				} else {
+					return self.get_all_shards_nodes(model.table_name, shard_type);
+				}
 			} else {
 				// return all sets
 				return self.get_all_shards_nodes(model.table_name, shard_type);
@@ -182,18 +207,52 @@ class DatabaseManager {
 					return [];
 				} else {
 					// delete
-					if (parameters.where[model.primary_key]) {
-						const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
-						const model_shards = self.find_shards(model.table_name, primary_key_number);
-						const model_shard = model_shards[0];
-						if (model_shard) {
-							return [self.get_one_shard_node(model_shard, shard_type)];
+					const required_where = ["gauze__relationship__from_id", "gauze__relationship__from_type", "gauze__relationship__to_id", "gauze__relationship__to_type"];
+					const required_where_exist = required_where.every(function (key) {
+						return key in parameters.where;
+					});
+					if (parameters.where[model.primary_key] && required_where_exist) {
+						const entity_id = parameters.where[model.primary_key];
+						const entity_type = model.table_name;
+						const entity_primary_key_number = self.uuid_to_big_int(entity_id);
+
+						const from_id = parameters.where.gauze__relationship__from_id;
+						const from_type = parameters.where.gauze__relationship__from_type;
+						const from_primary_key_number = self.uuid_to_big_int(from_id);
+
+						const to_id = parameters.where.gauze__relationship__to_id;
+						const to_type = parameters.where.gauze__relationship__to_type;
+						const to_primary_key_number = self.uuid_to_big_int(to_id);
+
+						const entity_shards = self.find_shards(entity_type, entity_primary_key_number);
+						const entity_shard = entity_shards[0];
+
+						const from_shards = self.find_shards(from_type, from_primary_key_number);
+						const from_shard = from_shards[0];
+
+						const to_shards = self.find_shards(to_type, to_primary_key_number);
+						const to_shard = to_shards[0];
+
+						if (entity_shard && from_shard && to_shard) {
+							const entity_shard_node = self.get_one_shard_node(entity_shard, shard_type);
+							const from_shard_node = self.get_one_shard_node(from_shard, shard_type);
+							const to_shard_node = self.get_one_shard_node(to_shard, shard_type);
+
+							return [entity_shard_node, from_shard_node, to_shard_node];
 						} else {
-							throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
+							if (!entity_shard) {
+								throw new Error(`Could not find shard for table: ${entity_type} and primary key: ${entity_id}`);
+							}
+							if (!from_shard) {
+								throw new Error(`Could not find shard for table: ${from_type} and primary key: ${from_id}`);
+							}
+							if (!to_shard) {
+								throw new Error(`Could not find shard for table: ${to_type} and primary key: ${to_id}`);
+							}
 						}
 					} else {
 						// not allowed to edit relationships across multiple nodes
-						return [];
+						return []
 					}
 				}
 			} else {
@@ -308,6 +367,10 @@ class DatabaseManager {
 					// return all sets
 					return self.get_all_shards_nodes(model.table_name, shard_type);
 				}
+			} else if (parameters.where_in) {
+				// TODO: filter by where_in[primary_key] if it exists
+				// return all sets
+				return self.get_all_shards_nodes(model.table_name, shard_type);
 			} else {
 				// return all sets
 				return self.get_all_shards_nodes(model.table_name, shard_type);
@@ -318,6 +381,7 @@ class DatabaseManager {
 					// update
 					return [];
 				} else {
+					console.log("REACHED")
 					// delete
 					const required_attributes = [agent_id_attribute, agent_type_attribute, entity_id_attribute, entity_type_attribute];
 					const required_attributes_exist = required_attributes.every(function (key) {
@@ -362,18 +426,6 @@ class DatabaseManager {
 								throw new Error(`Could not find shard for table: ${agent_type} and primary key: ${agent_id}`);
 							}
 						}
-
-						// TODO: delete on all 3 locations
-						/*
-						const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
-						const model_shards = self.find_shards(model.table_name, primary_key_number);
-						const model_shard = model_shards[0];
-						if (model_shard) {
-							return [self.get_one_shard_node(model_shard, shard_type)];
-						} else {
-							throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
-						}
-						*/
 					} else {
 						// not allowed to edit whitelist or blacklist across multiple nodes
 						return [];
