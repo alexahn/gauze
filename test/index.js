@@ -1,4 +1,3 @@
-process.env.GAUZE_ENV = "test";
 // internal
 export * as relationship from "./relationship/index.js";
 export * as whitelist from "./whitelist/index.js";
