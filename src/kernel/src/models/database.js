@@ -305,7 +305,7 @@ class DatabaseModel extends Model {
 				return output;
 			})
 			.then(function (result) {
-				if (process.env.GAUZE_ENV === "test") {
+				if (process.env.GAUZE_ENV === "test" || process.env.GAUZE_ENV === "test_monolith" || process.env.GAUZE_ENV === "test_sharded") {
 					self.clearAll();
 				}
 				return result;

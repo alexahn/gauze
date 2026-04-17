@@ -76,7 +76,7 @@ class EnvironmentModel extends Model {
 				}
 			}),
 		).then(function (results) {
-			if (process.env.GAUZE_ENV === "test") {
+			if (process.env.GAUZE_ENV === "test" || process.env.GAUZE_ENV === "test_monolith" || process.env.GAUZE_ENV === "test_sharded") {
 				self.clearAll();
 			}
 			return results;

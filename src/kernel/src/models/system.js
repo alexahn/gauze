@@ -103,7 +103,7 @@ class SystemModel extends Model {
 			}),
 		).then(function (results) {
 			// tests will only pass if cache is turned off
-			if (process.env.GAUZE_ENV === "test") {
+			if (process.env.GAUZE_ENV === "test" || process.env.GAUZE_ENV === "test_monolith" || process.env.GAUZE_ENV === "test_sharded") {
 				self.clearAll();
 			}
 			return results;
@@ -146,7 +146,7 @@ class SystemModel extends Model {
 				}
 			}),
 		).then(function (results) {
-			if (process.env.GAUZE_ENV === "test") {
+			if (process.env.GAUZE_ENV === "test" || process.env.GAUZE_ENV === "test_monolith" || process.env.GAUZE_ENV === "test_sharded") {
 				self.clearAll();
 			}
 			return results;
