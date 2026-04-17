@@ -634,83 +634,157 @@ class DatabaseManager {
 			return shard_node.knex.migrate.make(name, shard_node.config.migrations);
 		});
 	}
-	migrate_latest() {
+	migrate_latest(mode) {
 		const self = this;
-		return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
-			return shard_node.knex.migrate.latest(shard_node.config.migrations);
-		});
+		if (mode === "single") {
+			return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
+				return shard_node.knex.migrate.latest(shard_node.config.migrations);
+			});
+		} else if (mode === "all") {
+			return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
+				return shard_node.knex.migrate.latest(shard_node.config.migrations);
+			});
+		}
 	}
-	migrate_rollback() {
+	migrate_rollback(mode) {
 		const self = this;
-		return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
-			return shard_node.knex.migrate.rollback(shard_node.config.migrations);
-		});
+		if (mode === "single") {
+			return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
+				return shard_node.knex.migrate.rollback(shard_node.config.migrations);
+			});
+		} else if (mode === "all") {
+			return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
+				return shard_node.knex.migrate.rollback(shard_node.config.migrations);
+			});
+		}
 	}
-	migrate_up(name) {
+	migrate_up(mode, name) {
 		const self = this;
-		return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
-			const config = JSON.parse(JSON.stringify(shard_node.config.migrations));
-			config.name = name;
-			return shard_node.knex.migrate.up(config);
-		});
+		if (mode === "single") {
+			return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
+				const config = JSON.parse(JSON.stringify(shard_node.config.migrations));
+				config.name = name;
+				return shard_node.knex.migrate.up(config);
+			});
+		} else if (mode === "all") {
+			return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
+				const config = JSON.parse(JSON.stringify(shard_node.config.migrations));
+				config.name = name;
+				return shard_node.knex.migrate.up(config);
+			});
+		}
 	}
-	migrate_down(name) {
+	migrate_down(mode, name) {
 		const self = this;
-		return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
-			const config = JSON.parse(JSON.stringify(shard_node.config.migrations));
-			config.name = name;
-			return shard_node.knex.migrate.down(config);
-		});
+		if (mode === "single") {
+			return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
+				const config = JSON.parse(JSON.stringify(shard_node.config.migrations));
+				config.name = name;
+				return shard_node.knex.migrate.down(config);
+			});
+		} else if (mode === "all") {
+			return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
+				const config = JSON.parse(JSON.stringify(shard_node.config.migrations));
+				config.name = name;
+				return shard_node.knex.migrate.down(config);
+			});
+		}
 	}
-	migrate_current_version() {
+	migrate_current_version(mode) {
 		const self = this;
 		const write_shards = self.get_write_shard_nodes();
-		return Promise.all(
-			write_shards.map(function (write_shard) {
-				return write_shard.shard_node.knex.migrate.currentVersion(write_shard.shard_node.config.migrations).then(function (version) {
-					return {
-						table_name: write_shard.table_name,
-						shard_id: write_shard.shard.id,
-						shard_node_id: write_shard.shard_node.id,
-						version: version,
-					};
-				});
-			}),
-		);
+		if (mode === "single") {
+			return Promise.all(
+				write_shards.slice(0, 1).map(function (write_shard) {
+					return write_shard.shard_node.knex.migrate.currentVersion(write_shard.shard_node.config.migrations).then(function (version) {
+						return {
+							table_name: write_shard.table_name,
+							shard_id: write_shard.shard.id,
+							shard_node_id: write_shard.shard_node.id,
+							version: version,
+						};
+					});
+				}),
+			);
+		} else if (mode === "all") {
+			return Promise.all(
+				write_shards.map(function (write_shard) {
+					return write_shard.shard_node.knex.migrate.currentVersion(write_shard.shard_node.config.migrations).then(function (version) {
+						return {
+							table_name: write_shard.table_name,
+							shard_id: write_shard.shard.id,
+							shard_node_id: write_shard.shard_node.id,
+							version: version,
+						};
+					});
+				}),
+			);
+		}
 	}
-	migrate_list() {
+	migrate_list(mode) {
 		const self = this;
 		const write_shards = self.get_write_shard_nodes();
-		return Promise.all(
-			write_shards.map(function (write_shard) {
-				return write_shard.shard_node.knex.migrate.list(write_shard.shard_node.config.migrations).then(function (list) {
-					return {
-						table_name: write_shard.table_name,
-						shard_id: write_shard.shard.id,
-						shard_node_id: write_shard.shard_node.id,
-						completed_migrations: list[0],
-						pending_migrations: list[1],
-					};
-				});
-			}),
-		);
+		if (mode === "single") {
+			return Promise.all(
+				write_shards.slice(0, 1).map(function (write_shard) {
+					return write_shard.shard_node.knex.migrate.list(write_shard.shard_node.config.migrations).then(function (list) {
+						return {
+							table_name: write_shard.table_name,
+							shard_id: write_shard.shard.id,
+							shard_node_id: write_shard.shard_node.id,
+							completed_migrations: list[0],
+							pending_migrations: list[1],
+						};
+					});
+				}),
+			);
+		} else if (mode === "all") {
+			return Promise.all(
+				write_shards.map(function (write_shard) {
+					return write_shard.shard_node.knex.migrate.list(write_shard.shard_node.config.migrations).then(function (list) {
+						return {
+							table_name: write_shard.table_name,
+							shard_id: write_shard.shard.id,
+							shard_node_id: write_shard.shard_node.id,
+							completed_migrations: list[0],
+							pending_migrations: list[1],
+						};
+					});
+				}),
+			);
+		}
 	}
-	migrate_unlock() {
+	migrate_unlock(mode) {
 		const self = this;
-		return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
-			return shard_node.knex.migrate.unlock(shard_node.config.migrations);
-		});
+		if (mode === "single") {
+			return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
+				return shard_node.knex.migrate.unlock(shard_node.config.migrations);
+			});
+		} else if (mode === "all") {
+			return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
+				return shard_node.knex.migrate.unlock(shard_node.config.migrations);
+			});
+		}
 	}
 	seed_make(name) {
+		const self = this;
 		return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
 			return shard_node.knex.seed.make(name, shard_node.config.seeds);
 		});
 	}
-	seed_run() {
+	seed_run(mode) {
 		const self = this;
-		return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
-			return shard_node.knex.seed.run(shard_node.config.seeds);
-		});
+		if (mode === "single") {
+			return self.run_with_first_write_shard_node(function (table_name, shard, shard_node) {
+				return shard_node.knex.seed.run(shard_node.config.seeds);
+			});
+		} else if (mode === "all") {
+			return self.run_with_write_shard_nodes(function (table_name, shard, shard_node) {
+				return shard_node.knex.seed.run(shard_node.config.seeds);
+			});
+		} else {
+			throw new Error("Invalid seed run mode");
+		}
 	}
 }
 

@@ -10,21 +10,29 @@ config({
 
 import * as $gauze from "./../../../index.js";
 
-export const command = "down [migration]";
+export const command = "down <mode> [migration]";
 
 export const describe = "Undo the last migration that was run";
 
 export const builder = function (yargs) {
-	return yargs.env("GAUZE_PROJECT_MIGRATE").option("migration", {
-		describe: "The name of the migration file",
-		type: "string",
-		requiresArgs: false,
-	});
+	return yargs
+		.env("GAUZE_PROJECT_MIGRATE")
+		.option("mode", {
+			alias: "m",
+			describe: "The run mode. Single will run the migration for the first shard node. All will run the migration for every shard node.",
+			choices: ["single", "all"], // Fixed set of options
+			type: "string",
+		})
+		.option("migration", {
+			describe: "The name of the migration file",
+			type: "string",
+			requiresArgs: false,
+		});
 	//.wrap(128)
 };
 
 export const handler = function (argv) {
 	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
 	const MANAGER = $gauze.kernel.src.applications.manager.GAUZE__MANAGER__APPLICATION__SRC__KERNEL({ $gauze });
-	MANAGER.migrate_down(argv.migration);
+	MANAGER.migrate_down(argv.mode, argv.migration);
 };

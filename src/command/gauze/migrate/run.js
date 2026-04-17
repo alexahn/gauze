@@ -10,17 +10,22 @@ config({
 
 import * as $gauze from "./../../../index.js";
 
-export const command = "run";
+export const command = "run <mode>";
 
 export const describe = "Run the latest migrations";
 
 export const builder = function (yargs) {
-	return yargs.env("GAUZE_PROJECT_MIGRATE");
+	return yargs.env("GAUZE_PROJECT_MIGRATE").option("mode", {
+		alias: "m",
+		describe: "The run mode. Single will run the migration for the first shard node. All will run the migration for every shard node.",
+		choices: ["single", "all"], // Fixed set of options
+		type: "string",
+	});
 	//.wrap(128)
 };
 
 export const handler = function (argv) {
 	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
 	const MANAGER = $gauze.kernel.src.applications.manager.GAUZE__MANAGER__APPLICATION__SRC__KERNEL({ $gauze });
-	MANAGER.migrate_run();
+	MANAGER.migrate_run(argv.mode);
 };
