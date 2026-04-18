@@ -1006,7 +1006,6 @@ class DatabaseManager {
 	}
 	// context is graphql context
 	commit_transactions(transactions) {
-		console.log("committing transactions");
 		return Promise.all(Object.values(transactions)).then(function (transactions) {
 			return Promise.all(
 				transactions.map(function (transaction) {
@@ -1020,7 +1019,6 @@ class DatabaseManager {
 		return self.commit_transactions(context.transactions);
 	}
 	rollback_transactions(transactions) {
-		console.log("rolling back transactions");
 		return Promise.all(Object.values(transactions)).then(function (transactions) {
 			return Promise.all(
 				transactions.map(function (transaction) {
@@ -1036,7 +1034,6 @@ class DatabaseManager {
 	}
 	destroy_connections() {
 		const self = this;
-		console.log("destroying connections");
 		return Object.values(self.connections).map(function (connection) {
 			delete self.connections[connection.key];
 			return connection.destroy();
