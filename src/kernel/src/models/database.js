@@ -1257,7 +1257,6 @@ class DatabaseModel extends Model {
 	_root_count(context, scope, parameters) {
 		const self = this;
 		return context.database_manager.route_transactions(context, scope, parameters, self, "read").then(function (shards) {
-			console.log("shards.length", shards.length);
 			return Promise.all(
 				shards.map(function (shard) {
 					return self._root_count_transaction(context, scope, parameters, shard.connection, shard.transaction);
