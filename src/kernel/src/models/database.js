@@ -932,7 +932,7 @@ class DatabaseModel extends Model {
 	// TODO: refactor cleanup_delete to delete things one by one (because relationships, whitelists, and blacklists are spread across multiple nodes)
 	_cleanup_delete(context, valid_ids, database, transaction) {
 		const self = this;
-		//const { database, transaction } = context;
+		// we cant import the actual models here, so we will have to do it by hand
 		const transactions = [
 			// to relationship
 			function () {

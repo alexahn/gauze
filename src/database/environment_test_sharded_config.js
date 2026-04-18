@@ -40,7 +40,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -60,7 +60,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -85,7 +85,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.2.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -105,7 +105,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.2.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -130,7 +130,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.3.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -150,7 +150,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.3.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -175,7 +175,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.4.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -195,7 +195,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.4.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -227,7 +227,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${whitelist__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -247,7 +247,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${whitelist__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -272,7 +272,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${whitelist__table}.shard.2.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -292,7 +292,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${whitelist__table}.shard.2.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -317,7 +317,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${whitelist__table}.shard.3.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -337,7 +337,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${whitelist__table}.shard.3.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -362,7 +362,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${whitelist__table}.shard.4.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -382,7 +382,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${whitelist__table}.shard.4.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -414,7 +414,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${blacklist__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -434,7 +434,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${blacklist__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -459,7 +459,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${blacklist__table}.shard.2.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -479,7 +479,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${blacklist__table}.shard.2.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -504,7 +504,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${blacklist__table}.shard.3.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -524,7 +524,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${blacklist__table}.shard.3.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -549,7 +549,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${blacklist__table}.shard.4.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -569,7 +569,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${blacklist__table}.shard.4.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -601,7 +601,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${proxy__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -621,7 +621,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${proxy__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -646,7 +646,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${proxy__table}.shard.2.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -666,7 +666,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${proxy__table}.shard.2.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -691,7 +691,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${proxy__table}.shard.3.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -711,7 +711,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${proxy__table}.shard.3.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -736,7 +736,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${proxy__table}.shard.4.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -756,7 +756,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${proxy__table}.shard.4.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -788,7 +788,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${secret__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -808,7 +808,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${secret__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -833,7 +833,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${secret__table}.shard.2.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -853,7 +853,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${secret__table}.shard.2.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -878,7 +878,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${secret__table}.shard.3.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -898,7 +898,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${secret__table}.shard.3.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -923,7 +923,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${secret__table}.shard.4.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -943,7 +943,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${secret__table}.shard.4.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -975,7 +975,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_root__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -995,7 +995,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_root__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1020,7 +1020,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_root__table}.shard.2.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1040,7 +1040,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_root__table}.shard.2.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1065,7 +1065,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_root__table}.shard.3.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1085,7 +1085,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_root__table}.shard.3.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1110,7 +1110,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_root__table}.shard.4.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1130,7 +1130,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_root__table}.shard.4.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1162,7 +1162,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_account__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1182,7 +1182,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_account__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1207,7 +1207,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_account__table}.shard.2.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1227,7 +1227,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_account__table}.shard.2.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1252,7 +1252,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_account__table}.shard.3.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1272,7 +1272,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_account__table}.shard.3.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1297,7 +1297,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_account__table}.shard.4.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1317,7 +1317,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_account__table}.shard.4.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1349,7 +1349,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_user__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1369,7 +1369,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_user__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1394,7 +1394,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_user__table}.shard.2.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1414,7 +1414,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_user__table}.shard.2.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1439,7 +1439,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_user__table}.shard.3.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1459,7 +1459,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_user__table}.shard.3.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1484,7 +1484,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_user__table}.shard.4.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1504,7 +1504,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_user__table}.shard.4.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1536,7 +1536,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_person__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1556,7 +1556,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_person__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1581,7 +1581,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_person__table}.shard.2.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1601,7 +1601,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_person__table}.shard.2.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1626,7 +1626,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_person__table}.shard.3.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1646,7 +1646,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_person__table}.shard.3.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1671,7 +1671,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_person__table}.shard.4.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1691,7 +1691,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_person__table}.shard.4.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1723,7 +1723,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_character__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1743,7 +1743,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_character__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1768,7 +1768,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_character__table}.shard.2.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1788,7 +1788,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_character__table}.shard.2.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1813,7 +1813,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_character__table}.shard.3.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1833,7 +1833,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_character__table}.shard.3.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1858,7 +1858,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_character__table}.shard.4.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1878,7 +1878,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_character__table}.shard.4.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1910,7 +1910,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${ezuag__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1930,7 +1930,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${ezuag__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1955,7 +1955,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${ezuag__table}.shard.2.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -1975,7 +1975,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${ezuag__table}.shard.2.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2000,7 +2000,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${ezuag__table}.shard.3.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2020,7 +2020,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${ezuag__table}.shard.3.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2045,7 +2045,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${ezuag__table}.shard.4.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2065,7 +2065,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${ezuag__table}.shard.4.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2097,7 +2097,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${ytitne__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2117,7 +2117,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${ytitne__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2142,7 +2142,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${ytitne__table}.shard.2.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2162,7 +2162,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${ytitne__table}.shard.2.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2187,7 +2187,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${ytitne__table}.shard.3.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2207,7 +2207,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${ytitne__table}.shard.3.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2232,7 +2232,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${ytitne__table}.shard.4.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2252,7 +2252,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${ytitne__table}.shard.4.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2284,7 +2284,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${entity__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2304,7 +2304,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${entity__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2329,7 +2329,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${entity__table}.shard.2.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2349,7 +2349,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${entity__table}.shard.2.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2374,7 +2374,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${entity__table}.shard.3.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2394,7 +2394,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${entity__table}.shard.3.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2419,7 +2419,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${entity__table}.shard.4.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2439,7 +2439,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${entity__table}.shard.4.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2471,7 +2471,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${gauze__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2491,7 +2491,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${gauze__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2516,7 +2516,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${gauze__table}.shard.2.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2536,7 +2536,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${gauze__table}.shard.2.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2561,7 +2561,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${gauze__table}.shard.3.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2581,7 +2581,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${gauze__table}.shard.3.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2606,7 +2606,7 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${gauze__table}.shard.4.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
@@ -2626,7 +2626,7 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${TEST_SHARDED_ENVIRONMENT}.${gauze__table}.shard.4.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
