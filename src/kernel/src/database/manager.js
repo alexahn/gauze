@@ -627,7 +627,13 @@ class DatabaseManager {
 						const model_shards = self.find_shards(model.table_name, primary_key_number);
 						const model_shard = model_shards[0];
 						if (model_shard) {
-							return [self.get_one_shard_node(model_shard, shard_type)];
+							// if a write connection is already open, then use it
+							const write_shard_node = self.get_one_shard_node(model_shard, "write");
+							if (context.transactions[write_shard_node.key]) {
+								return [write_shard_node];
+							} else {
+								return [self.get_one_shard_node(model_shard, shard_type)];
+							}
 						} else {
 							throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
 						}
@@ -639,7 +645,12 @@ class DatabaseManager {
 							});
 							const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
 							const shard_nodes = shards.map(function (shard) {
-								return self.get_one_shard_node(shard, shard_type);
+								const write_shard_node = self.get_one_shard_node(model_shard, "write");
+								if (context.transactions[write_shard_node.key]) {
+									return [write_shard_node];
+								} else {
+									return self.get_one_shard_node(shard, shard_type);
+								}
 							});
 							return shard_nodes;
 						} else {
@@ -652,7 +663,12 @@ class DatabaseManager {
 					if (parameters.where_in[model.primary_key]) {
 						const shards = self.find_shards_for_set(model.table_name, parameters.where_in);
 						const shard_nodes = shards.map(function (shard) {
-							return self.get_one_shard_node(shard, shard_type);
+							const write_shard_node = self.get_one_shard_node(model_shard, "write");
+							if (context.transactions[write_shard_node.key]) {
+								return [write_shard_node];
+							} else {
+								return self.get_one_shard_node(shard, shard_type);
+							}
 						});
 						return shard_nodes;
 					} else {
