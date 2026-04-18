@@ -50,17 +50,20 @@ class DatabaseModel extends Model {
 		self.breadth_max = parseInt(process.env.GAUZE_SQL_MAX_BREADTH, 10);
 		self.transactions_max = parseInt(process.env.GAUZE_SQL_MAX_TRANSACTIONS, 10);
 		if ($structure.entities.relationship) {
-			this.relationship_table_name = $structure.entities.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE;
+			self.relationship_table_name = $structure.entities.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE;
+			self.relationship_primary_key = $structure.entities.relationship.database.sql.PRIMARY_KEY__SQL__DATABASE__RELATIONSHIP__STRUCTURE;
 		} else {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("5", __RELATIVE_FILEPATH, `${this.name}.constructor:WARNING`, new Error("Relationship structure not found"));
 		}
 		if ($structure.entities.whitelist) {
-			self.whitelist_table = $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE;
+			self.whitelist_table_name = $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE;
+			self.whitelist_primary_key = $structure.entities.whitelist.database.sql.PRIMARY_KEY__SQL__DATABASE__WHITELIST__STRUCTURE;
 		} else {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Whitelist structure not found"));
 		}
 		if ($structure.entities.blacklist) {
-			self.blacklist_table = $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE;
+			self.blacklist_table_name = $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE;
+			self.blacklist_primary_key = $structure.entities.blacklist.database.sql.PRIMARY_KEY__SQL__DATABASE__BLACKLIST__STRUCTURE;
 		} else {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Blacklist structure not found"));
 		}
@@ -929,7 +932,85 @@ class DatabaseModel extends Model {
 		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, scope, key);
 	}
-	// TODO: refactor cleanup_delete to delete things one by one (because relationships, whitelists, and blacklists are spread across multiple nodes)
+	_cleanup_delete_relationship(context, relationship) {
+		const self = this;
+		const parameters = {
+			where: relationship,
+		};
+		const model = {
+			table_name: self.relationship_table_name,
+			primary_key: self.relationship_primary_key,
+		};
+		function _delete_relationship(database, transaction, relationship) {
+			const sql = database(self.relationship_table_name).where(self.relationship_primary_key, relationship[self.relationship_primary_key]).del().transacting(transaction);
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._cleanup_delete_relationship:debug_sql`, sql.toString());
+			}
+			return sql;
+		}
+		return context.database_manager.route_transactions(context, {}, parameters, model, "write").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return _delete_relationship(shard.connection, shard.transaction, relationship);
+				}),
+			).then(function (results) {
+				return results.flat();
+			});
+		});
+	}
+	_cleanup_delete_whitelist(context, whitelist) {
+		const self = this;
+		const parameters = {
+			where: whitelist,
+		};
+		const model = {
+			table_name: self.whitelist_table_name,
+			primary_key: self.whitelist_primary_key,
+		};
+		function _delete_whitelist(database, transaction, relationship) {
+			const sql = database(self.whitelist_table_name).where(self.whitelist_primary_key, whitelist[self.whitelist_primary_key]).del().transacting(transaction);
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._cleanup_delete_whitelist:debug_sql`, sql.toString());
+			}
+			return sql;
+		}
+		return context.database_manager.route_transactions(context, {}, parameters, model, "write").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return _delete_whitelist(shard.connection, shard.transaction, whitelist);
+				}),
+			).then(function (results) {
+				return results.flat();
+			});
+		});
+	}
+	_cleanup_delete_blacklist(context, blacklist) {
+		const self = this;
+		const parameters = {
+			where: blacklist,
+		};
+		const model = {
+			table_name: self.blacklist_table_name,
+			primary_key: self.blacklist_primary_key,
+		};
+		function _delete_blacklist(database, transaction, relationship) {
+			const sql = database(self.blacklist_table_name).where(self.blacklist_primary_key, blacklist[self.blacklist_primary_key]).del().transacting(transaction);
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._cleanup_delete_blacklist:debug_sql`, sql.toString());
+			}
+			return sql;
+		}
+		return context.database_manager.route_transactions(context, {}, parameters, model, "write").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return _delete_blacklist(shard.connection, shard.transaction, blacklist);
+				}),
+			).then(function (results) {
+				return results.flat();
+			});
+		});
+	}
+	// note: is this concurrency safe? seems like it should be okay as long as every entity only belongs to one shard node?
 	_cleanup_delete(context, valid_ids, database, transaction) {
 		const self = this;
 		// we cant import the actual models here, so we will have to do it by hand
@@ -939,7 +1020,6 @@ class DatabaseModel extends Model {
 				const sql = database(self.relationship_table_name)
 					.where("gauze__relationship__to_type", self.entity.table_name)
 					.whereIn("gauze__relationship__to_id", valid_ids)
-					.del()
 					.transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
@@ -951,7 +1031,6 @@ class DatabaseModel extends Model {
 				const sql = database(self.relationship_table_name)
 					.where("gauze__relationship__from_type", self.entity.table_name)
 					.whereIn("gauze__relationship__from_id", valid_ids)
-					.del()
 					.transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
@@ -960,10 +1039,9 @@ class DatabaseModel extends Model {
 			},
 			// whitelist
 			function () {
-				const sql = database(self.whitelist_table)
+				const sql = database(self.whitelist_table_name)
 					.where("gauze__whitelist__entity_type", self.entity.table_name)
 					.whereIn("gauze__whitelist__entity_id", valid_ids)
-					.del()
 					.transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
@@ -972,10 +1050,9 @@ class DatabaseModel extends Model {
 			},
 			// blacklist
 			function () {
-				const sql = database(self.blacklist_table)
+				const sql = database(self.blacklist_table_name)
 					.where("gauze__blacklist__entity_type", self.entity.table_name)
 					.whereIn("gauze__blacklist__entity_id", valid_ids)
-					.del()
 					.transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
@@ -987,7 +1064,48 @@ class DatabaseModel extends Model {
 			transactions.map(function (f) {
 				return f();
 			}),
-		);
+		).then(function (results) {
+			const to_relationships = results[0] || [];
+			const from_relationships = results[1] || [];
+			const whitelists = results[2] || [];
+			const blacklists = results[3] || [];
+			const transactions = [
+				function () {
+					return Promise.all(
+						to_relationships.map(function (relationship) {
+							return self._cleanup_delete_relationship(context, relationship);
+						}),
+					);
+				},
+				function () {
+					return Promise.all(
+						from_relationships.map(function (relationship) {
+							return self._cleanup_delete_relationship(context, relationship);
+						}),
+					);
+				},
+				function () {
+					return Promise.all(
+						whitelists.map(function (whitelist) {
+							return self._cleanup_delete_whitelist(context, whitelist);
+						}),
+					);
+				},
+				function () {
+					return Promise.all(
+						blacklists.map(function (blacklist) {
+							return self._cleanup_delete_blacklist(context, blacklist);
+						}),
+					);
+				},
+			];
+			return Promise.all(
+				transactions.map(function (f) {
+					return f();
+				}),
+			);
+			//return results
+		});
 	}
 	_root_delete(context, scope, parameters) {
 		const self = this;

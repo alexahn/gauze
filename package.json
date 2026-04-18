@@ -25,7 +25,9 @@
 	"main": "src/index.js",
 	"bin": "./src/command/gauze.js",
 	"scripts": {
-		"test": "GAUZE_ENV=test_monolithic LOG_LEVEL_MINIMUM=4 node test",
+		"test": "npm run test-monolithic && npm run test-sharded",
+		"test-monolithic": "GAUZE_ENV=test_monolithic LOG_LEVEL_MINIMUM=4 node test",
+		"test-sharded": "GAUZE_ENV=test_sharded LOG_LEVEL_MINIMUM=4 node test",
 		"gauze": "./src/command/gauze.js",
 		"start": "/bin/zsh -c \"npm run start-server & ; npm run start-ui & ; npm run start-graphiql & ; wait\"",
 		"start-server": "/bin/zsh -c \"npm run watch-server & ; wait\"",

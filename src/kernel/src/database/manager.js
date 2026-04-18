@@ -947,8 +947,15 @@ class DatabaseManager {
 					});
 				} else {
 					const transaction_promise = new Promise(function (resolve, reject) {
+						// note: pass an empty object for better-sqlite3 so we don't get spammed with warnings that sqlite3 only supports serializable isolation level
+						const transaction_config =
+							connection.config.client === "better-sqlite3" || connection.config.client === "sqlite3"
+								? {}
+								: {
+										isolationLevel: connection.transaction_isolation_level,
+									};
 						return connection.knex
-							.transaction({ isolationLevel: connection.transaction_isolation_level })
+							.transaction(transaction_config)
 							.then(function (trx) {
 								return resolve(trx);
 							})
