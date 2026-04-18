@@ -475,7 +475,9 @@ class DatabaseModel extends Model {
 				shards.map(function (shard) {
 					return self._entity_relationships_transaction(context, scope, parameters, shard.connection, shard.transaction);
 				}),
-			);
+			).then(function (result) {
+				return result.flat();
+			});
 		});
 	}
 	_entity_relationships_transaction(context, scope, parameters, database, transaction) {

@@ -118,6 +118,22 @@ class DatabaseManager {
 			return shard.start <= primary_key_number && primary_key_number <= shard.end;
 		});
 	}
+	find_shards_for_set(table_name, primary_key_numbers) {
+		const self = this;
+		const mapped_shards = primary_key_numbers
+			.map(function (primary_key_number) {
+				return self.find_shards(table_name, primary_key_number);
+			})
+			.flat();
+		const unique_shards = [
+			...new Map(
+				mapped_shards.map(function (shard) {
+					return [shard.id, shard];
+				}),
+			).values(),
+		];
+		return unique_shards;
+	}
 	// randomly selects one node for the shard type on the shard
 	get_one_shard_node(shard, shard_type) {
 		const shard_nodes = shard[shard_type];
@@ -239,14 +255,34 @@ class DatabaseManager {
 						} else {
 							throw new Error(`Could not find shard for table: ${to_type} and primary key: ${to_id}`);
 						}
+					} else if (parameters.where_in) {
+						// note: we need to copy this here because where is bootstrapped for us
+						if (parameters.where_in[model.primary_key]) {
+							const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
+								return self.uuid_to_big_int(primary_key);
+							});
+							const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
+							const shard_nodes = shards.map(function (shard) {
+								return self.get_one_shard_node(shard, shard_type);
+							});
+							return shard_nodes;
+						} else {
+							return self.get_all_shards_nodes(model.table_name, shard_type);
+						}
 					} else {
 						return self.get_all_shards_nodes(model.table_name, shard_type);
 					}
 				}
 			} else if (parameters.where_in) {
 				if (parameters.where_in[model.primary_key]) {
-					// TODO: constrain set of nodes
-					return self.get_all_shards_nodes(model.table_name, shard_type);
+					const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
+						return self.uuid_to_big_int(primary_key);
+					});
+					const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
+					const shard_nodes = shards.map(function (shard) {
+						return self.get_one_shard_node(shard, shard_type);
+					});
+					return shard_nodes;
 				} else {
 					return self.get_all_shards_nodes(model.table_name, shard_type);
 				}
@@ -308,6 +344,14 @@ class DatabaseManager {
 						return [];
 					}
 				}
+			} else if (parameters.where_in) {
+				return [];
+			} else if (parameters.where_not_in) {
+				return [];
+			} else if (parameters.where_between) {
+				return [];
+			} else if (parameters.where_like) {
+				return [];
 			} else {
 				if (parameters.attributes) {
 					// create
@@ -416,14 +460,37 @@ class DatabaseManager {
 					} else {
 						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
 					}
+				} else if (parameters.where_in) {
+					// note: we need to copy this here because where is bootstrapped for us
+					if (parameters.where_in[model.primary_key]) {
+						const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
+							return self.uuid_to_big_int(primary_key);
+						});
+						const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
+						const shard_nodes = shards.map(function (shard) {
+							return self.get_one_shard_node(shard, shard_type);
+						});
+						return shard_nodes;
+					} else {
+						return self.get_all_shards_nodes(model.table_name, shard_type);
+					}
 				} else {
 					// return all sets
 					return self.get_all_shards_nodes(model.table_name, shard_type);
 				}
 			} else if (parameters.where_in) {
-				// TODO: filter by where_in[primary_key] if it exists
-				// return all sets
-				return self.get_all_shards_nodes(model.table_name, shard_type);
+				if (parameters.where_in[model.primary_key]) {
+					const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
+						return self.uuid_to_big_int(primary_key);
+					});
+					const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
+					const shard_nodes = shards.map(function (shard) {
+						return self.get_one_shard_node(shard, shard_type);
+					});
+					return shard_nodes;
+				} else {
+					return self.get_all_shards_nodes(model.table_name, shard_type);
+				}
 			} else {
 				// return all sets
 				return self.get_all_shards_nodes(model.table_name, shard_type);
@@ -483,6 +550,14 @@ class DatabaseManager {
 						return [];
 					}
 				}
+			} else if (parameters.where_in) {
+				return [];
+			} else if (parameters.where_not_in) {
+				return [];
+			} else if (parameters.where_between) {
+				return [];
+			} else if (parameters.where_like) {
+				return [];
 			} else {
 				if (parameters.attributes) {
 					// create
@@ -546,9 +621,55 @@ class DatabaseManager {
 			// non-relationship query
 			// primary key check
 			// TODO: refactor this
-			/*
 			if (shard_type === "read") {
 				// read
+				if (parameters.where) {
+					if (parameters.where[model.primary_key]) {
+						const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
+						const model_shards = self.find_shards(model.table_name, primary_key_number);
+						const model_shard = model_shards[0];
+						if (model_shard) {
+							return [self.get_one_shard_node(model_shard, shard_type)];
+						} else {
+							throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
+						}
+					} else if (parameters.where_in) {
+						// note: we need to add this here because our graphql logic bootstraps a where for us
+						if (parameters.where_in[model.primary_key]) {
+							const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
+								return self.uuid_to_big_int(primary_key);
+							});
+							const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
+							const shard_nodes = shards.map(function (shard) {
+								return self.get_one_shard_node(shard, shard_type);
+							});
+							return shard_nodes;
+						} else {
+							return self.get_all_shards_nodes(model.table_name, shard_type);
+						}
+					} else {
+						return self.get_all_shards_nodes(model.table_name, shard_type);
+					}
+				} else if (parameters.where_in) {
+					if (parameters.where_in[model.primary_key]) {
+						const shards = self.find_shards_for_set(model.table_name, parameters.where_in);
+						const shard_nodes = shards.map(function (shard) {
+							return self.get_one_shard_node(shard, shard_type);
+						});
+						return shard_nodes;
+					} else {
+						return self.get_all_shards_nodes(model.table_name, shard_type);
+					}
+				} else if (parameters.where_not_in) {
+					return self.get_all_shards_nodes(model.table_name, shard_type);
+				} else if (parameters.where_between) {
+					return self.get_all_shards_nodes(model.table_name, shard_type);
+				} else if (parameters.where_like) {
+					return self.get_all_shards_nodes(model.table_name, shard_type);
+				} else {
+					return [];
+				}
+			} else if (shard_type === "write") {
 				if (parameters.where) {
 					if (parameters.where[model.primary_key]) {
 						const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
@@ -563,39 +684,15 @@ class DatabaseManager {
 						return self.get_all_shards_nodes(model.table_name, shard_type);
 					}
 				} else if (parameters.where_in) {
-                    if (parameters.where_in[model.primary_key]) {
-                        // TODO: filter by ids
-                        return self.get_all_shards_nodes(model.table_name, shard_type);
-                    } else {
-                        return self.get_all_shards_nodes(model.table_name, shard_type);
-                    }
-				} else if (parameters.where_not_in) {
-					return self.get_all_shards_nodes(model.table_name, shard_type);
-				} else if (parameters.where_between) {
-					return self.get_all_shards_nodes(model.table_name, shard_type);
-				} else if (parameters.where_like) {
-					return self.get_all_shards_nodes(model.table_name, shard_type);
-				} else {
-					return [];
-				}
-			} else if (shard_type === "write") {
-				if (parameters.where) {
-					if (parameters.where[model.primary_key]) {
-                        const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
-                        const model_shards = self.find_shards(model.table_name, primary_key_number);
-                        const model_shard = model_shards[0];
-                        if (model_shard) {
-                            return [self.get_one_shard_node(model_shard, shard_type)];
-                        } else {
-                            throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
-                        }
-					} else {
-						return self.get_all_shards_nodes(model.table_name, shard_type);
-					}
-				} else if (parameters.where_in) {
 					if (parameters.where_in[model.primary_key]) {
-						// TODO: filter by ids
-						return self.get_all_shards_nodes(model.table_name, shard_type);
+						const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
+							return self.uuid_to_big_int(primary_key);
+						});
+						const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
+						const shard_nodes = shards.map(function (shard) {
+							return self.get_one_shard_node(shard, shard_type);
+						});
+						return shard_nodes;
 					} else {
 						return self.get_all_shards_nodes(model.table_name, shard_type);
 					}
@@ -618,48 +715,186 @@ class DatabaseManager {
 								throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
 							}
 						} else {
-							return []
+							return [];
 						}
 					} else {
-						return []
+						return [];
 					}
 				}
 			} else {
 				throw new Error("Invalid shard type, must be either read or write");
 			}
-			*/
-			if (parameters.where) {
-				if (parameters.where[model.primary_key]) {
-					const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
-					const model_shards = self.find_shards(model.table_name, primary_key_number);
-					const model_shard = model_shards[0];
-					if (model_shard) {
-						return [self.get_one_shard_node(model_shard, shard_type)];
-					} else {
-						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
-					}
+		} else if (Array.isArray(relationships)) {
+			function _parse_source(scope, parameters) {
+				const { source } = scope;
+				if (source && source._metadata && source._direction) {
+					return source;
 				} else {
-					// return all shards, selecting one random per shard type allocation
-					return self.get_all_shards_nodes(model.table_name, shard_type);
+					if (parameters.source && parameters.source._metadata && parameters.source._direction) {
+						return parameters.source;
+					} else {
+						return null;
+					}
 				}
-			} else if (parameters.attributes) {
-				if (parameters.attributes[model.primary_key]) {
-					const primary_key_number = self.uuid_to_big_int(parameters.attributes[model.primary_key]);
-					const model_shards = self.find_shards(model.table_name, primary_key_number);
-					const model_shard = model_shards[0];
-					if (model_shard) {
-						return [self.get_one_shard_node(model_shard, shard_type)];
+			}
+			// relationship query
+			const source = _parse_source(scope, parameters);
+			let relationship_primary_keys = [];
+			if (source._direction === "to") {
+				relationship_primary_keys = relationships
+					.filter(function (relationship) {
+						return relationship.gauze__relationship__to_type === model.table_name;
+					})
+					.map(function (relationship) {
+						return relationship.gauze__relationship__to_id;
+					});
+			} else if (source._direction === "from") {
+				relationship_primary_keys = relationships
+					.filter(function (relationship) {
+						return relationship.gauze__relationship__from_type === model.table_name;
+					})
+					.map(function (relationship) {
+						return relationship.gauze__relationship__from_id;
+					});
+			} else {
+				throw new Error("Invalid source direction");
+			}
+			const relationship_primary_key_numbers = relationship_primary_keys.map(function (relationship_primary_key_number) {
+				return self.uuid_to_big_int(relationship_primary_key_number);
+			});
+			const relationship_shards = self.find_shards_for_set(model.table_name, relationship_primary_key_numbers);
+			const relationship_shards_index = new Set(
+				relationship_shards.map(function (item) {
+					return item.id;
+				}),
+			);
+			const relationship_shard_nodes = relationship_shards.map(function (shard) {
+				return self.get_one_shard_node(shard, shard_type);
+			});
+			if (shard_type === "read") {
+				// read
+				if (parameters.where) {
+					if (parameters.where[model.primary_key]) {
+						const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
+						const model_shards = self.find_shards(model.table_name, primary_key_number);
+						const model_shard = model_shards[0];
+						if (model_shard) {
+							return [self.get_one_shard_node(model_shard, shard_type)];
+						} else {
+							throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
+						}
+					} else if (parameters.where_in) {
+						// note: we need to add this here because our graphql logic bootstraps a where for us
+						if (parameters.where_in[model.primary_key]) {
+							const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
+								return self.uuid_to_big_int(primary_key);
+							});
+							const shards = self.find_shards_for_set(model.table_name, primary_key_numbers).filter(function (shard) {
+								return relationship_shards_index.has(shard.id);
+							});
+							const shard_nodes = shards.map(function (shard) {
+								return self.get_one_shard_node(shard, shard_type);
+							});
+							return shard_nodes;
+						} else {
+							return relationship_shard_nodes;
+							//return self.get_all_shards_nodes(model.table_name, shard_type);
+						}
 					} else {
-						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
+						return relationship_shard_nodes;
+						//return self.get_all_shards_nodes(model.table_name, shard_type);
 					}
+				} else if (parameters.where_in) {
+					if (parameters.where_in[model.primary_key]) {
+						const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
+							return self.uuid_to_big_int(primary_key);
+						});
+						const shards = self.find_shards_for_set(model.table_name, primary_key_numbers).filter(function (shard) {
+							return relationship_shards_index.has(shard.id);
+						});
+						const shard_nodes = shards.map(function (shard) {
+							return self.get_one_shard_node(shard, shard_type);
+						});
+						return shard_nodes;
+					} else {
+						return relationship_shard_nodes;
+						//return self.get_all_shards_nodes(model.table_name, shard_type);
+					}
+				} else if (parameters.where_not_in) {
+					return relationship_shard_nodes;
+					//return self.get_all_shards_nodes(model.table_name, shard_type);
+				} else if (parameters.where_between) {
+					return relationship_shard_nodes;
+					//return self.get_all_shards_nodes(model.table_name, shard_type);
+				} else if (parameters.where_like) {
+					return relationship_shard_nodes;
+					//return self.get_all_shards_nodes(model.table_name, shard_type);
 				} else {
-					return self.get_all_shards_nodes(model.table_name, shard_type);
+					return [];
+				}
+			} else if (shard_type === "write") {
+				if (parameters.where) {
+					if (parameters.where[model.primary_key]) {
+						const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
+						const model_shards = self.find_shards(model.table_name, primary_key_number);
+						const model_shard = model_shards[0];
+						if (model_shard) {
+							return [self.get_one_shard_node(model_shard, shard_type)];
+						} else {
+							throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
+						}
+					} else {
+						return relationship_shard_nodes;
+						//return self.get_all_shards_nodes(model.table_name, shard_type);
+					}
+				} else if (parameters.where_in) {
+					if (parameters.where_in[model.primary_key]) {
+						const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
+							return self.uuid_to_big_int(primary_key);
+						});
+						const shards = self.find_shards_for_set(model.table_name, primary_key_numbers).filter(function (shard) {
+							return relationship_shards_index.has(shard.id);
+						});
+						const shard_nodes = shards.map(function (shard) {
+							return self.get_one_shard_node(shard, shard_type);
+						});
+						return shard_nodes;
+					} else {
+						return relationship_shard_nodes;
+						//return self.get_all_shards_nodes(model.table_name, shard_type);
+					}
+				} else if (parameters.where_not_in) {
+					return relationship_shard_nodes;
+					//return self.get_all_shards_nodes(model.table_name, shard_type);
+				} else if (parameters.where_between) {
+					return relationship_shard_nodes;
+					//return self.get_all_shards_nodes(model.table_name, shard_type);
+				} else if (parameters.where_like) {
+					return relationship_shard_nodes;
+					//return self.get_all_shards_nodes(model.table_name, shard_type);
+				} else {
+					if (parameters.attributes) {
+						// create
+						if (parameters.attributes[model.primary_key]) {
+							const primary_key_number = self.uuid_to_big_int(parameters.attributes[model.primary_key]);
+							const model_shards = self.find_shards(model.table_name, primary_key_number);
+							const model_shard = model_shards[0];
+							if (model_shard) {
+								return [self.get_one_shard_node(model_shard, shard_type)];
+							} else {
+								throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
+							}
+						} else {
+							return [];
+						}
+					} else {
+						return [];
+					}
 				}
 			} else {
-				return [];
+				throw new Error("Invalid shard type, must be either read or write");
 			}
-		} else if (Array.isArray(relationships)) {
-			// relationship query
+			/*
 			if (parameters.where) {
 				if (parameters.where[model.primary_key]) {
 					const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
@@ -692,6 +927,7 @@ class DatabaseManager {
 			} else {
 				return [];
 			}
+			*/
 		} else {
 			throw new Error("Invalid relationships, must be either undefined or an array");
 		}
@@ -720,7 +956,6 @@ class DatabaseManager {
 	route_transactions(context, scope, parameters, model, shard_type, relationships) {
 		const self = this;
 		const connections = self.route_connections(context, scope, parameters, model, shard_type, relationships);
-		//console.log("connections", connections);
 		const unique_connections = [
 			...new Map(
 				connections.map(function (connection) {
