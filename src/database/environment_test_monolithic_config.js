@@ -6,8 +6,8 @@ import * as $abstract from "./../abstract/index.js";
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-//const TEST_MONOLITH_ENVIRONMENT = "test";
-const TEST_MONOLITH_ENVIRONMENT = "test_monolith";
+//const TEST_MONOLITHIC_ENVIRONMENT = "test";
+const TEST_MONOLITHIC_ENVIRONMENT = "test_monolithic";
 const TEST_SHARDED_ENVIRONMENT = "test_sharded";
 const DEVELOPMENT_ENVIRONMENT = "development";
 const STAGING_ENVIRONMENT = "staging";
@@ -41,11 +41,11 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${relationship__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -61,11 +61,11 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${relationship__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -93,11 +93,11 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${whitelist__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -113,11 +113,11 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${whitelist__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -145,11 +145,11 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${blacklist__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -165,11 +165,11 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${blacklist__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -197,11 +197,11 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${proxy__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -217,11 +217,11 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${proxy__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -249,11 +249,11 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${secret__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -269,11 +269,11 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${secret__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -301,11 +301,11 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${session__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -321,11 +321,11 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${session__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -353,11 +353,11 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_root__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -373,11 +373,11 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_root__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -405,11 +405,11 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_account__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -425,11 +425,11 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_account__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -457,11 +457,11 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_user__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -477,11 +477,11 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_user__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -509,11 +509,11 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_person__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -529,11 +529,11 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_person__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -561,11 +561,11 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_character__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -581,11 +581,11 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_character__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -613,11 +613,11 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${ezuag__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -633,11 +633,11 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${ezuag__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -665,11 +665,11 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${ytitne__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -685,11 +685,11 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${ytitne__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -717,11 +717,11 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${entity__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -737,11 +737,11 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${entity__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -769,11 +769,11 @@ const CONFIG__ENVIRONMENT = {
 				read: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${gauze__table}.shard.1.read.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -789,11 +789,11 @@ const CONFIG__ENVIRONMENT = {
 				write: [
 					{
 						id: `${DEVELOPMENT_ENVIRONMENT}.${gauze__table}.shard.1.write.1`,
-						transaction_isolation_level: "read committed",
+						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITH_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,

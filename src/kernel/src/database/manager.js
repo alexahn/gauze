@@ -645,9 +645,9 @@ class DatabaseManager {
 							});
 							const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
 							const shard_nodes = shards.map(function (shard) {
-								const write_shard_node = self.get_one_shard_node(model_shard, "write");
+								const write_shard_node = self.get_one_shard_node(shard, "write");
 								if (context.transactions[write_shard_node.key]) {
-									return [write_shard_node];
+									return write_shard_node;
 								} else {
 									return self.get_one_shard_node(shard, shard_type);
 								}
@@ -665,7 +665,7 @@ class DatabaseManager {
 						const shard_nodes = shards.map(function (shard) {
 							const write_shard_node = self.get_one_shard_node(model_shard, "write");
 							if (context.transactions[write_shard_node.key]) {
-								return [write_shard_node];
+								return write_shard_node;
 							} else {
 								return self.get_one_shard_node(shard, shard_type);
 							}
@@ -947,20 +947,21 @@ class DatabaseManager {
 					});
 				} else {
 					const transaction_promise = new Promise(function (resolve, reject) {
-						// TODO: read isolation level from database config
+						// note: pass an empty object for better-sqlite3 so we don't get spammed with warnings that sqlite3 only supports serializable isolation level
+						const transaction_config =
+							connection.config.client === "better-sqlite3" || connection.config.client === "sqlite3"
+								? {}
+								: {
+										isolationLevel: connection.transaction_isolation_level,
+									};
 						return connection.knex
-							.transaction({ isolationLevel: "read committed" })
+							.transaction(transaction_config)
 							.then(function (trx) {
 								return resolve(trx);
 							})
 							.catch(function (err) {
 								return reject(err);
 							});
-						/*
-						connection.knex.transaction(function (transaction) {
-							resolve(transaction);
-						});
-						*/
 					});
 					context.transactions[connection.key] = transaction_promise;
 					return transaction_promise.then(function (transaction) {
