@@ -1257,6 +1257,7 @@ class DatabaseModel extends Model {
 	_root_count(context, scope, parameters) {
 		const self = this;
 		return context.database_manager.route_transactions(context, scope, parameters, self, "read").then(function (shards) {
+			console.log("shards.length", shards.length);
 			return Promise.all(
 				shards.map(function (shard) {
 					return self._root_count_transaction(context, scope, parameters, shard.connection, shard.transaction);
@@ -1274,6 +1275,10 @@ class DatabaseModel extends Model {
 						}
 					});
 				});
+				// note: this will guarantee we always return at least one result (currently the frontend code depends on at least one result being returned)
+				if (Object.keys(merged).length === 0) {
+					merged["null"] = 0;
+				}
 				return merged;
 			});
 		});
@@ -1353,8 +1358,11 @@ class DatabaseModel extends Model {
 							}
 						});
 					});
+					// note: this will guarantee that we always return at least one result (currently the frontend code depends on at least one result being returned)
+					if (Object.keys(merged).length === 0) {
+						merged["null"] = 0;
+					}
 					return merged;
-					//return results.flat();
 				});
 			});
 		});

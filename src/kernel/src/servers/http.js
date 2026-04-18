@@ -215,7 +215,7 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 				if (rollback) {
 					// handle error response from graphql query/mutation
 					// rollback.errors is an array object
-					if (process.env.GAUZE_ENV === "development") {
+					if (process.env.GAUZE_ENV === "development_monolithic" || process.env.GAUZE_ENV === "development_sharded") {
 						// note: better to log instead of throwing a wrapped error becaused the wrapped error loses fidelity
 						console.error(rollback.errors);
 					}
@@ -223,7 +223,7 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 				return collection;
 			})
 			.catch(function (err) {
-				if (process.env.GAUZE_ENV === "development") {
+				if (process.env.GAUZE_ENV === "development_monolithic" || process.env.GAUZE_ENV === "development_sharded") {
 					console.error(err);
 				}
 			})

@@ -34,18 +34,18 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${TEST_MONOLITHIC_ENVIRONMENT}.${relationship__table}.shard.1`,
+				id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${relationship__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${relationship__table}.shard.1.read.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${relationship__table}.shard.1.read.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -60,12 +60,12 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${relationship__table}.shard.1.write.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${relationship__table}.shard.1.write.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -86,18 +86,18 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${TEST_MONOLITHIC_ENVIRONMENT}.${whitelist__table}.shard.1`,
+				id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${whitelist__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${whitelist__table}.shard.1.read.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${whitelist__table}.shard.1.read.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -112,12 +112,12 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${whitelist__table}.shard.1.write.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${whitelist__table}.shard.1.write.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -138,18 +138,18 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${TEST_MONOLITHIC_ENVIRONMENT}.${blacklist__table}.shard.1`,
+				id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${blacklist__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${blacklist__table}.shard.1.read.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${blacklist__table}.shard.1.read.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -164,12 +164,12 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${blacklist__table}.shard.1.write.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${blacklist__table}.shard.1.write.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -190,18 +190,18 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${TEST_MONOLITHIC_ENVIRONMENT}.${proxy__table}.shard.1`,
+				id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${proxy__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${proxy__table}.shard.1.read.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${proxy__table}.shard.1.read.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -216,12 +216,12 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${proxy__table}.shard.1.write.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${proxy__table}.shard.1.write.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -242,18 +242,18 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${TEST_MONOLITHIC_ENVIRONMENT}.${secret__table}.shard.1`,
+				id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${secret__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${secret__table}.shard.1.read.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${secret__table}.shard.1.read.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -268,12 +268,12 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${secret__table}.shard.1.write.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${secret__table}.shard.1.write.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -294,18 +294,18 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${TEST_MONOLITHIC_ENVIRONMENT}.${session__table}.shard.1`,
+				id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${session__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${session__table}.shard.1.read.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${session__table}.shard.1.read.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -320,12 +320,12 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${session__table}.shard.1.write.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${session__table}.shard.1.write.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -346,18 +346,18 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${TEST_MONOLITHIC_ENVIRONMENT}.${agent_root__table}.shard.1`,
+				id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${agent_root__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${agent_root__table}.shard.1.read.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${agent_root__table}.shard.1.read.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -372,12 +372,12 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${agent_root__table}.shard.1.write.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${agent_root__table}.shard.1.write.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -398,18 +398,18 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${TEST_MONOLITHIC_ENVIRONMENT}.${agent_account__table}.shard.1`,
+				id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${agent_account__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${agent_account__table}.shard.1.read.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${agent_account__table}.shard.1.read.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -424,12 +424,12 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${agent_account__table}.shard.1.write.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${agent_account__table}.shard.1.write.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -450,18 +450,18 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${TEST_MONOLITHIC_ENVIRONMENT}.${agent_user__table}.shard.1`,
+				id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${agent_user__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${agent_user__table}.shard.1.read.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${agent_user__table}.shard.1.read.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -476,12 +476,12 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${agent_user__table}.shard.1.write.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${agent_user__table}.shard.1.write.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -502,18 +502,18 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${TEST_MONOLITHIC_ENVIRONMENT}.${agent_person__table}.shard.1`,
+				id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${agent_person__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${agent_person__table}.shard.1.read.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${agent_person__table}.shard.1.read.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -528,12 +528,12 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${agent_person__table}.shard.1.write.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${agent_person__table}.shard.1.write.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -554,18 +554,18 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${TEST_MONOLITHIC_ENVIRONMENT}.${agent_character__table}.shard.1`,
+				id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${agent_character__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${agent_character__table}.shard.1.read.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${agent_character__table}.shard.1.read.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -580,12 +580,12 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${agent_character__table}.shard.1.write.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${agent_character__table}.shard.1.write.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -606,18 +606,18 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${TEST_MONOLITHIC_ENVIRONMENT}.${ezuag__table}.shard.1`,
+				id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${ezuag__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${ezuag__table}.shard.1.read.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${ezuag__table}.shard.1.read.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -632,12 +632,12 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${ezuag__table}.shard.1.write.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${ezuag__table}.shard.1.write.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -658,18 +658,18 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${TEST_MONOLITHIC_ENVIRONMENT}.${ytitne__table}.shard.1`,
+				id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${ytitne__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${ytitne__table}.shard.1.read.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${ytitne__table}.shard.1.read.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -684,12 +684,12 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${ytitne__table}.shard.1.write.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${ytitne__table}.shard.1.write.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -710,18 +710,18 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${TEST_MONOLITHIC_ENVIRONMENT}.${entity__table}.shard.1`,
+				id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${entity__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${entity__table}.shard.1.read.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${entity__table}.shard.1.read.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -736,12 +736,12 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${entity__table}.shard.1.write.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${entity__table}.shard.1.write.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -762,18 +762,18 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${TEST_MONOLITHIC_ENVIRONMENT}.${gauze__table}.shard.1`,
+				id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${gauze__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${gauze__table}.shard.1.read.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${gauze__table}.shard.1.read.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -788,12 +788,12 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${TEST_MONOLITHIC_ENVIRONMENT}.${gauze__table}.shard.1.write.1`,
+						id: `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.${gauze__table}.shard.1.write.1`,
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${DEVELOPMENT_MONOLITHIC_ENVIRONMENT}.sqlite3`),
 							},
 							migrations: {
 								tableName: "knex_migrations",
