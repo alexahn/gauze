@@ -37,8 +37,8 @@ const expected = `{
                     "gauze__blacklist__id": "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
                     "gauze__blacklist__realm": "system",
                     "gauze__blacklist__agent_type": "gauze__agent_user",
-                    "gauze__blacklist__agent_role": "trunk",
-                    "gauze__blacklist__agent_id": "00000000-0000-0000-0000-000000000002",
+                    "gauze__blacklist__agent_role": "root",
+                    "gauze__blacklist__agent_id": "00000000-0000-0000-0000-000000000001",
                     "gauze__blacklist__entity_type": "gauze__entity",
                     "gauze__blacklist__entity_id": "7f84c508-b714-41c1-b986-2d6ed64fc5e9",
                     "gauze__blacklist__method": "read"

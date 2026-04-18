@@ -15,12 +15,19 @@ export const command = "list";
 export const describe = "List both completed and pending migrations";
 
 export const builder = function (yargs) {
-	return yargs.env("GAUZE_PROJECT_MIGRATE");
+	return yargs.env("GAUZE_PROJECT_MIGRATE").option("format", {
+		alias: "f",
+		description: "The format to log the migration lists",
+		type: "string",
+		requiresArg: false,
+		choices: ["console", "json"],
+		default: "console",
+	});
 	//.wrap(128)
 };
 
 export const handler = function (argv) {
 	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
 	const MANAGER = $gauze.kernel.src.applications.manager.GAUZE__MANAGER__APPLICATION__SRC__KERNEL({ $gauze });
-	MANAGER.migrate_list();
+	return MANAGER.migrate_list(argv.format);
 };

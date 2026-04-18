@@ -26,5 +26,7 @@ export const builder = function (yargs) {
 export const handler = function (argv) {
 	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
 	const MANAGER = $gauze.kernel.src.applications.manager.GAUZE__MANAGER__APPLICATION__SRC__KERNEL({ $gauze });
-	MANAGER.migrate_up(argv.migration);
+	return MANAGER.migrate_up(argv.migration).then(function () {
+		console.log("Migrate up completed successfully");
+	});
 };

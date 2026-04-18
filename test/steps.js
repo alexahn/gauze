@@ -67,11 +67,16 @@ function load_steps(base_path, directory) {
 		});
 }
 
-function make_step_error(step, errors) {
+function make_step_error(step, errors, actual, expected) {
 	const message = `Step ${step.step} failed at: ${step.file_path}
 Error: Step description: ${step.description}
 Response: 
-${errors}`;
+${errors}
+
+Actual:
+${actual}
+Expected:
+${expected}`;
 	return new Error(message);
 }
 
@@ -107,7 +112,7 @@ function run_step(environment, step) {
 					console.log(step.expected);
 					console.log("error:");
 					console.log(data.errors);
-					throw make_step_error(step, data.errors);
+					throw make_step_error(step, data.errors, result, step.expected);
 				}
 				return data;
 			} else {
@@ -122,7 +127,7 @@ function run_step(environment, step) {
 					console.log("expected:");
 					console.log(step.expected);
 					//console.error(err)
-					throw make_step_error(step);
+					throw make_step_error(step, err, result, step.expected);
 				}
 				return data;
 			}
@@ -132,95 +137,68 @@ function run_step(environment, step) {
 function run_steps(environment, steps) {
 	// make transaction here
 	// augment context with database and transaction
-	const { database, database_manager, schema } = environment;
-	return database.transaction(function (transaction) {
-		const transactions = {};
-		// const manager = new DatabaseManager(config)
-		return steps
-			.reduce(function (prev, next) {
-				return prev.then(function () {
-					return Promise.all(
-						next.map(function (step) {
-							return run_step(
-								{
-									database,
-									schema,
-									transaction,
-									transactions,
-									database_manager,
-								},
-								step,
-							);
-						}),
-					);
-				});
-			}, Promise.resolve([]))
-			.then(function () {
-				return transaction.rollback().then(function () {
-					return $gauze.database.manager.default.rollback_transactions(transactions);
-				});
-			})
-			.catch(function (err) {
-				return transaction
-					.rollback(err)
-					.then(function () {
-						return $gauze.database.manager.default.rollback_transactions(transactions).then(function () {
-							throw err;
-						});
-					})
-					.catch(function (err) {
-						throw err;
-					});
+	const { database_manager, schema } = environment;
+	const transactions = {};
+	return steps
+		.reduce(function (prev, next) {
+			return prev.then(function () {
+				return Promise.all(
+					next.map(function (step) {
+						return run_step(
+							{
+								schema,
+								transactions,
+								database_manager,
+							},
+							step,
+						);
+					}),
+				);
 			});
-	});
+		}, Promise.resolve([]))
+		.then(function () {
+			return $gauze.database.manager.default.rollback_transactions(transactions);
+		})
+		.catch(function (err) {
+			return $gauze.database.manager.default.rollback_transactions(transactions).then(function () {
+				throw err;
+			});
+		});
 }
 
 function run_layers(environment, layers) {
-	const { database, database_manager } = environment;
-	return database.transaction(function (transaction) {
-		const transactions = {};
-		return layers
-			.reduce(function (prev, next) {
-				return prev.then(function () {
-					const { schema, steps } = next;
-					return steps.reduce(function (prev, next) {
-						return prev.then(function () {
-							return Promise.all(
-								next.map(function (step) {
-									return run_step(
-										{
-											database,
-											database_manager,
-											schema,
-											transaction,
-											transactions,
-										},
-										step,
-									);
-								}),
-							);
-						});
-					}, Promise.resolve([]));
-				});
-			}, Promise.resolve(true))
-			.then(function () {
-				return transaction.rollback().then(function () {
-					return $gauze.database.manager.default.rollback_transactions(transactions);
-				});
-			})
-			.catch(function (err) {
-				return transaction
-					.rollback(err)
-					.then(function () {
-						return $gauze.database.manager.default.rollback_transactions(transactions).then(function () {
-							throw err;
-						});
-					})
-					.catch(function (err) {
-						throw err;
+	const { database_manager } = environment;
+	const transactions = {};
+	return layers
+		.reduce(function (prev, next) {
+			return prev.then(function () {
+				const { schema, steps } = next;
+				return steps.reduce(function (prev, next) {
+					return prev.then(function () {
+						return Promise.all(
+							next.map(function (step) {
+								return run_step(
+									{
+										database_manager,
+										schema,
+										transactions,
+									},
+									step,
+								);
+							}),
+						);
 					});
+				}, Promise.resolve([]));
 			});
-	});
+		}, Promise.resolve(true))
+		.then(function () {
+			return $gauze.database.manager.default.rollback_transactions(transactions);
+		})
+		.catch(function (err) {
+			return $gauze.database.manager.default.rollback_transactions(transactions).then(function () {
+				throw err;
+			});
+		});
 }
 
 export { load_steps, run_steps, run_layers };

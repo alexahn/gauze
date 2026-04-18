@@ -16,6 +16,10 @@ mutation ${operation_name}($where: Relationship_Mutation__Where) {
 const operation_variables = {
 	where: {
 		gauze__relationship__id: "3ab515f4-5391-4af9-a2c9-a7119ad262ce",
+		gauze__relationship__from_type: "gauze__ytitne",
+		gauze__relationship__from_id: "00000000-0000-0000-0000-000000000004",
+		gauze__relationship__to_type: "gauze__ytitne",
+		gauze__relationship__to_id: "00000000-0000-0000-0000-000000000004",
 	},
 };
 const expected = `{

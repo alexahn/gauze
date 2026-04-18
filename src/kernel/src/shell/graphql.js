@@ -17,27 +17,25 @@ const EXECUTE__GRAPHQL__SHELL__SRC__KERNEL = function ({ schema, context, operat
 };
 
 // connection is a knex database connection
-const TRANSACTION_EXECUTE__GRAPHQL__SHELL__SRC__KERNEL = function (connection, config) {
-	return connection.transaction(function (transaction) {
-		const context = config.context || {};
-		context.database = connection;
-		context.transaction = transaction;
-		config.context = context;
-		return EXECUTE__GRAPHQL__SHELL__SRC__KERNEL(config)
-			.then(function (data) {
-				if (data.errors && data.errors.length) {
-					throw data.errors;
-				}
-				return transaction.commit(data).then(function () {
-					return Promise.resolve(data);
-				});
-			})
-			.catch(function (err) {
-				return transaction.rollback(err).then(function () {
-					throw err;
-				});
+const TRANSACTION_EXECUTE__GRAPHQL__SHELL__SRC__KERNEL = function (database_manager, config) {
+	const context = config.context || {};
+	context.database_manager = database_manager;
+	context.transactions = {};
+	config.context = context;
+	return EXECUTE__GRAPHQL__SHELL__SRC__KERNEL(config)
+		.then(function (data) {
+			if (data.errors && data.errors.length) {
+				throw data.errors;
+			}
+			return database_manager.commit_context_transactions(context).then(function () {
+				return Promise.resolve(data);
 			});
-	});
+		})
+		.catch(function (err) {
+			return database_manager.rollback_context_transactions(context).then(function () {
+				throw err;
+			});
+		});
 };
 
 export { EXECUTE__GRAPHQL__SHELL__SRC__KERNEL, TRANSACTION_EXECUTE__GRAPHQL__SHELL__SRC__KERNEL };

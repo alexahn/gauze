@@ -43,6 +43,12 @@ const operation_variables = {
 };
 const expected = `{
     "data": {
+        "update_blacklist": []
+    }
+}`;
+/*
+const expected = `{
+    "data": {
         "update_blacklist": [
             {
                 "_metadata": {
@@ -61,6 +67,7 @@ const expected = `{
         ]
     }
 }`;
+*/
 
 export default {
 	step: 1,

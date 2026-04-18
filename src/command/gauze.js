@@ -11,6 +11,19 @@ import * as project from "./gauze/project.js";
 import * as migrate from "./gauze/migrate/index.js";
 import * as seed from "./gauze/seed/index.js";
 import * as application from "./application/index.js";
+import * as shard from "./gauze/shard/index.js";
 
-yargs(hideBin(process.argv)).command(create).command(read).command(del).command(run).command(migrate).command(seed).command(project).command(application).demandCommand().help().parse();
+yargs(hideBin(process.argv))
+	.command(create)
+	.command(read)
+	.command(del)
+	.command(run)
+	.command(migrate)
+	.command(seed)
+	.command(project)
+	.command(application)
+	.command(shard)
+	.demandCommand()
+	.help()
+	.parse();
 //.wrap(128)

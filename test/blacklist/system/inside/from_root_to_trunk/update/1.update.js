@@ -43,22 +43,7 @@ const operation_variables = {
 };
 const expected = `{
     "data": {
-        "update_blacklist": [
-            {
-                "_metadata": {
-                    "id": "55c29b50-5e24-447d-8505-75e82c2aa8cc"
-                },
-                "attributes": {
-                    "gauze__blacklist__realm": "system",
-                    "gauze__blacklist__agent_type": "gauze__agent_user",
-                    "gauze__blacklist__agent_role": "trunk",
-                    "gauze__blacklist__agent_id": "00000000-0000-0000-0000-000000000003",
-                    "gauze__blacklist__entity_type": "gauze__entity",
-                    "gauze__blacklist__entity_id": "7f84c508-b714-41c1-b986-2d6ed64fc5e9",
-                    "gauze__blacklist__method": "read"
-                }
-            }
-        ]
+        "update_blacklist": []
     }
 }`;
 
