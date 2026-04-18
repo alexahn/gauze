@@ -1275,6 +1275,7 @@ class DatabaseModel extends Model {
 						}
 					});
 				});
+				// TODO: fix the frontend code so we don't need to do this
 				// note: this will guarantee we always return at least one result (currently the frontend code depends on at least one result being returned)
 				if (Object.keys(merged).length === 0) {
 					merged["null"] = 0;
@@ -1358,6 +1359,7 @@ class DatabaseModel extends Model {
 							}
 						});
 					});
+					// TODO: fix the frontend code so we don't need to do this
 					// note: this will guarantee that we always return at least one result (currently the frontend code depends on at least one result being returned)
 					if (Object.keys(merged).length === 0) {
 						merged["null"] = 0;

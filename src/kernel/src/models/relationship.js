@@ -255,7 +255,6 @@ class RelationshipSystemModel extends SystemModel {
 	// todo: parallelize the sql queries
 	_filter_access_transaction(context, scope, parameters, realm, relationship_rows, method, database, transaction) {
 		const self = this;
-		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const { agent_id, agent_type } = agent;
 		const valid_from_ids = relationship_rows.map(function (relationship) {
@@ -378,7 +377,6 @@ class RelationshipSystemModel extends SystemModel {
 	}
 	_read_entity_transaction(context, scope, parameters, realm, database, transaction) {
 		const self = this;
-		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const { agent_id } = agent;
 		const method = "read";
@@ -399,7 +397,6 @@ class RelationshipSystemModel extends SystemModel {
 	}
 	_read_entity_in_transaction(context, scope, parameters, realm, database, transaction) {
 		const self = this;
-		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const { agent_id } = agent;
 		const method = "read";
@@ -435,7 +432,6 @@ class RelationshipSystemModel extends SystemModel {
 		// do an in memory join basically
 		// final set of relationships the user has access to
 		const self = this;
-		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const { agent_id } = agent;
 		const method = "read";
@@ -479,7 +475,6 @@ class RelationshipSystemModel extends SystemModel {
 		// do an in memory join basically
 		// final set of relationships the user has access to
 		const self = this;
-		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const { agent_id } = agent;
 		const method = "read";
@@ -554,13 +549,6 @@ class RelationshipSystemModel extends SystemModel {
 					});
 				} else {
 					return self.generate_response("read", []);
-					/*
-					return {
-						data: {
-							read_relationship: [],
-						},
-					};
-					*/
 				}
 			});
 		} else if (
@@ -634,13 +622,6 @@ class RelationshipSystemModel extends SystemModel {
 					});
 				} else {
 					return self.generate_response("update", []);
-					/*
-					return {
-						data: {
-							update_relationship: [],
-						},
-					};
-					*/
 				}
 			});
 		} else {
@@ -707,13 +688,6 @@ class RelationshipSystemModel extends SystemModel {
 					});
 				} else {
 					return self.generate_response("delete", []);
-					/*
-					return {
-						data: {
-							delete_relationship: [],
-						},
-					};
-					*/
 				}
 			});
 		} else {
@@ -874,7 +848,30 @@ class RelationshipSystemModel extends SystemModel {
 						return result.data[`count_${self.entity.name}`];
 					})
 					.flat();
-				return self.generate_response("count", rows);
+				// TODO: figure out a way to not have to do the logic below
+				const counts = {};
+				rows.forEach(function (row) {
+					if (counts[row.select]) {
+						counts[row.select] += row.count;
+					} else {
+						if (row.select !== "null") {
+							counts[row.select] = row.count;
+						}
+					}
+				});
+				const count_rows = Object.keys(counts).map(function (key) {
+					return {
+						select: key,
+						count: counts[key],
+					};
+				});
+				if (!count_rows.length) {
+					count_rows.push({
+						select: "null",
+						count: 0,
+					});
+				}
+				return self.generate_response("count", count_rows);
 			});
 		});
 	}

@@ -341,9 +341,6 @@ class AccessSystemModel extends SystemModel {
 		return self.model_loader.load(context, scope, key);
 	}
 	_read_agent(context, input, realm) {
-		//const self = this
-		//const { database, transaction } = context
-		//return self._read_agent_transaction(context, input, realm, database, transaction)
 		const self = this;
 		const agent_id = input.where[self.key_agent_id];
 		const agent_table_name = input.where[self.key_agent_type];
@@ -458,8 +455,6 @@ class AccessSystemModel extends SystemModel {
 	}
 	_root_read(context, scope, input, realm) {
 		const self = this;
-		//const { database, transaction } = context;
-		//return self.__root_read_transaction(context, scope, input, realm, database, transaction)
 		return context.database_manager.route_transactions(context, scope, input, self, "read").then(function (shards) {
 			return Promise.all(
 				shards.map(function (shard) {
@@ -585,7 +580,6 @@ class AccessSystemModel extends SystemModel {
 	// requires where.id
 	_root_delete_transaction(context, scope, input, realm, database, transaction) {
 		const self = this;
-		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const method = "delete";
 		if (input && input.where && input.where[self.key_id]) {
@@ -758,21 +752,42 @@ class AccessSystemModel extends SystemModel {
 					return self._count_read_transaction(context, scope, input, realm, shard.connection, shard.transaction);
 				}),
 			).then(function (results) {
-				//return results.flat();
 				// stitch together results and build response
 				const rows = results
 					.map(function (result) {
 						return result.data[`count_${self.entity.name}`];
 					})
 					.flat();
-				return self.generate_count_response(rows);
+				// TODO: figure out a way to not have to do the logic below
+				const counts = {};
+				rows.forEach(function (row) {
+					if (counts[row.select]) {
+						counts[row.select] += row.count;
+					} else {
+						if (row.select !== "null") {
+							counts[row.select] = row.count;
+						}
+					}
+				});
+				const count_rows = Object.keys(counts).map(function (key) {
+					return {
+						select: key,
+						count: counts[key],
+					};
+				});
+				if (!count_rows.length) {
+					count_rows.push({
+						select: "null",
+						count: 0,
+					});
+				}
+				return self.generate_count_response(count_rows);
 			});
 		});
 	}
 	// requires where.id or where.agent_id or (where.entity_id and where.entity_type and where.method)
 	_root_count_transaction(context, scope, input, realm, database, transaction) {
 		const self = this;
-		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const method = "count";
 		if (input.where && input.where[self.key_id]) {
