@@ -159,7 +159,7 @@ class DatabaseManager {
 					filename: path.join(__dirname, "../../", `${DEVELOPMENT_ENVIRONMENT}.sqlite3`),
 				},
 				migrations: {
-					tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
+					tableName: "knex_migrations",
 					directory: path.join(__dirname, "migrations"),
 				},
 				seeds: {
