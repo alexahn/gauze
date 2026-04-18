@@ -619,8 +619,6 @@ class DatabaseManager {
 		const self = this;
 		if (relationships === undefined) {
 			// non-relationship query
-			// primary key check
-			// TODO: refactor this
 			if (shard_type === "read") {
 				// read
 				if (parameters.where) {
@@ -798,11 +796,9 @@ class DatabaseManager {
 							return shard_nodes;
 						} else {
 							return relationship_shard_nodes;
-							//return self.get_all_shards_nodes(model.table_name, shard_type);
 						}
 					} else {
 						return relationship_shard_nodes;
-						//return self.get_all_shards_nodes(model.table_name, shard_type);
 					}
 				} else if (parameters.where_in) {
 					if (parameters.where_in[model.primary_key]) {
@@ -818,17 +814,13 @@ class DatabaseManager {
 						return shard_nodes;
 					} else {
 						return relationship_shard_nodes;
-						//return self.get_all_shards_nodes(model.table_name, shard_type);
 					}
 				} else if (parameters.where_not_in) {
 					return relationship_shard_nodes;
-					//return self.get_all_shards_nodes(model.table_name, shard_type);
 				} else if (parameters.where_between) {
 					return relationship_shard_nodes;
-					//return self.get_all_shards_nodes(model.table_name, shard_type);
 				} else if (parameters.where_like) {
 					return relationship_shard_nodes;
-					//return self.get_all_shards_nodes(model.table_name, shard_type);
 				} else {
 					return [];
 				}
@@ -845,7 +837,6 @@ class DatabaseManager {
 						}
 					} else {
 						return relationship_shard_nodes;
-						//return self.get_all_shards_nodes(model.table_name, shard_type);
 					}
 				} else if (parameters.where_in) {
 					if (parameters.where_in[model.primary_key]) {
@@ -861,17 +852,13 @@ class DatabaseManager {
 						return shard_nodes;
 					} else {
 						return relationship_shard_nodes;
-						//return self.get_all_shards_nodes(model.table_name, shard_type);
 					}
 				} else if (parameters.where_not_in) {
 					return relationship_shard_nodes;
-					//return self.get_all_shards_nodes(model.table_name, shard_type);
 				} else if (parameters.where_between) {
 					return relationship_shard_nodes;
-					//return self.get_all_shards_nodes(model.table_name, shard_type);
 				} else if (parameters.where_like) {
 					return relationship_shard_nodes;
-					//return self.get_all_shards_nodes(model.table_name, shard_type);
 				} else {
 					if (parameters.attributes) {
 						// create
@@ -894,40 +881,6 @@ class DatabaseManager {
 			} else {
 				throw new Error("Invalid shard type, must be either read or write");
 			}
-			/*
-			if (parameters.where) {
-				if (parameters.where[model.primary_key]) {
-					const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
-					const model_shards = self.find_shards(model.table_name, primary_key_number);
-					const model_shard = model_shards[0];
-					if (model_shard) {
-						return [self.get_one_shard_node(model_shard, shard_type)];
-					} else {
-						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
-					}
-				} else {
-					// use relationships to constrain the set of connections we need to check
-					return self.get_all_shards_nodes(model.table_name, shard_type);
-					//return [];
-				}
-			} else if (parameters.attributes) {
-				if (parameters.attributes[model.primary_key]) {
-					const primary_key_number = self.uuid_to_big_int(parameters.attributes[model.primary_key]);
-					const model_shards = self.find_shards(model.table_name, primary_key_number);
-					const model_shard = model_shards[0];
-					if (model_shard) {
-						return [self.get_one_shard_node(model_shard, shard_type)];
-					} else {
-						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
-					}
-				} else {
-					// should not be possible
-					return [];
-				}
-			} else {
-				return [];
-			}
-			*/
 		} else {
 			throw new Error("Invalid relationships, must be either undefined or an array");
 		}
