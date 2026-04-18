@@ -6,7 +6,6 @@ import * as $abstract from "./../abstract/index.js";
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-//const TEST_MONOLITHIC_ENVIRONMENT = "test";
 const TEST_MONOLITHIC_ENVIRONMENT = "test_monolithic";
 const TEST_SHARDED_ENVIRONMENT = "test_sharded";
 const DEVELOPMENT_ENVIRONMENT = "development";
@@ -34,18 +33,18 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${DEVELOPMENT_ENVIRONMENT}.${relationship__table}.shard.1`,
+				id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.1`,
 				start: 0n,
-				end: 340282366920938463463374607431768211455n,
+				end: 85070591730234615865843651857942052862n,
 				// read slaves
 				read: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${relationship__table}.shard.1.read.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.1.read.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.${relationship__table}.shard.1.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -60,12 +59,147 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${relationship__table}.shard.1.write.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.1.write.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.sqlite3`),
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.${relationship__table}.shard.1.sqlite3`),
+							},
+							migrations: {
+								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
+								directory: path.join(__dirname, "migrations"),
+							},
+							seeds: {
+								directory: path.join(__dirname, "seeds", "test"),
+							},
+						},
+					},
+				],
+			},
+			{
+				id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.2`,
+				start: 85070591730234615865843651857942052863n,
+				end: 170141183460469231731687303715884105726n,
+				// read slaves
+				read: [
+					{
+						id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.2.read.1`,
+						transaction_isolation_level: "read committed",
+						config: {
+							client: "better-sqlite3",
+							connection: {
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.${relationship__table}.shard.2.sqlite3`),
+							},
+							migrations: {
+								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
+								directory: path.join(__dirname, "migrations"),
+							},
+							seeds: {
+								directory: path.join(__dirname, "seeds", "test"),
+							},
+						},
+					},
+				],
+				// write masters
+				write: [
+					{
+						id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.2.write.1`,
+						transaction_isolation_level: "read committed",
+						config: {
+							client: "better-sqlite3",
+							connection: {
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.${relationship__table}.shard.2.sqlite3`),
+							},
+							migrations: {
+								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
+								directory: path.join(__dirname, "migrations"),
+							},
+							seeds: {
+								directory: path.join(__dirname, "seeds", "test"),
+							},
+						},
+					},
+				],
+			},
+			{
+				id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.3`,
+				start: 170141183460469231731687303715884105727n,
+				end: 255211775190703847597530955573826158590n,
+				// read slaves
+				read: [
+					{
+						id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.3.read.1`,
+						transaction_isolation_level: "read committed",
+						config: {
+							client: "better-sqlite3",
+							connection: {
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.${relationship__table}.shard.3.sqlite3`),
+							},
+							migrations: {
+								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
+								directory: path.join(__dirname, "migrations"),
+							},
+							seeds: {
+								directory: path.join(__dirname, "seeds", "test"),
+							},
+						},
+					},
+				],
+				// write masters
+				write: [
+					{
+						id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.3.write.1`,
+						transaction_isolation_level: "read committed",
+						config: {
+							client: "better-sqlite3",
+							connection: {
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.${relationship__table}.shard.3.sqlite3`),
+							},
+							migrations: {
+								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
+								directory: path.join(__dirname, "migrations"),
+							},
+							seeds: {
+								directory: path.join(__dirname, "seeds", "test"),
+							},
+						},
+					},
+				],
+			},
+			{
+				id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.4`,
+				start: 255211775190703847597530955573826158591n,
+				end: 340282366920938463463374607431768211455n,
+				// read slaves
+				read: [
+					{
+						id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.4.read.1`,
+						transaction_isolation_level: "read committed",
+						config: {
+							client: "better-sqlite3",
+							connection: {
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.${relationship__table}.shard.4.sqlite3`),
+							},
+							migrations: {
+								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
+								directory: path.join(__dirname, "migrations"),
+							},
+							seeds: {
+								directory: path.join(__dirname, "seeds", "test"),
+							},
+						},
+					},
+				],
+				// write masters
+				write: [
+					{
+						id: `${TEST_SHARDED_ENVIRONMENT}.${relationship__table}.shard.4.write.1`,
+						transaction_isolation_level: "read committed",
+						config: {
+							client: "better-sqlite3",
+							connection: {
+								filename: path.join(__dirname, "../../", `${TEST_MONOLITHIC_ENVIRONMENT}.${relationship__table}.shard.4.sqlite3`),
 							},
 							migrations: {
 								tableName: process.env.KNEX_MIGRATIONS_TABLENAME,
@@ -86,13 +220,13 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${DEVELOPMENT_ENVIRONMENT}.${whitelist__table}.shard.1`,
+				id: `${TEST_SHARDED_ENVIRONMENT}.${whitelist__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${whitelist__table}.shard.1.read.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${whitelist__table}.shard.1.read.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -112,7 +246,7 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${whitelist__table}.shard.1.write.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${whitelist__table}.shard.1.write.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -138,13 +272,13 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${DEVELOPMENT_ENVIRONMENT}.${blacklist__table}.shard.1`,
+				id: `${TEST_SHARDED_ENVIRONMENT}.${blacklist__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${blacklist__table}.shard.1.read.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${blacklist__table}.shard.1.read.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -164,7 +298,7 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${blacklist__table}.shard.1.write.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${blacklist__table}.shard.1.write.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -190,13 +324,13 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${DEVELOPMENT_ENVIRONMENT}.${proxy__table}.shard.1`,
+				id: `${TEST_SHARDED_ENVIRONMENT}.${proxy__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${proxy__table}.shard.1.read.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${proxy__table}.shard.1.read.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -216,7 +350,7 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${proxy__table}.shard.1.write.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${proxy__table}.shard.1.write.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -242,13 +376,13 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${DEVELOPMENT_ENVIRONMENT}.${secret__table}.shard.1`,
+				id: `${TEST_SHARDED_ENVIRONMENT}.${secret__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${secret__table}.shard.1.read.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${secret__table}.shard.1.read.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -268,7 +402,7 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${secret__table}.shard.1.write.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${secret__table}.shard.1.write.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -294,13 +428,13 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${DEVELOPMENT_ENVIRONMENT}.${session__table}.shard.1`,
+				id: `${TEST_SHARDED_ENVIRONMENT}.${session__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${session__table}.shard.1.read.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${session__table}.shard.1.read.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -320,7 +454,7 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${session__table}.shard.1.write.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${session__table}.shard.1.write.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -346,13 +480,13 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${DEVELOPMENT_ENVIRONMENT}.${agent_root__table}.shard.1`,
+				id: `${TEST_SHARDED_ENVIRONMENT}.${agent_root__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_root__table}.shard.1.read.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_root__table}.shard.1.read.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -372,7 +506,7 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_root__table}.shard.1.write.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_root__table}.shard.1.write.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -398,13 +532,13 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${DEVELOPMENT_ENVIRONMENT}.${agent_account__table}.shard.1`,
+				id: `${TEST_SHARDED_ENVIRONMENT}.${agent_account__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_account__table}.shard.1.read.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_account__table}.shard.1.read.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -424,7 +558,7 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_account__table}.shard.1.write.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_account__table}.shard.1.write.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -450,13 +584,13 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${DEVELOPMENT_ENVIRONMENT}.${agent_user__table}.shard.1`,
+				id: `${TEST_SHARDED_ENVIRONMENT}.${agent_user__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_user__table}.shard.1.read.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_user__table}.shard.1.read.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -476,7 +610,7 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_user__table}.shard.1.write.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_user__table}.shard.1.write.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -502,13 +636,13 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${DEVELOPMENT_ENVIRONMENT}.${agent_person__table}.shard.1`,
+				id: `${TEST_SHARDED_ENVIRONMENT}.${agent_person__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_person__table}.shard.1.read.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_person__table}.shard.1.read.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -528,7 +662,7 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_person__table}.shard.1.write.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_person__table}.shard.1.write.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -554,13 +688,13 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${DEVELOPMENT_ENVIRONMENT}.${agent_character__table}.shard.1`,
+				id: `${TEST_SHARDED_ENVIRONMENT}.${agent_character__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_character__table}.shard.1.read.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_character__table}.shard.1.read.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -580,7 +714,7 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${agent_character__table}.shard.1.write.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${agent_character__table}.shard.1.write.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -606,13 +740,13 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${DEVELOPMENT_ENVIRONMENT}.${ezuag__table}.shard.1`,
+				id: `${TEST_SHARDED_ENVIRONMENT}.${ezuag__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${ezuag__table}.shard.1.read.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${ezuag__table}.shard.1.read.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -632,7 +766,7 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${ezuag__table}.shard.1.write.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${ezuag__table}.shard.1.write.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -658,13 +792,13 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${DEVELOPMENT_ENVIRONMENT}.${ytitne__table}.shard.1`,
+				id: `${TEST_SHARDED_ENVIRONMENT}.${ytitne__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${ytitne__table}.shard.1.read.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${ytitne__table}.shard.1.read.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -684,7 +818,7 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${ytitne__table}.shard.1.write.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${ytitne__table}.shard.1.write.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -710,13 +844,13 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${DEVELOPMENT_ENVIRONMENT}.${entity__table}.shard.1`,
+				id: `${TEST_SHARDED_ENVIRONMENT}.${entity__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${entity__table}.shard.1.read.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${entity__table}.shard.1.read.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -736,7 +870,7 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${entity__table}.shard.1.write.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${entity__table}.shard.1.write.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -762,13 +896,13 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: `${DEVELOPMENT_ENVIRONMENT}.${gauze__table}.shard.1`,
+				id: `${TEST_SHARDED_ENVIRONMENT}.${gauze__table}.shard.1`,
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				// read slaves
 				read: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${gauze__table}.shard.1.read.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${gauze__table}.shard.1.read.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",
@@ -788,7 +922,7 @@ const CONFIG__ENVIRONMENT = {
 				// write masters
 				write: [
 					{
-						id: `${DEVELOPMENT_ENVIRONMENT}.${gauze__table}.shard.1.write.1`,
+						id: `${TEST_SHARDED_ENVIRONMENT}.${gauze__table}.shard.1.write.1`,
 						transaction_isolation_level: "read committed",
 						config: {
 							client: "better-sqlite3",

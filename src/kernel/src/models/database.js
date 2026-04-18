@@ -408,7 +408,14 @@ class DatabaseModel extends Model {
 					return self._root_create_transaction(context, scope, parameters, shard.connection, shard.transaction);
 				}),
 			).then(function (results) {
-				return results.flat();
+				const flattened = results.flat();
+				return [
+					...new Map(
+						flattened.map(function (row) {
+							return [row[self.primary_key], row];
+						}),
+					).values(),
+				];
 			});
 		});
 	}
@@ -990,7 +997,14 @@ class DatabaseModel extends Model {
 					return self._root_delete_transaction(context, scope, parameters, shard.connection, shard.transaction);
 				}),
 			).then(function (results) {
-				return results.flat();
+				const flattened = results.flat();
+				return [
+					...new Map(
+						flattened.map(function (row) {
+							return [row[self.primary_key], row];
+						}),
+					).values(),
+				];
 			});
 		});
 	}
@@ -1063,7 +1077,14 @@ class DatabaseModel extends Model {
 						return self._relationship_delete_transaction(context, scope, parameters, shard.connection, shard.transaction);
 					}),
 				).then(function (results) {
-					return results.flat();
+					const flattened = results.flat();
+					return [
+						...new Map(
+							flattened.map(function (row) {
+								return [row[self.primary_key], row];
+							}),
+						).values(),
+					];
 				});
 			});
 		});
