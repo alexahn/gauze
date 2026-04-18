@@ -659,33 +659,39 @@ class GauzeManager {
 			self.$gauze.database.manager.default.destroy_connections();
 		});
 	}
-	migrate_current_version() {
+	migrate_current_version(format) {
 		const self = this;
 		return self.$gauze.database.manager.default.migrate_current_version().then(function (shard_nodes) {
-			console.log("OBJECT:");
-			console.dir(shard_nodes, { depth: 256 });
 			const versions = shard_nodes.map(function (shard_node) {
 				return shard_node.version;
 			});
-			console.log("JSON:");
-			console.log(JSON.stringify(shard_nodes));
-			console.log("UNIQUE VERSIONS:");
-			console.log(
-				versions.filter(function (version, idx, self) {
-					return self.indexOf(version) === idx;
-				}),
-			);
+			const unique_versions = versions.filter(function (version, idx, self) {
+				return self.indexOf(version) === idx;
+			});
+			if (format === "console") {
+				console.log("NODES:");
+				console.dir(shard_nodes, { depth: 256 });
+				console.log("UNIQUE VERSIONS:");
+				console.log(unique_versions);
+			} else if (format === "json") {
+				console.log(
+					JSON.stringify({
+						nodes: shard_nodes,
+						unique_versions,
+					}),
+				);
+			}
 			self.$gauze.database.manager.default.destroy_connections();
 		});
 	}
-	migrate_list() {
+	migrate_list(format) {
 		const self = this;
 		return self.$gauze.database.manager.default.migrate_list().then(function (shard_nodes) {
-			console.log("OBJECT:");
-			console.dir(shard_nodes, { depth: 256 });
-			// note: we probably want to change this to return JSON
-			console.log("JSON:");
-			console.log(JSON.stringify(shard_nodes));
+			if (format === "console") {
+				console.dir(shard_nodes, { depth: 256 });
+			} else if (format === "json") {
+				console.log(JSON.stringify(shard_nodes));
+			}
 			self.$gauze.database.manager.default.destroy_connections();
 		});
 	}
@@ -704,6 +710,21 @@ class GauzeManager {
 	seed_run() {
 		const self = this;
 		return self.$gauze.database.manager.default.seed_run().then(function () {
+			self.$gauze.database.manager.default.destroy_connections();
+		});
+	}
+	shard_plan(depth, order, format) {
+		const self = this;
+		return self.$gauze.database.manager.default.shard_plan(depth, order).then(function (plan) {
+			if (format === "console") {
+				console.dir(plan, { depth: 256 });
+			} else if (format === "json") {
+				console.log(
+					JSON.stringify(plan, function (_, v) {
+						return typeof v === "bigint" ? v.toString() : v;
+					}),
+				);
+			}
 			self.$gauze.database.manager.default.destroy_connections();
 		});
 	}
