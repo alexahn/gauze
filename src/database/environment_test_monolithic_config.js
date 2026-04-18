@@ -7,7 +7,7 @@ const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 //const TEST_MONOLITH_ENVIRONMENT = "test";
-const TEST_MONOLITH_ENVIRONMENT = "test_monolith";
+const TEST_MONOLITH_ENVIRONMENT = "test_monolithic";
 const TEST_SHARDED_ENVIRONMENT = "test_sharded";
 const DEVELOPMENT_ENVIRONMENT = "development";
 const STAGING_ENVIRONMENT = "staging";

@@ -25,7 +25,7 @@
 	"main": "src/index.js",
 	"bin": "./src/command/gauze.js",
 	"scripts": {
-		"test": "GAUZE_ENV=test_monolith LOG_LEVEL_MINIMUM=4 node test",
+		"test": "GAUZE_ENV=test_monolithic LOG_LEVEL_MINIMUM=4 node test",
 		"gauze": "./src/command/gauze.js",
 		"start": "/bin/zsh -c \"npm run start-server & ; npm run start-ui & ; npm run start-graphiql & ; wait\"",
 		"start-server": "/bin/zsh -c \"npm run watch-server & ; wait\"",

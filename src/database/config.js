@@ -7,13 +7,13 @@ const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const TEST_ENVIRONMENT = "test";
-const TEST_MONOLITH_ENVIRONMENT = "test_monolith";
+const TEST_MONOLITH_ENVIRONMENT = "test_monolithic";
 const TEST_SHARDED_ENVIRONMENT = "test_sharded";
 const DEVELOPMENT_ENVIRONMENT = "development";
 const STAGING_ENVIRONMENT = "staging";
 const PRODUCTION_ENVIRONMENT = "production";
 
-import TEST_MONOLITH_ENVIRONMENT_CONFIG from "./environment_test_monolith_config.js";
+import TEST_MONOLITH_ENVIRONMENT_CONFIG from "./environment_test_monolithic_config.js";
 
 const relationship__table = $abstract.entities.relationship ? $abstract.entities.relationship.default($abstract).table_name : "undefined";
 const whitelist__table = $abstract.entities.whitelist ? $abstract.entities.whitelist.default($abstract).table_name : "undefined";
