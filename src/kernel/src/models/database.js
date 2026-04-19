@@ -397,6 +397,40 @@ class DatabaseModel extends Model {
 			}
 		}
 	}
+	// splits where_in and cache_where_in into chunks that don't cross the sql bind limit
+	// maps the chunks to actions and returns all results
+	_chunk_action(context, scope, parameters, database, transaction, action) {
+		const self = this;
+		const { where_in = {}, cache_where_in = {} } = parameters;
+		let where_in_primary_key = [];
+		if (where_in[self.primary_key]) {
+			where_in_primary_key = where_in_primary_key.concat(where_in[self.primary_key]);
+		}
+		if (cache_where_in[self.primary_key]) {
+			where_in_primary_key = where_in_primary_key.concat(TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[self.primary_key]).value);
+		}
+		// split where_in_primary_key into batches of (SQL_BIND_LIMIT - SQL_MAX_COLUMNS)
+		const chunks = [];
+		const GAUZE_SQL_BIND_LIMIT = parseInt(process.env.GAUZE_SQL_BIND_LIMIT, 10);
+		const GAUZE_SQL_MAX_COLUMNS = parseInt(process.env.GAUZE_SQL_MAX_COLUMNS, 10);
+		const chunk_size = GAUZE_SQL_BIND_LIMIT - GAUZE_SQL_MAX_COLUMNS;
+		for (let i = 0; i < where_in_primary_key.length; i += chunk_size) {
+			chunks.push(where_in_primary_key.slice(i, i + chunk_size));
+		}
+		return Promise.all(
+			chunks.map(function (chunk) {
+				const params = JSON.parse(JSON.stringify(parameters));
+				if (params.cache_where_in && params.cache_where_in[self.primary_key]) {
+					delete params.cache_where_in[self.primary_key];
+				}
+				params.where_in = params.where_in || {};
+				params.where_in[self.primary_key] = chunk;
+				return action(context, scope, parameters, database, transaction);
+			}),
+		).then(function (result) {
+			return result.flat();
+		});
+	}
 	_entity_relationships(context, scope, parameters) {
 		const self = this;
 		const source = self._parse_source(scope, parameters);
@@ -473,14 +507,8 @@ class DatabaseModel extends Model {
 	_root_create_transaction(context, scope, parameters, database, transaction) {
 		context.transaction_count += 1;
 		const self = this;
-		//const { source } = scope
 		const { attributes } = parameters;
 		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.create.enter`, "parameters", parameters);
-		// sharding note: check if there is an active transactions, and if not create one
-		// sharding note: use attributes[primary_key] to find the shard node to run the query below
-		// sharding note: relationship model is special and shards on from_entity_id and to_entity_id (put relationships on the entity shards)
-		// sharding note: we will only be able to edit relationships if we have the from_entity_id and to_entity_id, which is a divergence from the current implementation
-		// sharding note: we cannot clean up relationships on entity deletion without querying every shard node for every entity type
 		const sql = database(self.table_name).insert(attributes, [self.primary_key]).transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.create:debug_sql`, sql.toString());
@@ -515,9 +543,8 @@ class DatabaseModel extends Model {
 			});
 	}
 	_relationship_create(context, scope, parameters) {
-		// todo: move logic from system model here
+		// todo: move logic from system model here to create the relationship as well
 		const self = this;
-		const { database, transaction } = context;
 		// flow: fetch relationships based on scope from database, pass relationships to route_transactions
 		return self._entity_relationships(context, scope, parameters).then(function (relationships) {
 			return context.database_manager.route_transactions(context, scope, parameters, self, "write", relationships).then(function (shards) {
@@ -909,43 +936,8 @@ class DatabaseModel extends Model {
 			});
 		});
 	}
-	// splits where_in and cache_where_in into chunks that don't cross the sql bind limit
-	// maps the chunks to actions and returns all results
-	_chunk_action(context, scope, parameters, database, transaction, action) {
-		const self = this;
-		const { where_in = {}, cache_where_in = {} } = parameters;
-		let where_in_primary_key = [];
-		if (where_in[self.primary_key]) {
-			where_in_primary_key = where_in_primary_key.concat(where_in[self.primary_key]);
-		}
-		if (cache_where_in[self.primary_key]) {
-			where_in_primary_key = where_in_primary_key.concat(TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[self.primary_key]).value);
-		}
-		// split where_in_primary_key into batches of (SQL_BIND_LIMIT - SQL_MAX_COLUMNS)
-		const chunks = [];
-		const GAUZE_SQL_BIND_LIMIT = parseInt(process.env.GAUZE_SQL_BIND_LIMIT, 10);
-		const GAUZE_SQL_MAX_COLUMNS = parseInt(process.env.GAUZE_SQL_MAX_COLUMNS, 10);
-		const chunk_size = GAUZE_SQL_BIND_LIMIT - GAUZE_SQL_MAX_COLUMNS;
-		for (let i = 0; i < where_in_primary_key.length; i += chunk_size) {
-			chunks.push(where_in_primary_key.slice(i, i + chunk_size));
-		}
-		return Promise.all(
-			chunks.map(function (chunk) {
-				const params = JSON.parse(JSON.stringify(parameters));
-				if (params.cache_where_in && params.cache_where_in[self.primary_key]) {
-					delete params.cache_where_in[self.primary_key];
-				}
-				params.where_in = params.where_in || {};
-				params.where_in[self.primary_key] = chunk;
-				return action(context, scope, parameters, database, transaction);
-			}),
-		).then(function (result) {
-			return result.flat();
-		});
-	}
 	_relationship_update_transaction(context, scope, parameters, database, transaction) {
 		const self = this;
-		//const { attributes, where_in = {}, cache_where_in = {} } = parameters;
 
 		function action(context, scope, parameters, database, transaction) {
 			context.transaction_count += 1;

@@ -173,7 +173,6 @@ class AccessSystemModel extends SystemModel {
 	// get the access records for the initiator
 	_initiator_records(context, entity, agent, database, transaction) {
 		const self = this;
-		//const { database, transaction } = context;
 		const sql = database(self.entity.table_name)
 			.where({
 				[self.key_entity_type]: entity[self.key_entity_type],
@@ -693,7 +692,6 @@ class AccessSystemModel extends SystemModel {
 	}
 	_count_entity_transaction(context, input, realm, database, transaction) {
 		const self = this;
-		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		// get highest record for initiator
 		// get list of records based on entity_id, entity_type, and method

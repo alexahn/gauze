@@ -604,7 +604,6 @@ class RelationshipSystemModel extends SystemModel {
 	// requires where.id
 	_root_update_transaction(context, scope, parameters, realm, database, transaction) {
 		const self = this;
-		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const method = "update";
 		entity.entity_method = method;
@@ -655,7 +654,6 @@ class RelationshipSystemModel extends SystemModel {
 	// requires where.id
 	_root_delete_transaction(context, scope, parameters, realm, database, transaction) {
 		const self = this;
-		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const method = "delete";
 		entity.entity_method = method;
@@ -877,7 +875,6 @@ class RelationshipSystemModel extends SystemModel {
 	}
 	_root_count_transaction(context, scope, parameters, realm, database, transaction) {
 		const self = this;
-		//const { database, transaction } = context;
 		const { agent, entity, operation } = realm;
 		const method = "count";
 		entity.entity_method = method;
@@ -892,13 +889,6 @@ class RelationshipSystemModel extends SystemModel {
 					});
 				} else {
 					return self.generate_response("count", []);
-					/*
-					return {
-						data: {
-							count_relationship: [],
-						},
-					};
-					*/
 				}
 			});
 		} else if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__to_id) {
