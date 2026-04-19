@@ -307,7 +307,8 @@ class GauzeManager {
 				} else if (key === "privacy") {
 					const privacy = method[key];
 					if (typeof privacy !== "string") throw new Error(`Entity property '${method_path}' must be of type 'string', ${privacy} is not of type 'string'`);
-					if (!valid_privacy[privacy]) throw new Error(`Entity property '${method_path}' must contain string values from (${Object.keys(valid_privacy)}): ${privacy} is not contained`);
+					if (!valid_privacy[privacy])
+						throw new Error(`Entity property '${method_path}' must contain string values from (${Object.keys(valid_privacy)}): ${privacy} is not contained`);
 				} else if (key === "allowed_agent_types") {
 					validate_agent_types(method_path, method[key]);
 				} else {
