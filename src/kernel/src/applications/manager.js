@@ -188,7 +188,7 @@ class GauzeManager {
 				if (reducer[key] === undefined) throw new Error(`Entity property '${reducer_path}' must be defined`);
 			});
 			Object.keys(reducer).forEach(function (key) {
-				path = `${path}.${key}`;
+				const reducer_path = `${path}.${key}`;
 				if (key === "create") {
 					if (typeof reducer[key] !== "function") throw new Error(`Entity property '${path}' must be of type 'function', ${reducer[key]} is not of type 'function'`);
 				} else if (key === "read") {
@@ -207,8 +207,8 @@ class GauzeManager {
 			if (typeof reducers !== "object") throw new Error(`Entity property '${path}' must be of type 'object', ${reducers} is not of type 'object'`);
 			if (typeof reducers.length !== "number") throw new Error(`Entity property '${path}' must be of type 'array', ${reducers} is not of type 'array'`);
 			reducers.forEach(function (reducer, index) {
-				path = `${path}.${index}`;
-				validate_reducer(path, reducer);
+				const reducers_path = `${path}.${index}`;
+				validate_reducer(reducers_path, reducer);
 			});
 		}
 
@@ -227,8 +227,8 @@ class GauzeManager {
 			if (typeof agent_types !== "object") throw new Error(`Entity property '${path}' must be of type 'object', ${agent_types} is not of type 'object'`);
 			if (typeof agent_types.length !== "number") throw new Error(`Entity property '${path}' must be of type 'array', ${agent_types} is not of type 'array'`);
 			agent_types.forEach(function (agent_type, index) {
-				path = `${path}.${index}`;
-				validate_agent_type(path, agent_type);
+				const agent_types_path = `${path}.${index}`;
+				validate_agent_type(agent_types_path, agent_type);
 			});
 		}
 
@@ -239,44 +239,44 @@ class GauzeManager {
 				if (field[key] === undefined) throw new Error(`Entity property '${field_path}' must be defined`);
 			});
 			Object.keys(field).forEach(function (key) {
-				path = `${path}.${key}`;
+				const field_path = `${path}.${key}`;
 				if (key === "name") {
 					const name = field[key];
-					if (name !== field_key) throw new Error(`Entity property '${path}' must align with the path key ${field_key}, ${name} !== ${field_key}`);
-					if (typeof name !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${name} is not of type 'string'`);
+					if (name !== field_key) throw new Error(`Entity property '${field_path}' must align with the path key ${field_key}, ${name} !== ${field_key}`);
+					if (typeof name !== "string") throw new Error(`Entity property '${field_path}' must be of type 'string', ${name} is not of type 'string'`);
 				} else if (key === "indexed") {
 					const indexed = field[key];
-					if (typeof indexed !== "boolean") throw new Error(`Entity property '${path}' must be of type 'boolean', ${indexed} is not of type 'boolean'`);
+					if (typeof indexed !== "boolean") throw new Error(`Entity property '${field_path}' must be of type 'boolean', ${indexed} is not of type 'boolean'`);
 				} else if (key === "required") {
 					const required = field[key];
-					if (typeof required !== "boolean") throw new Error(`Entity property '${path}' must be of type 'boolean', ${required} is not of type 'boolean'`);
+					if (typeof required !== "boolean") throw new Error(`Entity property '${field_path}' must be of type 'boolean', ${required} is not of type 'boolean'`);
 				} else if (key === "sql_type") {
 					const sql_type = field[key];
-					if (typeof sql_type !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${sql_type} is not of type 'string'`);
+					if (typeof sql_type !== "string") throw new Error(`Entity property '${field_path}' must be of type 'string', ${sql_type} is not of type 'string'`);
 				} else if (key === "graphql_type") {
 					const graphql_type = field[key];
-					if (typeof graphql_type !== "function") throw new Error(`Entity property '${path}' must be of type 'function', ${graphql_type} is not of type 'function'`);
+					if (typeof graphql_type !== "function") throw new Error(`Entity property '${field_path}' must be of type 'function', ${graphql_type} is not of type 'function'`);
 				} else if (key === "graphql_type_parameters") {
 					const graphql_type_parameters = field[key];
 					if (typeof graphql_type_parameters !== "object")
-						throw new Error(`Entity property '${path}' must be of type 'object', ${graphql_type_parameters} is not of type 'object'`);
+						throw new Error(`Entity property '${field_path}' must be of type 'object', ${graphql_type_parameters} is not of type 'object'`);
 				} else if (key === "description") {
 					const description = field[key];
-					if (typeof description !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${description} is not of type 'string'`);
+					if (typeof description !== "string") throw new Error(`Entity property '${field_path}' must be of type 'string', ${description} is not of type 'string'`);
 				} else if (key === "pre_serialize_middlewares") {
-					validate_reducers(path, field[key]);
+					validate_reducers(field_path, field[key]);
 				} else if (key === "serializers") {
-					validate_reducers(path, field[key]);
+					validate_reducers(field_path, field[key]);
 				} else if (key === "post_serialize_middlewares") {
-					validate_reducers(path, field[key]);
+					validate_reducers(field_path, field[key]);
 				} else if (key === "pre_deserialize_middlewares") {
-					validate_reducers(path, field[key]);
+					validate_reducers(field_path, field[key]);
 				} else if (key === "deserializers") {
-					validate_reducers(path, field[key]);
+					validate_reducers(field_path, field[key]);
 				} else if (key === "post_deserialize_middlewares") {
-					validate_reducers(path, field[key]);
+					validate_reducers(field_path, field[key]);
 				} else if (key === "allowed_agent_types") {
-					validate_agent_types(path, field[key]);
+					validate_agent_types(field_path, field[key]);
 				} else {
 					throw new Error(`Entity property '${path}' is invalid, property '${key}' must be one of: ${Object.keys(valid_field_keys)}`);
 				}
@@ -286,9 +286,9 @@ class GauzeManager {
 		function validate_fields(path, fields) {
 			if (typeof fields !== "object") throw new Error(`Entity property '${path}' must be of type 'object', ${fields} is not of type 'object'`);
 			Object.keys(fields).forEach(function (key) {
-				path = `${path}.${key}`;
+				const fields_path = `${path}.${key}`;
 				const field = fields[key];
-				validate_field(path, field, key);
+				validate_field(fields_path, field, key);
 			});
 		}
 
@@ -299,19 +299,19 @@ class GauzeManager {
 				if (method[key] === undefined) throw new Error(`Entity property '${method_path}' must be defined`);
 			});
 			Object.keys(method).forEach(function (key) {
-				path = `${path}.${key}`;
+				const method_path = `${path}.${key}`;
 				if (key === "name") {
 					const name = method[key];
-					if (name !== method_key) throw new Error(`Entity property '${path}' must align with the path key ${method_key}, ${name} !== ${method_key}`);
-					if (typeof name !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${name} is not of type 'string'`);
+					if (name !== method_key) throw new Error(`Entity property '${method_path}' must align with the path key ${method_key}, ${name} !== ${method_key}`);
+					if (typeof name !== "string") throw new Error(`Entity property '${method_path}' must be of type 'string', ${name} is not of type 'string'`);
 				} else if (key === "privacy") {
 					const privacy = method[key];
-					if (typeof privacy !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${privacy} is not of type 'string'`);
-					if (!valid_privacy[privacy]) throw new Error(`Entity property '${path}' must contain string values from (${Object.keys(valid_privacy)}): ${privacy} is not contained`);
+					if (typeof privacy !== "string") throw new Error(`Entity property '${method_path}' must be of type 'string', ${privacy} is not of type 'string'`);
+					if (!valid_privacy[privacy]) throw new Error(`Entity property '${method_path}' must contain string values from (${Object.keys(valid_privacy)}): ${privacy} is not contained`);
 				} else if (key === "allowed_agent_types") {
-					validate_agent_types(path, method[key]);
+					validate_agent_types(method_path, method[key]);
 				} else {
-					throw new Error(`Entity property '${path}' is invalid, property '${key}' must be one of: ${Object.keys(valid_method_keys)}`);
+					throw new Error(`Entity property '${method_path}' is invalid, property '${key}' must be one of: ${Object.keys(valid_method_keys)}`);
 				}
 			});
 		}
@@ -323,9 +323,9 @@ class GauzeManager {
 				if (methods[key] === undefined) throw new Error(`Entity property '${method_path}' must be defined`);
 			});
 			Object.keys(methods).forEach(function (key) {
-				path = `${path}.${key}`;
+				const methods_path = `${path}.${key}`;
 				const method = methods[key];
-				validate_method(path, method, key);
+				validate_method(methods_path, method, key);
 			});
 		}
 

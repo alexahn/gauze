@@ -10,7 +10,7 @@ config({
 
 import * as $gauze from "./../../../index.js";
 
-export const command = "entity <directory> <name>";
+export const command = "gauze <directory> <name>";
 
 export const describe = "Read a builtin gauze entity in a gauze project";
 
