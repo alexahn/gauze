@@ -6,6 +6,7 @@ class DatabaseManager {
 	// config is top level database config
 	constructor(config) {
 		const self = this;
+		self.validate_config(config);
 		self.config = config;
 		// key for connections map is the shard key
 		self.connections = {};
@@ -13,6 +14,194 @@ class DatabaseManager {
 		self.relationship_table = $abstract.entities.relationship ? $abstract.entities.relationship.default($abstract).table_name : "undefined";
 		self.whitelist_table = $abstract.entities.whitelist ? $abstract.entities.whitelist.default($abstract).table_name : "undefined";
 		self.blacklist_table = $abstract.entities.blacklist ? $abstract.entities.blacklist.default($abstract).table_name : "undefined";
+	}
+	validate_config(config) {
+		const valid_environment_keys = {};
+		Object.keys($abstract.entities).forEach(function (key) {
+			const entity = $abstract.entities[key].default($abstract);
+			valid_environment_keys[entity.table_name] = true;
+		});
+
+		const valid_table_keys = {
+			previous: true,
+			current: true,
+			next: true,
+		};
+
+		const valid_shard_keys = {
+			id: true,
+			start: true,
+			end: true,
+			read: true,
+			write: true,
+		};
+
+		const valid_shard_node_keys = {
+			id: true,
+			transaction_isolation_level: true,
+			config: true,
+		};
+
+		const valid_knex_config_keys = {
+			client: true,
+			connection: true,
+			migrations: true,
+			seeds: true,
+		};
+
+		const valid_knex_migration_config_keys = {
+			directory: true,
+		};
+
+		const valid_knex_seed_config_keys = {
+			directory: true,
+		};
+
+		function validate_knex_seeds(path, seeds, key) {
+			if (typeof seeds !== "object") throw new Error(`Database config property '${path}' must be of type 'object', ${seeds} is not of type 'object'`);
+			Object.keys(valid_knex_seed_config_keys).forEach(function (key) {
+				const seed_path = `${path}.${key}`;
+				if (seeds[key] === undefined) throw new Error(`Database config property '${seed_path}' must be defined`);
+			});
+		}
+
+		function validate_knex_migrations(path, migrations, key) {
+			if (typeof migrations !== "object") throw new Error(`Database config property '${path}' must be of type 'object', ${migrations} is not of type 'object'`);
+			Object.keys(valid_knex_migration_config_keys).forEach(function (key) {
+				const migration_path = `${path}.${key}`;
+				if (migrations[key] === undefined) throw new Error(`Database config property '${migration_path}' must be defined`);
+			});
+		}
+
+		function validate_knex_config(path, knex_config, key) {
+			if (typeof knex_config !== "object") throw new Error(`Database config property '${path}' must be of type 'object', ${knex_config} is not of type 'object'`);
+			Object.keys(valid_knex_config_keys).forEach(function (key) {
+				const knex_config_path = `${path}.${key}`;
+				if (knex_config[key] === undefined) throw new Error(`Database config property '${knex_config_path}' must be defined`);
+			});
+			Object.keys(knex_config).forEach(function (key) {
+				const knex_config_path = `${path}.${key}`;
+				if (key === "client") {
+					const client = knex_config[key];
+					if (typeof client !== "string") throw new Error(`Database config property '${knex_config_path}' must be of type 'string', ${client} is not of type 'string'`);
+				} else if (key === "connection") {
+					const connection = knex_config[key];
+					if (typeof connection !== "object") throw new Error(`Database config property '${knex_config_path}' must be of type 'object', ${connection} is not of type 'object'`);
+				} else if (key === "migrations") {
+					const migrations = knex_config[key];
+					validate_knex_migrations(knex_config_path, migrations, key);
+				} else if (key === "seeds") {
+					const seeds = knex_config[key];
+					validate_knex_seeds(knex_config_path, seeds, key);
+				} else {
+					// allow other keys, don't throw an error
+				}
+			});
+		}
+
+		function validate_shard_node(path, shard_node, key) {
+			if (typeof shard_node !== "object") throw new Error(`Database config property '${path}' must be of type 'object', ${shard_node} is not of type 'object'`);
+			Object.keys(valid_shard_node_keys).forEach(function (key) {
+				const shard_node_path = `${path}.${key}`;
+				if (shard_node[key] === undefined) throw new Error(`Database config property '${shard_node_path}' must be defined`);
+			});
+			Object.keys(shard_node).forEach(function (key) {
+				const shard_node_path = `${path}.${key}`;
+				if (key === "id") {
+					const id = shard_node[key];
+					if (typeof id !== "string") throw new Error(`Database config property '${shard_node_path}' must be of type 'string', ${id} is not of type 'string'`);
+				} else if (key === "transaction_isolation_level") {
+					const transaction_isolation_level = shard_node[key];
+					if (typeof transaction_isolation_level !== "string")
+						throw new Error(`Database config property '${shard_node_path}' must be of type 'string', ${transaction_isolation_level} is not of type 'string'`);
+				} else if (key === "config") {
+					const knex_config = shard_node[key];
+					validate_knex_config(shard_node_path, knex_config, key);
+				} else {
+					throw new Error(`Database config property '${shard_node_path}' is invalid, property '${key}' must be one of: ${Object.keys(valid_shard_node_keys)}`);
+				}
+			});
+		}
+
+		function validate_shard_type(path, shard_type, key) {
+			if (!Array.isArray(shard_type)) throw new Error(`Database config property '${path}' must be of type 'Array', ${shard_type} is not of type 'Array'`);
+			Object.keys(shard_type).forEach(function (key) {
+				const shard_type_path = `${path}.${key}`;
+				const shard_node = shard_type[key];
+				validate_shard_node(shard_type_path, shard_node, key);
+			});
+		}
+
+		function validate_shard(path, shard, key) {
+			if (typeof shard !== "object") throw new Error(`Database config property '${path}' must be of type 'object', ${shard} is not of type 'object'`);
+			Object.keys(valid_shard_keys).forEach(function (key) {
+				const shard_path = `${path}.${key}`;
+				if (shard[key] === undefined) throw new Error(`Database config property '${shard_path}' must be defined`);
+			});
+			Object.keys(valid_shard_keys).forEach(function (key) {
+				const shard_path = `${path}.${key}`;
+				if (key === "id") {
+					const id = shard[key];
+					if (typeof id !== "string") throw new Error(`Database config property '${shard_path}' must be of type 'string', ${id} is not of type 'string'`);
+				} else if (key === "start") {
+					const start = shard[key];
+					if (typeof start !== "bigint") throw new Error(`Database config property '${shard_path}' must be of type 'bigint', ${start} is not of type 'bigint'`);
+				} else if (key === "end") {
+					const end = shard[key];
+					if (typeof end !== "bigint") throw new Error(`Database config property '${shard_path}' must be of type 'bigint', ${end} is not of type 'bigint'`);
+				} else if (key === "read") {
+					const read = shard[key];
+					validate_shard_type(shard_path, read, key);
+				} else if (key === "write") {
+					const write = shard[key];
+					validate_shard_type(shard_path, write, key);
+				} else {
+					throw new Error(`Database config property '${path}' is invalid, property '${key}' must be one of: ${Object.keys(valid_shard_keys)}`);
+				}
+			});
+		}
+
+		function validate_sequence(path, sequence, key) {
+			if (!Array.isArray(sequence)) throw new Error(`Database config property '${path}' must be of type 'Array', ${sequence} is not of type 'Array'`);
+			Object.keys(sequence).forEach(function (key) {
+				const sequence_path = `${path}.${key}`;
+				const shard = sequence[key];
+				validate_shard(sequence_path, shard, key);
+			});
+		}
+
+		function validate_table(path, table, key) {
+			if (typeof table !== "object") throw new Error(`Database config property '${path}' must be of type 'object', ${table} is not of type 'object'`);
+			Object.keys(valid_table_keys).forEach(function (key) {
+				const table_path = `${path}.${key}`;
+				if (table[key] === undefined) throw new Error(`Database config property '${table_path}' must be defined`);
+			});
+			Object.keys(table).forEach(function (key) {
+				const table_path = `${path}.${key}`;
+				const sequence = table[key];
+				validate_sequence(table_path, sequence, key);
+			});
+		}
+
+		function validate_environment(path, environment, key) {
+			if (typeof environment !== "object") throw new Error(`Database config property '${path}' must be of type 'object', ${environment} is not of type 'object'`);
+			Object.keys(valid_environment_keys).forEach(function (key) {
+				const environment_path = `${path}.${key}`;
+				if (environment[key] === undefined) throw new Error(`Database config property '${environment_path}' must be defined`);
+			});
+			Object.keys(environment).forEach(function (key) {
+				const environment_path = `${path}.${key}`;
+				const table = environment[key];
+				validate_table(environment_path, table, key);
+			});
+		}
+
+		let path = "";
+		Object.keys(config).forEach(function (key) {
+			path = key;
+			const environment = config[key];
+			validate_environment(path, environment, key);
+		});
 	}
 	uuid_to_big_int(uuid) {
 		const bigIntValue = BigInt("0x" + uuid.replace(/-/g, ""));
