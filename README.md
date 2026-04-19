@@ -301,10 +301,7 @@ LOG_LEVEL_MAXIMUM="8"
 LOG_LEVEL_REGEX=""
 LOG_TOPIC_REGEX=""
 LOG_MESSAGE_REGEX=""
-KNEX_ENV="development"
 KNEX_CLIENT="better-sqlite3"
-KNEX_CONNECTION_FILENAME="development.sqlite3"
-KNEX_MIGRATIONS_TABLENAME="knex_migrations"
 ```
 The environment variables above are required to interact with a project. Create a `.env` file and define these environment variables inside. After creating a project, there will be an example environment variables file called `example.env`, which can be used as a starting point.
 
