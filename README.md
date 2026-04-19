@@ -338,6 +338,34 @@ npx gauze project { project_name } migrate run
 ```
 The command will run the database migrations for the project. The command ensures that the corresponding tables and columns will exist for every entity, so long as the migration files have been defined properly. 
 
+Add a sharding configuration for the new table in `{ project_name }/database/config.js`. Sharding configuration should follow the pattern:
+```
+{
+	[GAUZE_ENV]: {
+		[table_name]: {
+			previous: [...shards],
+			current: [{
+				id: [shard_id],
+				start: [shard_key_range_start],
+				end: [shard_key_range_end],
+				read: [{
+					id: [shard_node_id],
+					transaction_isolation_level: "serialized",
+					config: {...knex_config}
+				}...shard_node_config],
+				write: [{
+					id: [shard_node_id],
+					transaction_isolation_level: "serialized",
+					config: {...knex_config}
+				}...shard_node_config]
+			}],
+			next: [...shards]
+		}
+	},
+}
+```
+`GAUZE_ENV` is used to choose the database configuration at runtime, and each environment has a configuration for every table. Each table has three sections in its configuration, `previous`, `current`, and `next`. `current` is always used during runtime. Each section holds an array of shard configurations. Each shard configuration has an `id`, start of the shard range `start`, end of the shard range `end`, an array of read slaves `read`, and and array of write masters `write`. `read` and `write` both contain an array of shard node configurations. Each shard node has a an `id`, `transaction_isolation_level` and `config`. `config` holds a `knex` configuration. The required fields in the `knex` configuration are `client`, `connection`, `migrations.directory`, `seeds.directory`.
+
 Update `{ project_name }/database/interfaces/graphql/schema.js` to register your entity. Entities and their methods can be registered here for the database realm. Add an entry to `ENTITIES` and `METHODS` using the type name (which is defined in structure). The shape of the type name should be `$structure.entities.{ entity_name }.database.graphql.TYPE__GRAPHQL__DATABASE__{ ENTITY_NAME }__STRUCTURE`.
 
 Update `{ project_name }/system/interfaces/graphql/schema.js` to register your entity. Entities and their methods can be registered here for the system realm. Add an entry to `ENTITIES` and `METHODS` using the type name (which is defined in structure). The shape of the type name should be `$structure.entities.{ entity_name }.system.graphql.TYPE__GRAPHQL__SYSTEM__{ ENTITY_NAME }__STRUCTURE`.
