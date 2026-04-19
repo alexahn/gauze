@@ -397,9 +397,57 @@ class DatabaseModel extends Model {
 			}
 		}
 	}
+	_entity_relationships(context, scope, parameters) {
+		const self = this;
+		const source = self._parse_source(scope, parameters);
+		const entity_table_name = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[source._metadata.type];
+		const entity_primary_key = $abstract.entities[$structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity_table_name]].default($abstract).primary_key;
+		const entity_model = {
+			table_name: entity_table_name,
+			primary_key: entity_primary_key,
+		};
+		const entity_parameters = {
+			where: {
+				[entity_primary_key]: source._metadata.id,
+			},
+		};
+		return context.database_manager.route_transactions(context, scope, entity_parameters, entity_model, "read").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._entity_relationships_transaction(context, scope, parameters, shard.connection, shard.transaction);
+				}),
+			).then(function (result) {
+				return result.flat();
+			});
+		});
+	}
+	_entity_relationships_transaction(context, scope, parameters, database, transaction) {
+		context.transaction_count += 1;
+		const self = this;
+		const MAXIMUM_ROWS = 4294967296;
+		const query = {};
+		const source = self._parse_source(scope, parameters);
+		if (source._direction === "to") {
+			query.gauze__relationship__from_id = source._metadata.id;
+			query.gauze__relationship__from_type = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[source._metadata.type];
+			query.gauze__relationship__to_type = self.table_name;
+		} else if (source._direction === "from") {
+			query.gauze__relationship__to_id = source._metadata.id;
+			query.gauze__relationship__to_type = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[source._metadata.type];
+			query.gauze__relationship__from_type = self.table_name;
+		} else {
+			throw new Error("Invalid relationship direction");
+		}
+		const sql = database(self.relationship_table_name).where(query).limit(MAXIMUM_ROWS).offset(0).transacting(transaction);
+		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._entity_relationships_transaction:debug_sql`, sql.toString());
+		}
+		return sql.then(function (data) {
+			return data;
+		});
+	}
 	_root_create(context, scope, parameters) {
 		const self = this;
-		//const { database, transaction } = context;
 		// create id on primary key if it does not exist
 		if (!parameters.attributes[self.primary_key]) {
 			const primary_key = uuidv4();
@@ -466,55 +514,6 @@ class DatabaseModel extends Model {
 				}
 			});
 	}
-	_entity_relationships(context, scope, parameters) {
-		const self = this;
-		const source = self._parse_source(scope, parameters);
-		const entity_table_name = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[source._metadata.type];
-		const entity_primary_key = $abstract.entities[$structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[entity_table_name]].default($abstract).primary_key;
-		const entity_model = {
-			table_name: entity_table_name,
-			primary_key: entity_primary_key,
-		};
-		const entity_parameters = {
-			where: {
-				[entity_primary_key]: source._metadata.id,
-			},
-		};
-		return context.database_manager.route_transactions(context, scope, entity_parameters, entity_model, "read").then(function (shards) {
-			return Promise.all(
-				shards.map(function (shard) {
-					return self._entity_relationships_transaction(context, scope, parameters, shard.connection, shard.transaction);
-				}),
-			).then(function (result) {
-				return result.flat();
-			});
-		});
-	}
-	_entity_relationships_transaction(context, scope, parameters, database, transaction) {
-		context.transaction_count += 1;
-		const self = this;
-		const MAXIMUM_ROWS = 4294967296;
-		const query = {};
-		const source = self._parse_source(scope, parameters);
-		if (source._direction === "to") {
-			query.gauze__relationship__from_id = source._metadata.id;
-			query.gauze__relationship__from_type = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[source._metadata.type];
-			query.gauze__relationship__to_type = self.table_name;
-		} else if (source._direction === "from") {
-			query.gauze__relationship__to_id = source._metadata.id;
-			query.gauze__relationship__to_type = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[source._metadata.type];
-			query.gauze__relationship__from_type = self.table_name;
-		} else {
-			throw new Error("Invalid relationship direction");
-		}
-		const sql = database(self.relationship_table_name).where(query).limit(MAXIMUM_ROWS).offset(0).transacting(transaction);
-		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._entity_relationships_transaction:debug_sql`, sql.toString());
-		}
-		return sql.then(function (data) {
-			return data;
-		});
-	}
 	_relationship_create(context, scope, parameters) {
 		// todo: move logic from system model here
 		const self = this;
@@ -530,7 +529,6 @@ class DatabaseModel extends Model {
 					return results.flat();
 				});
 			});
-			//return self._root_create_transaction(context, scope, parameters, database, transaction);
 		});
 	}
 	_relationship_create_transaction(context, scope, parameters, database, transaction) {
@@ -561,83 +559,90 @@ class DatabaseModel extends Model {
 			).then(function (results) {
 				return results.flat();
 			});
-			//return self._root_read(context, scope, parameters, database, transaction)
 		});
 	}
 	_root_read_transaction(context, scope, parameters, database, transaction) {
-		context.transaction_count += 1;
 		const self = this;
-		//const { database, transaction } = context;
-		const {
-			where = {},
-			where_in = {},
-			cache_where_in = {},
-			where_not_in = {},
-			cache_where_not_in = {},
-			where_like = {},
-			where_between = {},
-			limit = 16,
-			offset = 0,
-			order = self.entity.default_order || self.primary_key,
-			order_direction = self.entity.default_order_direction || "asc",
-			order_nulls = "first",
-		} = parameters;
-		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
-		const sql = database(self.table_name)
-			.where(function (builder) {
-				builder.where(where);
-				Object.keys(where_in).forEach(function (key) {
-					builder.whereIn(key, where_in[key]);
-				});
-				Object.keys(cache_where_in).forEach(function (key) {
-					builder.whereIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[key]).value);
-				});
-				Object.keys(where_not_in).forEach(function (key) {
-					builder.whereNotIn(key, where_not_in[key]);
-				});
-				Object.keys(cache_where_not_in).forEach(function (key) {
-					builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[key]).value);
-				});
-				Object.keys(where_like).forEach(function (key) {
-					builder.whereLike(key, where_like[key]);
-				});
-				Object.keys(where_between).forEach(function (key) {
-					builder.whereBetween(key, where_between[key]);
-				});
-				/*
-				Object.keys(where_greater).forEach(function (key) {
-					builder.where(key, '>', where_greater[key])
+
+		function action(context, scope, parameters, database, transaction) {
+			context.transaction_count += 1;
+			const {
+				where = {},
+				where_in = {},
+				cache_where_in = {},
+				where_not_in = {},
+				cache_where_not_in = {},
+				where_like = {},
+				where_between = {},
+				limit = 16,
+				offset = 0,
+				order = self.entity.default_order || self.primary_key,
+				order_direction = self.entity.default_order_direction || "asc",
+				order_nulls = "first",
+			} = parameters;
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
+			const sql = database(self.table_name)
+				.where(function (builder) {
+					builder.where(where);
+					Object.keys(where_in).forEach(function (key) {
+						builder.whereIn(key, where_in[key]);
+					});
+					Object.keys(cache_where_in).forEach(function (key) {
+						builder.whereIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[key]).value);
+					});
+					Object.keys(where_not_in).forEach(function (key) {
+						builder.whereNotIn(key, where_not_in[key]);
+					});
+					Object.keys(cache_where_not_in).forEach(function (key) {
+						builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[key]).value);
+					});
+					Object.keys(where_like).forEach(function (key) {
+						builder.whereLike(key, where_like[key]);
+					});
+					Object.keys(where_between).forEach(function (key) {
+						builder.whereBetween(key, where_between[key]);
+					});
+					/*
+					Object.keys(where_greater).forEach(function (key) {
+						builder.where(key, '>', where_greater[key])
+					})
+					Object.keys(where_lesser).forEach(function (key) {
+						builder.where(key, '<', where_lesser[key])
+					})
+					*/
+					return builder;
 				})
-				Object.keys(where_lesser).forEach(function (key) {
-					builder.where(key, '<', where_lesser[key])
+				.limit(Math.min(limit, self.limit_max))
+				.offset(offset)
+				// todo: figure out how to get order_nulls working without breaking the query
+				// note: sqlite cannot handle order nulls, it seems to break the query: order by ({table_name}.{order_column} is not null) vs order by {table_name}.{order_column}
+				//.orderBy(order, order_direction, order_nulls)
+				.orderBy(order, order_direction)
+				.transacting(transaction);
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
+			}
+			return sql
+				.then(function (data) {
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
+					context.breadth_count += data.length;
+					return Promise.resolve(data);
 				})
-				*/
-				return builder;
-			})
-			.limit(Math.min(limit, self.limit_max))
-			.offset(offset)
-			// todo: figure out how to get order_nulls working without breaking the query
-			// note: sqlite cannot handle order nulls, it seems to break the query: order by ({table_name}.{order_column} is not null) vs order by {table_name}.{order_column}
-			//.orderBy(order, order_direction, order_nulls)
-			.orderBy(order, order_direction)
-			.transacting(transaction);
-		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
+				.catch(function (err) {
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.read:failure`, "err", err);
+					throw err;
+				});
 		}
-		return sql
-			.then(function (data) {
-				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
-				context.breadth_count += data.length;
-				return Promise.resolve(data);
-			})
-			.catch(function (err) {
-				LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.read:failure`, "err", err);
-				throw err;
-			});
+
+		const { where_in = {}, cache_where_in = {} } = parameters;
+		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
+			return self._chunk_action(context, scope, parameters, database, transaction, action);
+		} else {
+			return action(context, scope, parameters, database, transaction);
+		}
 	}
 	_relationship_read(context, scope, parameters) {
 		const self = this;
-		const { database, transaction } = context;
 		return self._entity_relationships(context, scope, parameters).then(function (relationships) {
 			return context.database_manager.route_transactions(context, scope, parameters, self, "read", relationships).then(function (shards) {
 				return Promise.all(
@@ -651,150 +656,159 @@ class DatabaseModel extends Model {
 		});
 	}
 	_relationship_read_transaction(context, scope, parameters, database, transaction) {
-		context.transaction_count += 1;
 		const self = this;
-		//const { database, transaction } = context;
-		const {
-			where = {},
-			where_in = {},
-			cache_where_in = {},
-			where_not_in = {},
-			cache_where_not_in = {},
-			where_like = {},
-			where_between = {},
-			limit = 16,
-			offset = 0,
-			order = self.entity.default_order || self.primary_key,
-			order_direction = self.entity.default_order_direction || "asc",
-			order_nulls = "first",
-		} = parameters;
-		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
-		const relationship_source = self._parse_source(scope, parameters);
-		// do join here based on source metadata
-		// use structure resolvers to convert graphql type to table_name name
-		// relationships are one directional, so use from as the parent
-		const SOURCE_SQL_ID = relationship_source._metadata.id;
-		const SOURCE_GRAPHQL_TYPE = relationship_source._metadata.type;
-		const SOURCE_SQL_TABLE = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[SOURCE_GRAPHQL_TYPE];
-		//const SOURCE_PRIMARY_KEY = $abstract.entities[$structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[SOURCE_SQL_TABLE]].default($abstract).primary_key
 
-		// mutate where by prefixing with table_name name
-		var joined_where = {};
-		Object.keys(where).forEach(function (k) {
-			var joined_key = self.table_name + "." + k;
-			joined_where[joined_key] = where[k];
-		});
-		var joined_where_in = {};
-		Object.keys(where_in).forEach(function (k) {
-			var joined_key = self.table_name + "." + k;
-			joined_where_in[joined_key] = where_in[k];
-		});
-		Object.keys(cache_where_in).forEach(function (k) {
-			var joined_key = self.table_name + "." + k;
-			joined_where_in[joined_key] = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[k]).value;
-		});
-		var joined_where_not_in = {};
-		Object.keys(where_not_in).forEach(function (k) {
-			var joined_key = self.table_name + "." + k;
-			joined_where_not_in[joined_key] = where_not_in[k];
-		});
-		Object.keys(cache_where_not_in).forEach(function (k) {
-			var joined_key = self.table_name + "." + k;
-			joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[k]).value;
-		});
-		var joined_where_like = {};
-		Object.keys(where_like).forEach(function (k) {
-			var joined_key = self.table_name + "." + k;
-			joined_where_like[joined_key] = where_like[k];
-		});
-		var joined_where_between = {};
-		Object.keys(where_between).forEach(function (k) {
-			var joined_key = self.table_name + "." + k;
-			joined_where_between[joined_key] = where_between[k];
-		});
-		const joined_order = self.table_name + "." + order;
-		if (relationship_source._direction === "to") {
-			const sql = database(self.table_name)
-				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.${self.primary_key}`)
-				.where(`${self.relationship_table_name}.gauze__relationship__from_id`, SOURCE_SQL_ID)
-				.where(`${self.relationship_table_name}.gauze__relationship__from_type`, SOURCE_SQL_TABLE)
-				.where(function (builder) {
-					builder.where(joined_where);
-					Object.keys(joined_where_in).forEach(function (key) {
-						builder.whereIn(key, joined_where_in[key]);
+		function action(context, scope, parameters, database, transaction) {
+			context.transaction_count += 1;
+			const {
+				where = {},
+				where_in = {},
+				cache_where_in = {},
+				where_not_in = {},
+				cache_where_not_in = {},
+				where_like = {},
+				where_between = {},
+				limit = 16,
+				offset = 0,
+				order = self.entity.default_order || self.primary_key,
+				order_direction = self.entity.default_order_direction || "asc",
+				order_nulls = "first",
+			} = parameters;
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
+			const relationship_source = self._parse_source(scope, parameters);
+			// do join here based on source metadata
+			// use structure resolvers to convert graphql type to table_name name
+			// relationships are one directional, so use from as the parent
+			const SOURCE_SQL_ID = relationship_source._metadata.id;
+			const SOURCE_GRAPHQL_TYPE = relationship_source._metadata.type;
+			const SOURCE_SQL_TABLE = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[SOURCE_GRAPHQL_TYPE];
+			//const SOURCE_PRIMARY_KEY = $abstract.entities[$structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[SOURCE_SQL_TABLE]].default($abstract).primary_key
+
+			// mutate where by prefixing with table_name name
+			var joined_where = {};
+			Object.keys(where).forEach(function (k) {
+				var joined_key = self.table_name + "." + k;
+				joined_where[joined_key] = where[k];
+			});
+			var joined_where_in = {};
+			Object.keys(where_in).forEach(function (k) {
+				var joined_key = self.table_name + "." + k;
+				joined_where_in[joined_key] = where_in[k];
+			});
+			Object.keys(cache_where_in).forEach(function (k) {
+				var joined_key = self.table_name + "." + k;
+				joined_where_in[joined_key] = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[k]).value;
+			});
+			var joined_where_not_in = {};
+			Object.keys(where_not_in).forEach(function (k) {
+				var joined_key = self.table_name + "." + k;
+				joined_where_not_in[joined_key] = where_not_in[k];
+			});
+			Object.keys(cache_where_not_in).forEach(function (k) {
+				var joined_key = self.table_name + "." + k;
+				joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[k]).value;
+			});
+			var joined_where_like = {};
+			Object.keys(where_like).forEach(function (k) {
+				var joined_key = self.table_name + "." + k;
+				joined_where_like[joined_key] = where_like[k];
+			});
+			var joined_where_between = {};
+			Object.keys(where_between).forEach(function (k) {
+				var joined_key = self.table_name + "." + k;
+				joined_where_between[joined_key] = where_between[k];
+			});
+			const joined_order = self.table_name + "." + order;
+			if (relationship_source._direction === "to") {
+				const sql = database(self.table_name)
+					.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.${self.primary_key}`)
+					.where(`${self.relationship_table_name}.gauze__relationship__from_id`, SOURCE_SQL_ID)
+					.where(`${self.relationship_table_name}.gauze__relationship__from_type`, SOURCE_SQL_TABLE)
+					.where(function (builder) {
+						builder.where(joined_where);
+						Object.keys(joined_where_in).forEach(function (key) {
+							builder.whereIn(key, joined_where_in[key]);
+						});
+						Object.keys(joined_where_not_in).forEach(function (key) {
+							builder.whereNotIn(key, joined_where_not_in[key]);
+						});
+						Object.keys(joined_where_like).forEach(function (key) {
+							builder.whereLike(key, joined_where_like[key]);
+						});
+						Object.keys(joined_where_between).forEach(function (key) {
+							builder.whereBetween(key, joined_where_between[key]);
+						});
+						return builder;
+					})
+					.limit(Math.min(limit, self.limit_max))
+					.offset(offset)
+					// note: sqlite cannot handle order nulls, it seems to break the query: order by ({table_name}.{order_column} is not null) vs order by {table_name}.{order_column}
+					//.orderBy(joined_order, order_direction, order_nulls)
+					.orderBy(joined_order, order_direction)
+					.transacting(transaction);
+				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
+				}
+				return sql
+					.then(function (data) {
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
+						context.breadth_count += data.length;
+						return Promise.resolve(data);
+					})
+					.catch(function (err) {
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.read:failure`, "err", err);
+						throw err;
 					});
-					Object.keys(joined_where_not_in).forEach(function (key) {
-						builder.whereNotIn(key, joined_where_not_in[key]);
+			} else if (relationship_source._direction === "from") {
+				const sql = database(self.table_name)
+					.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__from_id`, "=", `${self.table_name}.${self.primary_key}`)
+					.where(`${self.relationship_table_name}.gauze__relationship__to_id`, SOURCE_SQL_ID)
+					.where(`${self.relationship_table_name}.gauze__relationship__to_type`, SOURCE_SQL_TABLE)
+					.where(function (builder) {
+						builder.where(joined_where);
+						Object.keys(joined_where_in).forEach(function (key) {
+							builder.whereIn(key, joined_where_in[key]);
+						});
+						Object.keys(joined_where_not_in).forEach(function (key) {
+							builder.whereNotIn(key, joined_where_not_in[key]);
+						});
+						Object.keys(joined_where_like).forEach(function (key) {
+							builder.whereLike(key, joined_where_like[key]);
+						});
+						Object.keys(joined_where_between).forEach(function (key) {
+							builder.whereBetween(key, joined_where_between[key]);
+						});
+						return builder;
+					})
+					.limit(Math.min(limit, self.limit_max))
+					.offset(offset)
+					// note: sqlite cannot handle order nulls, it seems to break the query: order by ({table_name}.{order_column} is not null) vs order by {table_name}.{order_column}
+					//.orderBy(joined_order, order_direction, order_nulls)
+					.orderBy(joined_order, order_direction)
+					.transacting(transaction);
+				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
+				}
+				return sql
+					.then(function (data) {
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
+						context.breadth_count += data.length;
+						return Promise.resolve(data);
+					})
+					.catch(function (err) {
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.read:failure`, "err", err);
+						throw err;
 					});
-					Object.keys(joined_where_like).forEach(function (key) {
-						builder.whereLike(key, joined_where_like[key]);
-					});
-					Object.keys(joined_where_between).forEach(function (key) {
-						builder.whereBetween(key, joined_where_between[key]);
-					});
-					return builder;
-				})
-				.limit(Math.min(limit, self.limit_max))
-				.offset(offset)
-				// note: sqlite cannot handle order nulls, it seems to break the query: order by ({table_name}.{order_column} is not null) vs order by {table_name}.{order_column}
-				//.orderBy(joined_order, order_direction, order_nulls)
-				.orderBy(joined_order, order_direction)
-				.transacting(transaction);
-			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
+			} else {
+				throw new Error("Internal error: invalid direction for relationship");
 			}
-			return sql
-				.then(function (data) {
-					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
-					context.breadth_count += data.length;
-					return Promise.resolve(data);
-				})
-				.catch(function (err) {
-					LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.read:failure`, "err", err);
-					throw err;
-				});
-		} else if (relationship_source._direction === "from") {
-			const sql = database(self.table_name)
-				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__from_id`, "=", `${self.table_name}.${self.primary_key}`)
-				.where(`${self.relationship_table_name}.gauze__relationship__to_id`, SOURCE_SQL_ID)
-				.where(`${self.relationship_table_name}.gauze__relationship__to_type`, SOURCE_SQL_TABLE)
-				.where(function (builder) {
-					builder.where(joined_where);
-					Object.keys(joined_where_in).forEach(function (key) {
-						builder.whereIn(key, joined_where_in[key]);
-					});
-					Object.keys(joined_where_not_in).forEach(function (key) {
-						builder.whereNotIn(key, joined_where_not_in[key]);
-					});
-					Object.keys(joined_where_like).forEach(function (key) {
-						builder.whereLike(key, joined_where_like[key]);
-					});
-					Object.keys(joined_where_between).forEach(function (key) {
-						builder.whereBetween(key, joined_where_between[key]);
-					});
-					return builder;
-				})
-				.limit(Math.min(limit, self.limit_max))
-				.offset(offset)
-				// note: sqlite cannot handle order nulls, it seems to break the query: order by ({table_name}.{order_column} is not null) vs order by {table_name}.{order_column}
-				//.orderBy(joined_order, order_direction, order_nulls)
-				.orderBy(joined_order, order_direction)
-				.transacting(transaction);
-			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
-			}
-			return sql
-				.then(function (data) {
-					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:success`, "data", data);
-					context.breadth_count += data.length;
-					return Promise.resolve(data);
-				})
-				.catch(function (err) {
-					LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.read:failure`, "err", err);
-					throw err;
-				});
+		}
+
+		const { where_in = {}, cache_where_in = {} } = parameters;
+		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
+			return self._chunk_action(context, scope, parameters, database, transaction, action);
 		} else {
-			throw new Error("Internal error: invalid direction for relationship");
+			return action(context, scope, parameters, database, transaction);
 		}
 	}
 	// read a row
@@ -823,54 +837,63 @@ class DatabaseModel extends Model {
 		});
 	}
 	_root_update_transaction(context, scope, parameters, database, transaction) {
-		context.transaction_count += 1;
-		var self = this;
-		//const { database, transaction } = context;
-		var { attributes, where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
-		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
-		const sql = database(self.table_name)
-			.where(function (builder) {
-				builder.where(where);
-				Object.keys(where_in).forEach(function (key) {
-					builder.whereIn(key, where_in[key]);
+		const self = this;
+		function action(context, scope, parameters, database, transaction) {
+			context.transaction_count += 1;
+			const { attributes, where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
+
+			const sql = database(self.table_name)
+				.where(function (builder) {
+					builder.where(where);
+					Object.keys(where_in).forEach(function (key) {
+						builder.whereIn(key, where_in[key]);
+					});
+					Object.keys(cache_where_in).forEach(function (key) {
+						builder.whereIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[key]).value);
+					});
+					Object.keys(where_not_in).forEach(function (key) {
+						builder.whereNotIn(key, where_not_in[key]);
+					});
+					Object.keys(cache_where_not_in).forEach(function (key) {
+						builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[key]).value);
+					});
+					Object.keys(where_like).forEach(function (key) {
+						builder.whereLike(key, where_like[key]);
+					});
+					Object.keys(where_between).forEach(function (key) {
+						builder.whereBetween(key, where_between[key]);
+					});
+					return builder;
+				})
+				.update(attributes)
+				.transacting(transaction);
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
+			}
+			return sql
+				.then(function (data) {
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
+					context.breadth_count += data.length;
+					return self.read(context, scope, parameters);
+				})
+				.catch(function (err) {
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.update:failure`, "err", err);
+					if (process.env.KNEX_CLIENT === "better-sqlite3") {
+						process_knex_error_sqlite3(self, err);
+					} else {
+						// different dialects here to parse database errors (to turn them into field errors)
+						throw err;
+					}
 				});
-				Object.keys(cache_where_in).forEach(function (key) {
-					builder.whereIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[key]).value);
-				});
-				Object.keys(where_not_in).forEach(function (key) {
-					builder.whereNotIn(key, where_not_in[key]);
-				});
-				Object.keys(cache_where_not_in).forEach(function (key) {
-					builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[key]).value);
-				});
-				Object.keys(where_like).forEach(function (key) {
-					builder.whereLike(key, where_like[key]);
-				});
-				Object.keys(where_between).forEach(function (key) {
-					builder.whereBetween(key, where_between[key]);
-				});
-				return builder;
-			})
-			.update(attributes)
-			.transacting(transaction);
-		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
 		}
-		return sql
-			.then(function (data) {
-				LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
-				context.breadth_count += data.length;
-				return self.read(context, scope, parameters);
-			})
-			.catch(function (err) {
-				LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.update:failure`, "err", err);
-				if (process.env.KNEX_CLIENT === "better-sqlite3") {
-					process_knex_error_sqlite3(self, err);
-				} else {
-					// different dialects here to parse database errors (to turn them into field errors)
-					throw err;
-				}
-			});
+
+		const { where_in = {}, cache_where_in = {} } = parameters;
+		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
+			return self._chunk_action(context, scope, parameters, database, transaction, action);
+		} else {
+			return action(context, scope, parameters, database, transaction);
+		}
 	}
 	_relationship_update(context, scope, parameters) {
 		const self = this;
@@ -886,38 +909,82 @@ class DatabaseModel extends Model {
 			});
 		});
 	}
-	_relationship_update_transaction(context, scope, parameters, database, transaction) {
-		context.transaction_count += 1;
+	// splits where_in and cache_where_in into chunks that don't cross the sql bind limit
+	// maps the chunks to actions and returns all results
+	_chunk_action(context, scope, parameters, database, transaction, action) {
 		const self = this;
-		//const { database, transaction } = context;
-		const { attributes } = parameters;
-		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
-		// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
-		const MAXIMUM_ROWS = 4294967296;
-		return self
-			.read(context, scope, {
-				...parameters,
-				limit: MAXIMUM_ROWS,
-			})
-			.then(function (data) {
-				const valid_ids = data.map(function (item) {
-					return item[self.primary_key];
-				});
-				// use valid_ids to do a where in query
-				const sql = database(self.table_name).whereIn(self.primary_key, valid_ids).update(attributes).transacting(transaction);
-				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
+		const { where_in = {}, cache_where_in = {} } = parameters;
+		let where_in_primary_key = [];
+		if (where_in[self.primary_key]) {
+			where_in_primary_key = where_in_primary_key.concat(where_in[self.primary_key]);
+		}
+		if (cache_where_in[self.primary_key]) {
+			where_in_primary_key = where_in_primary_key.concat(TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[self.primary_key]).value);
+		}
+		// split where_in_primary_key into batches of (SQL_BIND_LIMIT - SQL_MAX_COLUMNS)
+		const chunks = [];
+		const GAUZE_SQL_BIND_LIMIT = parseInt(process.env.GAUZE_SQL_BIND_LIMIT, 10);
+		const GAUZE_SQL_MAX_COLUMNS = parseInt(process.env.GAUZE_SQL_MAX_COLUMNS, 10);
+		const chunk_size = GAUZE_SQL_BIND_LIMIT - GAUZE_SQL_MAX_COLUMNS;
+		for (let i = 0; i < where_in_primary_key.length; i += chunk_size) {
+			chunks.push(where_in_primary_key.slice(i, i + chunk_size));
+		}
+		return Promise.all(
+			chunks.map(function (chunk) {
+				const params = JSON.parse(JSON.stringify(parameters));
+				if (params.cache_where_in && params.cache_where_in[self.primary_key]) {
+					delete params.cache_where_in[self.primary_key];
 				}
-				context.breadth_count += data.length;
-				return sql.then(function (data) {
-					LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
-					return self.read(context, scope, parameters);
+				params.where_in = params.where_in || {};
+				params.where_in[self.primary_key] = chunk;
+				return action(context, scope, parameters, database, transaction);
+			}),
+		).then(function (result) {
+			return result.flat();
+		});
+	}
+	_relationship_update_transaction(context, scope, parameters, database, transaction) {
+		const self = this;
+		//const { attributes, where_in = {}, cache_where_in = {} } = parameters;
+
+		function action(context, scope, parameters, database, transaction) {
+			context.transaction_count += 1;
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
+			// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
+			const MAXIMUM_ROWS = 4294967296;
+			const { attributes } = parameters;
+			return self
+				.read(context, scope, {
+					...parameters,
+					limit: MAXIMUM_ROWS,
+				})
+				.then(function (data) {
+					const valid_ids = data.map(function (item) {
+						return item[self.primary_key];
+					});
+					// use valid_ids to do a where in query
+					const sql = database(self.table_name).whereIn(self.primary_key, valid_ids).update(attributes).transacting(transaction);
+					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
+					}
+					context.breadth_count += data.length;
+					return sql.then(function (data) {
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
+						return self.read(context, scope, parameters);
+					});
+				})
+				.catch(function (err) {
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.update:failure`, "err", err);
+					throw err;
 				});
-			})
-			.catch(function (err) {
-				LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.update:failure`, "err", err);
-				throw err;
-			});
+		}
+
+		const { where_in = {}, cache_where_in = {} } = parameters;
+		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
+			return self._chunk_action(context, scope, parameters, database, transaction, action);
+		} else {
+			return action(context, scope, parameters, database, transaction);
+		}
 	}
 	// update a row
 	_update(context, scope, parameters) {
@@ -1127,64 +1194,73 @@ class DatabaseModel extends Model {
 		});
 	}
 	_root_delete_transaction(context, scope, parameters, database, transaction) {
-		context.transaction_count += 1;
 		const self = this;
-		//const { database, transaction } = context;
-		const { where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {}, limit = 16 } = parameters;
-		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
-		// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
-		const MAXIMUM_ROWS = 4294967296;
-		// todo: use attributes and update deleted_at instead of deleting the row
-		// do a read first
-		return self
-			.read(context, scope, {
-				...parameters,
-				limit: MAXIMUM_ROWS,
-			})
-			.then(function (read_data) {
-				const valid_ids = read_data.map(function (item) {
-					return item[self.primary_key];
-				});
-				const sql = database(self.table_name)
-					.where(function (builder) {
-						builder.where(where);
-						Object.keys(where_in).forEach(function (key) {
-							builder.whereIn(key, where_in[key]);
-						});
-						Object.keys(cache_where_in).forEach(function (key) {
-							builder.whereIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[key]).value);
-						});
-						Object.keys(where_not_in).forEach(function (key) {
-							builder.whereNotIn(key, where_not_in[key]);
-						});
-						Object.keys(cache_where_not_in).forEach(function (key) {
-							builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[key]).value);
-						});
-						Object.keys(where_like).forEach(function (key) {
-							builder.whereLike(key, where_like[key]);
-						});
-						Object.keys(where_between).forEach(function (key) {
-							builder.whereBetween(key, where_between[key]);
-						});
-						return builder;
-					})
-					.del()
-					.transacting(transaction);
-				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
-				}
-				return sql.then(function (delete_data) {
-					LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
-					context.breadth_count += read_data.length;
-					return self._cleanup_delete(context, valid_ids, database, transaction).then(function () {
-						return read_data.slice(0, Math.min(limit, self.limit_max));
+
+		function action(context, scope, parameters, database, transaction) {
+			context.transaction_count += 1;
+			const { where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {}, limit = 16 } = parameters;
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
+			// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
+			const MAXIMUM_ROWS = 4294967296;
+			// todo: use attributes and update deleted_at instead of deleting the row
+			// do a read first
+			return self
+				.read(context, scope, {
+					...parameters,
+					limit: MAXIMUM_ROWS,
+				})
+				.then(function (read_data) {
+					const valid_ids = read_data.map(function (item) {
+						return item[self.primary_key];
 					});
+					const sql = database(self.table_name)
+						.where(function (builder) {
+							builder.where(where);
+							Object.keys(where_in).forEach(function (key) {
+								builder.whereIn(key, where_in[key]);
+							});
+							Object.keys(cache_where_in).forEach(function (key) {
+								builder.whereIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[key]).value);
+							});
+							Object.keys(where_not_in).forEach(function (key) {
+								builder.whereNotIn(key, where_not_in[key]);
+							});
+							Object.keys(cache_where_not_in).forEach(function (key) {
+								builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[key]).value);
+							});
+							Object.keys(where_like).forEach(function (key) {
+								builder.whereLike(key, where_like[key]);
+							});
+							Object.keys(where_between).forEach(function (key) {
+								builder.whereBetween(key, where_between[key]);
+							});
+							return builder;
+						})
+						.del()
+						.transacting(transaction);
+					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
+					}
+					return sql.then(function (delete_data) {
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
+						context.breadth_count += read_data.length;
+						return self._cleanup_delete(context, valid_ids, database, transaction).then(function () {
+							return read_data.slice(0, Math.min(limit, self.limit_max));
+						});
+					});
+				})
+				.catch(function (err) {
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.delete:failure`, "err", err);
+					throw err;
 				});
-			})
-			.catch(function (err) {
-				LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.delete:failure`, "err", err);
-				throw err;
-			});
+		}
+
+		const { where_in = {}, cache_where_in = {} } = parameters;
+		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
+			return self._chunk_action(context, scope, parameters, database, transaction, action);
+		} else {
+			return action(context, scope, parameters, database, transaction);
+		}
 	}
 	_relationship_delete(context, scope, parameters) {
 		const self = this;
@@ -1208,38 +1284,47 @@ class DatabaseModel extends Model {
 		});
 	}
 	_relationship_delete_transaction(context, scope, parameters, database, transaction) {
-		context.transaction_count += 1;
 		const self = this;
-		//const { database, transaction } = context;
-		const { limit = 16 } = parameters;
-		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
-		const MAXIMUM_ROWS = 4294967296;
-		return self
-			.read(context, scope, {
-				...parameters,
-				limit: MAXIMUM_ROWS,
-			})
-			.then(function (read_data) {
-				const valid_ids = read_data.map(function (item) {
-					return item[self.primary_key];
-				});
-				// use valid_ids to do a where in query
-				const sql = database(self.table_name).whereIn(self.primary_key, valid_ids).del().transacting(transaction);
-				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
-				}
-				return sql.then(function (delete_data) {
-					LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
-					return self._cleanup_delete(context, valid_ids, database, transaction).then(function () {
-						context.breadth_count += read_data.length;
-						return read_data.slice(0, limit);
+
+		function action(context, scope, parameters, database, transaction) {
+			context.transaction_count += 1;
+			const { limit = 16 } = parameters;
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
+			const MAXIMUM_ROWS = 4294967296;
+			return self
+				.read(context, scope, {
+					...parameters,
+					limit: MAXIMUM_ROWS,
+				})
+				.then(function (read_data) {
+					const valid_ids = read_data.map(function (item) {
+						return item[self.primary_key];
 					});
+					// use valid_ids to do a where in query
+					const sql = database(self.table_name).whereIn(self.primary_key, valid_ids).del().transacting(transaction);
+					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
+					}
+					return sql.then(function (delete_data) {
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
+						return self._cleanup_delete(context, valid_ids, database, transaction).then(function () {
+							context.breadth_count += read_data.length;
+							return read_data.slice(0, limit);
+						});
+					});
+				})
+				.catch(function (err) {
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.delete:failure`, "err", err);
+					throw err;
 				});
-			})
-			.catch(function (err) {
-				LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.delete:failure`, "err", err);
-				throw err;
-			});
+		}
+
+		const { where_in = {}, cache_where_in = {} } = parameters;
+		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
+			return self._chunk_action(context, scope, parameters, database, transaction, action);
+		} else {
+			return action(context, scope, parameters, database, transaction);
+		}
 	}
 	// delete a row
 	_delete(context, scope, parameters) {
@@ -1284,61 +1369,81 @@ class DatabaseModel extends Model {
 		});
 	}
 	_root_count_transaction(context, scope, parameters, database, transaction) {
-		context.transaction_count += 1;
 		const self = this;
-		//const { database, transaction } = context;
-		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
-		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
-		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
-		const reversed = {};
-		if (count_has_key) {
-			Object.keys(count).forEach(function (key) {
-				reversed[count[key]] = key;
-			});
+
+		function action(context, scope, parameters, database, transaction) {
+			context.transaction_count += 1;
+			const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
+			const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
+			const reversed = {};
+			if (count_has_key) {
+				Object.keys(count).forEach(function (key) {
+					reversed[count[key]] = key;
+				});
+			}
+			const sql = database(self.table_name)
+				.count(count_has_key ? reversed : null)
+				.where(function (builder) {
+					builder.where(where);
+					Object.keys(where_in).forEach(function (key) {
+						builder.whereIn(key, where_in[key]);
+					});
+					Object.keys(cache_where_in).forEach(function (key) {
+						builder.whereIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[key]).value);
+					});
+					Object.keys(where_not_in).forEach(function (key) {
+						builder.whereNotIn(key, where_not_in[key]);
+					});
+					Object.keys(cache_where_not_in).forEach(function (key) {
+						builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[key]).value);
+					});
+					Object.keys(where_like).forEach(function (key) {
+						builder.whereLike(key, where_like[key]);
+					});
+					Object.keys(where_between).forEach(function (key) {
+						builder.whereBetween(key, where_between[key]);
+					});
+					return builder;
+				})
+				.first()
+				.transacting(transaction);
+			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
+			}
+			return sql
+				.then(function (data) {
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
+					context.breadth_count += data.length;
+					return Promise.resolve(data);
+				})
+				.catch(function (err) {
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
+					throw err;
+				});
 		}
-		const sql = database(self.table_name)
-			.count(count_has_key ? reversed : null)
-			.where(function (builder) {
-				builder.where(where);
-				Object.keys(where_in).forEach(function (key) {
-					builder.whereIn(key, where_in[key]);
+
+		const { where_in = {}, cache_where_in = {} } = parameters;
+		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
+			return self._chunk_action(context, scope, parameters, database, transaction, action).then(function (results) {
+				const merged = {};
+				results.forEach(function (result) {
+					Object.keys(result).forEach(function (key) {
+						if (merged[key]) {
+							merged[key] += result[key];
+						} else {
+							merged[key] = result[key];
+						}
+					});
 				});
-				Object.keys(cache_where_in).forEach(function (key) {
-					builder.whereIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[key]).value);
-				});
-				Object.keys(where_not_in).forEach(function (key) {
-					builder.whereNotIn(key, where_not_in[key]);
-				});
-				Object.keys(cache_where_not_in).forEach(function (key) {
-					builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[key]).value);
-				});
-				Object.keys(where_like).forEach(function (key) {
-					builder.whereLike(key, where_like[key]);
-				});
-				Object.keys(where_between).forEach(function (key) {
-					builder.whereBetween(key, where_between[key]);
-				});
-				return builder;
-			})
-			.first()
-			.transacting(transaction);
-		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
-		}
-		return sql
-			.then(function (data) {
-				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
-				context.breadth_count += data.length;
-				return Promise.resolve(data);
-			})
-			.catch(function (err) {
-				LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
-				throw err;
+				return merged;
 			});
+		} else {
+			return action(context, scope, parameters, database, transaction);
+		}
 	}
 	_relationship_count(context, scope, parameters) {
 		const self = this;
-		const { database, transaction } = context;
 		return self._entity_relationships(context, scope, parameters).then(function (relationships) {
 			return context.database_manager.route_transactions(context, scope, parameters, self, "read", relationships).then(function (shards) {
 				return Promise.all(
@@ -1369,130 +1474,152 @@ class DatabaseModel extends Model {
 		});
 	}
 	_relationship_count_transaction(context, scope, parameters, database, transaction) {
-		context.transaction_count += 1;
 		const self = this;
-		const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
-		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
-		const relationship_source = self._parse_source(scope, parameters);
 
-		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
-		const reversed = {};
-		if (count_has_key) {
-			Object.keys(count).forEach(function (key) {
-				reversed[count[key]] = key;
+		function action(context, scope, parameters, database, transaction) {
+			context.transaction_count += 1;
+			const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
+			const relationship_source = self._parse_source(scope, parameters);
+
+			const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
+			const reversed = {};
+			if (count_has_key) {
+				Object.keys(count).forEach(function (key) {
+					reversed[count[key]] = key;
+				});
+			}
+
+			// do join here based on source metadata
+			// use structure resolvers to convert graphql type to table_name name
+			// relationships are one directional, so use from as the parent
+			const SOURCE_SQL_ID = relationship_source._metadata.id;
+			const SOURCE_GRAPHQL_TYPE = relationship_source._metadata.type;
+			const SOURCE_SQL_TABLE = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[SOURCE_GRAPHQL_TYPE];
+
+			// mutate where by prefixing with table_name name
+			var joined_where = {};
+			Object.keys(where).forEach(function (k) {
+				var joined_key = self.table_name + "." + k;
+				joined_where[joined_key] = where[k];
 			});
+			var joined_where_in = {};
+			Object.keys(where_in).forEach(function (k) {
+				var joined_key = self.table_name + "." + k;
+				joined_where_in[joined_key] = where_in[k];
+			});
+			Object.keys(cache_where_in).forEach(function (k) {
+				var joined_key = self.table_name + "." + k;
+				joined_where_in[joined_key] = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[k]).value;
+			});
+			var joined_where_not_in = {};
+			Object.keys(where_not_in).forEach(function (k) {
+				var joined_key = self.table_name + "." + k;
+				joined_where_not_in[joined_key] = where_not_in[k];
+			});
+			Object.keys(cache_where_not_in).forEach(function (k) {
+				var joined_key = self.table_name + "." + k;
+				joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[k]).value;
+			});
+			var joined_where_like = {};
+			Object.keys(where_like).forEach(function (k) {
+				var joined_key = self.table_name + "." + k;
+				joined_where_like[joined_key] = where_like[k];
+			});
+			var joined_where_between = {};
+			Object.keys(where_between).forEach(function (k) {
+				var joined_key = self.table_name + "." + k;
+				joined_where_between[joined_key] = where_between[k];
+			});
+			if (relationship_source._direction === "to") {
+				const sql = database(self.table_name)
+					.count(count_has_key ? reversed : null)
+					.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.${self.primary_key}`)
+					.where(`${self.relationship_table_name}.gauze__relationship__from_id`, SOURCE_SQL_ID)
+					.where(`${self.relationship_table_name}.gauze__relationship__from_type`, SOURCE_SQL_TABLE)
+					.where(function (builder) {
+						builder.where(joined_where);
+						Object.keys(joined_where_in).forEach(function (key) {
+							builder.whereIn(key, joined_where_in[key]);
+						});
+						Object.keys(joined_where_not_in).forEach(function (key) {
+							builder.whereNotIn(key, joined_where_not_in[key]);
+						});
+						Object.keys(joined_where_like).forEach(function (key) {
+							builder.whereLike(key, joined_where_like[key]);
+						});
+						Object.keys(joined_where_between).forEach(function (key) {
+							builder.whereBetween(key, joined_where_between[key]);
+						});
+						return builder;
+					})
+					.first()
+					.transacting(transaction);
+				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
+				}
+				return sql
+					.then(function (data) {
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
+						return Promise.resolve(data);
+					})
+					.catch(function (err) {
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
+						throw err;
+					});
+			} else if (relationship_source._direction === "from") {
+				const sql = database(self.table_name)
+					.count(count_has_key ? reversed : null)
+					.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__from_id`, "=", `${self.table_name}.${self.primary_key}`)
+					.where(`${self.relationship_table_name}.gauze__relationship__to_id`, SOURCE_SQL_ID)
+					.where(`${self.relationship_table_name}.gauze__relationship__to_type`, SOURCE_SQL_TABLE)
+					.where(function (builder) {
+						builder.where(joined_where);
+						Object.keys(joined_where_in).forEach(function (key) {
+							builder.whereIn(key, joined_where_in[key]);
+						});
+						Object.keys(joined_where_not_in).forEach(function (key) {
+							builder.whereNotIn(key, joined_where_not_in[key]);
+						});
+						return builder;
+					})
+					.first()
+					.transacting(transaction);
+				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
+				}
+				return sql
+					.then(function (data) {
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
+						context.breadth_count += data.length;
+						return Promise.resolve(data);
+					})
+					.catch(function (err) {
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
+						throw err;
+					});
+			} else {
+				throw new Error("Internal error: invalid direction for relationship");
+			}
 		}
 
-		// do join here based on source metadata
-		// use structure resolvers to convert graphql type to table_name name
-		// relationships are one directional, so use from as the parent
-		const SOURCE_SQL_ID = relationship_source._metadata.id;
-		const SOURCE_GRAPHQL_TYPE = relationship_source._metadata.type;
-		const SOURCE_SQL_TABLE = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[SOURCE_GRAPHQL_TYPE];
-
-		// mutate where by prefixing with table_name name
-		var joined_where = {};
-		Object.keys(where).forEach(function (k) {
-			var joined_key = self.table_name + "." + k;
-			joined_where[joined_key] = where[k];
-		});
-		var joined_where_in = {};
-		Object.keys(where_in).forEach(function (k) {
-			var joined_key = self.table_name + "." + k;
-			joined_where_in[joined_key] = where_in[k];
-		});
-		Object.keys(cache_where_in).forEach(function (k) {
-			var joined_key = self.table_name + "." + k;
-			joined_where_in[joined_key] = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[k]).value;
-		});
-		var joined_where_not_in = {};
-		Object.keys(where_not_in).forEach(function (k) {
-			var joined_key = self.table_name + "." + k;
-			joined_where_not_in[joined_key] = where_not_in[k];
-		});
-		Object.keys(cache_where_not_in).forEach(function (k) {
-			var joined_key = self.table_name + "." + k;
-			joined_where_not_in[joined_key] = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[k]).value;
-		});
-		var joined_where_like = {};
-		Object.keys(where_like).forEach(function (k) {
-			var joined_key = self.table_name + "." + k;
-			joined_where_like[joined_key] = where_like[k];
-		});
-		var joined_where_between = {};
-		Object.keys(where_between).forEach(function (k) {
-			var joined_key = self.table_name + "." + k;
-			joined_where_between[joined_key] = where_between[k];
-		});
-		if (relationship_source._direction === "to") {
-			const sql = database(self.table_name)
-				.count(count_has_key ? reversed : null)
-				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.${self.primary_key}`)
-				.where(`${self.relationship_table_name}.gauze__relationship__from_id`, SOURCE_SQL_ID)
-				.where(`${self.relationship_table_name}.gauze__relationship__from_type`, SOURCE_SQL_TABLE)
-				.where(function (builder) {
-					builder.where(joined_where);
-					Object.keys(joined_where_in).forEach(function (key) {
-						builder.whereIn(key, joined_where_in[key]);
+		const { where_in = {}, cache_where_in = {} } = parameters;
+		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
+			return self._chunk_action(context, scope, parameters, database, transaction, action).then(function (results) {
+				const merged = {};
+				results.forEach(function (result) {
+					Object.keys(result).forEach(function (key) {
+						if (merged[key]) {
+							merged[key] += result[key];
+						} else {
+							merged[key] = result[key];
+						}
 					});
-					Object.keys(joined_where_not_in).forEach(function (key) {
-						builder.whereNotIn(key, joined_where_not_in[key]);
-					});
-					Object.keys(joined_where_like).forEach(function (key) {
-						builder.whereLike(key, joined_where_like[key]);
-					});
-					Object.keys(joined_where_between).forEach(function (key) {
-						builder.whereBetween(key, joined_where_between[key]);
-					});
-					return builder;
-				})
-				.first()
-				.transacting(transaction);
-			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
-			}
-			return sql
-				.then(function (data) {
-					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
-					return Promise.resolve(data);
-				})
-				.catch(function (err) {
-					LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
-					throw err;
 				});
-		} else if (relationship_source._direction === "from") {
-			const sql = database(self.table_name)
-				.count(count_has_key ? reversed : null)
-				.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__from_id`, "=", `${self.table_name}.${self.primary_key}`)
-				.where(`${self.relationship_table_name}.gauze__relationship__to_id`, SOURCE_SQL_ID)
-				.where(`${self.relationship_table_name}.gauze__relationship__to_type`, SOURCE_SQL_TABLE)
-				.where(function (builder) {
-					builder.where(joined_where);
-					Object.keys(joined_where_in).forEach(function (key) {
-						builder.whereIn(key, joined_where_in[key]);
-					});
-					Object.keys(joined_where_not_in).forEach(function (key) {
-						builder.whereNotIn(key, joined_where_not_in[key]);
-					});
-					return builder;
-				})
-				.first()
-				.transacting(transaction);
-			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:debug_sql`, sql.toString());
-			}
-			return sql
-				.then(function (data) {
-					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.count:success`, "data", data);
-					context.breadth_count += data.length;
-					return Promise.resolve(data);
-				})
-				.catch(function (err) {
-					LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.count:failure`, "err", err);
-					throw err;
-				});
+				return merged;
+			});
 		} else {
-			throw new Error("Internal error: invalid direction for relationship");
+			return action(context, scope, parameters, database, transaction);
 		}
 	}
 	_count(context, scope, parameters) {
