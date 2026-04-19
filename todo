@@ -1096,3 +1096,5 @@
 		[ ] configure so the path of the url maps to the project documention (e.g. /gauze)
 	[ ] readme.md
 		[ ] refactor readme to make it more digestable
+	[ ] use codex or claude to generate the documentation and readmes
+		[ ] subscribe to codex or claude
