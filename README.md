@@ -77,45 +77,7 @@ npx gauze create project { project_name }
 ```
 The command will create a new directory at `{ project_name }` that houses the project code. A project is designed to be as self-contained as possible, and therefore has its own kernel and CLI. The command `npx gauze project { project_name } { sub_command }` will be used to pass execution control to the project's CLI. A project is a collection of realms and abstract definitions, along with a functioning kernel and CLI.
 
-### Create environment variables file
-```
-GAUZE_ENV="development"
-GAUZE_DEBUG_UI="TRUE"
-GAUZE_DEBUG_SQL="TRUE"
-GAUZE_DEBUG_GRAPHQL="TRUE"
-GAUZE_ENVIRONMENT_JWT_SECRET="ENVIRONMENT"
-GAUZE_SYSTEM_JWT_SECRET="SYSTEM"
-GAUZE_DATABASE_JWT_SECRET="DATABASE"
-GAUZE_KERNEL_JWT_SECRET="KERNEL"
-GAUZE_PROXY_JWT_SECRET="PROXY"
-GAUZE_PROTOCOL="http"
-GAUZE_HOST="localhost"
-GAUZE_PORT="4000"
-GAUZE_SERVER_PROTOCOL="http"
-GAUZE_SERVER_HOST="localhost"
-GAUZE_SERVER_PORT="4000"
-GAUZE_GRAPHQL_MAX_DEPTH="8"
-GAUZE_HTTP_MAX_SIZE="1048576"
-GAUZE_SQL_MAX_LIMIT="1024"
-GAUZE_SQL_MAX_BREADTH="4096"
-GAUZE_SQL_MAX_TRANSACTIONS="256"
-LOG_LEVEL_MINIMUM="0"
-LOG_LEVEL_MAXIMUM="8"
-LOG_LEVEL_REGEX=""
-LOG_TOPIC_REGEX=""
-LOG_MESSAGE_REGEX=""
-KNEX_ENV="development"
-KNEX_CLIENT="better-sqlite3"
-KNEX_CONNECTION_FILENAME="development.sqlite3"
-KNEX_MIGRATIONS_TABLENAME="knex_migrations"
-```
-The environment variables above are required to interact with a project. Create a `.env` file and define these environment variables inside. After creating a project, there will be an example environment variables file called `example.env`, which can be used as a starting point.
-
-### Create an entity
-```
-npx gauze project { project_name } create entity { entity_name }.js
-```
-The command will create the relevant models, controllers, and structural files in the project using the entity definition in `{ entity_name }.js`. After creating a project, there will be an example entity definition file called `example.js`. An entity definition file typically looks like:
+After creating a project, there will be an example entity definition file called `example.js`. An entity definition file typically looks like:
 ```
 export default function ($abstract) {
 	const ENTITY = {
@@ -311,6 +273,47 @@ function (field) {
 };
 ```
 Serializers and deserializers follow the same structure as middlewares, and they are only differentiated as semantic checkpoints during the processing flow. The `name` attribute for fields should align with the column name in the database. The `graphql_type` attribute for fields should point to a function which accepts three arguments (`entity`, `field`, `parameters`) and returns a GraphQL scalar. The `graphql_type_parameters` attribute for fields will populate the third argument `parameters`. Typically this is used to define custom validators and parsers. The `required` attribute for fields specifies whether the field is required for GraphQL, not whether the column is required in the database. Database constraints are typically independent of entity definitions. Every entity currently enables five methods: `create`, `read`, `update`, `delete`, and `count`. Each method can be either private or public. Public methods can be accessed by everyone by default. Private methods can be accessed by no one by default. Whitelists and blacklists are used in conjunction with the privacy mode to control access to methods.
+
+### Create environment variables file
+```
+GAUZE_ENV="development"
+GAUZE_DEBUG_UI="TRUE"
+GAUZE_DEBUG_SQL="TRUE"
+GAUZE_DEBUG_GRAPHQL="TRUE"
+GAUZE_ENVIRONMENT_JWT_SECRET="ENVIRONMENT"
+GAUZE_SYSTEM_JWT_SECRET="SYSTEM"
+GAUZE_DATABASE_JWT_SECRET="DATABASE"
+GAUZE_KERNEL_JWT_SECRET="KERNEL"
+GAUZE_PROXY_JWT_SECRET="PROXY"
+GAUZE_PROTOCOL="http"
+GAUZE_HOST="localhost"
+GAUZE_PORT="4000"
+GAUZE_SERVER_PROTOCOL="http"
+GAUZE_SERVER_HOST="localhost"
+GAUZE_SERVER_PORT="4000"
+GAUZE_GRAPHQL_MAX_DEPTH="8"
+GAUZE_HTTP_MAX_SIZE="1048576"
+GAUZE_SQL_MAX_LIMIT="1024"
+GAUZE_SQL_MAX_BREADTH="4096"
+GAUZE_SQL_MAX_TRANSACTIONS="256"
+LOG_LEVEL_MINIMUM="0"
+LOG_LEVEL_MAXIMUM="8"
+LOG_LEVEL_REGEX=""
+LOG_TOPIC_REGEX=""
+LOG_MESSAGE_REGEX=""
+KNEX_ENV="development"
+KNEX_CLIENT="better-sqlite3"
+KNEX_CONNECTION_FILENAME="development.sqlite3"
+KNEX_MIGRATIONS_TABLENAME="knex_migrations"
+```
+The environment variables above are required to interact with a project. Create a `.env` file and define these environment variables inside. After creating a project, there will be an example environment variables file called `example.env`, which can be used as a starting point.
+
+### Create an entity
+```
+npx gauze project { project_name } create entity { project_dir } { entity_name }.js
+```
+The command will create the relevant models, controllers, and structural files in the project using the entity definition in `{ entity_name }.js`.
+
 ```
 npx gauze project { project_name } migrate make { entity_name }
 ```
