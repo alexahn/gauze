@@ -118,7 +118,7 @@ class DatabaseManager {
 					const knex_config = shard_node[key];
 					validate_knex_config(shard_node_path, knex_config, key);
 				} else {
-					throw new Error(`Database config property '${shard_node_path}' is invalid, property '${key}' must be one of: ${Object.keys(valid_shard_node_keys)}`);
+					//throw new Error(`Database config property '${shard_node_path}' is invalid, property '${key}' must be one of: ${Object.keys(valid_shard_node_keys)}`);
 				}
 			});
 		}
