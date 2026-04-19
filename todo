@@ -1087,3 +1087,12 @@
 	[x] harden database connection routing logic
 		[x] should minimize the set of nodes we interact with, for example by reading where_in[primary_key] to get a set of nodes, or using the relationships to get a set of nodes
 		[x] should prefer to use the write shard node if the connection is already open (so update queries dont fetch stale data once the update is complete)
+
+[ ] documentation
+	[ ] vitepress
+		[ ] consistent theme
+		[ ] include explanations of every major aspect of gauze
+	[ ] github pages hosting
+		[ ] configure so the path of the url maps to the project documention (e.g. /gauze)
+	[ ] readme.md
+		[ ] refactor readme to make it more digestable
