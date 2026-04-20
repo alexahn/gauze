@@ -7,23 +7,23 @@ A GraphQL server architecture.
 
 ### Internal Code
 - Module names are lower Snake Case (all lower case) prefixed with a $.
-	- $two_words
+	- For example, use `$two_words`.
 - Class names are Pascal Case (Upper Camel Case).
-	- TwoWords
+	- For example, use `TwoWords`.
 - Function, variable, and method names are lower Snake Case (all lower case).
-	- two_words
+	- For example, use `two_words`.
 - Global constants and module exports are upper Snake Case (all upper case).
-	- TWO_WORDS
+	- For example, use `TWO_WORDS`.
 
 ### External Code
 - All external code will follow whatever conventions the source decides to use, which is usually Camel Case. External code will usually be easily identifiable due to the difference in conventions.
-	- twoWords
+	- For example, external code may use `twoWords`.
 
 ### Files
 - Code variant files are lower Snake Case. Code variant files usually contain code or other data that can change program execution behavior.
-	- two_words
+	- For example, use `two_words`.
 - Code invariant files are upper upper Snake Case (all upper case). Code invariant files usually contain documentation or static variables that rarely change, if ever.
-	- TWO_WORDS
+	- For example, use `TWO_WORDS`.
 
 ### JavaScript
 
@@ -31,19 +31,19 @@ A GraphQL server architecture.
 - Directories are modules, and module exports get aggregated under `index.js`.
 - Non-aggregating modules (e.g. any file that is not `index.js`) should typically have named exports, and should rarely have a default export.
 - Named instance exports should typically be named with the reverse order of the module path.
-	- `/src/system/models/entity1.js` should export `ENTITY1_MODEL_SYSTEM`.
+	- Export `ENTITY1_MODEL_SYSTEM` from `/src/system/models/entity1.js`.
 	- The root module can access it via `gauze.system.models.entity1.ENTITY1_MODEL_SYSTEM`.
 - Named class exports should typically be named according to the abstract hierarchy.
 
 ## Dependency Hierarchy (Realm Hierarchy)
-- abstract
-- structure
-- kernel
-- database
-- application / story
-- system / reality
-- environment
-- command
+- Put `abstract` at the base of the hierarchy.
+- Put `structure` above `abstract`.
+- Put `kernel` above `structure`.
+- Put `database` above `kernel`.
+- Put `application / story` above `database`.
+- Put `system / reality` above `application / story`.
+- Put `environment` above `system / reality`.
+- Put `command` at the top of the hierarchy.
 
 ## Architecture
 
@@ -54,38 +54,38 @@ The abstract realm contains the atomic defintions in the realm.
 
 #### Structure
 The structure realm contains structural information for the entities in the realm.
-- `f(kernel, database, system, user)` (interaction dependency)
-- `g()` (code dependency)
+- Use `f(kernel, database, system, user)` to represent the interaction dependency.
+- Use `g()` to represent the code dependency.
 
 #### Kernel
 The kernel realm contains base classes and common utilities, like logging and caching.
-- `f(database, application, system, user)` (interaction dependency)
-- `g(structure)` (code dependency)
+- Use `f(database, application, system, user)` to represent the interaction dependency.
+- Use `g(structure)` to represent the code dependency.
 
 #### Database
 The database realm manages state for entities.
-- `f(system, application, user)` (interaction dependency)
-- `g(structure, kernel)` (code dependency)
+- Use `f(system, application, user)` to represent the interaction dependency.
+- Use `g(structure, kernel)` to represent the code dependency.
 
 #### Application
 The application realm manages user interaction.
-- `f(agent.user)` (interaction dependency)
-- `g(database, kernel, structure)` (code dependency)
+- Use `f(agent.user)` to represent the interaction dependency.
+- Use `g(database, kernel, structure)` to represent the code dependency.
 
 #### System
 The system realm manages account interaction.
-- `f(agent.account)` (interaction dependency)
-- `g(application, database, kernel, structure)` (code dependency)
+- Use `f(agent.account)` to represent the interaction dependency.
+- Use `g(application, database, kernel, structure)` to represent the code dependency.
 
 #### Story
 The story realm manages character interaction.
-- `f(agent.character)` (interaction dependency)
-- `g(database, kernel, structure)` (code dependency)
+- Use `f(agent.character)` to represent the interaction dependency.
+- Use `g(database, kernel, structure)` to represent the code dependency.
 
 #### Reality
 The reality realm manages person interaction.
-- `f(agent.person)` (interaction dependency)
-- `g(application, database, kernel, structure)` (code dependency)
+- Use `f(agent.person)` to represent the interaction dependency.
+- Use `g(application, database, kernel, structure)` to represent the code dependency.
 
 #### Environment
 The environment realm manages external interaction. The environment allows agents to be created and authenticated.
@@ -105,9 +105,9 @@ Controllers can use an arbitrary number of models to satisfy a method. Controlle
 Interfaces can use an arbitrary number of controllers to satisfy a request. Interfaces should only use controllers from their realm.
 
 ### Lifecyle
-- `pre_serialize_middleware`
-- `serialize`
-- `post_serialize_middleware`
-- `pre_deserialize_middleware`
-- `deserialize`
-- `post_deserialize_middleware`
+- Run `pre_serialize_middleware` first.
+- Run `serialize` next.
+- Run `post_serialize_middleware` after serialization.
+- Run `pre_deserialize_middleware` before deserialization.
+- Run `deserialize` for the main deserialization step.
+- Run `post_deserialize_middleware` after deserialization.

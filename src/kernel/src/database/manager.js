@@ -1,4 +1,5 @@
 import * as $abstract from "./../../../abstract/index.js";
+import { LOGGER__IO__LOGGER__SRC__KERNEL } from "./../logger/io.js";
 
 import knex from "knex";
 
@@ -191,6 +192,14 @@ class DatabaseManager {
 			});
 			Object.keys(environment).forEach(function (key) {
 				const environment_path = `${path}.${key}`;
+				if (!valid_environment_keys[key]) {
+					LOGGER__IO__LOGGER__SRC__KERNEL.write(
+						"5",
+						import.meta.filename,
+						"DatabaseManager.validate_config:WARNING",
+						new Error(`Database config property '${environment_path}' does not match a registered entity table name yet`),
+					);
+				}
 				const table = environment[key];
 				validate_table(environment_path, table, key);
 			});
