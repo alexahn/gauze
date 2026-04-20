@@ -2,6 +2,7 @@ export default {
 	title: "Gauze",
 	description: "Gauze is a structured GraphQL framework",
 	themeConfig: {
+		logo: "/logo.svg",
 		nav: [
 			{ text: "Quick Start", link: "/getting-started" },
 			{ text: "Entities", link: "/entities" },
