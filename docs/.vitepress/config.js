@@ -5,9 +5,12 @@ export default {
 		logo: "/logo.svg",
 		nav: [
 			{ text: "Quick Start", link: "/getting-started" },
-			{ text: "Entities", link: "/entities" },
+			{ text: "Entities", link: "/entity-definition" },
 			{ text: "API", link: "/runtime-and-graphql" },
 			{ text: "Development", link: "/development/source-layout" },
+		],
+		socialLinks: [
+			{ icon: "github", link: "https://github.com/alexahn/gauze" },
 		],
 		sidebar: [
 			{
