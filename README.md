@@ -1,4 +1,7 @@
-# gauze
+<h1>
+	<img src="./logo.svg" alt="gauze logo" width="48" valign="middle" />
+	<span>gauze</span>
+</h1>
 
 
 | Project   |     | Status 
