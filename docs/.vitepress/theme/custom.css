@@ -1,0 +1,442 @@
+:root {
+	--vp-c-bg: #f4ecdc;
+	--vp-c-bg-alt: #eadfc9;
+	--vp-c-bg-elv: #fbf6ec;
+	--vp-c-bg-soft: #efe5d4;
+	--vp-c-text-1: #2b2520;
+	--vp-c-text-2: #6f5f4f;
+	--vp-c-text-3: #8e7b66;
+	--vp-c-divider: rgba(139, 102, 63, 0.22);
+	--vp-c-divider-light: rgba(139, 102, 63, 0.1);
+	--vp-c-border: rgba(139, 102, 63, 0.2);
+	--vp-c-gutter: rgba(139, 102, 63, 0.12);
+	--vp-c-brand-1: #bb3f02;
+	--vp-c-brand-2: #ca6702;
+	--vp-c-brand-3: #ed9b00;
+	--vp-c-brand-soft: rgba(202, 103, 2, 0.12);
+	--vp-c-indigo-1: #005f73;
+	--vp-c-indigo-2: #099396;
+	--vp-c-indigo-3: #93d2bd;
+	--vp-home-hero-name-color: #2b2520;
+	--vp-home-hero-image-background-image:
+		radial-gradient(circle at 30% 30%, rgba(202, 103, 2, 0.18), transparent 45%),
+		radial-gradient(circle at 75% 20%, rgba(9, 147, 150, 0.16), transparent 38%),
+		linear-gradient(135deg, rgba(232, 215, 164, 0.54), rgba(244, 236, 220, 0.92));
+	--vp-home-hero-image-filter: blur(44px);
+	--vp-button-brand-bg: #ca6702;
+	--vp-button-brand-hover-bg: #ed9b00;
+	--vp-button-brand-active-bg: #bb3f02;
+	--vp-button-brand-text: #fbf6ec;
+	--vp-button-alt-bg: rgba(255, 248, 235, 0.66);
+	--vp-button-alt-border: rgba(139, 102, 63, 0.18);
+	--vp-button-alt-hover-bg: rgba(255, 248, 235, 0.92);
+	--vp-custom-block-tip-border: rgba(9, 147, 150, 0.45);
+	--vp-custom-block-tip-bg: rgba(9, 147, 150, 0.1);
+	--vp-custom-block-tip-text: #17414a;
+	--vp-custom-block-warning-border: rgba(237, 155, 0, 0.45);
+	--vp-custom-block-warning-bg: rgba(237, 155, 0, 0.1);
+	--vp-custom-block-warning-text: #62430d;
+	--vp-custom-block-danger-border: rgba(176, 32, 19, 0.5);
+	--vp-custom-block-danger-bg: rgba(176, 32, 19, 0.12);
+	--vp-custom-block-danger-text: #6d251c;
+	--vp-font-family-base: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+	--vp-font-family-mono: Consolas, Monaco, monospace;
+}
+
+.dark {
+	--vp-c-bg: #111111;
+	--vp-c-bg-alt: #01121a;
+	--vp-c-bg-elv: #1a1712;
+	--vp-c-bg-soft: #181411;
+	--vp-c-text-1: #eeeeee;
+	--vp-c-text-2: #d2bd93;
+	--vp-c-text-3: #93d2bd;
+	--vp-c-divider: rgba(232, 215, 164, 0.16);
+	--vp-c-divider-light: rgba(232, 215, 164, 0.08);
+	--vp-c-border: rgba(232, 215, 164, 0.18);
+	--vp-c-gutter: rgba(232, 215, 164, 0.12);
+	--vp-c-brand-1: #ed9b00;
+	--vp-c-brand-2: #ca6702;
+	--vp-c-brand-3: #bb3f02;
+	--vp-c-brand-soft: rgba(237, 155, 0, 0.14);
+	--vp-c-indigo-1: #099396;
+	--vp-c-indigo-2: #005f73;
+	--vp-c-indigo-3: #01121a;
+	--vp-home-hero-name-color: #eeeeee;
+	--vp-home-hero-image-background-image:
+		radial-gradient(circle at 30% 30%, rgba(237, 155, 0, 0.24), transparent 45%),
+		radial-gradient(circle at 75% 20%, rgba(9, 147, 150, 0.24), transparent 38%),
+		linear-gradient(135deg, rgba(202, 103, 2, 0.18), rgba(17, 17, 17, 0.92));
+	--vp-button-brand-text: #111111;
+	--vp-button-alt-bg: rgba(255, 255, 255, 0.03);
+	--vp-button-alt-border: rgba(232, 215, 164, 0.18);
+	--vp-button-alt-hover-bg: rgba(255, 255, 255, 0.07);
+	--vp-custom-block-tip-text: #d8f3ec;
+	--vp-custom-block-warning-text: #f6deb0;
+	--vp-custom-block-danger-text: #f2c0b8;
+}
+
+html,
+body,
+.Layout {
+	background:
+		radial-gradient(circle at top, rgba(9, 147, 150, 0.06), transparent 26%),
+		linear-gradient(180deg, #eadfc9 0%, #f4ecdc 20%, #f4ecdc 100%);
+}
+
+.dark html,
+.dark body,
+.dark .Layout,
+html.dark,
+body.dark,
+.dark {
+	background:
+		radial-gradient(circle at top, rgba(9, 147, 150, 0.08), transparent 26%),
+		linear-gradient(180deg, #121001 0%, #111111 20%, #111111 100%);
+}
+
+body {
+	color: var(--vp-c-text-1);
+}
+
+.VPApp {
+	background-image:
+		linear-gradient(rgba(139, 102, 63, 0.05) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(139, 102, 63, 0.05) 1px, transparent 1px);
+	background-position: center top;
+	background-size: 32px 32px;
+}
+
+.VPNav {
+	background: rgba(251, 246, 236, 0.76);
+	backdrop-filter: blur(18px);
+	border-bottom: 1px solid var(--vp-c-divider);
+}
+
+.dark .VPNav {
+	background: rgba(17, 17, 17, 0.8);
+}
+
+.VPNavBar.has-sidebar .content-body,
+.VPNavBar .content-body {
+	background: transparent;
+}
+
+.VPNavBarTitle .title {
+	font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+	font-size: 1.02rem;
+	font-weight: 500;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+.VPNavBarTitle .logo {
+	filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
+}
+
+.VPNavBarMenuLink,
+.VPSocialLink {
+	transition:
+		color 0.2s ease,
+		transform 0.2s ease;
+}
+
+.VPNavBarMenuLink:hover,
+.VPSocialLink:hover {
+	color: var(--vp-c-brand-1);
+	transform: translateY(-1px);
+}
+
+.VPSidebar {
+	background:
+		linear-gradient(180deg, rgba(251, 246, 236, 0.94), rgba(234, 223, 201, 0.98));
+	border-right: 1px solid var(--vp-c-divider);
+}
+
+.dark .VPSidebar {
+	background:
+		linear-gradient(180deg, rgba(1, 18, 26, 0.9), rgba(17, 17, 17, 0.96));
+}
+
+.VPSidebarItem.level-0 > .item > .text,
+.VPSidebarGroup .title {
+	font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+
+.VPContent {
+	background: transparent;
+}
+
+.VPDoc {
+	padding-top: 24px;
+}
+
+.VPDoc .container {
+	max-width: 1180px;
+}
+
+.VPDoc .content,
+.VPDocAsideOutline .content {
+	background: transparent;
+}
+
+.VPDoc .main {
+	position: relative;
+}
+
+.VPDoc .main .vp-doc {
+	position: relative;
+	padding: 2.5rem;
+	border: 1px solid rgba(232, 215, 164, 0.12);
+	border-radius: 28px;
+	background:
+		linear-gradient(180deg, rgba(255, 251, 244, 0.92), rgba(244, 236, 220, 0.98)),
+		radial-gradient(circle at top left, rgba(202, 103, 2, 0.08), transparent 32%);
+	box-shadow:
+		0 20px 60px rgba(74, 49, 23, 0.12),
+		inset 0 1px 0 rgba(255, 255, 255, 0.36);
+}
+
+.dark .VPDoc .main .vp-doc {
+	background:
+		linear-gradient(180deg, rgba(30, 41, 50, 0.72), rgba(17, 17, 17, 0.9)),
+		radial-gradient(circle at top left, rgba(237, 155, 0, 0.08), transparent 32%);
+	box-shadow:
+		0 20px 60px rgba(0, 0, 0, 0.28),
+		inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.vp-doc h4,
+.vp-doc h5,
+.vp-doc h6 {
+	font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+	font-weight: 500;
+	letter-spacing: 0.01em;
+}
+
+.vp-doc h1 {
+	margin-bottom: 1.2rem;
+	font-size: clamp(2.4rem, 5vw, 3.6rem);
+	line-height: 1.05;
+}
+
+.vp-doc h2 {
+	margin-top: 2.8rem;
+	padding-top: 0.35rem;
+	border-top: 1px solid rgba(232, 215, 164, 0.12);
+	font-size: 1.7rem;
+}
+
+.vp-doc p,
+.vp-doc li,
+.vp-doc td,
+.vp-doc th {
+	color: rgba(43, 37, 32, 0.9);
+	line-height: 1.8;
+}
+
+.dark .vp-doc p,
+.dark .vp-doc li,
+.dark .vp-doc td,
+.dark .vp-doc th {
+	color: rgba(238, 238, 238, 0.9);
+}
+
+.vp-doc a {
+	color: #005f73;
+	text-decoration-color: rgba(0, 95, 115, 0.35);
+	text-underline-offset: 0.18em;
+}
+
+.vp-doc a:hover {
+	color: #bb3f02;
+	text-decoration-color: rgba(187, 63, 2, 0.48);
+}
+
+.dark .vp-doc a {
+	color: #93d2bd;
+	text-decoration-color: rgba(147, 210, 189, 0.45);
+}
+
+.dark .vp-doc a:hover {
+	color: #e8d7a4;
+	text-decoration-color: rgba(232, 215, 164, 0.72);
+}
+
+.vp-doc strong {
+	color: #4f3622;
+	font-weight: 600;
+}
+
+.dark .vp-doc strong {
+	color: #f5e7c5;
+}
+
+.vp-doc blockquote {
+	border-left: 3px solid rgba(237, 155, 0, 0.5);
+	background: rgba(202, 103, 2, 0.09);
+	border-radius: 0 18px 18px 0;
+	padding: 0.9rem 1.1rem;
+}
+
+.vp-doc :not(pre) > code {
+	color: #7c340d;
+	background: rgba(255, 248, 235, 0.92);
+	border: 1px solid rgba(0, 95, 115, 0.12);
+	border-radius: 999px;
+	padding: 0.15rem 0.45rem;
+}
+
+.dark .vp-doc :not(pre) > code {
+	color: #f6deb0;
+	background: rgba(1, 18, 26, 0.72);
+	border: 1px solid rgba(147, 210, 189, 0.14);
+}
+
+.vp-doc div[class*="language-"] {
+	border: 1px solid rgba(139, 102, 63, 0.16);
+	border-radius: 20px;
+	background: linear-gradient(180deg, rgba(253, 249, 241, 0.96), rgba(239, 229, 212, 0.94));
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.dark .vp-doc div[class*="language-"] {
+	border: 1px solid rgba(147, 210, 189, 0.14);
+	background: linear-gradient(180deg, rgba(1, 18, 26, 0.96), rgba(17, 17, 17, 0.94));
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.vp-doc div[class*="language-"] pre {
+	margin: 0;
+	padding: 1.1rem 1.25rem;
+	background: transparent;
+	border: 0;
+	border-radius: 0;
+	font-family: var(--vp-font-family-mono);
+	font-size: 0.92rem;
+	line-height: 1.65;
+}
+
+.vp-doc div[class*="language-"] code {
+	background: transparent;
+	border: 0;
+	border-radius: 0;
+	padding: 0;
+	color: inherit;
+	font-size: inherit;
+	line-height: inherit;
+}
+
+.vp-doc table {
+	display: table;
+	width: 100%;
+	border-collapse: collapse;
+	border-radius: 18px;
+	overflow: hidden;
+}
+
+.vp-doc th {
+	background: rgba(234, 223, 201, 0.9);
+}
+
+.vp-doc tr:nth-child(even) {
+	background: rgba(139, 102, 63, 0.04);
+}
+
+.dark .vp-doc th {
+	background: rgba(1, 18, 26, 0.82);
+}
+
+.dark .vp-doc tr:nth-child(even) {
+	background: rgba(255, 255, 255, 0.02);
+}
+
+.vp-doc hr {
+	border-top: 1px solid rgba(232, 215, 164, 0.12);
+}
+
+.VPOutline {
+	border-left: 1px solid var(--vp-c-divider);
+}
+
+.VPOutline .outline-title {
+	font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+}
+
+.VPOutlineItem .outline-link:hover,
+.VPOutlineItem .outline-link.active {
+	color: var(--vp-c-brand-1);
+}
+
+.vp-doc h1[style] {
+	display: flex !important;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.vp-doc h1[style] img {
+	flex: 0 0 auto;
+	filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.28));
+}
+
+.VPHome {
+	background:
+		radial-gradient(circle at top, rgba(9, 147, 150, 0.06), transparent 22%),
+		linear-gradient(180deg, rgba(244, 236, 220, 0.94), rgba(234, 223, 201, 0.98));
+}
+
+.dark .VPHome {
+	background:
+		radial-gradient(circle at top, rgba(9, 147, 150, 0.08), transparent 22%),
+		linear-gradient(180deg, rgba(18, 16, 1, 0.94), rgba(17, 17, 17, 0.98));
+}
+
+.VPHomeHero .container {
+	position: relative;
+}
+
+.VPHomeHero .container::before {
+	content: "";
+	position: absolute;
+	inset: 2rem 1rem auto;
+	height: 220px;
+	border-radius: 32px;
+	background:
+		radial-gradient(circle at 18% 25%, rgba(202, 103, 2, 0.12), transparent 24%),
+		radial-gradient(circle at 78% 35%, rgba(9, 147, 150, 0.1), transparent 22%),
+		linear-gradient(135deg, rgba(202, 103, 2, 0.06), rgba(255, 255, 255, 0));
+	pointer-events: none;
+	filter: blur(6px);
+}
+
+.dark .VPHomeHero .container::before {
+	background:
+		radial-gradient(circle at 18% 25%, rgba(237, 155, 0, 0.14), transparent 24%),
+		radial-gradient(circle at 78% 35%, rgba(9, 147, 150, 0.14), transparent 22%),
+		linear-gradient(135deg, rgba(202, 103, 2, 0.08), rgba(17, 17, 17, 0));
+}
+
+@media (max-width: 960px) {
+	.VPDoc .main .vp-doc {
+		padding: 1.5rem;
+		border-radius: 22px;
+	}
+}
+
+@media (max-width: 640px) {
+	.vp-doc h1[style] {
+		gap: 0.5rem;
+	}
+
+	.vp-doc h1[style] img {
+		width: 40px;
+		height: 40px;
+	}
+}

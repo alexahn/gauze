@@ -1,5 +1,5 @@
 <h1 style="display: flex; align-items: center; gap: 0.5rem;">
-	<img src="/logo.svg" alt="Gauze logo" width="48" height="48" />
+	<img src="/logo.svg" alt="Gauze logo" width="64" height="64" />
 	<span>Gauze</span>
 </h1>
 
