@@ -25,6 +25,14 @@ export default {
 				],
 			},
 			{
+				text: "Database",
+				items: [
+					{ text: "Overview", link: "/database/overview" },
+					{ text: "Configuration", link: "/database/configuration" },
+					{ text: "Sharding", link: "/database/sharding" },
+				],
+			},
+			{
 				text: "Entity",
 				items: [
 					{ text: "Create a Definition", link: "/entity-definition" },

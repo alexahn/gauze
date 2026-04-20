@@ -26,5 +26,5 @@ The fastest way to get Gauze running is: create a project, add `.env`, run migra
 - [Create a Definition](./entity-definition.md) for the entity format Gauze builds from.
 - [Generate Project Code](./entities.md) for turning that definition into runtime code.
 - [HTTP & GraphQL](./runtime-and-graphql.md) for endpoints, realms, and frontend build commands.
-- [Database Setup](./database-and-sharding.md) for environments, migrations, seeds, and sharding.
+- [Database Overview](./database/overview.md) for how Gauze stores data, configures environments, and grows into sharding.
 - [Development](./development/source-layout.md) for framework internals and contribution work.
