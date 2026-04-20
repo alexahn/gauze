@@ -1,5 +1,6 @@
 export default {
 	title: "Gauze",
+	base: "/gauze/",
 	description: "Gauze is a structured GraphQL framework",
 	themeConfig: {
 		logo: "/logo.svg",
