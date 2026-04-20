@@ -12,7 +12,7 @@
 
 Gauze is a structured GraphQL framework, with a focus on modularity. It offers a unified way to define and interact with data, and includes a flexible authentication and authorization system. The framework has a fractal architecture, which enables modular reusability.
 
-[Documentation](./docs/index.md) | [Quick Start Docs](./docs/getting-started.md)
+[Documentation](https://alexahn.github.io/gauze/) | [Quick Start Docs](https://alexahn.github.io/gauze/getting-started.html)
 
 ## Prerequisites
 
