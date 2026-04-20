@@ -120,4 +120,4 @@ This keeps the database model understandable while still matching the structure 
 
 - Read [Overview](./overview.md) for the bigger picture of how the database layer fits into Gauze.
 - Read [Sharding](./sharding.md) for what `previous/current/next` mean during resharding.
-- Read [Project Configuration](../project-configuration.md) for root-level project auth configuration, which is separate from database topology.
+- Read [Project Configuration](../authentication-and-authorization/project-configuration.md) for root-level project auth configuration, which is separate from database topology.

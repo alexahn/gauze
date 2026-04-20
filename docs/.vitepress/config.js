@@ -6,7 +6,7 @@ export default {
 		logo: "/logo.svg",
 		nav: [
 			{ text: "Quick Start", link: "/getting-started" },
-			{ text: "Entities", link: "/entity-definition" },
+			{ text: "Entities", link: "/entity/definition" },
 			{ text: "API", link: "/runtime-and-graphql" },
 			{ text: "Development", link: "/development/source-layout" },
 		],
@@ -35,19 +35,19 @@ export default {
 			{
 				text: "Entity",
 				items: [
-					{ text: "Create a Definition", link: "/entity-definition" },
-					{ text: "Create a Migration", link: "/create-a-migration" },
-					{ text: "Generate Project Code", link: "/entities" },
-					{ text: "Article Entity Tutorial", link: "/article-entity-tutorial" },
+					{ text: "Create a Definition", link: "/entity/definition" },
+					{ text: "Create a Migration", link: "/entity/create-a-migration" },
+					{ text: "Generate Project Code", link: "/entity/generate-project-code" },
+					{ text: "Article Entity Tutorial", link: "/entity/article-entity-tutorial" },
 				],
 			},
 			{
 				text: "Authentication and Authorization",
 				items: [
-					{ text: "Overview", link: "/authentication-and-authorization" },
-					{ text: "Project Configuration", link: "/project-configuration" },
-					{ text: "Environment Realm", link: "/environment-realm" },
-					{ text: "Email Code Tutorial", link: "/email-code-tutorial" },
+					{ text: "Overview", link: "/authentication-and-authorization/overview" },
+					{ text: "Project Configuration", link: "/authentication-and-authorization/project-configuration" },
+					{ text: "Environment Realm", link: "/authentication-and-authorization/environment-realm" },
+					{ text: "Email Code Tutorial", link: "/authentication-and-authorization/email-code-tutorial" },
 				],
 			},
 			{
