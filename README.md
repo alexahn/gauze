@@ -12,6 +12,8 @@
 
 Gauze is a structured GraphQL framework, with a focus on modularity. It offers a unified way to define and interact with data, and includes a flexible authentication and authorization system. The framework has a fractal architecture, which enables modular reusability.
 
+[Documentation](./docs/index.md) | [Quick Start Docs](./docs/getting-started.md)
+
 ## Prerequisites
 
 - Use Node.js version `22.18.0`.
