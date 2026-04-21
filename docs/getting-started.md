@@ -52,15 +52,17 @@ The HTTP server starts on port `4000` by default.
 
 ## Useful Next Commands
 
-Use `npx gauze project <dir> ...` to work against a project from any directory:
+After the server is running, the next commands people usually reach for are:
+
+- Use `npx gauze project ./my-app migrate list` to see which migrations exist.
+- Use `npx gauze project ./my-app migrate current --format json` to inspect the current migration state.
+- Use `npx gauze project ./my-app seed run` to reload seed data when you need a fresh development dataset.
+- Use `npx gauze project ./my-app shard plan 4 --format json` to preview a four-shard layout before moving beyond a monolithic database.
+
+All of these commands follow the same pattern:
 
 ```sh
-npx gauze project ./my-app migrate list
+npx gauze project <dir> <subcommand>
 ```
 
-Common early commands:
-
-```sh
-npx gauze project ./my-app migrate current --format json
-npx gauze project ./my-app shard plan 4 --format json
-```
+That means you can run project commands from anywhere as long as you point Gauze at the project directory.

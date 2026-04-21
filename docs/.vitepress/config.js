@@ -6,9 +6,9 @@ export default {
 		logo: "/logo.svg",
 		nav: [
 			{ text: "Quick Start", link: "/getting-started" },
-			{ text: "Entities", link: "/entity/definition" },
+			{ text: "Projects", link: "/project/overview" },
+			{ text: "Entities", link: "/entity/overview" },
 			{ text: "API", link: "/runtime-and-graphql" },
-			{ text: "Development", link: "/development/source-layout" },
 		],
 		socialLinks: [
 			{ icon: "github", link: "https://github.com/alexahn/gauze" },
@@ -19,7 +19,6 @@ export default {
 				items: [
 					{ text: "Overview", link: "/" },
 					{ text: "Quick Start", link: "/getting-started" },
-					{ text: "Generated Project", link: "/project-layout" },
 					{ text: "HTTP & GraphQL", link: "/runtime-and-graphql" },
 					{ text: "Database Setup", link: "/database-and-sharding" },
 				],
@@ -64,6 +63,7 @@ export default {
 			{
 				text: "Entity",
 				items: [
+					{ text: "Overview", link: "/entity/overview" },
 					{ text: "Create a Definition", link: "/entity/definition" },
 					{ text: "Create a Migration", link: "/entity/create-a-migration" },
 					{ text: "Generate Project Code", link: "/entity/generate-project-code" },

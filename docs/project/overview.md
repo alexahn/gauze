@@ -83,5 +83,4 @@ That gives you:
 ## Related Pages
 
 - Read [Configuration](./configuration.md) for the files and settings that control a generated project.
-- Read [Generated Project](../project-layout.md) for the original layout reference page.
 - Read [Quick Start](../getting-started.md) to scaffold and run a project from scratch.

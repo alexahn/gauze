@@ -5,6 +5,7 @@ test.sqlite3
 development.sqlite3
 staging.sqlite3
 production.sqlite3
+*.sqlite3
 metafile.json
 Makefile
 todo
@@ -21,3 +22,4 @@ src/views/project/build/*.map
 test
 /bin
 eslint.config.js
+AGENTS.md

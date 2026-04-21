@@ -4,7 +4,7 @@ export default {
 	version: "0.0.1",
 	process_middlewares: [],
 	http_middlewares: [],
-	development_monolith: {
+	development_monolithic: {
 		admins: [
 			{
 				name: "Alex Ahn",

@@ -9,6 +9,7 @@ npx gauze project ./my-app application serve
 ```
 
 The server is a Koa application with `koa-body`, CORS, compression, conditional requests, and ETags enabled.
+By default, the HTTP server listens on port `4000`.
 
 ## Endpoints
 
