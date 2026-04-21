@@ -688,6 +688,8 @@ export default memo(function Table({
 	const buttonPlainLeftClass = `${buttonPlainClass} tl`;
 	const buttonPlainRightCellClass = `${buttonPlainCellClass} tr`;
 	const buttonPlainLeftCellClass = `${buttonPlainCellClass} tl`;
+	const buttonPlainEntityClass = `button-reset bg-transparent bn pa0 ${nextColor.node.c}`;
+	const buttonPlainEntityCellClass = `${buttonPlainEntityClass} db w-100 overflow-hidden tl`;
 	const buttonSpanClass = `mw5 w-100 truncate-ns ba bw1 br2 ${nextColor.node.bd} ${nextColor.table.bg} ${nextColor.table.c} ${nextColor.node.bdh} ${nextColor.table.bgh} ${nextColor.table.ch}`;
 	const cellInputClass = `${cellClass} ${color.node.bg} ${color.node.bd} ${color.node.bgh} ${color.node.bdh} ${color.node.ch}`;
 	const cellInputClass2 = `${cellClass} ${color.node.bg} bdx${color.table.x - 1} bw1`;
@@ -1244,7 +1246,7 @@ export default memo(function Table({
 												<td align="left" key={`${item[header.primary_key]}.${field}`} className={cellEntityClass}>
 													<Popover
 														containerClassName="pa1"
-														buttonClassName={buttonPlainLeftCellClass}
+														buttonClassName={buttonPlainEntityCellClass}
 														buttonContent={<div className="truncate-ns entity">{item[field.name]}</div>}
 														popoverClassName={spanEntityClass}
 													>
