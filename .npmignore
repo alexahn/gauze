@@ -23,4 +23,4 @@ test
 /bin
 eslint.config.js
 AGENTS.md
-docs
+docs/.vitepress/dist/
