@@ -8,6 +8,7 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 	const graphQLTypeToInputType = {
 		Date: "datetime-local",
 		String: "text",
+		SCALAR__EMAIL__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: "email",
 		SCALAR__ID__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: "text",
 		SCALAR__DATE__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: "datetime-local",
 		SCALAR__STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: "text",
@@ -23,6 +24,13 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 			}
 		},
 		String: function (v) {
+			if (typeof v === "string") {
+				return v;
+			} else {
+				return undefined;
+			}
+		},
+		SCALAR__EMAIL__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: function (v) {
 			if (typeof v === "string") {
 				return v;
 			} else {
@@ -67,6 +75,10 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 			e.target.serialized = e.target.value;
 			return e;
 		},
+		SCALAR__EMAIL__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: function (e, field) {
+			e.target.serialized = e.target.value;
+			return e;
+		},
 		SCALAR__ID__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: function (e, field) {
 			e.target.serialized = e.target.value;
 			return e;
@@ -94,6 +106,13 @@ export default function Input({ field, className, defaultMode, defaultValue, val
 			}
 		},
 		String: function (v) {
+			if (v === undefined) {
+				return "";
+			} else {
+				return v;
+			}
+		},
+		SCALAR__EMAIL__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT: function (v) {
 			if (v === undefined) {
 				return "";
 			} else {

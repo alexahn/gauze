@@ -8,6 +8,7 @@ import { navigate } from "@ahn/sinew";
 import Input from "./Input.jsx";
 import Link from "./Link.jsx";
 import Pagination from "./Pagination.jsx";
+import Popover from "./Popover.jsx";
 
 function Table({ pathfinder, services, agent, headers, header, variables = {}, items, count }) {
 	const { gauze } = services;
@@ -15,9 +16,12 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 	const defaultFilterMode = variables.where ? "where" : variables.where_like ? "where_like" : variables.where_between ? "where_between" : "where";
 	const [filterMode, setFilterMode] = useState(defaultFilterMode);
 	const [localVariables, setLocalVariables] = useState(variables);
-	const cellClass = "relative tooltip-container ba bw1 br2 mb1 bgx2 bdx2 cx6 bgx3h bdx3h cx6h w100";
+	const cellClass = "ba bw1 br2 mb1 bgx2 bdx2 cx6 bgx3h bdx3h cx6h w100";
 	const itemClass = "athelas f6 clouds w-100 truncate-ns mw5";
-	const tooltipClass = "absolute tooltip athelas f6 dn bgx2 cx6 mw5 w5 top-0 left-0 ba bw1 br2";
+	const textTriggerClass = "button-reset athelas f6 clouds w-100 truncate-ns mw5 tl";
+	const iconTriggerClass = "button-reset flex items-center justify-center";
+	const textPopoverClass = "tooltip athelas f6 bgx2 cx6 mw5 ba bw1 br2 pa1";
+	const menuPopoverClass = "tooltip athelas f6 bgx2 cx6 mw5 ba bw1 br2 pa1";
 
 	const offset = variables.offset ? Number.parseInt(variables.offset) : 0;
 	const limit = variables.limit ? Number.parseInt(variables.limit) : 16;
@@ -167,30 +171,40 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 			}
 		};
 	}
+	function renderFilterModePopover(label) {
+		return (
+			<Popover trigger={label} triggerClassName="button-reset athelas f6" popoverClassName={menuPopoverClass} popoverWidth="5rem">
+				<div className="flex flex-column">
+					<button type="button" onClick={handleFilterMode("where")}>
+						Match
+					</button>
+					<button type="button" onClick={handleFilterMode("where_like")}>
+						Search
+					</button>
+					<button type="button" onClick={handleFilterMode("where_between")}>
+						Range
+					</button>
+				</div>
+			</Popover>
+		);
+	}
+	function renderValuePopover(value) {
+		const content = value === undefined || value === null ? "" : String(value);
+		return (
+			<Popover trigger={content} triggerClassName={textTriggerClass} popoverClassName={textPopoverClass} triggerTitle={content} triggerAriaLabel={content}>
+				{content}
+			</Popover>
+		);
+	}
 	function renderFilters() {
 		if (filterMode === "where") {
 			return (
 				<tr>
-					<th className={cellClass} tabIndex="0">
-						<button className="athelas f6" type="button">
-							Match
-						</button>
-						<span className={tooltipClass}>
-							<button type="button" onClick={handleFilterMode("where")}>
-								Match
-							</button>
-							<button type="button" onClick={handleFilterMode("where_like")}>
-								Search
-							</button>
-							<button type="button" onClick={handleFilterMode("where_between")}>
-								Range
-							</button>
-						</span>
-					</th>
+					<th className={cellClass}>{renderFilterModePopover("Match")}</th>
 					{header.fields.map(function (field) {
 						const defaultValue = localVariables[filterMode] ? localVariables[filterMode][field.name] : undefined;
 						return (
-							<th key={field.name} className={cellClass} tabIndex="0">
+							<th key={field.name} className={cellClass}>
 								<div key={filterMode} className={itemClass}>
 									<Input
 										defaultMode={true}
@@ -209,26 +223,11 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 		} else if (filterMode === "where_like") {
 			return (
 				<tr>
-					<th className={cellClass} tabIndex="0">
-						<button className="athelas f6" type="button">
-							Search
-						</button>
-						<span className={tooltipClass}>
-							<button type="button" onClick={handleFilterMode("where")}>
-								Match
-							</button>
-							<button type="button" onClick={handleFilterMode("where_like")}>
-								Search
-							</button>
-							<button type="button" onClick={handleFilterMode("where_between")}>
-								Range
-							</button>
-						</span>
-					</th>
+					<th className={cellClass}>{renderFilterModePopover("Search")}</th>
 					{header.fields.map(function (field) {
 						const defaultValue = localVariables[filterMode] ? localVariables[filterMode][field.name] : undefined;
 						return (
-							<th key={field.name} className={cellClass} tabIndex="0">
+							<th key={field.name} className={cellClass}>
 								<div key={filterMode} className={itemClass}>
 									<Input
 										defaultMode={true}
@@ -248,26 +247,11 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 			return (
 				<>
 					<tr>
-						<th className={cellClass} tabIndex="0">
-							<button className="athelas f6" type="button">
-								Start
-							</button>
-							<span className={tooltipClass}>
-								<button type="button" onClick={handleFilterMode("where")}>
-									Match
-								</button>
-								<button type="button" onClick={handleFilterMode("where_like")}>
-									Search
-								</button>
-								<button type="button" onClick={handleFilterMode("where_between")}>
-									Range
-								</button>
-							</span>
-						</th>
+						<th className={cellClass}>{renderFilterModePopover("Start")}</th>
 						{header.fields.map(function (field) {
 							const defaultValue0 = localVariables[filterMode] ? (localVariables[filterMode][field.name] ? localVariables[filterMode][field.name][0] : undefined) : undefined;
 							return (
-								<th key={field.name} className={cellClass} tabIndex="0">
+								<th key={field.name} className={cellClass}>
 									<div key={filterMode} className={itemClass}>
 										<Input
 											defaultMode={true}
@@ -283,26 +267,11 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 						})}
 					</tr>
 					<tr>
-						<th className={cellClass} tabIndex="0">
-							<button className="athelas f6" type="button">
-								End
-							</button>
-							<span className={tooltipClass}>
-								<button type="button" onClick={handleFilterMode("where")}>
-									Match
-								</button>
-								<button type="button" onClick={handleFilterMode("where_like")}>
-									Search
-								</button>
-								<button type="button" onClick={handleFilterMode("where_between")}>
-									Range
-								</button>
-							</span>
-						</th>
+						<th className={cellClass}>{renderFilterModePopover("End")}</th>
 						{header.fields.map(function (field) {
 							const defaultValue1 = localVariables[filterMode] ? (localVariables[filterMode][field.name] ? localVariables[filterMode][field.name][1] : undefined) : undefined;
 							return (
-								<th key={field.name} className={cellClass} tabIndex="0">
+								<th key={field.name} className={cellClass}>
 									<div key={filterMode} className={itemClass}>
 										<Input
 											defaultMode={true}
@@ -335,9 +304,8 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 						</th>
 						{header.fields.map(function (field) {
 							return (
-								<th key={field.name} className={cellClass} tabIndex="0">
-									<div className={itemClass}>{field.name}</div>
-									<span className={tooltipClass}>{field.name}</span>
+								<th key={field.name} className={cellClass}>
+									{renderValuePopover(field.name)}
 								</th>
 							);
 						})}
@@ -461,111 +429,107 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 											</button>
 										</Link>
 										{hasRelationships ? (
-											<div className={"relative tooltip-container"} tabIndex="0">
-												<div className={itemClass}>
-													<button type="button">
-														<Link2Icon />
-													</button>
+											<Popover
+												trigger={<Link2Icon />}
+												triggerClassName={iconTriggerClass}
+												popoverClassName={menuPopoverClass}
+												popoverWidth="5rem"
+												triggerAriaLabel="Relationships"
+											>
+												<div className={"flex flex-column mw3"}>
+													<Link href={toRelationships} push={true}>
+														<button className="athelas f6 w3" type="button">
+															To
+														</button>
+													</Link>
+													<Link href={fromRelationships} push={true}>
+														<button className="athelas f6 w3" type="button">
+															From
+														</button>
+													</Link>
 												</div>
-												<span className={tooltipClass}>
-													<div className={"flex flex-column mw3"}>
-														<Link href={toRelationships} push={true}>
-															<button className="athelas f6 w3" type="button">
-																To
-															</button>
-														</Link>
-														<Link href={fromRelationships} push={true}>
-															<button className="athelas f6 w3" type="button">
-																From
-															</button>
-														</Link>
-													</div>
-												</span>
-											</div>
+											</Popover>
 										) : null}
 										{hasWhitelist ? (
-											<div className={"relative tooltip-container"} tabIndex="0">
-												<div className={itemClass}>
-													<button type="button">
-														<BookmarkIcon />
-													</button>
+											<Popover
+												trigger={<BookmarkIcon />}
+												triggerClassName={iconTriggerClass}
+												popoverClassName={menuPopoverClass}
+												popoverWidth="5rem"
+												triggerAriaLabel="Whitelist actions"
+											>
+												<div className={"flex flex-column mw3"}>
+													<Link href={whitelist("create")} push={true}>
+														<button className="athelas f6 w3" type="button">
+															Create
+														</button>
+													</Link>
+													<Link href={whitelist("read")} push={true}>
+														<button className="athelas f6 w3" type="button">
+															Read
+														</button>
+													</Link>
+													<Link href={whitelist("update")} push={true}>
+														<button className="athelas f6 w3" type="button">
+															Update
+														</button>
+													</Link>
+													<Link href={whitelist("delete")} push={true}>
+														<button className="athelas f6 w3" type="button">
+															Delete
+														</button>
+													</Link>
+													<Link href={whitelist("count")} push={true}>
+														<button className="athelas f6 w3" type="button">
+															Count
+														</button>
+													</Link>
 												</div>
-												<span className={tooltipClass}>
-													<div className={"flex flex-column mw3"}>
-														<Link href={whitelist("create")} push={true}>
-															<button className="athelas f6 w3" type="button">
-																Create
-															</button>
-														</Link>
-														<Link href={whitelist("read")} push={true}>
-															<button className="athelas f6 w3" type="button">
-																Read
-															</button>
-														</Link>
-														<Link href={whitelist("update")} push={true}>
-															<button className="athelas f6 w3" type="button">
-																Update
-															</button>
-														</Link>
-														<Link href={whitelist("delete")} push={true}>
-															<button className="athelas f6 w3" type="button">
-																Delete
-															</button>
-														</Link>
-														<Link href={whitelist("count")} push={true}>
-															<button className="athelas f6 w3" type="button">
-																Count
-															</button>
-														</Link>
-													</div>
-												</span>
-											</div>
+											</Popover>
 										) : null}
 										{hasBlacklist ? (
-											<div className={"relative tooltip-container"} tabIndex="0">
-												<div className={itemClass}>
-													<button type="button">
-														<BookmarkFilledIcon />
-													</button>
+											<Popover
+												trigger={<BookmarkFilledIcon />}
+												triggerClassName={iconTriggerClass}
+												popoverClassName={menuPopoverClass}
+												popoverWidth="5rem"
+												triggerAriaLabel="Blacklist actions"
+											>
+												<div className={"flex flex-column mw3"}>
+													<Link href={blacklist("create")} push={true}>
+														<button className="athelas f6 w3" type="button">
+															Create
+														</button>
+													</Link>
+													<Link href={blacklist("read")} push={true}>
+														<button className="athelas f6 w3" type="button">
+															Read
+														</button>
+													</Link>
+													<Link href={blacklist("update")} push={true}>
+														<button className="athelas f6 w3" type="button">
+															Update
+														</button>
+													</Link>
+													<Link href={blacklist("delete")} push={true}>
+														<button className="athelas f6 w3" type="button">
+															Delete
+														</button>
+													</Link>
+													<Link href={blacklist("count")} push={true}>
+														<button className="athelas f6 w3" type="button">
+															Count
+														</button>
+													</Link>
 												</div>
-												<span className={tooltipClass}>
-													<div className={"flex flex-column mw3"}>
-														<Link href={blacklist("create")} push={true}>
-															<button className="athelas f6 w3" type="button">
-																Create
-															</button>
-														</Link>
-														<Link href={blacklist("read")} push={true}>
-															<button className="athelas f6 w3" type="button">
-																Read
-															</button>
-														</Link>
-														<Link href={blacklist("update")} push={true}>
-															<button className="athelas f6 w3" type="button">
-																Update
-															</button>
-														</Link>
-														<Link href={blacklist("delete")} push={true}>
-															<button className="athelas f6 w3" type="button">
-																Delete
-															</button>
-														</Link>
-														<Link href={blacklist("count")} push={true}>
-															<button className="athelas f6 w3" type="button">
-																Count
-															</button>
-														</Link>
-													</div>
-												</span>
-											</div>
+											</Popover>
 										) : null}
 									</div>
 								</td>
 								{header.fields.map(function (field) {
 									return (
-										<td key={field.name} className={cellClass} tabIndex="0">
-											<div className={itemClass}>{item.attributes[field.name]}</div>
-											<span className={tooltipClass}>{item.attributes[field.name]}</span>
+										<td key={field.name} className={cellClass}>
+											{renderValuePopover(item.attributes[field.name])}
 										</td>
 									);
 								})}

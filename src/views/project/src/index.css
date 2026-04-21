@@ -894,9 +894,11 @@
 	grid-row: 1 / span 1;
 }
 
-.tooltip-container:focus .tooltip {
-	display: block;
-	/*border: 1px solid black;*/
+.tooltip {
+	margin: 0;
+}
+
+.tooltip:popover-open {
 	z-index: 1;
 }
 

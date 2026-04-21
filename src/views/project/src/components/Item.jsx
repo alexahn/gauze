@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 
 import Input from "./Input.jsx";
+import Popover from "./Popover.jsx";
 
 function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 	const [localMode, setLocalMode] = useState(mode);
@@ -14,9 +15,11 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 	const [updateModelError, setUpdateModelError] = useState("");
 	const [deleteModelError, setDeleteModelError] = useState("");
 	const { gauzemodel } = services;
-	const cellClass = "relative tooltip-container ba bw1 br2 mb1 bgx2 bdx2 cx6 bgx3h bdx3h cx6h w100";
+	const cellClass = "ba bw1 br2 mb1 bgx2 bdx2 cx6 bgx3h bdx3h cx6h w100";
 	const itemClass = "athelas f6 clouds w-100 truncate-ns mw5";
-	const tooltipClass = "absolute tooltip athelas f6 dn bgx2 cx6 mw5 w5 top-0 left-0 ba bw1 br2";
+	const errorItemClass = "relative athelas f6 clouds w-100 mw5";
+	const errorClass = "absolute left-4 top-0 w5 bgxyz7 pa1 br2 z-1";
+	const menuPopoverClass = "tooltip athelas f6 bgx2 cx6 mw5 ba bw1 br2 pa1";
 	function changeMode(localMode) {
 		return function (e) {
 			setLocalMode(localMode);
@@ -144,6 +147,23 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 	function handleOnKeyDown(field) {
 		return function (e) {};
 	}
+	function renderModePopover(label) {
+		return (
+			<Popover trigger={label} triggerClassName="button-reset athelas f6" popoverClassName={menuPopoverClass} popoverWidth="5rem">
+				<div className="flex flex-column">
+					<button type="button" className="athelas f6" onClick={changeMode("read")}>
+						Read
+					</button>
+					<button type="button" className="athelas f6" onClick={changeMode("update")}>
+						Update
+					</button>
+					<button type="button" className="athelas f6" onClick={changeMode("delete")}>
+						Delete
+					</button>
+				</div>
+			</Popover>
+		);
+	}
 	function renderCreate(item) {
 		if (item) {
 			return <div>Item already exists</div>;
@@ -153,7 +173,7 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 					<table>
 						<thead>
 							<tr>
-								<th className={cellClass} tabIndex="0">
+								<th className={cellClass}>
 									<div className={itemClass}>
 										<button type="button" className="athelas f6">
 											Create
@@ -179,7 +199,7 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 											<div className={itemClass}>{field.name}</div>
 										</td>
 										<td className={cellClass}>
-											<div className={itemClass}>
+											<div className={errorItemClass}>
 												<Input
 													defaultMode={true}
 													field={field}
@@ -188,7 +208,7 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 													onKeyDown={handleOnKeyDown(field.name)}
 													defaultValue={localCreateItem.attributes[field.name]}
 												/>
-												{createFieldError[field.name] ? <span className="absolute left-4 top-0 w5 bgxyz7 pa1 br2">{createFieldError[field.name]}</span> : null}
+												{createFieldError[field.name] ? <span className={errorClass}>{createFieldError[field.name]}</span> : null}
 											</div>
 										</td>
 									</tr>
@@ -197,11 +217,11 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 							<tr>
 								<td className={cellClass}></td>
 								<td className={cellClass} align="center">
-									<div className={itemClass}>
+									<div className={errorItemClass}>
 										<button type="button" className="athelas f6" onClick={handleCreate}>
 											Apply
 										</button>
-										{createModelError ? <span className="absolute left-4 top-0 w5 bgxyz7 pa1 br2">{createModelError}</span> : null}
+										{createModelError ? <span className={errorClass}>{createModelError}</span> : null}
 									</div>
 								</td>
 							</tr>
@@ -218,23 +238,8 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 					<table>
 						<thead>
 							<tr>
-								<th className={cellClass} tabIndex="0">
-									<div className={itemClass}>
-										<button type="button" className="athelas f6">
-											Read
-										</button>
-									</div>
-									<span className={tooltipClass}>
-										<button type="button" className="athelas f6" onClick={changeMode("read")}>
-											Read
-										</button>
-										<button type="button" className="athelas f6" onClick={changeMode("update")}>
-											Update
-										</button>
-										<button type="button" className="athelas f6" onClick={changeMode("delete")}>
-											Delete
-										</button>
-									</span>
+								<th className={cellClass}>
+									<div className={itemClass}>{renderModePopover("Read")}</div>
 								</th>
 								<th className={cellClass}></th>
 							</tr>
@@ -275,23 +280,8 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 					<table>
 						<thead>
 							<tr>
-								<th className={cellClass} tabIndex="0">
-									<div className={itemClass}>
-										<button type="button" className="athelas f6">
-											Update
-										</button>
-									</div>
-									<span className={tooltipClass}>
-										<button type="button" className="athelas f6" onClick={changeMode("read")}>
-											Read
-										</button>
-										<button type="button" className="athelas f6" onClick={changeMode("update")}>
-											Update
-										</button>
-										<button type="button" className="athelas f6" onClick={changeMode("delete")}>
-											Delete
-										</button>
-									</span>
+								<th className={cellClass}>
+									<div className={itemClass}>{renderModePopover("Update")}</div>
 								</th>
 								<th className={cellClass}></th>
 							</tr>
@@ -312,7 +302,7 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 											<div className={itemClass}>{field.name}</div>
 										</td>
 										<td className={cellClass}>
-											<div className={itemClass}>
+											<div className={errorItemClass}>
 												<Input
 													defaultMode={true}
 													field={field}
@@ -321,7 +311,7 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 													onKeyDown={handleOnKeyDown(field.name)}
 													defaultValue={localItem.attributes[field.name]}
 												/>
-												{updateFieldError[field.name] ? <span className="absolute left-4 top-0 w5 bgxyz7 pa1 br2">{updateFieldError[field.name]}</span> : null}
+												{updateFieldError[field.name] ? <span className={errorClass}>{updateFieldError[field.name]}</span> : null}
 											</div>
 										</td>
 									</tr>
@@ -330,11 +320,11 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 							<tr>
 								<td className={cellClass}></td>
 								<td className={cellClass} align="center">
-									<div className={itemClass}>
+									<div className={errorItemClass}>
 										<button type="button" className="athelas f6" onClick={handleUpdate}>
 											Apply
 										</button>
-										{updateModelError ? <span className="absolute left-4 top-0 w5 bgxyz7 pa1 br2">{updateModelError}</span> : null}
+										{updateModelError ? <span className={errorClass}>{updateModelError}</span> : null}
 									</div>
 								</td>
 							</tr>
@@ -353,23 +343,8 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 					<table>
 						<thead>
 							<tr>
-								<th className={cellClass} tabIndex="0">
-									<div className={itemClass}>
-										<button type="button" className="athelas f6">
-											Delete
-										</button>
-									</div>
-									<span className={tooltipClass}>
-										<button type="button" className="athelas f6" onClick={changeMode("read")}>
-											Read
-										</button>
-										<button type="button" className="athelas f6" onClick={changeMode("update")}>
-											Update
-										</button>
-										<button type="button" className="athelas f6" onClick={changeMode("delete")}>
-											Delete
-										</button>
-									</span>
+								<th className={cellClass}>
+									<div className={itemClass}>{renderModePopover("Delete")}</div>
 								</th>
 								<th className={cellClass}></th>
 							</tr>
@@ -408,11 +383,11 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 							<tr>
 								<td className={cellClass}></td>
 								<td className={cellClass} align="center">
-									<div className={itemClass}>
+									<div className={errorItemClass}>
 										<button type="button" className="athelas f6" onClick={handleDelete}>
 											Apply
 										</button>
-										{deleteModelError ? <span className="absolute left-4 top-0 w5 bgxyz7 pa1 br2">{deleteModelError}</span> : null}
+										{deleteModelError ? <span className={errorClass}>{deleteModelError}</span> : null}
 									</div>
 								</td>
 							</tr>
