@@ -280,7 +280,13 @@ class DatabaseManager {
 	}
 	// create knex connections for every shard, every shard node will have a knex attribute with the instantiated knex object
 	create_connections(config) {
-		if (!config[process.env.GAUZE_ENV]) throw new Error(`Database config is not defined for environment ${process.env.GAUZE_ENV}`);
+		if (process.env.GAUZE_ENV === undefined) {
+			// note: we are assuming the CLI is being used for the first time
+			// note: maybe we should create these connections when we run applications instead of in the constructor?
+			return;
+		} else {
+			if (!config[process.env.GAUZE_ENV]) throw new Error(`Database config is not defined for environment ${process.env.GAUZE_ENV}`);
+		}
 		const self = this;
 		const database_environment = config[process.env.GAUZE_ENV];
 		const database_tables = Object.keys(database_environment);
