@@ -9,8 +9,8 @@ import Connection from "./Connection.jsx";
 import Relationship from "./Relationship.jsx";
 import Input from "./Input.jsx";
 import Pagination from "./Pagination.jsx";
+import Popover from "./Popover.jsx";
 
-import { v4 as uuidv4 } from "uuid";
 import { Share1Icon, Pencil2Icon, Cross1Icon, BookmarkIcon, BookmarkFilledIcon, PlusIcon, MinusIcon } from "@radix-ui/react-icons";
 
 export default memo(function Table({
@@ -682,6 +682,12 @@ export default memo(function Table({
 	const buttonPaginationClass = `${buttonClass} mr1`;
 	const buttonTableClass = `ba br2 ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c} ${nextColor.table.bdh} ${nextColor.table.bgh} ${nextColor.table.ch}`;
 	const buttonBlackClass = `ba br2 bgx2 bdx2 cx12 bgx12h bdx12h cx2h`;
+	const buttonPlainClass = `button-reset bg-transparent bn pa0 ${color.node.c}`;
+	const buttonPlainCellClass = `${buttonPlainClass} db w-100 overflow-hidden`;
+	const buttonPlainRightClass = `${buttonPlainClass} tr`;
+	const buttonPlainLeftClass = `${buttonPlainClass} tl`;
+	const buttonPlainRightCellClass = `${buttonPlainCellClass} tr`;
+	const buttonPlainLeftCellClass = `${buttonPlainCellClass} tl`;
 	const buttonSpanClass = `mw5 w-100 truncate-ns ba bw1 br2 ${nextColor.node.bd} ${nextColor.table.bg} ${nextColor.table.c} ${nextColor.node.bdh} ${nextColor.table.bgh} ${nextColor.table.ch}`;
 	const cellInputClass = `${cellClass} ${color.node.bg} ${color.node.bd} ${color.node.bgh} ${color.node.bdh} ${color.node.ch}`;
 	const cellInputClass2 = `${cellClass} ${color.node.bg} bdx${color.table.x - 1} bw1`;
@@ -692,16 +698,16 @@ export default memo(function Table({
 	const cellEntityClass = `${cellClass} ${nextColor.node.bg} ${nextColor.node.bd} ${nextColor.node.c}`;
 	const inputTableClass = `w-100 br2 ba bw1 ${color.node.bd} ${color.node.bg} ${color.node.c} ${color.node.bdh} ${color.node.bgh} ${color.node.ch}`;
 	const inputErrorTableClass = `w-100 br2 ba bw1 ${color.table.bd} ${color.node.bg} ${color.node.c} ${color.node.bdh} ${color.node.bgh} ${color.node.ch}`;
-	const spanTableClass = `dn mw9 w6 top-0 right-0 pa1 absolute f4 tooltip ${color.node.bg} bdx2 ${color.node.c} bw1 ba br2`;
-	const spanEntityClass = `dn mw5 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.node.x - 1} bdx${nextColor.node.x - 1} cx${nextColor.node.x === 10 ? nextColor.node.x + 2 : nextColor.node.x + 1} bw1 ba br2`;
-	const spanButtonClass = `dn mw5 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.table.x - 1} bdx${nextColor.table.x - 1} cx${nextColor.table.x === 10 ? nextColor.table.x + 2 : nextColor.table.x + 1} br2`;
-	const spanButtonLongClass = `dn mw9 w6 top-0 left-0 pa1 absolute f4 tooltip bgx${nextColor.table.x - 1} bdx${nextColor.table.x - 1} cx${nextColor.table.x === 10 ? nextColor.table.x + 2 : nextColor.table.x + 1} br2`;
+	const spanTableClass = `mw9 w6 pa1 f4 ${color.node.bg} bdx2 ${color.node.c} bw1 ba br2`;
+	const spanEntityClass = `mw5 w5 pa1 f4 bgx${nextColor.node.x - 1} bdx${nextColor.node.x - 1} cx${nextColor.node.x === 10 ? nextColor.node.x + 2 : nextColor.node.x + 1} bw1 ba br2`;
+	const spanButtonClass = `mw5 w5 pa1 f4 bgx${nextColor.table.x - 1} bdx${nextColor.table.x - 1} cx${nextColor.table.x === 10 ? nextColor.table.x + 2 : nextColor.table.x + 1} bw1 ba br2`;
+	const spanButtonLongClass = `mw9 w6 pa1 f4 bgx${nextColor.table.x - 1} bdx${nextColor.table.x - 1} cx${nextColor.table.x === 10 ? nextColor.table.x + 2 : nextColor.table.x + 1} bw1 ba br2`;
 	const buttonConnectionToClass = `ba br2 ${prevPrevColor.table.bd} ${prevPrevColor.table.bg} ${prevPrevColor.table.c} ${prevPrevColor.table.bdh} ${prevPrevColor.table.bgh} ${prevPrevColor.table.ch}`;
 	const buttonSpanConnectionToClass = `ba br2 w-100 mw5 ${nextColor.table.bd} ${nextColor.table.bg} ${nextColor.table.c} ${nextColor.table.bdh} ${nextColor.table.bgh} ${nextColor.table.ch}`;
-	const spanConnectionToClass = `dn mw9 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${prevPrevColor.table.x - 1} bdx${prevPrevColor.table.x - 1} cx${prevPrevColor.table.x === 10 ? prevPrevColor.table.x + 2 : prevPrevColor.table.x + 1} bw1 ba br2`;
+	const spanConnectionToClass = `mw9 w5 pa1 f4 bgx${prevPrevColor.table.x - 1} bdx${prevPrevColor.table.x - 1} cx${prevPrevColor.table.x === 10 ? prevPrevColor.table.x + 2 : prevPrevColor.table.x + 1} bw1 ba br2`;
 	const buttonConnectionFromClass = `ba br2 ${nextNextColor.node.bd} ${nextNextColor.node.bg} ${nextNextColor.node.c} ${nextNextColor.node.bdh} ${nextNextColor.node.bgh} ${nextNextColor.node.ch}`;
 	const buttonSpanConnectionFromClass = `ba br2 w-100 mw5 ${prevColor.table.bd} ${prevColor.table.bg} ${prevColor.table.c} ${prevColor.table.bdh} ${prevColor.table.bgh} ${prevColor.table.ch}`;
-	const spanConnectionFromClass = `dn mw9 w5 top-0 left-0 pa1 absolute f4 tooltip bgx${nextNextColor.node.x - 1} bdx${nextNextColor.node.x - 1} cx${nextNextColor.node.x === 10 ? nextNextColor.node.x + 2 : nextNextColor.node.x + 1} bw1 ba br2`;
+	const spanConnectionFromClass = `mw9 w5 pa1 f4 bgx${nextNextColor.node.x - 1} bdx${nextNextColor.node.x - 1} cx${nextNextColor.node.x === 10 ? nextNextColor.node.x + 2 : nextNextColor.node.x + 1} bw1 ba br2`;
 
 	function renderFilterHeader1() {
 		switch (mode) {
@@ -726,157 +732,131 @@ export default memo(function Table({
 			case "where":
 				return (
 					<th align="center" className={cellWideTableClass}>
-						<div className="pa1 relative row" tabIndex="0">
-							{/*<button className={buttonTableClass} onClick={applyFilterButton}>*/}
-							<button className={buttonTableClass}>{filterModeLabel[mode]}</button>
-							<span className={spanTableClass}>
-								<div className="pa1">{filterModeLabel[mode]}</div>
-								<button className={buttonClass} style={{ width: "100%" }} onClick={applyFilterButton}>
-									Apply
-								</button>
-								<button className={buttonClass} style={{ width: "100%" }} onClick={handleClearFilter("where")}>
-									Clear
-								</button>
-								<button className={buttonSpanClass} style={{ opacity: mode === "where" ? "0.5" : "1" }} onClick={handleChangeFilterMode("where")} disabled={mode === "where"}>
-									{filterModeLabel["where"]}
-								</button>
-								<button
-									className={buttonSpanClass}
-									style={{ opacity: mode === "where_like" ? "0.5" : "1" }}
-									onClick={handleChangeFilterMode("where_like")}
-									disabled={mode === "where_like"}
-								>
-									{filterModeLabel["where_like"]}
-								</button>
-								<button
-									className={buttonSpanClass}
-									style={{ opacity: mode === "where_between" ? "0.5" : "1" }}
-									onClick={handleChangeFilterMode("where_between")}
-									disabled={mode === "where_between"}
-								>
-									{filterModeLabel["where_between"]}
-								</button>
-							</span>
-						</div>
+						<Popover buttonClassName={buttonTableClass} buttonContent={filterModeLabel[mode]} popoverClassName={spanTableClass}>
+							<div className="pa1">{filterModeLabel[mode]}</div>
+							<button className={buttonClass} style={{ width: "100%" }} onClick={applyFilterButton}>
+								Apply
+							</button>
+							<button className={buttonClass} style={{ width: "100%" }} onClick={handleClearFilter("where")}>
+								Clear
+							</button>
+							<button className={buttonSpanClass} style={{ opacity: mode === "where" ? "0.5" : "1" }} onClick={handleChangeFilterMode("where")} disabled={mode === "where"}>
+								{filterModeLabel["where"]}
+							</button>
+							<button
+								className={buttonSpanClass}
+								style={{ opacity: mode === "where_like" ? "0.5" : "1" }}
+								onClick={handleChangeFilterMode("where_like")}
+								disabled={mode === "where_like"}
+							>
+								{filterModeLabel["where_like"]}
+							</button>
+							<button
+								className={buttonSpanClass}
+								style={{ opacity: mode === "where_between" ? "0.5" : "1" }}
+								onClick={handleChangeFilterMode("where_between")}
+								disabled={mode === "where_between"}
+							>
+								{filterModeLabel["where_between"]}
+							</button>
+						</Popover>
 					</th>
 				);
 			case "where_like":
 				return (
 					<th align="center" className={cellWideTableClass}>
-						<div className="pa1 relative row" tabIndex="0">
-							{/*<button className={buttonTableClass} onClick={applyFilterButton}>*/}
-							<button className={buttonTableClass}>{filterModeLabel[mode]}</button>
-							<span className={spanTableClass}>
-								<div className="pa1">{filterModeLabel[mode]}</div>
-								<button className={buttonClass} style={{ width: "100%" }} onClick={applyFilterButton}>
-									Apply
-								</button>
-								<button className={buttonClass} style={{ width: "100%" }} onClick={handleClearFilter("where_like")}>
-									Clear
-								</button>
-								<button className={buttonSpanClass} style={{ opacity: mode === "where" ? "0.5" : "1" }} onClick={handleChangeFilterMode("where")} disabled={mode === "where"}>
-									{filterModeLabel["where"]}
-								</button>
-								<button
-									className={buttonSpanClass}
-									style={{ opacity: mode === "where_like" ? "0.5" : "1" }}
-									onClick={handleChangeFilterMode("where_like")}
-									disabled={mode === "where_like"}
-								>
-									{filterModeLabel["where_like"]}
-								</button>
-								<button
-									className={buttonSpanClass}
-									style={{ opacity: mode === "where_between" ? "0.5" : "1" }}
-									onClick={handleChangeFilterMode("where_between")}
-									disabled={mode === "where_between"}
-								>
-									{filterModeLabel["where_between"]}
-								</button>
-							</span>
-						</div>
+						<Popover buttonClassName={buttonTableClass} buttonContent={filterModeLabel[mode]} popoverClassName={spanTableClass}>
+							<div className="pa1">{filterModeLabel[mode]}</div>
+							<button className={buttonClass} style={{ width: "100%" }} onClick={applyFilterButton}>
+								Apply
+							</button>
+							<button className={buttonClass} style={{ width: "100%" }} onClick={handleClearFilter("where_like")}>
+								Clear
+							</button>
+							<button className={buttonSpanClass} style={{ opacity: mode === "where" ? "0.5" : "1" }} onClick={handleChangeFilterMode("where")} disabled={mode === "where"}>
+								{filterModeLabel["where"]}
+							</button>
+							<button
+								className={buttonSpanClass}
+								style={{ opacity: mode === "where_like" ? "0.5" : "1" }}
+								onClick={handleChangeFilterMode("where_like")}
+								disabled={mode === "where_like"}
+							>
+								{filterModeLabel["where_like"]}
+							</button>
+							<button
+								className={buttonSpanClass}
+								style={{ opacity: mode === "where_between" ? "0.5" : "1" }}
+								onClick={handleChangeFilterMode("where_between")}
+								disabled={mode === "where_between"}
+							>
+								{filterModeLabel["where_between"]}
+							</button>
+						</Popover>
 					</th>
 				);
 			case "where_between":
 				return (
 					<>
 						<th align="center" className={cellWideTableClass}>
-							<div className="pa1 relative row" tabIndex="0">
-								{/*<button className={buttonTableClass} onClick={applyFilterButton}>*/}
-								<button className={buttonTableClass}>Start</button>
-								<span className={spanTableClass}>
-									<div className="pa1">{filterModeLabel[mode]}</div>
-									<button className={buttonClass} style={{ width: "100%" }} onClick={applyFilterButton}>
-										Apply
-									</button>
-									<button className={buttonClass} style={{ width: "100%" }} onClick={handleClearFilter("where_between")}>
-										Clear
-									</button>
-									<button
-										className={buttonSpanClass}
-										style={{ opacity: mode === "where" ? "0.5" : "1" }}
-										onClick={handleChangeFilterMode("where")}
-										disabled={mode === "where"}
-									>
-										{filterModeLabel["where"]}
-									</button>
-									<button
-										className={buttonSpanClass}
-										style={{ opacity: mode === "where_like" ? "0.5" : "1" }}
-										onClick={handleChangeFilterMode("where_like")}
-										disabled={mode === "where_like"}
-									>
-										{filterModeLabel["where_like"]}
-									</button>
-									<button
-										className={buttonSpanClass}
-										style={{ opacity: mode === "where_between" ? "0.5" : "1" }}
-										onClick={handleChangeFilterMode("where_between")}
-										disabled={mode === "where_between"}
-									>
-										{filterModeLabel["where_between"]}
-									</button>
-								</span>
-							</div>
+							<Popover buttonClassName={buttonTableClass} buttonContent="Start" popoverClassName={spanTableClass}>
+								<div className="pa1">{filterModeLabel[mode]}</div>
+								<button className={buttonClass} style={{ width: "100%" }} onClick={applyFilterButton}>
+									Apply
+								</button>
+								<button className={buttonClass} style={{ width: "100%" }} onClick={handleClearFilter("where_between")}>
+									Clear
+								</button>
+								<button className={buttonSpanClass} style={{ opacity: mode === "where" ? "0.5" : "1" }} onClick={handleChangeFilterMode("where")} disabled={mode === "where"}>
+									{filterModeLabel["where"]}
+								</button>
+								<button
+									className={buttonSpanClass}
+									style={{ opacity: mode === "where_like" ? "0.5" : "1" }}
+									onClick={handleChangeFilterMode("where_like")}
+									disabled={mode === "where_like"}
+								>
+									{filterModeLabel["where_like"]}
+								</button>
+								<button
+									className={buttonSpanClass}
+									style={{ opacity: mode === "where_between" ? "0.5" : "1" }}
+									onClick={handleChangeFilterMode("where_between")}
+									disabled={mode === "where_between"}
+								>
+									{filterModeLabel["where_between"]}
+								</button>
+							</Popover>
 						</th>
 						<th align="center" className={cellWideTableClass}>
-							<div className="pa1 relative row" tabIndex="0">
-								{/*<button className={buttonTableClass} onClick={applyFilterButton}>*/}
-								<button className={buttonTableClass}>End</button>
-								<span className={spanTableClass}>
-									<div className="pa1">{filterModeLabel[mode]}</div>
-									<button className={buttonClass} style={{ width: "100%" }} onClick={applyFilterButton}>
-										Apply
-									</button>
-									<button className={buttonClass} style={{ width: "100%" }}>
-										Clear
-									</button>
-									<button
-										className={buttonSpanClass}
-										style={{ opacity: mode === "where" ? "0.5" : "1" }}
-										onClick={handleChangeFilterMode("where")}
-										disabled={mode === "where"}
-									>
-										{filterModeLabel["where"]}
-									</button>
-									<button
-										className={buttonSpanClass}
-										style={{ opacity: mode === "where_like" ? "0.5" : "1" }}
-										onClick={handleChangeFilterMode("where_like")}
-										disabled={mode === "where_like"}
-									>
-										{filterModeLabel["where_like"]}
-									</button>
-									<button
-										className={buttonSpanClass}
-										style={{ opacity: mode === "where_between" ? "0.5" : "1" }}
-										onClick={handleChangeFilterMode("where_between")}
-										disabled={mode === "where_between"}
-									>
-										{filterModeLabel["where_between"]}
-									</button>
-								</span>
-							</div>
+							<Popover buttonClassName={buttonTableClass} buttonContent="End" popoverClassName={spanTableClass}>
+								<div className="pa1">{filterModeLabel[mode]}</div>
+								<button className={buttonClass} style={{ width: "100%" }} onClick={applyFilterButton}>
+									Apply
+								</button>
+								<button className={buttonClass} style={{ width: "100%" }}>
+									Clear
+								</button>
+								<button className={buttonSpanClass} style={{ opacity: mode === "where" ? "0.5" : "1" }} onClick={handleChangeFilterMode("where")} disabled={mode === "where"}>
+									{filterModeLabel["where"]}
+								</button>
+								<button
+									className={buttonSpanClass}
+									style={{ opacity: mode === "where_like" ? "0.5" : "1" }}
+									onClick={handleChangeFilterMode("where_like")}
+									disabled={mode === "where_like"}
+								>
+									{filterModeLabel["where_like"]}
+								</button>
+								<button
+									className={buttonSpanClass}
+									style={{ opacity: mode === "where_between" ? "0.5" : "1" }}
+									onClick={handleChangeFilterMode("where_between")}
+									disabled={mode === "where_between"}
+								>
+									{filterModeLabel["where_between"]}
+								</button>
+							</Popover>
 						</th>
 					</>
 				);
@@ -1024,32 +1004,31 @@ export default memo(function Table({
 								{/*<th align="center" className={cellTableClass}></th>*/}
 								{renderFilterHeader1()}
 								<th className={cellTableClass}>
-									<div className="pa1 relative row" tabIndex="0">
-										<div className="truncate-ns">RELATIONSHIPS</div>
-										<span className={spanTableClass}>RELATIONSHIPS</span>
-									</div>
+									<Popover buttonClassName={buttonPlainClass} buttonContent={<div className="truncate-ns">RELATIONSHIPS</div>} popoverClassName={spanTableClass}>
+										RELATIONSHIPS
+									</Popover>
 								</th>
 								{data.map(function (item) {
 									return (
 										<th key={item[header.primary_key]} align="center" className={cellEntityClass}>
 											<div className="flex justify-center pa1">
-												<div className="flex relative row" tabIndex="0">
-													<button className={`relationship ${buttonTableClass}`}>
-														<div className="w3 truncate-ns">FROM</div>
-													</button>
-													<span className={spanButtonClass}>
-														<div className="pa1">FROM</div>
-														{header.relationships_from.map(function (from) {
-															return (
-																<div key={from} className="pa1">
-																	<button className={buttonSpanClass} onClick={traverseFrom(header, item, from)}>
-																		{from}
-																	</button>
-																</div>
-															);
-														})}
-													</span>
-												</div>
+												<Popover
+													containerClassName="flex"
+													buttonClassName={`relationship ${buttonTableClass}`}
+													buttonContent={<div className="w3 truncate-ns">FROM</div>}
+													popoverClassName={spanButtonClass}
+												>
+													<div className="pa1">FROM</div>
+													{header.relationships_from.map(function (from) {
+														return (
+															<div key={from} className="pa1">
+																<button className={buttonSpanClass} onClick={traverseFrom(header, item, from)}>
+																	{from}
+																</button>
+															</div>
+														);
+													})}
+												</Popover>
 												{link ? (
 													<div
 														className="flex pl1 from-start from-end"
@@ -1109,44 +1088,27 @@ export default memo(function Table({
 								<th align="center" className={cellWideTableClass}></th>
 							</tr>
 							<tr>
-								{/*<th align="center" className={cellTableClass}>
-									<div className="pa1 relative row" tabIndex="0">
-										//<button className={buttonTableClass} onClick={applyFilterButton}>
-										<button className={buttonTableClass}>
-											{filterModeLabel[mode]}
-										</button>
-										<span className={spanTableClass}>
-											<div className="pa1">{filterModeLabel[mode]}</div>
-											<button className={buttonSpanClass} style={{opacity: mode === "where_like" ? "0.5" : "1" }} onClick={handleChangeFilterMode("where_like")} disabled={mode === "where_like"}>{filterModeLabel["where_like"]}</button>
-											<button className={buttonSpanClass} style={{opacity: mode === "where" ? "0.5" : "1" }} onClick={handleChangeFilterMode("where")} disabled={mode === "where"}>{filterModeLabel["where"]}</button>
-											<button className={buttonSpanClass} style={{opacity: mode === "where_between" ? "0.5" : "1" }} onClick={handleChangeFilterMode("where_between")} disabled={mode === "where_between"}>{filterModeLabel["where_between"]}</button>
-										</span>
-									</div>
-								</th>
-								*/}
 								{renderFilterHeader2()}
 								<th className={cellTableClass}>
-									<div className="pa1 relative row" tabIndex="0">
-										<div>FIELDS</div>
-										<span className={spanTableClass}>
-											{header.fields.map(function (field) {
-												return (
-													<div key={`${field.name}.checkbox`} className="flex fr">
-														{field.name}
-														<input
-															type="checkbox"
-															checked={
-																node.props.fields
-																	? node.props.fields.find(function (v) {
-																			return v.name === field.name;
-																		})
-																		? true
-																		: false
-																	: true
-															}
-															onChange={updateFields(field.name)}
-														/>
-														{/*
+									<Popover buttonClassName={buttonPlainClass} buttonContent="FIELDS" popoverClassName={spanTableClass}>
+										{header.fields.map(function (field) {
+											return (
+												<div key={`${field.name}.checkbox`} className="flex fr">
+													{field.name}
+													<input
+														type="checkbox"
+														checked={
+															node.props.fields
+																? node.props.fields.find(function (v) {
+																		return v.name === field.name;
+																	})
+																	? true
+																	: false
+																: true
+														}
+														onChange={updateFields(field.name)}
+													/>
+													{/*
 														<a href={router.buildUrl(route.name, { ...route.params, order: field.name, order_direction: "asc" })}>
 															<button className="f6" disabled={route.params.order && route.params.order === field.name && route.params.order_direction === "asc"}>
 																{"<"}
@@ -1158,11 +1120,10 @@ export default memo(function Table({
 															</button>
 														</a>
 														*/}
-													</div>
-												);
-											})}
-										</span>
-									</div>
+												</div>
+											);
+										})}
+									</Popover>
 								</th>
 								{data.map(function (item) {
 									function whitelistWhere(method) {
@@ -1199,50 +1160,45 @@ export default memo(function Table({
 														</button>
 													</a>
 												</div>
-												<div className="relative row mw4 w4" tabIndex="0">
-													<button className={buttonTableClass}>
-														<BookmarkIcon />
-													</button>
-													<span className={spanButtonClass}>
-														<div className="pa1">BLACKLIST</div>
-														{header.methods.map(function (method) {
-															return (
-																<a
-																	key={method.name}
-																	href={router.buildUrl("system.types.list.type", { type: "blacklist", where: blacklistWhere(method.name) })}
-																>
-																	<button className={buttonSpanClass}>{method.name}</button>
-																</a>
-															);
-														})}
-													</span>
-												</div>
-												<div className="relative row mw4 w4" tabIndex="0">
-													<button className={buttonTableClass}>
-														<BookmarkFilledIcon />
-													</button>
-													<span className={spanButtonClass}>
-														<div className="pa1">WHITELIST</div>
-														{header.methods.map(function (method) {
-															return (
-																<a
-																	key={method.name}
-																	href={router.buildUrl("system.types.list.type", { type: "whitelist", where: whitelistWhere(method.name) })}
-																>
-																	<button className={buttonSpanClass}>{method.name}</button>
-																</a>
-															);
-														})}
-													</span>
-												</div>
-												<div className="relative row mw4 w4" tabIndex="0">
-													<button className={buttonTableClass}>
-														<Share1Icon />
-													</button>
-													<span align="left" className={spanButtonLongClass}>
-														{JSON.stringify(share)}
-													</span>
-												</div>
+												<Popover
+													containerClassName="relative mw4 w4"
+													buttonClassName={buttonTableClass}
+													buttonContent={<BookmarkIcon />}
+													popoverClassName={spanButtonClass}
+												>
+													<div className="pa1">BLACKLIST</div>
+													{header.methods.map(function (method) {
+														return (
+															<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "blacklist", where: blacklistWhere(method.name) })}>
+																<button className={buttonSpanClass}>{method.name}</button>
+															</a>
+														);
+													})}
+												</Popover>
+												<Popover
+													containerClassName="relative mw4 w4"
+													buttonClassName={buttonTableClass}
+													buttonContent={<BookmarkFilledIcon />}
+													popoverClassName={spanButtonClass}
+												>
+													<div className="pa1">WHITELIST</div>
+													{header.methods.map(function (method) {
+														return (
+															<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "whitelist", where: whitelistWhere(method.name) })}>
+																<button className={buttonSpanClass}>{method.name}</button>
+															</a>
+														);
+													})}
+												</Popover>
+												<Popover
+													containerClassName="relative mw4 w4"
+													align="right"
+													buttonClassName={buttonTableClass}
+													buttonContent={<Share1Icon />}
+													popoverClassName={spanButtonLongClass}
+												>
+													{JSON.stringify(share)}
+												</Popover>
 											</div>
 										</th>
 									);
@@ -1273,24 +1229,27 @@ export default memo(function Table({
 										*/}
 										{renderFilterInput(field)}
 										<td align="right" className={cellTableClass}>
-											<div className="relative pa1 row" tabIndex="0">
-												<div className="truncate-ns field">{field.name}</div>
-												<span className={spanTableClass}>
-													{/*<div className="absolute top-0 right-0 field w6">{field.name}</div>*/}
-													<div>{field.name}</div>
-												</span>
-											</div>
+											<Popover
+												containerClassName="pa1"
+												align="right"
+												buttonClassName={buttonPlainRightCellClass}
+												buttonContent={<div className="truncate-ns field">{field.name}</div>}
+												popoverClassName={spanTableClass}
+											>
+												<div>{field.name}</div>
+											</Popover>
 										</td>
 										{data.map(function (item) {
 											return (
 												<td align="left" key={`${item[header.primary_key]}.${field}`} className={cellEntityClass}>
-													<div className="relative pa1 row" tabIndex="0">
-														<div className="truncate-ns entity">{item[field.name]}</div>
-														<span className={spanEntityClass}>
-															{/*<div className="absolute top-0 left-0">{item[field.name]}</div>*/}
-															<div>{item[field.name]}</div>
-														</span>
-													</div>
+													<Popover
+														containerClassName="pa1"
+														buttonClassName={buttonPlainLeftCellClass}
+														buttonContent={<div className="truncate-ns entity">{item[field.name]}</div>}
+														popoverClassName={spanEntityClass}
+													>
+														<div>{item[field.name]}</div>
+													</Popover>
 												</td>
 											);
 										})}
@@ -1313,32 +1272,31 @@ export default memo(function Table({
 								{/*<th align="center" className={cellTableClass}></th>*/}
 								{renderFilterFooter()}
 								<th className={cellTableClass}>
-									<div className="relative pa1 row" tabIndex="0">
-										<div className="truncate-ns">RELATIONSHIPS</div>
-										<span className={spanTableClass}>RELATIONSHIPS</span>
-									</div>
+									<Popover buttonClassName={buttonPlainClass} buttonContent={<div className="truncate-ns">RELATIONSHIPS</div>} popoverClassName={spanTableClass}>
+										RELATIONSHIPS
+									</Popover>
 								</th>
 								{data.map(function (item) {
 									return (
 										<th key={item[header.primary_key]} align="center" className={cellEntityClass}>
 											<div className="flex justify-center pa1">
-												<div className="flex relative row" tabIndex="0">
-													<button className={`relationship ${buttonTableClass}`}>
-														<div className="w3 truncate-ns">TO</div>
-													</button>
-													<span className={spanButtonClass}>
-														<div className="">TO</div>
-														{header.relationships_to.map(function (to) {
-															return (
-																<div key={to} className="pa1">
-																	<button className={buttonSpanClass} onClick={traverseTo(header, item, to)}>
-																		{to}
-																	</button>
-																</div>
-															);
-														})}
-													</span>
-												</div>
+												<Popover
+													containerClassName="flex"
+													buttonClassName={`relationship ${buttonTableClass}`}
+													buttonContent={<div className="w3 truncate-ns">TO</div>}
+													popoverClassName={spanButtonClass}
+												>
+													<div className="">TO</div>
+													{header.relationships_to.map(function (to) {
+														return (
+															<div key={to} className="pa1">
+																<button className={buttonSpanClass} onClick={traverseTo(header, item, to)}>
+																	{to}
+																</button>
+															</div>
+														);
+													})}
+												</Popover>
 												{link ? (
 													<div
 														className="flex pl1 to-start to-end"

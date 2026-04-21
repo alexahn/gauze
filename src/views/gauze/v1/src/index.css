@@ -278,22 +278,14 @@ table .truncate-ns {
 	padding-left: 1px;
 }
 
-.type-item {
-	.row:focus .tooltip {
-		border: 1px solid black;
-	}
+.tooltip-popover {
+	margin: 0;
+	inset: auto;
+	overflow: visible;
 }
 
-.type-list {
-	.row:focus .tooltip {
-		border: 1px solid black;
-	}
-}
-
-.row:focus .tooltip {
-	display: block;
-	/*border: 1px solid black;*/
-	z-index: 1;
+.tooltip-popover::backdrop {
+	background: transparent;
 }
 
 .action {

@@ -5,12 +5,15 @@ import { PAGINATION_PAGE_SIZE } from "./../constants.js";
 
 import Input from "./Input.jsx";
 import Pagination from "./Pagination.jsx";
+import Popover from "./Popover.jsx";
 
 import { FileTextIcon, TrashIcon, Pencil2Icon } from "@radix-ui/react-icons";
 
 export default function TypeList({ route, router, gauze, model, where, fields }) {
 	const header = model.read("HEADER", route.params.type);
 	const [localWhere, setLocalWhere] = useState(where);
+	const buttonPlainClass = "button-reset bg-transparent bn pa0";
+	const buttonPlainCellClass = `${buttonPlainClass} db w-100 overflow-hidden`;
 	const nullItem = {};
 	header.fields.forEach(function (field) {
 		nullItem[field.name] = "";
@@ -202,9 +205,8 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 										</th>
 									);
 								})}
-								<th className="mw4 w4 pa1 relative row" tabIndex="0">
-									<div>FIELDS</div>
-									<span className="dn bg-light-green mw9 w5 top-0 right-0 pa1 absolute f4 tooltip">
+								<th className="mw4 w4 pa1">
+									<Popover align="right" buttonClassName={buttonPlainCellClass} buttonContent="FIELDS" popoverClassName="bg-light-green mw9 w5 pa1 f4 bw1 ba br2">
 										{header.fields.map(function (field) {
 											return (
 												<div key={`${field.name}.checkbox`}>
@@ -233,7 +235,7 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 												</div>
 											);
 										})}
-									</span>
+									</Popover>
 								</th>
 								<th align="center" className="mw4 w4">
 									<a href={router.buildUrl(route.name, { ...route.params, where: encodeURIComponent(JSON.stringify(localWhere)) })}>
@@ -251,19 +253,30 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 										</td>
 										{page.map(function (item) {
 											return (
-												<td align="left" key={`${item[header.primary_key]}.${field}`} className="relative mw4 w4 pa1 row" tabIndex="0">
-													<div className="truncate-ns">{item[field.name]}</div>
-													<span className="dn bg-washed-green mw9 w5 top-0 left-0 pa1 absolute f4 tooltip">{item[field.name]}</span>
+												<td align="left" key={`${item[header.primary_key]}.${field}`} className="mw4 w4 pa1">
+													<Popover
+														buttonClassName={buttonPlainCellClass}
+														buttonContent={<div className="truncate-ns">{item[field.name]}</div>}
+														popoverClassName="bg-washed-green mw9 w5 pa1 f4 bw1 ba br2"
+													>
+														{item[field.name]}
+													</Popover>
 												</td>
 											);
 										})}
-										<td className="relative mw4 w4 pa1 row" tabIndex="0">
-											<div className="truncate-ns field">
+										<td className="mw4 w4 pa1">
+											<Popover
+												align="right"
+												buttonClassName={`${buttonPlainCellClass} tr`}
+												buttonContent={
+													<div className="truncate-ns field">
+														<b>{field.name}</b>
+													</div>
+												}
+												popoverClassName="bg-light-green mw9 w5 pa1 f4 bw1 ba br2"
+											>
 												<b>{field.name}</b>
-											</div>
-											<span className="dn bg-light-green mw9 w5 top-0 right-0 pa1 absolute f4 tooltip">
-												<b>{field.name}</b>
-											</span>
+											</Popover>
 										</td>
 										<td className="mw4 w4 overflow-x-hidden">
 											<Input

@@ -1,9 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { FileTextIcon, TrashIcon, Pencil2Icon, BookmarkIcon, BookmarkFilledIcon, Share1Icon, Link2Icon, ChevronUpIcon, ChevronDownIcon } from "@radix-ui/react-icons";
+import { FileTextIcon, TrashIcon, Pencil2Icon, BookmarkIcon, BookmarkFilledIcon, Share1Icon, ChevronUpIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 
 import Input from "./Input.jsx";
+import Popover from "./Popover.jsx";
 
 export default function TypeItem({ router, route, gauze, model, fields }) {
 	const [submitUpdate, setSubmitUpdate] = useState(false);
@@ -152,6 +153,9 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 		entity_id: item[header.primary_key],
 		entity_type: header.table_name,
 	};
+	const buttonPlainClass = "button-reset bg-transparent bn pa0";
+	const buttonPlainIconClass = `${buttonPlainClass} action`;
+	const buttonPlainCellClass = `${buttonPlainClass} db w-100 overflow-hidden`;
 	return (
 		<div className="type-item mw-100 w-100">
 			<h1 align="right">{header.graphql_meta_type}</h1>
@@ -174,46 +178,45 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 								</button>
 							</a>
 						</div>
-						<div className="relative row" tabIndex="0">
-							<a>
-								<button>
-									<Share1Icon />
-								</button>
-							</a>
-							<span className="dn bg-light-green mw6 w6 top-0 right-0 pa1 absolute f9 tooltip">{JSON.stringify(share)}</span>
-						</div>
-						<div className="relative row" tabIndex="0">
-							<a>
-								<button>
-									<BookmarkFilledIcon />
-								</button>
-							</a>
-							<span className="dn bg-light-green mw4 w4 top-0 right-0 pa1 absolute f4 tooltip">
-								{header.methods.map(function (method) {
-									return (
-										<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "blacklist", where: blacklistWhere(method.name) })}>
-											<button className="mw4 w4">{method.name}</button>
-										</a>
-									);
-								})}
-							</span>
-						</div>
-						<div className="relative row" tabIndex="0">
-							<a>
-								<button>
-									<BookmarkIcon />
-								</button>
-							</a>
-							<span className="dn bg-light-green mw4 w4 top-0 right-0 pa1 absolute f4 tooltip">
-								{header.methods.map(function (method) {
-									return (
-										<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "whitelist", where: whitelistWhere(method.name) })}>
-											<button className="mw4 w4">{method.name}</button>
-										</a>
-									);
-								})}
-							</span>
-						</div>
+						<Popover
+							containerClassName="relative"
+							align="right"
+							buttonClassName={buttonPlainIconClass}
+							buttonContent={<Share1Icon />}
+							popoverClassName="bg-light-green mw6 w6 pa1 f9 bw1 ba br2"
+						>
+							{JSON.stringify(share)}
+						</Popover>
+						<Popover
+							containerClassName="relative"
+							align="right"
+							buttonClassName={buttonPlainIconClass}
+							buttonContent={<BookmarkFilledIcon />}
+							popoverClassName="bg-light-green mw4 w4 pa1 f4 bw1 ba br2"
+						>
+							{header.methods.map(function (method) {
+								return (
+									<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "blacklist", where: blacklistWhere(method.name) })}>
+										<button className="mw4 w4">{method.name}</button>
+									</a>
+								);
+							})}
+						</Popover>
+						<Popover
+							containerClassName="relative"
+							align="right"
+							buttonClassName={buttonPlainIconClass}
+							buttonContent={<BookmarkIcon />}
+							popoverClassName="bg-light-green mw4 w4 pa1 f4 bw1 ba br2"
+						>
+							{header.methods.map(function (method) {
+								return (
+									<a key={method.name} href={router.buildUrl("system.types.list.type", { type: "whitelist", where: whitelistWhere(method.name) })}>
+										<button className="mw4 w4">{method.name}</button>
+									</a>
+								);
+							})}
+						</Popover>
 						<div>
 							<a href={router.buildUrl(route.name, { ...route.params, mode: "remove" })}>
 								<button className="action" type="button" disabled={route.params.mode === "remove"}>
@@ -253,9 +256,8 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 							<th align="left" className="mw5 w5 pa1">
 								<div>VALUES</div>
 							</th>
-							<th align="right" className="mw4 w4 pa1 relative row" tabIndex="0">
-								<div>FIELDS</div>
-								<span className="dn bg-light-green mw9 w5 top-0 right-0 pa1 absolute f4 tooltip">
+							<th align="right" className="mw4 w4 pa1">
+								<Popover align="right" buttonClassName={buttonPlainCellClass} buttonContent="FIELDS" popoverClassName="bg-light-green mw9 w5 pa1 f4 bw1 ba br2">
 									{header.fields.map(function (field) {
 										return (
 											<div key={`${field.name}.checkbox`}>
@@ -274,7 +276,7 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 											</div>
 										);
 									})}
-								</span>
+								</Popover>
 							</th>
 							<th className="mw5 w5">
 								{route.params.mode === "view" ? null : null}
@@ -295,17 +297,28 @@ export default function TypeItem({ router, route, gauze, model, fields }) {
 						{fields.map(function (field) {
 							return (
 								<tr align="right" key={field.name} className="flex flex-wrap">
-									<td align="left" key={`${item[header.primary_key]}.${field.name}`} className="relative mw5 w5 pa1 row" tabIndex="0">
-										<div className="truncate-ns">{readItem[field.name]}</div>
-										<span className="dn bg-washed-green mw9 w5 top-0 left-0 pa1 absolute f4 tooltip">{readItem[field.name]}</span>
+									<td align="left" key={`${item[header.primary_key]}.${field.name}`} className="mw5 w5 pa1">
+										<Popover
+											buttonClassName={buttonPlainCellClass}
+											buttonContent={<div className="truncate-ns">{readItem[field.name]}</div>}
+											popoverClassName="bg-washed-green mw9 w5 pa1 f4 bw1 ba br2"
+										>
+											{readItem[field.name]}
+										</Popover>
 									</td>
-									<td className="relative mw4 w4 pa1 row" tabIndex="0">
-										<div className="truncate-ns field">
+									<td className="mw4 w4 pa1">
+										<Popover
+											align="right"
+											buttonClassName={`${buttonPlainCellClass} tr`}
+											buttonContent={
+												<div className="truncate-ns field">
+													<b>{field.name}</b>
+												</div>
+											}
+											popoverClassName="bg-light-green mw9 w5 pa1 f4 bw1 ba br2"
+										>
 											<b>{field.name}</b>
-										</div>
-										<span className="dn bg-light-green mw9 w5 top-0 right-0 pa1 absolute f4 tooltip">
-											<b>{field.name}</b>
-										</span>
+										</Popover>
 									</td>
 									<td className="mw5 w5 overflow-x-hidden">
 										<Input

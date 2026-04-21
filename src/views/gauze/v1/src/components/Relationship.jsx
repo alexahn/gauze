@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import Popover from "./Popover.jsx";
 
 function absoluteToAbstract({ x, y, z, width, height }) {
 	return {
@@ -73,35 +73,29 @@ export default function Relationship({ agentHeader, route, nodeID, connectionID,
 		if (edge.fromConnectionID === connectionID) {
 			const toConnection = graph.selectConnection(edge.toConnectionID);
 			return (
-				<div className="relative row" tabIndex="0">
-					<button className={buttonClass}>
-						<div className="w3 truncate-ns">{toConnection.entityID}</div>
-					</button>
-					<span className={spanClass} style={{ zIndex: 4 }}>
+				<div className="relative">
+					<Popover buttonClassName={buttonClass} buttonContent={<div className="w3 truncate-ns">{toConnection.entityID}</div>} popoverClassName={spanClass}>
 						<div>{toConnection.entityID}</div>
 						<div>
 							<button className={buttonSpanClass} onClick={handleFocus(toConnection)}>
 								Focus
 							</button>
 						</div>
-					</span>
+					</Popover>
 				</div>
 			);
 		} else if (edge.toConnectionID === connectionID) {
 			const fromConnection = graph.selectConnection(edge.fromConnectionID);
 			return (
-				<div className="relative row" tabIndex="0">
-					<button className={buttonClass}>
-						<div className="w3 truncate-ns">{fromConnection.entityID}</div>
-					</button>
-					<span className={spanClass} style={{ zIndex: 4 }}>
+				<div className="relative">
+					<Popover buttonClassName={buttonClass} buttonContent={<div className="w3 truncate-ns">{fromConnection.entityID}</div>} popoverClassName={spanClass}>
 						<div>{fromConnection.entityID}</div>
 						<div>
 							<button className={buttonSpanClass} onClick={handleFocus(fromConnection)}>
 								Focus
 							</button>
 						</div>
-					</span>
+					</Popover>
 				</div>
 			);
 		}

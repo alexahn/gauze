@@ -9,6 +9,7 @@ import Graph from "./Graph.jsx";
 import Node from "./Node.jsx";
 import Table from "./Table.jsx";
 import SpacesBar from "./SpacesBar.jsx";
+import Popover from "./Popover.jsx";
 
 import { GearIcon, PlusCircledIcon, Link2Icon, LinkBreak2Icon } from "@radix-ui/react-icons";
 
@@ -26,7 +27,6 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 	const [interaction, setInteraction] = useState(graph.readInteraction());
 	const [performance, setPerformance] = useState(0);
 	const [share, setShare] = useState();
-	const [displayShare, setDisplayShare] = useState(false);
 	const [link, setLink] = useState(false);
 	const services = {
 		gauze,
@@ -34,13 +34,10 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 		router,
 		graph,
 	};
-	function toggleShare(e) {
-		setDisplayShare(!displayShare);
-	}
 	function updateShare(e) {
 		setShare(e.target.value.replace("\n", ""));
 	}
-	function handleShare(e) {
+	function handleShare() {
 		let parsed;
 		try {
 			parsed = JSON.parse(share);
@@ -60,7 +57,6 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 				)
 				.then(function () {
 					setShare("");
-					setDisplayShare(!displayShare);
 				});
 		} catch (e) {
 			console.error(e);
@@ -128,57 +124,58 @@ export default function Space({ gauze, model, router, route, render, graph }) {
 	return (
 		<div className="mw-100 mh-100 h-100 w-100">
 			<div className="fixed top-1 left-1" style={{ zIndex: 4 }}>
-				<div className="relative">
-					<PlusCircledIcon width={30} height={30} onClick={toggleShare} />
-					<span className="dn bgx2 br3 w6 top-0 left-0 pa3 absolute f4" style={{ display: displayShare ? "block" : "none" }}>
-						<div className="flex flex-column">
-							<div className="">
-								<textarea
-									className="bgx12 br2"
-									placeholder={'{"entity_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx","entity_type": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"}'}
-									value={share}
-									onChange={updateShare}
-									rows="4"
-									cols="30"
-									autoFocus={true}
-								/>
-							</div>
-							<div className="flex justify-end w-100 pt3">
-								<button className="ba bw1 br2 bgx8 bdx8 cx6 mr1" onClick={handleShare}>
-									Add
-								</button>
-								<button className="ba bw1 br2 bgx10 bdx10 cx6" onClick={toggleShare}>
-									Cancel
-								</button>
-							</div>
+				<Popover
+					containerClassName="relative"
+					buttonClassName="button-reset bg-transparent bn pa0"
+					buttonContent={<PlusCircledIcon width={30} height={30} />}
+					popoverClassName="bgx2 br3 w6 pa3 f4 bw1 ba"
+				>
+					<div className="flex flex-column">
+						<div className="">
+							<textarea
+								className="bgx12 br2"
+								placeholder={'{"entity_id": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx","entity_type": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"}'}
+								value={share}
+								onChange={updateShare}
+								rows="4"
+								cols="30"
+							/>
 						</div>
-					</span>
-				</div>
+						<div className="flex justify-end w-100 pt3">
+							<button className="ba bw1 br2 bgx8 bdx8 cx6 mr1" onClick={handleShare}>
+								Add
+							</button>
+						</div>
+					</div>
+				</Popover>
 			</div>
 			<div className="fixed top-1 right-1" style={{ zIndex: 1 }}>
-				<div className="relative row" tabIndex="0">
-					<GearIcon width={30} height={30} />
-					<span className="dn bgx2 cx12 br3 mw6 w5 top-0 right-0 pa3 absolute f4 tooltip">
-						<label htmlFor="performance">Performance:</label>
-						<br />
-						<input type="radio" id="performance0" name="performance" value="max" defaultChecked={performance === 0} onChange={handlePerformance} />
-						&nbsp;
-						<label htmlFor="performance1">Max</label>
-						<br />
-						<input type="radio" id="performance1" name="performance" value="high" defaultChecked={performance === 4} onChange={handlePerformance} />
-						&nbsp;
-						<label htmlFor="performance1">High</label>
-						<br />
-						<input type="radio" id="performance2" name="performance" value="medium" defaultChecked={performance === 32} onChange={handlePerformance} />
-						&nbsp;
-						<label htmlFor="performance2">Medium</label>
-						<br />
-						<input type="radio" id="performance3" name="performance" value="low" defaultChecked={performance === 128} onChange={handlePerformance} />
-						&nbsp;
-						<label htmlFor="performance3">Low</label>
-						<br />
-					</span>
-				</div>
+				<Popover
+					containerClassName="relative"
+					align="right"
+					buttonClassName="button-reset bg-transparent bn pa0"
+					buttonContent={<GearIcon width={30} height={30} />}
+					popoverClassName="bgx2 cx12 br3 mw6 w5 pa3 f4 bw1 ba"
+				>
+					<label htmlFor="performance">Performance:</label>
+					<br />
+					<input type="radio" id="performance0" name="performance" value="max" defaultChecked={performance === 0} onChange={handlePerformance} />
+					&nbsp;
+					<label htmlFor="performance1">Max</label>
+					<br />
+					<input type="radio" id="performance1" name="performance" value="high" defaultChecked={performance === 4} onChange={handlePerformance} />
+					&nbsp;
+					<label htmlFor="performance1">High</label>
+					<br />
+					<input type="radio" id="performance2" name="performance" value="medium" defaultChecked={performance === 32} onChange={handlePerformance} />
+					&nbsp;
+					<label htmlFor="performance2">Medium</label>
+					<br />
+					<input type="radio" id="performance3" name="performance" value="low" defaultChecked={performance === 128} onChange={handlePerformance} />
+					&nbsp;
+					<label htmlFor="performance3">Low</label>
+					<br />
+				</Popover>
 			</div>
 			<div className="fixed bottom-1 right-1" style={{ zIndex: 1 }}>
 				{link ? <LinkBreak2Icon width={30} height={30} onClick={handleLink} /> : <Link2Icon width={30} height={30} onClick={handleLink} />}
