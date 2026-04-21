@@ -48,6 +48,14 @@ const STRING_MAXIMUM_LENGTH__ERROR__GAUZE__ABSTRACT = function (entity, field, v
 	return err;
 };
 
+// code 3
+const EMAIL_REGEX__ERROR__GAUZE__ABSTRACT = function (entity, field, value, regex) {
+	const err = new Error(`Scalar email has a regex pattern of: ${regex}, received input: ${value}`);
+	err.extensions = ENTITY_FIELD_ERROR_EXTENSIONS("EMAIL_REGEX__ERROR__GAUZE__ABSTRACT", 3, entity, field);
+	err.extensions.readable = `Field must be a valid email address`;
+	return err;
+};
+
 // code 4000
 const UNIQUE_CONSTRAINT__ERROR_GAUZE__ABSTRACT = function (entity, field, message) {
 	const err = new Error(`Field has a unique constraint: ${message}`);
@@ -61,6 +69,7 @@ export {
 	ID_REGEX__ERROR__GAUZE__ABSTRACT,
 	STRING_MINIMUM_LENGTH__ERROR__GAUZE__ABSTRACT,
 	STRING_MAXIMUM_LENGTH__ERROR__GAUZE__ABSTRACT,
+	EMAIL_REGEX__ERROR__GAUZE__ABSTRACT,
 	// 4000 - 5000
 	UNIQUE_CONSTRAINT__ERROR_GAUZE__ABSTRACT,
 };

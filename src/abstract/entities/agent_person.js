@@ -72,7 +72,7 @@ export default function ($abstract) {
 				indexed: true,
 				required: false,
 				sql_type: "string",
-				graphql_type: $abstract.gauze.types.graphql.scalars.string.SCALAR__STRING__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+				graphql_type: $abstract.gauze.types.graphql.scalars.email.SCALAR__EMAIL__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT,
 				description: "email",
 				pre_serialize_middlewares: [],
 				serializers: [],
