@@ -1,5 +1,4 @@
 import * as $abstract from "./../../../abstract/index.js";
-import { LOGGER__IO__LOGGER__SRC__KERNEL } from "./../logger/io.js";
 
 import knex from "knex";
 
@@ -718,7 +717,7 @@ class DatabaseManager {
 
 						const entity_id = parameters.where[entity_id_attribute];
 						const entity_type = parameters.where[entity_type_attribute];
-						const entity_primary_key_number = self.uuid_to_big_int(entity_id);
+						const entity_primary_key_number = entity_id === null ? 0n : self.uuid_to_big_int(entity_id);
 
 						const agent_id = parameters.where[agent_id_attribute];
 						const agent_type = parameters.where[agent_type_attribute];
@@ -777,7 +776,7 @@ class DatabaseManager {
 
 						const entity_id = parameters.attributes[entity_id_attribute];
 						const entity_type = parameters.attributes[entity_type_attribute];
-						const entity_primary_key_number = self.uuid_to_big_int(entity_id);
+						const entity_primary_key_number = entity_id === null ? 0n : self.uuid_to_big_int(entity_id);
 
 						const agent_id = parameters.attributes[agent_id_attribute];
 						const agent_type = parameters.attributes[agent_type_attribute];
