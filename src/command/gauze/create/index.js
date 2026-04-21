@@ -4,7 +4,7 @@ import * as gauze from "./gauze.js";
 
 export const command = "create <gauze object>";
 
-export const describe = "Create a gauze object";
+export const describe = "Create a new project, entity, or builtin Gauze entity scaffold";
 
 export const builder = function (yargs) {
 	return yargs.command(project).command(entity).command(gauze).demandCommand();

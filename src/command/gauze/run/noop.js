@@ -12,7 +12,7 @@ import * as $gauze from "./../../../index.js";
 
 export const command = "noop";
 
-export const describe = "Run gauze noop";
+export const describe = "Run the no-op application used for smoke checks";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_NOOP");

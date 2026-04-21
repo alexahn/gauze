@@ -12,11 +12,11 @@ import * as $gauze from "./../../../index.js";
 
 export const command = "up [migration]";
 
-export const describe = "Run the next migration that has not yet been run";
+export const describe = "Apply the next pending migration, or a specific migration";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_PROJECT_MIGRATE").option("migration", {
-		describe: "The name of the migration file",
+		describe: "Migration filename to apply explicitly; defaults to the next pending migration",
 		type: "string",
 		requiresArgs: false,
 	});

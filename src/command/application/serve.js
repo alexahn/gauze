@@ -17,26 +17,26 @@ import * as $gauze from "./../../index.js";
 
 export const command = "serve";
 
-export const describe = "Run gauze application HTTP server";
+export const describe = "Start the Gauze HTTP server for the current environment";
 
 export const builder = function (yargs) {
 	return yargs
 		.env("GAUZE_SERVER")
 		.option("protocol", {
 			//alias: 'r',
-			describe: "Protocol the server should use",
+			describe: "Protocol to advertise for the server endpoints",
 			type: "string",
 			default: "http",
 		})
 		.option("host", {
 			//alias: 'h',
-			describe: "Host the server should use",
+			describe: "Host interface to bind the server to",
 			type: "string",
 			default: "localhost",
 		})
 		.option("port", {
 			//alias: 'p',
-			describe: "Port the server should use",
+			describe: "Port to listen on",
 			type: "number",
 			default: "4000",
 			//requiresArg: false,

@@ -10,7 +10,7 @@ import * as up from "./up.js";
 
 export const command = "migrate <command>";
 
-export const describe = "Manage gauze migrations";
+export const describe = "Create, inspect, run, and roll back database migrations";
 
 export const builder = function (yargs) {
 	return yargs.command(current).command(down).command(list).command(make).command(run).command(rollback).command(unlock).command(up);

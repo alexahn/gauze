@@ -16,7 +16,7 @@ import * as $gauze from "./../../index.js";
 
 export const command = "build";
 
-export const describe = "Build the frontend application";
+export const describe = "Build the bundled frontend assets for the Gauze UIs";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_APPLICATION");

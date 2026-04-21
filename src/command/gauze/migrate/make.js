@@ -12,12 +12,12 @@ import * as $gauze from "./../../../index.js";
 
 export const command = "make <name>";
 
-export const describe = "Create a migration file";
+export const describe = "Create a new timestamped migration file";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_PROJECT_MIGRATE").option("name", {
 		//alias: 'r',
-		describe: "The gauze name of the migration that will be created",
+		describe: "Migration name to include in the new filename",
 		type: "string",
 		requiresArg: true,
 	});

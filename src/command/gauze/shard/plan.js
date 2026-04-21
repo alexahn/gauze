@@ -12,21 +12,21 @@ import * as $gauze from "./../../../index.js";
 
 export const command = "plan <depth>";
 
-export const describe = "Get the sharding ranges for the depth";
+export const describe = "Generate shard key ranges for a given shard depth";
 
 export const builder = function (yargs) {
 	return yargs
 		.env("GAUZE_PROJECT_SHARD")
 		.option("depth", {
 			alias: "d",
-			describe: "The depth to use for generating the sharding plan",
+			describe: "Shard depth to generate ranges for",
 			type: "number",
 			requiresArg: true,
 		})
 		.option("order", {
 			alias: "o",
 			describe:
-				"The order in which the ranges are returned for the sharding plan. The default is time, which generates the sharding plan according to the logical progression of a sharding strategy. Use key ordering to return shards in contiguous segments.",
+				"Ordering for the generated ranges. Use `time` for rollout order or `key` for contiguous key-space order.",
 			type: "string",
 			requiresArg: false,
 			choices: ["time", "key"],
@@ -34,7 +34,7 @@ export const builder = function (yargs) {
 		})
 		.option("format", {
 			alias: "f",
-			description: "The format to log the sharding plan in",
+			description: "Output format for the shard plan",
 			type: "string",
 			requiresArg: false,
 			choices: ["console", "json"],

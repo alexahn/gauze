@@ -12,7 +12,7 @@ import * as $gauze from "./../../../index.js";
 
 export const command = "run";
 
-export const describe = "Run gauze seeds";
+export const describe = "Run all pending seed files";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_PROJECT_SEED");

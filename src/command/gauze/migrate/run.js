@@ -12,7 +12,7 @@ import * as $gauze from "./../../../index.js";
 
 export const command = "run";
 
-export const describe = "Run the latest migrations";
+export const describe = "Apply every pending migration in order";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_PROJECT_MIGRATE");

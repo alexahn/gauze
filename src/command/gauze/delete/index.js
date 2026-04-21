@@ -3,7 +3,7 @@ import * as entity from "./entity.js";
 
 export const command = "delete <gauze object>";
 
-export const describe = "Delete a gauze object";
+export const describe = "Delete an entity or builtin scaffold from a Gauze project";
 
 export const builder = function (yargs) {
 	return yargs.command(gauze).command(entity).demandCommand();

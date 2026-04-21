@@ -12,7 +12,7 @@ import * as $gauze from "./../../../index.js";
 
 export const command = "rollback";
 
-export const describe = "Rollback the last batch of migrations";
+export const describe = "Roll back the most recent batch of migrations as a unit";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_PROJECT_MIGRATE");

@@ -3,7 +3,7 @@ import * as entity from "./entity.js";
 
 export const command = "read <gauze object>";
 
-export const describe = "Read a gauze object";
+export const describe = "Inspect an entity or builtin scaffold and print its generated source";
 
 export const builder = function (yargs) {
 	return yargs.command(gauze).command(entity).demandCommand();

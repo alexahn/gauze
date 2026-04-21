@@ -12,12 +12,12 @@ import * as $gauze from "./../../../index.js";
 
 export const command = "make <name>";
 
-export const describe = "Create gauze seed";
+export const describe = "Create a new seed file";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_PROJECT_SEED").option("name", {
 		//alias: 'r',
-		describe: "The gauze seed file that will be created",
+		describe: "Seed name to include in the new filename",
 		type: "string",
 		requiresArg: true,
 	});

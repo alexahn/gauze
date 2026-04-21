@@ -10,22 +10,22 @@ config({
 
 import * as $gauze from "./../../../index.js";
 
-export const command = "gauze <directory> <name>";
+export const command = "gauze <directory> <entity_file>";
 
-export const describe = "Delete a builtin gauze entity in a gauze project";
+export const describe = "Remove a builtin Gauze entity scaffold from a project";
 
 export const builder = function (yargs) {
 	return yargs
 		.env("GAUZE_PROJECT_DELETE")
 		.option("directory", {
 			//alias: 'r',
-			describe: "The gauze project directory that the builtin gauze entity will be deleted in",
+			describe: "Path to the Gauze project that contains the builtin entity",
 			type: "string",
 			requiresArg: true,
 		})
-		.option("name", {
+		.option("entity_file", {
 			//alias: 'n',
-			describe: "The name of the builtin gauze entity",
+			describe: "Path to the builtin entity config file to remove",
 			type: "string",
 			requiresArg: true,
 		});
@@ -35,5 +35,5 @@ export const builder = function (yargs) {
 export const handler = function (argv) {
 	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
 	const MANAGER = $gauze.kernel.src.applications.manager.GAUZE__MANAGER__APPLICATION__SRC__KERNEL({ $gauze });
-	MANAGER.delete_gauze(argv.directory, argv.name);
+	MANAGER.delete_gauze(argv.directory, argv.entity_file);
 };

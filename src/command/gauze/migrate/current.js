@@ -12,12 +12,12 @@ import * as $gauze from "./../../../index.js";
 
 export const command = "current";
 
-export const describe = "Get the current migration version";
+export const describe = "Show the migration version currently recorded in the database";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_PROJECT_MIGRATE").option("format", {
 		alias: "f",
-		description: "The format to log the current versions",
+		description: "Output format for the current migration version",
 		type: "string",
 		requiresArg: false,
 		choices: ["console", "json"],

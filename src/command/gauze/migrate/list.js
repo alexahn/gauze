@@ -12,12 +12,12 @@ import * as $gauze from "./../../../index.js";
 
 export const command = "list";
 
-export const describe = "List both completed and pending migrations";
+export const describe = "List applied migrations and those still waiting to run";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_PROJECT_MIGRATE").option("format", {
 		alias: "f",
-		description: "The format to log the migration lists",
+		description: "Output format for the migration list",
 		type: "string",
 		requiresArg: false,
 		choices: ["console", "json"],

@@ -12,7 +12,7 @@ import * as $gauze from "./../../../index.js";
 
 export const command = "unlock";
 
-export const describe = "Forcibly unlock the migrations lock table";
+export const describe = "Clear the migration lock when a previous run left it stuck";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_PROJECT_MIGRATE");

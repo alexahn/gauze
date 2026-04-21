@@ -2,7 +2,7 @@ import * as plan from "./plan.js";
 
 export const command = "shard <command>";
 
-export const describe = "Manage database sharding";
+export const describe = "Inspect shard layouts and sharding plans";
 
 export const builder = function (yargs) {
 	return yargs.command(plan).demandCommand();

@@ -12,12 +12,12 @@ import * as $gauze from "./../../index.js";
 
 export const command = "project <directory>";
 
-export const describe = "Command a gauze project";
+export const describe = "Open the project manager UI for a Gauze project directory";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_PROJECT").option("directory", {
 		//alias: 'r',
-		describe: "Interact with a gauze project",
+		describe: "Path to the Gauze project to open in the project manager",
 		type: "string",
 		requiresArg: true,
 	});

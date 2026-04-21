@@ -12,11 +12,11 @@ import * as $gauze from "./../../../index.js";
 
 export const command = "down [migration]";
 
-export const describe = "Undo the last migration that was run";
+export const describe = "Roll back the most recently applied migration, or a specific one";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_PROJECT_MIGRATE").option("migration", {
-		describe: "The name of the migration file",
+		describe: "Migration filename to roll back explicitly; defaults to the latest applied migration",
 		type: "string",
 		requiresArgs: false,
 	});

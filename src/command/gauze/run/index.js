@@ -3,7 +3,7 @@ import * as noop from "./noop.js";
 
 export const command = "run <application>";
 
-export const describe = "Run a gauze application";
+export const describe = "Launch one of Gauze's interactive or utility applications";
 
 export const builder = function (yargs) {
 	return yargs.command(terminal).command(noop).demandCommand();

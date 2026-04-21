@@ -3,7 +3,7 @@ import * as run from "./run.js";
 
 export const command = "seed <command>";
 
-export const describe = "Manage gauze seeds";
+export const describe = "Create and run database seed files";
 
 export const builder = function (yargs) {
 	return yargs.command(run).command(make).demandCommand();

@@ -16,7 +16,7 @@ import * as $gauze from "./../../index.js";
 
 export const command = "watch";
 
-export const describe = "Watch the frontend application code and rebuild the application on change";
+export const describe = "Watch the frontend sources and rebuild UI bundles when files change";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_APPLICATION");

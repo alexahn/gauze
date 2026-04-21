@@ -12,7 +12,7 @@ import * as $gauze from "./../../../index.js";
 
 export const command = "terminal";
 
-export const describe = "Run gauze terminal";
+export const describe = "Start the Gauze terminal application";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_TERMINAL");

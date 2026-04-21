@@ -12,12 +12,12 @@ import * as $gauze from "./../../../index.js";
 
 export const command = "project <directory>";
 
-export const describe = "Create gauze project";
+export const describe = "Create a new Gauze project directory with the standard layout";
 
 export const builder = function (yargs) {
 	return yargs.env("GAUZE_PROJECT_CREATE").option("directory", {
 		//alias: 'r',
-		describe: "The gauze project directory that will be created",
+		describe: "Directory to create for the new Gauze project",
 		type: "string",
 		requiresArg: true,
 	});

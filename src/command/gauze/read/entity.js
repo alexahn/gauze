@@ -10,22 +10,22 @@ config({
 
 import * as $gauze from "./../../../index.js";
 
-export const command = "entity <directory> <name>";
+export const command = "entity <directory> <entity_file>";
 
-export const describe = "Read an entity in a gauze project";
+export const describe = "Print the files and metadata for a project entity";
 
 export const builder = function (yargs) {
 	return yargs
 		.env("GAUZE_PROJECT")
 		.option("directory", {
 			//alias: 'r',
-			describe: "The gauze project directory that the entity will be read from",
+			describe: "Path to the Gauze project that contains the entity",
 			type: "string",
 			requiresArg: true,
 		})
-		.option("name", {
+		.option("entity_file", {
 			//alias: 'n',
-			describe: "The name of the entity",
+			describe: "Path to the entity config file to inspect",
 			type: "string",
 			requiresArg: true,
 		});
@@ -35,5 +35,5 @@ export const builder = function (yargs) {
 export const handler = function (argv) {
 	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
 	const MANAGER = $gauze.kernel.src.applications.manager.GAUZE__MANAGER__APPLICATION__SRC__KERNEL({ $gauze });
-	MANAGER.read_entity(argv.directory, argv.name);
+	MANAGER.read_entity(argv.directory, argv.entity_file);
 };

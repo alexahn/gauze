@@ -10,22 +10,22 @@ config({
 
 import * as $gauze from "./../../../index.js";
 
-export const command = "gauze <directory> <name>";
+export const command = "gauze <directory> <entity_file>";
 
-export const describe = "Create a gauze builtin entity in a gauze project (for kernel developers only)";
+export const describe = "Scaffold a Gauze builtin entity inside a project for framework development";
 
 export const builder = function (yargs) {
 	return yargs
 		.env("GAUZE_PROJECT_CREATE")
 		.option("directory", {
 			//alias: 'r',
-			describe: "The gauze project directory that the gauze builtin entity will be created in",
+			describe: "Path to the Gauze project that will receive the builtin entity",
 			type: "string",
 			requiresArg: true,
 		})
-		.option("name", {
+		.option("entity_file", {
 			//alias: 'n',
-			describe: "The name of the gauze builtin entity",
+			describe: "Path to the builtin entity config file to scaffold from",
 			type: "string",
 			requiresArg: true,
 		});
@@ -35,5 +35,5 @@ export const builder = function (yargs) {
 export const handler = function (argv) {
 	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
 	const MANAGER = $gauze.kernel.src.applications.manager.GAUZE__MANAGER__APPLICATION__SRC__KERNEL({ $gauze });
-	MANAGER.create_gauze(argv.directory, argv.name);
+	MANAGER.create_gauze(argv.directory, argv.entity_file);
 };
