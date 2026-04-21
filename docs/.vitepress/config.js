@@ -25,6 +25,13 @@ export default {
 				],
 			},
 			{
+				text: "Project",
+				items: [
+					{ text: "Overview", link: "/project/overview" },
+					{ text: "Configuration", link: "/project/configuration" },
+				],
+			},
+			{
 				text: "Database",
 				items: [
 					{ text: "Overview", link: "/database/overview" },
