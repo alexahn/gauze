@@ -5,6 +5,7 @@ import { hideBin } from "yargs/helpers";
 
 import * as create from "./gauze/create/index.js";
 import * as read from "./gauze/read/index.js";
+import * as update from "./gauze/update/index.js";
 import * as del from "./gauze/delete/index.js";
 import * as run from "./gauze/run/index.js";
 import * as project from "./gauze/project.js";
@@ -16,6 +17,7 @@ import * as shard from "./gauze/shard/index.js";
 yargs(hideBin(process.argv))
 	.command(create)
 	.command(read)
+	.command(update)
 	.command(del)
 	.command(run)
 	.command(migrate)
