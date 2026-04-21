@@ -3,11 +3,7 @@
 import { GraphQLScalarType } from "graphql";
 import { v4 as uuidv4 } from "uuid";
 
-import {
-	STRING_MINIMUM_LENGTH__ERROR__GAUZE__ABSTRACT,
-	STRING_MAXIMUM_LENGTH__ERROR__GAUZE__ABSTRACT,
-	EMAIL_REGEX__ERROR__GAUZE__ABSTRACT,
-} from "./../../../errors.js";
+import { STRING_MINIMUM_LENGTH__ERROR__GAUZE__ABSTRACT, STRING_MAXIMUM_LENGTH__ERROR__GAUZE__ABSTRACT, EMAIL_REGEX__ERROR__GAUZE__ABSTRACT } from "./../../../errors.js";
 
 function SCALAR__EMAIL__SCALAR__GRAPHQL__TYPE__GAUZE__ABSTRACT(entity, field, params = {}) {
 	const { minimum_length = 3, maximum_length = 320 } = params;
