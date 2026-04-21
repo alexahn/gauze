@@ -5,9 +5,10 @@ import path from "node:path";
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { load_steps, run_steps } from "./../../../../steps.js";
+import { load_steps, run_layers } from "./../../../../steps.js";
 
-const SCHEMA = $gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM;
+const DATABASE_SCHEMA = $gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE;
+const SYSTEM_SCHEMA = $gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM;
 
 test.describe("(from private to private - from invalid to invalid) relationship graphql interface system", async function (suite_ctx) {
 	test.before(function (ctx) {
@@ -20,47 +21,43 @@ test.describe("(from private to private - from invalid to invalid) relationship 
 		suite_ctx.database_manager.destroy_connections();
 	});
 	await test.it("create", function (test_ctx) {
-		return load_steps(import.meta.dirname, "./create").then(function (steps) {
-			return run_steps(
-				{
-					database_manager: suite_ctx.database_manager,
-					schema: SCHEMA,
-				},
-				steps,
-			);
+		return load_steps(import.meta.dirname, "./../../environment").then(function (environment_steps) {
+			return load_steps(import.meta.dirname, "./create").then(function (steps) {
+				return run_layers({ database_manager: suite_ctx.database_manager }, [
+					{ schema: DATABASE_SCHEMA, steps: environment_steps },
+					{ schema: SYSTEM_SCHEMA, steps: steps },
+				]);
+			});
 		});
 	});
 	await test.it("read", function (test_ctx) {
-		return load_steps(import.meta.dirname, "./read").then(function (steps) {
-			return run_steps(
-				{
-					database_manager: suite_ctx.database_manager,
-					schema: SCHEMA,
-				},
-				steps,
-			);
+		return load_steps(import.meta.dirname, "./../../environment").then(function (environment_steps) {
+			return load_steps(import.meta.dirname, "./read").then(function (steps) {
+				return run_layers({ database_manager: suite_ctx.database_manager }, [
+					{ schema: DATABASE_SCHEMA, steps: environment_steps },
+					{ schema: SYSTEM_SCHEMA, steps: steps },
+				]);
+			});
 		});
 	});
 	await test.it("update", function (test_ctx) {
-		return load_steps(import.meta.dirname, "./update").then(function (steps) {
-			return run_steps(
-				{
-					database_manager: suite_ctx.database_manager,
-					schema: SCHEMA,
-				},
-				steps,
-			);
+		return load_steps(import.meta.dirname, "./../../environment").then(function (environment_steps) {
+			return load_steps(import.meta.dirname, "./update").then(function (steps) {
+				return run_layers({ database_manager: suite_ctx.database_manager }, [
+					{ schema: DATABASE_SCHEMA, steps: environment_steps },
+					{ schema: SYSTEM_SCHEMA, steps: steps },
+				]);
+			});
 		});
 	});
 	await test.it("delete", function (test_ctx) {
-		return load_steps(import.meta.dirname, "./delete").then(function (steps) {
-			return run_steps(
-				{
-					database_manager: suite_ctx.database_manager,
-					schema: SCHEMA,
-				},
-				steps,
-			);
+		return load_steps(import.meta.dirname, "./../../environment").then(function (environment_steps) {
+			return load_steps(import.meta.dirname, "./delete").then(function (steps) {
+				return run_layers({ database_manager: suite_ctx.database_manager }, [
+					{ schema: DATABASE_SCHEMA, steps: environment_steps },
+					{ schema: SYSTEM_SCHEMA, steps: steps },
+				]);
+			});
 		});
 	});
 });
