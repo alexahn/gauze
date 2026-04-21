@@ -32,6 +32,14 @@ export default {
 				],
 			},
 			{
+				text: "Abstract",
+				items: [
+					{ text: "Overview", link: "/abstract/overview" },
+					{ text: "Errors", link: "/abstract/errors" },
+					{ text: "GraphQL Scalars", link: "/abstract/graphql-scalars" },
+				],
+			},
+			{
 				text: "Realm",
 				items: [
 					{ text: "Overview", link: "/realm/overview" },
