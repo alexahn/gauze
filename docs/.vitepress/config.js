@@ -36,6 +36,7 @@ export default {
 					{ text: "Overview", link: "/abstract/overview" },
 					{ text: "Errors", link: "/abstract/errors" },
 					{ text: "GraphQL Scalars", link: "/abstract/graphql-scalars" },
+					{ text: "Phone Number Scalar Tutorial", link: "/abstract/phone-number-scalar-tutorial" },
 				],
 			},
 			{

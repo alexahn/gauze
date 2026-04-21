@@ -46,7 +46,7 @@ If you are trying to understand the kernel, these are good starting points:
 
 The practical expectation for Gauze upgrades should be simple:
 
-upgrading a project's Gauze version should largely be the same as replacing the project's `kernel/` directory with the new `kernel/` directory.
+Upgrading a project's Gauze version should largely be the same as replacing the project's `kernel/` directory with the new `kernel/` directory.
 
 That expectation matters because it keeps framework updates conceptually clean. The kernel should behave like the replaceable implementation core of the generated project, rather than a directory that requires heavy manual merging every time the framework changes.
 

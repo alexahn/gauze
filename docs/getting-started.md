@@ -42,6 +42,16 @@ npx gauze project . migrate run
 npx gauze project . seed run
 ```
 
+## Build the Frontend Assets
+
+Build the bundled frontend assets with:
+
+```sh
+npx gauze project . application build
+```
+
+This generates the frontend build output for the Gauze and project UIs.
+
 ## Start the Server
 
 ```sh
@@ -66,3 +76,4 @@ npx gauze project <dir> <subcommand>
 ```
 
 That means you can run project commands from anywhere as long as you point Gauze at the project directory.
+It is also equivalent in spirit to calling the generated project CLI entrypoint directly with `node ${project_dir}/command/gauze.js`, because `gauze project` hands execution off to the project's own command layer.
