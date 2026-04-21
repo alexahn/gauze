@@ -10,9 +10,9 @@ Project configuration is split by responsibility. `.env`, `gauze.js`, and databa
 
 In a generated project, these files matter first:
 
-- `.env` for runtime environment variables
-- `gauze.js` for project-level authentication and realm-entry rules
-- `database/config.js` for mapping environment names to database topologies
+- Use `.env` for runtime environment variables.
+- Use `gauze.js` for project-level authentication and realm-entry rules.
+- Use `database/config.js` for mapping environment names to database topologies.
 
 You do not need to learn every setting at once, but it helps to know which file owns which kind of decision.
 
@@ -20,10 +20,10 @@ You do not need to learn every setting at once, but it helps to know which file 
 
 `.env` is where you set runtime values such as:
 
-- `GAUZE_ENV`
-- `GAUZE_SERVER_HOST`
-- `GAUZE_SERVER_PORT`
-- realm JWT secrets
+- `GAUZE_ENV`.
+- `GAUZE_SERVER_HOST`.
+- `GAUZE_SERVER_PORT`.
+- Realm JWT secrets.
 
 For most new projects, `.env` answers the question: which environment am I running, and what server/auth settings should it use?
 
@@ -39,10 +39,10 @@ That value affects which database configuration Gauze loads.
 
 `gauze.js` is the root project configuration file. It defines authentication sequencing and realm-entry requirements, including:
 
-- `steps`
-- `authentication.proxy`
-- `authentication.realms`
-- `authentication.agents`
+- `steps`.
+- `authentication.proxy`.
+- `authentication.realms`.
+- `authentication.agents`.
 
 This file is about application policy rather than raw process settings. It tells Gauze what must happen before an agent can sign in, enter a realm, or act as a specific agent type.
 
@@ -112,20 +112,20 @@ export default {
 
 In that example:
 
-- `name` and `type` identify the config as a project-level Gauze application config
-- `development_monolithic`, `staging`, and `production` each define their own `admins` list
-- the `development_monolithic.admins` entry identifies an admin person and ties that environment-level admin record to one or more agent IDs
-- in this example, `gauze__agent_user` is set to a concrete identifier, which means that user is configured as an admin user in the `development_monolithic` environment
-- `realms` controls whether each realm is open or closed before the finer authentication rules are evaluated
-- all sign-ins must complete email verification and password verification before a proxy session is created
-- entering the `system` realm requires a verified password
-- `gauze__agent_root` is treated as the admin user type, so admin sessions explicitly require the password-verification success step
-- `gauze__agent_user` has no additional agent-specific requirement beyond the proxy and realm rules
+- `name` and `type` identify the config as a project-level Gauze application config.
+- `development_monolithic`, `staging`, and `production` each define their own `admins` list.
+- The `development_monolithic.admins` entry identifies an admin person and ties that environment-level admin record to one or more agent IDs.
+- In this example, `gauze__agent_user` is set to a concrete identifier, which means that user is configured as an admin user in the `development_monolithic` environment.
+- `realms` controls whether each realm is open or closed before the finer authentication rules are evaluated.
+- All sign-ins must complete email verification and password verification before a proxy session is created.
+- Entering the `system` realm requires a verified password.
+- `gauze__agent_root` is treated as the admin user type, so admin sessions explicitly require the password-verification success step.
+- `gauze__agent_user` has no additional agent-specific requirement beyond the proxy and realm rules.
 
 The important distinction is that there are two related pieces here:
 
-- the environment-level `admins` arrays define who the admin users are for a given environment
-- `authentication.agents` defines what extra authentication requirements apply when one of those users operates as a specific agent type such as `gauze__agent_root`
+- The environment-level `admins` arrays define who the admin users are for a given environment.
+- `authentication.agents` defines what extra authentication requirements apply when one of those users operates as a specific agent type such as `gauze__agent_root`.
 
 In practice, `gauze__agent_root` is how Gauze represents the highest-privilege administrative agent.
 
@@ -163,9 +163,9 @@ That means the flow is:
 
 For new users, this split is usually the clearest:
 
-- `.env` chooses the runtime environment
-- `gauze.js` defines application auth behavior
-- `database/config.js` selects the database topology for that environment
+- `.env` chooses the runtime environment.
+- `gauze.js` defines application auth behavior.
+- `database/config.js` selects the database topology for that environment.
 
 Those three files together explain most of the project's startup behavior.
 

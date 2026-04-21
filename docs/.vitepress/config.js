@@ -32,6 +32,20 @@ export default {
 				],
 			},
 			{
+				text: "Realm",
+				items: [
+					{ text: "Overview", link: "/realm/overview" },
+					{ text: "Configuration", link: "/realm/configuration" },
+				],
+			},
+			{
+				text: "Command",
+				items: [
+					{ text: "Overview", link: "/command/overview" },
+					{ text: "Gauze Commands", link: "/command/gauze-commands" },
+				],
+			},
+			{
 				text: "Database",
 				items: [
 					{ text: "Overview", link: "/database/overview" },
@@ -61,6 +75,7 @@ export default {
 				text: "Development",
 				items: [
 					{ text: "Framework Source", link: "/development/source-layout" },
+					{ text: "Kernel", link: "/development/kernel" },
 				],
 			},
 		],
