@@ -1089,12 +1089,13 @@
 		[x] should prefer to use the write shard node if the connection is already open (so update queries dont fetch stale data once the update is complete)
 
 [ ] documentation
-	[ ] vitepress
-		[ ] consistent theme
-		[ ] include explanations of every major aspect of gauze
-	[ ] github pages hosting
-		[ ] configure so the path of the url maps to the project documention (e.g. /gauze)
+	[x] vitepress
+		[x] consistent theme
+		[x] include explanations of every major aspect of gauze
+	[x] github pages hosting
+		[x] configure so the path of the url maps to the project documention (e.g. /gauze)
 	[ ] readme.md
 		[ ] refactor readme to make it more digestable
-	[ ] use codex or claude to generate the documentation and readmes
-		[ ] subscribe to codex or claude
+	[x] use codex or claude to generate the documentation and readmes
+		[x] subscribe to codex or claude
+		[x] add AGENTS.md to repo
