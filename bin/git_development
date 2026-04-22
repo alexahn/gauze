@@ -1,5 +1,8 @@
 #!/bin/zsh
 
+cp -r ./env/development/before/src/* ./src/
+cp -r ./env/development/before/test/* ./test/
+
 cp ./src/kernel/src/migrations/ezuag.js ./src/database/migrations/00000000000012_ezuag.js
 cp ./src/kernel/src/migrations/ytitne.js ./src/database/migrations/00000000000013_ytitne.js
 cp ./src/kernel/src/migrations/entity.js ./src/database/migrations/00000000000014_entity.js
@@ -13,8 +16,6 @@ npx gauze create entity ./src ./gauze/ytitne.js
 
 npx gauze create gauze ./src ./gauze/ezuag.js
 
-cp -r ./env/development/src/* ./src/
-cp -r ./env/development/test/* ./test/
 
 # class name fix for pascal case
 find ./src/database/models/ezuag.js -type f -name "*.js" -exec sed -i '' "s/EzuagDatabaseModel/EzuagEzuagDatabaseModel/g" {} +
@@ -29,4 +30,5 @@ find ./src/system/models/ytitne.js -type f -name "*.js" -exec sed -i '' "s/Ytitn
 find ./src/system/controllers/ezuag.js -type f -name "*.js" -exec sed -i '' "s/EzuagSystemController/EzuagEzuagSystemController/g" {} +
 find ./src/system/controllers/ytitne.js -type f -name "*.js" -exec sed -i '' "s/YtitneSystemController/YtitneYtitneSystemController/g" {} +
 
-
+cp -r ./env/development/after/src/* ./src/
+cp -r ./env/development/after/test/* ./test/
