@@ -165,17 +165,18 @@ class DatabaseModel extends Model {
 					return item.source !== null;
 				});
 		});
-		function handle_groups_without_source(groups) {
-			// map each to a basic method
-			return Promise.all(
-				groups.map(function (group) {
-					return Promise.all(
-						group.map(function (key) {
-							// rich typed parameters (post graphql parsing) pulled from cache
-							const parameters = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(key.raw_key).value;
-							if (key.method === "create") {
-								return self.model._root_create(contexts[key.index], scopes[key.index], parameters).then(function (data) {
-									self.clearAll();
+			function handle_groups_without_source(groups) {
+				// map each to a basic method
+				return Promise.all(
+					groups.map(function (group) {
+						return Promise.all(
+							group.map(function (key) {
+								// rich typed parameters (post graphql parsing) pulled from cache
+								const cached = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(key.raw_key);
+								const parameters = cached ? cached.value : JSON.parse(key.raw_key).parameters;
+								if (key.method === "create") {
+									return self.model._root_create(contexts[key.index], scopes[key.index], parameters).then(function (data) {
+										self.clearAll();
 									return {
 										index: key.index,
 										data: data,
@@ -236,15 +237,16 @@ class DatabaseModel extends Model {
 				// afterwards, we call a single method at the end with a set of ids
 				return Promise.resolve([]);
 			} else {
-				return Promise.all(
-					groups.map(function (group) {
-						return Promise.all(
-							group.map(function (key) {
-								// rich typed parameters (post graphql parsing) pulled from cache
-								const parameters = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(key.raw_key).value;
-								if (key.method === "create") {
-									return self.model._relationship_create(contexts[key.index], scopes[key.index], parameters).then(function (data) {
-										self.clearAll();
+					return Promise.all(
+						groups.map(function (group) {
+							return Promise.all(
+								group.map(function (key) {
+									// rich typed parameters (post graphql parsing) pulled from cache
+									const cached = TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(key.raw_key);
+									const parameters = cached ? cached.value : JSON.parse(key.raw_key).parameters;
+									if (key.method === "create") {
+										return self.model._relationship_create(contexts[key.index], scopes[key.index], parameters).then(function (data) {
+											self.clearAll();
 										return {
 											index: key.index,
 											data: data,
