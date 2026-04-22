@@ -662,22 +662,22 @@ class RelationshipSystemModel extends SystemModel {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
 					return self._authorized_relationship(context, scope, relationship, agent, method).then(function () {
-						if (parameters.where[self.key_to_id] && parameters.where[self.key_to_id] !== target_record[self.key_to_id]) {
+						if (parameters.where[self.key_to_id] && parameters.where[self.key_to_id] !== relationship[self.key_to_id]) {
 							return self.generate_response("delete", []);
 						} else {
 							parameters.where[self.key_to_id] = relationship[self.key_to_id];
 						}
-						if (parameters.where[self.key_to_type] && parameters.where[self.key_to_type] !== target_record[self.key_to_type]) {
+						if (parameters.where[self.key_to_type] && parameters.where[self.key_to_type] !== relationship[self.key_to_type]) {
 							return self.generate_response("delete", []);
 						} else {
 							parameters.where[self.key_to_type] = relationship[self.key_to_type];
 						}
-						if (parameters.where[self.key_from_id] && parameters.where[self.key_from_id] !== target_record[self.key_from_id]) {
+						if (parameters.where[self.key_from_id] && parameters.where[self.key_from_id] !== relationship[self.key_from_id]) {
 							return self.generate_response("delete", []);
 						} else {
 							parameters.where[self.key_from_id] = relationship[self.key_from_id];
 						}
-						if (parameters.where[self.key_from_type] && parameters.where[self.key_from_type] !== target_record[self.key_from_type]) {
+						if (parameters.where[self.key_from_type] && parameters.where[self.key_from_type] !== relationship[self.key_from_type]) {
 							return self.generate_response("delete", []);
 						} else {
 							parameters.where[self.key_from_type] = relationship[self.key_from_type];
