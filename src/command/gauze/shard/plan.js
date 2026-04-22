@@ -25,8 +25,7 @@ export const builder = function (yargs) {
 		})
 		.option("order", {
 			alias: "o",
-			describe:
-				"Ordering for the generated ranges. Use `time` for rollout order or `key` for contiguous key-space order.",
+			describe: "Ordering for the generated ranges. Use `time` for rollout order or `key` for contiguous key-space order.",
 			type: "string",
 			requiresArg: false,
 			choices: ["time", "key"],

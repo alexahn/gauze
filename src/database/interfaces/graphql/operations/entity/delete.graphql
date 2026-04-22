@@ -1,0 +1,39 @@
+mutation DeleteEntity(
+	$source: Entity_Mutation__Source
+	$where: Entity_Mutation__Where
+	$where_in: Entity_Mutation__Where_Array
+	$cache_where_in: Entity_Mutation__Where_String
+	$where_not_in: Entity_Mutation__Where_Array
+	$cache_where_not_in: Entity_Mutation__Where_String
+	$where_like: Entity_Mutation__Where
+	$where_between: Entity_Mutation__Where_Array
+	$limit: Int
+	$offset: Int
+	$order: String
+	$order_direction: String
+	$order_nulls: String
+) {
+	delete_entity(
+		source: $source
+		where: $where
+		where_in: $where_in
+		cache_where_in: $cache_where_in
+		where_not_in: $where_not_in
+		cache_where_not_in: $cache_where_not_in
+		where_like: $where_like
+		where_between: $where_between
+		limit: $limit
+		offset: $offset
+		order: $order
+		order_direction: $order_direction
+		order_nulls: $order_nulls
+	) {
+		attributes {
+			id
+			created_at
+			updated_at
+			deleted_at
+			text
+		}
+	}
+}

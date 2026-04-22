@@ -29,9 +29,7 @@ function Popover({ trigger, children, triggerClassName = "", popoverClassName = 
 		const popoverRect = popoverElement.getBoundingClientRect();
 		const left = clamp(triggerRect.left, 8, Math.max(8, window.innerWidth - popoverRect.width - 8));
 		const fitsBelow = triggerRect.bottom + 4 + popoverRect.height <= window.innerHeight - 8;
-		const top = fitsBelow
-			? triggerRect.bottom + 4
-			: clamp(triggerRect.top - popoverRect.height - 4, 8, Math.max(8, window.innerHeight - popoverRect.height - 8));
+		const top = fitsBelow ? triggerRect.bottom + 4 : clamp(triggerRect.top - popoverRect.height - 4, 8, Math.max(8, window.innerHeight - popoverRect.height - 8));
 
 		popoverElement.style.left = `${left}px`;
 		popoverElement.style.top = `${top}px`;
