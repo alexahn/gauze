@@ -1,5 +1,7 @@
 import * as $abstract from "./../../../abstract/index.js";
 
+import { LOGGER__IO__LOGGER__SRC__KERNEL } from "./../logger/io.js";
+
 import knex from "knex";
 
 class DatabaseManager {
