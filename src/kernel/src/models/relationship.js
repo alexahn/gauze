@@ -327,7 +327,7 @@ class RelationshipSystemModel extends SystemModel {
 								whitelist_row.gauze__whitelist__agent_id === agent_id &&
 								whitelist_row.gauze__whitelist__entity_type === entity_type &&
 								whitelist_row.gauze__whitelist__entity_id === entity_id &&
-								method === method
+								whitelist_row.gauze__whitelist__method === method
 							) {
 								return true;
 							} else {
@@ -346,7 +346,7 @@ class RelationshipSystemModel extends SystemModel {
 								blacklist_row.gauze__blacklist__entity_type === entity_type &&
 								blacklist_row.gauze__blacklist__entity_id === entity_id &&
 								blacklist_row.gauze__blacklist__agent_role === "leaf" &&
-								method === method
+								blacklist_row.gauze__blacklist__method === method
 							) {
 								return false;
 							} else {

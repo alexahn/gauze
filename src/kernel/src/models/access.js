@@ -697,7 +697,7 @@ class AccessSystemModel extends SystemModel {
 		// get list of records based on entity_id, entity_type, and method
 		// filter list of records based on role hierarchy
 		// root initiator can see everything, trunk can see trunk and leaf, leaf can only see itself
-		return self._initiator_records(context, input.where, agent).then(function (access_records) {
+		return self._initiator_records(context, input.where, agent, database, transaction).then(function (access_records) {
 			if (access_records && access_records.length) {
 				// get record for the highest role
 				const highest_record = self._highest_record(access_records);
@@ -747,7 +747,7 @@ class AccessSystemModel extends SystemModel {
 		return context.database_manager.route_transactions(context, scope, input, self, "read").then(function (shards) {
 			return Promise.all(
 				shards.map(function (shard) {
-					return self._count_read_transaction(context, scope, input, realm, shard.connection, shard.transaction);
+					return self._root_count_transaction(context, scope, input, realm, shard.connection, shard.transaction);
 				}),
 			).then(function (results) {
 				// stitch together results and build response
@@ -812,7 +812,7 @@ class AccessSystemModel extends SystemModel {
 	}
 	_count(context, scope, parameters, realm) {
 		const self = this;
-		const key = self._model_batch_key(parameters, realm, "read");
+		const key = self._model_batch_key(parameters, realm, "count");
 		return self.model_loader.load(context, scope, key);
 	}
 }
