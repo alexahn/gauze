@@ -219,7 +219,7 @@ class DatabaseManager {
 	}
 	big_int_to_uuid(big_int) {
 		// Convert BigInt to hex and pad to 32 characters (128 bits)
-		let hex = bigInt.toString(16).padStart(32, "0");
+		let hex = big_int.toString(16).padStart(32, "0");
 
 		// Insert hyphens at 8-4-4-4-12 positions
 		return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
@@ -866,9 +866,12 @@ class DatabaseManager {
 					}
 				} else if (parameters.where_in) {
 					if (parameters.where_in[model.primary_key]) {
-						const shards = self.find_shards_for_set(model.table_name, parameters.where_in);
+						const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
+							return self.uuid_to_big_int(primary_key);
+						});
+						const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
 						const shard_nodes = shards.map(function (shard) {
-							const write_shard_node = self.get_one_shard_node(model_shard, "write");
+							const write_shard_node = self.get_one_shard_node(shard, "write");
 							if (context.transactions[write_shard_node.key]) {
 								return write_shard_node;
 							} else {
@@ -1113,7 +1116,7 @@ class DatabaseManager {
 		}
 		if (self.databases[model.table_name].connection_router) {
 			// note: allows for custom connection routing (for instances where someone wants to set up their own sharding scheme)
-			return self.database[model.table_name].connection_router(context, scope, parameters, model, shard_type, relationships, self);
+			return self.databases[model.table_name].connection_router(context, scope, parameters, model, shard_type, relationships, self);
 		} else if (model.table_name === self.relationship_table) {
 			return self.route_relationship_connections(context, scope, parameters, model, shard_type, relationships);
 		} else if (model.table_name === self.whitelist_table) {

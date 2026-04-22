@@ -902,7 +902,7 @@ class DatabaseModel extends Model {
 				.then(function (data) {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
 					context.breadth_count += data.length;
-					return self.read(context, scope, parameters);
+					return self._root_read_transaction(context, scope, parameters, database, transaction);
 				})
 				.catch(function (err) {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.update:failure`, "err", err);
@@ -946,10 +946,16 @@ class DatabaseModel extends Model {
 			const MAXIMUM_ROWS = 4294967296;
 			const { attributes } = parameters;
 			return self
-				.read(context, scope, {
-					...parameters,
-					limit: MAXIMUM_ROWS,
-				})
+				._relationship_read_transaction(
+					context,
+					scope,
+					{
+						...parameters,
+						limit: MAXIMUM_ROWS,
+					},
+					database,
+					transaction,
+				)
 				.then(function (data) {
 					const valid_ids = data.map(function (item) {
 						return item[self.primary_key];
@@ -962,7 +968,7 @@ class DatabaseModel extends Model {
 					context.breadth_count += data.length;
 					return sql.then(function (data) {
 						LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
-						return self.read(context, scope, parameters);
+						return self._relationship_read_transaction(context, scope, parameters, database, transaction);
 					});
 				})
 				.catch(function (err) {
@@ -1197,10 +1203,16 @@ class DatabaseModel extends Model {
 			// todo: use attributes and update deleted_at instead of deleting the row
 			// do a read first
 			return self
-				.read(context, scope, {
-					...parameters,
-					limit: MAXIMUM_ROWS,
-				})
+				._root_read_transaction(
+					context,
+					scope,
+					{
+						...parameters,
+						limit: MAXIMUM_ROWS,
+					},
+					database,
+					transaction,
+				)
 				.then(function (read_data) {
 					const valid_ids = read_data.map(function (item) {
 						return item[self.primary_key];
@@ -1284,10 +1296,16 @@ class DatabaseModel extends Model {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 			const MAXIMUM_ROWS = 4294967296;
 			return self
-				.read(context, scope, {
-					...parameters,
-					limit: MAXIMUM_ROWS,
-				})
+				._relationship_read_transaction(
+					context,
+					scope,
+					{
+						...parameters,
+						limit: MAXIMUM_ROWS,
+					},
+					database,
+					transaction,
+				)
 				.then(function (read_data) {
 					const valid_ids = read_data.map(function (item) {
 						return item[self.primary_key];
