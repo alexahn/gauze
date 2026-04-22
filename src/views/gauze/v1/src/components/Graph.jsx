@@ -50,6 +50,7 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 		if (nodesInitialized) {
 			if (e.button === 2) {
 			} else if (e.button === 1) {
+				window.dispatchEvent(new CustomEvent("gauze:close-popovers"));
 				setPanning(true);
 				graph.updateSpaceNodes(
 					agentHeader.name,
@@ -76,6 +77,7 @@ export default function Graph({ agentHeader, route, gauze, model, router, link, 
 			} else if (e.button === 0) {
 				if (e.target === containerRef.current) {
 					e.preventDefault();
+					window.dispatchEvent(new CustomEvent("gauze:close-popovers"));
 					setPanning(true);
 					graph.updateSpaceNodes(
 						agentHeader.name,

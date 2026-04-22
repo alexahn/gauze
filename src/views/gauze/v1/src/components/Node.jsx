@@ -108,6 +108,7 @@ export default function Node({ agentHeader, route, gauze, model, router, link, g
 					} else if (buttonTarget) {
 					} else if (spanTarget) {
 					} else {
+						window.dispatchEvent(new CustomEvent("gauze:close-popovers"));
 						setDragging(true);
 						//e.preventDefault();
 						graph.updateSpaceNodes(agentHeader.name, spaceID, [

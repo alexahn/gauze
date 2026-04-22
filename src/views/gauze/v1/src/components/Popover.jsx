@@ -1,10 +1,11 @@
 import React from "react";
-import { useId, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 
 export default function Popover({ align = "left", side = "bottom", buttonClassName, buttonContent, containerClassName = "", popoverClassName, children }) {
 	const buttonRef = useRef(null);
 	const popoverRef = useRef(null);
 	const popoverID = useId().replace(/:/g, "");
+	const closeEventName = "gauze:close-popovers";
 
 	function positionPopover() {
 		const buttonNode = buttonRef.current;
@@ -41,6 +42,20 @@ export default function Popover({ align = "left", side = "bottom", buttonClassNa
 			popoverNode.style.visibility = "visible";
 		});
 	}
+
+	useEffect(function () {
+		function handleClosePopover() {
+			const popoverNode = popoverRef.current;
+			if (!popoverNode) return;
+			if (popoverNode.matches(":popover-open")) {
+				popoverNode.hidePopover();
+			}
+		}
+		window.addEventListener(closeEventName, handleClosePopover);
+		return function () {
+			window.removeEventListener(closeEventName, handleClosePopover);
+		};
+	}, []);
 
 	return (
 		<div className={containerClassName}>
