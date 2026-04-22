@@ -75,6 +75,29 @@ class SystemModel extends Model {
 		const self = this;
 		return SystemModel._class_name(self.schema_name);
 	}
+	_merge_authorization_results(results) {
+		const flattened = results.flat().filter(function (result) {
+			return result !== undefined && result !== null;
+		});
+		if (!flattened.length) {
+			return undefined;
+		}
+		const first = flattened[0];
+		const records = flattened
+			.map(function (result) {
+				return result.records || [];
+			})
+			.flat();
+		const has_records = Boolean(records.length);
+		return {
+			status: first.privacy === "private" ? has_records : !has_records,
+			scope: first.scope,
+			agent: first.agent,
+			entity: first.entity,
+			privacy: first.privacy,
+			records: records,
+		};
+	}
 	_auth_batch_key(realm, agent, entity, method) {
 		return JSON.stringify({
 			realm: realm,
@@ -238,8 +261,7 @@ class SystemModel extends Model {
 						return self._authorization_element_transaction(context, scope, realm, agent, entity, shard.connection, shard.transaction);
 					}),
 				).then(function (results) {
-					// pick first element assuming we resolve to a single node
-					return results.flat()[0];
+					return self._merge_authorization_results(results);
 				});
 			});
 		} else if (method_privacy === "public") {
@@ -265,8 +287,7 @@ class SystemModel extends Model {
 						return self._authorization_element_transaction(context, scope, realm, agent, entity, shard.connection, shard.transaction);
 					}),
 				).then(function (results) {
-					// pick first element assuming we resolve to a single node
-					return results.flat()[0];
+					return self._merge_authorization_results(results);
 				});
 			});
 		} else {
@@ -371,8 +392,7 @@ class SystemModel extends Model {
 						return self._authorization_set_transaction(context, scope, realm, agent, entity, shard.connection, shard.transaction);
 					}),
 				).then(function (results) {
-					// pick first element assuming we resolve to a single node
-					return results.flat()[0];
+					return self._merge_authorization_results(results);
 				});
 			});
 		} else if (method_privacy === "public") {
@@ -397,8 +417,7 @@ class SystemModel extends Model {
 						return self._authorization_set_transaction(context, scope, realm, agent, entity, shard.connection, shard.transaction);
 					}),
 				).then(function (results) {
-					// pick first element assuming we resolve to a single node
-					return results.flat()[0];
+					return self._merge_authorization_results(results);
 				});
 			});
 		} else {
@@ -502,8 +521,7 @@ class SystemModel extends Model {
 						return self._authorization_filter_transaction(context, scope, realm, agent, entity, shard.connection, shard.transaction);
 					}),
 				).then(function (results) {
-					// pick first element assuming we resolve to a single node
-					return results.flat()[0];
+					return self._merge_authorization_results(results);
 				});
 			});
 		} else if (method_privacy === "public") {
@@ -527,8 +545,7 @@ class SystemModel extends Model {
 						return self._authorization_filter_transaction(context, scope, realm, agent, entity, shard.connection, shard.transaction);
 					}),
 				).then(function (results) {
-					// pick first element assuming we resolve to a single node
-					return results.flat()[0];
+					return self._merge_authorization_results(results);
 				});
 			});
 		} else {
