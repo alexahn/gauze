@@ -16,7 +16,7 @@ class TTLLRUCache {
 		self.size = 0;
 		self.cursor = 0;
 		self.buffer = Array(self.maximum_size).fill(undefined);
-		self.value = {};
+		self.values = {};
 		self.index = {};
 		self.timestamps = {};
 	}
@@ -64,7 +64,10 @@ class TTLLRUCache {
 	}
 	set(key, value) {
 		const self = this;
-		const next_position = self.cursor + 1;
+		if (self.has(key)) {
+			self.buffer[self.index[key]] = undefined;
+		}
+		const next_position = (self.cursor + 1) % self.maximum_size;
 		const next_key = self.buffer[next_position];
 		if (next_key !== undefined) {
 			self.delete(next_key);
@@ -75,8 +78,7 @@ class TTLLRUCache {
 		self.values[key] = value;
 		self.timestamps[key] = new Date().getTime();
 		self.index[key] = self.cursor;
-		self.size = self.size += 1;
-		self.size = self.size % self.maximum_size;
+		self.size = Object.keys(self.index).length;
 		return this;
 	}
 	keys() {
@@ -89,8 +91,9 @@ class TTLLRUCache {
 		return new EntryIterator(Object.keys(this.values), Object.values(this.values));
 	}
 	forEach(f) {
-		Object.keys(this.values).forEach(function (k) {
-			f(k, this.values[k]);
+		const self = this;
+		Object.keys(self.values).forEach(function (k) {
+			f(self.values[k], k);
 		});
 	}
 }

@@ -19,7 +19,10 @@ class LRUCache {
 		}
 	}
 	set(key, value) {
-		var oldest_index = this.cursor + 1;
+		if (this.index[key] !== undefined) {
+			this.buffer[this.index[key]] = undefined;
+		}
+		var oldest_index = (this.cursor + 1) % this.size;
 		var oldest_key = this.buffer[oldest_index];
 		if (oldest_key !== undefined) {
 			delete this.values[oldest_key];
