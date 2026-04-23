@@ -27,10 +27,15 @@ class DatabaseManager {
 			valid_environment_keys[entity.table_name] = true;
 		});
 
-		const valid_table_keys = {
+		const required_table_keys = {
 			previous: true,
 			current: true,
 			next: true,
+		};
+
+		const valid_table_keys = {
+			...required_table_keys,
+			connection_router: true,
 		};
 
 		const valid_shard_keys = {
@@ -177,14 +182,23 @@ class DatabaseManager {
 
 		function validate_table(path, table, key) {
 			if (!is_non_null_object(table)) throw new Error(`Database config property '${path}' must be of type 'object', ${table} is not of type 'object'`);
-			Object.keys(valid_table_keys).forEach(function (key) {
+			Object.keys(required_table_keys).forEach(function (key) {
 				const table_path = `${path}.${key}`;
 				if (table[key] === undefined) throw new Error(`Database config property '${table_path}' must be defined`);
 			});
 			Object.keys(table).forEach(function (key) {
 				const table_path = `${path}.${key}`;
-				const sequence = table[key];
-				validate_sequence(table_path, sequence, key);
+				if (key === "connection_router") {
+					const connection_router = table[key];
+					if (typeof connection_router !== "function") {
+						throw new Error(`Database config property '${table_path}' must be of type 'function', ${connection_router} is not of type 'function'`);
+					}
+				} else if (valid_table_keys[key]) {
+					const sequence = table[key];
+					validate_sequence(table_path, sequence, key);
+				} else {
+					throw new Error(`Database config property '${path}' is invalid, property '${key}' must be one of: ${Object.keys(valid_table_keys)}`);
+				}
 			});
 		}
 
@@ -230,11 +244,13 @@ class DatabaseManager {
 	get_shard_node_connection_key(shard_node) {
 		if (shard_node.config.client === "better-sqlite3") {
 			return JSON.stringify({
+				client: shard_node.config.client,
 				transaction_isolation_level: shard_node.transaction_isolation_level,
 				filename: shard_node.config.connection.filename,
 			});
 		} else {
 			return JSON.stringify({
+				client: shard_node.config.client,
 				transaction_isolation_level: shard_node.transaction_isolation_level,
 				host: shard_node.config.connection.host,
 				port: shard_node.config.connection.port,
@@ -1462,8 +1478,10 @@ class DatabaseManager {
 		function split(ranges, order) {
 			const divided = ranges
 				.map(function (range) {
-					const first_end = range[0] + (range[1] - range[0]) / 2n - 1n;
-					const second_start = range[0] + (range[1] - range[0]) / 2n;
+					const size = range[1] - range[0] + 1n;
+					const midpoint = size / 2n;
+					const first_end = range[0] + midpoint - 1n;
+					const second_start = first_end + 1n;
 					return [
 						[range[0], first_end],
 						[second_start, range[1]],
