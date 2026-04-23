@@ -889,7 +889,7 @@ class DatabaseManager {
 				} else if (parameters.where_like) {
 					return self.get_all_shards_nodes(model.table_name, shard_type);
 				} else {
-					return [];
+					return self.get_all_shards_nodes(model.table_name, shard_type);
 				}
 			} else if (shard_type === "write") {
 				if (parameters.where) {
@@ -934,7 +934,7 @@ class DatabaseManager {
 							if (model_shard) {
 								return [self.get_one_shard_node(model_shard, shard_type)];
 							} else {
-								throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
+								throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.attributes[model.primary_key]}`);
 							}
 						} else {
 							return [];
@@ -961,6 +961,9 @@ class DatabaseManager {
 			}
 			// relationship query
 			const source = _parse_source(scope, parameters);
+			if (!source) {
+				throw new Error("Relationship routing requires a source with _metadata and _direction");
+			}
 			let relationship_primary_keys = [];
 			if (source._direction === "to") {
 				relationship_primary_keys = relationships
@@ -1093,7 +1096,7 @@ class DatabaseManager {
 							if (model_shard) {
 								return [self.get_one_shard_node(model_shard, shard_type)];
 							} else {
-								throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
+								throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.attributes[model.primary_key]}`);
 							}
 						} else {
 							return [];
@@ -1212,8 +1215,8 @@ class DatabaseManager {
 	}
 	destroy_connections() {
 		const self = this;
-		return Object.values(self.connections).map(function (connection) {
-			delete self.connections[connection.key];
+		return Object.entries(self.connections).map(function ([key, connection]) {
+			delete self.connections[key];
 			return connection.destroy();
 		});
 	}
