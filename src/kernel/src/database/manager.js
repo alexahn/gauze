@@ -135,10 +135,16 @@ class DatabaseManager {
 
 		function validate_shard_type(path, shard_type, key) {
 			if (!Array.isArray(shard_type)) throw new Error(`Database config property '${path}' must be of type 'Array', ${shard_type} is not of type 'Array'`);
+			if (shard_type.length === 0) throw new Error(`Database config property '${path}' must contain at least one shard node`);
+			const shard_node_ids = {};
 			Object.keys(shard_type).forEach(function (key) {
 				const shard_type_path = `${path}.${key}`;
 				const shard_node = shard_type[key];
 				validate_shard_node(shard_type_path, shard_node, key);
+				if (shard_node_ids[shard_node.id]) {
+					throw new Error(`Database config property '${shard_type_path}.id' is invalid, shard node id '${shard_node.id}' must be unique within ${path}`);
+				}
+				shard_node_ids[shard_node.id] = true;
 			});
 		}
 
@@ -172,10 +178,15 @@ class DatabaseManager {
 		}
 
 		function validate_sequence_fields(path, sequence) {
+			const shard_ids = {};
 			Object.keys(sequence).forEach(function (key) {
 				const sequence_path = `${path}.${key}`;
 				const shard = sequence[key];
 				validate_shard(sequence_path, shard, key);
+				if (shard_ids[shard.id]) {
+					throw new Error(`Database config property '${sequence_path}.id' is invalid, shard id '${shard.id}' must be unique within ${path}`);
+				}
+				shard_ids[shard.id] = true;
 				if (shard.start > shard.end) {
 					throw new Error(`Database config property '${sequence_path}' is invalid, shard.start must be less than or equal to shard.end`);
 				}
@@ -288,12 +299,14 @@ class DatabaseManager {
 	}
 	get_shard_node_connection_key(shard_node) {
 		if (shard_node.config.client === "better-sqlite3" || shard_node.config.client === "sqlite3") {
+			// we only key on the fields that identify the underlying database target; other knex config fields are intentionally ignored
 			return JSON.stringify({
 				client: shard_node.config.client,
 				transaction_isolation_level: shard_node.transaction_isolation_level,
 				filename: shard_node.config.connection.filename,
 			});
 		} else {
+			// we only key on the fields that identify the underlying database target; other knex config fields are intentionally ignored
 			return JSON.stringify({
 				client: shard_node.config.client,
 				transaction_isolation_level: shard_node.transaction_isolation_level,
@@ -301,6 +314,8 @@ class DatabaseManager {
 				port: shard_node.config.connection.port,
 				user: shard_node.config.connection.user,
 				database: shard_node.config.connection.database,
+				searchPath: shard_node.config.searchPath,
+				ssl: shard_node.config.connection.ssl,
 			});
 		}
 	}
@@ -318,6 +333,8 @@ class DatabaseManager {
 				port: shard_node.config.connection.port,
 				user: shard_node.config.connection.user,
 				database: shard_node.config.connection.database,
+				searchPath: shard_node.config.searchPath,
+				ssl: shard_node.config.connection.ssl,
 				directory: shard_node.config.migrations.directory,
 			});
 		}
@@ -336,6 +353,8 @@ class DatabaseManager {
 				port: shard_node.config.connection.port,
 				user: shard_node.config.connection.user,
 				database: shard_node.config.connection.database,
+				searchPath: shard_node.config.searchPath,
+				ssl: shard_node.config.connection.ssl,
 				directory: shard_node.config.seeds.directory,
 			});
 		}
@@ -596,7 +615,7 @@ class DatabaseManager {
 		} else if (shard_type === "write") {
 			if (parameters.where) {
 				if (parameters.attributes) {
-					// update
+					// updates are intentionally disabled for relationship rows
 					return [];
 				} else {
 					// delete
@@ -804,7 +823,7 @@ class DatabaseManager {
 		} else if (shard_type === "write") {
 			if (parameters.where) {
 				if (parameters.attributes) {
-					// update
+					// updates are intentionally disabled for whitelist and blacklist rows
 					return [];
 				} else {
 					// delete
