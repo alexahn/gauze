@@ -1110,18 +1110,6 @@ export default memo(function Table({
 														}
 														onChange={updateFields(field.name)}
 													/>
-													{/*
-														<a href={router.buildUrl(route.name, { ...route.params, order: field.name, order_direction: "asc" })}>
-															<button className="f6" disabled={route.params.order && route.params.order === field.name && route.params.order_direction === "asc"}>
-																{"<"}
-															</button>
-														</a>
-														<a href={router.buildUrl(route.name, { ...route.params, order: field.name, order_direction: "desc" })}>
-															<button className="f6" disabled={route.params.order && route.params.order === field.name && route.params.order_direction === "desc"}>
-																{">"}
-															</button>
-														</a>
-														*/}
 												</div>
 											);
 										})}

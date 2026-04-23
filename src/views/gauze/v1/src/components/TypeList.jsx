@@ -222,13 +222,37 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 														}
 														onChange={updateFields(field.name)}
 													/>
-													<a href={router.buildUrl(route.name, { ...route.params, order: field.name, order_direction: "asc" })}>
-														<button className="f6" disabled={route.params.order && route.params.order === field.name && route.params.order_direction === "asc"}>
+													<a
+														href={router.buildUrl(route.name, {
+															...route.params,
+															order: encodeURIComponent(JSON.stringify([{ column: field.name, order: "asc" }])),
+														})}
+													>
+														<button
+															className="f6"
+															disabled={
+																route.params.order &&
+																JSON.parse(decodeURIComponent(route.params.order))[0]?.column === field.name &&
+																JSON.parse(decodeURIComponent(route.params.order))[0]?.order === "asc"
+															}
+														>
 															{"<"}
 														</button>
 													</a>
-													<a href={router.buildUrl(route.name, { ...route.params, order: field.name, order_direction: "desc" })}>
-														<button className="f6" disabled={route.params.order && route.params.order === field.name && route.params.order_direction === "desc"}>
+													<a
+														href={router.buildUrl(route.name, {
+															...route.params,
+															order: encodeURIComponent(JSON.stringify([{ column: field.name, order: "desc" }])),
+														})}
+													>
+														<button
+															className="f6"
+															disabled={
+																route.params.order &&
+																JSON.parse(decodeURIComponent(route.params.order))[0]?.column === field.name &&
+																JSON.parse(decodeURIComponent(route.params.order))[0]?.order === "desc"
+															}
+														>
 															{">"}
 														</button>
 													</a>

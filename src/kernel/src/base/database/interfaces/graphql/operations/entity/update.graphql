@@ -10,9 +10,7 @@ mutation Updateba381b0cc764c4c9a187b716ae94ed96(
 	$where_between: ba381b0cc764c4c9a187b716ae94ed96_Mutation__Where_Array
 	$limit: Int
 	$offset: Int
-	$order: String
-	$order_direction: String
-	$order_nulls: String
+	$order: [Order]
 ) {
 	update_a2b8dbc3427b41a9899e11671c2422c7(
 		source: $source
@@ -27,8 +25,6 @@ mutation Updateba381b0cc764c4c9a187b716ae94ed96(
 		limit: $limit
 		offset: $offset
 		order: $order
-		order_direction: $order_direction
-		order_nulls: $order_nulls
 	) {
 		attributes {
 			id

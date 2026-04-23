@@ -8,9 +8,7 @@ mutation DeleteWhitelist(
 	$where_between: Whitelist_Mutation__Where_Array
 	$limit: Int
 	$offset: Int
-	$order: String
-	$order_direction: String
-	$order_nulls: String
+	$order: [Order]
 ) {
 	delete_whitelist(
 		where: $where
@@ -23,8 +21,6 @@ mutation DeleteWhitelist(
 		limit: $limit
 		offset: $offset
 		order: $order
-		order_direction: $order_direction
-		order_nulls: $order_nulls
 	) {
 		attributes {
 			gauze__whitelist__id

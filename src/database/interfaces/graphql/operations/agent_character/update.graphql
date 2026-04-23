@@ -10,9 +10,7 @@ mutation UpdateAgent_Character(
 	$where_between: Agent_Character_Mutation__Where_Array
 	$limit: Int
 	$offset: Int
-	$order: String
-	$order_direction: String
-	$order_nulls: String
+	$order: [Order]
 ) {
 	update_agent_character(
 		source: $source
@@ -27,8 +25,6 @@ mutation UpdateAgent_Character(
 		limit: $limit
 		offset: $offset
 		order: $order
-		order_direction: $order_direction
-		order_nulls: $order_nulls
 	) {
 		attributes {
 			gauze__agent_character__id
