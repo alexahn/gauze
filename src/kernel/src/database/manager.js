@@ -352,6 +352,15 @@ class DatabaseManager {
 			return shard_nodes[Math.floor(Math.random() * shard_nodes.length)];
 		});
 	}
+	get_preferred_read_shard_node(context, shard) {
+		const self = this;
+		const write_shard_node = self.get_one_shard_node(shard, "write");
+		if (context.transactions[write_shard_node.key]) {
+			return write_shard_node;
+		} else {
+			return self.get_one_shard_node(shard, "read");
+		}
+	}
 	// context is graphql context
 	// note: we need to choose whether to return normalized connections
 	/*
@@ -386,7 +395,7 @@ class DatabaseManager {
 					const model_shards = self.find_shards(model.table_name, primary_key_number);
 					const model_shard = model_shards[0];
 					if (model_shard) {
-						return [self.get_one_shard_node(model_shard, shard_type)];
+						return [self.get_preferred_read_shard_node(context, model_shard)];
 					} else {
 						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
 					}
@@ -419,14 +428,14 @@ class DatabaseManager {
 
 						if (flip) {
 							if (from_shard) {
-								const from_shard_node = self.get_one_shard_node(from_shard, shard_type);
+								const from_shard_node = self.get_preferred_read_shard_node(context, from_shard);
 								return [from_shard_node];
 							} else {
 								throw new Error(`Could not find shard for table: ${from_type} and primary key: ${from_id}`);
 							}
 						} else {
 							if (to_shard) {
-								const to_shard_node = self.get_one_shard_node(to_shard, shard_type);
+								const to_shard_node = self.get_preferred_read_shard_node(context, to_shard);
 								return [to_shard_node];
 							} else {
 								throw new Error(`Could not find shard for table: ${to_type} and primary key: ${to_id}`);
@@ -441,7 +450,7 @@ class DatabaseManager {
 						const from_shard = from_shards[0];
 
 						if (from_shard) {
-							const from_shard_node = self.get_one_shard_node(from_shard, shard_type);
+							const from_shard_node = self.get_preferred_read_shard_node(context, from_shard);
 							return [from_shard_node];
 						} else {
 							throw new Error(`Could not find shard for table: ${from_type} and primary key: ${from_id}`);
@@ -455,7 +464,7 @@ class DatabaseManager {
 						const to_shard = to_shards[0];
 
 						if (to_shard) {
-							const to_shard_node = self.get_one_shard_node(to_shard, shard_type);
+							const to_shard_node = self.get_preferred_read_shard_node(context, to_shard);
 							return [to_shard_node];
 						} else {
 							throw new Error(`Could not find shard for table: ${to_type} and primary key: ${to_id}`);
@@ -468,7 +477,7 @@ class DatabaseManager {
 							});
 							const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
 							const shard_nodes = shards.map(function (shard) {
-								return self.get_one_shard_node(shard, shard_type);
+								return self.get_preferred_read_shard_node(context, shard);
 							});
 							return shard_nodes;
 						} else {
@@ -485,7 +494,7 @@ class DatabaseManager {
 					});
 					const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
 					const shard_nodes = shards.map(function (shard) {
-						return self.get_one_shard_node(shard, shard_type);
+						return self.get_preferred_read_shard_node(context, shard);
 					});
 					return shard_nodes;
 				} else {
@@ -642,7 +651,7 @@ class DatabaseManager {
 					const model_shards = self.find_shards(entity_table_name, entity_primary_key_number);
 					const model_shard = model_shards[0];
 					if (model_shard) {
-						return [self.get_one_shard_node(model_shard, shard_type)];
+						return [self.get_preferred_read_shard_node(context, model_shard)];
 					} else {
 						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
 					}
@@ -652,7 +661,7 @@ class DatabaseManager {
 					const model_shards = self.find_shards(agent_table_name, agent_primary_key_number);
 					const model_shard = model_shards[0];
 					if (model_shard) {
-						return [self.get_one_shard_node(model_shard, shard_type)];
+						return [self.get_preferred_read_shard_node(context, model_shard)];
 					} else {
 						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
 					}
@@ -661,7 +670,7 @@ class DatabaseManager {
 					const model_shards = self.find_shards(model.table_name, primary_key_number);
 					const model_shard = model_shards[0];
 					if (model_shard) {
-						return [self.get_one_shard_node(model_shard, shard_type)];
+						return [self.get_preferred_read_shard_node(context, model_shard)];
 					} else {
 						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
 					}
@@ -673,7 +682,7 @@ class DatabaseManager {
 						});
 						const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
 						const shard_nodes = shards.map(function (shard) {
-							return self.get_one_shard_node(shard, shard_type);
+							return self.get_preferred_read_shard_node(context, shard);
 						});
 						return shard_nodes;
 					} else {
@@ -690,7 +699,7 @@ class DatabaseManager {
 					});
 					const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
 					const shard_nodes = shards.map(function (shard) {
-						return self.get_one_shard_node(shard, shard_type);
+						return self.get_preferred_read_shard_node(context, shard);
 					});
 					return shard_nodes;
 				} else {
