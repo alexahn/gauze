@@ -302,7 +302,7 @@ class RelationshipSystemModel extends SystemModel {
 						const module = $abstract.entities[module_name].default($abstract);
 						modules[row.gauze__relationship__to_type] = module;
 					}
-					if (modules[row.gauze__relationship_from_type]) {
+					if (modules[row.gauze__relationship__from_type]) {
 						// skip
 					} else {
 						const module_name = $structure.gauze.resolvers.SQL_TABLE_TO_MODULE_NAME__RESOLVER__STRUCTURE[row.gauze__relationship__from_type];

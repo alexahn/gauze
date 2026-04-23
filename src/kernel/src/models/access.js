@@ -339,7 +339,7 @@ class AccessSystemModel extends SystemModel {
 		const key = self._model_batch_key(parameters, realm, "create");
 		return self.model_loader.load(context, scope, key);
 	}
-	_read_agent(context, input, realm) {
+	_read_agent(context, scope, input, realm) {
 		const self = this;
 		const agent_id = input.where[self.key_agent_id];
 		const agent_table_name = input.where[self.key_agent_type];
@@ -622,7 +622,7 @@ class AccessSystemModel extends SystemModel {
 		const key = self._model_batch_key(parameters, realm, "delete");
 		return self.model_loader.load(context, scope, key);
 	}
-	_count_agent(context, input, realm) {
+	_count_agent(context, scope, input, realm) {
 		const self = this;
 		const agent_id = input.where[self.key_agent_id];
 		const agent_table_name = input.where[self.key_agent_type];
@@ -800,9 +800,9 @@ class AccessSystemModel extends SystemModel {
 				}
 			});
 		} else if (input.where && input.where[self.key_agent_id]) {
-			return self._count_agent_transaction(context, input, realm);
+			return self._count_agent_transaction(context, input, realm, database, transaction);
 		} else if (input.where && input.where[self.key_entity_id] && input.where[self.key_entity_type] && input.where[self.key_method]) {
-			return self._count_entity_transaction(context, input, realm);
+			return self._count_entity_transaction(context, input, realm, database, transaction);
 		} else {
 			// todo: move this to system interface
 			throw new Error(

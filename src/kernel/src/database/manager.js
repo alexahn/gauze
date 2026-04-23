@@ -18,6 +18,9 @@ class DatabaseManager {
 		self.blacklist_table = $abstract.entities.blacklist ? $abstract.entities.blacklist.default($abstract).table_name : "undefined";
 	}
 	validate_config(config) {
+		function is_non_null_object(value) {
+			return value !== null && typeof value === "object";
+		}
 		const valid_environment_keys = {};
 		Object.keys($abstract.entities).forEach(function (key) {
 			const entity = $abstract.entities[key].default($abstract);
@@ -60,7 +63,7 @@ class DatabaseManager {
 		};
 
 		function validate_knex_seeds(path, seeds, key) {
-			if (typeof seeds !== "object") throw new Error(`Database config property '${path}' must be of type 'object', ${seeds} is not of type 'object'`);
+			if (!is_non_null_object(seeds)) throw new Error(`Database config property '${path}' must be of type 'object', ${seeds} is not of type 'object'`);
 			Object.keys(valid_knex_seed_config_keys).forEach(function (key) {
 				const seed_path = `${path}.${key}`;
 				if (seeds[key] === undefined) throw new Error(`Database config property '${seed_path}' must be defined`);
@@ -68,7 +71,7 @@ class DatabaseManager {
 		}
 
 		function validate_knex_migrations(path, migrations, key) {
-			if (typeof migrations !== "object") throw new Error(`Database config property '${path}' must be of type 'object', ${migrations} is not of type 'object'`);
+			if (!is_non_null_object(migrations)) throw new Error(`Database config property '${path}' must be of type 'object', ${migrations} is not of type 'object'`);
 			Object.keys(valid_knex_migration_config_keys).forEach(function (key) {
 				const migration_path = `${path}.${key}`;
 				if (migrations[key] === undefined) throw new Error(`Database config property '${migration_path}' must be defined`);
@@ -76,7 +79,7 @@ class DatabaseManager {
 		}
 
 		function validate_knex_config(path, knex_config, key) {
-			if (typeof knex_config !== "object") throw new Error(`Database config property '${path}' must be of type 'object', ${knex_config} is not of type 'object'`);
+			if (!is_non_null_object(knex_config)) throw new Error(`Database config property '${path}' must be of type 'object', ${knex_config} is not of type 'object'`);
 			Object.keys(valid_knex_config_keys).forEach(function (key) {
 				const knex_config_path = `${path}.${key}`;
 				if (knex_config[key] === undefined) throw new Error(`Database config property '${knex_config_path}' must be defined`);
@@ -88,7 +91,7 @@ class DatabaseManager {
 					if (typeof client !== "string") throw new Error(`Database config property '${knex_config_path}' must be of type 'string', ${client} is not of type 'string'`);
 				} else if (key === "connection") {
 					const connection = knex_config[key];
-					if (typeof connection !== "object") throw new Error(`Database config property '${knex_config_path}' must be of type 'object', ${connection} is not of type 'object'`);
+					if (!is_non_null_object(connection)) throw new Error(`Database config property '${knex_config_path}' must be of type 'object', ${connection} is not of type 'object'`);
 				} else if (key === "migrations") {
 					const migrations = knex_config[key];
 					validate_knex_migrations(knex_config_path, migrations, key);
@@ -102,7 +105,7 @@ class DatabaseManager {
 		}
 
 		function validate_shard_node(path, shard_node, key) {
-			if (typeof shard_node !== "object") throw new Error(`Database config property '${path}' must be of type 'object', ${shard_node} is not of type 'object'`);
+			if (!is_non_null_object(shard_node)) throw new Error(`Database config property '${path}' must be of type 'object', ${shard_node} is not of type 'object'`);
 			Object.keys(valid_shard_node_keys).forEach(function (key) {
 				const shard_node_path = `${path}.${key}`;
 				if (shard_node[key] === undefined) throw new Error(`Database config property '${shard_node_path}' must be defined`);
@@ -135,7 +138,7 @@ class DatabaseManager {
 		}
 
 		function validate_shard(path, shard, key) {
-			if (typeof shard !== "object") throw new Error(`Database config property '${path}' must be of type 'object', ${shard} is not of type 'object'`);
+			if (!is_non_null_object(shard)) throw new Error(`Database config property '${path}' must be of type 'object', ${shard} is not of type 'object'`);
 			Object.keys(valid_shard_keys).forEach(function (key) {
 				const shard_path = `${path}.${key}`;
 				if (shard[key] === undefined) throw new Error(`Database config property '${shard_path}' must be defined`);
@@ -173,7 +176,7 @@ class DatabaseManager {
 		}
 
 		function validate_table(path, table, key) {
-			if (typeof table !== "object") throw new Error(`Database config property '${path}' must be of type 'object', ${table} is not of type 'object'`);
+			if (!is_non_null_object(table)) throw new Error(`Database config property '${path}' must be of type 'object', ${table} is not of type 'object'`);
 			Object.keys(valid_table_keys).forEach(function (key) {
 				const table_path = `${path}.${key}`;
 				if (table[key] === undefined) throw new Error(`Database config property '${table_path}' must be defined`);
@@ -186,7 +189,7 @@ class DatabaseManager {
 		}
 
 		function validate_environment(path, environment, key) {
-			if (typeof environment !== "object") throw new Error(`Database config property '${path}' must be of type 'object', ${environment} is not of type 'object'`);
+			if (!is_non_null_object(environment)) throw new Error(`Database config property '${path}' must be of type 'object', ${environment} is not of type 'object'`);
 			Object.keys(valid_environment_keys).forEach(function (key) {
 				const environment_path = `${path}.${key}`;
 				if (environment[key] === undefined) throw new Error(`Database config property '${environment_path}' must be defined`);
@@ -279,12 +282,20 @@ class DatabaseManager {
 		const self = this;
 		return self.connections[shard_node_key];
 	}
+	get_shard_node_key(shard_node) {
+		const self = this;
+		return self.get_shard_node_connection_key(shard_node);
+	}
+	get_shard_node_knex(shard_node) {
+		const self = this;
+		return self.get_connection(self.get_shard_node_key(shard_node));
+	}
 	// create knex connections for every shard, every shard node will have a knex attribute with the instantiated knex object
 	create_connections(config) {
 		if (process.env.GAUZE_ENV === undefined) {
 			// note: we are assuming the CLI is being used for the first time
 			// note: maybe we should create these connections when we run applications instead of in the constructor?
-			return;
+			return {};
 		} else {
 			if (!config[process.env.GAUZE_ENV]) throw new Error(`Database config is not defined for environment ${process.env.GAUZE_ENV}`);
 		}
@@ -299,12 +310,8 @@ class DatabaseManager {
 				const write_nodes = shard.write;
 				function create_connections(node) {
 					const node_key = self.get_shard_node_connection_key(node);
-					node.key = node_key;
-					if (self.connections[node_key]) {
-						node.knex = self.connections[node_key];
-					} else {
+					if (!self.connections[node_key]) {
 						self.connections[node_key] = knex(node.config);
-						node.knex = self.connections[node_key];
 					}
 				}
 				read_nodes.forEach(create_connections);
@@ -317,9 +324,18 @@ class DatabaseManager {
 		const self = this;
 		return self.databases;
 	}
+	get_table_database(table_name) {
+		const self = this;
+		const table_database = self.databases[table_name];
+		if (!table_database) {
+			throw new Error(`Database routing/sharding configuration is not defined for table: ${table_name}`);
+		}
+		return table_database;
+	}
 	find_shards(table_name, primary_key_number) {
 		const self = this;
-		return self.databases[table_name].current.filter(function (shard) {
+		const table_database = self.get_table_database(table_name);
+		return table_database.current.filter(function (shard) {
 			return shard.start <= primary_key_number && primary_key_number <= shard.end;
 		});
 	}
@@ -352,9 +368,16 @@ class DatabaseManager {
 			return shard_nodes[Math.floor(Math.random() * shard_nodes.length)];
 		});
 	}
+	get_all_preferred_read_shard_nodes(context, table_name) {
+		const self = this;
+		return self.get_table_database(table_name).current.map(function (shard) {
+			return self.get_preferred_read_shard_node(context, shard);
+		});
+	}
 	get_open_write_shard_node(context, shard) {
+		const self = this;
 		return shard.write.find(function (write_shard_node) {
-			return context.transactions[write_shard_node.key];
+			return context.transactions[self.get_shard_node_key(write_shard_node)];
 		});
 	}
 	get_preferred_read_shard_node(context, shard) {
@@ -486,10 +509,10 @@ class DatabaseManager {
 							});
 							return shard_nodes;
 						} else {
-							return self.get_all_shards_nodes(model.table_name, shard_type);
+							return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 						}
 					} else {
-						return self.get_all_shards_nodes(model.table_name, shard_type);
+						return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 					}
 				}
 			} else if (parameters.where_in) {
@@ -503,10 +526,10 @@ class DatabaseManager {
 					});
 					return shard_nodes;
 				} else {
-					return self.get_all_shards_nodes(model.table_name, shard_type);
+					return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 				}
 			} else {
-				return self.get_all_shards_nodes(model.table_name, shard_type);
+				return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 			}
 		} else if (shard_type === "write") {
 			if (parameters.where) {
@@ -691,11 +714,11 @@ class DatabaseManager {
 						});
 						return shard_nodes;
 					} else {
-						return self.get_all_shards_nodes(model.table_name, shard_type);
+						return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 					}
 				} else {
 					// return all sets
-					return self.get_all_shards_nodes(model.table_name, shard_type);
+					return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 				}
 			} else if (parameters.where_in) {
 				if (parameters.where_in[model.primary_key]) {
@@ -708,11 +731,11 @@ class DatabaseManager {
 					});
 					return shard_nodes;
 				} else {
-					return self.get_all_shards_nodes(model.table_name, shard_type);
+					return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 				}
 			} else {
 				// return all sets
-				return self.get_all_shards_nodes(model.table_name, shard_type);
+				return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 			}
 		} else if (shard_type === "write") {
 			if (parameters.where) {
@@ -873,10 +896,10 @@ class DatabaseManager {
 							});
 							return shard_nodes;
 						} else {
-							return self.get_all_shards_nodes(model.table_name, shard_type);
+							return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 						}
 					} else {
-						return self.get_all_shards_nodes(model.table_name, shard_type);
+						return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 					}
 				} else if (parameters.where_in) {
 					if (parameters.where_in[model.primary_key]) {
@@ -894,16 +917,16 @@ class DatabaseManager {
 						});
 						return shard_nodes;
 					} else {
-						return self.get_all_shards_nodes(model.table_name, shard_type);
+						return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 					}
 				} else if (parameters.where_not_in) {
-					return self.get_all_shards_nodes(model.table_name, shard_type);
+					return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 				} else if (parameters.where_between) {
-					return self.get_all_shards_nodes(model.table_name, shard_type);
+					return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 				} else if (parameters.where_like) {
-					return self.get_all_shards_nodes(model.table_name, shard_type);
+					return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 				} else {
-					return self.get_all_shards_nodes(model.table_name, shard_type);
+					return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 				}
 			} else if (shard_type === "write") {
 				if (parameters.where) {
@@ -1128,12 +1151,10 @@ class DatabaseManager {
 	}
 	route_connections(context, scope, parameters, model, shard_type, relationships) {
 		const self = this;
-		if (!self.databases[model.table_name]) {
-			throw new Error(`Database routing/sharding configuration is not defined for table: ${model.table_name}`);
-		}
-		if (self.databases[model.table_name].connection_router) {
+		const table_database = self.get_table_database(model.table_name);
+		if (table_database.connection_router) {
 			// note: allows for custom connection routing (for instances where someone wants to set up their own sharding scheme)
-			return self.databases[model.table_name].connection_router(context, scope, parameters, model, shard_type, relationships, self);
+			return table_database.connection_router(context, scope, parameters, model, shard_type, relationships, self);
 		} else if (model.table_name === self.relationship_table) {
 			return self.route_relationship_connections(context, scope, parameters, model, shard_type, relationships);
 		} else if (model.table_name === self.whitelist_table) {
@@ -1153,7 +1174,7 @@ class DatabaseManager {
 		const unique_connections = [
 			...new Map(
 				connections.map(function (connection) {
-					return [connection.key, connection];
+					return [self.get_shard_node_key(connection), connection];
 				}),
 			).values(),
 		];
@@ -1163,10 +1184,11 @@ class DatabaseManager {
 		return Promise.all(
 			unique_connections.map(function (connection) {
 				// key is shard node key
-				if (context.transactions[connection.key]) {
-					return context.transactions[connection.key].then(function (transaction) {
+				const connection_key = self.get_shard_node_key(connection);
+				if (context.transactions[connection_key]) {
+					return context.transactions[connection_key].then(function (transaction) {
 						return {
-							connection: self.get_connection(connection.key),
+							connection: self.get_connection(connection_key),
 							transaction: transaction,
 						};
 					});
@@ -1179,7 +1201,8 @@ class DatabaseManager {
 								: {
 										isolationLevel: connection.transaction_isolation_level,
 									};
-						return connection.knex
+						return self
+							.get_shard_node_knex(connection)
 							.transaction(transaction_config)
 							.then(function (trx) {
 								return resolve(trx);
@@ -1188,13 +1211,18 @@ class DatabaseManager {
 								return reject(err);
 							});
 					});
-					context.transactions[connection.key] = transaction_promise;
-					return transaction_promise.then(function (transaction) {
-						return {
-							connection: self.get_connection(connection.key),
-							transaction,
-						};
-					});
+					context.transactions[connection_key] = transaction_promise;
+					return transaction_promise
+						.then(function (transaction) {
+							return {
+								connection: self.get_connection(connection_key),
+								transaction,
+							};
+						})
+						.catch(function (err) {
+							delete context.transactions[connection_key];
+							throw err;
+						});
 				}
 			}),
 		);
@@ -1211,7 +1239,11 @@ class DatabaseManager {
 	}
 	commit_context_transactions(context) {
 		const self = this;
-		return self.commit_transactions(context.transactions);
+		return self.commit_transactions(context.transactions).finally(function () {
+			Object.keys(context.transactions).forEach(function (key) {
+				delete context.transactions[key];
+			});
+		});
 	}
 	rollback_transactions(transactions) {
 		return Promise.all(Object.values(transactions)).then(function (transactions) {
@@ -1225,7 +1257,11 @@ class DatabaseManager {
 	// context is graphql context
 	rollback_context_transactions(context) {
 		const self = this;
-		return self.rollback_transactions(context.transactions);
+		return self.rollback_transactions(context.transactions).finally(function () {
+			Object.keys(context.transactions).forEach(function (key) {
+				delete context.transactions[key];
+			});
+		});
 	}
 	destroy_connections() {
 		const self = this;
@@ -1326,21 +1362,21 @@ class DatabaseManager {
 		const self = this;
 		const migration_nodes = self.get_migration_nodes();
 		return self.run_with_nodes(migration_nodes, function (table_name, shard, shard_node) {
-			return shard_node.knex.migrate.make(name, shard_node.config.migrations);
+			return self.get_shard_node_knex(shard_node).migrate.make(name, shard_node.config.migrations);
 		});
 	}
 	migrate_latest() {
 		const self = this;
 		const migration_nodes = self.get_migration_nodes();
 		return self.run_with_nodes(migration_nodes, function (table_name, shard, shard_node) {
-			return shard_node.knex.migrate.latest(shard_node.config.migrations);
+			return self.get_shard_node_knex(shard_node).migrate.latest(shard_node.config.migrations);
 		});
 	}
 	migrate_rollback() {
 		const self = this;
 		const migration_nodes = self.get_migration_nodes();
 		return self.run_with_nodes(migration_nodes, function (table_name, shard, shard_node) {
-			return shard_node.knex.migrate.rollback(shard_node.config.migrations);
+			return self.get_shard_node_knex(shard_node).migrate.rollback(shard_node.config.migrations);
 		});
 	}
 	migrate_up(name) {
@@ -1349,7 +1385,7 @@ class DatabaseManager {
 		return self.run_with_nodes(migration_nodes, function (table_name, shard, shard_node) {
 			const config = JSON.parse(JSON.stringify(shard_node.config.migrations));
 			config.name = name;
-			return shard_node.knex.migrate.up(config);
+			return self.get_shard_node_knex(shard_node).migrate.up(config);
 		});
 	}
 	migrate_down(name) {
@@ -1358,7 +1394,7 @@ class DatabaseManager {
 		return self.run_with_nodes(migration_nodes, function (table_name, shard, shard_node) {
 			const config = JSON.parse(JSON.stringify(shard_node.config.migrations));
 			config.name = name;
-			return shard_node.knex.migrate.down(config);
+			return self.get_shard_node_knex(shard_node).migrate.down(config);
 		});
 	}
 	migrate_current_version() {
@@ -1366,14 +1402,17 @@ class DatabaseManager {
 		const write_shards = self.get_write_shard_nodes();
 		return Promise.all(
 			write_shards.map(function (write_shard) {
-				return write_shard.shard_node.knex.migrate.currentVersion(write_shard.shard_node.config.migrations).then(function (version) {
-					return {
-						table_name: write_shard.table_name,
-						shard_id: write_shard.shard.id,
-						shard_node_id: write_shard.shard_node.id,
-						version: version,
-					};
-				});
+				return self
+					.get_shard_node_knex(write_shard.shard_node)
+					.migrate.currentVersion(write_shard.shard_node.config.migrations)
+					.then(function (version) {
+						return {
+							table_name: write_shard.table_name,
+							shard_id: write_shard.shard.id,
+							shard_node_id: write_shard.shard_node.id,
+							version: version,
+						};
+					});
 			}),
 		);
 	}
@@ -1382,15 +1421,18 @@ class DatabaseManager {
 		const write_shards = self.get_write_shard_nodes();
 		return Promise.all(
 			write_shards.map(function (write_shard) {
-				return write_shard.shard_node.knex.migrate.list(write_shard.shard_node.config.migrations).then(function (list) {
-					return {
-						table_name: write_shard.table_name,
-						shard_id: write_shard.shard.id,
-						shard_node_id: write_shard.shard_node.id,
-						completed_migrations: list[0],
-						pending_migrations: list[1],
-					};
-				});
+				return self
+					.get_shard_node_knex(write_shard.shard_node)
+					.migrate.list(write_shard.shard_node.config.migrations)
+					.then(function (list) {
+						return {
+							table_name: write_shard.table_name,
+							shard_id: write_shard.shard.id,
+							shard_node_id: write_shard.shard_node.id,
+							completed_migrations: list[0],
+							pending_migrations: list[1],
+						};
+					});
 			}),
 		);
 	}
@@ -1398,21 +1440,21 @@ class DatabaseManager {
 		const self = this;
 		const migration_nodes = self.get_migration_nodes();
 		return self.run_with_nodes(migration_nodes, function (table_name, shard, shard_node) {
-			return shard_node.knex.migrate.unlock(shard_node.config.migrations);
+			return self.get_shard_node_knex(shard_node).migrate.unlock(shard_node.config.migrations);
 		});
 	}
 	seed_make(name) {
 		const self = this;
 		const seed_nodes = self.get_seed_nodes();
 		return self.run_with_nodes(seed_nodes, function (table_name, shard, shard_node) {
-			return shard_node.knex.seed.make(name, shard_node.config.seeds);
+			return self.get_shard_node_knex(shard_node).seed.make(name, shard_node.config.seeds);
 		});
 	}
 	seed_run(mode) {
 		const self = this;
 		const seed_nodes = self.get_seed_nodes();
 		return self.run_with_nodes(seed_nodes, function (table_name, shard, shard_node) {
-			return shard_node.knex.seed.run(shard_node.config.seeds);
+			return self.get_shard_node_knex(shard_node).seed.run(shard_node.config.seeds);
 		});
 	}
 	shard_plan(depth, order) {
