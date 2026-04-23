@@ -8,13 +8,13 @@ const context = {
 const operation_name = "ReadDeletedShardedYtitne";
 const operation_source = `
 query ${operation_name}($where_in: Ytitne_Query__Where_Array, $where_like: Ytitne_Query__Where) {
-	fanout: read_ytitne(where_in: $where_in, order: "id", order_direction: "asc") {
+	fanout: read_ytitne(where_in: $where_in, order: [{column: "id", order: "asc"}]) {
 		attributes {
 			id
 			text
 		}
 	}
-	scan: read_ytitne(where_like: $where_like, order: "id", order_direction: "asc") {
+	scan: read_ytitne(where_like: $where_like, order: [{column: "id", order: "asc"}]) {
 		attributes {
 			id
 			text

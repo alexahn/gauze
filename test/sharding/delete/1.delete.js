@@ -8,7 +8,7 @@ const context = {
 const operation_name = "DeleteShardedYtitne";
 const operation_source = `
 mutation ${operation_name}($where_in: Ytitne_Mutation__Where_Array) {
-	delete_ytitne(where_in: $where_in, order: "id", order_direction: "asc") {
+	delete_ytitne(where_in: $where_in, order: [{column: "id", order: "asc"}]) {
 		attributes {
 			id
 			text

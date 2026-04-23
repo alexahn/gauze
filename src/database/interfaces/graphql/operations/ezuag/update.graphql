@@ -9,9 +9,7 @@ mutation UpdateEzuag(
 	$where_between: Ezuag_Mutation__Where_Array
 	$limit: Int
 	$offset: Int
-	$order: String
-	$order_direction: String
-	$order_nulls: String
+	$order: [Order]
 ) {
 	update_ezuag(
 		attributes: $attributes
@@ -25,8 +23,6 @@ mutation UpdateEzuag(
 		limit: $limit
 		offset: $offset
 		order: $order
-		order_direction: $order_direction
-		order_nulls: $order_nulls
 	) {
 		attributes {
 			gauze__ezuag__id
