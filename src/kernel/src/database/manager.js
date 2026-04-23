@@ -352,10 +352,15 @@ class DatabaseManager {
 			return shard_nodes[Math.floor(Math.random() * shard_nodes.length)];
 		});
 	}
+	get_open_write_shard_node(context, shard) {
+		return shard.write.find(function (write_shard_node) {
+			return context.transactions[write_shard_node.key];
+		});
+	}
 	get_preferred_read_shard_node(context, shard) {
 		const self = this;
-		const write_shard_node = self.get_one_shard_node(shard, "write");
-		if (context.transactions[write_shard_node.key]) {
+		const write_shard_node = self.get_open_write_shard_node(context, shard);
+		if (write_shard_node) {
 			return write_shard_node;
 		} else {
 			return self.get_one_shard_node(shard, "read");
@@ -842,8 +847,8 @@ class DatabaseManager {
 						const model_shard = model_shards[0];
 						if (model_shard) {
 							// if a write connection is already open, then use it
-							const write_shard_node = self.get_one_shard_node(model_shard, "write");
-							if (context.transactions[write_shard_node.key]) {
+							const write_shard_node = self.get_open_write_shard_node(context, model_shard);
+							if (write_shard_node) {
 								return [write_shard_node];
 							} else {
 								return [self.get_one_shard_node(model_shard, shard_type)];
@@ -859,8 +864,8 @@ class DatabaseManager {
 							});
 							const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
 							const shard_nodes = shards.map(function (shard) {
-								const write_shard_node = self.get_one_shard_node(shard, "write");
-								if (context.transactions[write_shard_node.key]) {
+								const write_shard_node = self.get_open_write_shard_node(context, shard);
+								if (write_shard_node) {
 									return write_shard_node;
 								} else {
 									return self.get_one_shard_node(shard, shard_type);
@@ -880,8 +885,8 @@ class DatabaseManager {
 						});
 						const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
 						const shard_nodes = shards.map(function (shard) {
-							const write_shard_node = self.get_one_shard_node(shard, "write");
-							if (context.transactions[write_shard_node.key]) {
+							const write_shard_node = self.get_open_write_shard_node(context, shard);
+							if (write_shard_node) {
 								return write_shard_node;
 							} else {
 								return self.get_one_shard_node(shard, shard_type);
@@ -1003,7 +1008,7 @@ class DatabaseManager {
 				}),
 			);
 			const relationship_shard_nodes = relationship_shards.map(function (shard) {
-				return self.get_one_shard_node(shard, shard_type);
+				return shard_type === "read" ? self.get_preferred_read_shard_node(context, shard) : self.get_one_shard_node(shard, shard_type);
 			});
 			if (shard_type === "read") {
 				// read
@@ -1013,7 +1018,7 @@ class DatabaseManager {
 						const model_shards = self.find_shards(model.table_name, primary_key_number);
 						const model_shard = model_shards[0];
 						if (model_shard) {
-							return [self.get_one_shard_node(model_shard, shard_type)];
+							return [self.get_preferred_read_shard_node(context, model_shard)];
 						} else {
 							throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
 						}
@@ -1027,7 +1032,7 @@ class DatabaseManager {
 								return relationship_shards_index.has(shard.id);
 							});
 							const shard_nodes = shards.map(function (shard) {
-								return self.get_one_shard_node(shard, shard_type);
+								return self.get_preferred_read_shard_node(context, shard);
 							});
 							return shard_nodes;
 						} else {
@@ -1045,7 +1050,7 @@ class DatabaseManager {
 							return relationship_shards_index.has(shard.id);
 						});
 						const shard_nodes = shards.map(function (shard) {
-							return self.get_one_shard_node(shard, shard_type);
+							return self.get_preferred_read_shard_node(context, shard);
 						});
 						return shard_nodes;
 					} else {
@@ -1058,7 +1063,7 @@ class DatabaseManager {
 				} else if (parameters.where_like) {
 					return relationship_shard_nodes;
 				} else {
-					return [];
+					return relationship_shard_nodes;
 				}
 			} else if (shard_type === "write") {
 				if (parameters.where) {
@@ -1224,10 +1229,12 @@ class DatabaseManager {
 	}
 	destroy_connections() {
 		const self = this;
-		return Object.entries(self.connections).map(function ([key, connection]) {
-			delete self.connections[key];
-			return connection.destroy();
-		});
+		return Promise.all(
+			Object.entries(self.connections).map(function ([key, connection]) {
+				delete self.connections[key];
+				return connection.destroy();
+			}),
+		);
 	}
 	get_write_shard_nodes() {
 		const self = this;
