@@ -242,7 +242,7 @@ class DatabaseManager {
 		return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 	}
 	get_shard_node_connection_key(shard_node) {
-		if (shard_node.config.client === "better-sqlite3") {
+		if (shard_node.config.client === "better-sqlite3" || shard_node.config.client === "sqlite3") {
 			return JSON.stringify({
 				client: shard_node.config.client,
 				transaction_isolation_level: shard_node.transaction_isolation_level,
@@ -261,13 +261,15 @@ class DatabaseManager {
 	}
 	get_shard_node_migration_key(shard_node) {
 		const self = this;
-		if (shard_node.config.client === "better-sqlite3") {
+		if (shard_node.config.client === "better-sqlite3" || shard_node.config.client === "sqlite3") {
 			return JSON.stringify({
+				client: shard_node.config.client,
 				filename: shard_node.config.connection.filename,
 				directory: shard_node.config.migrations.directory,
 			});
 		} else {
 			return JSON.stringify({
+				client: shard_node.config.client,
 				host: shard_node.config.connection.host,
 				port: shard_node.config.connection.port,
 				user: shard_node.config.connection.user,
@@ -279,13 +281,15 @@ class DatabaseManager {
 	get_shard_node_seed_key(shard_node) {
 		const self = this;
 		const connection_key = self.get_shard_node_connection_key(shard_node);
-		if (shard_node.config.client === "better-sqlite3") {
+		if (shard_node.config.client === "better-sqlite3" || shard_node.config.client === "sqlite3") {
 			return JSON.stringify({
+				client: shard_node.config.client,
 				filename: shard_node.config.connection.filename,
 				directory: shard_node.config.seeds.directory,
 			});
 		} else {
 			return JSON.stringify({
+				client: shard_node.config.client,
 				host: shard_node.config.connection.host,
 				port: shard_node.config.connection.port,
 				user: shard_node.config.connection.user,
@@ -689,8 +693,9 @@ class DatabaseManager {
 		}
 		if (shard_type === "read") {
 			if (parameters.where) {
-				if (parameters.where[entity_id_attribute] && parameters.where[entity_type_attribute]) {
-					const entity_primary_key_number = self.uuid_to_big_int(parameters.where[entity_id_attribute]);
+				if (entity_id_attribute in parameters.where && entity_type_attribute in parameters.where) {
+					const entity_id = parameters.where[entity_id_attribute];
+					const entity_primary_key_number = entity_id === null ? 0n : self.uuid_to_big_int(entity_id);
 					const entity_table_name = parameters.where[entity_type_attribute];
 					const model_shards = self.find_shards(entity_table_name, entity_primary_key_number);
 					const model_shard = model_shards[0];
@@ -699,7 +704,7 @@ class DatabaseManager {
 					} else {
 						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
 					}
-				} else if (parameters.where[agent_id_attribute] && parameters.where[agent_type_attribute]) {
+				} else if (agent_id_attribute in parameters.where && agent_type_attribute in parameters.where) {
 					const agent_primary_key_number = self.uuid_to_big_int(parameters.where[agent_id_attribute]);
 					const agent_table_name = parameters.where[agent_type_attribute];
 					const model_shards = self.find_shards(agent_table_name, agent_primary_key_number);
