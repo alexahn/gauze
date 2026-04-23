@@ -148,7 +148,7 @@ class DatabaseManager {
 				const shard_path = `${path}.${key}`;
 				if (shard[key] === undefined) throw new Error(`Database config property '${shard_path}' must be defined`);
 			});
-			Object.keys(valid_shard_keys).forEach(function (key) {
+			Object.keys(shard).forEach(function (key) {
 				const shard_path = `${path}.${key}`;
 				if (key === "id") {
 					const id = shard[key];
@@ -172,12 +172,49 @@ class DatabaseManager {
 		}
 
 		function validate_sequence(path, sequence, key) {
+			const minimum_primary_key = 0n;
+			const maximum_primary_key = 340282366920938463463374607431768211455n;
 			if (!Array.isArray(sequence)) throw new Error(`Database config property '${path}' must be of type 'Array', ${sequence} is not of type 'Array'`);
 			Object.keys(sequence).forEach(function (key) {
 				const sequence_path = `${path}.${key}`;
 				const shard = sequence[key];
 				validate_shard(sequence_path, shard, key);
+				if (shard.start > shard.end) {
+					throw new Error(`Database config property '${sequence_path}' is invalid, shard.start must be less than or equal to shard.end`);
+				}
 			});
+			const sorted_sequence = sequence
+				.map(function (shard, idx) {
+					return { shard, idx };
+				})
+				.sort(function (left, right) {
+					if (left.shard.start < right.shard.start) return -1;
+					if (left.shard.start > right.shard.start) return 1;
+					return 0;
+				});
+			if (sorted_sequence.length === 0) {
+				if (key === "current") {
+					throw new Error(`Database config property '${path}' must contain at least one shard`);
+				}
+				return;
+			}
+			let previous_end = null;
+			sorted_sequence.forEach(function ({ shard, idx }) {
+				if (previous_end === null) {
+					if (shard.start !== minimum_primary_key) {
+						throw new Error(`Database config property '${path}.${idx}.start' must be ${minimum_primary_key}n`);
+					}
+				} else if (shard.start !== previous_end + 1n) {
+					throw new Error(`Database config property '${path}.${idx}.start' must immediately follow the previous shard end`);
+				}
+				if (previous_end !== null && shard.start <= previous_end) {
+					throw new Error(`Database config property '${path}.${idx}.start' overlaps with another shard range`);
+				}
+				previous_end = shard.end;
+			});
+			if (previous_end !== null && previous_end !== maximum_primary_key) {
+				throw new Error(`Database config property '${path}' must end at ${maximum_primary_key}n`);
+			}
 		}
 
 		function validate_table(path, table, key) {
@@ -342,7 +379,7 @@ class DatabaseManager {
 	}
 	get_connections() {
 		const self = this;
-		return self.databases;
+		return self.connections;
 	}
 	get_table_database(table_name) {
 		const self = this;
@@ -1471,7 +1508,7 @@ class DatabaseManager {
 			return self.get_shard_node_knex(shard_node).seed.make(name, shard_node.config.seeds);
 		});
 	}
-	seed_run(mode) {
+	seed_run() {
 		const self = this;
 		const seed_nodes = self.get_seed_nodes();
 		return self.run_with_nodes(seed_nodes, function (table_name, shard, shard_node) {
