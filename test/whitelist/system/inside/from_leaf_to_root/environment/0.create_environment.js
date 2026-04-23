@@ -8,9 +8,15 @@ const context = {
 const operation_name = "CreateWhitelistEnvironment";
 const operation_source = `
 mutation ${operation_name}(
-	$whitelist: Whitelist_Mutation__Attributes
+	$whitelist: Whitelist_Mutation__Attributes,
+	$whitelist_count: Whitelist_Mutation__Attributes
 ) {
 	create_whitelist(attributes: $whitelist) {
+		_metadata {
+			id
+		}
+	}
+	count_whitelist: create_whitelist(attributes: $whitelist_count) {
 		_metadata {
 			id
 		}
@@ -28,6 +34,16 @@ const operation_variables = {
 		gauze__whitelist__entity_id: "7f84c508-b714-41c1-b986-2d6ed64fc5e9",
 		gauze__whitelist__method: "read",
 	},
+	whitelist_count: {
+		gauze__whitelist__id: "4ab515f4-5391-4af9-a2c9-a7119ad262ce",
+		gauze__whitelist__realm: "system",
+		gauze__whitelist__agent_type: "gauze__agent_user",
+		gauze__whitelist__agent_role: "leaf",
+		gauze__whitelist__agent_id: "00000000-0000-0000-0000-000000000001",
+		gauze__whitelist__entity_type: "gauze__ytitne",
+		gauze__whitelist__entity_id: "7f84c508-b714-41c1-b986-2d6ed64fc5e9",
+		gauze__whitelist__method: "count",
+	},
 };
 const expected = `{
     "data": {
@@ -35,6 +51,13 @@ const expected = `{
             {
                 "_metadata": {
                     "id": "3ab515f4-5391-4af9-a2c9-a7119ad262ce"
+                }
+            }
+        ],
+        "count_whitelist": [
+            {
+                "_metadata": {
+                    "id": "4ab515f4-5391-4af9-a2c9-a7119ad262ce"
                 }
             }
         ]

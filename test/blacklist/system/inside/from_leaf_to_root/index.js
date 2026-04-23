@@ -80,4 +80,19 @@ test.describe("(inside - from leaf to root) blacklist graphql interface system",
 			});
 		});
 	});
+	await test.it("count", function (test_ctx) {
+		return load_steps(import.meta.dirname, "./environment").then(function (environment_steps) {
+			return load_steps(import.meta.dirname, "./count").then(function (steps) {
+				return run_layers(
+					{
+						database_manager: suite_ctx.database_manager,
+					},
+					[
+						{ schema: DATABASE_SCHEMA, steps: environment_steps },
+						{ schema: SYSTEM_SCHEMA, steps: steps },
+					],
+				);
+			});
+		});
+	});
 });

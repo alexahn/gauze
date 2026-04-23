@@ -8,9 +8,15 @@ const context = {
 const operation_name = "CreateBlacklistEnvironment";
 const operation_source = `
 mutation ${operation_name}(
-	$blacklist: Blacklist_Mutation__Attributes
+	$blacklist: Blacklist_Mutation__Attributes,
+	$blacklist_count: Blacklist_Mutation__Attributes
 ) {
 	create_blacklist(attributes: $blacklist) {
+		_metadata {
+			id
+		}
+	}
+	count_blacklist: create_blacklist(attributes: $blacklist_count) {
 		_metadata {
 			id
 		}
@@ -28,6 +34,16 @@ const operation_variables = {
 		gauze__blacklist__entity_id: "7f84c508-b714-41c1-b986-2d6ed64fc5e9",
 		gauze__blacklist__method: "read",
 	},
+	blacklist_count: {
+		gauze__blacklist__id: "4ab515f4-5391-4af9-a2c9-a7119ad262ce",
+		gauze__blacklist__realm: "system",
+		gauze__blacklist__agent_type: "gauze__agent_user",
+		gauze__blacklist__agent_role: "trunk",
+		gauze__blacklist__agent_id: "00000000-0000-0000-0000-000000000004",
+		gauze__blacklist__entity_type: "gauze__entity",
+		gauze__blacklist__entity_id: "7f84c508-b714-41c1-b986-2d6ed64fc5e9",
+		gauze__blacklist__method: "count",
+	},
 };
 const expected = `{
     "data": {
@@ -35,6 +51,13 @@ const expected = `{
             {
                 "_metadata": {
                     "id": "3ab515f4-5391-4af9-a2c9-a7119ad262ce"
+                }
+            }
+        ],
+        "count_blacklist": [
+            {
+                "_metadata": {
+                    "id": "4ab515f4-5391-4af9-a2c9-a7119ad262ce"
                 }
             }
         ]
