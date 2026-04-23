@@ -63,4 +63,15 @@ test.describe("entity graphql interface system", async function (suite_ctx) {
 			);
 		});
 	});
+	await test.it("count", function (test_ctx) {
+		return load_steps(import.meta.dirname, "./count").then(function (steps) {
+			return run_steps(
+				{
+					database_manager: suite_ctx.database_manager,
+					schema: SCHEMA,
+				},
+				steps,
+			);
+		});
+	});
 });

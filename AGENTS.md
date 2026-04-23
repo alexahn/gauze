@@ -24,3 +24,6 @@ Recent history favors short, imperative commit messages such as `update README.m
 
 ## Configuration Tips
 Treat root-level `*.sqlite3` files and `src/views/*/build/` as generated artifacts. Do not hand-edit them unless the task is explicitly about fixtures or build output.
+
+## Memory
+At at time there is a piece of information that would be useful for future prompts regarding the codebase, add it to MEMORY.md. These can be technical notes, motivations, mistakes, etc. For example, if I correct you and ask you to do something another way, find out the motivation and record it in MEMORY.md so you do not make the same mistake in the future. Read MEMORY.md when you read AGENTS.md.
