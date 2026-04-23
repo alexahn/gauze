@@ -128,7 +128,7 @@ class DatabaseManager {
 					const knex_config = shard_node[key];
 					validate_knex_config(shard_node_path, knex_config, key);
 				} else {
-					//throw new Error(`Database config property '${shard_node_path}' is invalid, property '${key}' must be one of: ${Object.keys(valid_shard_node_keys)}`);
+					throw new Error(`Database config property '${shard_node_path}' is invalid, property '${key}' must be one of: ${Object.keys(valid_shard_node_keys)}`);
 				}
 			});
 		}
@@ -305,7 +305,6 @@ class DatabaseManager {
 		}
 	}
 	get_shard_node_migration_key(shard_node) {
-		const self = this;
 		if (shard_node.config.client === "better-sqlite3" || shard_node.config.client === "sqlite3") {
 			return JSON.stringify({
 				client: shard_node.config.client,
@@ -324,8 +323,6 @@ class DatabaseManager {
 		}
 	}
 	get_shard_node_seed_key(shard_node) {
-		const self = this;
-		const connection_key = self.get_shard_node_connection_key(shard_node);
 		if (shard_node.config.client === "better-sqlite3" || shard_node.config.client === "sqlite3") {
 			return JSON.stringify({
 				client: shard_node.config.client,
@@ -747,17 +744,18 @@ class DatabaseManager {
 					if (model_shard) {
 						return [self.get_preferred_read_shard_node(context, model_shard)];
 					} else {
-						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
+						throw new Error(`Could not find shard for table: ${entity_table_name} and primary key: ${entity_id}`);
 					}
 				} else if (agent_id_attribute in parameters.where && agent_type_attribute in parameters.where) {
-					const agent_primary_key_number = self.uuid_to_big_int(parameters.where[agent_id_attribute]);
+					const agent_id = parameters.where[agent_id_attribute];
+					const agent_primary_key_number = self.uuid_to_big_int(agent_id);
 					const agent_table_name = parameters.where[agent_type_attribute];
 					const model_shards = self.find_shards(agent_table_name, agent_primary_key_number);
 					const model_shard = model_shards[0];
 					if (model_shard) {
 						return [self.get_preferred_read_shard_node(context, model_shard)];
 					} else {
-						throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
+						throw new Error(`Could not find shard for table: ${agent_table_name} and primary key: ${agent_id}`);
 					}
 				} else if (parameters.where[model.primary_key]) {
 					const primary_key_number = self.uuid_to_big_int(parameters.where[model.primary_key]);
