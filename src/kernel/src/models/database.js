@@ -382,18 +382,8 @@ class DatabaseModel extends Model {
 	}
 	_validate_order(order) {
 		const self = this;
-		if (typeof order === "string") {
-			if (self.entity.fields[order]) {
-				if (!self.entity.fields[order].indexed) {
-					throw new Error(`Input argument 'order' is invalid: ${order} is not an indexed field`);
-				}
-			} else {
-				throw new Error(`Input argument 'order' is invalid: ${order} is not a valid field`);
-			}
-			return;
-		}
 		if (!Array.isArray(order)) {
-			throw new Error("Input argument 'order' is invalid: order must be a string or array");
+			throw new Error("Input argument 'order' is invalid: order must be an array");
 		}
 		order.forEach(function (item, index) {
 			if (!item || typeof item !== "object" || Array.isArray(item)) {
@@ -412,16 +402,8 @@ class DatabaseModel extends Model {
 			}
 		});
 	}
-	_normalize_order(order, order_direction) {
+	_normalize_order(order) {
 		const self = this;
-		if (typeof order === "string") {
-			return [
-				{
-					column: order,
-					order: order_direction || self.entity.default_order_direction || "asc",
-				},
-			];
-		}
 		if (Array.isArray(order) && order.length) {
 			return order.map(function (item) {
 				return {
@@ -429,13 +411,14 @@ class DatabaseModel extends Model {
 					order: item.order || self.entity.default_order_direction || "asc",
 				};
 			});
+		} else {
+			return [
+				{
+					column: self.entity.default_order || self.primary_key,
+					order: self.entity.default_order_direction || "asc",
+				},
+			];
 		}
-		return [
-			{
-				column: self.entity.default_order || self.primary_key,
-				order: self.entity.default_order_direction || "asc",
-			},
-		];
 	}
 	_parse_source(scope, parameters) {
 		const self = this;
@@ -579,9 +562,6 @@ class DatabaseModel extends Model {
 						},
 						limit: 1,
 						offset: 0,
-						order: self.primary_key,
-						order_direction: "asc",
-						order_nulls: "first",
 					},
 				);
 			})
@@ -657,10 +637,8 @@ class DatabaseModel extends Model {
 				limit = 16,
 				offset = 0,
 				order,
-				order_direction = self.entity.default_order_direction || "asc",
-				order_nulls = "first",
 			} = parameters;
-			const resolved_order = self._normalize_order(order, order_direction);
+			const resolved_order = self._normalize_order(order);
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
 			const sql = database(self.table_name)
 				.where(function (builder) {
@@ -695,8 +673,6 @@ class DatabaseModel extends Model {
 				})
 				.limit(Math.min(limit, self.limit_max))
 				.offset(offset)
-				// todo: figure out how to get order_nulls working without breaking the query
-				// note: sqlite cannot handle order nulls consistently here
 				.orderBy(resolved_order)
 				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
@@ -751,10 +727,8 @@ class DatabaseModel extends Model {
 				limit = 16,
 				offset = 0,
 				order,
-				order_direction = self.entity.default_order_direction || "asc",
-				order_nulls = "first",
 			} = parameters;
-			const resolved_order = self._normalize_order(order, order_direction).map(function (item) {
+			const resolved_order = self._normalize_order(order).map(function (item) {
 				return {
 					...item,
 					column: `${self.table_name}.${item.column}`,
@@ -827,8 +801,6 @@ class DatabaseModel extends Model {
 					})
 					.limit(Math.min(limit, self.limit_max))
 					.offset(offset)
-					// todo: figure out how to get order_nulls working without breaking the query
-					// note: sqlite cannot handle order nulls consistently here
 					.orderBy(resolved_order)
 					.transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
@@ -867,8 +839,6 @@ class DatabaseModel extends Model {
 					})
 					.limit(Math.min(limit, self.limit_max))
 					.offset(offset)
-					// todo: figure out how to get order_nulls working without breaking the query
-					// note: sqlite cannot handle order_nulls consistently here
 					.orderBy(resolved_order)
 					.transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
