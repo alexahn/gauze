@@ -428,6 +428,44 @@ class DatabaseModel extends Model {
 			];
 		}
 	}
+	// When where_between includes both an indexed field and the primary key, treat them as a composite cursor:
+	// use the primary key as a tie-breaker so identical field values can still be paged deterministically.
+	_apply_where_between(builder, where_between = {}, table_name = null) {
+		const self = this;
+		const qualified_primary_key = table_name ? `${table_name}.${self.primary_key}` : self.primary_key;
+		const has_primary_key_range = Object.prototype.hasOwnProperty.call(where_between, self.primary_key);
+		const composite_keys = Object.keys(where_between).filter(function (key) {
+			return key !== self.primary_key;
+		});
+
+		composite_keys.forEach(function (key) {
+			const qualified_key = table_name ? `${table_name}.${key}` : key;
+
+			if (has_primary_key_range) {
+				const [start_value, end_value] = where_between[key];
+				const [start_primary_key_value, end_primary_key_value] = where_between[self.primary_key];
+
+				builder.where(function () {
+					this.where(qualified_key, ">", start_value).orWhere(function () {
+						this.where(qualified_key, "=", start_value).andWhere(qualified_primary_key, ">", start_primary_key_value);
+					});
+				});
+				builder.andWhere(function () {
+					this.where(qualified_key, "<", end_value).orWhere(function () {
+						this.where(qualified_key, "=", end_value).andWhere(qualified_primary_key, "<=", end_primary_key_value);
+					});
+				});
+			} else {
+				builder.whereBetween(qualified_key, where_between[key]);
+			}
+		});
+
+		if (has_primary_key_range && composite_keys.length === 0) {
+			builder.whereBetween(qualified_primary_key, where_between[self.primary_key]);
+		}
+
+		return builder;
+	}
 	_parse_source(scope, parameters) {
 		const self = this;
 		const { source } = scope;
@@ -666,9 +704,7 @@ class DatabaseModel extends Model {
 					Object.keys(where_like).forEach(function (key) {
 						builder.whereLike(key, where_like[key]);
 					});
-					Object.keys(where_between).forEach(function (key) {
-						builder.whereBetween(key, where_between[key]);
-					});
+					self._apply_where_between(builder, where_between);
 					/*
 					Object.keys(where_greater).forEach(function (key) {
 						builder.where(key, '>', where_greater[key])
@@ -781,11 +817,6 @@ class DatabaseModel extends Model {
 				var joined_key = self.table_name + "." + k;
 				joined_where_like[joined_key] = where_like[k];
 			});
-			var joined_where_between = {};
-			Object.keys(where_between).forEach(function (k) {
-				var joined_key = self.table_name + "." + k;
-				joined_where_between[joined_key] = where_between[k];
-			});
 			if (relationship_source._direction === "to") {
 				const sql = database(self.table_name)
 					.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.${self.primary_key}`)
@@ -802,9 +833,7 @@ class DatabaseModel extends Model {
 						Object.keys(joined_where_like).forEach(function (key) {
 							builder.whereLike(key, joined_where_like[key]);
 						});
-						Object.keys(joined_where_between).forEach(function (key) {
-							builder.whereBetween(key, joined_where_between[key]);
-						});
+						self._apply_where_between(builder, where_between, self.table_name);
 						return builder;
 					})
 					.limit(Math.min(limit, self.limit_max))
@@ -840,9 +869,7 @@ class DatabaseModel extends Model {
 						Object.keys(joined_where_like).forEach(function (key) {
 							builder.whereLike(key, joined_where_like[key]);
 						});
-						Object.keys(joined_where_between).forEach(function (key) {
-							builder.whereBetween(key, joined_where_between[key]);
-						});
+						self._apply_where_between(builder, where_between, self.table_name);
 						return builder;
 					})
 					.limit(Math.min(limit, self.limit_max))
@@ -924,9 +951,7 @@ class DatabaseModel extends Model {
 					Object.keys(where_like).forEach(function (key) {
 						builder.whereLike(key, where_like[key]);
 					});
-					Object.keys(where_between).forEach(function (key) {
-						builder.whereBetween(key, where_between[key]);
-					});
+					self._apply_where_between(builder, where_between);
 					return builder;
 				})
 				.update(attributes)
@@ -1271,9 +1296,7 @@ class DatabaseModel extends Model {
 							Object.keys(where_like).forEach(function (key) {
 								builder.whereLike(key, where_like[key]);
 							});
-							Object.keys(where_between).forEach(function (key) {
-								builder.whereBetween(key, where_between[key]);
-							});
+							self._apply_where_between(builder, where_between);
 							return builder;
 						})
 						.del()
@@ -1447,9 +1470,7 @@ class DatabaseModel extends Model {
 					Object.keys(where_like).forEach(function (key) {
 						builder.whereLike(key, where_like[key]);
 					});
-					Object.keys(where_between).forEach(function (key) {
-						builder.whereBetween(key, where_between[key]);
-					});
+					self._apply_where_between(builder, where_between);
 					return builder;
 				})
 				.first()
@@ -1572,11 +1593,6 @@ class DatabaseModel extends Model {
 				var joined_key = self.table_name + "." + k;
 				joined_where_like[joined_key] = where_like[k];
 			});
-			var joined_where_between = {};
-			Object.keys(where_between).forEach(function (k) {
-				var joined_key = self.table_name + "." + k;
-				joined_where_between[joined_key] = where_between[k];
-			});
 			if (relationship_source._direction === "to") {
 				const sql = database(self.table_name)
 					.count(count_has_key ? reversed : null)
@@ -1594,9 +1610,7 @@ class DatabaseModel extends Model {
 						Object.keys(joined_where_like).forEach(function (key) {
 							builder.whereLike(key, joined_where_like[key]);
 						});
-						Object.keys(joined_where_between).forEach(function (key) {
-							builder.whereBetween(key, joined_where_between[key]);
-						});
+						self._apply_where_between(builder, where_between, self.table_name);
 						return builder;
 					})
 					.first()
@@ -1627,6 +1641,10 @@ class DatabaseModel extends Model {
 						Object.keys(joined_where_not_in).forEach(function (key) {
 							builder.whereNotIn(key, joined_where_not_in[key]);
 						});
+						Object.keys(joined_where_like).forEach(function (key) {
+							builder.whereLike(key, joined_where_like[key]);
+						});
+						self._apply_where_between(builder, where_between, self.table_name);
 						return builder;
 					})
 					.first()

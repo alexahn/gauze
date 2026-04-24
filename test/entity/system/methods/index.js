@@ -74,4 +74,26 @@ test.describe("entity graphql interface system", async function (suite_ctx) {
 			);
 		});
 	});
+	await test.it("read_composite", function (test_ctx) {
+		return load_steps(import.meta.dirname, "./read_composite").then(function (steps) {
+			return run_steps(
+				{
+					database_manager: suite_ctx.database_manager,
+					schema: SCHEMA,
+				},
+				steps,
+			);
+		});
+	});
+	await test.it("count_composite", function (test_ctx) {
+		return load_steps(import.meta.dirname, "./count_composite").then(function (steps) {
+			return run_steps(
+				{
+					database_manager: suite_ctx.database_manager,
+					schema: SCHEMA,
+				},
+				steps,
+			);
+		});
+	});
 });
