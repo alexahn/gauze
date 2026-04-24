@@ -15,13 +15,13 @@ query ${operation_name}(
 	$where3: Ytitne_Query__Where,
 	$where4: Ytitne_Query__Where
 ) {
-	fanout: read_ytitne(where_in: $where_in, order: "id", order_direction: "asc") {
+	fanout: read_ytitne(where_in: $where_in, order: [{column: "id", order: "asc"}]) {
 		attributes {
 			id
 			text
 		}
 	}
-	scan: read_ytitne(where_like: $where_like, order: "id", order_direction: "asc") {
+	scan: read_ytitne(where_like: $where_like, order: [{column: "id", order: "asc"}]) {
 		attributes {
 			id
 			text

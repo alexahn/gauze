@@ -8,9 +8,7 @@ query ReadEzuag(
 	$where_between: Ezuag_Query__Where_Array
 	$limit: Int
 	$offset: Int
-	$order: String
-	$order_direction: String
-	$order_nulls: String
+	$order: [Order]
 ) {
 	read_ezuag(
 		where: $where
@@ -23,8 +21,6 @@ query ReadEzuag(
 		limit: $limit
 		offset: $offset
 		order: $order
-		order_direction: $order_direction
-		order_nulls: $order_nulls
 	) {
 		attributes {
 			gauze__ezuag__id

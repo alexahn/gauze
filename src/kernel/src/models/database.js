@@ -377,13 +377,55 @@ class DatabaseModel extends Model {
 			});
 		}
 		if (parameters.order) {
-			if (self.entity.fields[parameters.order]) {
-				if (!self.entity.fields[parameters.order].indexed) {
-					throw new Error(`Input argument 'order' is invalid: ${parameters.order} is not an indexed field`);
+			self._validate_order(parameters.order);
+		}
+	}
+	_validate_order(order) {
+		const self = this;
+		if (!Array.isArray(order)) {
+			throw new Error("Input argument 'order' is invalid: order must be an array");
+		}
+		order.forEach(function (item, index) {
+			if (!item || typeof item !== "object" || Array.isArray(item)) {
+				throw new Error(`Input argument 'order.${index}' is invalid: order item must be an object`);
+			}
+			const { column, order, nulls } = item;
+			if (typeof column !== "string") {
+				throw new Error(`Input argument 'order.${index}.column' is invalid: column must be a string`);
+			}
+			if (self.entity.fields[column]) {
+				if (!self.entity.fields[column].indexed) {
+					throw new Error(`Input argument 'order.${index}.column' is invalid: ${column} is not an indexed field`);
 				}
 			} else {
-				throw new Error(`Input argument 'order' is invalid: ${parameters.order} is not a valid field`);
+				throw new Error(`Input argument 'order.${index}.column' is invalid: ${column} is not a valid field`);
 			}
+			if (typeof order !== "undefined" && order !== "asc" && order !== "desc") {
+				throw new Error(`Input argument 'order.${index}.order' is invalid: order must be "asc" or "desc"`);
+			}
+			if (typeof nulls !== "undefined" && nulls !== "first" && nulls !== "last") {
+				throw new Error(`Input argument 'order.${index}.nulls' is invalid: nulls must be "first" or "last"`);
+			}
+		});
+	}
+	_normalize_order(order) {
+		const self = this;
+		if (Array.isArray(order) && order.length) {
+			return order.map(function (item) {
+				return {
+					column: item.column,
+					order: item.order || self.entity.default_order_direction || "asc",
+					nulls: item.nulls || "first",
+				};
+			});
+		} else {
+			return [
+				{
+					column: self.entity.default_order || self.primary_key,
+					order: self.entity.default_order_direction || "asc",
+					nulls: "first",
+				},
+			];
 		}
 	}
 	_parse_source(scope, parameters) {
@@ -528,9 +570,6 @@ class DatabaseModel extends Model {
 						},
 						limit: 1,
 						offset: 0,
-						order: self.primary_key,
-						order_direction: "asc",
-						order_nulls: "first",
 					},
 				);
 			})
@@ -605,10 +644,9 @@ class DatabaseModel extends Model {
 				where_between = {},
 				limit = 16,
 				offset = 0,
-				order = self.entity.default_order || self.primary_key,
-				order_direction = self.entity.default_order_direction || "asc",
-				order_nulls = "first",
+				order,
 			} = parameters;
+			const resolved_order = self._normalize_order(order);
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
 			const sql = database(self.table_name)
 				.where(function (builder) {
@@ -643,10 +681,7 @@ class DatabaseModel extends Model {
 				})
 				.limit(Math.min(limit, self.limit_max))
 				.offset(offset)
-				// todo: figure out how to get order_nulls working without breaking the query
-				// note: sqlite cannot handle order nulls, it seems to break the query: order by ({table_name}.{order_column} is not null) vs order by {table_name}.{order_column}
-				//.orderBy(order, order_direction, order_nulls)
-				.orderBy(order, order_direction)
+				.orderBy(resolved_order)
 				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
@@ -699,10 +734,14 @@ class DatabaseModel extends Model {
 				where_between = {},
 				limit = 16,
 				offset = 0,
-				order = self.entity.default_order || self.primary_key,
-				order_direction = self.entity.default_order_direction || "asc",
-				order_nulls = "first",
+				order,
 			} = parameters;
+			const resolved_order = self._normalize_order(order).map(function (item) {
+				return {
+					...item,
+					column: `${self.table_name}.${item.column}`,
+				};
+			});
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
 			const relationship_source = self._parse_source(scope, parameters);
 			// do join here based on source metadata
@@ -747,7 +786,6 @@ class DatabaseModel extends Model {
 				var joined_key = self.table_name + "." + k;
 				joined_where_between[joined_key] = where_between[k];
 			});
-			const joined_order = self.table_name + "." + order;
 			if (relationship_source._direction === "to") {
 				const sql = database(self.table_name)
 					.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.${self.primary_key}`)
@@ -771,9 +809,7 @@ class DatabaseModel extends Model {
 					})
 					.limit(Math.min(limit, self.limit_max))
 					.offset(offset)
-					// note: sqlite cannot handle order nulls, it seems to break the query: order by ({table_name}.{order_column} is not null) vs order by {table_name}.{order_column}
-					//.orderBy(joined_order, order_direction, order_nulls)
-					.orderBy(joined_order, order_direction)
+					.orderBy(resolved_order)
 					.transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
@@ -811,9 +847,7 @@ class DatabaseModel extends Model {
 					})
 					.limit(Math.min(limit, self.limit_max))
 					.offset(offset)
-					// note: sqlite cannot handle order nulls, it seems to break the query: order by ({table_name}.{order_column} is not null) vs order by {table_name}.{order_column}
-					//.orderBy(joined_order, order_direction, order_nulls)
-					.orderBy(joined_order, order_direction)
+					.orderBy(resolved_order)
 					.transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());

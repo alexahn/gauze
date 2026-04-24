@@ -396,7 +396,7 @@ const routes = [
 	},
 	{
 		name: "system.types.list.type",
-		path: "/:type?where&limit&offset&order&order_direction&fields",
+		path: "/:type?where&limit&offset&order&fields",
 		onActivate: function ({ dependencies, toState }) {
 			const { services } = dependencies;
 			const { gauze, model, router } = services;
@@ -408,8 +408,7 @@ const routes = [
 							where: toState.params.where ? JSON.parse(decodeURIComponent(toState.params.where)) : {},
 							limit: toState.params.limit ? Number.parseInt(toState.params.limit) : PAGINATION_PAGE_SIZE,
 							offset: toState.params.offset ? Number.parseInt(toState.params.offset) : 0,
-							order: toState.params.order,
-							order_direction: toState.params.order_direction,
+							order: toState.params.order ? JSON.parse(decodeURIComponent(toState.params.order)) : undefined,
 						})
 						.then(function (items) {
 							items.forEach(function (item) {

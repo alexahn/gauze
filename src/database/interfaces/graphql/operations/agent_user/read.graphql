@@ -9,9 +9,7 @@ query ReadAgent_User(
 	$where_between: Agent_User_Query__Where_Array
 	$limit: Int
 	$offset: Int
-	$order: String
-	$order_direction: String
-	$order_nulls: String
+	$order: [Order]
 ) {
 	read_agent_user(
 		source: $source
@@ -25,8 +23,6 @@ query ReadAgent_User(
 		limit: $limit
 		offset: $offset
 		order: $order
-		order_direction: $order_direction
-		order_nulls: $order_nulls
 	) {
 		attributes {
 			gauze__agent_user__id

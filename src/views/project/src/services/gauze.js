@@ -530,7 +530,6 @@ query header {
 		primary_key
 		graphql_meta_type
 		default_order
-		default_order_direction
 		fields {
 			name
 			sql_type
@@ -614,8 +613,7 @@ query read(
 	$where_between: ${header.graphql_query_where_array_type},
 	$limit: Int,
 	$offset: Int,
-	$order: String,
-	$order_direction: String
+	$order: [Order]
 ) {
 	read_${header.name}(
 		source: $source,
@@ -627,7 +625,6 @@ query read(
 		limit: $limit,
 		offset: $offset,
 		order: $order,
-		order_direction: $order_direction
 	) {
 		_metadata {
 			id
@@ -694,8 +691,7 @@ mutation update(
 	$attributes: ${header.graphql_mutation_attributes_type},
 	$limit: Int,
 	$offset: Int,
-	$order: String,
-	$order_direction: String
+	$order: [Order]
 ) {
 	update_${header.name}(
 		source: $source,
@@ -706,7 +702,6 @@ mutation update(
 		limit: $limit,
 		offset: $offset,
 		order: $order,
-		order_direction: $order_direction
 	) {
 		_metadata {
 			id
@@ -737,8 +732,7 @@ mutation delete(
     $where_not_in: ${header.graphql_mutation_where_array_type},
 	$limit: Int,
 	$offset: Int,
-	$order: String,
-	$order_direction: String
+	$order: [Order]
 ) {
 	delete_${header.name}(
 		source: $source,
@@ -748,7 +742,6 @@ mutation delete(
 		limit: $limit,
 		offset: $offset,
 		order: $order,
-		order_direction: $order_direction
 	) {
 		_metadata {
 			id

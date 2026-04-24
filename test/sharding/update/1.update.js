@@ -11,7 +11,7 @@ mutation ${operation_name}(
 	$where_in: Ytitne_Mutation__Where_Array,
 	$attributes: Ytitne_Mutation__Attributes
 ) {
-	update_ytitne(where_in: $where_in, attributes: $attributes, order: "id", order_direction: "asc") {
+	update_ytitne(where_in: $where_in, attributes: $attributes, order: [{column: "id", order: "asc"}]) {
 		attributes {
 			id
 			text

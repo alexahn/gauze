@@ -457,7 +457,6 @@ query header {
 		primary_key
 		graphql_meta_type
 		default_order
-		default_order_direction
 		fields {
 			name
 			sql_type
@@ -542,8 +541,7 @@ mutation create(
 	$where_between_${id}: ${header.graphql_query_where_array_type},
 	$limit_${id}: Int,
 	$offset_${id}: Int,
-	$order_${id}: String,
-	$order_direction_${id}: String,`;
+	$order_${id}: [Order],`;
 		}
 		function operationFunction(header, id) {
 			return `
@@ -556,8 +554,7 @@ mutation create(
         where_between: $where_between_${id},
         limit: $limit_${id},
         offset: $offset_${id},
-        order: $order_${id},
-        order_direction: $order_direction_${id}
+        order: $order_${id}
     ) {
         _metadata {
             id
@@ -703,8 +700,7 @@ query read(
 	$where_between: ${header.graphql_query_where_array_type},
 	$limit: Int,
 	$offset: Int,
-	$order: String,
-	$order_direction: String
+	$order: [Order]
 ) {
 	read_${header.name}(
 		source: $source,
@@ -715,8 +711,7 @@ query read(
 		where_between: $where_between,
 		limit: $limit,
 		offset: $offset,
-		order: $order,
-		order_direction: $order_direction
+		order: $order
 	) {
 		_metadata {
 			id
@@ -784,8 +779,7 @@ mutation update(
 	$attributes: ${header.graphql_mutation_attributes_type},
 	$limit: Int,
 	$offset: Int,
-	$order: String,
-	$order_direction: String
+	$order: [Order]
 ) {
 	update_${header.name}(
 		source: $source,
@@ -795,8 +789,7 @@ mutation update(
 		attributes: $attributes,
 		limit: $limit,
 		offset: $offset,
-		order: $order,
-		order_direction: $order_direction
+		order: $order
 	) {
 		_metadata {
 			id
@@ -827,8 +820,7 @@ mutation delete(
     $where_not_in: ${header.graphql_mutation_where_array_type},
 	$limit: Int,
 	$offset: Int,
-	$order: String,
-	$order_direction: String
+	$order: [Order]
 ) {
 	delete_${header.name}(
 		source: $source,
@@ -837,8 +829,7 @@ mutation delete(
 		where_not_in: $where_not_in,
 		limit: $limit,
 		offset: $offset,
-		order: $order,
-		order_direction: $order_direction
+		order: $order
 	) {
 		_metadata {
 			id

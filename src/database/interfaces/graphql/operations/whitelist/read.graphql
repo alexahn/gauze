@@ -8,9 +8,7 @@ query ReadWhitelist(
 	$where_between: Whitelist_Query__Where_Array
 	$limit: Int
 	$offset: Int
-	$order: String
-	$order_direction: String
-	$order_nulls: String
+	$order: [Order]
 ) {
 	read_whitelist(
 		where: $where
@@ -23,8 +21,6 @@ query ReadWhitelist(
 		limit: $limit
 		offset: $offset
 		order: $order
-		order_direction: $order_direction
-		order_nulls: $order_nulls
 	) {
 		attributes {
 			gauze__whitelist__id

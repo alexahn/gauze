@@ -8,9 +8,7 @@ mutation Deletebb95d174a16f4ddd935ff3a802f7c7bc(
 	$where_between: bb95d174a16f4ddd935ff3a802f7c7bc_Mutation__Where_Array
 	$limit: Int
 	$offset: Int
-	$order: String
-	$order_direction: String
-	$order_nulls: String
+	$order: [Order]
 ) {
 	delete_a543731262804f64adcc0eae1a225acc(
 		where: $where
@@ -23,8 +21,6 @@ mutation Deletebb95d174a16f4ddd935ff3a802f7c7bc(
 		limit: $limit
 		offset: $offset
 		order: $order
-		order_direction: $order_direction
-		order_nulls: $order_nulls
 	) {
 		attributes {
 			gauze__a543731262804f64adcc0eae1a225acc__id

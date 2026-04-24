@@ -8,7 +8,7 @@ const context = {
 const operation_name = "ReadUpdatedShardedYtitne";
 const operation_source = `
 query ${operation_name}($where_in: Ytitne_Query__Where_Array) {
-	read_ytitne(where_in: $where_in, order: "id", order_direction: "asc") {
+	read_ytitne(where_in: $where_in, order: [{column: "id", order: "asc"}]) {
 		attributes {
 			id
 			text

@@ -9,9 +9,7 @@ mutation DeleteProxy(
 	$where_between: Proxy_Mutation__Where_Array
 	$limit: Int
 	$offset: Int
-	$order: String
-	$order_direction: String
-	$order_nulls: String
+	$order: [Order]
 ) {
 	delete_proxy(
 		source: $source
@@ -25,8 +23,6 @@ mutation DeleteProxy(
 		limit: $limit
 		offset: $offset
 		order: $order
-		order_direction: $order_direction
-		order_nulls: $order_nulls
 	) {
 		attributes {
 			gauze__proxy__id
