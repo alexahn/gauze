@@ -107,4 +107,25 @@ mutation UpdateEntity($where: Entity_Mutation__Where, $attributes: Entity_Mutati
 
 Entity result objects can expose relationship traversal fields under `relationships_to` and `relationships_from` when relationships are registered for that entity pair. Relationship traversal reuses the same generated operation style, but the parent result becomes the `source` for the nested operation.
 
+```graphql
+query ReadEntityRelationships($where: Entity_Query__Where, $relatedWhere: Entity_Query__Where) {
+	read_entity(where: $where) {
+		attributes {
+			id
+			text
+		}
+		relationships_to {
+			read_entity(where: $relatedWhere) {
+				attributes {
+					id
+					text
+				}
+			}
+		}
+	}
+}
+```
+
+The nested `read_entity` receives the parent entity as its `source`, so callers only provide the usual filters for the related rows.
+
 Read [Entity Overview](../entity/overview.md) for how entity definitions and generated GraphQL modules fit together.

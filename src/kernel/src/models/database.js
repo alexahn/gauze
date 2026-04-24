@@ -452,7 +452,7 @@ class DatabaseModel extends Model {
 				});
 				builder.andWhere(function () {
 					this.where(qualified_key, "<", end_value).orWhere(function () {
-						this.where(qualified_key, "=", end_value).andWhere(qualified_primary_key, "<=", end_primary_key_value);
+						this.where(qualified_key, "=", end_value).andWhere(qualified_primary_key, "<", end_primary_key_value);
 					});
 				});
 			} else {
