@@ -9,7 +9,7 @@ The `environment` realm is the outermost authentication entry point in Gauze. It
 
 At a high level, the flow is:
 
-1. Start with an environment session.
+1. Call `mutation.environment.enter_session` to create an environment session.
 2. Complete the required authentication steps in the `environment` realm.
 3. Call `mutation.environment.sign_in` to exchange the environment session for a proxy session.
 4. Use the proxy session JWT to call `mutation.realm.system.enter_session` or another realm-specific `enter_session` mutation.
@@ -25,7 +25,28 @@ The environment schema exposes three top-level mutation groups:
 
 In a generated project, these mutations are exposed through `${project_dir}/environment/interfaces/graphql/schema.js` and the modules it imports.
 
-### Step 1: Complete the Required Authentication Steps
+### Step 1: Create an Environment Session
+
+Call `environment.enter_session` against `/environment/graphql` without an existing application session:
+
+```graphql
+mutation EnterEnvironmentSession {
+  environment {
+    enter_session(proxy: null) {
+      gauze__session__id
+      gauze__session__realm
+      gauze__session__kind
+      gauze__session__agent_id
+      gauze__session__agent_type
+      gauze__session__value
+    }
+  }
+}
+```
+
+The returned `gauze__session__value` is the environment session JWT. Use it in the `Authorization: Bearer <token>` header for the authentication-step mutations that follow.
+
+### Step 2: Complete the Required Authentication Steps
 
 The default project configuration requires these proxy authentication steps before `environment.sign_in` succeeds:
 
@@ -76,7 +97,7 @@ These mutations run against `/environment/graphql` while you are still using an 
 
 `person.request.email` and `person.verify.email` exist in the environment GraphQL surface, but they are currently placeholders rather than a completed email-code flow. The supported sign-in example today is the combination of `person.assert.email` and `account.verify.password`.
 
-### Step 2: Exchange the Environment Session for a Proxy Session
+### Step 3: Exchange the Environment Session for a Proxy Session
 
 Once the required steps are complete, call `environment.sign_in`:
 
@@ -96,7 +117,7 @@ mutation SignIn {
 
 The returned `gauze__session__value` is the proxy session JWT. Use it as the bearer token for subsequent `environment` realm requests that require a proxy session.
 
-### Step 3: Mint a System JWT from the Proxy Session
+### Step 4: Mint a System JWT from the Proxy Session
 
 With the proxy JWT in the `Authorization` header, call `realm.system.enter_session`:
 

@@ -9,6 +9,7 @@ export default {
 			{ text: "Quick Start", link: "/getting-started" },
 			{ text: "Projects", link: "/project/overview" },
 			{ text: "Entities", link: "/entity/overview" },
+			{ text: "GraphQL", link: "/graphql/queries-and-mutations" },
 			{ text: "API", link: "/runtime-and-graphql" },
 		],
 		socialLinks: [
@@ -70,6 +71,13 @@ export default {
 					{ text: "Create a Migration", link: "/entity/create-a-migration" },
 					{ text: "Generate Project Code", link: "/entity/generate-project-code" },
 					{ text: "Article Entity Tutorial", link: "/entity/article-entity-tutorial" },
+				],
+			},
+			{
+				text: "GraphQL",
+				items: [
+					{ text: "Queries and Mutations", link: "/graphql/queries-and-mutations" },
+					{ text: "Parameters", link: "/graphql/parameters" },
 				],
 			},
 			{
