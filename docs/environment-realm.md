@@ -277,4 +277,4 @@ If you want the environment realm to mint JWTs for an additional realm, follow t
 ## Related Pages
 
 - Read [Authentication and Authorization](./authentication-and-authorization.md) for the broader model.
-- Read [HTTP & GraphQL](./runtime-and-graphql.md) for endpoint and bearer-token behavior.
+- Read [GraphQL Overview](./graphql/overview.md) for endpoint and bearer-token behavior.

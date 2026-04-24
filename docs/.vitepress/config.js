@@ -9,7 +9,7 @@ export default {
 			{ text: "Quick Start", link: "/getting-started" },
 			{ text: "Projects", link: "/project/overview" },
 			{ text: "Entities", link: "/entity/overview" },
-			{ text: "GraphQL", link: "/graphql/queries-and-mutations" },
+			{ text: "GraphQL", link: "/graphql/overview" },
 			{ text: "API", link: "/runtime-and-graphql" },
 		],
 		socialLinks: [
@@ -76,6 +76,7 @@ export default {
 			{
 				text: "GraphQL",
 				items: [
+					{ text: "Overview", link: "/graphql/overview" },
 					{ text: "Queries and Mutations", link: "/graphql/queries-and-mutations" },
 					{ text: "Parameters", link: "/graphql/parameters" },
 				],

@@ -6,7 +6,7 @@ Gauze exposes GraphQL through realm-specific schemas. The most common applicatio
 - Use `/database/graphql` when you need the lower-level database realm directly.
 - Use `/environment/graphql` for authentication, session, and realm-entry flows.
 
-Read [HTTP & GraphQL](../runtime-and-graphql.md) for endpoint setup, bearer tokens, and request transaction behavior.
+Read [GraphQL Overview](./overview.md) for endpoint setup, bearer tokens, and request transaction behavior.
 
 ## Generated Entity Operations
 

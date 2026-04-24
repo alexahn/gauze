@@ -70,4 +70,4 @@ If the error is framework-generic, it belongs with Gauze. If it is specific to o
 
 - Read [GraphQL Scalars](./graphql-scalars.md) for where several built-in abstract errors are used.
 - Read [Create a Definition](../entity/definition.md) for how field definitions attach GraphQL scalar behavior.
-- Read [HTTP & GraphQL](../runtime-and-graphql.md) for the runtime GraphQL surface that returns these errors.
+- Read [GraphQL Overview](../graphql/overview.md) for the runtime GraphQL surface that returns these errors.

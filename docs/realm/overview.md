@@ -93,4 +93,4 @@ Once that is clear, the lower-level details of controllers, JWT signing, and rea
 
 - Read [Configuration](./configuration.md) for how realms are configured through each realm's own `gauze.js` and the project-level auth config.
 - Read [Environment Realm](../authentication-and-authorization/environment-realm.md) for the full environment-to-realm session flow.
-- Read [HTTP & GraphQL](../runtime-and-graphql.md) for the mounted endpoints and request behavior.
+- Read [GraphQL Overview](../graphql/overview.md) for the mounted endpoints and request behavior.

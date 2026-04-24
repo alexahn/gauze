@@ -92,4 +92,4 @@ This separation lets you expose a `read` method to one agent type while keeping 
 
 - Read [Project Configuration](./project-configuration.md) for the `${project_dir}/gauze.js` authentication structure.
 - Read [Create a Definition](../entity/definition.md) for details on how `privacy` and `allowed_agent_types` are declared in entity definitions.
-- Read [HTTP & GraphQL](../runtime-and-graphql.md) for the request flow and realm endpoints.
+- Read [GraphQL Overview](../graphql/overview.md) for the request flow and realm endpoints.
