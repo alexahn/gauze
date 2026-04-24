@@ -58,6 +58,8 @@ query ReadEntity($where: Entity_Query__Where, $limit: Int, $order: [Order]) {
 
 Use `count_<entity>` to count rows that match the shared filters. Counts can also take a `count` argument for explicit count selections, but they do not take `limit`, `offset`, or `order`.
 
+The returned `count` field uses the `CountValue` scalar. When the database client is PostgreSQL, count values are returned as strings because PostgreSQL reports `count(*)` as a bigint value.
+
 ```graphql
 query CountEntity($where: Entity_Query__Where) {
 	count_entity(where: $where) {
