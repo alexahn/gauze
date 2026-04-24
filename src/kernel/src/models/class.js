@@ -5,7 +5,7 @@ import * as $structure from "./../../../structure/index.js";
 
 import { LOGGER__IO__LOGGER__SRC__KERNEL } from "./../logger/io.js";
 
-const EMPTY_COUNT_SELECT__CLASS__MODEL__SRC__KERNEL = "b55c1f0fb7b44454d6186e16409262a1dc53a27f52c996c64bc56bff53dd7f8e";
+const DEFAULT_COUNT_SELECT__CLASS__MODEL__SRC__KERNEL = "count(*)";
 
 // base model handles middlewares, serializers, and deserializers based on the abstract entity definition
 class Model {
@@ -102,64 +102,94 @@ class Model {
 		}
 		return Number(value);
 	}
-	_merge_count_maps(results) {
-		const self = this;
-		const merged = {};
-		const strings = {};
-		results.forEach(function (result) {
-			Object.keys(result).forEach(function (key) {
-				if (key !== EMPTY_COUNT_SELECT__CLASS__MODEL__SRC__KERNEL) {
-					const count = self._normalize_count_value(result[key]);
-					if (!Object.prototype.hasOwnProperty.call(merged, key)) {
-						merged[key] = 0n;
-						strings[key] = false;
-					}
-					merged[key] += count.value;
-					strings[key] = strings[key] || count.string;
+	_count_selects(count) {
+		if (count && Object.keys(count).length) {
+			const selects = [];
+			const seen = new Set();
+			Object.keys(count).forEach(function (key) {
+				const select = count[key];
+				if (!seen.has(select)) {
+					selects.push(select);
+					seen.add(select);
 				}
 			});
-		});
-		const formatted = {};
-		Object.keys(merged).forEach(function (key) {
-			formatted[key] = self._format_count_value(merged[key], strings[key]);
-		});
-		// TODO: fix the frontend code so we don't need to do this
-		// note: this will guarantee we always return at least one result (currently the frontend code depends on at least one result being returned)
-		if (Object.keys(formatted).length === 0) {
-			formatted[EMPTY_COUNT_SELECT__CLASS__MODEL__SRC__KERNEL] = 0;
+			return selects;
 		}
-		return formatted;
+		return [DEFAULT_COUNT_SELECT__CLASS__MODEL__SRC__KERNEL];
 	}
-	_merge_count_rows(rows) {
+	_merge_count_maps(results, count) {
 		const self = this;
-		const merged = {};
-		const strings = {};
-		rows.forEach(function (row) {
-			if (row.select !== EMPTY_COUNT_SELECT__CLASS__MODEL__SRC__KERNEL) {
-				const count = self._normalize_count_value(row.count);
-				if (!Object.prototype.hasOwnProperty.call(merged, row.select)) {
-					merged[row.select] = 0n;
-					strings[row.select] = false;
+		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
+		const selects = self._count_selects(count);
+		const merged = new Map();
+		const strings = new Map();
+		function initialize_select(select) {
+			if (!merged.has(select)) {
+				merged.set(select, 0n);
+				strings.set(select, false);
+			}
+		}
+		function merge_value(select, value) {
+			const parsed = self._normalize_count_value(value);
+			initialize_select(select);
+			merged.set(select, merged.get(select) + parsed.value);
+			strings.set(select, strings.get(select) || parsed.string);
+		}
+		selects.forEach(initialize_select);
+		results.forEach(function (result) {
+			if (count_has_key) {
+				selects.forEach(function (select) {
+					if (Object.hasOwn(result, select)) {
+						merge_value(select, result[select]);
+					}
+				});
+			} else {
+				const keys = Object.keys(result);
+				if (keys.length) {
+					merge_value(DEFAULT_COUNT_SELECT__CLASS__MODEL__SRC__KERNEL, result[keys[0]]);
 				}
-				merged[row.select] += count.value;
-				strings[row.select] = strings[row.select] || count.string;
 			}
 		});
-		const count_rows = Object.keys(merged).map(function (key) {
+		const formatted = Object.create(null);
+		merged.forEach(function (value, select) {
+			formatted[select] = self._format_count_value(value, strings.get(select));
+		});
+		return formatted;
+	}
+	_merge_count_rows(rows, count) {
+		const self = this;
+		const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
+		const selects = self._count_selects(count);
+		const merged = new Map();
+		const strings = new Map();
+		function initialize_select(select) {
+			if (!merged.has(select)) {
+				merged.set(select, 0n);
+				strings.set(select, false);
+			}
+		}
+		function merge_value(select, value) {
+			const parsed = self._normalize_count_value(value);
+			initialize_select(select);
+			merged.set(select, merged.get(select) + parsed.value);
+			strings.set(select, strings.get(select) || parsed.string);
+		}
+		selects.forEach(initialize_select);
+		rows.forEach(function (row) {
+			if (count_has_key) {
+				if (merged.has(row.select)) {
+					merge_value(row.select, row.count);
+				}
+			} else {
+				merge_value(DEFAULT_COUNT_SELECT__CLASS__MODEL__SRC__KERNEL, row.count);
+			}
+		});
+		return Array.from(merged).map(function ([select, value]) {
 			return {
-				select: key,
-				count: self._format_count_value(merged[key], strings[key]),
+				select: select,
+				count: self._format_count_value(value, strings.get(select)),
 			};
 		});
-		// TODO: fix the frontend code so we don't need to do this
-		// note: this will guarantee we always return at least one result (currently the frontend code depends on at least one result being returned)
-		if (!count_rows.length) {
-			count_rows.push({
-				select: EMPTY_COUNT_SELECT__CLASS__MODEL__SRC__KERNEL,
-				count: 0,
-			});
-		}
-		return count_rows;
 	}
 }
 

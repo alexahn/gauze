@@ -113,6 +113,8 @@ Each count entry supports:
 
 The response `count` field uses the `CountValue` scalar. Small counts may serialize as JSON numbers, while database clients that return bigint counts, such as PostgreSQL, serialize counts as strings. When Gauze merges counts across shards, it sums values with `BigInt` and returns a string if any merged value was a bigint string or the total exceeds JavaScript's safe integer range.
 
+Count responses are shaped from the requested `count` map. If `count` is omitted, Gauze returns the canonical `count(*)` selector. If no rows are returned for a requested selector, Gauze returns that selector with count `0`.
+
 ## Source
 
 `source` is used for relationship traversal. Top-level entity operations usually omit it. Nested relationship operations receive source metadata from the parent object so Gauze can route the relationship read or mutation correctly:

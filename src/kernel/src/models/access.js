@@ -756,7 +756,7 @@ class AccessSystemModel extends SystemModel {
 						return result.data[`count_${self.entity.name}`];
 					})
 					.flat();
-				const count_rows = self._merge_count_rows(rows);
+				const count_rows = self._merge_count_rows(rows, input.count);
 				return self.generate_count_response(count_rows);
 			});
 		});

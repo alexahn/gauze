@@ -1416,7 +1416,7 @@ class DatabaseModel extends Model {
 					return self._root_count_transaction(context, scope, parameters, shard.connection, shard.transaction);
 				}),
 			).then(function (results) {
-				return self._merge_count_maps(results);
+				return self._merge_count_maps(results, parameters.count);
 			});
 		});
 	}
@@ -1476,7 +1476,7 @@ class DatabaseModel extends Model {
 		const { where_in = {}, cache_where_in = {} } = parameters;
 		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
 			return self._chunk_action(context, scope, parameters, database, transaction, action).then(function (results) {
-				return self._merge_count_maps(results);
+				return self._merge_count_maps(results, parameters.count);
 			});
 		} else {
 			return action(context, scope, parameters, database, transaction);
@@ -1491,7 +1491,7 @@ class DatabaseModel extends Model {
 						return self._relationship_count_transaction(context, scope, parameters, shard.connection, shard.transaction);
 					}),
 				).then(function (results) {
-					return self._merge_count_maps(results);
+					return self._merge_count_maps(results, parameters.count);
 				});
 			});
 		});
@@ -1626,7 +1626,7 @@ class DatabaseModel extends Model {
 		const { where_in = {}, cache_where_in = {} } = parameters;
 		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
 			return self._chunk_action(context, scope, parameters, database, transaction, action).then(function (results) {
-				return self._merge_count_maps(results);
+				return self._merge_count_maps(results, parameters.count);
 			});
 		} else {
 			return action(context, scope, parameters, database, transaction);

@@ -846,7 +846,7 @@ class RelationshipSystemModel extends SystemModel {
 						return result.data[`count_${self.entity.name}`];
 					})
 					.flat();
-				const count_rows = self._merge_count_rows(rows);
+				const count_rows = self._merge_count_rows(rows, parameters.count);
 				return self.generate_response("count", count_rows);
 			});
 		});
