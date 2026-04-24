@@ -6,7 +6,7 @@ const FIELDS__COUNT__STRUCTURE = {
 		description: "select",
 	},
 	count: {
-		type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT),
+		type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($abstract.gauze.types.graphql.graphql.COUNT_VALUE__GRAPHQL__TYPE__GAUZE__ABSTRACT),
 		description: "count",
 	},
 };

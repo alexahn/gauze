@@ -36,10 +36,7 @@ Use `where_in` or `where_not_in` for list membership:
 ```json
 {
 	"where_in": {
-		"id": [
-			"00000000-0000-0000-0000-000000000001",
-			"00000000-0000-0000-0000-000000000002"
-		]
+		"id": ["00000000-0000-0000-0000-000000000001", "00000000-0000-0000-0000-000000000002"]
 	}
 }
 ```
@@ -113,6 +110,8 @@ Each count entry supports:
 
 - `<field>`: The entity field to count, such as `id`.
 - `<label>`: The result label returned in the count response's `select` field, such as `rows`.
+
+The response `count` field uses the `CountValue` scalar. Small counts may serialize as JSON numbers, while database clients that return bigint counts, such as PostgreSQL, serialize counts as strings. When Gauze merges counts across shards, it sums values with `BigInt` and returns a string if any merged value was a bigint string or the total exceeds JavaScript's safe integer range.
 
 ## Source
 

@@ -846,29 +846,7 @@ class RelationshipSystemModel extends SystemModel {
 						return result.data[`count_${self.entity.name}`];
 					})
 					.flat();
-				// TODO: figure out a way to not have to do the logic below
-				const counts = {};
-				rows.forEach(function (row) {
-					if (counts[row.select]) {
-						counts[row.select] += row.count;
-					} else {
-						if (row.select !== "null") {
-							counts[row.select] = row.count;
-						}
-					}
-				});
-				const count_rows = Object.keys(counts).map(function (key) {
-					return {
-						select: key,
-						count: counts[key],
-					};
-				});
-				if (!count_rows.length) {
-					count_rows.push({
-						select: "null",
-						count: 0,
-					});
-				}
+				const count_rows = self._merge_count_rows(rows);
 				return self.generate_response("count", count_rows);
 			});
 		});

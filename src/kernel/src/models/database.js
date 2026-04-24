@@ -1416,24 +1416,7 @@ class DatabaseModel extends Model {
 					return self._root_count_transaction(context, scope, parameters, shard.connection, shard.transaction);
 				}),
 			).then(function (results) {
-				// merge results
-				const merged = {};
-				results.forEach(function (result) {
-					const keys = Object.keys(result);
-					keys.forEach(function (key) {
-						if (merged[key]) {
-							merged[key] += result[key];
-						} else {
-							merged[key] = result[key];
-						}
-					});
-				});
-				// TODO: fix the frontend code so we don't need to do this
-				// note: this will guarantee we always return at least one result (currently the frontend code depends on at least one result being returned)
-				if (Object.keys(merged).length === 0) {
-					merged["null"] = 0;
-				}
-				return merged;
+				return self._merge_count_maps(results);
 			});
 		});
 	}
@@ -1493,17 +1476,7 @@ class DatabaseModel extends Model {
 		const { where_in = {}, cache_where_in = {} } = parameters;
 		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
 			return self._chunk_action(context, scope, parameters, database, transaction, action).then(function (results) {
-				const merged = {};
-				results.forEach(function (result) {
-					Object.keys(result).forEach(function (key) {
-						if (merged[key]) {
-							merged[key] += result[key];
-						} else {
-							merged[key] = result[key];
-						}
-					});
-				});
-				return merged;
+				return self._merge_count_maps(results);
 			});
 		} else {
 			return action(context, scope, parameters, database, transaction);
@@ -1518,24 +1491,7 @@ class DatabaseModel extends Model {
 						return self._relationship_count_transaction(context, scope, parameters, shard.connection, shard.transaction);
 					}),
 				).then(function (results) {
-					// merge results
-					const merged = {};
-					results.forEach(function (result) {
-						const keys = Object.keys(result);
-						keys.forEach(function (key) {
-							if (merged[key]) {
-								merged[key] += result[key];
-							} else {
-								merged[key] = result[key];
-							}
-						});
-					});
-					// TODO: fix the frontend code so we don't need to do this
-					// note: this will guarantee that we always return at least one result (currently the frontend code depends on at least one result being returned)
-					if (Object.keys(merged).length === 0) {
-						merged["null"] = 0;
-					}
-					return merged;
+					return self._merge_count_maps(results);
 				});
 			});
 		});
@@ -1670,17 +1626,7 @@ class DatabaseModel extends Model {
 		const { where_in = {}, cache_where_in = {} } = parameters;
 		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
 			return self._chunk_action(context, scope, parameters, database, transaction, action).then(function (results) {
-				const merged = {};
-				results.forEach(function (result) {
-					Object.keys(result).forEach(function (key) {
-						if (merged[key]) {
-							merged[key] += result[key];
-						} else {
-							merged[key] = result[key];
-						}
-					});
-				});
-				return merged;
+				return self._merge_count_maps(results);
 			});
 		} else {
 			return action(context, scope, parameters, database, transaction);

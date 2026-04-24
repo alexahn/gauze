@@ -24,7 +24,7 @@ const expected = `{
     "data": {
         "count_whitelist": [
             {
-                "select": "null",
+                "select": "b55c1f0fb7b44454d6186e16409262a1dc53a27f52c996c64bc56bff53dd7f8e",
                 "count": 0
             }
         ]

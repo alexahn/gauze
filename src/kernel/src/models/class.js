@@ -5,6 +5,8 @@ import * as $structure from "./../../../structure/index.js";
 
 import { LOGGER__IO__LOGGER__SRC__KERNEL } from "./../logger/io.js";
 
+const EMPTY_COUNT_SELECT__CLASS__MODEL__SRC__KERNEL = "b55c1f0fb7b44454d6186e16409262a1dc53a27f52c996c64bc56bff53dd7f8e";
+
 // base model handles middlewares, serializers, and deserializers based on the abstract entity definition
 class Model {
 	constructor(config) {
@@ -66,6 +68,98 @@ class Model {
 		const self = this;
 		row = self.reduce_fields(row, method, "post_deserialize_middlewares");
 		return row;
+	}
+	_normalize_count_value(value) {
+		if (typeof value === "bigint") {
+			return {
+				value: value,
+				string: true,
+			};
+		}
+		if (typeof value === "number") {
+			if (!Number.isFinite(value) || !Number.isInteger(value)) {
+				throw new TypeError(`Count must be an integer: ${value}`);
+			}
+			return {
+				value: BigInt(value),
+				string: !Number.isSafeInteger(value),
+			};
+		}
+		if (typeof value === "string") {
+			if (!/^[0-9]+$/.test(value)) {
+				throw new TypeError(`Count must be an integer string: ${value}`);
+			}
+			return {
+				value: BigInt(value),
+				string: true,
+			};
+		}
+		throw new TypeError(`Count must be a number, string, or bigint: ${value}`);
+	}
+	_format_count_value(value, force_string = false) {
+		if (force_string || value > BigInt(Number.MAX_SAFE_INTEGER)) {
+			return value.toString();
+		}
+		return Number(value);
+	}
+	_merge_count_maps(results) {
+		const self = this;
+		const merged = {};
+		const strings = {};
+		results.forEach(function (result) {
+			Object.keys(result).forEach(function (key) {
+				if (key !== EMPTY_COUNT_SELECT__CLASS__MODEL__SRC__KERNEL) {
+					const count = self._normalize_count_value(result[key]);
+					if (!Object.prototype.hasOwnProperty.call(merged, key)) {
+						merged[key] = 0n;
+						strings[key] = false;
+					}
+					merged[key] += count.value;
+					strings[key] = strings[key] || count.string;
+				}
+			});
+		});
+		const formatted = {};
+		Object.keys(merged).forEach(function (key) {
+			formatted[key] = self._format_count_value(merged[key], strings[key]);
+		});
+		// TODO: fix the frontend code so we don't need to do this
+		// note: this will guarantee we always return at least one result (currently the frontend code depends on at least one result being returned)
+		if (Object.keys(formatted).length === 0) {
+			formatted[EMPTY_COUNT_SELECT__CLASS__MODEL__SRC__KERNEL] = 0;
+		}
+		return formatted;
+	}
+	_merge_count_rows(rows) {
+		const self = this;
+		const merged = {};
+		const strings = {};
+		rows.forEach(function (row) {
+			if (row.select !== EMPTY_COUNT_SELECT__CLASS__MODEL__SRC__KERNEL) {
+				const count = self._normalize_count_value(row.count);
+				if (!Object.prototype.hasOwnProperty.call(merged, row.select)) {
+					merged[row.select] = 0n;
+					strings[row.select] = false;
+				}
+				merged[row.select] += count.value;
+				strings[row.select] = strings[row.select] || count.string;
+			}
+		});
+		const count_rows = Object.keys(merged).map(function (key) {
+			return {
+				select: key,
+				count: self._format_count_value(merged[key], strings[key]),
+			};
+		});
+		// TODO: fix the frontend code so we don't need to do this
+		// note: this will guarantee we always return at least one result (currently the frontend code depends on at least one result being returned)
+		if (!count_rows.length) {
+			count_rows.push({
+				select: EMPTY_COUNT_SELECT__CLASS__MODEL__SRC__KERNEL,
+				count: 0,
+			});
+		}
+		return count_rows;
 	}
 }
 

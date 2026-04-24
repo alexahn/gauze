@@ -1099,3 +1099,5 @@
 	[x] use codex or claude to generate the documentation and readmes
 		[x] subscribe to codex or claude
 		[x] add AGENTS.md to repo
+
+[ ] postgresql returns a bigint for count, which is a string
