@@ -389,7 +389,7 @@ class DatabaseModel extends Model {
 			if (!item || typeof item !== "object" || Array.isArray(item)) {
 				throw new Error(`Input argument 'order.${index}' is invalid: order item must be an object`);
 			}
-			const { column } = item;
+			const { column, order, nulls } = item;
 			if (typeof column !== "string") {
 				throw new Error(`Input argument 'order.${index}.column' is invalid: column must be a string`);
 			}
@@ -400,6 +400,12 @@ class DatabaseModel extends Model {
 			} else {
 				throw new Error(`Input argument 'order.${index}.column' is invalid: ${column} is not a valid field`);
 			}
+			if (typeof order !== "undefined" && order !== "asc" && order !== "desc") {
+				throw new Error(`Input argument 'order.${index}.order' is invalid: order must be "asc" or "desc"`);
+			}
+			if (typeof nulls !== "undefined" && nulls !== "first" && nulls !== "last") {
+				throw new Error(`Input argument 'order.${index}.nulls' is invalid: nulls must be "first" or "last"`);
+			}
 		});
 	}
 	_normalize_order(order) {
@@ -409,6 +415,7 @@ class DatabaseModel extends Model {
 				return {
 					column: item.column,
 					order: item.order || self.entity.default_order_direction || "asc",
+					nulls: item.nulls || "first",
 				};
 			});
 		} else {
@@ -416,6 +423,7 @@ class DatabaseModel extends Model {
 				{
 					column: self.entity.default_order || self.primary_key,
 					order: self.entity.default_order_direction || "asc",
+					nulls: "first",
 				},
 			];
 		}
