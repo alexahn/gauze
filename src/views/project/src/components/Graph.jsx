@@ -220,7 +220,7 @@ function countToNumber(count) {
 	}
 }
 
-function GraphTable({ pathfinder, node, onReload, onClose, onTraverse }) {
+function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem }) {
 	const [filterMode, setFilterMode] = useState(node.filterMode);
 	const [localVariables, setLocalVariables] = useState(node.variables);
 	const fields = node.header.fields;
@@ -471,6 +471,12 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse }) {
 		);
 	}
 
+	function handleOpenItem(item) {
+		return function () {
+			onOpenItem(node, item);
+		};
+	}
+
 	return (
 		<div className="project-graph-node-frame clouds ba bw1 br2 bdx3 bgx12 cx2 shadow-2">
 			<div className="project-graph-node-title flex items-center justify-between bgx2 cx6">
@@ -519,14 +525,9 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse }) {
 								<tr key={id} data-project-graph-row-id={id}>
 									<td className={rowHeaderCellClass}>
 										<div className="project-graph-row-actions flex items-center">
-											<Link
-												href={pathfinder.stateToURL("project.system.headers.header.item", { header: node.header.graphql_meta_type.toLowerCase(), id }, {})}
-												push={true}
-											>
-												<button type="button" className="project-graph-row-link" title="Open" aria-label="Open">
-													<Pencil2Icon />
-												</button>
-											</Link>
+											<button type="button" className="project-graph-row-link" title="Open" aria-label="Open" onClick={handleOpenItem(item)}>
+												<Pencil2Icon />
+											</button>
 											{renderRelationshipControls(item)}
 											<span className="project-graph-row-id truncate" title={id}>
 												{id}
@@ -544,6 +545,275 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse }) {
 								</tr>
 							);
 						})}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	);
+}
+
+function GraphItemTable({ services, node, onClose, onItemUpdate, onItemDelete }) {
+	const { gauzemodel } = services;
+	const [localMode, setLocalMode] = useState(node.mode || "read");
+	const [localItem, setLocalItem] = useState(node.item);
+	const [updateFieldError, setUpdateFieldError] = useState({});
+	const [updateModelError, setUpdateModelError] = useState("");
+	const [deleteModelError, setDeleteModelError] = useState("");
+	const header = node.header;
+	const fields = header.fields;
+	const itemID = localItem ? localItem._metadata.id : node.item ? node.item._metadata.id : "";
+	const cellClass = "project-graph-item-cell ba bw1 br2 bdx2 bgx2 cx6";
+	const headerCellClass = "project-graph-item-cell ba bw1 br2 bdx3 bgx3 cx6";
+	const inputClass = "project-graph-input w-100 ba bw1 br2 bdx3 bgx12 cx2";
+
+	useEffect(
+		function () {
+			setLocalMode(node.mode || "read");
+		},
+		[node.id, node.mode],
+	);
+
+	useEffect(
+		function () {
+			setLocalItem(node.item);
+			setUpdateFieldError({});
+			setUpdateModelError("");
+			setDeleteModelError("");
+		},
+		[node.id, node.item],
+	);
+
+	function changeMode(mode) {
+		return function () {
+			setLocalMode(mode);
+		};
+	}
+
+	function handleUpdateChange(field) {
+		return function (e) {
+			setLocalItem(function (item) {
+				return {
+					...item,
+					attributes: {
+						...item.attributes,
+						[field]: e.target.serialized,
+					},
+				};
+			});
+		};
+	}
+
+	function handleOnKeyDown() {
+		return function () {};
+	}
+
+	function handleUpdate() {
+		if (!localItem) {
+			return Promise.resolve();
+		}
+		const expected = "update";
+		const input = prompt(`Confirm action by entering '${expected}'`, "");
+		if (input !== expected) {
+			return Promise.resolve();
+		}
+		const previousItem = localItem;
+		setUpdateFieldError({});
+		setUpdateModelError("");
+		return gauzemodel.default
+			.update(header, {
+				where: {
+					[header.primary_key]: localItem._metadata.id,
+				},
+				attributes: localItem.attributes,
+			})
+			.then(function (rows) {
+				if (rows && rows.length) {
+					setLocalItem(rows[0]);
+					onItemUpdate(node.id, rows[0], previousItem);
+				} else {
+					setUpdateModelError("Something went wrong!");
+				}
+			})
+			.catch(function (err) {
+				console.error(err);
+				if (err.extensions && err.extensions.field && err.extensions.readable) {
+					setUpdateFieldError({
+						...updateFieldError,
+						[err.extensions.field.name]: err.extensions.readable,
+					});
+				} else if (err.extensions && err.extensions.entity && err.extensions.readable) {
+					setUpdateModelError(err.extensions.readable);
+				} else {
+					setUpdateModelError("Something went wrong!");
+				}
+			});
+	}
+
+	function handleDelete() {
+		if (!localItem) {
+			return Promise.resolve();
+		}
+		const expected = "delete";
+		const input = prompt(`Confirm action by entering '${expected}'`, "");
+		if (input !== expected) {
+			return Promise.resolve();
+		}
+		setDeleteModelError("");
+		return gauzemodel.default
+			.delete(header, {
+				where: {
+					[header.primary_key]: localItem._metadata.id,
+				},
+			})
+			.then(function (rows) {
+				if (rows && rows.length) {
+					const deletedItem = rows[0] || localItem;
+					setLocalItem(null);
+					onItemDelete(node.id, deletedItem);
+				} else {
+					setDeleteModelError("Something went wrong!");
+				}
+			})
+			.catch(function (err) {
+				console.error(err);
+				if (err.extensions && err.extensions.entity && err.extensions.readable) {
+					setDeleteModelError(err.extensions.readable);
+				} else {
+					setDeleteModelError("Something went wrong!");
+				}
+			});
+	}
+
+	function renderModeButtons() {
+		return (
+			<div className="project-graph-item-modes flex">
+				<button type="button" className={localMode === "read" ? "active" : ""} onClick={changeMode("read")}>
+					Read
+				</button>
+				<button type="button" className={localMode === "update" ? "active" : ""} onClick={changeMode("update")}>
+					Update
+				</button>
+				<button type="button" className={localMode === "delete" ? "active" : ""} onClick={changeMode("delete")}>
+					Delete
+				</button>
+			</div>
+		);
+	}
+
+	function renderReadValue(field) {
+		return <div className="project-graph-item-value truncate">{formatValue(localItem.attributes[field.name])}</div>;
+	}
+
+	function renderUpdateValue(field) {
+		return (
+			<div className="project-graph-item-input-wrap">
+				<Input
+					defaultMode={true}
+					field={field}
+					className={inputClass}
+					onChange={handleUpdateChange(field.name)}
+					onKeyDown={handleOnKeyDown(field.name)}
+					defaultValue={localItem.attributes[field.name]}
+				/>
+				{updateFieldError[field.name] ? <span className="project-graph-item-error bgxyz7 cx12 ba bw1 br2 pa1">{updateFieldError[field.name]}</span> : null}
+			</div>
+		);
+	}
+
+	function renderDeleteValue(field) {
+		return (
+			<Input
+				defaultMode={true}
+				field={field}
+				className={inputClass}
+				onChange={handleUpdateChange(field.name)}
+				onKeyDown={handleOnKeyDown(field.name)}
+				defaultValue={localItem.attributes[field.name]}
+				disabled={true}
+			/>
+		);
+	}
+
+	function renderRows() {
+		if (!localItem) {
+			return (
+				<tr>
+					<td className={cellClass} colSpan="2">
+						<div className="project-graph-item-message">Item does not exist or has been deleted</div>
+					</td>
+				</tr>
+			);
+		}
+		return fields.map(function (field) {
+			let value;
+			if (localMode === "update") {
+				value = renderUpdateValue(field);
+			} else if (localMode === "delete") {
+				value = renderDeleteValue(field);
+			} else {
+				value = renderReadValue(field);
+			}
+			return (
+				<tr key={field.name}>
+					<td className={cellClass}>
+						<div className="project-graph-item-field truncate" title={field.name}>
+							{field.name}
+						</div>
+					</td>
+					<td className={cellClass}>{value}</td>
+				</tr>
+			);
+		});
+	}
+
+	function renderApplyRow() {
+		if (!localItem || localMode === "read") {
+			return null;
+		}
+		const isDelete = localMode === "delete";
+		const error = isDelete ? deleteModelError : updateModelError;
+		return (
+			<tr>
+				<td className={cellClass}></td>
+				<td className={cellClass}>
+					<div className="project-graph-item-input-wrap">
+						<button type="button" className="project-graph-item-apply ba bw1 br2 bdx3 bgx2 cx6" onClick={isDelete ? handleDelete : handleUpdate}>
+							Apply
+						</button>
+						{error ? <span className="project-graph-item-error bgxyz7 cx12 ba bw1 br2 pa1">{error}</span> : null}
+					</div>
+				</td>
+			</tr>
+		);
+	}
+
+	return (
+		<div className="project-graph-item-frame clouds ba bw1 br2 bdx3 bgx12 cx2 shadow-2">
+			<div className="project-graph-node-title flex items-center justify-between bgx2 cx6">
+				<div className="flex items-center overflow-hidden">
+					<div className="project-graph-node-name truncate">{header.graphql_meta_type}</div>
+					<div className="project-graph-node-source ml2 truncate" title={itemID}>
+						{itemID}
+					</div>
+				</div>
+				<div className="project-graph-node-actions flex items-center">
+					<button type="button" title="Close" aria-label="Close" onClick={() => onClose(node.id)}>
+						<Cross1Icon />
+					</button>
+				</div>
+			</div>
+			<div className="project-graph-node-toolbar flex items-center justify-between">{renderModeButtons()}</div>
+			<div className="project-graph-table-scroll">
+				<table className="project-graph-item-table">
+					<thead>
+						<tr>
+							<th className={headerCellClass}>Field</th>
+							<th className={headerCellClass}>Value</th>
+						</tr>
+					</thead>
+					<tbody>
+						{renderRows()}
+						{renderApplyRow()}
 					</tbody>
 				</table>
 			</div>
@@ -631,7 +901,8 @@ function Graph({ pathfinder, services, headers }) {
 	const { gauzemodel } = services;
 	const nodeMeasureSignature = nodes
 		.map(function (node) {
-			return [node.id, node.header.fields.length, node.items.length, node.loading, node.count, node.filterMode, node.error].join(":");
+			const itemCount = node.items ? node.items.length : node.item ? 1 : 0;
+			return [node.id, node.kind || "table", node.header.fields.length, itemCount, node.loading, node.count, node.filterMode, node.mode, node.error].join(":");
 		})
 		.join("|");
 
@@ -784,6 +1055,88 @@ function Graph({ pathfinder, services, headers }) {
 			return nodes.concat(node);
 		});
 		return reloadNode(node.id, variables, node.filterMode, node);
+	}
+
+	function addItemNode(sourceNode, item) {
+		const sourceDimensions = getNodeDimensions(nodeDimensions, sourceNode);
+		const node = {
+			id: uuidv4(),
+			kind: "item",
+			header: sourceNode.header,
+			item,
+			mode: "update",
+			x: sourceNode.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
+			y: sourceNode.y + NODE_VERTICAL_GAP,
+		};
+		setNodes(function (nodes) {
+			return nodes.concat(node);
+		});
+		return Promise.resolve();
+	}
+
+	function itemMatches(a, b) {
+		if (!a || !b) {
+			return false;
+		}
+		return a._metadata.type === b._metadata.type && a._metadata.id === b._metadata.id;
+	}
+
+	function updateGraphItem(itemNodeID, updatedItem, previousItem = updatedItem) {
+		setNodes(function (nodes) {
+			return nodes.map(function (node) {
+				if (node.id === itemNodeID) {
+					return {
+						...node,
+						item: updatedItem,
+					};
+				} else if (node.kind === "item" && (itemMatches(node.item, previousItem) || itemMatches(node.item, updatedItem))) {
+					return {
+						...node,
+						item: updatedItem,
+					};
+				} else if (node.items) {
+					return {
+						...node,
+						items: node.items.map(function (item) {
+							if (itemMatches(item, previousItem) || itemMatches(item, updatedItem)) {
+								return updatedItem;
+							} else {
+								return item;
+							}
+						}),
+					};
+				} else {
+					return node;
+				}
+			});
+		});
+	}
+
+	function deleteGraphItem(itemNodeID, deletedItem) {
+		setNodes(function (nodes) {
+			return nodes.map(function (node) {
+				if (node.id === itemNodeID) {
+					return {
+						...node,
+						item: null,
+					};
+				} else if (node.kind === "item" && itemMatches(node.item, deletedItem)) {
+					return {
+						...node,
+						item: null,
+					};
+				} else if (node.items) {
+					return {
+						...node,
+						items: node.items.filter(function (item) {
+							return !itemMatches(item, deletedItem);
+						}),
+					};
+				} else {
+					return node;
+				}
+			});
+		});
 	}
 
 	function closeNode(id) {
@@ -989,7 +1342,11 @@ function Graph({ pathfinder, services, headers }) {
 								}}
 							>
 								<div className="project-graph-drag-handle" onMouseDown={handleNodeMouseDown(node.id)} />
-								<GraphTable pathfinder={pathfinder} node={node} onReload={reloadNode} onClose={closeNode} onTraverse={addTraversalNode} />
+								{node.kind === "item" ? (
+									<GraphItemTable services={services} node={node} onClose={closeNode} onItemUpdate={updateGraphItem} onItemDelete={deleteGraphItem} />
+								) : (
+									<GraphTable node={node} onReload={reloadNode} onClose={closeNode} onTraverse={addTraversalNode} onOpenItem={addItemNode} />
+								)}
 							</div>
 						);
 					})}

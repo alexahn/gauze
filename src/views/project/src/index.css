@@ -991,6 +991,12 @@
 	overflow: hidden;
 }
 
+.project-graph-item-frame {
+	width: min(34rem, max(24rem, calc(100vw - 20rem)));
+	max-height: min(42rem, calc(100vh - 4rem));
+	overflow: hidden;
+}
+
 .project-graph-node-title {
 	min-height: 2.5rem;
 	padding: 0.45rem 0.6rem;
@@ -1044,9 +1050,15 @@
 	gap: 0.25rem;
 }
 
+.project-graph-item-modes {
+	gap: 0.25rem;
+}
+
 .project-graph-filter-modes button,
 .project-graph-filter-action button,
-.project-graph-page-button {
+.project-graph-page-button,
+.project-graph-item-modes button,
+.project-graph-item-apply {
 	border: 1px solid var(--x3);
 	border-radius: 0.25rem;
 	background: var(--x2);
@@ -1055,7 +1067,8 @@
 	font-size: 0.75rem;
 }
 
-.project-graph-filter-modes button.active {
+.project-graph-filter-modes button.active,
+.project-graph-item-modes button.active {
 	background: var(--x3);
 	color: var(--x12);
 }
@@ -1086,10 +1099,24 @@
 	font-size: 0.78rem;
 }
 
+.project-graph-item-table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0.15rem;
+	table-layout: fixed;
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.78rem;
+}
+
 .project-graph-cell {
 	min-width: 11rem;
 	max-width: 16rem;
 	padding: 0.2rem;
+	vertical-align: middle;
+}
+
+.project-graph-item-cell {
+	padding: 0.25rem;
 	vertical-align: middle;
 }
 
@@ -1111,6 +1138,27 @@
 .project-graph-value {
 	display: block;
 	max-width: 14rem;
+}
+
+.project-graph-item-field,
+.project-graph-item-value,
+.project-graph-item-message {
+	display: block;
+	max-width: 100%;
+}
+
+.project-graph-item-input-wrap {
+	position: relative;
+}
+
+.project-graph-item-error {
+	position: absolute;
+	top: calc(100% + 0.2rem);
+	left: 0;
+	z-index: 5;
+	width: min(16rem, 100%);
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.75rem;
 }
 
 .project-graph-row-id {
