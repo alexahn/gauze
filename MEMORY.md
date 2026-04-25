@@ -30,4 +30,5 @@
 - Project graph table scroll containers should stop wheel propagation so scrolling a table does not also trigger graph viewport zoom.
 - Project graph title metadata next to the entity name, such as traversal source ids and item ids, should wrap instead of using `truncate`; this is the top header area of the table/node, not the column header row.
 - Project graph item nodes should show mode-level GraphQL errors for create/update/delete in the top `project-graph-error` banner, not only near the bottom apply row. Field validation errors still render beside the field input.
+- Project graph item field validation errors should render below the related input in normal document flow, not absolutely positioned or inline to the right; this keeps messages readable without horizontal scrolling and prevents the last field's error from covering the apply row.
 - Do not render relationship traversal menus as project graph table-cell popovers: popover content can leak/clamp inside the table in some render states. Use a compact in-row selector or another control whose menu body is not regular table content.
