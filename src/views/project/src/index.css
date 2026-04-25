@@ -1150,6 +1150,33 @@
 	max-width: 14rem;
 }
 
+.project-graph-value-trigger {
+	display: block;
+	width: 100%;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+}
+
+.project-graph-value-popover {
+	max-width: calc(100vw - 1rem);
+	max-height: calc(100vh - 1rem);
+	padding: 0.55rem;
+	overflow: auto;
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.78rem;
+}
+
+.project-graph-value-popover-content {
+	margin: 0;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
 .project-graph-item-field,
 .project-graph-item-value,
 .project-graph-item-message {

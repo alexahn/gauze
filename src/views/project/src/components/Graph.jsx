@@ -7,6 +7,7 @@ import { BookmarkFilledIcon, BookmarkIcon, Cross1Icon, Pencil2Icon, PlusCircledI
 import Input from "./Input.jsx";
 import Link from "./Link.jsx";
 import Pagination from "./Pagination.jsx";
+import Popover from "./Popover.jsx";
 
 const PAGE_SIZE = 8;
 const NODE_HORIZONTAL_GAP = 96;
@@ -299,6 +300,18 @@ function formatValue(value) {
 		return "";
 	} else if (typeof value === "object") {
 		return JSON.stringify(value);
+	} else {
+		return String(value);
+	}
+}
+
+function formatFullValue(value) {
+	if (value === undefined) {
+		return "";
+	} else if (value === null) {
+		return "null";
+	} else if (typeof value === "object") {
+		return JSON.stringify(value, null, 2);
 	} else {
 		return String(value);
 	}
@@ -601,6 +614,25 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 		);
 	}
 
+	function renderValuePopover(value) {
+		const summary = formatValue(value);
+		const content = formatFullValue(value);
+		return (
+			<Popover
+				trigger={<span className="project-graph-value truncate">{summary}</span>}
+				triggerClassName="project-graph-value-trigger"
+				popoverClassName="project-graph-value-popover bgx2 cx6 ba bw1 br2 bdx3 shadow-2"
+				popoverWidth="min(48rem, calc(100vw - 1rem))"
+				triggerTitle={summary}
+				triggerAriaLabel="Show full value"
+			>
+				<pre className="project-graph-value-popover-content" onWheel={stopWheelPropagation}>
+					{content}
+				</pre>
+			</Popover>
+		);
+	}
+
 	return (
 		<div className="project-graph-node-frame clouds ba bw1 br2 bdx3 bgx12 cx2 shadow-2">
 			<div className="project-graph-node-title flex items-center justify-between bgx2 cx6">
@@ -668,10 +700,11 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 										</div>
 									</td>
 									{fields.map(function (field) {
-										const value = formatValue(item.attributes[field.name]);
+										const rawValue = item.attributes[field.name];
+										const value = formatValue(rawValue);
 										return (
 											<td key={field.name} className={cellClass} title={value}>
-												<div className="project-graph-value truncate">{value}</div>
+												{renderValuePopover(rawValue)}
 											</td>
 										);
 									})}
