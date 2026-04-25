@@ -764,10 +764,14 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 		}
 		setCreateFieldError({});
 		setCreateModelError("");
+		const variables = {
+			attributes: localCreateItem.attributes,
+		};
+		if (node.createSource) {
+			variables.source = node.createSource;
+		}
 		return gauzemodel.default
-			.create(header, {
-				attributes: localCreateItem.attributes,
-			})
+			.create(header, variables)
 			.then(function (rows) {
 				if (rows && rows.length) {
 					setLocalItem(rows[0]);
@@ -1324,7 +1328,9 @@ function Graph({ pathfinder, services, agent, headers }) {
 			item: null,
 			mode: "create",
 			createAttributes: createAttributesFromVariables(sourceNode.header, variables || sourceNode.variables),
+			createSource: sourceNode.source || null,
 			parentNodeID: sourceNode.id,
+			parentEntityID: null,
 			x: sourceNode.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
 			y: sourceNode.y + NODE_VERTICAL_GAP,
 		};
@@ -1397,6 +1403,7 @@ function Graph({ pathfinder, services, agent, headers }) {
 						...node,
 						item: createdItem,
 						mode: "read",
+						parentEntityID: createdItem._metadata.id,
 					};
 				} else if (node.kind === "item" && itemMatches(node.item, createdItem)) {
 					return {
