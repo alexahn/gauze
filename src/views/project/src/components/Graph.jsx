@@ -218,6 +218,7 @@ function accessWhere(kind, agent, sourceHeader, item) {
 	const where = {
 		[`${prefix}__entity_id`]: item._metadata.id,
 		[`${prefix}__entity_type`]: sourceHeader.table_name,
+		[`${prefix}__method`]: "read",
 	};
 	if (agent && agent.aud) {
 		where[`${prefix}__realm`] = agent.aud;
