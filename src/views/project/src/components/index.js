@@ -8,3 +8,4 @@ export * as headers from "./Headers.jsx";
 export * as table from "./Table.jsx";
 export * as item from "./Item.jsx";
 export * as popover from "./Popover.jsx";
+export * as graph from "./Graph.jsx";
