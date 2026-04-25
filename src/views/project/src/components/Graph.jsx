@@ -11,6 +11,7 @@ import Pagination from "./Pagination.jsx";
 const PAGE_SIZE = 8;
 const NODE_HORIZONTAL_GAP = 96;
 const NODE_VERTICAL_GAP = 64;
+const ACCESS_METHODS = ["create", "read", "update", "delete", "count"];
 const NODE_FALLBACK_DIMENSIONS = {
 	width: 720,
 	height: 320,
@@ -96,14 +97,15 @@ function buildTraversalEdges(nodes, nodeDimensions) {
 		if (node.kind === "access") {
 			const from = edgePoint(parentNode, parentDimensions, parentRowAnchor, "right");
 			const to = itemEdgePoint(node, nodeDimensionsValue);
+			const label = node.accessMethod ? `${node.accessKind} ${node.accessMethod}` : node.accessKind;
 			edges.push({
 				id: `edge.access.${node.id}`,
 				markerID: `project-graph-edge-access-${node.id}-arrow`,
 				from,
 				to,
-				label: node.accessKind,
+				label,
 				color: "var(--x7)",
-				title: `${node.accessKind}: ${node.parentEntityID}`,
+				title: `${label}: ${node.parentEntityID}`,
 			});
 			return edges;
 		}
@@ -213,12 +215,12 @@ function accessVariables(header, where) {
 	return variables;
 }
 
-function accessWhere(kind, agent, sourceHeader, item) {
+function accessWhere(kind, agent, sourceHeader, item, method) {
 	const prefix = `gauze__${kind}`;
 	const where = {
 		[`${prefix}__entity_id`]: item._metadata.id,
 		[`${prefix}__entity_type`]: sourceHeader.table_name,
-		[`${prefix}__method`]: "read",
+		[`${prefix}__method`]: method,
 	};
 	if (agent && agent.aud) {
 		where[`${prefix}__realm`] = agent.aud;
@@ -562,10 +564,10 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 		return (
 			<>
 				<button type="button" className="project-graph-row-link" title="Whitelist" aria-label="Whitelist" onClick={handleOpenAccess("whitelist", item)}>
-					<BookmarkIcon />
+					<BookmarkFilledIcon />
 				</button>
 				<button type="button" className="project-graph-row-link" title="Blacklist" aria-label="Blacklist" onClick={handleOpenAccess("blacklist", item)}>
-					<BookmarkFilledIcon />
+					<BookmarkIcon />
 				</button>
 			</>
 		);
@@ -579,6 +581,11 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 					{node.source ? (
 						<div className="project-graph-node-source ml2 truncate" title={`${node.source._direction}: ${node.source._metadata.id}`}>
 							{node.source._direction}: {node.source._metadata.id}
+						</div>
+					) : null}
+					{node.accessMethod ? (
+						<div className="project-graph-node-source ml2 truncate" title={`${node.accessKind}: ${node.accessMethod}`}>
+							{node.accessMethod}
 						</div>
 					) : null}
 					<div className="project-graph-node-count ml2">{node.loading ? "Loading" : `${total} rows`}</div>
@@ -1179,28 +1186,35 @@ function Graph({ pathfinder, services, agent, headers }) {
 		if (!targetHeader) {
 			return Promise.resolve();
 		}
-		const variables = accessVariables(targetHeader, accessWhere(kind, agent, sourceNode.header, item));
 		const sourceDimensions = getNodeDimensions(nodeDimensions, sourceNode);
-		const node = {
-			id: uuidv4(),
-			kind: "access",
-			accessKind: kind,
-			header: targetHeader,
-			variables,
-			filterMode: "where",
-			items: [],
-			count: 0,
-			parentNodeID: sourceNode.id,
-			parentEntityID: item._metadata.id,
-			x: sourceNode.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
-			y: sourceNode.y + NODE_VERTICAL_GAP,
-			loading: true,
-			error: "",
-		};
-		setNodes(function (nodes) {
-			return nodes.concat(node);
+		const accessNodes = ACCESS_METHODS.map(function (method, index) {
+			const variables = accessVariables(targetHeader, accessWhere(kind, agent, sourceNode.header, item, method));
+			return {
+				id: uuidv4(),
+				kind: "access",
+				accessKind: kind,
+				accessMethod: method,
+				header: targetHeader,
+				variables,
+				filterMode: "where",
+				items: [],
+				count: 0,
+				parentNodeID: sourceNode.id,
+				parentEntityID: item._metadata.id,
+				x: sourceNode.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
+				y: sourceNode.y + NODE_VERTICAL_GAP + index * (NODE_FALLBACK_DIMENSIONS.height + NODE_VERTICAL_GAP),
+				loading: true,
+				error: "",
+			};
 		});
-		return reloadNode(node.id, variables, node.filterMode, node);
+		setNodes(function (nodes) {
+			return nodes.concat(accessNodes);
+		});
+		return Promise.all(
+			accessNodes.map(function (node) {
+				return reloadNode(node.id, node.variables, node.filterMode, node);
+			}),
+		);
 	}
 
 	function itemMatches(a, b) {
