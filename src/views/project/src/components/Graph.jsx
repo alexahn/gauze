@@ -16,102 +16,8 @@ const NODE_FALLBACK_DIMENSIONS = {
 	height: 320,
 };
 
-const DEPTH_COLORS = {
-	0: {
-		node: {
-			bg: "x10",
-			bd: "x10",
-			c: "x6",
-		},
-		table: {
-			bg: "x7",
-			bd: "x7",
-			c: "x2",
-		},
-	},
-	1: {
-		node: {
-			bg: "x4",
-			bd: "x4",
-			c: "x6",
-		},
-		table: {
-			bg: "x2",
-			bd: "x2",
-			c: "x6",
-		},
-	},
-	2: {
-		node: {
-			bg: "y10",
-			bd: "y10",
-			c: "y2",
-		},
-		table: {
-			bg: "y7",
-			bd: "y7",
-			c: "y2",
-		},
-	},
-	3: {
-		node: {
-			bg: "z10",
-			bd: "z10",
-			c: "z6",
-		},
-		table: {
-			bg: "z7",
-			bd: "z7",
-			c: "z12",
-		},
-	},
-};
-
 function clamp(value, min, max) {
 	return Math.max(min, Math.min(max, value));
-}
-
-function depthColorIndex(depth) {
-	const index = depth % 4;
-	if (index < 0) {
-		return index + 4;
-	} else {
-		return index;
-	}
-}
-
-function depthColors(depth) {
-	return DEPTH_COLORS[depthColorIndex(depth || 0)];
-}
-
-function depthVar(token) {
-	return `var(--${token})`;
-}
-
-function depthStyle(depth) {
-	const colors = depthColors(depth);
-	return {
-		"--project-graph-node-bg": depthVar(colors.node.bg),
-		"--project-graph-node-bd": depthVar(colors.node.bd),
-		"--project-graph-node-c": depthVar(colors.node.c),
-		"--project-graph-table-bg": depthVar(colors.table.bg),
-		"--project-graph-table-bd": depthVar(colors.table.bd),
-		"--project-graph-table-c": depthVar(colors.table.c),
-	};
-}
-
-function nodeRelationshipDepth(node) {
-	if (node.relationshipDepth !== undefined) {
-		return node.relationshipDepth;
-	}
-	return node.depth || 0;
-}
-
-function nodeExplorationDepth(node) {
-	if (node.explorationDepth !== undefined) {
-		return node.explorationDepth;
-	}
-	return Math.abs(node.depth || 0);
 }
 
 function getNodeDimensions(nodeDimensions, node) {
@@ -169,7 +75,7 @@ function buildTraversalEdges(nodes, nodeDimensions) {
 		const direction = node.source._direction;
 		const sourceType = node.source._metadata.type;
 		const targetType = node.header.graphql_meta_type;
-		const color = depthVar(depthColors(nodeExplorationDepth(node)).table.bg);
+		const color = "var(--x7)";
 		const label = direction === "from" ? `${targetType} -> ${sourceType}` : `${sourceType} -> ${targetType}`;
 		let labeled = false;
 		node.items.forEach(function (item, index) {
@@ -566,7 +472,7 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse }) {
 	}
 
 	return (
-		<div className="project-graph-node-frame clouds ba bw1 br2 bdx3 bgx12 cx2 shadow-2" style={depthStyle(nodeExplorationDepth(node))}>
+		<div className="project-graph-node-frame clouds ba bw1 br2 bdx3 bgx12 cx2 shadow-2">
 			<div className="project-graph-node-title flex items-center justify-between bgx2 cx6">
 				<div className="flex items-center overflow-hidden">
 					<div className="project-graph-node-name truncate">{node.header.graphql_meta_type}</div>
@@ -831,8 +737,6 @@ function Graph({ pathfinder, services, headers }) {
 			filterMode: "where_like",
 			items: [],
 			count: 0,
-			relationshipDepth: 0,
-			explorationDepth: 0,
 			x: 24 + offset,
 			y: 24 + offset,
 			loading: true,
@@ -871,8 +775,6 @@ function Graph({ pathfinder, services, headers }) {
 			filterMode: "where_like",
 			items: [],
 			count: 0,
-			relationshipDepth: nodeRelationshipDepth(sourceNode) + (direction === "to" ? 1 : -1),
-			explorationDepth: nodeExplorationDepth(sourceNode) + 1,
 			x: sourceNode.x + xOffset,
 			y: sourceNode.y + NODE_VERTICAL_GAP,
 			loading: true,
