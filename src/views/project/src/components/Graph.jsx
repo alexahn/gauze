@@ -38,6 +38,13 @@ function edgePoint(node, dimensions, rowAnchor, side) {
 	};
 }
 
+function itemEdgePoint(node, dimensions) {
+	return {
+		x: node.x,
+		y: node.y + clamp(dimensions.height * 0.18, 56, 96),
+	};
+}
+
 function edgePath(from, to) {
 	const direction = to.x >= from.x ? 1 : -1;
 	const dx = Math.max(96, Math.abs(to.x - from.x) * 0.5);
@@ -59,7 +66,7 @@ function buildTraversalEdges(nodes, nodeDimensions) {
 		nodeIndex[node.id] = node;
 	});
 	return nodes.reduce(function (edges, node) {
-		if (!node.parentNodeID || !node.source) {
+		if (!node.parentNodeID) {
 			return edges;
 		}
 		const parentNode = nodeIndex[node.parentNodeID];
@@ -70,6 +77,23 @@ function buildTraversalEdges(nodes, nodeDimensions) {
 		const nodeDimensionsValue = getNodeDimensions(nodeDimensions, node);
 		const parentRowAnchor = getRowAnchor(parentDimensions, node.parentEntityID);
 		if (!parentRowAnchor) {
+			return edges;
+		}
+		if (node.kind === "item") {
+			const from = edgePoint(parentNode, parentDimensions, parentRowAnchor, "right");
+			const to = itemEdgePoint(node, nodeDimensionsValue);
+			edges.push({
+				id: `edge.item.${node.id}`,
+				markerID: `project-graph-edge-item-${node.id}-arrow`,
+				from,
+				to,
+				label: "item",
+				color: "var(--x7)",
+				title: `item: ${node.parentEntityID}`,
+			});
+			return edges;
+		}
+		if (!node.source) {
 			return edges;
 		}
 		const direction = node.source._direction;
@@ -1065,6 +1089,8 @@ function Graph({ pathfinder, services, headers }) {
 			header: sourceNode.header,
 			item,
 			mode: "update",
+			parentNodeID: sourceNode.id,
+			parentEntityID: item._metadata.id,
 			x: sourceNode.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
 			y: sourceNode.y + NODE_VERTICAL_GAP,
 		};
