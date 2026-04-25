@@ -228,6 +228,25 @@ function accessWhere(kind, agent, sourceHeader, item, method) {
 	return where;
 }
 
+function createAttributesFromVariables(header, variables) {
+	const fieldNames = new Set(
+		header.fields.map(function (field) {
+			return field.name;
+		}),
+	);
+	const modes = variables.where && Object.keys(variables.where).length ? ["where"] : ["where_like"];
+	return modes.reduce(function (attributes, mode) {
+		const values = variables[mode] || {};
+		Object.keys(values).forEach(function (fieldName) {
+			const value = values[fieldName];
+			if (fieldNames.has(fieldName) && value !== undefined && value !== null && typeof value !== "object") {
+				attributes[fieldName] = value;
+			}
+		});
+		return attributes;
+	}, {});
+}
+
 function isGauzeEntityHeader(header) {
 	return ["RELATIONSHIP", "WHITELIST", "BLACKLIST"].indexOf(header.graphql_meta_type) >= 0;
 }
@@ -294,7 +313,7 @@ function countToNumber(count) {
 	}
 }
 
-function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAccess }) {
+function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAccess, onOpenCreate }) {
 	const [filterMode, setFilterMode] = useState(node.filterMode);
 	const [localVariables, setLocalVariables] = useState(node.variables);
 	const fields = node.header.fields;
@@ -358,6 +377,11 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 	function applyFilters() {
 		const variables = stripFilterVariables(localVariables, filterMode);
 		onReload(node.id, variables, filterMode);
+	}
+
+	function handleOpenCreate() {
+		const variables = stripFilterVariables(localVariables, filterMode);
+		onOpenCreate(node, variables);
 	}
 
 	function handleFilterKeyDown() {
@@ -591,6 +615,9 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 					<div className="project-graph-node-count ml2">{node.loading ? "Loading" : `${total} rows`}</div>
 				</div>
 				<div className="project-graph-node-actions flex items-center">
+					<button type="button" title="Create" aria-label="Create" onClick={handleOpenCreate}>
+						<PlusCircledIcon />
+					</button>
 					<button type="button" title="Reload" aria-label="Reload" onClick={() => onReload(node.id, node.variables, filterMode)}>
 						<ReloadIcon />
 					</button>
@@ -654,16 +681,19 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 	);
 }
 
-function GraphItemTable({ services, node, onClose, onItemUpdate, onItemDelete }) {
+function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, onItemDelete }) {
 	const { gauzemodel } = services;
 	const [localMode, setLocalMode] = useState(node.mode || "read");
 	const [localItem, setLocalItem] = useState(node.item);
+	const [localCreateItem, setLocalCreateItem] = useState({ attributes: node.createAttributes || {} });
+	const [createFieldError, setCreateFieldError] = useState({});
+	const [createModelError, setCreateModelError] = useState("");
 	const [updateFieldError, setUpdateFieldError] = useState({});
 	const [updateModelError, setUpdateModelError] = useState("");
 	const [deleteModelError, setDeleteModelError] = useState("");
 	const header = node.header;
 	const fields = header.fields;
-	const itemID = localItem ? localItem._metadata.id : node.item ? node.item._metadata.id : "";
+	const itemID = localItem ? localItem._metadata.id : node.item ? node.item._metadata.id : localMode === "create" ? "new" : "";
 	const cellClass = "project-graph-item-cell ba bw1 br2 bdx2 bgx2 cx6";
 	const headerCellClass = "project-graph-item-cell ba bw1 br2 bdx3 bgx3 cx6";
 	const inputClass = "project-graph-input w-100 ba bw1 br2 bdx3 bgx12 cx2";
@@ -678,6 +708,9 @@ function GraphItemTable({ services, node, onClose, onItemUpdate, onItemDelete })
 	useEffect(
 		function () {
 			setLocalItem(node.item);
+			setLocalCreateItem({ attributes: node.createAttributes || {} });
+			setCreateFieldError({});
+			setCreateModelError("");
 			setUpdateFieldError({});
 			setUpdateModelError("");
 			setDeleteModelError("");
@@ -688,6 +721,20 @@ function GraphItemTable({ services, node, onClose, onItemUpdate, onItemDelete })
 	function changeMode(mode) {
 		return function () {
 			setLocalMode(mode);
+		};
+	}
+
+	function handleCreateChange(field) {
+		return function (e) {
+			setLocalCreateItem(function (item) {
+				return {
+					...item,
+					attributes: {
+						...item.attributes,
+						[field]: e.target.serialized,
+					},
+				};
+			});
 		};
 	}
 
@@ -707,6 +754,42 @@ function GraphItemTable({ services, node, onClose, onItemUpdate, onItemDelete })
 
 	function handleOnKeyDown() {
 		return function () {};
+	}
+
+	function handleCreate() {
+		const expected = "create";
+		const input = prompt(`Confirm action by entering '${expected}'`, "");
+		if (input !== expected) {
+			return Promise.resolve();
+		}
+		setCreateFieldError({});
+		setCreateModelError("");
+		return gauzemodel.default
+			.create(header, {
+				attributes: localCreateItem.attributes,
+			})
+			.then(function (rows) {
+				if (rows && rows.length) {
+					setLocalItem(rows[0]);
+					setLocalMode("read");
+					onItemCreate(node.id, rows[0]);
+				} else {
+					setCreateModelError("Something went wrong!");
+				}
+			})
+			.catch(function (err) {
+				console.error(err);
+				if (err.extensions && err.extensions.field && err.extensions.readable) {
+					setCreateFieldError({
+						...createFieldError,
+						[err.extensions.field.name]: err.extensions.readable,
+					});
+				} else if (err.extensions && err.extensions.entity && err.extensions.readable) {
+					setCreateModelError(err.extensions.readable);
+				} else {
+					setCreateModelError("Something went wrong!");
+				}
+			});
 	}
 
 	function handleUpdate() {
@@ -787,6 +870,15 @@ function GraphItemTable({ services, node, onClose, onItemUpdate, onItemDelete })
 	}
 
 	function renderModeButtons() {
+		if (localMode === "create" && !localItem) {
+			return (
+				<div className="project-graph-item-modes flex">
+					<button type="button" className="active">
+						Create
+					</button>
+				</div>
+			);
+		}
 		return (
 			<div className="project-graph-item-modes flex">
 				<button type="button" className={localMode === "read" ? "active" : ""} onClick={changeMode("read")}>
@@ -798,6 +890,22 @@ function GraphItemTable({ services, node, onClose, onItemUpdate, onItemDelete })
 				<button type="button" className={localMode === "delete" ? "active" : ""} onClick={changeMode("delete")}>
 					Delete
 				</button>
+			</div>
+		);
+	}
+
+	function renderCreateValue(field) {
+		return (
+			<div className="project-graph-item-input-wrap">
+				<Input
+					defaultMode={true}
+					field={field}
+					className={inputClass}
+					onChange={handleCreateChange(field.name)}
+					onKeyDown={handleOnKeyDown(field.name)}
+					defaultValue={localCreateItem.attributes[field.name]}
+				/>
+				{createFieldError[field.name] ? <span className="project-graph-item-error bgxyz7 cx12 ba bw1 br2 pa1">{createFieldError[field.name]}</span> : null}
 			</div>
 		);
 	}
@@ -837,6 +945,20 @@ function GraphItemTable({ services, node, onClose, onItemUpdate, onItemDelete })
 	}
 
 	function renderRows() {
+		if (localMode === "create" && !localItem) {
+			return fields.map(function (field) {
+				return (
+					<tr key={field.name}>
+						<td className={cellClass}>
+							<div className="project-graph-item-field truncate" title={field.name}>
+								{field.name}
+							</div>
+						</td>
+						<td className={cellClass}>{renderCreateValue(field)}</td>
+					</tr>
+				);
+			});
+		}
 		if (!localItem) {
 			return (
 				<tr>
@@ -869,6 +991,21 @@ function GraphItemTable({ services, node, onClose, onItemUpdate, onItemDelete })
 	}
 
 	function renderApplyRow() {
+		if (localMode === "create" && !localItem) {
+			return (
+				<tr>
+					<td className={cellClass}></td>
+					<td className={cellClass}>
+						<div className="project-graph-item-input-wrap">
+							<button type="button" className="project-graph-item-apply ba bw1 br2 bdx3 bgx2 cx6" onClick={handleCreate}>
+								Apply
+							</button>
+							{createModelError ? <span className="project-graph-item-error bgxyz7 cx12 ba bw1 br2 pa1">{createModelError}</span> : null}
+						</div>
+					</td>
+				</tr>
+			);
+		}
 		if (!localItem || localMode === "read") {
 			return null;
 		}
@@ -1178,6 +1315,25 @@ function Graph({ pathfinder, services, agent, headers }) {
 		return Promise.resolve();
 	}
 
+	function addCreateNode(sourceNode, variables) {
+		const sourceDimensions = getNodeDimensions(nodeDimensions, sourceNode);
+		const node = {
+			id: uuidv4(),
+			kind: "item",
+			header: sourceNode.header,
+			item: null,
+			mode: "create",
+			createAttributes: createAttributesFromVariables(sourceNode.header, variables || sourceNode.variables),
+			parentNodeID: sourceNode.id,
+			x: sourceNode.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
+			y: sourceNode.y + NODE_VERTICAL_GAP,
+		};
+		setNodes(function (nodes) {
+			return nodes.concat(node);
+		});
+		return Promise.resolve();
+	}
+
 	function addAccessNode(sourceNode, item, kind) {
 		const targetType = kind === "whitelist" ? "WHITELIST" : "BLACKLIST";
 		const targetHeader = headers.find(function (header) {
@@ -1222,6 +1378,40 @@ function Graph({ pathfinder, services, agent, headers }) {
 			return false;
 		}
 		return a._metadata.type === b._metadata.type && a._metadata.id === b._metadata.id;
+	}
+
+	function createGraphItem(itemNodeID, createdItem) {
+		const itemNode = nodes.find(function (node) {
+			return node.id === itemNodeID;
+		});
+		const parentNode =
+			itemNode && itemNode.parentNodeID
+				? nodes.find(function (node) {
+						return node.id === itemNode.parentNodeID;
+					})
+				: null;
+		setNodes(function (nodes) {
+			return nodes.map(function (node) {
+				if (node.id === itemNodeID) {
+					return {
+						...node,
+						item: createdItem,
+						mode: "read",
+					};
+				} else if (node.kind === "item" && itemMatches(node.item, createdItem)) {
+					return {
+						...node,
+						item: createdItem,
+					};
+				} else {
+					return node;
+				}
+			});
+		});
+		if (parentNode && parentNode.items) {
+			return reloadNode(parentNode.id, parentNode.variables, parentNode.filterMode, parentNode);
+		}
+		return Promise.resolve();
 	}
 
 	function updateGraphItem(itemNodeID, updatedItem, previousItem = updatedItem) {
@@ -1486,9 +1676,24 @@ function Graph({ pathfinder, services, agent, headers }) {
 							>
 								<div className="project-graph-drag-handle" onMouseDown={handleNodeMouseDown(node.id)} />
 								{node.kind === "item" ? (
-									<GraphItemTable services={services} node={node} onClose={closeNode} onItemUpdate={updateGraphItem} onItemDelete={deleteGraphItem} />
+									<GraphItemTable
+										services={services}
+										node={node}
+										onClose={closeNode}
+										onItemCreate={createGraphItem}
+										onItemUpdate={updateGraphItem}
+										onItemDelete={deleteGraphItem}
+									/>
 								) : (
-									<GraphTable node={node} onReload={reloadNode} onClose={closeNode} onTraverse={addTraversalNode} onOpenItem={addItemNode} onOpenAccess={addAccessNode} />
+									<GraphTable
+										node={node}
+										onReload={reloadNode}
+										onClose={closeNode}
+										onTraverse={addTraversalNode}
+										onOpenItem={addItemNode}
+										onOpenAccess={addAccessNode}
+										onOpenCreate={addCreateNode}
+									/>
 								)}
 							</div>
 						);
