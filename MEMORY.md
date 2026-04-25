@@ -29,4 +29,5 @@
 - Project graph access buttons should render whitelist with the filled bookmark icon and blacklist with the outline bookmark icon.
 - Project graph table scroll containers should stop wheel propagation so scrolling a table does not also trigger graph viewport zoom.
 - Project graph title metadata next to the entity name, such as traversal source ids and item ids, should wrap instead of using `truncate`; this is the top header area of the table/node, not the column header row.
+- Project graph create-mode item nodes should show create-level GraphQL errors in the top `project-graph-error` banner, not only near the bottom apply row.
 - Do not render relationship traversal menus as project graph table-cell popovers: popover content can leak/clamp inside the table in some render states. Use a compact in-row selector or another control whose menu body is not regular table content.

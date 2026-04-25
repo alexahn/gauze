@@ -795,7 +795,7 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 				} else if (err.extensions && err.extensions.entity && err.extensions.readable) {
 					setCreateModelError(err.extensions.readable);
 				} else {
-					setCreateModelError("Something went wrong!");
+					setCreateModelError(err.message || "Something went wrong!");
 				}
 			});
 	}
@@ -1008,7 +1008,6 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 							<button type="button" className="project-graph-item-apply ba bw1 br2 bdx3 bgx2 cx6" onClick={handleCreate}>
 								Apply
 							</button>
-							{createModelError ? <span className="project-graph-item-error bgxyz7 cx12 ba bw1 br2 pa1">{createModelError}</span> : null}
 						</div>
 					</td>
 				</tr>
@@ -1050,6 +1049,7 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 				</div>
 			</div>
 			<div className="project-graph-node-toolbar flex items-center justify-between">{renderModeButtons()}</div>
+			{localMode === "create" && createModelError ? <div className="project-graph-error bgxyz7 cx12 ba bw1 br2 pa2">{createModelError}</div> : null}
 			<div className="project-graph-table-scroll" onWheel={stopWheelPropagation}>
 				<table className="project-graph-item-table">
 					<thead>
