@@ -1074,9 +1074,9 @@
 [x] gauze migrate refactoring
 	[-] we need to run all knex commands over every shard
 	[x] get a list of unique connections and run migrate over them
-[ ] get rid of test seed data
-	[ ] every test should be self-contained
-	[ ] the seeds are only used for ytitne (since the methods are private)
+[x] get rid of test seed data
+	[x] every test should be self-contained
+	[x] the seeds are only used for ytitne (since the methods are private)
 [x] sharding
 	[x] new database config file to specify sharded nodes
 		[x] read and write nodes separated
@@ -1100,4 +1100,5 @@
 		[x] subscribe to codex or claude
 		[x] add AGENTS.md to repo
 
-[ ] postgresql returns a bigint for count, which is a string
+[x] postgresql returns a bigint for count, which is a string
+	[x] custom count value scalar
