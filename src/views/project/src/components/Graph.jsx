@@ -604,15 +604,15 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 	return (
 		<div className="project-graph-node-frame clouds ba bw1 br2 bdx3 bgx12 cx2 shadow-2">
 			<div className="project-graph-node-title flex items-center justify-between bgx2 cx6">
-				<div className="flex items-center overflow-hidden">
+				<div className="project-graph-node-title-main flex items-center">
 					<div className="project-graph-node-name truncate">{node.header.graphql_meta_type}</div>
 					{node.source ? (
-						<div className="project-graph-node-source ml2 truncate" title={`${node.source._direction}: ${node.source._metadata.id}`}>
+						<div className="project-graph-node-source ml2" title={`${node.source._direction}: ${node.source._metadata.id}`}>
 							{node.source._direction}: {node.source._metadata.id}
 						</div>
 					) : null}
 					{node.accessMethod ? (
-						<div className="project-graph-node-source ml2 truncate" title={`${node.accessKind}: ${node.accessMethod}`}>
+						<div className="project-graph-node-source ml2" title={`${node.accessKind}: ${node.accessMethod}`}>
 							{node.accessMethod}
 						</div>
 					) : null}
@@ -1037,9 +1037,9 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 	return (
 		<div className="project-graph-item-frame clouds ba bw1 br2 bdx3 bgx12 cx2 shadow-2">
 			<div className="project-graph-node-title flex items-center justify-between bgx2 cx6">
-				<div className="flex items-center overflow-hidden">
+				<div className="project-graph-node-title-main flex items-center">
 					<div className="project-graph-node-name truncate">{header.graphql_meta_type}</div>
-					<div className="project-graph-node-source ml2 truncate" title={itemID}>
+					<div className="project-graph-node-source ml2" title={itemID}>
 						{itemID}
 					</div>
 				</div>

@@ -1003,6 +1003,13 @@
 	font-family: Consolas, monaco, monospace;
 }
 
+.project-graph-node-title-main {
+	min-width: 0;
+	flex: 1 1 auto;
+	flex-wrap: wrap;
+	row-gap: 0.2rem;
+}
+
 .project-graph-node-name {
 	max-width: 32rem;
 	font-size: 0.95rem;
@@ -1016,9 +1023,12 @@
 }
 
 .project-graph-node-source {
-	max-width: 16rem;
+	max-width: none;
 	font-size: 0.75rem;
 	opacity: 0.75;
+	white-space: normal;
+	overflow-wrap: anywhere;
+	word-break: break-word;
 }
 
 .project-graph-node-actions {

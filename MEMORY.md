@@ -28,4 +28,5 @@
 - Project graph row whitelist/blacklist buttons should create five in-graph WHITELIST/BLACKLIST table nodes, one per access method (`create`, `read`, `update`, `delete`, `count`), each prefiltered with `gauze__<kind>__entity_id`, `gauze__<kind>__entity_type`, `gauze__<kind>__method`, and realm when the system agent audience is available; do not navigate out of the graph.
 - Project graph access buttons should render whitelist with the filled bookmark icon and blacklist with the outline bookmark icon.
 - Project graph table scroll containers should stop wheel propagation so scrolling a table does not also trigger graph viewport zoom.
+- Project graph title metadata next to the entity name, such as traversal source ids and item ids, should wrap instead of using `truncate`; this is the top header area of the table/node, not the column header row.
 - Do not render relationship traversal menus as project graph table-cell popovers: popover content can leak/clamp inside the table in some render states. Use a compact in-row selector or another control whose menu body is not regular table content.
