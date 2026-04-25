@@ -31,6 +31,24 @@ function defaultVariables(header) {
 	return variables;
 }
 
+function traversalVariables(header, source) {
+	const variables = {
+		source,
+		where: {},
+		limit: PAGE_SIZE,
+		offset: 0,
+	};
+	if (header.default_order) {
+		variables.order = [
+			{
+				column: header.default_order,
+				order: "desc",
+			},
+		];
+	}
+	return variables;
+}
+
 function stripFilterVariables(variables, filterMode) {
 	const stripped = {
 		...variables,
@@ -93,7 +111,7 @@ function countToNumber(count) {
 	}
 }
 
-function GraphTable({ pathfinder, node, onReload, onClose }) {
+function GraphTable({ pathfinder, node, onReload, onClose, onTraverse }) {
 	const [filterMode, setFilterMode] = useState(node.filterMode);
 	const [localVariables, setLocalVariables] = useState(node.variables);
 	const fields = node.header.fields;
@@ -107,6 +125,10 @@ function GraphTable({ pathfinder, node, onReload, onClose }) {
 	const headerCellClass = "project-graph-cell ba bw1 br2 bdx3 bgx3 cx6";
 	const rowHeaderCellClass = `${headerCellClass} project-graph-heading`;
 	const inputClass = "project-graph-input w-100 ba bw1 br2 bdx3 bgx12 cx2";
+	const relationshipTargets = {
+		from: node.header.relationships_from || [],
+		to: node.header.relationships_to || [],
+	};
 
 	useEffect(
 		function () {
@@ -298,11 +320,58 @@ function GraphTable({ pathfinder, node, onReload, onClose }) {
 		}
 	}
 
+	function renderRelationshipControls(item) {
+		if (!relationshipTargets.from.length && !relationshipTargets.to.length) {
+			return null;
+		}
+		function handleRelationshipChange(e) {
+			const value = e.target.value;
+			e.target.value = "";
+			if (!value) {
+				return;
+			}
+			const [direction, targetType] = value.split(":");
+			onTraverse(node, item, targetType, direction);
+		}
+		return (
+			<select className="project-graph-row-select ba bw1 br2 bdx3 bgx2 cx6" aria-label="Traverse relationships" defaultValue="" onChange={handleRelationshipChange}>
+				<option value="">Link</option>
+				{relationshipTargets.from.length ? (
+					<optgroup label="From">
+						{relationshipTargets.from.map(function (targetType) {
+							return (
+								<option key={`from.${targetType}`} value={`from:${targetType}`}>
+									{targetType}
+								</option>
+							);
+						})}
+					</optgroup>
+				) : null}
+				{relationshipTargets.to.length ? (
+					<optgroup label="To">
+						{relationshipTargets.to.map(function (targetType) {
+							return (
+								<option key={`to.${targetType}`} value={`to:${targetType}`}>
+									{targetType}
+								</option>
+							);
+						})}
+					</optgroup>
+				) : null}
+			</select>
+		);
+	}
+
 	return (
 		<div className="project-graph-node-frame clouds ba bw1 br2 bdx3 bgx12 cx2 shadow-2">
 			<div className="project-graph-node-title flex items-center justify-between bgx2 cx6">
 				<div className="flex items-center overflow-hidden">
 					<div className="project-graph-node-name truncate">{node.header.graphql_meta_type}</div>
+					{node.source ? (
+						<div className="project-graph-node-source ml2 truncate" title={`${node.source._direction}: ${node.source._metadata.id}`}>
+							{node.source._direction}: {node.source._metadata.id}
+						</div>
+					) : null}
 					<div className="project-graph-node-count ml2">{node.loading ? "Loading" : `${total} rows`}</div>
 				</div>
 				<div className="project-graph-node-actions flex items-center">
@@ -340,7 +409,7 @@ function GraphTable({ pathfinder, node, onReload, onClose }) {
 							return (
 								<tr key={id}>
 									<td className={rowHeaderCellClass}>
-										<div className="flex items-center">
+										<div className="project-graph-row-actions flex items-center">
 											<Link
 												href={pathfinder.stateToURL("project.system.headers.header.item", { header: node.header.graphql_meta_type.toLowerCase(), id }, {})}
 												push={true}
@@ -349,6 +418,7 @@ function GraphTable({ pathfinder, node, onReload, onClose }) {
 													<Pencil2Icon />
 												</button>
 											</Link>
+											{renderRelationshipControls(item)}
 											<span className="project-graph-row-id truncate" title={id}>
 												{id}
 											</span>
@@ -517,6 +587,43 @@ function Graph({ pathfinder, services, headers }) {
 		return reloadNode(node.id, variables, node.filterMode, node);
 	}
 
+	function addTraversalNode(sourceNode, item, targetType, direction) {
+		const targetHeader = headers.find(function (header) {
+			return header.graphql_meta_type === targetType;
+		});
+		if (!targetHeader) {
+			return Promise.resolve();
+		}
+		const source = {
+			_metadata: {
+				type: sourceNode.header.graphql_meta_type,
+				id: item._metadata.id,
+			},
+			_direction: direction,
+		};
+		const variables = traversalVariables(targetHeader, source);
+		const xOffset = direction === "to" ? 420 : -420;
+		const node = {
+			id: uuidv4(),
+			header: targetHeader,
+			source,
+			parentNodeID: sourceNode.id,
+			parentEntityID: item._metadata.id,
+			variables,
+			filterMode: "where_like",
+			items: [],
+			count: 0,
+			x: sourceNode.x + xOffset,
+			y: sourceNode.y + 48,
+			loading: true,
+			error: "",
+		};
+		setNodes(function (nodes) {
+			return nodes.concat(node);
+		});
+		return reloadNode(node.id, variables, node.filterMode, node);
+	}
+
 	function closeNode(id) {
 		setNodes(function (nodes) {
 			return nodes.filter(function (node) {
@@ -635,7 +742,7 @@ function Graph({ pathfinder, services, headers }) {
 								}}
 							>
 								<div className="project-graph-drag-handle" onMouseDown={handleNodeMouseDown(node.id)} />
-								<GraphTable pathfinder={pathfinder} node={node} onReload={reloadNode} onClose={closeNode} />
+								<GraphTable pathfinder={pathfinder} node={node} onReload={reloadNode} onClose={closeNode} onTraverse={addTraversalNode} />
 							</div>
 						);
 					})}

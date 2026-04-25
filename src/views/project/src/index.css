@@ -983,6 +983,12 @@
 	opacity: 0.75;
 }
 
+.project-graph-node-source {
+	max-width: 16rem;
+	font-size: 0.75rem;
+	opacity: 0.75;
+}
+
 .project-graph-node-actions {
 	position: relative;
 	z-index: 4;
@@ -1084,6 +1090,17 @@
 .project-graph-row-id {
 	max-width: 8rem;
 	margin-left: 0.35rem;
+}
+
+.project-graph-row-actions {
+	gap: 0.25rem;
+}
+
+.project-graph-row-select {
+	width: 3.5rem;
+	height: 1.6rem;
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.75rem;
 }
 
 .project-graph-sidebar {
