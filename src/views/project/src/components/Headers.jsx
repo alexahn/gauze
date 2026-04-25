@@ -7,8 +7,16 @@ function Headers({ pathfinder, headers }) {
 	const buttonClass = "clouds w-100 ba bw1 br2 truncate-ns mb1 f6 athelas bgx2 bdx2 cx6 bgx3h bdx3h cx6h truncate-ns mw4";
 	const buttonActiveClass = "clouds w-100 ba bw1 br2 truncate-ns mb1 f6 athelas bgx3 bdx3 cx6 bgx3h bdx3h cx6h truncate-ns mw4";
 	const state = pathfinder.URLToState(location.href);
+	const isGraphActive = state.name === "project.system.headers.graph";
 	return (
 		<div>
+			<div className="mb2">
+				<Link href={pathfinder.stateToURL("project.system.headers.graph", {}, {})} push={true}>
+					<button className={isGraphActive ? buttonActiveClass : buttonClass} type="button">
+						Graph
+					</button>
+				</Link>
+			</div>
 			{headers.map(function (header) {
 				// note: default variables are where_like and limit 20
 				const variables = JSON.stringify({ where_like: {}, limit: 20 });

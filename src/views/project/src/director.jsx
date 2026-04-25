@@ -89,6 +89,18 @@ function createDirector(context) {
 		);
 	});
 
+	director.register("project.system.headers.graph", function (context, dependencies, pathParams, searchParams) {
+		const { services } = context;
+		const { headers } = dependencies;
+		root.render(
+			<React.StrictMode>
+				<layouts.amethyst.default>
+					<components.graph.default pathfinder={pathfinder} services={services} headers={headers.headers} />
+				</layouts.amethyst.default>
+			</React.StrictMode>,
+		);
+	});
+
 	director.register("project.system.headers.header.list", function (context, dependencies, pathParams, searchParams) {
 		const { services } = context;
 		const { system, headers, header, list } = dependencies;

@@ -113,6 +113,19 @@ function createPathfinder(context) {
 					},
 					[
 						{
+							name: "graph",
+							path: [],
+							pathRegex: new RegExp("/graph"),
+							pathString: function (groups) {
+								return "/graph";
+							},
+							search: [],
+							dependencies: async function (context, dependencies, state, pathParams, searchParams) {
+								return {};
+							},
+							pathfinder: null,
+						},
+						{
 							name: "header",
 							path: ["header"],
 							pathRegex: new RegExp("/(?<header>.*?)/"),

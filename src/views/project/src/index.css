@@ -902,6 +902,259 @@
 	z-index: 1;
 }
 
+.project-graph-shell {
+	position: relative;
+	width: 100%;
+	height: 100vh;
+	overflow: hidden;
+}
+
+.project-graph-viewport {
+	position: absolute;
+	inset: 0 17rem 0 0;
+	overflow: hidden;
+	cursor: grab;
+}
+
+.project-graph-viewport:active {
+	cursor: grabbing;
+}
+
+.project-graph-plane {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 1px;
+	height: 1px;
+	transform-origin: 0 0;
+}
+
+.project-graph-toolbar {
+	z-index: 6;
+	gap: 0.5rem;
+}
+
+.project-graph-toolbar button,
+.project-graph-zoom {
+	padding: 0.35rem 0.55rem;
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.8rem;
+	line-height: 1;
+}
+
+.project-graph-node {
+	top: 0;
+	left: 0;
+	z-index: 2;
+	transform-origin: 0 0;
+}
+
+.project-graph-drag-handle {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 4.75rem;
+	height: 2.5rem;
+	cursor: grab;
+	z-index: 3;
+}
+
+.project-graph-node-frame {
+	width: min(78rem, max(28rem, calc(100vw - 20rem)));
+	max-height: min(42rem, calc(100vh - 4rem));
+	overflow: hidden;
+}
+
+.project-graph-node-title {
+	min-height: 2.5rem;
+	padding: 0.45rem 0.6rem;
+	font-family: Consolas, monaco, monospace;
+}
+
+.project-graph-node-name {
+	max-width: 32rem;
+	font-size: 0.95rem;
+	font-weight: 700;
+}
+
+.project-graph-node-count {
+	flex: none;
+	font-size: 0.75rem;
+	opacity: 0.75;
+}
+
+.project-graph-node-actions {
+	position: relative;
+	z-index: 4;
+	gap: 0.25rem;
+}
+
+.project-graph-node-actions button,
+.project-graph-row-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.6rem;
+	height: 1.6rem;
+	border: 1px solid var(--x3);
+	border-radius: 0.25rem;
+	background: var(--x2);
+	color: var(--x6);
+}
+
+.project-graph-node-toolbar {
+	gap: 1rem;
+	padding: 0.35rem 0.45rem;
+	border-bottom: 1px solid var(--xyz3);
+}
+
+.project-graph-filter-modes {
+	gap: 0.25rem;
+}
+
+.project-graph-filter-modes button,
+.project-graph-filter-action button,
+.project-graph-page-button {
+	border: 1px solid var(--x3);
+	border-radius: 0.25rem;
+	background: var(--x2);
+	color: var(--x6);
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.75rem;
+}
+
+.project-graph-filter-modes button.active {
+	background: var(--x3);
+	color: var(--x12);
+}
+
+.project-graph-filter-action {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+}
+
+.project-graph-error {
+	margin: 0.45rem;
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.8rem;
+}
+
+.project-graph-table-scroll {
+	max-height: calc(min(42rem, calc(100vh - 4rem)) - 6.25rem);
+	overflow: auto;
+}
+
+.project-graph-table {
+	border-collapse: separate;
+	border-spacing: 0.15rem;
+	table-layout: fixed;
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.78rem;
+}
+
+.project-graph-cell {
+	min-width: 11rem;
+	max-width: 16rem;
+	padding: 0.2rem;
+	vertical-align: middle;
+}
+
+.project-graph-heading {
+	position: sticky;
+	left: 0;
+	z-index: 1;
+	font-weight: 700;
+}
+
+.project-graph-input {
+	height: 1.7rem;
+	padding: 0 0.35rem;
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.78rem;
+}
+
+.project-graph-row-id,
+.project-graph-value {
+	display: block;
+	max-width: 14rem;
+}
+
+.project-graph-row-id {
+	max-width: 8rem;
+	margin-left: 0.35rem;
+}
+
+.project-graph-sidebar {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 5;
+	display: flex;
+	width: 17rem;
+	flex-direction: column;
+}
+
+.project-graph-sidebar-header {
+	padding: 0.75rem;
+	border-bottom: 1px solid var(--xyz3);
+}
+
+.project-graph-sidebar-title {
+	margin-bottom: 0.5rem;
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.9rem;
+	font-weight: 700;
+}
+
+.project-graph-sidebar-filter {
+	width: 100%;
+	height: 1.8rem;
+	padding: 0 0.4rem;
+	font-family: Consolas, monaco, monospace;
+}
+
+.project-graph-entity-list {
+	display: flex;
+	min-height: 0;
+	flex: 1;
+	flex-direction: column;
+	gap: 0.35rem;
+	overflow: auto;
+	padding: 0.75rem;
+}
+
+.project-graph-entity-button {
+	display: flex;
+	align-items: center;
+	gap: 0.45rem;
+	min-height: 2rem;
+	padding: 0.25rem 0.45rem;
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.78rem;
+	text-align: left;
+}
+
+@media (max-width: 48rem) {
+	.project-graph-viewport {
+		right: 12rem;
+	}
+
+	.project-graph-node-frame {
+		width: 36rem;
+	}
+
+	.project-graph-sidebar {
+		width: 12rem;
+	}
+
+	.project-graph-cell {
+		min-width: 9rem;
+	}
+}
+
 /*
 .type-item .type-list table,
 tr,
