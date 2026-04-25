@@ -837,7 +837,7 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 				} else if (err.extensions && err.extensions.entity && err.extensions.readable) {
 					setUpdateModelError(err.extensions.readable);
 				} else {
-					setUpdateModelError("Something went wrong!");
+					setUpdateModelError(err.message || "Something went wrong!");
 				}
 			});
 	}
@@ -872,7 +872,7 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 				if (err.extensions && err.extensions.entity && err.extensions.readable) {
 					setDeleteModelError(err.extensions.readable);
 				} else {
-					setDeleteModelError("Something went wrong!");
+					setDeleteModelError(err.message || "Something went wrong!");
 				}
 			});
 	}
@@ -1017,7 +1017,6 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 			return null;
 		}
 		const isDelete = localMode === "delete";
-		const error = isDelete ? deleteModelError : updateModelError;
 		return (
 			<tr>
 				<td className={cellClass}></td>
@@ -1026,12 +1025,13 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 						<button type="button" className="project-graph-item-apply ba bw1 br2 bdx3 bgx2 cx6" onClick={isDelete ? handleDelete : handleUpdate}>
 							Apply
 						</button>
-						{error ? <span className="project-graph-item-error bgxyz7 cx12 ba bw1 br2 pa1">{error}</span> : null}
 					</div>
 				</td>
 			</tr>
 		);
 	}
+
+	const modelError = localMode === "create" ? createModelError : localMode === "update" ? updateModelError : localMode === "delete" ? deleteModelError : "";
 
 	return (
 		<div className="project-graph-item-frame clouds ba bw1 br2 bdx3 bgx12 cx2 shadow-2">
@@ -1049,7 +1049,7 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 				</div>
 			</div>
 			<div className="project-graph-node-toolbar flex items-center justify-between">{renderModeButtons()}</div>
-			{localMode === "create" && createModelError ? <div className="project-graph-error bgxyz7 cx12 ba bw1 br2 pa2">{createModelError}</div> : null}
+			{modelError ? <div className="project-graph-error bgxyz7 cx12 ba bw1 br2 pa2">{modelError}</div> : null}
 			<div className="project-graph-table-scroll" onWheel={stopWheelPropagation}>
 				<table className="project-graph-item-table">
 					<thead>
