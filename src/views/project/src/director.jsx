@@ -91,11 +91,12 @@ function createDirector(context) {
 
 	director.register("project.system.headers.graph", function (context, dependencies, pathParams, searchParams) {
 		const { services } = context;
-		const { headers } = dependencies;
+		const { system, headers } = dependencies;
+		const { agent } = system;
 		root.render(
 			<React.StrictMode>
 				<layouts.amethyst.default>
-					<components.graph.default pathfinder={pathfinder} services={services} headers={headers.headers} />
+					<components.graph.default pathfinder={pathfinder} services={services} agent={agent} headers={headers.headers} />
 				</layouts.amethyst.default>
 			</React.StrictMode>,
 		);

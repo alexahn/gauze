@@ -2,7 +2,7 @@ import * as React from "react";
 import { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { Cross1Icon, Pencil2Icon, PlusCircledIcon, ReloadIcon } from "@radix-ui/react-icons";
+import { BookmarkFilledIcon, BookmarkIcon, Cross1Icon, Pencil2Icon, PlusCircledIcon, ReloadIcon } from "@radix-ui/react-icons";
 
 import Input from "./Input.jsx";
 import Link from "./Link.jsx";
@@ -90,6 +90,20 @@ function buildTraversalEdges(nodes, nodeDimensions) {
 				label: "item",
 				color: "var(--x7)",
 				title: `item: ${node.parentEntityID}`,
+			});
+			return edges;
+		}
+		if (node.kind === "access") {
+			const from = edgePoint(parentNode, parentDimensions, parentRowAnchor, "right");
+			const to = itemEdgePoint(node, nodeDimensionsValue);
+			edges.push({
+				id: `edge.access.${node.id}`,
+				markerID: `project-graph-edge-access-${node.id}-arrow`,
+				from,
+				to,
+				label: node.accessKind,
+				color: "var(--x7)",
+				title: `${node.accessKind}: ${node.parentEntityID}`,
 			});
 			return edges;
 		}
@@ -182,6 +196,39 @@ function traversalVariables(header, source) {
 	return variables;
 }
 
+function accessVariables(header, where) {
+	const variables = {
+		where,
+		limit: PAGE_SIZE,
+		offset: 0,
+	};
+	if (header.default_order) {
+		variables.order = [
+			{
+				column: header.default_order,
+				order: "desc",
+			},
+		];
+	}
+	return variables;
+}
+
+function accessWhere(kind, agent, sourceHeader, item) {
+	const prefix = `gauze__${kind}`;
+	const where = {
+		[`${prefix}__entity_id`]: item._metadata.id,
+		[`${prefix}__entity_type`]: sourceHeader.table_name,
+	};
+	if (agent && agent.aud) {
+		where[`${prefix}__realm`] = agent.aud;
+	}
+	return where;
+}
+
+function isGauzeEntityHeader(header) {
+	return ["RELATIONSHIP", "WHITELIST", "BLACKLIST"].indexOf(header.graphql_meta_type) >= 0;
+}
+
 function stripFilterVariables(variables, filterMode) {
 	const stripped = {
 		...variables,
@@ -244,7 +291,7 @@ function countToNumber(count) {
 	}
 }
 
-function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem }) {
+function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAccess }) {
 	const [filterMode, setFilterMode] = useState(node.filterMode);
 	const [localVariables, setLocalVariables] = useState(node.variables);
 	const fields = node.header.fields;
@@ -501,6 +548,28 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem }) {
 		};
 	}
 
+	function handleOpenAccess(kind, item) {
+		return function () {
+			onOpenAccess(node, item, kind);
+		};
+	}
+
+	function renderAccessControls(item) {
+		if (isGauzeEntityHeader(node.header)) {
+			return null;
+		}
+		return (
+			<>
+				<button type="button" className="project-graph-row-link" title="Whitelist" aria-label="Whitelist" onClick={handleOpenAccess("whitelist", item)}>
+					<BookmarkIcon />
+				</button>
+				<button type="button" className="project-graph-row-link" title="Blacklist" aria-label="Blacklist" onClick={handleOpenAccess("blacklist", item)}>
+					<BookmarkFilledIcon />
+				</button>
+			</>
+		);
+	}
+
 	return (
 		<div className="project-graph-node-frame clouds ba bw1 br2 bdx3 bgx12 cx2 shadow-2">
 			<div className="project-graph-node-title flex items-center justify-between bgx2 cx6">
@@ -552,6 +621,7 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem }) {
 											<button type="button" className="project-graph-row-link" title="Open" aria-label="Open" onClick={handleOpenItem(item)}>
 												<Pencil2Icon />
 											</button>
+											{renderAccessControls(item)}
 											{renderRelationshipControls(item)}
 											<span className="project-graph-row-id truncate" title={id}>
 												{id}
@@ -915,7 +985,7 @@ function EntityPicker({ headers, onAdd }) {
 	);
 }
 
-function Graph({ pathfinder, services, headers }) {
+function Graph({ pathfinder, services, agent, headers }) {
 	const viewportRef = useRef();
 	const nodeElementsRef = useRef({});
 	const [nodes, setNodes] = useState([]);
@@ -1098,6 +1168,38 @@ function Graph({ pathfinder, services, headers }) {
 			return nodes.concat(node);
 		});
 		return Promise.resolve();
+	}
+
+	function addAccessNode(sourceNode, item, kind) {
+		const targetType = kind === "whitelist" ? "WHITELIST" : "BLACKLIST";
+		const targetHeader = headers.find(function (header) {
+			return header.graphql_meta_type === targetType;
+		});
+		if (!targetHeader) {
+			return Promise.resolve();
+		}
+		const variables = accessVariables(targetHeader, accessWhere(kind, agent, sourceNode.header, item));
+		const sourceDimensions = getNodeDimensions(nodeDimensions, sourceNode);
+		const node = {
+			id: uuidv4(),
+			kind: "access",
+			accessKind: kind,
+			header: targetHeader,
+			variables,
+			filterMode: "where",
+			items: [],
+			count: 0,
+			parentNodeID: sourceNode.id,
+			parentEntityID: item._metadata.id,
+			x: sourceNode.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
+			y: sourceNode.y + NODE_VERTICAL_GAP,
+			loading: true,
+			error: "",
+		};
+		setNodes(function (nodes) {
+			return nodes.concat(node);
+		});
+		return reloadNode(node.id, variables, node.filterMode, node);
 	}
 
 	function itemMatches(a, b) {
@@ -1371,7 +1473,7 @@ function Graph({ pathfinder, services, headers }) {
 								{node.kind === "item" ? (
 									<GraphItemTable services={services} node={node} onClose={closeNode} onItemUpdate={updateGraphItem} onItemDelete={deleteGraphItem} />
 								) : (
-									<GraphTable node={node} onReload={reloadNode} onClose={closeNode} onTraverse={addTraversalNode} onOpenItem={addItemNode} />
+									<GraphTable node={node} onReload={reloadNode} onClose={closeNode} onTraverse={addTraversalNode} onOpenItem={addItemNode} onOpenAccess={addAccessNode} />
 								)}
 							</div>
 						);
