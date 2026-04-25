@@ -313,6 +313,10 @@ function countToNumber(count) {
 	}
 }
 
+function stopWheelPropagation(e) {
+	e.stopPropagation();
+}
+
 function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAccess, onOpenCreate }) {
 	const [filterMode, setFilterMode] = useState(node.filterMode);
 	const [localVariables, setLocalVariables] = useState(node.variables);
@@ -631,7 +635,7 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 				<Pagination page={pageCurrent} count={pageMax} handleClick={handlePage} reverse={false} buttonClass="project-graph-page-button ba bw1 br2 bdx3 bgx2 cx6" />
 			</div>
 			{node.error ? <div className="project-graph-error bgxyz7 cx12 ba bw1 br2 pa2">{node.error}</div> : null}
-			<div className="project-graph-table-scroll">
+			<div className="project-graph-table-scroll" onWheel={stopWheelPropagation}>
 				<table className="project-graph-table">
 					<thead>
 						{renderFilterRows()}
@@ -1046,7 +1050,7 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 				</div>
 			</div>
 			<div className="project-graph-node-toolbar flex items-center justify-between">{renderModeButtons()}</div>
-			<div className="project-graph-table-scroll">
+			<div className="project-graph-table-scroll" onWheel={stopWheelPropagation}>
 				<table className="project-graph-item-table">
 					<thead>
 						<tr>
