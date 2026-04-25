@@ -949,6 +949,32 @@
 	transform-origin: 0 0;
 }
 
+.project-graph-edges {
+	position: absolute;
+	z-index: 1;
+	overflow: visible;
+	pointer-events: none;
+}
+
+.project-graph-edge-path {
+	fill: none;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 2;
+	vector-effect: non-scaling-stroke;
+}
+
+.project-graph-edge-label {
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.78rem;
+	paint-order: stroke;
+	stroke: var(--xyz12);
+	stroke-linejoin: round;
+	stroke-width: 0.22rem;
+	text-anchor: middle;
+	vector-effect: non-scaling-stroke;
+}
+
 .project-graph-drag-handle {
 	position: absolute;
 	top: 0;
@@ -963,11 +989,16 @@
 	width: min(78rem, max(28rem, calc(100vw - 20rem)));
 	max-height: min(42rem, calc(100vh - 4rem));
 	overflow: hidden;
+	border-color: var(--project-graph-node-bd, var(--x3));
+	background-color: var(--project-graph-node-bg, var(--x12));
+	color: var(--project-graph-node-c, var(--x2));
 }
 
 .project-graph-node-title {
 	min-height: 2.5rem;
 	padding: 0.45rem 0.6rem;
+	background-color: var(--project-graph-table-bg, var(--x2));
+	color: var(--project-graph-table-c, var(--x6));
 	font-family: Consolas, monaco, monospace;
 }
 
@@ -1002,10 +1033,10 @@
 	justify-content: center;
 	width: 1.6rem;
 	height: 1.6rem;
-	border: 1px solid var(--x3);
+	border: 1px solid var(--project-graph-table-bd, var(--x3));
 	border-radius: 0.25rem;
-	background: var(--x2);
-	color: var(--x6);
+	background: var(--project-graph-table-bg, var(--x2));
+	color: var(--project-graph-table-c, var(--x6));
 }
 
 .project-graph-node-toolbar {
@@ -1021,17 +1052,17 @@
 .project-graph-filter-modes button,
 .project-graph-filter-action button,
 .project-graph-page-button {
-	border: 1px solid var(--x3);
+	border: 1px solid var(--project-graph-table-bd, var(--x3));
 	border-radius: 0.25rem;
-	background: var(--x2);
-	color: var(--x6);
+	background: var(--project-graph-table-bg, var(--x2));
+	color: var(--project-graph-table-c, var(--x6));
 	font-family: Consolas, monaco, monospace;
 	font-size: 0.75rem;
 }
 
 .project-graph-filter-modes button.active {
-	background: var(--x3);
-	color: var(--x12);
+	background: var(--project-graph-node-bg, var(--x3));
+	color: var(--project-graph-node-c, var(--x12));
 }
 
 .project-graph-filter-action {
@@ -1064,6 +1095,9 @@
 	min-width: 11rem;
 	max-width: 16rem;
 	padding: 0.2rem;
+	border-color: var(--project-graph-node-bd, var(--x2));
+	background-color: var(--project-graph-node-bg, var(--x2));
+	color: var(--project-graph-node-c, var(--x6));
 	vertical-align: middle;
 }
 
@@ -1071,12 +1105,18 @@
 	position: sticky;
 	left: 0;
 	z-index: 1;
+	border-color: var(--project-graph-table-bd, var(--x3));
+	background-color: var(--project-graph-table-bg, var(--x3));
+	color: var(--project-graph-table-c, var(--x6));
 	font-weight: 700;
 }
 
 .project-graph-input {
 	height: 1.7rem;
 	padding: 0 0.35rem;
+	border-color: var(--project-graph-table-bd, var(--x3));
+	background-color: var(--project-graph-node-bg, var(--x12));
+	color: var(--project-graph-node-c, var(--x2));
 	font-family: Consolas, monaco, monospace;
 	font-size: 0.78rem;
 }
@@ -1099,6 +1139,9 @@
 .project-graph-row-select {
 	width: 3.5rem;
 	height: 1.6rem;
+	border-color: var(--project-graph-table-bd, var(--x3));
+	background-color: var(--project-graph-table-bg, var(--x2));
+	color: var(--project-graph-table-c, var(--x6));
 	font-family: Consolas, monaco, monospace;
 	font-size: 0.75rem;
 }

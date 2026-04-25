@@ -9,9 +9,212 @@ import Link from "./Link.jsx";
 import Pagination from "./Pagination.jsx";
 
 const PAGE_SIZE = 8;
+const NODE_HORIZONTAL_GAP = 96;
+const NODE_VERTICAL_GAP = 64;
+const NODE_FALLBACK_DIMENSIONS = {
+	width: 720,
+	height: 320,
+};
+
+const DEPTH_COLORS = {
+	0: {
+		node: {
+			bg: "x10",
+			bd: "x10",
+			c: "x6",
+		},
+		table: {
+			bg: "x7",
+			bd: "x7",
+			c: "x2",
+		},
+	},
+	1: {
+		node: {
+			bg: "x4",
+			bd: "x4",
+			c: "x6",
+		},
+		table: {
+			bg: "x2",
+			bd: "x2",
+			c: "x6",
+		},
+	},
+	2: {
+		node: {
+			bg: "y10",
+			bd: "y10",
+			c: "y2",
+		},
+		table: {
+			bg: "y7",
+			bd: "y7",
+			c: "y2",
+		},
+	},
+	3: {
+		node: {
+			bg: "z10",
+			bd: "z10",
+			c: "z6",
+		},
+		table: {
+			bg: "z7",
+			bd: "z7",
+			c: "z12",
+		},
+	},
+};
 
 function clamp(value, min, max) {
 	return Math.max(min, Math.min(max, value));
+}
+
+function depthColorIndex(depth) {
+	const index = depth % 4;
+	if (index < 0) {
+		return index + 4;
+	} else {
+		return index;
+	}
+}
+
+function depthColors(depth) {
+	return DEPTH_COLORS[depthColorIndex(depth || 0)];
+}
+
+function depthVar(token) {
+	return `var(--${token})`;
+}
+
+function depthStyle(depth) {
+	const colors = depthColors(depth);
+	return {
+		"--project-graph-node-bg": depthVar(colors.node.bg),
+		"--project-graph-node-bd": depthVar(colors.node.bd),
+		"--project-graph-node-c": depthVar(colors.node.c),
+		"--project-graph-table-bg": depthVar(colors.table.bg),
+		"--project-graph-table-bd": depthVar(colors.table.bd),
+		"--project-graph-table-c": depthVar(colors.table.c),
+	};
+}
+
+function nodeRelationshipDepth(node) {
+	if (node.relationshipDepth !== undefined) {
+		return node.relationshipDepth;
+	}
+	return node.depth || 0;
+}
+
+function nodeExplorationDepth(node) {
+	if (node.explorationDepth !== undefined) {
+		return node.explorationDepth;
+	}
+	return Math.abs(node.depth || 0);
+}
+
+function getNodeDimensions(nodeDimensions, node) {
+	return nodeDimensions[node.id] || NODE_FALLBACK_DIMENSIONS;
+}
+
+function getRowAnchor(dimensions, id) {
+	if (!dimensions.rows) {
+		return null;
+	}
+	return dimensions.rows[String(id)] || null;
+}
+
+function edgePoint(node, dimensions, rowAnchor, side) {
+	return {
+		x: node.x + (side === "right" ? dimensions.width : 0),
+		y: node.y + rowAnchor.y,
+	};
+}
+
+function edgePath(from, to) {
+	const direction = to.x >= from.x ? 1 : -1;
+	const dx = Math.max(96, Math.abs(to.x - from.x) * 0.5);
+	const c1x = from.x + dx * direction;
+	const c2x = to.x - dx * direction;
+	return `M ${from.x} ${from.y} C ${c1x} ${from.y}, ${c2x} ${to.y}, ${to.x} ${to.y}`;
+}
+
+function edgeLabelPosition(from, to) {
+	return {
+		x: (from.x + to.x) / 2,
+		y: (from.y + to.y) / 2 - 12,
+	};
+}
+
+function buildTraversalEdges(nodes, nodeDimensions) {
+	const nodeIndex = {};
+	nodes.forEach(function (node) {
+		nodeIndex[node.id] = node;
+	});
+	return nodes.reduce(function (edges, node) {
+		if (!node.parentNodeID || !node.source) {
+			return edges;
+		}
+		const parentNode = nodeIndex[node.parentNodeID];
+		if (!parentNode) {
+			return edges;
+		}
+		const parentDimensions = getNodeDimensions(nodeDimensions, parentNode);
+		const nodeDimensionsValue = getNodeDimensions(nodeDimensions, node);
+		const parentRowAnchor = getRowAnchor(parentDimensions, node.parentEntityID);
+		if (!parentRowAnchor) {
+			return edges;
+		}
+		const direction = node.source._direction;
+		const sourceType = node.source._metadata.type;
+		const targetType = node.header.graphql_meta_type;
+		const color = depthVar(depthColors(nodeExplorationDepth(node)).table.bg);
+		const label = direction === "from" ? `${targetType} -> ${sourceType}` : `${sourceType} -> ${targetType}`;
+		let labeled = false;
+		node.items.forEach(function (item, index) {
+			const itemID = item._metadata.id;
+			const nodeRowAnchor = getRowAnchor(nodeDimensionsValue, itemID);
+			if (!nodeRowAnchor) {
+				return;
+			}
+			const from = direction === "from" ? edgePoint(node, nodeDimensionsValue, nodeRowAnchor, "right") : edgePoint(parentNode, parentDimensions, parentRowAnchor, "right");
+			const to = direction === "from" ? edgePoint(parentNode, parentDimensions, parentRowAnchor, "left") : edgePoint(node, nodeDimensionsValue, nodeRowAnchor, "left");
+			edges.push({
+				id: `edge.${node.id}.${index}`,
+				markerID: `project-graph-edge-${node.id}-${index}-arrow`,
+				from,
+				to,
+				label: labeled ? "" : label,
+				color,
+				title: `${direction}: ${node.source._metadata.id} -> ${itemID}`,
+			});
+			labeled = true;
+		});
+		return edges;
+	}, []);
+}
+
+function edgeBounds(edges) {
+	let minX = Infinity;
+	let minY = Infinity;
+	let maxX = -Infinity;
+	let maxY = -Infinity;
+	edges.forEach(function (edge) {
+		[edge.from, edge.to].forEach(function (point) {
+			minX = Math.min(minX, point.x);
+			minY = Math.min(minY, point.y);
+			maxX = Math.max(maxX, point.x);
+			maxY = Math.max(maxY, point.y);
+		});
+	});
+	const padding = 160;
+	return {
+		x: minX - padding,
+		y: minY - padding,
+		width: Math.max(1, maxX - minX + padding * 2),
+		height: Math.max(1, maxY - minY + padding * 2),
+	};
 }
 
 function defaultVariables(header) {
@@ -363,7 +566,7 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse }) {
 	}
 
 	return (
-		<div className="project-graph-node-frame clouds ba bw1 br2 bdx3 bgx12 cx2 shadow-2">
+		<div className="project-graph-node-frame clouds ba bw1 br2 bdx3 bgx12 cx2 shadow-2" style={depthStyle(nodeExplorationDepth(node))}>
 			<div className="project-graph-node-title flex items-center justify-between bgx2 cx6">
 				<div className="flex items-center overflow-hidden">
 					<div className="project-graph-node-name truncate">{node.header.graphql_meta_type}</div>
@@ -407,7 +610,7 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse }) {
 						{node.items.map(function (item) {
 							const id = item._metadata.id;
 							return (
-								<tr key={id}>
+								<tr key={id} data-project-graph-row-id={id}>
 									<td className={rowHeaderCellClass}>
 										<div className="project-graph-row-actions flex items-center">
 											<Link
@@ -442,6 +645,51 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse }) {
 	);
 }
 
+function GraphEdges({ nodes, nodeDimensions }) {
+	const edges = buildTraversalEdges(nodes, nodeDimensions);
+	if (!edges.length) {
+		return null;
+	}
+	const bounds = edgeBounds(edges);
+	return (
+		<svg
+			className="project-graph-edges"
+			style={{
+				left: bounds.x,
+				top: bounds.y,
+				width: bounds.width,
+				height: bounds.height,
+			}}
+			viewBox={`${bounds.x} ${bounds.y} ${bounds.width} ${bounds.height}`}
+			aria-hidden="true"
+		>
+			<defs>
+				{edges.map(function (edge) {
+					return (
+						<marker key={edge.id} id={edge.markerID} markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+							<path d="M 0 0 L 8 4 L 0 8 z" style={{ fill: edge.color }} />
+						</marker>
+					);
+				})}
+			</defs>
+			{edges.map(function (edge) {
+				const labelPosition = edgeLabelPosition(edge.from, edge.to);
+				return (
+					<g key={edge.id}>
+						<title>{edge.title}</title>
+						<path className="project-graph-edge-path" d={edgePath(edge.from, edge.to)} style={{ stroke: edge.color }} markerEnd={`url(#${edge.markerID})`} />
+						{edge.label ? (
+							<text className="project-graph-edge-label" x={labelPosition.x} y={labelPosition.y} style={{ fill: edge.color }}>
+								{edge.label}
+							</text>
+						) : null}
+					</g>
+				);
+			})}
+		</svg>
+	);
+}
+
 function EntityPicker({ headers, onAdd }) {
 	const [filter, setFilter] = useState("");
 	const filteredHeaders = headers.filter(function (header) {
@@ -469,10 +717,17 @@ function EntityPicker({ headers, onAdd }) {
 
 function Graph({ pathfinder, services, headers }) {
 	const viewportRef = useRef();
+	const nodeElementsRef = useRef({});
 	const [nodes, setNodes] = useState([]);
+	const [nodeDimensions, setNodeDimensions] = useState({});
 	const [viewport, setViewport] = useState({ x: 24, y: 24, z: 1 });
 	const [dragging, setDragging] = useState(null);
 	const { gauzemodel } = services;
+	const nodeMeasureSignature = nodes
+		.map(function (node) {
+			return [node.id, node.header.fields.length, node.items.length, node.loading, node.count, node.filterMode, node.error].join(":");
+		})
+		.join("|");
 
 	function updateNode(id, updater) {
 		setNodes(function (nodes) {
@@ -576,6 +831,8 @@ function Graph({ pathfinder, services, headers }) {
 			filterMode: "where_like",
 			items: [],
 			count: 0,
+			relationshipDepth: 0,
+			explorationDepth: 0,
 			x: 24 + offset,
 			y: 24 + offset,
 			loading: true,
@@ -602,7 +859,8 @@ function Graph({ pathfinder, services, headers }) {
 			_direction: direction,
 		};
 		const variables = traversalVariables(targetHeader, source);
-		const xOffset = direction === "to" ? 420 : -420;
+		const sourceDimensions = getNodeDimensions(nodeDimensions, sourceNode);
+		const xOffset = direction === "to" ? sourceDimensions.width + NODE_HORIZONTAL_GAP : -(sourceDimensions.width + NODE_HORIZONTAL_GAP);
 		const node = {
 			id: uuidv4(),
 			header: targetHeader,
@@ -613,8 +871,10 @@ function Graph({ pathfinder, services, headers }) {
 			filterMode: "where_like",
 			items: [],
 			count: 0,
+			relationshipDepth: nodeRelationshipDepth(sourceNode) + (direction === "to" ? 1 : -1),
+			explorationDepth: nodeExplorationDepth(sourceNode) + 1,
 			x: sourceNode.x + xOffset,
-			y: sourceNode.y + 48,
+			y: sourceNode.y + NODE_VERTICAL_GAP,
 			loading: true,
 			error: "",
 		};
@@ -630,6 +890,16 @@ function Graph({ pathfinder, services, headers }) {
 				return node.id !== id;
 			});
 		});
+	}
+
+	function registerNodeElement(id) {
+		return function (element) {
+			if (element) {
+				nodeElementsRef.current[id] = element;
+			} else {
+				delete nodeElementsRef.current[id];
+			}
+		};
 	}
 
 	function handleNodeMouseDown(id) {
@@ -715,6 +985,79 @@ function Graph({ pathfinder, services, headers }) {
 		[dragging, viewport],
 	);
 
+	useEffect(
+		function () {
+			function measureNodes() {
+				setNodeDimensions(function (previousDimensions) {
+					const nextDimensions = {};
+					nodes.forEach(function (node) {
+						const element = nodeElementsRef.current[node.id];
+						if (!element) {
+							return;
+						}
+						const width = element.offsetWidth;
+						const height = element.offsetHeight;
+						const rows = {};
+						const tableScroll = element.querySelector(".project-graph-table-scroll");
+						if (tableScroll) {
+							element.querySelectorAll("[data-project-graph-row-id]").forEach(function (row) {
+								const rowTop = row.offsetTop - tableScroll.scrollTop;
+								const rowBottom = rowTop + row.offsetHeight;
+								if (rowBottom < 0 || rowTop > tableScroll.clientHeight) {
+									return;
+								}
+								rows[row.dataset.projectGraphRowId] = {
+									y: tableScroll.offsetTop + rowTop + row.offsetHeight / 2,
+								};
+							});
+						}
+						nextDimensions[node.id] = {
+							width,
+							height,
+							rows,
+						};
+					});
+					const changed = JSON.stringify(previousDimensions) !== JSON.stringify(nextDimensions);
+					return changed ? nextDimensions : previousDimensions;
+				});
+			}
+			measureNodes();
+			window.addEventListener("resize", measureNodes);
+			const scrollElements = [];
+			let observer;
+			if (typeof ResizeObserver !== "undefined") {
+				observer = new ResizeObserver(measureNodes);
+				nodes.forEach(function (node) {
+					const element = nodeElementsRef.current[node.id];
+					if (element) {
+						observer.observe(element);
+					}
+				});
+			}
+			nodes.forEach(function (node) {
+				const element = nodeElementsRef.current[node.id];
+				if (!element) {
+					return;
+				}
+				const tableScroll = element.querySelector(".project-graph-table-scroll");
+				if (tableScroll) {
+					scrollElements.push(tableScroll);
+					tableScroll.addEventListener("scroll", measureNodes);
+				}
+			});
+			return function () {
+				window.removeEventListener("resize", measureNodes);
+				scrollElements.forEach(function (tableScroll) {
+					tableScroll.removeEventListener("scroll", measureNodes);
+				});
+				if (observer) {
+					observer.disconnect();
+				}
+			};
+		},
+		[nodeMeasureSignature],
+	);
+
 	return (
 		<div className="project-graph-shell bgx12">
 			<div className="project-graph-toolbar fixed top-1 left-1 flex items-center">
@@ -732,11 +1075,13 @@ function Graph({ pathfinder, services, headers }) {
 						transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.z})`,
 					}}
 				>
+					<GraphEdges nodes={nodes} nodeDimensions={nodeDimensions} />
 					{nodes.map(function (node) {
 						return (
 							<div
 								key={node.id}
 								className="project-graph-node absolute"
+								ref={registerNodeElement(node.id)}
 								style={{
 									transform: `translate(${node.x}px, ${node.y}px)`,
 								}}
