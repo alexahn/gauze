@@ -888,14 +888,14 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 					<div className="project-graph-node-count ml2">{node.loading ? "Loading" : `${total} rows`}</div>
 				</div>
 				<div className="project-graph-node-actions flex items-center">
-					<button type="button" className={showSettings ? "active" : ""} title="Table settings" aria-label="Table settings" aria-pressed={showSettings} onClick={toggleSettings}>
-						<GearIcon />
-					</button>
 					<button type="button" title="Create" aria-label="Create" onClick={handleOpenCreate}>
 						<PlusCircledIcon />
 					</button>
 					<button type="button" title="Reload" aria-label="Reload" onClick={() => onReload(node.id, node.variables, filterMode)}>
 						<ReloadIcon />
+					</button>
+					<button type="button" className={showSettings ? "active" : ""} title="Table settings" aria-label="Table settings" aria-pressed={showSettings} onClick={toggleSettings}>
+						<GearIcon />
 					</button>
 					<Link href={tableURL} push={true} target="_blank" rel="noreferrer">
 						<button type="button" title="Open table page" aria-label="Open table page">
