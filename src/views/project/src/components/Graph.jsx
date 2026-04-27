@@ -2,7 +2,7 @@ import * as React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { BookmarkFilledIcon, BookmarkIcon, Cross1Icon, Pencil2Icon, PlusCircledIcon, ReloadIcon } from "@radix-ui/react-icons";
+import { BookmarkFilledIcon, BookmarkIcon, Cross1Icon, OpenInNewWindowIcon, Pencil2Icon, PlusCircledIcon, ReloadIcon } from "@radix-ui/react-icons";
 
 import Input from "./Input.jsx";
 import Link from "./Link.jsx";
@@ -766,7 +766,7 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 	);
 }
 
-function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, onItemDelete }) {
+function GraphItemTable({ pathfinder, services, node, onClose, onItemCreate, onItemUpdate, onItemDelete }) {
 	const { gauzemodel } = services;
 	const [localMode, setLocalMode] = useState(node.mode || "read");
 	const [localItem, setLocalItem] = useState(node.item);
@@ -779,6 +779,7 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 	const header = node.header;
 	const fields = header.fields;
 	const itemID = localItem ? localItem._metadata.id : node.item ? node.item._metadata.id : localMode === "create" ? "new" : "";
+	const itemURL = localItem ? pathfinder.stateToURL("project.system.headers.header.item", { header: header.graphql_meta_type.toLowerCase(), id: localItem._metadata.id }, {}) : "";
 	const cellClass = "project-graph-item-cell ba bw1 br2 bdx2 bgx2 cx6";
 	const headerCellClass = "project-graph-item-cell ba bw1 br2 bdx3 bgx3 cx6";
 	const inputClass = "project-graph-input w-100 ba bw1 br2 bdx3 bgx12 cx2";
@@ -1124,6 +1125,13 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 					</div>
 				</div>
 				<div className="project-graph-node-actions flex items-center">
+					{itemURL ? (
+						<Link href={itemURL} push={true}>
+							<button type="button" title="Open item page" aria-label="Open item page">
+								<OpenInNewWindowIcon />
+							</button>
+						</Link>
+					) : null}
 					<button type="button" title="Close" aria-label="Close" onClick={() => onClose(node.id)}>
 						<Cross1Icon />
 					</button>
@@ -1152,10 +1160,11 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 const MemoGraphTable = React.memo(GraphTable);
 const MemoGraphItemTable = React.memo(GraphItemTable);
 
-const GraphNodeContent = React.memo(function GraphNodeContent({ services, node, actions }) {
+const GraphNodeContent = React.memo(function GraphNodeContent({ pathfinder, services, node, actions }) {
 	if (node.kind === "item") {
 		return (
 			<MemoGraphItemTable
+				pathfinder={pathfinder}
 				services={services}
 				node={node}
 				onClose={actions.closeNode}
@@ -1178,7 +1187,7 @@ const GraphNodeContent = React.memo(function GraphNodeContent({ services, node, 
 	);
 });
 
-const GraphNode = React.memo(function GraphNode({ services, node, position, actions, onRegisterNodeElement, onNodeMouseDown }) {
+const GraphNode = React.memo(function GraphNode({ pathfinder, services, node, position, actions, onRegisterNodeElement, onNodeMouseDown }) {
 	const handleRef = useCallback(
 		function (element) {
 			onRegisterNodeElement(node.id, element);
@@ -1200,7 +1209,7 @@ const GraphNode = React.memo(function GraphNode({ services, node, position, acti
 			}}
 		>
 			<div className="project-graph-drag-handle" onMouseDown={handleMouseDown} />
-			<GraphNodeContent services={services} node={node} actions={actions} />
+			<GraphNodeContent pathfinder={pathfinder} services={services} node={node} actions={actions} />
 		</div>
 	);
 });
@@ -1937,6 +1946,7 @@ function Graph({ pathfinder, services, agent, headers }) {
 						return (
 							<GraphNode
 								key={node.id}
+								pathfinder={pathfinder}
 								services={services}
 								node={node}
 								position={position}
