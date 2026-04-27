@@ -397,7 +397,7 @@ function GraphValuePopover({ value, valueClassName = "project-graph-value trunca
 	);
 }
 
-function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAccess, onOpenCreate }) {
+function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenItem, onOpenAccess, onOpenCreate }) {
 	const [filterMode, setFilterMode] = useState(node.filterMode);
 	const [localVariables, setLocalVariables] = useState(node.variables);
 	const fields = node.header.fields;
@@ -415,6 +415,7 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 		from: node.header.relationships_from || [],
 		to: node.header.relationships_to || [],
 	};
+	const tableURL = pathfinder.stateToURL("project.system.headers.header.list", { header: node.header.graphql_meta_type.toLowerCase() }, { variables: JSON.stringify(node.variables) });
 
 	useEffect(
 		function () {
@@ -705,6 +706,11 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 					<button type="button" title="Reload" aria-label="Reload" onClick={() => onReload(node.id, node.variables, filterMode)}>
 						<ReloadIcon />
 					</button>
+					<Link href={tableURL} push={true} target="_blank" rel="noreferrer">
+						<button type="button" title="Open table page" aria-label="Open table page">
+							<OpenInNewWindowIcon />
+						</button>
+					</Link>
 					<button type="button" title="Close" aria-label="Close" onClick={() => onClose(node.id)}>
 						<Cross1Icon />
 					</button>
@@ -1172,6 +1178,7 @@ const GraphNodeContent = React.memo(function GraphNodeContent({ pathfinder, serv
 	}
 	return (
 		<MemoGraphTable
+			pathfinder={pathfinder}
 			node={node}
 			onReload={actions.reloadNode}
 			onClose={actions.closeNode}
