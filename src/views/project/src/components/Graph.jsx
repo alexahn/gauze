@@ -240,6 +240,13 @@ function traversalVariables(header, source) {
 	return variables;
 }
 
+function relationshipSourceLabelDirection(source) {
+	if (!source) {
+		return "";
+	}
+	return source._direction === "to" ? "from" : "to";
+}
+
 function accessVariables(header, where) {
 	const variables = {
 		where,
@@ -440,6 +447,7 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 		from: node.header.relationships_from || [],
 		to: node.header.relationships_to || [],
 	};
+	const sourceDirectionLabel = relationshipSourceLabelDirection(node.source);
 	const tableURL = pathfinder.stateToURL("project.system.headers.header.list", { header: node.header.graphql_meta_type.toLowerCase() }, { variables: JSON.stringify(node.variables) });
 
 	useEffect(
@@ -868,8 +876,8 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 				<div className="project-graph-node-title-main flex items-center">
 					<div className="project-graph-node-name truncate">{node.header.graphql_meta_type}</div>
 					{node.source ? (
-						<div className="project-graph-node-source ml2" title={`${node.source._direction}: ${node.source._metadata.id}`}>
-							{node.source._direction}: {node.source._metadata.id}
+						<div className="project-graph-node-source ml2" title={`${sourceDirectionLabel}: ${node.source._metadata.id}`}>
+							{sourceDirectionLabel}: {node.source._metadata.id}
 						</div>
 					) : null}
 					{node.accessMethod ? (
