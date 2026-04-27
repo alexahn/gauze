@@ -47,6 +47,13 @@ function itemEdgePoint(node, dimensions) {
 	};
 }
 
+function nodeEdgePoint(node, dimensions, side) {
+	return {
+		x: node.x + (side === "right" ? dimensions.width : 0),
+		y: node.y + clamp(dimensions.height * 0.18, 56, 96),
+	};
+}
+
 function edgePath(from, to) {
 	const direction = to.x >= from.x ? 1 : -1;
 	const dx = Math.max(96, Math.abs(to.x - from.x) * 0.5);
@@ -78,6 +85,20 @@ function buildTraversalEdges(nodes, nodeDimensions) {
 		const parentDimensions = getNodeDimensions(nodeDimensions, parentNode);
 		const nodeDimensionsValue = getNodeDimensions(nodeDimensions, node);
 		const parentRowAnchor = getRowAnchor(parentDimensions, node.parentEntityID);
+		if (node.kind === "item" && node.mode === "create" && !node.parentEntityID) {
+			const from = nodeEdgePoint(parentNode, parentDimensions, "right");
+			const to = itemEdgePoint(node, nodeDimensionsValue);
+			edges.push({
+				id: `edge.item.${node.id}`,
+				markerID: `project-graph-edge-item-${node.id}-arrow`,
+				from,
+				to,
+				label: "create",
+				color: "var(--x7)",
+				title: `create: ${node.header.graphql_meta_type}`,
+			});
+			return edges;
+		}
 		if (!parentRowAnchor) {
 			return edges;
 		}
