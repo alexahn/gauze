@@ -724,7 +724,7 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 							{fields.map(function (field) {
 								return (
 									<th key={field.name} className={headerCellClass} title={field.name}>
-										{field.name}
+										<GraphValuePopover value={field.name} />
 									</th>
 								);
 							})}
@@ -1040,9 +1040,7 @@ function GraphItemTable({ pathfinder, services, node, onClose, onItemCreate, onI
 				return (
 					<tr key={field.name}>
 						<td className={cellClass}>
-							<div className="project-graph-item-field truncate" title={field.name}>
-								{field.name}
-							</div>
+							<GraphValuePopover value={field.name} valueClassName="project-graph-item-field truncate" />
 						</td>
 						<td className={cellClass}>{renderCreateValue(field)}</td>
 					</tr>
@@ -1070,9 +1068,7 @@ function GraphItemTable({ pathfinder, services, node, onClose, onItemCreate, onI
 			return (
 				<tr key={field.name}>
 					<td className={cellClass}>
-						<div className="project-graph-item-field truncate" title={field.name}>
-							{field.name}
-						</div>
+						<GraphValuePopover value={field.name} valueClassName="project-graph-item-field truncate" />
 					</td>
 					<td className={cellClass}>{value}</td>
 				</tr>
