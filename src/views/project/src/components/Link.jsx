@@ -2,9 +2,9 @@ import * as React from "react";
 
 import { navigate } from "@ahn/sinew";
 
-function Link({ href, push, children }) {
+function Link({ href, push, target, rel, children }) {
 	function handleClick(e) {
-		if (push) {
+		if (push && target !== "_blank") {
 			e.preventDefault();
 			navigate(href, {
 				push: true,
@@ -14,7 +14,7 @@ function Link({ href, push, children }) {
 		}
 	}
 	return (
-		<a href={href} onClick={handleClick}>
+		<a href={href} target={target} rel={rel} onClick={handleClick}>
 			{children}
 		</a>
 	);

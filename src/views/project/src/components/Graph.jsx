@@ -1126,7 +1126,7 @@ function GraphItemTable({ pathfinder, services, node, onClose, onItemCreate, onI
 				</div>
 				<div className="project-graph-node-actions flex items-center">
 					{itemURL ? (
-						<Link href={itemURL} push={true}>
+						<Link href={itemURL} push={true} target="_blank" rel="noreferrer">
 							<button type="button" title="Open item page" aria-label="Open item page">
 								<OpenInNewWindowIcon />
 							</button>
