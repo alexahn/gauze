@@ -1760,7 +1760,7 @@ function Graph({ pathfinder, services, agent, headers }) {
 	function handleWheel(e) {
 		e.preventDefault();
 		const rect = viewportRef.current.getBoundingClientRect();
-		const nextZ = clamp(viewport.z * (e.deltaY > 0 ? 0.9 : 1.1), 0.35, 2.5);
+		const nextZ = clamp(viewport.z * (e.deltaY > 0 ? 0.9 : 1.1), 0.1, 2.5);
 		const mouseX = e.clientX - rect.left;
 		const mouseY = e.clientY - rect.top;
 		const worldX = (mouseX - viewport.x) / viewport.z;
@@ -1769,6 +1769,19 @@ function Graph({ pathfinder, services, agent, headers }) {
 			x: mouseX - worldX * nextZ,
 			y: mouseY - worldY * nextZ,
 			z: nextZ,
+		});
+	}
+
+	function handleResetZoom() {
+		const rect = viewportRef.current.getBoundingClientRect();
+		const centerX = rect.width / 2;
+		const centerY = rect.height / 2;
+		const worldX = (centerX - viewport.x) / viewport.z;
+		const worldY = (centerY - viewport.y) / viewport.z;
+		setViewport({
+			x: centerX - worldX,
+			y: centerY - worldY,
+			z: 1,
 		});
 	}
 
@@ -1907,7 +1920,9 @@ function Graph({ pathfinder, services, agent, headers }) {
 						Headers
 					</button>
 				</Link>
-				<div className="project-graph-zoom ba bw1 br2 bdx3 bgx2 cx6">{Math.round(viewport.z * 100)}%</div>
+				<button type="button" className="project-graph-zoom ba bw1 br2 bdx3 bgx2 cx6" title="Reset zoom to 100%" aria-label="Reset zoom to 100%" onClick={handleResetZoom}>
+					{Math.round(viewport.z * 100)}%
+				</button>
 			</div>
 			<div ref={viewportRef} className="project-graph-viewport" onMouseDown={handleViewportMouseDown} onWheel={handleWheel}>
 				<div
