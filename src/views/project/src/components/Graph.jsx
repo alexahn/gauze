@@ -2,7 +2,7 @@ import * as React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { BookmarkFilledIcon, BookmarkIcon, Cross1Icon, OpenInNewWindowIcon, Pencil2Icon, PlusCircledIcon, ReloadIcon } from "@radix-ui/react-icons";
+import { BookmarkFilledIcon, BookmarkIcon, Cross1Icon, GearIcon, OpenInNewWindowIcon, Pencil2Icon, PlusCircledIcon, ReloadIcon } from "@radix-ui/react-icons";
 
 import Input from "./Input.jsx";
 import Link from "./Link.jsx";
@@ -397,10 +397,35 @@ function GraphValuePopover({ value, valueClassName = "project-graph-value trunca
 	);
 }
 
+function sortStateFromVariables(header, variables) {
+	const orderItem = variables.order && variables.order.length ? variables.order[0] : null;
+	return {
+		column: orderItem ? orderItem.column : header.default_order || "",
+		direction: orderItem && orderItem.order ? orderItem.order : "desc",
+	};
+}
+
 function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenItem, onOpenAccess, onOpenCreate }) {
 	const [filterMode, setFilterMode] = useState(node.filterMode);
 	const [localVariables, setLocalVariables] = useState(node.variables);
+	const [visibleFieldNames, setVisibleFieldNames] = useState(function () {
+		return node.header.fields.map(function (field) {
+			return field.name;
+		});
+	});
+	const initialSortState = sortStateFromVariables(node.header, node.variables);
+	const [sortColumn, setSortColumn] = useState(initialSortState.column);
+	const [sortDirection, setSortDirection] = useState(initialSortState.direction);
+	const [showSettings, setShowSettings] = useState(false);
+	const [settingsFieldFilter, setSettingsFieldFilter] = useState("");
 	const fields = node.header.fields;
+	const visibleFieldSet = new Set(visibleFieldNames);
+	const visibleFields = fields.filter(function (field) {
+		return visibleFieldSet.has(field.name);
+	});
+	const settingsFields = fields.filter(function (field) {
+		return field.name.toLowerCase().indexOf(settingsFieldFilter.toLowerCase()) >= 0;
+	});
 	const total = countToNumber(node.count);
 	const limit = node.variables.limit ? Number.parseInt(node.variables.limit, 10) : PAGE_SIZE;
 	const offset = node.variables.offset ? Number.parseInt(node.variables.offset, 10) : 0;
@@ -421,8 +446,22 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 		function () {
 			setFilterMode(node.filterMode);
 			setLocalVariables(node.variables);
+			const sortState = sortStateFromVariables(node.header, node.variables);
+			setSortColumn(sortState.column);
+			setSortDirection(sortState.direction);
 		},
-		[node.id, node.filterMode, node.variables],
+		[node.id, node.filterMode, node.header, node.variables],
+	);
+
+	useEffect(
+		function () {
+			setVisibleFieldNames(
+				node.header.fields.map(function (field) {
+					return field.name;
+				}),
+			);
+		},
+		[node.id, node.header],
 	);
 
 	function updateFilterMode(mode) {
@@ -467,6 +506,76 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 	function handleOpenCreate() {
 		const variables = stripFilterVariables(localVariables, filterMode);
 		onOpenCreate(node, variables);
+	}
+
+	function toggleSettings() {
+		setShowSettings(function (value) {
+			return !value;
+		});
+	}
+
+	function updateSettingsFieldFilter(e) {
+		setSettingsFieldFilter(e.target.value);
+	}
+
+	function updateVisibleField(fieldName) {
+		return function (e) {
+			const checked = e.target.checked;
+			setVisibleFieldNames(function (fieldNames) {
+				const selected = new Set(fieldNames);
+				if (checked) {
+					selected.add(fieldName);
+				} else {
+					selected.delete(fieldName);
+				}
+				return fields
+					.map(function (field) {
+						return field.name;
+					})
+					.filter(function (name) {
+						return selected.has(name);
+					});
+			});
+		};
+	}
+
+	function showAllFields() {
+		setVisibleFieldNames(
+			fields.map(function (field) {
+				return field.name;
+			}),
+		);
+	}
+
+	function hideAllFields() {
+		setVisibleFieldNames([]);
+	}
+
+	function updateSortColumn(e) {
+		setSortColumn(e.target.value);
+	}
+
+	function updateSortDirection(e) {
+		setSortDirection(e.target.value);
+	}
+
+	function applySort() {
+		const variables = {
+			...node.variables,
+			offset: 0,
+		};
+		if (sortColumn) {
+			variables.order = [
+				{
+					column: sortColumn,
+					order: sortDirection,
+				},
+			];
+		} else {
+			delete variables.order;
+		}
+		onReload(node.id, variables, filterMode);
+		setShowSettings(false);
 	}
 
 	function handleFilterKeyDown() {
@@ -541,7 +650,7 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 								</button>
 							</div>
 						</th>
-						{fields.map(function (field) {
+						{visibleFields.map(function (field) {
 							const defaultValue = localVariables.where_between && localVariables.where_between[field.name] ? localVariables.where_between[field.name][0] : undefined;
 							return (
 								<th key={field.name} className={cellClass}>
@@ -563,7 +672,7 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 								<span>End</span>
 							</div>
 						</th>
-						{fields.map(function (field) {
+						{visibleFields.map(function (field) {
 							const defaultValue = localVariables.where_between && localVariables.where_between[field.name] ? localVariables.where_between[field.name][1] : undefined;
 							return (
 								<th key={field.name} className={cellClass}>
@@ -592,7 +701,7 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 							</button>
 						</div>
 					</th>
-					{fields.map(function (field) {
+					{visibleFields.map(function (field) {
 						const defaultValue = localVariables[filterMode] ? localVariables[filterMode][field.name] : undefined;
 						return (
 							<th key={field.name} className={cellClass}>
@@ -682,6 +791,77 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 		);
 	}
 
+	function renderSettingsView() {
+		return (
+			<div className="project-graph-settings-view" onWheel={stopWheelPropagation}>
+				<div className="project-graph-settings-view-title">
+					<div className="project-graph-settings-heading">Table settings</div>
+					<div className="project-graph-settings-count">
+						{visibleFieldNames.length} / {fields.length} fields
+					</div>
+				</div>
+				<div className="project-graph-settings-grid">
+					<div className="project-graph-settings-panel">
+						<div className="project-graph-settings-panel-header">
+							<div className="project-graph-settings-heading">Fields</div>
+							<div className="project-graph-settings-actions">
+								<button type="button" className="project-graph-settings-apply ba bw1 br2 bdx3 bgx2 cx6" onClick={showAllFields}>
+									All
+								</button>
+								<button type="button" className="project-graph-settings-apply ba bw1 br2 bdx3 bgx2 cx6" onClick={hideAllFields}>
+									None
+								</button>
+							</div>
+						</div>
+						<input
+							className="project-graph-settings-filter ba bw1 br2 bdx3 bgx12 cx2"
+							type="text"
+							value={settingsFieldFilter}
+							onChange={updateSettingsFieldFilter}
+							aria-label="Filter fields"
+						/>
+						<div className="project-graph-settings-list">
+							{settingsFields.map(function (field) {
+								return (
+									<label key={field.name} className="project-graph-settings-row">
+										<input type="checkbox" checked={visibleFieldSet.has(field.name)} onChange={updateVisibleField(field.name)} />
+										<span title={field.name}>{field.name}</span>
+									</label>
+								);
+							})}
+						</div>
+					</div>
+					<div className="project-graph-settings-panel">
+						<div className="project-graph-settings-heading">Sort</div>
+						<label className="project-graph-settings-control">
+							<span>Field</span>
+							<select className="project-graph-settings-select ba bw1 br2 bdx3 bgx12 cx2" value={sortColumn} onChange={updateSortColumn}>
+								<option value="">None</option>
+								{fields.map(function (field) {
+									return (
+										<option key={field.name} value={field.name}>
+											{field.name}
+										</option>
+									);
+								})}
+							</select>
+						</label>
+						<label className="project-graph-settings-control">
+							<span>Direction</span>
+							<select className="project-graph-settings-select ba bw1 br2 bdx3 bgx12 cx2" value={sortDirection} onChange={updateSortDirection} disabled={!sortColumn}>
+								<option value="asc">Ascending</option>
+								<option value="desc">Descending</option>
+							</select>
+						</label>
+						<button type="button" className="project-graph-settings-apply ba bw1 br2 bdx3 bgx2 cx6" onClick={applySort}>
+							Apply
+						</button>
+					</div>
+				</div>
+			</div>
+		);
+	}
+
 	return (
 		<div className="project-graph-node-frame clouds ba bw1 br2 bdx3 bgx12 cx2 shadow-2">
 			<div className="project-graph-node-title flex items-center justify-between bgx2 cx6">
@@ -700,6 +880,9 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 					<div className="project-graph-node-count ml2">{node.loading ? "Loading" : `${total} rows`}</div>
 				</div>
 				<div className="project-graph-node-actions flex items-center">
+					<button type="button" className={showSettings ? "active" : ""} title="Table settings" aria-label="Table settings" aria-pressed={showSettings} onClick={toggleSettings}>
+						<GearIcon />
+					</button>
 					<button type="button" title="Create" aria-label="Create" onClick={handleOpenCreate}>
 						<PlusCircledIcon />
 					</button>
@@ -716,58 +899,64 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 					</button>
 				</div>
 			</div>
-			<div className="project-graph-node-toolbar flex items-center justify-between">
-				{renderModeButtons()}
-				<Pagination page={pageCurrent} count={pageMax} handleClick={handlePage} reverse={false} buttonClass="project-graph-page-button ba bw1 br2 bdx3 bgx2 cx6" />
-			</div>
-			{node.error ? <div className="project-graph-error bgxyz7 cx12 ba bw1 br2 pa2">{node.error}</div> : null}
-			<div className="project-graph-table-scroll" onWheel={stopWheelPropagation}>
-				<table className="project-graph-table">
-					<thead>
-						{renderFilterRows()}
-						<tr>
-							<th className={rowHeaderCellClass}>Rows</th>
-							{fields.map(function (field) {
-								return (
-									<th key={field.name} className={headerCellClass} title={field.name}>
-										<GraphValuePopover value={field.name} />
-									</th>
-								);
-							})}
-						</tr>
-					</thead>
-					<tbody>
-						{node.items.map(function (item) {
-							const id = item._metadata.id;
-							return (
-								<tr key={id} data-project-graph-row-id={id}>
-									<td className={rowHeaderCellClass}>
-										<div className="project-graph-row-actions flex items-center">
-											<button type="button" className="project-graph-row-link" title="Open" aria-label="Open" onClick={handleOpenItem(item)}>
-												<Pencil2Icon />
-											</button>
-											{renderAccessControls(item)}
-											{renderRelationshipControls(item)}
-											<span className="project-graph-row-id truncate" title={id}>
-												{id}
-											</span>
-										</div>
-									</td>
-									{fields.map(function (field) {
-										const rawValue = item.attributes[field.name];
-										const value = formatValue(rawValue);
+			{showSettings ? (
+				renderSettingsView()
+			) : (
+				<>
+					<div className="project-graph-node-toolbar flex items-center justify-between">
+						{renderModeButtons()}
+						<Pagination page={pageCurrent} count={pageMax} handleClick={handlePage} reverse={false} buttonClass="project-graph-page-button ba bw1 br2 bdx3 bgx2 cx6" />
+					</div>
+					{node.error ? <div className="project-graph-error bgxyz7 cx12 ba bw1 br2 pa2">{node.error}</div> : null}
+					<div className="project-graph-table-scroll" onWheel={stopWheelPropagation}>
+						<table className="project-graph-table">
+							<thead>
+								{renderFilterRows()}
+								<tr>
+									<th className={rowHeaderCellClass}>Rows</th>
+									{visibleFields.map(function (field) {
 										return (
-											<td key={field.name} className={cellClass} title={value}>
-												<GraphValuePopover value={rawValue} />
-											</td>
+											<th key={field.name} className={headerCellClass} title={field.name}>
+												<GraphValuePopover value={field.name} />
+											</th>
 										);
 									})}
 								</tr>
-							);
-						})}
-					</tbody>
-				</table>
-			</div>
+							</thead>
+							<tbody>
+								{node.items.map(function (item) {
+									const id = item._metadata.id;
+									return (
+										<tr key={id} data-project-graph-row-id={id}>
+											<td className={rowHeaderCellClass}>
+												<div className="project-graph-row-actions flex items-center">
+													<button type="button" className="project-graph-row-link" title="Open" aria-label="Open" onClick={handleOpenItem(item)}>
+														<Pencil2Icon />
+													</button>
+													{renderAccessControls(item)}
+													{renderRelationshipControls(item)}
+													<span className="project-graph-row-id truncate" title={id}>
+														{id}
+													</span>
+												</div>
+											</td>
+											{visibleFields.map(function (field) {
+												const rawValue = item.attributes[field.name];
+												const value = formatValue(rawValue);
+												return (
+													<td key={field.name} className={cellClass} title={value}>
+														<GraphValuePopover value={rawValue} />
+													</td>
+												);
+											})}
+										</tr>
+									);
+								})}
+							</tbody>
+						</table>
+					</div>
+				</>
+			)}
 		</div>
 	);
 }
