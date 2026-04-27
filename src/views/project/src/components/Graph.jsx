@@ -378,6 +378,25 @@ function itemMatches(a, b) {
 	return a._metadata.type === b._metadata.type && a._metadata.id === b._metadata.id;
 }
 
+function GraphValuePopover({ value, valueClassName = "project-graph-value truncate" }) {
+	const summary = formatValue(value);
+	const content = formatFullValue(value);
+	return (
+		<Popover
+			trigger={<span className={valueClassName}>{summary}</span>}
+			triggerClassName="project-graph-value-trigger"
+			popoverClassName="project-graph-value-popover bgx2 cx6 ba bw1 br2 bdx3 shadow-2"
+			popoverWidth="min(48rem, calc(100vw - 1rem))"
+			triggerTitle={summary}
+			triggerAriaLabel="Show full value"
+		>
+			<pre className="project-graph-value-popover-content" onWheel={stopWheelPropagation}>
+				{content}
+			</pre>
+		</Popover>
+	);
+}
+
 function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAccess, onOpenCreate }) {
 	const [filterMode, setFilterMode] = useState(node.filterMode);
 	const [localVariables, setLocalVariables] = useState(node.variables);
@@ -662,25 +681,6 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 		);
 	}
 
-	function renderValuePopover(value) {
-		const summary = formatValue(value);
-		const content = formatFullValue(value);
-		return (
-			<Popover
-				trigger={<span className="project-graph-value truncate">{summary}</span>}
-				triggerClassName="project-graph-value-trigger"
-				popoverClassName="project-graph-value-popover bgx2 cx6 ba bw1 br2 bdx3 shadow-2"
-				popoverWidth="min(48rem, calc(100vw - 1rem))"
-				triggerTitle={summary}
-				triggerAriaLabel="Show full value"
-			>
-				<pre className="project-graph-value-popover-content" onWheel={stopWheelPropagation}>
-					{content}
-				</pre>
-			</Popover>
-		);
-	}
-
 	return (
 		<div className="project-graph-node-frame clouds ba bw1 br2 bdx3 bgx12 cx2 shadow-2">
 			<div className="project-graph-node-title flex items-center justify-between bgx2 cx6">
@@ -752,7 +752,7 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 										const value = formatValue(rawValue);
 										return (
 											<td key={field.name} className={cellClass} title={value}>
-												{renderValuePopover(rawValue)}
+												<GraphValuePopover value={rawValue} />
 											</td>
 										);
 									})}
@@ -1001,7 +1001,7 @@ function GraphItemTable({ pathfinder, services, node, onClose, onItemCreate, onI
 	}
 
 	function renderReadValue(field) {
-		return <div className="project-graph-item-value truncate">{formatValue(localItem.attributes[field.name])}</div>;
+		return <GraphValuePopover value={localItem.attributes[field.name]} valueClassName="project-graph-item-value truncate" />;
 	}
 
 	function renderUpdateValue(field) {
