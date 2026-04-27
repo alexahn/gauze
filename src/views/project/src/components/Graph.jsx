@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { BookmarkFilledIcon, BookmarkIcon, Cross1Icon, Pencil2Icon, PlusCircledIcon, ReloadIcon } from "@radix-ui/react-icons";
@@ -17,6 +17,10 @@ const NODE_FALLBACK_DIMENSIONS = {
 	width: 720,
 	height: 320,
 };
+const NODE_DEFAULT_POSITION = {
+	x: 0,
+	y: 0,
+};
 
 function clamp(value, min, max) {
 	return Math.max(min, Math.min(max, value));
@@ -24,6 +28,19 @@ function clamp(value, min, max) {
 
 function getNodeDimensions(nodeDimensions, node) {
 	return nodeDimensions[node.id] || NODE_FALLBACK_DIMENSIONS;
+}
+
+function getNodePosition(nodePositions, id) {
+	return nodePositions[id] || NODE_DEFAULT_POSITION;
+}
+
+function positionNode(node, nodePositions) {
+	const position = getNodePosition(nodePositions, node.id);
+	return {
+		...node,
+		x: position.x,
+		y: position.y,
+	};
 }
 
 function getRowAnchor(dimensions, id) {
@@ -69,12 +86,15 @@ function edgeLabelPosition(from, to) {
 	};
 }
 
-function buildTraversalEdges(nodes, nodeDimensions) {
+function buildTraversalEdges(nodes, nodePositions, nodeDimensions) {
+	const positionedNodes = nodes.map(function (node) {
+		return positionNode(node, nodePositions);
+	});
 	const nodeIndex = {};
-	nodes.forEach(function (node) {
+	positionedNodes.forEach(function (node) {
 		nodeIndex[node.id] = node;
 	});
-	return nodes.reduce(function (edges, node) {
+	return positionedNodes.reduce(function (edges, node) {
 		if (!node.parentNodeID) {
 			return edges;
 		}
@@ -349,6 +369,13 @@ function countToNumber(count) {
 
 function stopWheelPropagation(e) {
 	e.stopPropagation();
+}
+
+function itemMatches(a, b) {
+	if (!a || !b) {
+		return false;
+	}
+	return a._metadata.type === b._metadata.type && a._metadata.id === b._metadata.id;
 }
 
 function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAccess, onOpenCreate }) {
@@ -1122,8 +1149,64 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 	);
 }
 
-function GraphEdges({ nodes, nodeDimensions }) {
-	const edges = buildTraversalEdges(nodes, nodeDimensions);
+const MemoGraphTable = React.memo(GraphTable);
+const MemoGraphItemTable = React.memo(GraphItemTable);
+
+const GraphNodeContent = React.memo(function GraphNodeContent({ services, node, actions }) {
+	if (node.kind === "item") {
+		return (
+			<MemoGraphItemTable
+				services={services}
+				node={node}
+				onClose={actions.closeNode}
+				onItemCreate={actions.createGraphItem}
+				onItemUpdate={actions.updateGraphItem}
+				onItemDelete={actions.deleteGraphItem}
+			/>
+		);
+	}
+	return (
+		<MemoGraphTable
+			node={node}
+			onReload={actions.reloadNode}
+			onClose={actions.closeNode}
+			onTraverse={actions.addTraversalNode}
+			onOpenItem={actions.addItemNode}
+			onOpenAccess={actions.addAccessNode}
+			onOpenCreate={actions.addCreateNode}
+		/>
+	);
+});
+
+const GraphNode = React.memo(function GraphNode({ services, node, position, actions, onRegisterNodeElement, onNodeMouseDown }) {
+	const handleRef = useCallback(
+		function (element) {
+			onRegisterNodeElement(node.id, element);
+		},
+		[node.id, onRegisterNodeElement],
+	);
+	const handleMouseDown = useCallback(
+		function (e) {
+			onNodeMouseDown(node.id, e);
+		},
+		[node.id, onNodeMouseDown],
+	);
+	return (
+		<div
+			className="project-graph-node absolute"
+			ref={handleRef}
+			style={{
+				transform: `translate(${position.x}px, ${position.y}px)`,
+			}}
+		>
+			<div className="project-graph-drag-handle" onMouseDown={handleMouseDown} />
+			<GraphNodeContent services={services} node={node} actions={actions} />
+		</div>
+	);
+});
+
+const GraphEdges = React.memo(function GraphEdges({ nodes, nodePositions, nodeDimensions }) {
+	const edges = buildTraversalEdges(nodes, nodePositions, nodeDimensions);
 	if (!edges.length) {
 		return null;
 	}
@@ -1165,7 +1248,7 @@ function GraphEdges({ nodes, nodeDimensions }) {
 			})}
 		</svg>
 	);
-}
+});
 
 function EntityPicker({ headers, onAdd }) {
 	const [filter, setFilter] = useState("");
@@ -1192,23 +1275,50 @@ function EntityPicker({ headers, onAdd }) {
 	);
 }
 
+const MemoEntityPicker = React.memo(EntityPicker);
+
 function Graph({ pathfinder, services, agent, headers }) {
 	const viewportRef = useRef();
 	const nodeElementsRef = useRef({});
-	const [nodes, setNodes] = useState([]);
+	const [nodeContents, setNodeContents] = useState([]);
+	const [nodePositions, setNodePositions] = useState({});
 	const [nodeDimensions, setNodeDimensions] = useState({});
 	const [viewport, setViewport] = useState({ x: 24, y: 24, z: 1 });
 	const [dragging, setDragging] = useState(null);
+	const nodeContentsRef = useRef(nodeContents);
+	const nodePositionsRef = useRef(nodePositions);
+	const nodeDimensionsRef = useRef(nodeDimensions);
 	const { gauzemodel } = services;
-	const nodeMeasureSignature = nodes
+	const nodeMeasureSignature = nodeContents
 		.map(function (node) {
 			const itemCount = node.items ? node.items.length : node.item ? 1 : 0;
 			return [node.id, node.kind || "table", node.header.fields.length, itemCount, node.loading, node.count, node.filterMode, node.mode, node.error].join(":");
 		})
 		.join("|");
 
-	function updateNode(id, updater) {
-		setNodes(function (nodes) {
+	useEffect(
+		function () {
+			nodeContentsRef.current = nodeContents;
+		},
+		[nodeContents],
+	);
+
+	useEffect(
+		function () {
+			nodePositionsRef.current = nodePositions;
+		},
+		[nodePositions],
+	);
+
+	useEffect(
+		function () {
+			nodeDimensionsRef.current = nodeDimensions;
+		},
+		[nodeDimensions],
+	);
+
+	const updateNodeContent = useCallback(function (id, updater) {
+		setNodeContents(function (nodes) {
 			return nodes.map(function (node) {
 				if (node.id === id) {
 					return updater(node);
@@ -1217,7 +1327,7 @@ function Graph({ pathfinder, services, agent, headers }) {
 				}
 			});
 		});
-	}
+	}, []);
 
 	function countVariables(header, variables) {
 		return {
@@ -1233,133 +1343,160 @@ function Graph({ pathfinder, services, agent, headers }) {
 		};
 	}
 
-	function reloadNode(id, variables, filterMode, selectedNodeOverride) {
-		const selectedNode =
-			selectedNodeOverride ||
-			nodes.find(function (node) {
-				return node.id === id;
+	const reloadNode = useCallback(
+		function (id, variables, filterMode, selectedNodeOverride) {
+			const selectedNode =
+				selectedNodeOverride ||
+				nodeContentsRef.current.find(function (node) {
+					return node.id === id;
+				});
+			setNodeContents(function (nodes) {
+				return nodes.map(function (node) {
+					if (node.id === id) {
+						return {
+							...node,
+							variables,
+							filterMode,
+							loading: true,
+							error: "",
+						};
+					} else {
+						return node;
+					}
+				});
 			});
-		setNodes(function (nodes) {
-			return nodes.map(function (node) {
-				if (node.id === id) {
+			if (!selectedNode) {
+				return Promise.resolve();
+			}
+			const header = selectedNode.header;
+			const read = gauzemodel.default
+				.read(header, variables)
+				.then(function (items) {
+					return {
+						items,
+					};
+				})
+				.catch(function (err) {
+					return {
+						items: [],
+						error: err.message,
+					};
+				});
+			const count = gauzemodel.default
+				.count(header, countVariables(header, variables))
+				.then(function (counts) {
+					return {
+						count: counts && counts.length ? counts[0].count : 0,
+					};
+				})
+				.catch(function (err) {
+					return {
+						count: 0,
+						error: err.message,
+					};
+				});
+			return Promise.all([read, count]).then(function (results) {
+				const readResult = results[0];
+				const countResult = results[1];
+				updateNodeContent(id, function (node) {
 					return {
 						...node,
-						variables,
-						filterMode,
-						loading: true,
-						error: "",
+						items: readResult.items,
+						count: countResult.count,
+						loading: false,
+						error: readResult.error || countResult.error || "",
 					};
-				} else {
-					return node;
-				}
+				});
 			});
-		});
-		if (!selectedNode) {
-			return Promise.resolve();
-		}
-		const header = selectedNode.header;
-		const read = gauzemodel.default
-			.read(header, variables)
-			.then(function (items) {
-				return {
-					items,
-				};
-			})
-			.catch(function (err) {
-				return {
-					items: [],
-					error: err.message,
-				};
-			});
-		const count = gauzemodel.default
-			.count(header, countVariables(header, variables))
-			.then(function (counts) {
-				return {
-					count: counts && counts.length ? counts[0].count : 0,
-				};
-			})
-			.catch(function (err) {
-				return {
-					count: 0,
-					error: err.message,
-				};
-			});
-		return Promise.all([read, count]).then(function (results) {
-			const readResult = results[0];
-			const countResult = results[1];
-			updateNode(id, function (node) {
-				return {
-					...node,
-					items: readResult.items,
-					count: countResult.count,
-					loading: false,
-					error: readResult.error || countResult.error || "",
-				};
-			});
-		});
-	}
+		},
+		[gauzemodel, updateNodeContent],
+	);
 
-	function addNode(header) {
-		const variables = defaultVariables(header);
-		const offset = nodes.length * 32;
-		const node = {
-			id: uuidv4(),
-			header,
-			variables,
-			filterMode: "where_like",
-			items: [],
-			count: 0,
-			x: 24 + offset,
-			y: 24 + offset,
-			loading: true,
-			error: "",
-		};
-		setNodes(function (nodes) {
-			return nodes.concat(node);
-		});
-		return reloadNode(node.id, variables, node.filterMode, node);
-	}
+	const addNode = useCallback(
+		function (header) {
+			const variables = defaultVariables(header);
+			const offset = nodeContentsRef.current.length * 32;
+			const position = {
+				x: 24 + offset,
+				y: 24 + offset,
+			};
+			const node = {
+				id: uuidv4(),
+				header,
+				variables,
+				filterMode: "where_like",
+				items: [],
+				count: 0,
+				loading: true,
+				error: "",
+			};
+			setNodeContents(function (nodes) {
+				return nodes.concat(node);
+			});
+			setNodePositions(function (positions) {
+				return {
+					...positions,
+					[node.id]: position,
+				};
+			});
+			return reloadNode(node.id, variables, node.filterMode, node);
+		},
+		[reloadNode],
+	);
 
-	function addTraversalNode(sourceNode, item, targetType, direction) {
-		const targetHeader = headers.find(function (header) {
-			return header.graphql_meta_type === targetType;
-		});
-		if (!targetHeader) {
-			return Promise.resolve();
-		}
-		const source = {
-			_metadata: {
-				type: sourceNode.header.graphql_meta_type,
-				id: item._metadata.id,
-			},
-			_direction: direction,
-		};
-		const variables = traversalVariables(targetHeader, source);
-		const sourceDimensions = getNodeDimensions(nodeDimensions, sourceNode);
-		const xOffset = direction === "to" ? sourceDimensions.width + NODE_HORIZONTAL_GAP : -(sourceDimensions.width + NODE_HORIZONTAL_GAP);
-		const node = {
-			id: uuidv4(),
-			header: targetHeader,
-			source,
-			parentNodeID: sourceNode.id,
-			parentEntityID: item._metadata.id,
-			variables,
-			filterMode: "where_like",
-			items: [],
-			count: 0,
-			x: sourceNode.x + xOffset,
-			y: sourceNode.y + NODE_VERTICAL_GAP,
-			loading: true,
-			error: "",
-		};
-		setNodes(function (nodes) {
-			return nodes.concat(node);
-		});
-		return reloadNode(node.id, variables, node.filterMode, node);
-	}
+	const addTraversalNode = useCallback(
+		function (sourceNode, item, targetType, direction) {
+			const targetHeader = headers.find(function (header) {
+				return header.graphql_meta_type === targetType;
+			});
+			if (!targetHeader) {
+				return Promise.resolve();
+			}
+			const source = {
+				_metadata: {
+					type: sourceNode.header.graphql_meta_type,
+					id: item._metadata.id,
+				},
+				_direction: direction,
+			};
+			const variables = traversalVariables(targetHeader, source);
+			const sourceDimensions = getNodeDimensions(nodeDimensionsRef.current, sourceNode);
+			const sourcePosition = getNodePosition(nodePositionsRef.current, sourceNode.id);
+			const xOffset = direction === "to" ? sourceDimensions.width + NODE_HORIZONTAL_GAP : -(sourceDimensions.width + NODE_HORIZONTAL_GAP);
+			const node = {
+				id: uuidv4(),
+				header: targetHeader,
+				source,
+				parentNodeID: sourceNode.id,
+				parentEntityID: item._metadata.id,
+				variables,
+				filterMode: "where_like",
+				items: [],
+				count: 0,
+				loading: true,
+				error: "",
+			};
+			const position = {
+				x: sourcePosition.x + xOffset,
+				y: sourcePosition.y + NODE_VERTICAL_GAP,
+			};
+			setNodeContents(function (nodes) {
+				return nodes.concat(node);
+			});
+			setNodePositions(function (positions) {
+				return {
+					...positions,
+					[node.id]: position,
+				};
+			});
+			return reloadNode(node.id, variables, node.filterMode, node);
+		},
+		[headers, reloadNode],
+	);
 
-	function addItemNode(sourceNode, item) {
-		const sourceDimensions = getNodeDimensions(nodeDimensions, sourceNode);
+	const addItemNode = useCallback(function (sourceNode, item) {
+		const sourceDimensions = getNodeDimensions(nodeDimensionsRef.current, sourceNode);
+		const sourcePosition = getNodePosition(nodePositionsRef.current, sourceNode.id);
 		const node = {
 			id: uuidv4(),
 			kind: "item",
@@ -1368,17 +1505,26 @@ function Graph({ pathfinder, services, agent, headers }) {
 			mode: "update",
 			parentNodeID: sourceNode.id,
 			parentEntityID: item._metadata.id,
-			x: sourceNode.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
-			y: sourceNode.y + NODE_VERTICAL_GAP,
 		};
-		setNodes(function (nodes) {
+		const position = {
+			x: sourcePosition.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
+			y: sourcePosition.y + NODE_VERTICAL_GAP,
+		};
+		setNodeContents(function (nodes) {
 			return nodes.concat(node);
 		});
+		setNodePositions(function (positions) {
+			return {
+				...positions,
+				[node.id]: position,
+			};
+		});
 		return Promise.resolve();
-	}
+	}, []);
 
-	function addCreateNode(sourceNode, variables) {
-		const sourceDimensions = getNodeDimensions(nodeDimensions, sourceNode);
+	const addCreateNode = useCallback(function (sourceNode, variables) {
+		const sourceDimensions = getNodeDimensions(nodeDimensionsRef.current, sourceNode);
+		const sourcePosition = getNodePosition(nodePositionsRef.current, sourceNode.id);
 		const node = {
 			id: uuidv4(),
 			kind: "item",
@@ -1389,98 +1535,116 @@ function Graph({ pathfinder, services, agent, headers }) {
 			createSource: sourceNode.source || null,
 			parentNodeID: sourceNode.id,
 			parentEntityID: null,
-			x: sourceNode.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
-			y: sourceNode.y + NODE_VERTICAL_GAP,
 		};
-		setNodes(function (nodes) {
+		const position = {
+			x: sourcePosition.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
+			y: sourcePosition.y + NODE_VERTICAL_GAP,
+		};
+		setNodeContents(function (nodes) {
 			return nodes.concat(node);
 		});
-		return Promise.resolve();
-	}
-
-	function addAccessNode(sourceNode, item, kind) {
-		const targetType = kind === "whitelist" ? "WHITELIST" : "BLACKLIST";
-		const targetHeader = headers.find(function (header) {
-			return header.graphql_meta_type === targetType;
-		});
-		if (!targetHeader) {
-			return Promise.resolve();
-		}
-		const sourceDimensions = getNodeDimensions(nodeDimensions, sourceNode);
-		const accessNodes = ACCESS_METHODS.map(function (method, index) {
-			const variables = accessVariables(targetHeader, accessWhere(kind, agent, sourceNode.header, item, method));
+		setNodePositions(function (positions) {
 			return {
-				id: uuidv4(),
-				kind: "access",
-				accessKind: kind,
-				accessMethod: method,
-				header: targetHeader,
-				variables,
-				filterMode: "where",
-				items: [],
-				count: 0,
-				parentNodeID: sourceNode.id,
-				parentEntityID: item._metadata.id,
-				x: sourceNode.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
-				y: sourceNode.y + NODE_VERTICAL_GAP + index * (NODE_FALLBACK_DIMENSIONS.height + NODE_VERTICAL_GAP),
-				loading: true,
-				error: "",
+				...positions,
+				[node.id]: position,
 			};
 		});
-		setNodes(function (nodes) {
-			return nodes.concat(accessNodes);
-		});
-		return Promise.all(
-			accessNodes.map(function (node) {
-				return reloadNode(node.id, node.variables, node.filterMode, node);
-			}),
-		);
-	}
-
-	function itemMatches(a, b) {
-		if (!a || !b) {
-			return false;
-		}
-		return a._metadata.type === b._metadata.type && a._metadata.id === b._metadata.id;
-	}
-
-	function createGraphItem(itemNodeID, createdItem) {
-		const itemNode = nodes.find(function (node) {
-			return node.id === itemNodeID;
-		});
-		const parentNode =
-			itemNode && itemNode.parentNodeID
-				? nodes.find(function (node) {
-						return node.id === itemNode.parentNodeID;
-					})
-				: null;
-		setNodes(function (nodes) {
-			return nodes.map(function (node) {
-				if (node.id === itemNodeID) {
-					return {
-						...node,
-						item: createdItem,
-						mode: "read",
-						parentEntityID: createdItem._metadata.id,
-					};
-				} else if (node.kind === "item" && itemMatches(node.item, createdItem)) {
-					return {
-						...node,
-						item: createdItem,
-					};
-				} else {
-					return node;
-				}
-			});
-		});
-		if (parentNode && parentNode.items) {
-			return reloadNode(parentNode.id, parentNode.variables, parentNode.filterMode, parentNode);
-		}
 		return Promise.resolve();
-	}
+	}, []);
 
-	function updateGraphItem(itemNodeID, updatedItem, previousItem = updatedItem) {
-		setNodes(function (nodes) {
+	const addAccessNode = useCallback(
+		function (sourceNode, item, kind) {
+			const targetType = kind === "whitelist" ? "WHITELIST" : "BLACKLIST";
+			const targetHeader = headers.find(function (header) {
+				return header.graphql_meta_type === targetType;
+			});
+			if (!targetHeader) {
+				return Promise.resolve();
+			}
+			const sourceDimensions = getNodeDimensions(nodeDimensionsRef.current, sourceNode);
+			const sourcePosition = getNodePosition(nodePositionsRef.current, sourceNode.id);
+			const accessNodes = ACCESS_METHODS.map(function (method, index) {
+				const variables = accessVariables(targetHeader, accessWhere(kind, agent, sourceNode.header, item, method));
+				return {
+					id: uuidv4(),
+					kind: "access",
+					accessKind: kind,
+					accessMethod: method,
+					header: targetHeader,
+					variables,
+					filterMode: "where",
+					items: [],
+					count: 0,
+					parentNodeID: sourceNode.id,
+					parentEntityID: item._metadata.id,
+					loading: true,
+					error: "",
+				};
+			});
+			setNodeContents(function (nodes) {
+				return nodes.concat(accessNodes);
+			});
+			setNodePositions(function (positions) {
+				const nextPositions = {
+					...positions,
+				};
+				accessNodes.forEach(function (node, index) {
+					nextPositions[node.id] = {
+						x: sourcePosition.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
+						y: sourcePosition.y + NODE_VERTICAL_GAP + index * (NODE_FALLBACK_DIMENSIONS.height + NODE_VERTICAL_GAP),
+					};
+				});
+				return nextPositions;
+			});
+			return Promise.all(
+				accessNodes.map(function (node) {
+					return reloadNode(node.id, node.variables, node.filterMode, node);
+				}),
+			);
+		},
+		[agent, headers, reloadNode],
+	);
+
+	const createGraphItem = useCallback(
+		function (itemNodeID, createdItem) {
+			const itemNode = nodeContentsRef.current.find(function (node) {
+				return node.id === itemNodeID;
+			});
+			const parentNode =
+				itemNode && itemNode.parentNodeID
+					? nodeContentsRef.current.find(function (node) {
+							return node.id === itemNode.parentNodeID;
+						})
+					: null;
+			setNodeContents(function (nodes) {
+				return nodes.map(function (node) {
+					if (node.id === itemNodeID) {
+						return {
+							...node,
+							item: createdItem,
+							mode: "read",
+							parentEntityID: createdItem._metadata.id,
+						};
+					} else if (node.kind === "item" && itemMatches(node.item, createdItem)) {
+						return {
+							...node,
+							item: createdItem,
+						};
+					} else {
+						return node;
+					}
+				});
+			});
+			if (parentNode && parentNode.items) {
+				return reloadNode(parentNode.id, parentNode.variables, parentNode.filterMode, parentNode);
+			}
+			return Promise.resolve();
+		},
+		[reloadNode],
+	);
+
+	const updateGraphItem = useCallback(function (itemNodeID, updatedItem, previousItem = updatedItem) {
+		setNodeContents(function (nodes) {
 			return nodes.map(function (node) {
 				if (node.id === itemNodeID) {
 					return {
@@ -1508,10 +1672,10 @@ function Graph({ pathfinder, services, agent, headers }) {
 				}
 			});
 		});
-	}
+	}, []);
 
-	function deleteGraphItem(itemNodeID, deletedItem) {
-		setNodes(function (nodes) {
+	const deleteGraphItem = useCallback(function (itemNodeID, deletedItem) {
+		setNodeContents(function (nodes) {
 			return nodes.map(function (node) {
 				if (node.id === itemNodeID) {
 					return {
@@ -1535,45 +1699,49 @@ function Graph({ pathfinder, services, agent, headers }) {
 				}
 			});
 		});
-	}
+	}, []);
 
-	function closeNode(id) {
-		setNodes(function (nodes) {
+	const closeNode = useCallback(function (id) {
+		setNodeContents(function (nodes) {
 			return nodes.filter(function (node) {
 				return node.id !== id;
 			});
 		});
-	}
+		setNodePositions(function (positions) {
+			const nextPositions = {
+				...positions,
+			};
+			delete nextPositions[id];
+			return nextPositions;
+		});
+	}, []);
 
-	function registerNodeElement(id) {
-		return function (element) {
-			if (element) {
-				nodeElementsRef.current[id] = element;
-			} else {
-				delete nodeElementsRef.current[id];
-			}
-		};
-	}
+	const registerNodeElement = useCallback(function (id, element) {
+		if (element) {
+			nodeElementsRef.current[id] = element;
+		} else {
+			delete nodeElementsRef.current[id];
+		}
+	}, []);
 
-	function handleNodeMouseDown(id) {
-		return function (e) {
+	const handleNodeMouseDown = useCallback(
+		function (id, e) {
 			if (e.button !== 0) return;
 			e.preventDefault();
 			e.stopPropagation();
-			const node = nodes.find(function (node) {
-				return node.id === id;
-			});
-			if (!node) return;
+			const position = getNodePosition(nodePositionsRef.current, id);
 			setDragging({
 				type: "node",
 				id,
 				startX: e.clientX,
 				startY: e.clientY,
-				nodeX: node.x,
-				nodeY: node.y,
+				nodeX: position.x,
+				nodeY: position.y,
+				viewportZ: viewport.z,
 			});
-		};
-	}
+		},
+		[viewport.z],
+	);
 
 	function handleViewportMouseDown(e) {
 		if (e.button !== 0) return;
@@ -1585,6 +1753,7 @@ function Graph({ pathfinder, services, agent, headers }) {
 			startY: e.clientY,
 			viewportX: viewport.x,
 			viewportY: viewport.y,
+			viewportZ: viewport.z,
 		});
 	}
 
@@ -1603,25 +1772,44 @@ function Graph({ pathfinder, services, agent, headers }) {
 		});
 	}
 
+	const graphActions = useMemo(
+		function () {
+			return {
+				reloadNode,
+				closeNode,
+				addTraversalNode,
+				addItemNode,
+				addAccessNode,
+				addCreateNode,
+				createGraphItem,
+				updateGraphItem,
+				deleteGraphItem,
+			};
+		},
+		[reloadNode, closeNode, addTraversalNode, addItemNode, addAccessNode, addCreateNode, createGraphItem, updateGraphItem, deleteGraphItem],
+	);
+
 	useEffect(
 		function () {
 			function handleMouseMove(e) {
 				if (!dragging) return;
 				if (dragging.type === "node") {
-					const dx = (e.clientX - dragging.startX) / viewport.z;
-					const dy = (e.clientY - dragging.startY) / viewport.z;
-					updateNode(dragging.id, function (node) {
+					const dx = (e.clientX - dragging.startX) / dragging.viewportZ;
+					const dy = (e.clientY - dragging.startY) / dragging.viewportZ;
+					setNodePositions(function (positions) {
 						return {
-							...node,
-							x: dragging.nodeX + dx,
-							y: dragging.nodeY + dy,
+							...positions,
+							[dragging.id]: {
+								x: dragging.nodeX + dx,
+								y: dragging.nodeY + dy,
+							},
 						};
 					});
 				} else if (dragging.type === "viewport") {
 					setViewport({
-						...viewport,
 						x: dragging.viewportX + e.clientX - dragging.startX,
 						y: dragging.viewportY + e.clientY - dragging.startY,
+						z: dragging.viewportZ,
 					});
 				}
 			}
@@ -1635,7 +1823,7 @@ function Graph({ pathfinder, services, agent, headers }) {
 				window.removeEventListener("mouseup", handleMouseUp);
 			};
 		},
-		[dragging, viewport],
+		[dragging],
 	);
 
 	useEffect(
@@ -1643,7 +1831,7 @@ function Graph({ pathfinder, services, agent, headers }) {
 			function measureNodes() {
 				setNodeDimensions(function (previousDimensions) {
 					const nextDimensions = {};
-					nodes.forEach(function (node) {
+					nodeContents.forEach(function (node) {
 						const element = nodeElementsRef.current[node.id];
 						if (!element) {
 							return;
@@ -1680,14 +1868,14 @@ function Graph({ pathfinder, services, agent, headers }) {
 			let observer;
 			if (typeof ResizeObserver !== "undefined") {
 				observer = new ResizeObserver(measureNodes);
-				nodes.forEach(function (node) {
+				nodeContents.forEach(function (node) {
 					const element = nodeElementsRef.current[node.id];
 					if (element) {
 						observer.observe(element);
 					}
 				});
 			}
-			nodes.forEach(function (node) {
+			nodeContents.forEach(function (node) {
 				const element = nodeElementsRef.current[node.id];
 				if (!element) {
 					return;
@@ -1728,44 +1916,24 @@ function Graph({ pathfinder, services, agent, headers }) {
 						transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.z})`,
 					}}
 				>
-					<GraphEdges nodes={nodes} nodeDimensions={nodeDimensions} />
-					{nodes.map(function (node) {
+					<GraphEdges nodes={nodeContents} nodePositions={nodePositions} nodeDimensions={nodeDimensions} />
+					{nodeContents.map(function (node) {
+						const position = getNodePosition(nodePositions, node.id);
 						return (
-							<div
+							<GraphNode
 								key={node.id}
-								className="project-graph-node absolute"
-								ref={registerNodeElement(node.id)}
-								style={{
-									transform: `translate(${node.x}px, ${node.y}px)`,
-								}}
-							>
-								<div className="project-graph-drag-handle" onMouseDown={handleNodeMouseDown(node.id)} />
-								{node.kind === "item" ? (
-									<GraphItemTable
-										services={services}
-										node={node}
-										onClose={closeNode}
-										onItemCreate={createGraphItem}
-										onItemUpdate={updateGraphItem}
-										onItemDelete={deleteGraphItem}
-									/>
-								) : (
-									<GraphTable
-										node={node}
-										onReload={reloadNode}
-										onClose={closeNode}
-										onTraverse={addTraversalNode}
-										onOpenItem={addItemNode}
-										onOpenAccess={addAccessNode}
-										onOpenCreate={addCreateNode}
-									/>
-								)}
-							</div>
+								services={services}
+								node={node}
+								position={position}
+								actions={graphActions}
+								onRegisterNodeElement={registerNodeElement}
+								onNodeMouseDown={handleNodeMouseDown}
+							/>
 						);
 					})}
 				</div>
 			</div>
-			<EntityPicker headers={headers} onAdd={addNode} />
+			<MemoEntityPicker headers={headers} onAdd={addNode} />
 		</div>
 	);
 }
