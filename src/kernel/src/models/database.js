@@ -545,7 +545,7 @@ class DatabaseModel extends Model {
 				}
 				params.where_in = params.where_in || {};
 				params.where_in[self.primary_key] = chunk;
-				return action(context, scope, parameters, database, transaction);
+				return action(context, scope, params, database, transaction);
 			}),
 		).then(function (result) {
 			return result.flat();
@@ -980,40 +980,50 @@ class DatabaseModel extends Model {
 		const self = this;
 		function action(context, scope, parameters, database, transaction) {
 			context.transaction_count += 1;
-			const { attributes, where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
+			const { attributes } = parameters;
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
+			const MAXIMUM_ROWS = 4294967296;
 
-			const sql = database(self.table_name)
-				.where(function (builder) {
-					builder.where(where);
-					Object.keys(where_in).forEach(function (key) {
-						builder.whereIn(key, where_in[key]);
+			return self
+				._root_read_transaction(
+					context,
+					scope,
+					{
+						...parameters,
+						limit: parameters.limit ?? MAXIMUM_ROWS,
+						offset: parameters.offset ?? 0,
+					},
+					database,
+					transaction,
+				)
+				.then(function (read_data) {
+					const valid_ids = read_data.map(function (item) {
+						return item[self.primary_key];
 					});
-					Object.keys(cache_where_in).forEach(function (key) {
-						builder.whereIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[key]).value);
+					if (valid_ids.length === 0) {
+						return [];
+					}
+					const sql = database(self.table_name).whereIn(self.primary_key, valid_ids).update(attributes).transacting(transaction);
+					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
+					}
+					return sql.then(function (data) {
+						LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
+						return self._root_read_transaction(
+							context,
+							scope,
+							{
+								where_in: {
+									[self.primary_key]: valid_ids,
+								},
+								limit: valid_ids.length,
+								offset: 0,
+								order: parameters.order,
+							},
+							database,
+							transaction,
+						);
 					});
-					Object.keys(where_not_in).forEach(function (key) {
-						builder.whereNotIn(key, where_not_in[key]);
-					});
-					Object.keys(cache_where_not_in).forEach(function (key) {
-						builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[key]).value);
-					});
-					Object.keys(where_like).forEach(function (key) {
-						builder.whereLike(key, where_like[key]);
-					});
-					self._apply_where_between(builder, where_between);
-					return builder;
-				})
-				.update(attributes)
-				.transacting(transaction);
-			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
-				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
-			}
-			return sql
-				.then(function (data) {
-					LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
-					context.breadth_count += data.length;
-					return self._root_read_transaction(context, scope, parameters, database, transaction);
 				})
 				.catch(function (err) {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("4", __RELATIVE_FILEPATH, `${self.name}.update:failure`, "err", err);
@@ -1053,33 +1063,49 @@ class DatabaseModel extends Model {
 		function action(context, scope, parameters, database, transaction) {
 			context.transaction_count += 1;
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
-			// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
 			const MAXIMUM_ROWS = 4294967296;
 			const { attributes } = parameters;
+
 			return self
 				._relationship_read_transaction(
 					context,
 					scope,
 					{
 						...parameters,
-						limit: MAXIMUM_ROWS,
+						limit: parameters.limit ?? MAXIMUM_ROWS,
+						offset: parameters.offset ?? 0,
 					},
 					database,
 					transaction,
 				)
-				.then(function (data) {
-					const valid_ids = data.map(function (item) {
+				.then(function (read_data) {
+					const valid_ids = read_data.map(function (item) {
 						return item[self.primary_key];
 					});
-					// use valid_ids to do a where in query
+					if (valid_ids.length === 0) {
+						return [];
+					}
 					const sql = database(self.table_name).whereIn(self.primary_key, valid_ids).update(attributes).transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
 					}
-					context.breadth_count += data.length;
 					return sql.then(function (data) {
 						LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:success`, "data", data);
-						return self._relationship_read_transaction(context, scope, parameters, database, transaction);
+						return self._relationship_read_transaction(
+							context,
+							scope,
+							{
+								source: parameters.source,
+								where_in: {
+									[self.primary_key]: valid_ids,
+								},
+								limit: valid_ids.length,
+								offset: 0,
+								order: parameters.order,
+							},
+							database,
+							transaction,
+						);
 					});
 				})
 				.catch(function (err) {
@@ -1307,7 +1333,6 @@ class DatabaseModel extends Model {
 
 		function action(context, scope, parameters, database, transaction) {
 			context.transaction_count += 1;
-			const { where, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {}, limit = 16 } = parameters;
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 			// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
 			const MAXIMUM_ROWS = 4294967296;
@@ -1319,7 +1344,8 @@ class DatabaseModel extends Model {
 					scope,
 					{
 						...parameters,
-						limit: MAXIMUM_ROWS,
+						limit: parameters.limit ?? MAXIMUM_ROWS,
+						offset: parameters.offset ?? 0,
 					},
 					database,
 					transaction,
@@ -1328,29 +1354,10 @@ class DatabaseModel extends Model {
 					const valid_ids = read_data.map(function (item) {
 						return item[self.primary_key];
 					});
-					const sql = database(self.table_name)
-						.where(function (builder) {
-							builder.where(where);
-							Object.keys(where_in).forEach(function (key) {
-								builder.whereIn(key, where_in[key]);
-							});
-							Object.keys(cache_where_in).forEach(function (key) {
-								builder.whereIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[key]).value);
-							});
-							Object.keys(where_not_in).forEach(function (key) {
-								builder.whereNotIn(key, where_not_in[key]);
-							});
-							Object.keys(cache_where_not_in).forEach(function (key) {
-								builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[key]).value);
-							});
-							Object.keys(where_like).forEach(function (key) {
-								builder.whereLike(key, where_like[key]);
-							});
-							self._apply_where_between(builder, where_between);
-							return builder;
-						})
-						.del()
-						.transacting(transaction);
+					if (valid_ids.length === 0) {
+						return [];
+					}
+					const sql = database(self.table_name).whereIn(self.primary_key, valid_ids).del().transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
 					}
@@ -1358,7 +1365,7 @@ class DatabaseModel extends Model {
 						LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.delete:success`, "delete_data", delete_data);
 						context.breadth_count += read_data.length;
 						return self._cleanup_delete(context, valid_ids, database, transaction).then(function () {
-							return read_data.slice(0, Math.min(limit, self.limit_max));
+							return read_data;
 						});
 					});
 				})
