@@ -179,23 +179,29 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 		suite_ctx.database_manager.destroy_connections();
 	});
 	await test.it("routes unfiltered reads and non-primary filters across current shards", function () {
+		// With no filters on a regular entity, read routing should include every current ytitne read shard.
 		assert.deepStrictEqual(route_node_ids(suite_ctx.database_manager, {}, {}, YTITNE_MODEL, "read"), expected_current_node_ids(suite_ctx.database_manager, YTITNE_MODEL, "read"));
+		// With a non-primary `where_like` filter, read routing cannot narrow by shard and should include every current ytitne read shard.
 		assert.deepStrictEqual(
 			route_node_ids(suite_ctx.database_manager, {}, { where_like: { text: "%shard%" } }, YTITNE_MODEL, "read"),
 			expected_current_node_ids(suite_ctx.database_manager, YTITNE_MODEL, "read"),
 		);
+		// With an exact non-primary `where` filter, read routing cannot narrow by shard and should include every current ytitne read shard.
 		assert.deepStrictEqual(
 			route_node_ids(suite_ctx.database_manager, {}, { where: { text: "shard-entity-1" } }, YTITNE_MODEL, "read"),
 			expected_current_node_ids(suite_ctx.database_manager, YTITNE_MODEL, "read"),
 		);
+		// With no filters on the relationship table, read routing should include every current relationship read shard.
 		assert.deepStrictEqual(
 			route_node_ids(suite_ctx.database_manager, {}, {}, RELATIONSHIP_MODEL, "read"),
 			expected_current_node_ids(suite_ctx.database_manager, RELATIONSHIP_MODEL, "read"),
 		);
+		// With only a whitelist method filter, there is no entity or agent anchor, so read routing should include every current whitelist read shard.
 		assert.deepStrictEqual(
 			route_node_ids(suite_ctx.database_manager, {}, { where: { gauze__whitelist__method: "read" } }, WHITELIST_MODEL, "read"),
 			expected_current_node_ids(suite_ctx.database_manager, WHITELIST_MODEL, "read"),
 		);
+		// With no filters on the blacklist table, read routing should include every current blacklist read shard.
 		assert.deepStrictEqual(route_node_ids(suite_ctx.database_manager, {}, {}, BLACKLIST_MODEL, "read"), expected_current_node_ids(suite_ctx.database_manager, BLACKLIST_MODEL, "read"));
 	});
 	await test.it("routes regular entity reads and filtered writes by cumulative primary key filters", function () {
@@ -220,9 +226,11 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 				[YTITNE_MODEL.primary_key]: RANGE_SHARD_3_TO_4,
 			},
 		};
+		// With an exact primary-key `where` for shard1, read routing should target only the ytitne read node for shard1.
 		assert.deepStrictEqual(route_node_ids(suite_ctx.database_manager, {}, exact_parameters, YTITNE_MODEL, "read"), [
 			expected_primary_key_node_id(suite_ctx.database_manager, YTITNE_MODEL.table_name, PRIMARY_KEYS.shard1, "read"),
 		]);
+		// With primary-key `where_in` values on shard1 and shard3, read routing should target the matching ytitne read nodes.
 		assert.deepStrictEqual(
 			route_node_ids(
 				suite_ctx.database_manager,
@@ -237,6 +245,7 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 			),
 			expected_primary_key_node_ids(suite_ctx.database_manager, YTITNE_MODEL.table_name, [PRIMARY_KEYS.shard1, PRIMARY_KEYS.shard3], "read"),
 		);
+		// With a primary-key range spanning shard2 through shard3, read routing should target the overlapping ytitne read nodes.
 		assert.deepStrictEqual(
 			route_node_ids(
 				suite_ctx.database_manager,
@@ -251,21 +260,26 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 			),
 			expected_range_node_ids(suite_ctx.database_manager, YTITNE_MODEL.table_name, RANGE_SHARD_2_TO_3, "read"),
 		);
+		// With `where_in` on shard1 and shard3 plus a shard2-to-shard3 range, read routing should intersect the filters to shard3 only.
 		assert.deepStrictEqual(route_node_ids(suite_ctx.database_manager, {}, set_and_range_parameters, YTITNE_MODEL, "read"), [
 			expected_primary_key_node_id(suite_ctx.database_manager, YTITNE_MODEL.table_name, PRIMARY_KEYS.shard3, "read"),
 		]);
+		// With an exact shard1 primary key plus a shard3-to-shard4 range, read routing should return no nodes because the primary-key filters do not overlap.
 		assert.deepStrictEqual(
 			route_node_ids(suite_ctx.database_manager, {}, incompatible_parameters, YTITNE_MODEL, "read"),
 			expected_primary_filter_node_ids(suite_ctx.database_manager, YTITNE_MODEL, incompatible_parameters, "read"),
 		);
+		// With write attributes and cumulative primary-key filters, write routing should use the intersected ytitne write node set.
 		assert.deepStrictEqual(
 			route_node_ids(suite_ctx.database_manager, {}, { ...set_and_range_parameters, attributes: { text: "shard-update" } }, YTITNE_MODEL, "write"),
 			expected_primary_filter_node_ids(suite_ctx.database_manager, YTITNE_MODEL, set_and_range_parameters, "write"),
 		);
+		// With create attributes containing a shard4 primary key, write routing should target only the ytitne write node for shard4.
 		assert.deepStrictEqual(
 			route_node_ids(suite_ctx.database_manager, {}, { attributes: { [YTITNE_MODEL.primary_key]: PRIMARY_KEYS.shard4, text: "shard-create" } }, YTITNE_MODEL, "write"),
 			[expected_primary_key_node_id(suite_ctx.database_manager, YTITNE_MODEL.table_name, PRIMARY_KEYS.shard4, "write")],
 		);
+		// With create attributes missing the primary key, write routing cannot infer a destination shard and should return no nodes.
 		assert.deepStrictEqual(route_node_ids(suite_ctx.database_manager, {}, { attributes: { text: "missing-primary-key" } }, YTITNE_MODEL, "write"), []);
 	});
 	await test.it("routes relationship table reads by anchors before row primary key filters", function () {
@@ -293,24 +307,29 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 				[RELATIONSHIP_MODEL.primary_key]: RANGE_SHARD_2_TO_3,
 			},
 		};
+		// With a relationship `from` anchor on shard1, read routing should prefer the anchor over the row primary-key range and target shard1.
 		assert.deepStrictEqual(route_node_ids(suite_ctx.database_manager, {}, from_anchor_parameters, RELATIONSHIP_MODEL, "read"), [
 			expected_primary_key_node_id(suite_ctx.database_manager, YTITNE_MODEL.table_name, PRIMARY_KEYS.shard1, "read"),
 		]);
+		// With a relationship `to` anchor on shard3, read routing should prefer the anchor over the row primary-key range and target shard3.
 		assert.deepStrictEqual(route_node_ids(suite_ctx.database_manager, {}, to_anchor_parameters, RELATIONSHIP_MODEL, "read"), [
 			expected_primary_key_node_id(suite_ctx.database_manager, YTITNE_MODEL.table_name, PRIMARY_KEYS.shard3, "read"),
 		]);
+		// With both relationship anchors and a low random value, read routing should choose the `from` anchor and target shard1.
 		assert.deepStrictEqual(
 			with_random(0.4, function () {
 				return route_node_ids(suite_ctx.database_manager, {}, both_anchor_parameters, RELATIONSHIP_MODEL, "read");
 			}),
 			[expected_primary_key_node_id(suite_ctx.database_manager, YTITNE_MODEL.table_name, PRIMARY_KEYS.shard1, "read")],
 		);
+		// With both relationship anchors and a high random value, read routing should choose the `to` anchor and target shard4.
 		assert.deepStrictEqual(
 			with_random(0.6, function () {
 				return route_node_ids(suite_ctx.database_manager, {}, both_anchor_parameters, RELATIONSHIP_MODEL, "read");
 			}),
 			[expected_primary_key_node_id(suite_ctx.database_manager, YTITNE_MODEL.table_name, PRIMARY_KEYS.shard4, "read")],
 		);
+		// With no relationship anchor and a row primary-key range, read routing should fall back to the overlapping relationship table read shards.
 		assert.deepStrictEqual(
 			route_node_ids(
 				suite_ctx.database_manager,
@@ -326,6 +345,7 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 			),
 			expected_range_node_ids(suite_ctx.database_manager, RELATIONSHIP_MODEL.table_name, RANGE_SHARD_2_TO_3, "read"),
 		);
+		// With no relationship anchor and row primary-key `where_in` values, read routing should fall back to the matching relationship table read shards.
 		assert.deepStrictEqual(
 			route_node_ids(
 				suite_ctx.database_manager,
@@ -348,8 +368,11 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 			expected_primary_key_node_id(suite_ctx.database_manager, YTITNE_MODEL.table_name, PRIMARY_KEYS.shard1, "write"),
 			expected_primary_key_node_id(suite_ctx.database_manager, YTITNE_MODEL.table_name, PRIMARY_KEYS.shard3, "write"),
 		];
+		// With complete relationship create attributes, write routing should include the relationship row shard plus the `from` and `to` entity shards.
 		assert.deepStrictEqual(route_node_ids(suite_ctx.database_manager, {}, { attributes }, RELATIONSHIP_MODEL, "write"), expected_write_node_ids);
+		// With only the relationship row primary key in create attributes, write routing lacks endpoint anchors and should return no nodes.
 		assert.deepStrictEqual(route_node_ids(suite_ctx.database_manager, {}, { attributes: { [RELATIONSHIP_MODEL.primary_key]: PRIMARY_KEYS.shard2 } }, RELATIONSHIP_MODEL, "write"), []);
+		// With update-style parameters that include a row primary key but no endpoint anchors, write routing should return no nodes.
 		assert.deepStrictEqual(
 			route_node_ids(
 				suite_ctx.database_manager,
@@ -360,6 +383,7 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 			),
 			[],
 		);
+		// With complete relationship fields in `where`, delete routing should include the relationship row shard plus both endpoint entity shards.
 		assert.deepStrictEqual(route_node_ids(suite_ctx.database_manager, {}, { where: attributes }, RELATIONSHIP_MODEL, "write"), expected_write_node_ids);
 		const constrained_delete_parameters = {
 			where: attributes,
@@ -367,10 +391,12 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 				[RELATIONSHIP_MODEL.primary_key]: RANGE_SHARD_3_TO_4,
 			},
 		};
+		// With complete delete fields constrained by a non-overlapping row primary-key range, write routing should return no nodes.
 		assert.deepStrictEqual(
 			route_node_ids(suite_ctx.database_manager, {}, constrained_delete_parameters, RELATIONSHIP_MODEL, "write"),
 			expected_constrained_write_node_ids(suite_ctx.database_manager, RELATIONSHIP_MODEL, PRIMARY_KEYS.shard2, constrained_delete_parameters, expected_write_node_ids),
 		);
+		// With only a relationship row primary-key `where_in`, write routing lacks endpoint anchors and should return no nodes.
 		assert.deepStrictEqual(
 			route_node_ids(
 				suite_ctx.database_manager,
@@ -394,6 +420,7 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 				[BLACKLIST_MODEL.primary_key]: RANGE_SHARD_2_TO_3,
 			},
 		};
+		// With a whitelist entity anchor on shard1, read routing should prefer the entity anchor over the whitelist row primary-key range.
 		assert.deepStrictEqual(
 			route_node_ids(
 				suite_ctx.database_manager,
@@ -412,6 +439,7 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 			),
 			[expected_primary_key_node_id(suite_ctx.database_manager, YTITNE_MODEL.table_name, PRIMARY_KEYS.shard1, "read")],
 		);
+		// With a whitelist agent anchor on shard3, read routing should prefer the agent anchor over the whitelist row primary-key range.
 		assert.deepStrictEqual(
 			route_node_ids(
 				suite_ctx.database_manager,
@@ -430,10 +458,12 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 			),
 			[expected_primary_key_node_id(suite_ctx.database_manager, AGENT_ROOT_MODEL.table_name, PRIMARY_KEYS.shard3, "read")],
 		);
+		// With no blacklist entity or agent anchor and a row primary-key range, read routing should use the overlapping blacklist read shards.
 		assert.deepStrictEqual(
 			route_node_ids(suite_ctx.database_manager, {}, blacklist_range_parameters, BLACKLIST_MODEL, "read"),
 			expected_range_node_ids(suite_ctx.database_manager, BLACKLIST_MODEL.table_name, RANGE_SHARD_2_TO_3, "read"),
 		);
+		// With no whitelist entity or agent anchor and row primary-key `where_in` values, read routing should use the matching whitelist read shards.
 		assert.deepStrictEqual(
 			route_node_ids(
 				suite_ctx.database_manager,
@@ -462,13 +492,18 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 			expected_primary_key_node_id(suite_ctx.database_manager, YTITNE_MODEL.table_name, PRIMARY_KEYS.shard2, "write"),
 			expected_primary_key_node_id(suite_ctx.database_manager, AGENT_ROOT_MODEL.table_name, PRIMARY_KEYS.shard1, "write"),
 		];
+		// With complete whitelist create attributes, write routing should include the whitelist row shard plus entity and agent shards.
 		assert.deepStrictEqual(route_node_ids(suite_ctx.database_manager, {}, { attributes: whitelist_attributes }, WHITELIST_MODEL, "write"), expected_whitelist_write_node_ids);
+		// With complete blacklist create attributes, write routing should include the blacklist row shard plus entity and agent shards.
 		assert.deepStrictEqual(route_node_ids(suite_ctx.database_manager, {}, { attributes: blacklist_attributes }, BLACKLIST_MODEL, "write"), expected_blacklist_write_node_ids);
+		// With only the whitelist row primary key in create attributes, write routing lacks entity and agent anchors and should return no nodes.
 		assert.deepStrictEqual(route_node_ids(suite_ctx.database_manager, {}, { attributes: { [WHITELIST_MODEL.primary_key]: PRIMARY_KEYS.shard2 } }, WHITELIST_MODEL, "write"), []);
+		// With update-style whitelist parameters that include a row primary key but no anchors, write routing should return no nodes.
 		assert.deepStrictEqual(
 			route_node_ids(suite_ctx.database_manager, {}, { where: { [WHITELIST_MODEL.primary_key]: PRIMARY_KEYS.shard2 }, attributes: { text: "ignored" } }, WHITELIST_MODEL, "write"),
 			[],
 		);
+		// With complete whitelist fields in `where`, delete routing should include the whitelist row shard plus entity and agent shards.
 		assert.deepStrictEqual(route_node_ids(suite_ctx.database_manager, {}, { where: whitelist_attributes }, WHITELIST_MODEL, "write"), expected_whitelist_write_node_ids);
 		const constrained_delete_parameters = {
 			where: whitelist_attributes,
@@ -476,10 +511,12 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 				[WHITELIST_MODEL.primary_key]: RANGE_SHARD_3_TO_4,
 			},
 		};
+		// With complete whitelist delete fields constrained by a non-overlapping row primary-key range, write routing should return no nodes.
 		assert.deepStrictEqual(
 			route_node_ids(suite_ctx.database_manager, {}, constrained_delete_parameters, WHITELIST_MODEL, "write"),
 			expected_constrained_write_node_ids(suite_ctx.database_manager, WHITELIST_MODEL, PRIMARY_KEYS.shard2, constrained_delete_parameters, expected_whitelist_write_node_ids),
 		);
+		// With only a whitelist row primary-key range on a write, routing lacks anchors and should return no nodes.
 		assert.deepStrictEqual(
 			route_node_ids(
 				suite_ctx.database_manager,
@@ -517,10 +554,12 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 			},
 			_direction: "to",
 		};
+		// With a `to` traversal source and relationship candidates, read routing should keep only ytitne `to` candidates on shard1 and shard3.
 		assert.deepStrictEqual(
 			route_node_ids(suite_ctx.database_manager, { source: to_source }, {}, YTITNE_MODEL, "read", to_relationships),
 			expected_primary_key_node_ids(suite_ctx.database_manager, YTITNE_MODEL.table_name, [PRIMARY_KEYS.shard1, PRIMARY_KEYS.shard3], "read"),
 		);
+		// With the same `to` traversal plus a shard3-to-shard4 primary-key range, read routing should intersect the candidates to shard3.
 		assert.deepStrictEqual(
 			route_node_ids(
 				suite_ctx.database_manager,
@@ -554,10 +593,12 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 			},
 			_direction: "from",
 		};
+		// With a `from` traversal source in parameters, read routing should use the ytitne `from` candidates on shard2 and shard4.
 		assert.deepStrictEqual(
 			route_node_ids(suite_ctx.database_manager, {}, { source: from_source }, YTITNE_MODEL, "read", from_relationships),
 			expected_primary_key_node_ids(suite_ctx.database_manager, YTITNE_MODEL.table_name, [PRIMARY_KEYS.shard2, PRIMARY_KEYS.shard4], "read"),
 		);
+		// With a `from` traversal plus a shard2-to-shard3 primary-key range, write routing should intersect the candidates to shard2.
 		assert.deepStrictEqual(
 			route_node_ids(
 				suite_ctx.database_manager,
@@ -574,6 +615,7 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 			),
 			[expected_primary_key_node_id(suite_ctx.database_manager, YTITNE_MODEL.table_name, PRIMARY_KEYS.shard2, "write")],
 		);
+		// With relationship traversal context and create attributes containing a shard4 primary key, write routing should target the new row shard.
 		assert.deepStrictEqual(
 			route_node_ids(
 				suite_ctx.database_manager,
@@ -589,9 +631,11 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 			),
 			[expected_primary_key_node_id(suite_ctx.database_manager, YTITNE_MODEL.table_name, PRIMARY_KEYS.shard4, "write")],
 		);
+		// With relationship candidates but no source, routing should reject the configuration because it cannot infer traversal direction.
 		assert.throws(function () {
 			route_node_ids(suite_ctx.database_manager, {}, {}, YTITNE_MODEL, "read", to_relationships);
 		}, /Relationship routing requires a source/);
+		// With an unsupported source direction, routing should reject the configuration instead of choosing candidate shards.
 		assert.throws(function () {
 			route_node_ids(
 				suite_ctx.database_manager,
