@@ -4,7 +4,7 @@ import test from "node:test";
 
 import { load_steps, run_layers } from "./../steps.js";
 
-export * as where_between_routing from "./where_between_routing.js";
+export * as where_between from "./where_between.js";
 
 const DATABASE_SCHEMA = $gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE;
 const SYSTEM_SCHEMA = $gauze.system.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__SYSTEM;
