@@ -443,6 +443,361 @@ class DatabaseModel extends Model {
 			return builder.orderBy(resolved_order);
 		}
 	}
+	_order_column_sql_type(column) {
+		const self = this;
+		return column && self.entity && self.entity.fields && self.entity.fields[column] ? self.entity.fields[column].sql_type : null;
+	}
+	_is_numeric_sql_type(sql_type) {
+		if (typeof sql_type !== "string") {
+			return false;
+		}
+		const normalized = sql_type.toLowerCase().replace(/\(.*/, "").trim();
+		return [
+			"bigint",
+			"bigserial",
+			"decimal",
+			"double precision",
+			"float",
+			"float4",
+			"float8",
+			"int",
+			"int2",
+			"int4",
+			"int8",
+			"integer",
+			"numeric",
+			"number",
+			"real",
+			"serial",
+			"serial2",
+			"serial4",
+			"serial8",
+			"smallint",
+		].includes(normalized);
+	}
+	_decimal_from_string(value) {
+		const decimal = String(value).trim();
+		if (decimal === "NaN") {
+			return { special: "nan" };
+		}
+		if (decimal === "Infinity" || decimal === "+Infinity") {
+			return { special: "infinity", sign: 1 };
+		}
+		if (decimal === "-Infinity") {
+			return { special: "infinity", sign: -1 };
+		}
+		const match = decimal.match(/^([+-]?)(?:(\d+)(?:\.(\d*))?|\.(\d+))$/);
+		if (!match) {
+			return null;
+		}
+		const sign = match[1] === "-" ? -1 : 1;
+		const integer = (match[2] || "0").replace(/^0+/, "") || "0";
+		const fraction = (match[3] || match[4] || "").replace(/0+$/, "");
+		if (integer === "0" && fraction === "") {
+			return {
+				sign: 0,
+				integer: "0",
+				fraction: "",
+			};
+		}
+		return {
+			sign,
+			integer,
+			fraction,
+		};
+	}
+	_decimal_from_value(value) {
+		if (typeof value === "bigint") {
+			return this._decimal_from_string(value.toString());
+		}
+		if (typeof value === "number") {
+			if (Number.isNaN(value)) {
+				return { special: "nan" };
+			}
+			if (value === Infinity) {
+				return { special: "infinity", sign: 1 };
+			}
+			if (value === -Infinity) {
+				return { special: "infinity", sign: -1 };
+			}
+			return this._decimal_from_string(value.toString());
+		}
+		if (typeof value === "string") {
+			return this._decimal_from_string(value);
+		}
+		return null;
+	}
+	_compare_decimal_values(left, right) {
+		const left_decimal = this._decimal_from_value(left);
+		const right_decimal = this._decimal_from_value(right);
+		if (!left_decimal || !right_decimal) {
+			return null;
+		}
+		if (left_decimal.special || right_decimal.special) {
+			if (left_decimal.special === right_decimal.special && left_decimal.sign === right_decimal.sign) {
+				return 0;
+			}
+			if (left_decimal.special === "nan") {
+				return 1;
+			}
+			if (right_decimal.special === "nan") {
+				return -1;
+			}
+			if (left_decimal.special === "infinity" && right_decimal.special !== "infinity") {
+				return left_decimal.sign < 0 ? -1 : 1;
+			}
+			if (right_decimal.special === "infinity" && left_decimal.special !== "infinity") {
+				return right_decimal.sign < 0 ? 1 : -1;
+			}
+			return left_decimal.sign < right_decimal.sign ? -1 : 1;
+		}
+		if (left_decimal.sign !== right_decimal.sign) {
+			return left_decimal.sign < right_decimal.sign ? -1 : 1;
+		}
+		if (left_decimal.sign === 0) {
+			return 0;
+		}
+		let comparison = 0;
+		if (left_decimal.integer.length !== right_decimal.integer.length) {
+			comparison = left_decimal.integer.length < right_decimal.integer.length ? -1 : 1;
+		} else if (left_decimal.integer !== right_decimal.integer) {
+			comparison = left_decimal.integer < right_decimal.integer ? -1 : 1;
+		} else {
+			const length = Math.max(left_decimal.fraction.length, right_decimal.fraction.length);
+			for (let i = 0; i < length; i++) {
+				const left_digit = left_decimal.fraction[i] || "0";
+				const right_digit = right_decimal.fraction[i] || "0";
+				if (left_digit !== right_digit) {
+					comparison = left_digit < right_digit ? -1 : 1;
+					break;
+				}
+			}
+		}
+		return left_decimal.sign < 0 ? -comparison : comparison;
+	}
+	_compare_numeric_order_values(left, right) {
+		const left_nan = typeof left === "number" && Number.isNaN(left);
+		const right_nan = typeof right === "number" && Number.isNaN(right);
+		if (left_nan || right_nan) {
+			if (left_nan && right_nan) {
+				return 0;
+			}
+			return left_nan ? 1 : -1;
+		}
+		if (left < right) {
+			return -1;
+		}
+		if (left > right) {
+			return 1;
+		}
+		return 0;
+	}
+	_order_type_rank(value) {
+		if (value === null) {
+			return 0;
+		}
+		if (typeof value === "undefined") {
+			return 1;
+		}
+		if (typeof value === "boolean") {
+			return 2;
+		}
+		if (typeof value === "number" || typeof value === "bigint") {
+			return 3;
+		}
+		if (typeof value === "string") {
+			return 4;
+		}
+		if (value instanceof Date) {
+			return 5;
+		}
+		if (value instanceof Uint8Array) {
+			return 6;
+		}
+		if (Array.isArray(value)) {
+			return 7;
+		}
+		if (typeof value === "object") {
+			return 8;
+		}
+		return 9;
+	}
+	_is_order_interval(value) {
+		return (
+			value &&
+			typeof value === "object" &&
+			typeof value.toPostgres === "function" &&
+			["years", "months", "days", "hours", "minutes", "seconds", "milliseconds"].some(function (key) {
+				return Object.prototype.hasOwnProperty.call(value, key);
+			})
+		);
+	}
+	_interval_order_value(value) {
+		const months = (value.years || 0) * 12 + (value.months || 0);
+		const days = months * 30 + (value.days || 0);
+		const hours = days * 24 + (value.hours || 0);
+		const minutes = hours * 60 + (value.minutes || 0);
+		const seconds = minutes * 60 + (value.seconds || 0);
+		return seconds * 1000 + (value.milliseconds || 0);
+	}
+	_is_order_point(value) {
+		return value && typeof value === "object" && typeof value.x === "number" && typeof value.y === "number" && (typeof value.radius === "undefined" || typeof value.radius === "number");
+	}
+	_compare_order_object_fields(left, right, fields, defaults = {}) {
+		for (const field of fields) {
+			const left_value = Object.prototype.hasOwnProperty.call(left, field) ? left[field] : defaults[field];
+			const right_value = Object.prototype.hasOwnProperty.call(right, field) ? right[field] : defaults[field];
+			const comparison = this._compare_order_values(left_value, right_value);
+			if (comparison !== 0) {
+				return comparison;
+			}
+		}
+		return 0;
+	}
+	_compare_order_objects(left, right) {
+		if (this._is_order_interval(left) && this._is_order_interval(right)) {
+			return this._compare_numeric_order_values(this._interval_order_value(left), this._interval_order_value(right));
+		}
+		if (this._is_order_point(left) && this._is_order_point(right)) {
+			return this._compare_order_object_fields(left, right, ["x", "y", "radius"], { radius: 0 });
+		}
+		const left_keys = Object.keys(left).sort();
+		const right_keys = Object.keys(right).sort();
+		const length = Math.min(left_keys.length, right_keys.length);
+		for (let i = 0; i < length; i++) {
+			const key_comparison = this._compare_order_values(left_keys[i], right_keys[i]);
+			if (key_comparison !== 0) {
+				return key_comparison;
+			}
+			const value_comparison = this._compare_order_values(left[left_keys[i]], right[right_keys[i]]);
+			if (value_comparison !== 0) {
+				return value_comparison;
+			}
+		}
+		if (left_keys.length < right_keys.length) {
+			return -1;
+		}
+		if (left_keys.length > right_keys.length) {
+			return 1;
+		}
+		return 0;
+	}
+	_compare_order_values(left, right, column = null) {
+		if (left === right) {
+			return 0;
+		}
+		const left_is_null = left === null || typeof left === "undefined";
+		const right_is_null = right === null || typeof right === "undefined";
+		if (left_is_null || right_is_null) {
+			if (left_is_null && right_is_null) {
+				return 0;
+			}
+			return left_is_null ? -1 : 1;
+		}
+		if (this._is_numeric_sql_type(this._order_column_sql_type(column))) {
+			const comparison = this._compare_decimal_values(left, right);
+			if (comparison !== null) {
+				return comparison;
+			}
+		}
+		if ((typeof left === "number" || typeof left === "bigint") && (typeof right === "number" || typeof right === "bigint")) {
+			return this._compare_numeric_order_values(left, right);
+		}
+		if (left instanceof Date && right instanceof Date) {
+			return this._compare_numeric_order_values(left.getTime(), right.getTime());
+		}
+		if (left instanceof Uint8Array && right instanceof Uint8Array) {
+			const length = Math.min(left.length, right.length);
+			for (let i = 0; i < length; i++) {
+				if (left[i] < right[i]) {
+					return -1;
+				}
+				if (left[i] > right[i]) {
+					return 1;
+				}
+			}
+			if (left.length < right.length) {
+				return -1;
+			}
+			if (left.length > right.length) {
+				return 1;
+			}
+			return 0;
+		}
+		if (Array.isArray(left) && Array.isArray(right)) {
+			const length = Math.min(left.length, right.length);
+			for (let i = 0; i < length; i++) {
+				const comparison = this._compare_order_values(left[i], right[i]);
+				if (comparison !== 0) {
+					return comparison;
+				}
+			}
+			if (left.length < right.length) {
+				return -1;
+			}
+			if (left.length > right.length) {
+				return 1;
+			}
+			return 0;
+		}
+		if (typeof left === "object" && typeof right === "object") {
+			return this._compare_order_objects(left, right);
+		}
+		if (left < right) {
+			return -1;
+		}
+		if (left > right) {
+			return 1;
+		}
+		const left_rank = this._order_type_rank(left);
+		const right_rank = this._order_type_rank(right);
+		if (left_rank < right_rank) {
+			return -1;
+		}
+		if (left_rank > right_rank) {
+			return 1;
+		}
+		return 0;
+	}
+	_compare_rows_by_order(left, right, resolved_order) {
+		const self = this;
+		for (const item of resolved_order) {
+			const left_value = left[item.column];
+			const right_value = right[item.column];
+			const left_is_null = left_value === null || typeof left_value === "undefined";
+			const right_is_null = right_value === null || typeof right_value === "undefined";
+			if (left_is_null || right_is_null) {
+				if (left_is_null && right_is_null) {
+					continue;
+				}
+				return left_is_null === (item.nulls === "first") ? -1 : 1;
+			}
+			const comparison = self._compare_order_values(left_value, right_value, item.column);
+			if (comparison !== 0) {
+				return item.order === "desc" ? -comparison : comparison;
+			}
+		}
+		return 0;
+	}
+	_sort_rows(rows, order) {
+		const self = this;
+		const resolved_order = self._normalize_order(order);
+		const primary_key_ordered = resolved_order.some(function (item) {
+			return item.column === self.primary_key;
+		});
+		const total_order = primary_key_ordered
+			? resolved_order
+			: resolved_order.concat([
+					{
+						column: self.primary_key,
+						order: "asc",
+						nulls: "last",
+					},
+				]);
+		return rows.slice().sort(function (left, right) {
+			return self._compare_rows_by_order(left, right, total_order);
+		});
+	}
 	_has_range_bound(value) {
 		return value !== null && typeof value !== "undefined";
 	}
@@ -701,7 +1056,7 @@ class DatabaseModel extends Model {
 					return self._root_read_transaction(context, scope, parameters, shard.connection, shard.transaction);
 				}),
 			).then(function (results) {
-				return results.flat();
+				return self._sort_rows(results.flat(), parameters.order);
 			});
 		});
 	}
@@ -792,7 +1147,7 @@ class DatabaseModel extends Model {
 						return self._relationship_read_transaction(context, scope, parameters, shard.connection, shard.transaction);
 					}),
 				).then(function (results) {
-					return results.flat();
+					return self._sort_rows(results.flat(), parameters.order);
 				});
 			});
 		});
@@ -972,7 +1327,7 @@ class DatabaseModel extends Model {
 					return self._root_update_transaction(context, scope, parameters, shard.connection, shard.transaction);
 				}),
 			).then(function (results) {
-				return results.flat();
+				return self._sort_rows(results.flat(), parameters.order);
 			});
 		});
 	}
@@ -1052,7 +1407,7 @@ class DatabaseModel extends Model {
 						return self._relationship_update_transaction(context, scope, parameters, shard.connection, shard.transaction);
 					}),
 				).then(function (results) {
-					return results.flat();
+					return self._sort_rows(results.flat(), parameters.order);
 				});
 			});
 		});
@@ -1318,13 +1673,14 @@ class DatabaseModel extends Model {
 				}),
 			).then(function (results) {
 				const flattened = results.flat();
-				return [
+				const deduped = [
 					...new Map(
 						flattened.map(function (row) {
 							return [row[self.primary_key], row];
 						}),
 					).values(),
 				];
+				return self._sort_rows(deduped, parameters.order);
 			});
 		});
 	}
@@ -1392,13 +1748,14 @@ class DatabaseModel extends Model {
 					}),
 				).then(function (results) {
 					const flattened = results.flat();
-					return [
+					const deduped = [
 						...new Map(
 							flattened.map(function (row) {
 								return [row[self.primary_key], row];
 							}),
 						).values(),
 					];
+					return self._sort_rows(deduped, parameters.order);
 				});
 			});
 		});

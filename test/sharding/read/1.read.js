@@ -21,7 +21,19 @@ query ${operation_name}(
 			text
 		}
 	}
+	fanout_desc: read_ytitne(where_in: $where_in, order: [{column: "id", order: "desc"}]) {
+		attributes {
+			id
+			text
+		}
+	}
 	scan: read_ytitne(where_like: $where_like, order: [{column: "id", order: "asc"}]) {
+		attributes {
+			id
+			text
+		}
+	}
+	scan_desc: read_ytitne(where_like: $where_like, order: [{column: "id", order: "desc"}]) {
 		attributes {
 			id
 			text
@@ -107,6 +119,32 @@ const expected = `{
                 }
             }
         ],
+        "fanout_desc": [
+            {
+                "attributes": {
+                    "id": "c0000000-0000-0000-0000-000000000009",
+                    "text": "shard-entity-4"
+                }
+            },
+            {
+                "attributes": {
+                    "id": "80000000-0000-0000-0000-000000000009",
+                    "text": "shard-entity-3"
+                }
+            },
+            {
+                "attributes": {
+                    "id": "40000000-0000-0000-0000-000000000009",
+                    "text": "shard-entity-2"
+                }
+            },
+            {
+                "attributes": {
+                    "id": "00000000-0000-0000-0000-00000000000a",
+                    "text": "shard-entity-1"
+                }
+            }
+        ],
         "scan": [
             {
                 "attributes": {
@@ -130,6 +168,32 @@ const expected = `{
                 "attributes": {
                     "id": "c0000000-0000-0000-0000-000000000009",
                     "text": "shard-entity-4"
+                }
+            }
+        ],
+        "scan_desc": [
+            {
+                "attributes": {
+                    "id": "c0000000-0000-0000-0000-000000000009",
+                    "text": "shard-entity-4"
+                }
+            },
+            {
+                "attributes": {
+                    "id": "80000000-0000-0000-0000-000000000009",
+                    "text": "shard-entity-3"
+                }
+            },
+            {
+                "attributes": {
+                    "id": "40000000-0000-0000-0000-000000000009",
+                    "text": "shard-entity-2"
+                }
+            },
+            {
+                "attributes": {
+                    "id": "00000000-0000-0000-0000-00000000000a",
+                    "text": "shard-entity-1"
                 }
             }
         ],

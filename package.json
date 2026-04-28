@@ -81,6 +81,7 @@
 		"koa-body": "^6.0.1",
 		"koa-compress": "^5.1.1",
 		"koa-conditional-get": "^3.0.0",
+		"pg": "^8.20.0",
 		"react": "^19.1.1",
 		"react-dom": "^19.1.1",
 		"react-redux": "^9.2.0",
