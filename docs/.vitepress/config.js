@@ -60,6 +60,7 @@ export default {
 				items: [
 					{ text: "Overview", link: "/database/overview" },
 					{ text: "Configuration", link: "/database/configuration" },
+					{ text: "Ordering", link: "/database/ordering" },
 					{ text: "Sharding", link: "/database/sharding" },
 				],
 			},

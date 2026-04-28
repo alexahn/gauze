@@ -84,10 +84,12 @@ If you are just getting started, use this order:
 
 1. Read [Quick Start](../getting-started.md).
 2. Read [Configuration](./configuration.md) to understand how Gauze chooses database layouts.
-3. Read [Sharding](./sharding.md) only after the monolithic flow feels clear.
+3. Read [Ordering](./ordering.md) to understand stable row order before relying on pagination.
+4. Read [Sharding](./sharding.md) only after the monolithic flow feels clear.
 
 ## Related Pages
 
 - Read [Configuration](./configuration.md) for the shape of the environment config files and how `GAUZE_ENV` selects them.
+- Read [Ordering](./ordering.md) for order inputs, null handling, and sharded result merge ordering.
 - Read [Sharding](./sharding.md) for shard ranges, `previous/current/next`, and the shard planning command.
 - Read [Database Setup](../database-and-sharding.md) for the original reference page covering migrations, seeds, and example config.
