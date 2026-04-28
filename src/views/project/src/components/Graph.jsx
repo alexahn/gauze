@@ -1967,7 +1967,6 @@ function Graph({ pathfinder, services, agent, headers }) {
 	}
 
 	function handleWheel(e) {
-		e.preventDefault();
 		const rect = viewportRef.current.getBoundingClientRect();
 		const nextZ = clamp(viewport.z * (e.deltaY > 0 ? 0.9 : 1.1), 0.1, 2.5);
 		const mouseX = e.clientX - rect.left;
