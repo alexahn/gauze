@@ -428,6 +428,21 @@ class DatabaseModel extends Model {
 			];
 		}
 	}
+	_apply_order(builder, resolved_order, database) {
+		const client = database && database.client && database.client.config ? database.client.config.client : null;
+		if (client === "sqlite3" || client === "better-sqlite3") {
+			resolved_order.forEach(function (item) {
+				if (item.nulls) {
+					const null_order = item.nulls === "first" ? "asc" : "desc";
+					builder.orderByRaw(`(?? is not null) ${null_order}`, [item.column]);
+				}
+				builder.orderBy(item.column, item.order);
+			});
+			return builder;
+		} else {
+			return builder.orderBy(resolved_order);
+		}
+	}
 	// When where_between includes both an indexed field and the primary key, treat them as a composite cursor:
 	// use the primary key as a tie-breaker so identical field values can still be paged deterministically.
 	_apply_where_between(builder, where_between = {}, table_name = null) {
@@ -686,38 +701,42 @@ class DatabaseModel extends Model {
 			} = parameters;
 			const resolved_order = self._normalize_order(order);
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
-			const sql = database(self.table_name)
-				.where(function (builder) {
-					builder.where(where);
-					Object.keys(where_in).forEach(function (key) {
-						builder.whereIn(key, where_in[key]);
-					});
-					Object.keys(cache_where_in).forEach(function (key) {
-						builder.whereIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[key]).value);
-					});
-					Object.keys(where_not_in).forEach(function (key) {
-						builder.whereNotIn(key, where_not_in[key]);
-					});
-					Object.keys(cache_where_not_in).forEach(function (key) {
-						builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[key]).value);
-					});
-					Object.keys(where_like).forEach(function (key) {
-						builder.whereLike(key, where_like[key]);
-					});
-					self._apply_where_between(builder, where_between);
-					/*
-					Object.keys(where_greater).forEach(function (key) {
-						builder.where(key, '>', where_greater[key])
-					})
-					Object.keys(where_lesser).forEach(function (key) {
-						builder.where(key, '<', where_lesser[key])
-					})
-					*/
-					return builder;
-				})
-				.limit(Math.min(limit, self.limit_max))
-				.offset(offset)
-				.orderBy(resolved_order)
+			const sql = self
+				._apply_order(
+					database(self.table_name)
+						.where(function (builder) {
+							builder.where(where);
+							Object.keys(where_in).forEach(function (key) {
+								builder.whereIn(key, where_in[key]);
+							});
+							Object.keys(cache_where_in).forEach(function (key) {
+								builder.whereIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[key]).value);
+							});
+							Object.keys(where_not_in).forEach(function (key) {
+								builder.whereNotIn(key, where_not_in[key]);
+							});
+							Object.keys(cache_where_not_in).forEach(function (key) {
+								builder.whereNotIn(key, TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_not_in[key]).value);
+							});
+							Object.keys(where_like).forEach(function (key) {
+								builder.whereLike(key, where_like[key]);
+							});
+							self._apply_where_between(builder, where_between);
+							/*
+							Object.keys(where_greater).forEach(function (key) {
+								builder.where(key, '>', where_greater[key])
+							})
+							Object.keys(where_lesser).forEach(function (key) {
+								builder.where(key, '<', where_lesser[key])
+							})
+							*/
+							return builder;
+						})
+						.limit(Math.min(limit, self.limit_max))
+						.offset(offset),
+					resolved_order,
+					database,
+				)
 				.transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
@@ -818,27 +837,31 @@ class DatabaseModel extends Model {
 				joined_where_like[joined_key] = where_like[k];
 			});
 			if (relationship_source._direction === "to") {
-				const sql = database(self.table_name)
-					.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.${self.primary_key}`)
-					.where(`${self.relationship_table_name}.gauze__relationship__from_id`, SOURCE_SQL_ID)
-					.where(`${self.relationship_table_name}.gauze__relationship__from_type`, SOURCE_SQL_TABLE)
-					.where(function (builder) {
-						builder.where(joined_where);
-						Object.keys(joined_where_in).forEach(function (key) {
-							builder.whereIn(key, joined_where_in[key]);
-						});
-						Object.keys(joined_where_not_in).forEach(function (key) {
-							builder.whereNotIn(key, joined_where_not_in[key]);
-						});
-						Object.keys(joined_where_like).forEach(function (key) {
-							builder.whereLike(key, joined_where_like[key]);
-						});
-						self._apply_where_between(builder, where_between, self.table_name);
-						return builder;
-					})
-					.limit(Math.min(limit, self.limit_max))
-					.offset(offset)
-					.orderBy(resolved_order)
+				const sql = self
+					._apply_order(
+						database(self.table_name)
+							.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.${self.primary_key}`)
+							.where(`${self.relationship_table_name}.gauze__relationship__from_id`, SOURCE_SQL_ID)
+							.where(`${self.relationship_table_name}.gauze__relationship__from_type`, SOURCE_SQL_TABLE)
+							.where(function (builder) {
+								builder.where(joined_where);
+								Object.keys(joined_where_in).forEach(function (key) {
+									builder.whereIn(key, joined_where_in[key]);
+								});
+								Object.keys(joined_where_not_in).forEach(function (key) {
+									builder.whereNotIn(key, joined_where_not_in[key]);
+								});
+								Object.keys(joined_where_like).forEach(function (key) {
+									builder.whereLike(key, joined_where_like[key]);
+								});
+								self._apply_where_between(builder, where_between, self.table_name);
+								return builder;
+							})
+							.limit(Math.min(limit, self.limit_max))
+							.offset(offset),
+						resolved_order,
+						database,
+					)
 					.transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());
@@ -854,27 +877,31 @@ class DatabaseModel extends Model {
 						throw err;
 					});
 			} else if (relationship_source._direction === "from") {
-				const sql = database(self.table_name)
-					.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__from_id`, "=", `${self.table_name}.${self.primary_key}`)
-					.where(`${self.relationship_table_name}.gauze__relationship__to_id`, SOURCE_SQL_ID)
-					.where(`${self.relationship_table_name}.gauze__relationship__to_type`, SOURCE_SQL_TABLE)
-					.where(function (builder) {
-						builder.where(joined_where);
-						Object.keys(joined_where_in).forEach(function (key) {
-							builder.whereIn(key, joined_where_in[key]);
-						});
-						Object.keys(joined_where_not_in).forEach(function (key) {
-							builder.whereNotIn(key, joined_where_not_in[key]);
-						});
-						Object.keys(joined_where_like).forEach(function (key) {
-							builder.whereLike(key, joined_where_like[key]);
-						});
-						self._apply_where_between(builder, where_between, self.table_name);
-						return builder;
-					})
-					.limit(Math.min(limit, self.limit_max))
-					.offset(offset)
-					.orderBy(resolved_order)
+				const sql = self
+					._apply_order(
+						database(self.table_name)
+							.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__from_id`, "=", `${self.table_name}.${self.primary_key}`)
+							.where(`${self.relationship_table_name}.gauze__relationship__to_id`, SOURCE_SQL_ID)
+							.where(`${self.relationship_table_name}.gauze__relationship__to_type`, SOURCE_SQL_TABLE)
+							.where(function (builder) {
+								builder.where(joined_where);
+								Object.keys(joined_where_in).forEach(function (key) {
+									builder.whereIn(key, joined_where_in[key]);
+								});
+								Object.keys(joined_where_not_in).forEach(function (key) {
+									builder.whereNotIn(key, joined_where_not_in[key]);
+								});
+								Object.keys(joined_where_like).forEach(function (key) {
+									builder.whereLike(key, joined_where_like[key]);
+								});
+								self._apply_where_between(builder, where_between, self.table_name);
+								return builder;
+							})
+							.limit(Math.min(limit, self.limit_max))
+							.offset(offset),
+						resolved_order,
+						database,
+					)
 					.transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.read:debug_sql`, sql.toString());

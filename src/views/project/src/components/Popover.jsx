@@ -80,7 +80,7 @@ function Popover({ trigger, children, triggerClassName = "", popoverClassName = 
 
 	return (
 		<>
-			<button ref={triggerRef} className={triggerClassName} type="button" popovertarget={fallbackId} popovertargetaction="toggle" title={triggerTitle} aria-label={triggerAriaLabel}>
+			<button ref={triggerRef} className={triggerClassName} type="button" popoverTarget={fallbackId} popoverTargetAction="toggle" title={triggerTitle} aria-label={triggerAriaLabel}>
 				{trigger}
 			</button>
 			<div ref={popoverRef} id={fallbackId} popover="auto" className={popoverClassName}>

@@ -32,9 +32,13 @@ function Proxies({ pathfinder, services, proxies, next }) {
 		gauze__agent_character: "CHARACTER",
 	};
 
-	proxies.sort(function (a, b) {
-		return order[b.attributes.gauze__proxy__agent_type] < order[a.attributes.gauze__proxy__agent_type];
+	const fallbackOrder = Object.keys(order).length;
+	const sortedProxies = proxies.slice().sort(function (a, b) {
+		const aOrder = order[a.attributes.gauze__proxy__agent_type] ?? fallbackOrder;
+		const bOrder = order[b.attributes.gauze__proxy__agent_type] ?? fallbackOrder;
+		return aOrder - bOrder;
 	});
+	const nextURL = next || pathfinder.stateToURL("project.system.headers.graph", {}, {});
 
 	function handleProxy(proxy) {
 		return function (e) {
@@ -45,7 +49,7 @@ function Proxies({ pathfinder, services, proxies, next }) {
 				.then(function (session) {
 					gauze.default.setSystemJWT(session.gauze__session__value);
 					setSubmitProxy(false);
-					navigate(next, {
+					navigate(nextURL, {
 						push: true,
 						replace: true,
 						pathfinder: pathfinder,
@@ -72,7 +76,7 @@ function Proxies({ pathfinder, services, proxies, next }) {
 	return (
 		<div>
 			<hr />
-			{proxies.map(function (proxy) {
+			{sortedProxies.map(function (proxy) {
 				const isActive = proxy.attributes.gauze__proxy__agent_type === currentAgent;
 				return (
 					<form key={proxy.attributes.gauze__proxy__id} className="mb0" action={handleProxy(proxy)}>

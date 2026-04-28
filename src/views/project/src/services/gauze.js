@@ -65,15 +65,14 @@ class GauzeService {
 				} else if (res.status === 400) {
 					return res.json();
 				} else if (res.status === 401) {
-					// destroy this jwt
-					if (self.getEnvironmentJWT() === jwt) {
-						self.deleteEnvironmentJWT();
-						// reload the page
-						// note: keep this as a location.replace to cause a full page reload since we don't have event listeners attached to push state
-						location.replace(location.href);
-					} else if (self.getProxyJWT() === jwt) {
+					let payload = {};
+					try {
+						payload = jwt ? jose.decodeJwt(jwt) : {};
+					} catch (err) {
+						// delete all
+						self.deleteSystemJWT();
 						self.deleteProxyJWT();
-						// load sign in page
+						self.deleteEnvironmentJWT();
 						const state = {
 							name: "project.environment.signin",
 							pathParams: {},
@@ -86,21 +85,48 @@ class GauzeService {
 							replace: true,
 							state: state,
 						});
-					} else if (self.getSystemJWT() === jwt) {
-						self.deleteSystemJWT();
-						// load proxies page
-						const state = {
-							name: "project.proxy.proxies",
-							pathParams: {},
-							searchParams: {
-								next: location.href,
-							},
-						};
-						navigate(self.getPathfinder().stateToURL(state.name, state.pathParams, state.searchParams), {
-							push: true,
-							replace: true,
-							state: state,
-						});
+					}
+					if (payload.aud === "environment") {
+						if (self.environmentJWT === jwt) {
+							self.deleteEnvironmentJWT();
+							// reload the page
+							// note: keep this as a location.replace to cause a full page reload since we don't have event listeners attached to push state
+							location.replace(location.href);
+						}
+					} else if (payload.aud === "proxy") {
+						if (self.proxyJWT === jwt) {
+							self.deleteProxyJWT();
+							// load sign in page
+							const state = {
+								name: "project.environment.signin",
+								pathParams: {},
+								searchParams: {
+									next: location.href,
+								},
+							};
+							navigate(self.getPathfinder().stateToURL(state.name, state.pathParams, state.searchParams), {
+								push: true,
+								replace: true,
+								state: state,
+							});
+						}
+					} else if (payload.aud === "system") {
+						if (self.systemJWT === jwt) {
+							self.deleteSystemJWT();
+							// load proxies page
+							const state = {
+								name: "project.proxy.proxies",
+								pathParams: {},
+								searchParams: {
+									next: location.href,
+								},
+							};
+							navigate(self.getPathfinder().stateToURL(state.name, state.pathParams, state.searchParams), {
+								push: true,
+								replace: true,
+								state: state,
+							});
+						}
 					} else {
 						// delete all
 						self.deleteSystemJWT();
@@ -211,8 +237,10 @@ class GauzeService {
 	}
 	deleteEnvironmentJWT() {
 		const self = this;
+		const deleted = self.environmentJWT;
 		self.environmentJWT = null;
 		localStorage.removeItem("environmentJWT");
+		return deleted;
 	}
 	setProxyJWT(jwt) {
 		const self = this;
@@ -236,8 +264,10 @@ class GauzeService {
 	}
 	deleteProxyJWT() {
 		const self = this;
+		const deleted = self.proxyJWT;
 		self.proxyJWT = null;
 		localStorage.removeItem("proxyJWT");
+		return deleted;
 	}
 	setSystemJWT(jwt) {
 		const self = this;
@@ -261,8 +291,10 @@ class GauzeService {
 	}
 	deleteSystemJWT() {
 		const self = this;
+		const deleted = self.systemJWT;
 		self.systemJWT = null;
 		localStorage.removeItem("systemJWT");
+		return deleted;
 	}
 	assertPerson(person) {
 		const self = this;

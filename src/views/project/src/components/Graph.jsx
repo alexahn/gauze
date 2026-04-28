@@ -1,8 +1,8 @@
 import * as React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { BookmarkFilledIcon, BookmarkIcon, Cross1Icon, Pencil2Icon, PlusCircledIcon, ReloadIcon } from "@radix-ui/react-icons";
+import { BookmarkFilledIcon, BookmarkIcon, Cross1Icon, GearIcon, OpenInNewWindowIcon, Pencil2Icon, PlusCircledIcon, ReloadIcon } from "@radix-ui/react-icons";
 
 import Input from "./Input.jsx";
 import Link from "./Link.jsx";
@@ -17,6 +17,10 @@ const NODE_FALLBACK_DIMENSIONS = {
 	width: 720,
 	height: 320,
 };
+const NODE_DEFAULT_POSITION = {
+	x: 0,
+	y: 0,
+};
 
 function clamp(value, min, max) {
 	return Math.max(min, Math.min(max, value));
@@ -24,6 +28,19 @@ function clamp(value, min, max) {
 
 function getNodeDimensions(nodeDimensions, node) {
 	return nodeDimensions[node.id] || NODE_FALLBACK_DIMENSIONS;
+}
+
+function getNodePosition(nodePositions, id) {
+	return nodePositions[id] || NODE_DEFAULT_POSITION;
+}
+
+function positionNode(node, nodePositions) {
+	const position = getNodePosition(nodePositions, node.id);
+	return {
+		...node,
+		x: position.x,
+		y: position.y,
+	};
 }
 
 function getRowAnchor(dimensions, id) {
@@ -47,6 +64,13 @@ function itemEdgePoint(node, dimensions) {
 	};
 }
 
+function nodeEdgePoint(node, dimensions, side) {
+	return {
+		x: node.x + (side === "right" ? dimensions.width : 0),
+		y: node.y + clamp(dimensions.height * 0.18, 56, 96),
+	};
+}
+
 function edgePath(from, to) {
 	const direction = to.x >= from.x ? 1 : -1;
 	const dx = Math.max(96, Math.abs(to.x - from.x) * 0.5);
@@ -62,12 +86,15 @@ function edgeLabelPosition(from, to) {
 	};
 }
 
-function buildTraversalEdges(nodes, nodeDimensions) {
+function buildTraversalEdges(nodes, nodePositions, nodeDimensions) {
+	const positionedNodes = nodes.map(function (node) {
+		return positionNode(node, nodePositions);
+	});
 	const nodeIndex = {};
-	nodes.forEach(function (node) {
+	positionedNodes.forEach(function (node) {
 		nodeIndex[node.id] = node;
 	});
-	return nodes.reduce(function (edges, node) {
+	return positionedNodes.reduce(function (edges, node) {
 		if (!node.parentNodeID) {
 			return edges;
 		}
@@ -78,6 +105,20 @@ function buildTraversalEdges(nodes, nodeDimensions) {
 		const parentDimensions = getNodeDimensions(nodeDimensions, parentNode);
 		const nodeDimensionsValue = getNodeDimensions(nodeDimensions, node);
 		const parentRowAnchor = getRowAnchor(parentDimensions, node.parentEntityID);
+		if (node.kind === "item" && node.mode === "create" && !node.parentEntityID) {
+			const from = nodeEdgePoint(parentNode, parentDimensions, "right");
+			const to = itemEdgePoint(node, nodeDimensionsValue);
+			edges.push({
+				id: `edge.item.${node.id}`,
+				markerID: `project-graph-edge-item-${node.id}-arrow`,
+				from,
+				to,
+				label: "create",
+				color: "var(--x7)",
+				title: `create: ${node.header.graphql_meta_type}`,
+			});
+			return edges;
+		}
 		if (!parentRowAnchor) {
 			return edges;
 		}
@@ -197,6 +238,13 @@ function traversalVariables(header, source) {
 		];
 	}
 	return variables;
+}
+
+function relationshipSourceLabelDirection(source) {
+	if (!source) {
+		return "";
+	}
+	return source._direction === "to" ? "from" : "to";
 }
 
 function accessVariables(header, where) {
@@ -330,10 +378,61 @@ function stopWheelPropagation(e) {
 	e.stopPropagation();
 }
 
-function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAccess, onOpenCreate }) {
+function itemMatches(a, b) {
+	if (!a || !b) {
+		return false;
+	}
+	return a._metadata.type === b._metadata.type && a._metadata.id === b._metadata.id;
+}
+
+function GraphValuePopover({ value, valueClassName = "project-graph-value truncate" }) {
+	const summary = formatValue(value);
+	const content = formatFullValue(value);
+	return (
+		<Popover
+			trigger={<span className={valueClassName}>{summary}</span>}
+			triggerClassName="project-graph-value-trigger"
+			popoverClassName="project-graph-value-popover bgx2 cx6 ba bw1 br2 bdx3 shadow-2"
+			popoverWidth="min(48rem, calc(100vw - 1rem))"
+			triggerTitle={summary}
+			triggerAriaLabel="Show full value"
+		>
+			<pre className="project-graph-value-popover-content" onWheel={stopWheelPropagation}>
+				{content}
+			</pre>
+		</Popover>
+	);
+}
+
+function sortStateFromVariables(header, variables) {
+	const orderItem = variables.order && variables.order.length ? variables.order[0] : null;
+	return {
+		column: orderItem ? orderItem.column : header.default_order || "",
+		direction: orderItem && orderItem.order ? orderItem.order : "desc",
+	};
+}
+
+function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenItem, onOpenAccess, onOpenCreate }) {
 	const [filterMode, setFilterMode] = useState(node.filterMode);
 	const [localVariables, setLocalVariables] = useState(node.variables);
+	const [visibleFieldNames, setVisibleFieldNames] = useState(function () {
+		return node.header.fields.map(function (field) {
+			return field.name;
+		});
+	});
+	const initialSortState = sortStateFromVariables(node.header, node.variables);
+	const [sortColumn, setSortColumn] = useState(initialSortState.column);
+	const [sortDirection, setSortDirection] = useState(initialSortState.direction);
+	const [showSettings, setShowSettings] = useState(false);
+	const [settingsFieldFilter, setSettingsFieldFilter] = useState("");
 	const fields = node.header.fields;
+	const visibleFieldSet = new Set(visibleFieldNames);
+	const visibleFields = fields.filter(function (field) {
+		return visibleFieldSet.has(field.name);
+	});
+	const settingsFields = fields.filter(function (field) {
+		return field.name.toLowerCase().indexOf(settingsFieldFilter.toLowerCase()) >= 0;
+	});
 	const total = countToNumber(node.count);
 	const limit = node.variables.limit ? Number.parseInt(node.variables.limit, 10) : PAGE_SIZE;
 	const offset = node.variables.offset ? Number.parseInt(node.variables.offset, 10) : 0;
@@ -348,13 +447,29 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 		from: node.header.relationships_from || [],
 		to: node.header.relationships_to || [],
 	};
+	const sourceDirectionLabel = relationshipSourceLabelDirection(node.source);
+	const tableURL = pathfinder.stateToURL("project.system.headers.header.list", { header: node.header.graphql_meta_type.toLowerCase() }, { variables: JSON.stringify(node.variables) });
 
 	useEffect(
 		function () {
 			setFilterMode(node.filterMode);
 			setLocalVariables(node.variables);
+			const sortState = sortStateFromVariables(node.header, node.variables);
+			setSortColumn(sortState.column);
+			setSortDirection(sortState.direction);
 		},
-		[node.id, node.filterMode, node.variables],
+		[node.id, node.filterMode, node.header, node.variables],
+	);
+
+	useEffect(
+		function () {
+			setVisibleFieldNames(
+				node.header.fields.map(function (field) {
+					return field.name;
+				}),
+			);
+		},
+		[node.id, node.header],
 	);
 
 	function updateFilterMode(mode) {
@@ -399,6 +514,76 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 	function handleOpenCreate() {
 		const variables = stripFilterVariables(localVariables, filterMode);
 		onOpenCreate(node, variables);
+	}
+
+	function toggleSettings() {
+		setShowSettings(function (value) {
+			return !value;
+		});
+	}
+
+	function updateSettingsFieldFilter(e) {
+		setSettingsFieldFilter(e.target.value);
+	}
+
+	function updateVisibleField(fieldName) {
+		return function (e) {
+			const checked = e.target.checked;
+			setVisibleFieldNames(function (fieldNames) {
+				const selected = new Set(fieldNames);
+				if (checked) {
+					selected.add(fieldName);
+				} else {
+					selected.delete(fieldName);
+				}
+				return fields
+					.map(function (field) {
+						return field.name;
+					})
+					.filter(function (name) {
+						return selected.has(name);
+					});
+			});
+		};
+	}
+
+	function showAllFields() {
+		setVisibleFieldNames(
+			fields.map(function (field) {
+				return field.name;
+			}),
+		);
+	}
+
+	function hideAllFields() {
+		setVisibleFieldNames([]);
+	}
+
+	function updateSortColumn(e) {
+		setSortColumn(e.target.value);
+	}
+
+	function updateSortDirection(e) {
+		setSortDirection(e.target.value);
+	}
+
+	function applySort() {
+		const variables = {
+			...node.variables,
+			offset: 0,
+		};
+		if (sortColumn) {
+			variables.order = [
+				{
+					column: sortColumn,
+					order: sortDirection,
+				},
+			];
+		} else {
+			delete variables.order;
+		}
+		onReload(node.id, variables, filterMode);
+		setShowSettings(false);
 	}
 
 	function handleFilterKeyDown() {
@@ -473,7 +658,7 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 								</button>
 							</div>
 						</th>
-						{fields.map(function (field) {
+						{visibleFields.map(function (field) {
 							const defaultValue = localVariables.where_between && localVariables.where_between[field.name] ? localVariables.where_between[field.name][0] : undefined;
 							return (
 								<th key={field.name} className={cellClass}>
@@ -495,7 +680,7 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 								<span>End</span>
 							</div>
 						</th>
-						{fields.map(function (field) {
+						{visibleFields.map(function (field) {
 							const defaultValue = localVariables.where_between && localVariables.where_between[field.name] ? localVariables.where_between[field.name][1] : undefined;
 							return (
 								<th key={field.name} className={cellClass}>
@@ -524,7 +709,7 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 							</button>
 						</div>
 					</th>
-					{fields.map(function (field) {
+					{visibleFields.map(function (field) {
 						const defaultValue = localVariables[filterMode] ? localVariables[filterMode][field.name] : undefined;
 						return (
 							<th key={field.name} className={cellClass}>
@@ -614,22 +799,74 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 		);
 	}
 
-	function renderValuePopover(value) {
-		const summary = formatValue(value);
-		const content = formatFullValue(value);
+	function renderSettingsView() {
 		return (
-			<Popover
-				trigger={<span className="project-graph-value truncate">{summary}</span>}
-				triggerClassName="project-graph-value-trigger"
-				popoverClassName="project-graph-value-popover bgx2 cx6 ba bw1 br2 bdx3 shadow-2"
-				popoverWidth="min(48rem, calc(100vw - 1rem))"
-				triggerTitle={summary}
-				triggerAriaLabel="Show full value"
-			>
-				<pre className="project-graph-value-popover-content" onWheel={stopWheelPropagation}>
-					{content}
-				</pre>
-			</Popover>
+			<div className="project-graph-settings-view" onWheel={stopWheelPropagation}>
+				<div className="project-graph-settings-view-title">
+					<div className="project-graph-settings-heading">Table settings</div>
+					<div className="project-graph-settings-count">
+						{visibleFieldNames.length} / {fields.length} fields
+					</div>
+				</div>
+				<div className="project-graph-settings-grid">
+					<div className="project-graph-settings-panel">
+						<div className="project-graph-settings-panel-header">
+							<div className="project-graph-settings-heading">Fields</div>
+							<div className="project-graph-settings-actions">
+								<button type="button" className="project-graph-settings-apply ba bw1 br2 bdx3 bgx2 cx6" onClick={showAllFields}>
+									All
+								</button>
+								<button type="button" className="project-graph-settings-apply ba bw1 br2 bdx3 bgx2 cx6" onClick={hideAllFields}>
+									None
+								</button>
+							</div>
+						</div>
+						<input
+							className="project-graph-settings-filter ba bw1 br2 bdx3 bgx12 cx2"
+							type="text"
+							value={settingsFieldFilter}
+							onChange={updateSettingsFieldFilter}
+							aria-label="Filter fields"
+						/>
+						<div className="project-graph-settings-list">
+							{settingsFields.map(function (field) {
+								return (
+									<label key={field.name} className="project-graph-settings-row">
+										<input type="checkbox" checked={visibleFieldSet.has(field.name)} onChange={updateVisibleField(field.name)} />
+										<span title={field.name}>{field.name}</span>
+									</label>
+								);
+							})}
+						</div>
+					</div>
+					<div className="project-graph-settings-panel">
+						<div className="project-graph-settings-heading">Sort</div>
+						<label className="project-graph-settings-control">
+							<span>Field</span>
+							<select className="project-graph-settings-select ba bw1 br2 bdx3 bgx12 cx2" value={sortColumn} onChange={updateSortColumn}>
+								<option value="">None</option>
+								{fields.map(function (field) {
+									return (
+										<option key={field.name} value={field.name}>
+											{field.name}
+										</option>
+									);
+								})}
+							</select>
+						</label>
+						<label className="project-graph-settings-control">
+							<span>Direction</span>
+							<select className="project-graph-settings-select ba bw1 br2 bdx3 bgx12 cx2" value={sortDirection} onChange={updateSortDirection} disabled={!sortColumn}>
+								<option value="asc">Ascending</option>
+								<option value="desc">Descending</option>
+							</select>
+						</label>
+						<button type="button" className="project-graph-settings-apply ba bw1 br2 bdx3 bgx2 cx6" onClick={applySort}>
+							Apply
+						</button>
+					</div>
+				</div>
+			</div>
 		);
 	}
 
@@ -639,8 +876,8 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 				<div className="project-graph-node-title-main flex items-center">
 					<div className="project-graph-node-name truncate">{node.header.graphql_meta_type}</div>
 					{node.source ? (
-						<div className="project-graph-node-source ml2" title={`${node.source._direction}: ${node.source._metadata.id}`}>
-							{node.source._direction}: {node.source._metadata.id}
+						<div className="project-graph-node-source ml2" title={`${sourceDirectionLabel}: ${node.source._metadata.id}`}>
+							{sourceDirectionLabel}: {node.source._metadata.id}
 						</div>
 					) : null}
 					{node.accessMethod ? (
@@ -657,68 +894,82 @@ function GraphTable({ node, onReload, onClose, onTraverse, onOpenItem, onOpenAcc
 					<button type="button" title="Reload" aria-label="Reload" onClick={() => onReload(node.id, node.variables, filterMode)}>
 						<ReloadIcon />
 					</button>
+					<button type="button" className={showSettings ? "active" : ""} title="Table settings" aria-label="Table settings" aria-pressed={showSettings} onClick={toggleSettings}>
+						<GearIcon />
+					</button>
+					<Link href={tableURL} push={true} target="_blank" rel="noreferrer">
+						<button type="button" title="Open table page" aria-label="Open table page">
+							<OpenInNewWindowIcon />
+						</button>
+					</Link>
 					<button type="button" title="Close" aria-label="Close" onClick={() => onClose(node.id)}>
 						<Cross1Icon />
 					</button>
 				</div>
 			</div>
-			<div className="project-graph-node-toolbar flex items-center justify-between">
-				{renderModeButtons()}
-				<Pagination page={pageCurrent} count={pageMax} handleClick={handlePage} reverse={false} buttonClass="project-graph-page-button ba bw1 br2 bdx3 bgx2 cx6" />
-			</div>
-			{node.error ? <div className="project-graph-error bgxyz7 cx12 ba bw1 br2 pa2">{node.error}</div> : null}
-			<div className="project-graph-table-scroll" onWheel={stopWheelPropagation}>
-				<table className="project-graph-table">
-					<thead>
-						{renderFilterRows()}
-						<tr>
-							<th className={rowHeaderCellClass}>Rows</th>
-							{fields.map(function (field) {
-								return (
-									<th key={field.name} className={headerCellClass} title={field.name}>
-										{field.name}
-									</th>
-								);
-							})}
-						</tr>
-					</thead>
-					<tbody>
-						{node.items.map(function (item) {
-							const id = item._metadata.id;
-							return (
-								<tr key={id} data-project-graph-row-id={id}>
-									<td className={rowHeaderCellClass}>
-										<div className="project-graph-row-actions flex items-center">
-											<button type="button" className="project-graph-row-link" title="Open" aria-label="Open" onClick={handleOpenItem(item)}>
-												<Pencil2Icon />
-											</button>
-											{renderAccessControls(item)}
-											{renderRelationshipControls(item)}
-											<span className="project-graph-row-id truncate" title={id}>
-												{id}
-											</span>
-										</div>
-									</td>
-									{fields.map(function (field) {
-										const rawValue = item.attributes[field.name];
-										const value = formatValue(rawValue);
+			{showSettings ? (
+				renderSettingsView()
+			) : (
+				<>
+					<div className="project-graph-node-toolbar flex items-center justify-between">
+						{renderModeButtons()}
+						<Pagination page={pageCurrent} count={pageMax} handleClick={handlePage} reverse={false} buttonClass="project-graph-page-button ba bw1 br2 bdx3 bgx2 cx6" />
+					</div>
+					{node.error ? <div className="project-graph-error bgxyz7 cx12 ba bw1 br2 pa2">{node.error}</div> : null}
+					<div className="project-graph-table-scroll" onWheel={stopWheelPropagation}>
+						<table className="project-graph-table">
+							<thead>
+								{renderFilterRows()}
+								<tr>
+									<th className={rowHeaderCellClass}>Rows</th>
+									{visibleFields.map(function (field) {
 										return (
-											<td key={field.name} className={cellClass} title={value}>
-												{renderValuePopover(rawValue)}
-											</td>
+											<th key={field.name} className={headerCellClass} title={field.name}>
+												<GraphValuePopover value={field.name} />
+											</th>
 										);
 									})}
 								</tr>
-							);
-						})}
-					</tbody>
-				</table>
-			</div>
+							</thead>
+							<tbody>
+								{node.items.map(function (item) {
+									const id = item._metadata.id;
+									return (
+										<tr key={id} data-project-graph-row-id={id}>
+											<td className={rowHeaderCellClass}>
+												<div className="project-graph-row-actions flex items-center">
+													<button type="button" className="project-graph-row-link" title="Open" aria-label="Open" onClick={handleOpenItem(item)}>
+														<Pencil2Icon />
+													</button>
+													{renderAccessControls(item)}
+													{renderRelationshipControls(item)}
+													<span className="project-graph-row-id truncate" title={id}>
+														{id}
+													</span>
+												</div>
+											</td>
+											{visibleFields.map(function (field) {
+												const rawValue = item.attributes[field.name];
+												const value = formatValue(rawValue);
+												return (
+													<td key={field.name} className={cellClass} title={value}>
+														<GraphValuePopover value={rawValue} />
+													</td>
+												);
+											})}
+										</tr>
+									);
+								})}
+							</tbody>
+						</table>
+					</div>
+				</>
+			)}
 		</div>
 	);
 }
 
-function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, onItemDelete }) {
+function GraphItemTable({ pathfinder, services, node, onClose, onItemCreate, onItemUpdate, onItemDelete }) {
 	const { gauzemodel } = services;
 	const [localMode, setLocalMode] = useState(node.mode || "read");
 	const [localItem, setLocalItem] = useState(node.item);
@@ -731,6 +982,7 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 	const header = node.header;
 	const fields = header.fields;
 	const itemID = localItem ? localItem._metadata.id : node.item ? node.item._metadata.id : localMode === "create" ? "new" : "";
+	const itemURL = localItem ? pathfinder.stateToURL("project.system.headers.header.item", { header: header.graphql_meta_type.toLowerCase(), id: localItem._metadata.id }, {}) : "";
 	const cellClass = "project-graph-item-cell ba bw1 br2 bdx2 bgx2 cx6";
 	const headerCellClass = "project-graph-item-cell ba bw1 br2 bdx3 bgx3 cx6";
 	const inputClass = "project-graph-input w-100 ba bw1 br2 bdx3 bgx12 cx2";
@@ -952,7 +1204,7 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 	}
 
 	function renderReadValue(field) {
-		return <div className="project-graph-item-value truncate">{formatValue(localItem.attributes[field.name])}</div>;
+		return <GraphValuePopover value={localItem.attributes[field.name]} valueClassName="project-graph-item-value truncate" />;
 	}
 
 	function renderUpdateValue(field) {
@@ -991,9 +1243,7 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 				return (
 					<tr key={field.name}>
 						<td className={cellClass}>
-							<div className="project-graph-item-field truncate" title={field.name}>
-								{field.name}
-							</div>
+							<GraphValuePopover value={field.name} valueClassName="project-graph-item-field truncate" />
 						</td>
 						<td className={cellClass}>{renderCreateValue(field)}</td>
 					</tr>
@@ -1021,9 +1271,7 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 			return (
 				<tr key={field.name}>
 					<td className={cellClass}>
-						<div className="project-graph-item-field truncate" title={field.name}>
-							{field.name}
-						</div>
+						<GraphValuePopover value={field.name} valueClassName="project-graph-item-field truncate" />
 					</td>
 					<td className={cellClass}>{value}</td>
 				</tr>
@@ -1076,6 +1324,13 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 					</div>
 				</div>
 				<div className="project-graph-node-actions flex items-center">
+					{itemURL ? (
+						<Link href={itemURL} push={true} target="_blank" rel="noreferrer">
+							<button type="button" title="Open item page" aria-label="Open item page">
+								<OpenInNewWindowIcon />
+							</button>
+						</Link>
+					) : null}
 					<button type="button" title="Close" aria-label="Close" onClick={() => onClose(node.id)}>
 						<Cross1Icon />
 					</button>
@@ -1101,8 +1356,66 @@ function GraphItemTable({ services, node, onClose, onItemCreate, onItemUpdate, o
 	);
 }
 
-function GraphEdges({ nodes, nodeDimensions }) {
-	const edges = buildTraversalEdges(nodes, nodeDimensions);
+const MemoGraphTable = React.memo(GraphTable);
+const MemoGraphItemTable = React.memo(GraphItemTable);
+
+const GraphNodeContent = React.memo(function GraphNodeContent({ pathfinder, services, node, actions }) {
+	if (node.kind === "item") {
+		return (
+			<MemoGraphItemTable
+				pathfinder={pathfinder}
+				services={services}
+				node={node}
+				onClose={actions.closeNode}
+				onItemCreate={actions.createGraphItem}
+				onItemUpdate={actions.updateGraphItem}
+				onItemDelete={actions.deleteGraphItem}
+			/>
+		);
+	}
+	return (
+		<MemoGraphTable
+			pathfinder={pathfinder}
+			node={node}
+			onReload={actions.reloadNode}
+			onClose={actions.closeNode}
+			onTraverse={actions.addTraversalNode}
+			onOpenItem={actions.addItemNode}
+			onOpenAccess={actions.addAccessNode}
+			onOpenCreate={actions.addCreateNode}
+		/>
+	);
+});
+
+const GraphNode = React.memo(function GraphNode({ pathfinder, services, node, position, actions, onRegisterNodeElement, onNodeMouseDown }) {
+	const handleRef = useCallback(
+		function (element) {
+			onRegisterNodeElement(node.id, element);
+		},
+		[node.id, onRegisterNodeElement],
+	);
+	const handleMouseDown = useCallback(
+		function (e) {
+			onNodeMouseDown(node.id, e);
+		},
+		[node.id, onNodeMouseDown],
+	);
+	return (
+		<div
+			className="project-graph-node absolute"
+			ref={handleRef}
+			style={{
+				transform: `translate(${position.x}px, ${position.y}px)`,
+			}}
+		>
+			<div className="project-graph-drag-handle" onMouseDown={handleMouseDown} />
+			<GraphNodeContent pathfinder={pathfinder} services={services} node={node} actions={actions} />
+		</div>
+	);
+});
+
+const GraphEdges = React.memo(function GraphEdges({ nodes, nodePositions, nodeDimensions }) {
+	const edges = buildTraversalEdges(nodes, nodePositions, nodeDimensions);
 	if (!edges.length) {
 		return null;
 	}
@@ -1144,7 +1457,7 @@ function GraphEdges({ nodes, nodeDimensions }) {
 			})}
 		</svg>
 	);
-}
+});
 
 function EntityPicker({ headers, onAdd }) {
 	const [filter, setFilter] = useState("");
@@ -1155,7 +1468,7 @@ function EntityPicker({ headers, onAdd }) {
 		<aside className="project-graph-sidebar bgx2 cx6 ba bw1 bdx3">
 			<div className="project-graph-sidebar-header">
 				<div className="project-graph-sidebar-title">Entities</div>
-				<input className="project-graph-sidebar-filter ba bw1 br2 bdx3 bgx12 cx2" value={filter} onChange={(e) => setFilter(e.target.value)} />
+				<input name="entities" className="project-graph-sidebar-filter ba bw1 br2 bdx3 bgx12 cx2" value={filter} onChange={(e) => setFilter(e.target.value)} />
 			</div>
 			<div className="project-graph-entity-list">
 				{filteredHeaders.map(function (header) {
@@ -1171,23 +1484,50 @@ function EntityPicker({ headers, onAdd }) {
 	);
 }
 
+const MemoEntityPicker = React.memo(EntityPicker);
+
 function Graph({ pathfinder, services, agent, headers }) {
 	const viewportRef = useRef();
 	const nodeElementsRef = useRef({});
-	const [nodes, setNodes] = useState([]);
+	const [nodeContents, setNodeContents] = useState([]);
+	const [nodePositions, setNodePositions] = useState({});
 	const [nodeDimensions, setNodeDimensions] = useState({});
 	const [viewport, setViewport] = useState({ x: 24, y: 24, z: 1 });
 	const [dragging, setDragging] = useState(null);
+	const nodeContentsRef = useRef(nodeContents);
+	const nodePositionsRef = useRef(nodePositions);
+	const nodeDimensionsRef = useRef(nodeDimensions);
 	const { gauzemodel } = services;
-	const nodeMeasureSignature = nodes
+	const nodeMeasureSignature = nodeContents
 		.map(function (node) {
 			const itemCount = node.items ? node.items.length : node.item ? 1 : 0;
 			return [node.id, node.kind || "table", node.header.fields.length, itemCount, node.loading, node.count, node.filterMode, node.mode, node.error].join(":");
 		})
 		.join("|");
 
-	function updateNode(id, updater) {
-		setNodes(function (nodes) {
+	useEffect(
+		function () {
+			nodeContentsRef.current = nodeContents;
+		},
+		[nodeContents],
+	);
+
+	useEffect(
+		function () {
+			nodePositionsRef.current = nodePositions;
+		},
+		[nodePositions],
+	);
+
+	useEffect(
+		function () {
+			nodeDimensionsRef.current = nodeDimensions;
+		},
+		[nodeDimensions],
+	);
+
+	const updateNodeContent = useCallback(function (id, updater) {
+		setNodeContents(function (nodes) {
 			return nodes.map(function (node) {
 				if (node.id === id) {
 					return updater(node);
@@ -1196,7 +1536,7 @@ function Graph({ pathfinder, services, agent, headers }) {
 				}
 			});
 		});
-	}
+	}, []);
 
 	function countVariables(header, variables) {
 		return {
@@ -1212,133 +1552,160 @@ function Graph({ pathfinder, services, agent, headers }) {
 		};
 	}
 
-	function reloadNode(id, variables, filterMode, selectedNodeOverride) {
-		const selectedNode =
-			selectedNodeOverride ||
-			nodes.find(function (node) {
-				return node.id === id;
+	const reloadNode = useCallback(
+		function (id, variables, filterMode, selectedNodeOverride) {
+			const selectedNode =
+				selectedNodeOverride ||
+				nodeContentsRef.current.find(function (node) {
+					return node.id === id;
+				});
+			setNodeContents(function (nodes) {
+				return nodes.map(function (node) {
+					if (node.id === id) {
+						return {
+							...node,
+							variables,
+							filterMode,
+							loading: true,
+							error: "",
+						};
+					} else {
+						return node;
+					}
+				});
 			});
-		setNodes(function (nodes) {
-			return nodes.map(function (node) {
-				if (node.id === id) {
+			if (!selectedNode) {
+				return Promise.resolve();
+			}
+			const header = selectedNode.header;
+			const read = gauzemodel.default
+				.read(header, variables)
+				.then(function (items) {
+					return {
+						items,
+					};
+				})
+				.catch(function (err) {
+					return {
+						items: [],
+						error: err.message,
+					};
+				});
+			const count = gauzemodel.default
+				.count(header, countVariables(header, variables))
+				.then(function (counts) {
+					return {
+						count: counts && counts.length ? counts[0].count : 0,
+					};
+				})
+				.catch(function (err) {
+					return {
+						count: 0,
+						error: err.message,
+					};
+				});
+			return Promise.all([read, count]).then(function (results) {
+				const readResult = results[0];
+				const countResult = results[1];
+				updateNodeContent(id, function (node) {
 					return {
 						...node,
-						variables,
-						filterMode,
-						loading: true,
-						error: "",
+						items: readResult.items,
+						count: countResult.count,
+						loading: false,
+						error: readResult.error || countResult.error || "",
 					};
-				} else {
-					return node;
-				}
+				});
 			});
-		});
-		if (!selectedNode) {
-			return Promise.resolve();
-		}
-		const header = selectedNode.header;
-		const read = gauzemodel.default
-			.read(header, variables)
-			.then(function (items) {
-				return {
-					items,
-				};
-			})
-			.catch(function (err) {
-				return {
-					items: [],
-					error: err.message,
-				};
-			});
-		const count = gauzemodel.default
-			.count(header, countVariables(header, variables))
-			.then(function (counts) {
-				return {
-					count: counts && counts.length ? counts[0].count : 0,
-				};
-			})
-			.catch(function (err) {
-				return {
-					count: 0,
-					error: err.message,
-				};
-			});
-		return Promise.all([read, count]).then(function (results) {
-			const readResult = results[0];
-			const countResult = results[1];
-			updateNode(id, function (node) {
-				return {
-					...node,
-					items: readResult.items,
-					count: countResult.count,
-					loading: false,
-					error: readResult.error || countResult.error || "",
-				};
-			});
-		});
-	}
+		},
+		[gauzemodel, updateNodeContent],
+	);
 
-	function addNode(header) {
-		const variables = defaultVariables(header);
-		const offset = nodes.length * 32;
-		const node = {
-			id: uuidv4(),
-			header,
-			variables,
-			filterMode: "where_like",
-			items: [],
-			count: 0,
-			x: 24 + offset,
-			y: 24 + offset,
-			loading: true,
-			error: "",
-		};
-		setNodes(function (nodes) {
-			return nodes.concat(node);
-		});
-		return reloadNode(node.id, variables, node.filterMode, node);
-	}
+	const addNode = useCallback(
+		function (header) {
+			const variables = defaultVariables(header);
+			const offset = nodeContentsRef.current.length * 32;
+			const position = {
+				x: 24 + offset,
+				y: 24 + offset,
+			};
+			const node = {
+				id: uuidv4(),
+				header,
+				variables,
+				filterMode: "where_like",
+				items: [],
+				count: 0,
+				loading: true,
+				error: "",
+			};
+			setNodeContents(function (nodes) {
+				return nodes.concat(node);
+			});
+			setNodePositions(function (positions) {
+				return {
+					...positions,
+					[node.id]: position,
+				};
+			});
+			return reloadNode(node.id, variables, node.filterMode, node);
+		},
+		[reloadNode],
+	);
 
-	function addTraversalNode(sourceNode, item, targetType, direction) {
-		const targetHeader = headers.find(function (header) {
-			return header.graphql_meta_type === targetType;
-		});
-		if (!targetHeader) {
-			return Promise.resolve();
-		}
-		const source = {
-			_metadata: {
-				type: sourceNode.header.graphql_meta_type,
-				id: item._metadata.id,
-			},
-			_direction: direction,
-		};
-		const variables = traversalVariables(targetHeader, source);
-		const sourceDimensions = getNodeDimensions(nodeDimensions, sourceNode);
-		const xOffset = direction === "to" ? sourceDimensions.width + NODE_HORIZONTAL_GAP : -(sourceDimensions.width + NODE_HORIZONTAL_GAP);
-		const node = {
-			id: uuidv4(),
-			header: targetHeader,
-			source,
-			parentNodeID: sourceNode.id,
-			parentEntityID: item._metadata.id,
-			variables,
-			filterMode: "where_like",
-			items: [],
-			count: 0,
-			x: sourceNode.x + xOffset,
-			y: sourceNode.y + NODE_VERTICAL_GAP,
-			loading: true,
-			error: "",
-		};
-		setNodes(function (nodes) {
-			return nodes.concat(node);
-		});
-		return reloadNode(node.id, variables, node.filterMode, node);
-	}
+	const addTraversalNode = useCallback(
+		function (sourceNode, item, targetType, direction) {
+			const targetHeader = headers.find(function (header) {
+				return header.graphql_meta_type === targetType;
+			});
+			if (!targetHeader) {
+				return Promise.resolve();
+			}
+			const source = {
+				_metadata: {
+					type: sourceNode.header.graphql_meta_type,
+					id: item._metadata.id,
+				},
+				_direction: direction,
+			};
+			const variables = traversalVariables(targetHeader, source);
+			const sourceDimensions = getNodeDimensions(nodeDimensionsRef.current, sourceNode);
+			const sourcePosition = getNodePosition(nodePositionsRef.current, sourceNode.id);
+			const xOffset = direction === "to" ? sourceDimensions.width + NODE_HORIZONTAL_GAP : -(sourceDimensions.width + NODE_HORIZONTAL_GAP);
+			const node = {
+				id: uuidv4(),
+				header: targetHeader,
+				source,
+				parentNodeID: sourceNode.id,
+				parentEntityID: item._metadata.id,
+				variables,
+				filterMode: "where_like",
+				items: [],
+				count: 0,
+				loading: true,
+				error: "",
+			};
+			const position = {
+				x: sourcePosition.x + xOffset,
+				y: sourcePosition.y + NODE_VERTICAL_GAP,
+			};
+			setNodeContents(function (nodes) {
+				return nodes.concat(node);
+			});
+			setNodePositions(function (positions) {
+				return {
+					...positions,
+					[node.id]: position,
+				};
+			});
+			return reloadNode(node.id, variables, node.filterMode, node);
+		},
+		[headers, reloadNode],
+	);
 
-	function addItemNode(sourceNode, item) {
-		const sourceDimensions = getNodeDimensions(nodeDimensions, sourceNode);
+	const addItemNode = useCallback(function (sourceNode, item) {
+		const sourceDimensions = getNodeDimensions(nodeDimensionsRef.current, sourceNode);
+		const sourcePosition = getNodePosition(nodePositionsRef.current, sourceNode.id);
 		const node = {
 			id: uuidv4(),
 			kind: "item",
@@ -1347,17 +1714,26 @@ function Graph({ pathfinder, services, agent, headers }) {
 			mode: "update",
 			parentNodeID: sourceNode.id,
 			parentEntityID: item._metadata.id,
-			x: sourceNode.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
-			y: sourceNode.y + NODE_VERTICAL_GAP,
 		};
-		setNodes(function (nodes) {
+		const position = {
+			x: sourcePosition.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
+			y: sourcePosition.y + NODE_VERTICAL_GAP,
+		};
+		setNodeContents(function (nodes) {
 			return nodes.concat(node);
 		});
+		setNodePositions(function (positions) {
+			return {
+				...positions,
+				[node.id]: position,
+			};
+		});
 		return Promise.resolve();
-	}
+	}, []);
 
-	function addCreateNode(sourceNode, variables) {
-		const sourceDimensions = getNodeDimensions(nodeDimensions, sourceNode);
+	const addCreateNode = useCallback(function (sourceNode, variables) {
+		const sourceDimensions = getNodeDimensions(nodeDimensionsRef.current, sourceNode);
+		const sourcePosition = getNodePosition(nodePositionsRef.current, sourceNode.id);
 		const node = {
 			id: uuidv4(),
 			kind: "item",
@@ -1368,98 +1744,116 @@ function Graph({ pathfinder, services, agent, headers }) {
 			createSource: sourceNode.source || null,
 			parentNodeID: sourceNode.id,
 			parentEntityID: null,
-			x: sourceNode.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
-			y: sourceNode.y + NODE_VERTICAL_GAP,
 		};
-		setNodes(function (nodes) {
+		const position = {
+			x: sourcePosition.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
+			y: sourcePosition.y + NODE_VERTICAL_GAP,
+		};
+		setNodeContents(function (nodes) {
 			return nodes.concat(node);
 		});
-		return Promise.resolve();
-	}
-
-	function addAccessNode(sourceNode, item, kind) {
-		const targetType = kind === "whitelist" ? "WHITELIST" : "BLACKLIST";
-		const targetHeader = headers.find(function (header) {
-			return header.graphql_meta_type === targetType;
-		});
-		if (!targetHeader) {
-			return Promise.resolve();
-		}
-		const sourceDimensions = getNodeDimensions(nodeDimensions, sourceNode);
-		const accessNodes = ACCESS_METHODS.map(function (method, index) {
-			const variables = accessVariables(targetHeader, accessWhere(kind, agent, sourceNode.header, item, method));
+		setNodePositions(function (positions) {
 			return {
-				id: uuidv4(),
-				kind: "access",
-				accessKind: kind,
-				accessMethod: method,
-				header: targetHeader,
-				variables,
-				filterMode: "where",
-				items: [],
-				count: 0,
-				parentNodeID: sourceNode.id,
-				parentEntityID: item._metadata.id,
-				x: sourceNode.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
-				y: sourceNode.y + NODE_VERTICAL_GAP + index * (NODE_FALLBACK_DIMENSIONS.height + NODE_VERTICAL_GAP),
-				loading: true,
-				error: "",
+				...positions,
+				[node.id]: position,
 			};
 		});
-		setNodes(function (nodes) {
-			return nodes.concat(accessNodes);
-		});
-		return Promise.all(
-			accessNodes.map(function (node) {
-				return reloadNode(node.id, node.variables, node.filterMode, node);
-			}),
-		);
-	}
-
-	function itemMatches(a, b) {
-		if (!a || !b) {
-			return false;
-		}
-		return a._metadata.type === b._metadata.type && a._metadata.id === b._metadata.id;
-	}
-
-	function createGraphItem(itemNodeID, createdItem) {
-		const itemNode = nodes.find(function (node) {
-			return node.id === itemNodeID;
-		});
-		const parentNode =
-			itemNode && itemNode.parentNodeID
-				? nodes.find(function (node) {
-						return node.id === itemNode.parentNodeID;
-					})
-				: null;
-		setNodes(function (nodes) {
-			return nodes.map(function (node) {
-				if (node.id === itemNodeID) {
-					return {
-						...node,
-						item: createdItem,
-						mode: "read",
-						parentEntityID: createdItem._metadata.id,
-					};
-				} else if (node.kind === "item" && itemMatches(node.item, createdItem)) {
-					return {
-						...node,
-						item: createdItem,
-					};
-				} else {
-					return node;
-				}
-			});
-		});
-		if (parentNode && parentNode.items) {
-			return reloadNode(parentNode.id, parentNode.variables, parentNode.filterMode, parentNode);
-		}
 		return Promise.resolve();
-	}
+	}, []);
 
-	function updateGraphItem(itemNodeID, updatedItem, previousItem = updatedItem) {
-		setNodes(function (nodes) {
+	const addAccessNode = useCallback(
+		function (sourceNode, item, kind) {
+			const targetType = kind === "whitelist" ? "WHITELIST" : "BLACKLIST";
+			const targetHeader = headers.find(function (header) {
+				return header.graphql_meta_type === targetType;
+			});
+			if (!targetHeader) {
+				return Promise.resolve();
+			}
+			const sourceDimensions = getNodeDimensions(nodeDimensionsRef.current, sourceNode);
+			const sourcePosition = getNodePosition(nodePositionsRef.current, sourceNode.id);
+			const accessNodes = ACCESS_METHODS.map(function (method, index) {
+				const variables = accessVariables(targetHeader, accessWhere(kind, agent, sourceNode.header, item, method));
+				return {
+					id: uuidv4(),
+					kind: "access",
+					accessKind: kind,
+					accessMethod: method,
+					header: targetHeader,
+					variables,
+					filterMode: "where",
+					items: [],
+					count: 0,
+					parentNodeID: sourceNode.id,
+					parentEntityID: item._metadata.id,
+					loading: true,
+					error: "",
+				};
+			});
+			setNodeContents(function (nodes) {
+				return nodes.concat(accessNodes);
+			});
+			setNodePositions(function (positions) {
+				const nextPositions = {
+					...positions,
+				};
+				accessNodes.forEach(function (node, index) {
+					nextPositions[node.id] = {
+						x: sourcePosition.x + sourceDimensions.width + NODE_HORIZONTAL_GAP,
+						y: sourcePosition.y + NODE_VERTICAL_GAP + index * (NODE_FALLBACK_DIMENSIONS.height + NODE_VERTICAL_GAP),
+					};
+				});
+				return nextPositions;
+			});
+			return Promise.all(
+				accessNodes.map(function (node) {
+					return reloadNode(node.id, node.variables, node.filterMode, node);
+				}),
+			);
+		},
+		[agent, headers, reloadNode],
+	);
+
+	const createGraphItem = useCallback(
+		function (itemNodeID, createdItem) {
+			const itemNode = nodeContentsRef.current.find(function (node) {
+				return node.id === itemNodeID;
+			});
+			const parentNode =
+				itemNode && itemNode.parentNodeID
+					? nodeContentsRef.current.find(function (node) {
+							return node.id === itemNode.parentNodeID;
+						})
+					: null;
+			setNodeContents(function (nodes) {
+				return nodes.map(function (node) {
+					if (node.id === itemNodeID) {
+						return {
+							...node,
+							item: createdItem,
+							mode: "read",
+							parentEntityID: createdItem._metadata.id,
+						};
+					} else if (node.kind === "item" && itemMatches(node.item, createdItem)) {
+						return {
+							...node,
+							item: createdItem,
+						};
+					} else {
+						return node;
+					}
+				});
+			});
+			if (parentNode && parentNode.items) {
+				return reloadNode(parentNode.id, parentNode.variables, parentNode.filterMode, parentNode);
+			}
+			return Promise.resolve();
+		},
+		[reloadNode],
+	);
+
+	const updateGraphItem = useCallback(function (itemNodeID, updatedItem, previousItem = updatedItem) {
+		setNodeContents(function (nodes) {
 			return nodes.map(function (node) {
 				if (node.id === itemNodeID) {
 					return {
@@ -1487,10 +1881,10 @@ function Graph({ pathfinder, services, agent, headers }) {
 				}
 			});
 		});
-	}
+	}, []);
 
-	function deleteGraphItem(itemNodeID, deletedItem) {
-		setNodes(function (nodes) {
+	const deleteGraphItem = useCallback(function (itemNodeID, deletedItem) {
+		setNodeContents(function (nodes) {
 			return nodes.map(function (node) {
 				if (node.id === itemNodeID) {
 					return {
@@ -1514,45 +1908,49 @@ function Graph({ pathfinder, services, agent, headers }) {
 				}
 			});
 		});
-	}
+	}, []);
 
-	function closeNode(id) {
-		setNodes(function (nodes) {
+	const closeNode = useCallback(function (id) {
+		setNodeContents(function (nodes) {
 			return nodes.filter(function (node) {
 				return node.id !== id;
 			});
 		});
-	}
+		setNodePositions(function (positions) {
+			const nextPositions = {
+				...positions,
+			};
+			delete nextPositions[id];
+			return nextPositions;
+		});
+	}, []);
 
-	function registerNodeElement(id) {
-		return function (element) {
-			if (element) {
-				nodeElementsRef.current[id] = element;
-			} else {
-				delete nodeElementsRef.current[id];
-			}
-		};
-	}
+	const registerNodeElement = useCallback(function (id, element) {
+		if (element) {
+			nodeElementsRef.current[id] = element;
+		} else {
+			delete nodeElementsRef.current[id];
+		}
+	}, []);
 
-	function handleNodeMouseDown(id) {
-		return function (e) {
+	const handleNodeMouseDown = useCallback(
+		function (id, e) {
 			if (e.button !== 0) return;
 			e.preventDefault();
 			e.stopPropagation();
-			const node = nodes.find(function (node) {
-				return node.id === id;
-			});
-			if (!node) return;
+			const position = getNodePosition(nodePositionsRef.current, id);
 			setDragging({
 				type: "node",
 				id,
 				startX: e.clientX,
 				startY: e.clientY,
-				nodeX: node.x,
-				nodeY: node.y,
+				nodeX: position.x,
+				nodeY: position.y,
+				viewportZ: viewport.z,
 			});
-		};
-	}
+		},
+		[viewport.z],
+	);
 
 	function handleViewportMouseDown(e) {
 		if (e.button !== 0) return;
@@ -1564,13 +1962,13 @@ function Graph({ pathfinder, services, agent, headers }) {
 			startY: e.clientY,
 			viewportX: viewport.x,
 			viewportY: viewport.y,
+			viewportZ: viewport.z,
 		});
 	}
 
 	function handleWheel(e) {
-		e.preventDefault();
 		const rect = viewportRef.current.getBoundingClientRect();
-		const nextZ = clamp(viewport.z * (e.deltaY > 0 ? 0.9 : 1.1), 0.35, 2.5);
+		const nextZ = clamp(viewport.z * (e.deltaY > 0 ? 0.9 : 1.1), 0.1, 2.5);
 		const mouseX = e.clientX - rect.left;
 		const mouseY = e.clientY - rect.top;
 		const worldX = (mouseX - viewport.x) / viewport.z;
@@ -1582,25 +1980,57 @@ function Graph({ pathfinder, services, agent, headers }) {
 		});
 	}
 
+	function handleResetZoom() {
+		const rect = viewportRef.current.getBoundingClientRect();
+		const centerX = rect.width / 2;
+		const centerY = rect.height / 2;
+		const worldX = (centerX - viewport.x) / viewport.z;
+		const worldY = (centerY - viewport.y) / viewport.z;
+		setViewport({
+			x: centerX - worldX,
+			y: centerY - worldY,
+			z: 1,
+		});
+	}
+
+	const graphActions = useMemo(
+		function () {
+			return {
+				reloadNode,
+				closeNode,
+				addTraversalNode,
+				addItemNode,
+				addAccessNode,
+				addCreateNode,
+				createGraphItem,
+				updateGraphItem,
+				deleteGraphItem,
+			};
+		},
+		[reloadNode, closeNode, addTraversalNode, addItemNode, addAccessNode, addCreateNode, createGraphItem, updateGraphItem, deleteGraphItem],
+	);
+
 	useEffect(
 		function () {
 			function handleMouseMove(e) {
 				if (!dragging) return;
 				if (dragging.type === "node") {
-					const dx = (e.clientX - dragging.startX) / viewport.z;
-					const dy = (e.clientY - dragging.startY) / viewport.z;
-					updateNode(dragging.id, function (node) {
+					const dx = (e.clientX - dragging.startX) / dragging.viewportZ;
+					const dy = (e.clientY - dragging.startY) / dragging.viewportZ;
+					setNodePositions(function (positions) {
 						return {
-							...node,
-							x: dragging.nodeX + dx,
-							y: dragging.nodeY + dy,
+							...positions,
+							[dragging.id]: {
+								x: dragging.nodeX + dx,
+								y: dragging.nodeY + dy,
+							},
 						};
 					});
 				} else if (dragging.type === "viewport") {
 					setViewport({
-						...viewport,
 						x: dragging.viewportX + e.clientX - dragging.startX,
 						y: dragging.viewportY + e.clientY - dragging.startY,
+						z: dragging.viewportZ,
 					});
 				}
 			}
@@ -1614,7 +2044,7 @@ function Graph({ pathfinder, services, agent, headers }) {
 				window.removeEventListener("mouseup", handleMouseUp);
 			};
 		},
-		[dragging, viewport],
+		[dragging],
 	);
 
 	useEffect(
@@ -1622,7 +2052,7 @@ function Graph({ pathfinder, services, agent, headers }) {
 			function measureNodes() {
 				setNodeDimensions(function (previousDimensions) {
 					const nextDimensions = {};
-					nodes.forEach(function (node) {
+					nodeContents.forEach(function (node) {
 						const element = nodeElementsRef.current[node.id];
 						if (!element) {
 							return;
@@ -1659,14 +2089,14 @@ function Graph({ pathfinder, services, agent, headers }) {
 			let observer;
 			if (typeof ResizeObserver !== "undefined") {
 				observer = new ResizeObserver(measureNodes);
-				nodes.forEach(function (node) {
+				nodeContents.forEach(function (node) {
 					const element = nodeElementsRef.current[node.id];
 					if (element) {
 						observer.observe(element);
 					}
 				});
 			}
-			nodes.forEach(function (node) {
+			nodeContents.forEach(function (node) {
 				const element = nodeElementsRef.current[node.id];
 				if (!element) {
 					return;
@@ -1690,15 +2120,20 @@ function Graph({ pathfinder, services, agent, headers }) {
 		[nodeMeasureSignature],
 	);
 
+	const graphURL = pathfinder.stateToURL("project.system.headers.graph", {}, {});
+	const proxiesURL = pathfinder.stateToURL("project.proxy.proxies", {}, { next: graphURL });
+
 	return (
 		<div className="project-graph-shell bgx12">
 			<div className="project-graph-toolbar fixed top-1 left-1 flex items-center">
-				<Link href={pathfinder.stateToURL("project.system.headers", {}, {})} push={true}>
+				<Link href={proxiesURL} push={true}>
 					<button type="button" className="ba bw1 br2 bdx3 bgx2 cx6">
-						Headers
+						Proxies
 					</button>
 				</Link>
-				<div className="project-graph-zoom ba bw1 br2 bdx3 bgx2 cx6">{Math.round(viewport.z * 100)}%</div>
+				<button type="button" className="project-graph-zoom ba bw1 br2 bdx3 bgx2 cx6" title="Reset zoom to 100%" aria-label="Reset zoom to 100%" onClick={handleResetZoom}>
+					{Math.round(viewport.z * 100)}%
+				</button>
 			</div>
 			<div ref={viewportRef} className="project-graph-viewport" onMouseDown={handleViewportMouseDown} onWheel={handleWheel}>
 				<div
@@ -1707,44 +2142,25 @@ function Graph({ pathfinder, services, agent, headers }) {
 						transform: `translate(${viewport.x}px, ${viewport.y}px) scale(${viewport.z})`,
 					}}
 				>
-					<GraphEdges nodes={nodes} nodeDimensions={nodeDimensions} />
-					{nodes.map(function (node) {
+					<GraphEdges nodes={nodeContents} nodePositions={nodePositions} nodeDimensions={nodeDimensions} />
+					{nodeContents.map(function (node) {
+						const position = getNodePosition(nodePositions, node.id);
 						return (
-							<div
+							<GraphNode
 								key={node.id}
-								className="project-graph-node absolute"
-								ref={registerNodeElement(node.id)}
-								style={{
-									transform: `translate(${node.x}px, ${node.y}px)`,
-								}}
-							>
-								<div className="project-graph-drag-handle" onMouseDown={handleNodeMouseDown(node.id)} />
-								{node.kind === "item" ? (
-									<GraphItemTable
-										services={services}
-										node={node}
-										onClose={closeNode}
-										onItemCreate={createGraphItem}
-										onItemUpdate={updateGraphItem}
-										onItemDelete={deleteGraphItem}
-									/>
-								) : (
-									<GraphTable
-										node={node}
-										onReload={reloadNode}
-										onClose={closeNode}
-										onTraverse={addTraversalNode}
-										onOpenItem={addItemNode}
-										onOpenAccess={addAccessNode}
-										onOpenCreate={addCreateNode}
-									/>
-								)}
-							</div>
+								pathfinder={pathfinder}
+								services={services}
+								node={node}
+								position={position}
+								actions={graphActions}
+								onRegisterNodeElement={registerNodeElement}
+								onNodeMouseDown={handleNodeMouseDown}
+							/>
 						);
 					})}
 				</div>
 			</div>
-			<EntityPicker headers={headers} onAdd={addNode} />
+			<MemoEntityPicker headers={headers} onAdd={addNode} />
 		</div>
 	);
 }
