@@ -69,12 +69,23 @@ function shards_for_primary_keys(database_manager, table_name, primary_keys) {
 
 function shards_for_range(database_manager, table_name, primary_key_range) {
 	const [start_primary_key, end_primary_key] = primary_key_range;
-	const start_primary_key_number = database_manager.uuid_to_big_int(start_primary_key);
-	const end_primary_key_number = database_manager.uuid_to_big_int(end_primary_key);
+	const shards = current_shards(database_manager, table_name);
+	const has_start_primary_key = start_primary_key !== null && typeof start_primary_key !== "undefined";
+	const has_end_primary_key = end_primary_key !== null && typeof end_primary_key !== "undefined";
+	const start_primary_key_number = has_start_primary_key
+		? database_manager.uuid_to_big_int(start_primary_key)
+		: shards.reduce(function (min, shard) {
+				return shard.start < min ? shard.start : min;
+			}, shards[0].start);
+	const end_primary_key_number = has_end_primary_key
+		? database_manager.uuid_to_big_int(end_primary_key)
+		: shards.reduce(function (max, shard) {
+				return shard.end > max ? shard.end : max;
+			}, shards[0].end);
 	if (end_primary_key_number < start_primary_key_number) {
 		return [];
 	}
-	return current_shards(database_manager, table_name).filter(function (shard) {
+	return shards.filter(function (shard) {
 		return shard.start <= end_primary_key_number && start_primary_key_number <= shard.end;
 	});
 }
@@ -259,6 +270,36 @@ test.describe("sharding connection routing", async function (suite_ctx) {
 				"read",
 			),
 			expected_range_node_ids(suite_ctx.database_manager, YTITNE_MODEL.table_name, RANGE_SHARD_2_TO_3, "read"),
+		);
+		// With a primary-key range open on the lower side, read routing should target shards up to the upper bound.
+		assert.deepStrictEqual(
+			route_node_ids(
+				suite_ctx.database_manager,
+				{},
+				{
+					where_between: {
+						[YTITNE_MODEL.primary_key]: [null, PRIMARY_KEYS.shard2],
+					},
+				},
+				YTITNE_MODEL,
+				"read",
+			),
+			expected_range_node_ids(suite_ctx.database_manager, YTITNE_MODEL.table_name, [null, PRIMARY_KEYS.shard2], "read"),
+		);
+		// With a primary-key range open on the upper side, read routing should target shards from the lower bound onward.
+		assert.deepStrictEqual(
+			route_node_ids(
+				suite_ctx.database_manager,
+				{},
+				{
+					where_between: {
+						[YTITNE_MODEL.primary_key]: [PRIMARY_KEYS.shard3, null],
+					},
+				},
+				YTITNE_MODEL,
+				"read",
+			),
+			expected_range_node_ids(suite_ctx.database_manager, YTITNE_MODEL.table_name, [PRIMARY_KEYS.shard3, null], "read"),
 		);
 		// With `where_in` on shard1 and shard3 plus a shard2-to-shard3 range, read routing should intersect the filters to shard3 only.
 		assert.deepStrictEqual(route_node_ids(suite_ctx.database_manager, {}, set_and_range_parameters, YTITNE_MODEL, "read"), [

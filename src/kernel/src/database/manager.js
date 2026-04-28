@@ -457,8 +457,18 @@ class DatabaseManager {
 		const self = this;
 		const table_database = self.get_table_database(table_name);
 		const [start_primary_key, end_primary_key] = primary_key_range;
-		const start_primary_key_number = self.uuid_to_big_int(start_primary_key);
-		const end_primary_key_number = self.uuid_to_big_int(end_primary_key);
+		const has_start_primary_key = start_primary_key !== null && typeof start_primary_key !== "undefined";
+		const has_end_primary_key = end_primary_key !== null && typeof end_primary_key !== "undefined";
+		const start_primary_key_number = has_start_primary_key
+			? self.uuid_to_big_int(start_primary_key)
+			: table_database.current.reduce(function (min, shard) {
+					return shard.start < min ? shard.start : min;
+				}, table_database.current[0].start);
+		const end_primary_key_number = has_end_primary_key
+			? self.uuid_to_big_int(end_primary_key)
+			: table_database.current.reduce(function (max, shard) {
+					return shard.end > max ? shard.end : max;
+				}, table_database.current[0].end);
 		if (end_primary_key_number < start_primary_key_number) {
 			return [];
 		}

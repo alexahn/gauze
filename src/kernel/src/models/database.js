@@ -443,6 +443,23 @@ class DatabaseModel extends Model {
 			return builder.orderBy(resolved_order);
 		}
 	}
+	_has_range_bound(value) {
+		return value !== null && typeof value !== "undefined";
+	}
+	_apply_plain_where_between(builder, qualified_key, range) {
+		const self = this;
+		const [start_value, end_value] = range;
+		const has_start = self._has_range_bound(start_value);
+		const has_end = self._has_range_bound(end_value);
+
+		if (has_start && has_end) {
+			builder.whereBetween(qualified_key, range);
+		} else if (has_start) {
+			builder.where(qualified_key, ">=", start_value);
+		} else if (has_end) {
+			builder.where(qualified_key, "<=", end_value);
+		}
+	}
 	// When where_between includes both an indexed field and the primary key, treat them as a composite cursor:
 	// use the primary key as a tie-breaker so identical field values can still be paged deterministically.
 	_apply_where_between(builder, where_between = {}, table_name = null) {
@@ -459,24 +476,30 @@ class DatabaseModel extends Model {
 			if (has_primary_key_range) {
 				const [start_value, end_value] = where_between[key];
 				const [start_primary_key_value, end_primary_key_value] = where_between[self.primary_key];
+				const has_start = self._has_range_bound(start_value) && self._has_range_bound(start_primary_key_value);
+				const has_end = self._has_range_bound(end_value) && self._has_range_bound(end_primary_key_value);
 
-				builder.where(function () {
-					this.where(qualified_key, ">", start_value).orWhere(function () {
-						this.where(qualified_key, "=", start_value).andWhere(qualified_primary_key, ">", start_primary_key_value);
+				if (has_start) {
+					builder.where(function () {
+						this.where(qualified_key, ">", start_value).orWhere(function () {
+							this.where(qualified_key, "=", start_value).andWhere(qualified_primary_key, ">", start_primary_key_value);
+						});
 					});
-				});
-				builder.andWhere(function () {
-					this.where(qualified_key, "<", end_value).orWhere(function () {
-						this.where(qualified_key, "=", end_value).andWhere(qualified_primary_key, "<", end_primary_key_value);
+				}
+				if (has_end) {
+					builder.andWhere(function () {
+						this.where(qualified_key, "<", end_value).orWhere(function () {
+							this.where(qualified_key, "=", end_value).andWhere(qualified_primary_key, "<", end_primary_key_value);
+						});
 					});
-				});
+				}
 			} else {
-				builder.whereBetween(qualified_key, where_between[key]);
+				self._apply_plain_where_between(builder, qualified_key, where_between[key]);
 			}
 		});
 
 		if (has_primary_key_range && composite_keys.length === 0) {
-			builder.whereBetween(qualified_primary_key, where_between[self.primary_key]);
+			self._apply_plain_where_between(builder, qualified_primary_key, where_between[self.primary_key]);
 		}
 
 		return builder;
