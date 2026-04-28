@@ -68,8 +68,7 @@ class GauzeService {
 					let payload = {};
 					try {
 						payload = jwt ? jose.decodeJwt(jwt) : {};
-					} catch (err) {}
-					if (err) {
+					} catch (err) {
 						// delete all
 						self.deleteSystemJWT();
 						self.deleteProxyJWT();

@@ -111,32 +111,15 @@ export default function ($gauze) {
 		return next();
 	});
 	ROUTER.get("/project/(.*)", async function (ctx, next) {
-		if (ctx.get("referrer")) {
-			const referrer_parsed = new url.URL(ctx.get("referrer"));
-			const referrer_directory = referrer_parsed.pathname[referrer_parsed.pathname.length - 1] === "/" ? referrer_parsed.pathname : path.dirname(referrer_parsed.pathname);
-			const relative_path = path.relative(referrer_directory, ctx.path);
-			if (path.extname(ctx.path)) {
-				await send(ctx, relative_path, { root: PROJECT_BUILD_ROOT, index: "index.html" });
-			} else {
-				//ctx.status = 200;
-				//ctx.body = projectIndex();
-				//await next();
-				await send(ctx, "/index.html", { root: PROJECT_BUILD_ROOT, index: "index.html" });
-			}
+		if (path.extname(ctx.path)) {
+			const project_prefix = "/project";
+			const rebased_path = ctx.path.slice(project_prefix.length);
+			await send(ctx, rebased_path, { root: PROJECT_BUILD_ROOT, index: "index.html" });
 		} else {
-			// remove /project prefix from path when accessing files from root directory
-			if (path.extname(ctx.path)) {
-				const prefix_length = 1;
-				const path_split = ctx.path.split("/");
-				const rebased_path_split = path_split.slice(0, 1).concat(path_split.slice(prefix_length + 1));
-				const rebased_path = rebased_path_split.join("/");
-				await send(ctx, rebased_path, { root: PROJECT_BUILD_ROOT, index: "index.html" });
-			} else {
-				//ctx.status = 200;
-				//ctx.body = projectIndex();
-				//await next();
-				await send(ctx, "/index.html", { root: PROJECT_BUILD_ROOT, index: "index.html" });
-			}
+			//ctx.status = 200;
+			//ctx.body = projectIndex();
+			//await next();
+			await send(ctx, "/index.html", { root: PROJECT_BUILD_ROOT, index: "index.html" });
 		}
 	});
 

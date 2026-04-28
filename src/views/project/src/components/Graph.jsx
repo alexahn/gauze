@@ -1468,7 +1468,7 @@ function EntityPicker({ headers, onAdd }) {
 		<aside className="project-graph-sidebar bgx2 cx6 ba bw1 bdx3">
 			<div className="project-graph-sidebar-header">
 				<div className="project-graph-sidebar-title">Entities</div>
-				<input className="project-graph-sidebar-filter ba bw1 br2 bdx3 bgx12 cx2" value={filter} onChange={(e) => setFilter(e.target.value)} />
+				<input name="entities" className="project-graph-sidebar-filter ba bw1 br2 bdx3 bgx12 cx2" value={filter} onChange={(e) => setFilter(e.target.value)} />
 			</div>
 			<div className="project-graph-entity-list">
 				{filteredHeaders.map(function (header) {
