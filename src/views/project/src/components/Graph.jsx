@@ -2121,12 +2121,15 @@ function Graph({ pathfinder, services, agent, headers }) {
 		[nodeMeasureSignature],
 	);
 
+	const graphURL = pathfinder.stateToURL("project.system.headers.graph", {}, {});
+	const proxiesURL = pathfinder.stateToURL("project.proxy.proxies", {}, { next: graphURL });
+
 	return (
 		<div className="project-graph-shell bgx12">
 			<div className="project-graph-toolbar fixed top-1 left-1 flex items-center">
-				<Link href={pathfinder.stateToURL("project.system.headers", {}, {})} push={true}>
+				<Link href={proxiesURL} push={true}>
 					<button type="button" className="ba bw1 br2 bdx3 bgx2 cx6">
-						Headers
+						Proxies
 					</button>
 				</Link>
 				<button type="button" className="project-graph-zoom ba bw1 br2 bdx3 bgx2 cx6" title="Reset zoom to 100%" aria-label="Reset zoom to 100%" onClick={handleResetZoom}>
