@@ -538,20 +538,6 @@ class DatabaseManager {
 		const shard_nodes = shard[shard_type];
 		return shard_nodes[Math.floor(Math.random() * shard_nodes.length)];
 	}
-	// randomly selects one node for each shard
-	get_all_shards_nodes(table_name, shard_type) {
-		const self = this;
-		return self.databases[table_name].current.map(function (shard) {
-			const shard_nodes = shard[shard_type];
-			return shard_nodes[Math.floor(Math.random() * shard_nodes.length)];
-		});
-	}
-	get_all_preferred_read_shard_nodes(context, table_name) {
-		const self = this;
-		return self.get_table_database(table_name).current.map(function (shard) {
-			return self.get_preferred_read_shard_node(context, shard);
-		});
-	}
 	get_open_write_shard_node(context, shard) {
 		const self = this;
 		return shard.write.find(function (write_shard_node) {
