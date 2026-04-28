@@ -35,7 +35,7 @@ const director = createDirector(directorContext);
 
 start(pathfinder, director, {
 	initial: {
-		name: "project.system.headers",
+		name: "project.system.headers.graph",
 		pathParams: {},
 		searchParams: {},
 	},

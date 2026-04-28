@@ -38,6 +38,7 @@ function Proxies({ pathfinder, services, proxies, next }) {
 		const bOrder = order[b.attributes.gauze__proxy__agent_type] ?? fallbackOrder;
 		return aOrder - bOrder;
 	});
+	const nextURL = next || pathfinder.stateToURL("project.system.headers.graph", {}, {});
 
 	function handleProxy(proxy) {
 		return function (e) {
@@ -48,7 +49,7 @@ function Proxies({ pathfinder, services, proxies, next }) {
 				.then(function (session) {
 					gauze.default.setSystemJWT(session.gauze__session__value);
 					setSubmitProxy(false);
-					navigate(next, {
+					navigate(nextURL, {
 						push: true,
 						replace: true,
 						pathfinder: pathfinder,

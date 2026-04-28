@@ -6,7 +6,7 @@ function Navigation({ pathfinder, services }) {
 	const { gauze } = services;
 	const proxyJWT = gauze.default.getProxyJWT();
 	const systemJWT = gauze.default.getSystemJWT();
-	const next = pathfinder.stateToURL("project.system.headers", {}, {});
+	const next = pathfinder.stateToURL("project.system.headers.graph", {}, {});
 	const state = pathfinder.URLToState(location.href);
 	const signUpClass =
 		state.name === "project.environment.signup" ? "w3 athelas clouds ba bw1 br2 bgx4 bdx1 cxyz6 b--dotted f6" : "f6 w3 athelas clouds ba bw1 br2 bgx4 bdx4 cx6 bgx3h bdx3h";
