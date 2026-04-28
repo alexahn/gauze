@@ -492,20 +492,17 @@ class DatabaseManager {
 			throw new Error(`Could not find shard for table: ${table_name} and primary key: ${primary_key}`);
 		}
 	}
-	has_primary_key_shard_filters(parameters, primary_key) {
-		const where_filter_exists = Boolean(parameters.where && parameters.where[primary_key]);
-		const where_in_filter_exists = Boolean(parameters.where_in && parameters.where_in[primary_key]);
-		const where_between_filter_exists = Boolean(parameters.where_between && Object.prototype.hasOwnProperty.call(parameters.where_between, primary_key));
-		return where_filter_exists || where_in_filter_exists || where_between_filter_exists;
-	}
-	filter_shards_for_primary_key_filters(shards, table_name, primary_key, parameters) {
+	filter_shards_for_primary_key_filters(shards, table_name, primary_key, parameters = {}) {
 		const self = this;
+		parameters = parameters || {};
 		let filtered_shards = shards;
-		if (parameters.where && parameters.where[primary_key]) {
+		const where_filter_exists = parameters.where && Object.prototype.hasOwnProperty.call(parameters.where, primary_key);
+		const where_in_filter_exists = parameters.where_in && Object.prototype.hasOwnProperty.call(parameters.where_in, primary_key);
+		if (where_filter_exists) {
 			const primary_key_shard = self.find_shard_for_primary_key(table_name, parameters.where[primary_key]);
 			filtered_shards = self.intersect_shards(filtered_shards, [primary_key_shard]);
 		}
-		if (parameters.where_in && parameters.where_in[primary_key]) {
+		if (where_in_filter_exists) {
 			const primary_key_numbers = parameters.where_in[primary_key].map(function (primary_key) {
 				return self.uuid_to_big_int(primary_key);
 			});
@@ -535,24 +532,6 @@ class DatabaseManager {
 		return shards.map(function (shard) {
 			return self.get_one_shard_node(shard, shard_type);
 		});
-	}
-	get_all_preferred_read_shard_nodes_for_between(context, table_name, primary_key, where_between) {
-		const self = this;
-		const shards = self.find_shards_for_between(table_name, primary_key, where_between);
-		if (shards !== null) {
-			return self.get_preferred_read_shard_nodes(context, shards);
-		} else {
-			return self.get_all_preferred_read_shard_nodes(context, table_name);
-		}
-	}
-	get_all_shard_nodes_for_between(table_name, primary_key, where_between, shard_type) {
-		const self = this;
-		const shards = self.find_shards_for_between(table_name, primary_key, where_between);
-		if (shards !== null) {
-			return self.get_shard_nodes(shards, shard_type);
-		} else {
-			return self.get_all_shards_nodes(table_name, shard_type);
-		}
 	}
 	// randomly selects one node for the shard type on the shard
 	get_one_shard_node(shard, shard_type) {
@@ -687,12 +666,12 @@ class DatabaseManager {
 						throw new Error(`Could not find shard for table: ${to_type} and primary key: ${to_id}`);
 					}
 				} else {
-					// all filters should be applied here
+					// shard-informative primary key filters should be applied here
 					const shards = self.filter_shards_for_primary_key_filters(self.get_current_shards(model.table_name), model.table_name, model.primary_key, parameters);
 					return self.get_route_shard_nodes(context, shards, shard_type);
 				}
 			} else {
-				// all filters should be applied here
+				// shard-informative primary key filters should be applied here
 				const shards = self.filter_shards_for_primary_key_filters(self.get_current_shards(model.table_name), model.table_name, model.primary_key, parameters);
 				return self.get_route_shard_nodes(context, shards, shard_type);
 			}
@@ -868,12 +847,12 @@ class DatabaseManager {
 						throw new Error(`Could not find shard for table: ${agent_table_name} and primary key: ${agent_id}`);
 					}
 				} else {
-					// all filters should be applied here
+					// shard-informative primary key filters should be applied here
 					const shards = self.filter_shards_for_primary_key_filters(self.get_current_shards(model.table_name), model.table_name, model.primary_key, parameters);
 					return self.get_route_shard_nodes(context, shards, shard_type);
 				}
 			} else {
-				// all filters should be applied here
+				// shard-informative primary key filters should be applied here
 				const shards = self.filter_shards_for_primary_key_filters(self.get_current_shards(model.table_name), model.table_name, model.primary_key, parameters);
 				return self.get_route_shard_nodes(context, shards, shard_type);
 			}
@@ -1031,12 +1010,12 @@ class DatabaseManager {
 				throw new Error("Invalid shard type, must be either read or write");
 			}
 		} else if (Array.isArray(relationships)) {
-			function _parse_source(scope, parameters) {
-				const { source } = scope;
+			function _parse_source(scope = {}, parameters = {}) {
+				const { source } = scope || {};
 				if (source && source._metadata && source._direction) {
 					return source;
 				} else {
-					if (parameters.source && parameters.source._metadata && parameters.source._direction) {
+					if (parameters && parameters.source && parameters.source._metadata && parameters.source._direction) {
 						return parameters.source;
 					} else {
 						return null;
