@@ -436,6 +436,71 @@ class DatabaseManager {
 		];
 		return unique_shards;
 	}
+	find_shards_for_range(table_name, primary_key_range) {
+		const self = this;
+		const table_database = self.get_table_database(table_name);
+		const [start_primary_key, end_primary_key] = primary_key_range;
+		const start_primary_key_number = self.uuid_to_big_int(start_primary_key);
+		const end_primary_key_number = self.uuid_to_big_int(end_primary_key);
+		if (end_primary_key_number < start_primary_key_number) {
+			return [];
+		}
+		return table_database.current.filter(function (shard) {
+			return shard.start <= end_primary_key_number && start_primary_key_number <= shard.end;
+		});
+	}
+	find_shards_for_between(table_name, primary_key, where_between) {
+		const self = this;
+		if (!where_between || !Object.prototype.hasOwnProperty.call(where_between, primary_key)) {
+			return null;
+		}
+		return self.find_shards_for_range(table_name, where_between[primary_key]);
+	}
+	filter_shards_for_between(shards, table_name, primary_key, where_between) {
+		const self = this;
+		const between_shards = self.find_shards_for_between(table_name, primary_key, where_between);
+		if (between_shards === null) {
+			return shards;
+		}
+		const between_shards_index = new Set(
+			between_shards.map(function (shard) {
+				return shard.id;
+			}),
+		);
+		return shards.filter(function (shard) {
+			return between_shards_index.has(shard.id);
+		});
+	}
+	get_preferred_read_shard_nodes(context, shards) {
+		const self = this;
+		return shards.map(function (shard) {
+			return self.get_preferred_read_shard_node(context, shard);
+		});
+	}
+	get_shard_nodes(shards, shard_type) {
+		const self = this;
+		return shards.map(function (shard) {
+			return self.get_one_shard_node(shard, shard_type);
+		});
+	}
+	get_all_preferred_read_shard_nodes_for_between(context, table_name, primary_key, where_between) {
+		const self = this;
+		const shards = self.find_shards_for_between(table_name, primary_key, where_between);
+		if (shards !== null) {
+			return self.get_preferred_read_shard_nodes(context, shards);
+		} else {
+			return self.get_all_preferred_read_shard_nodes(context, table_name);
+		}
+	}
+	get_all_shard_nodes_for_between(table_name, primary_key, where_between, shard_type) {
+		const self = this;
+		const shards = self.find_shards_for_between(table_name, primary_key, where_between);
+		if (shards !== null) {
+			return self.get_shard_nodes(shards, shard_type);
+		} else {
+			return self.get_all_shards_nodes(table_name, shard_type);
+		}
+	}
 	// randomly selects one node for the shard type on the shard
 	get_one_shard_node(shard, shard_type) {
 		const shard_nodes = shard[shard_type];
@@ -584,11 +649,20 @@ class DatabaseManager {
 							const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
 								return self.uuid_to_big_int(primary_key);
 							});
-							const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
-							const shard_nodes = shards.map(function (shard) {
-								return self.get_preferred_read_shard_node(context, shard);
-							});
-							return shard_nodes;
+							const shards = self.filter_shards_for_between(
+								self.find_shards_for_set(model.table_name, primary_key_numbers),
+								model.table_name,
+								model.primary_key,
+								parameters.where_between,
+							);
+							return self.get_preferred_read_shard_nodes(context, shards);
+						} else {
+							return self.get_all_preferred_read_shard_nodes_for_between(context, model.table_name, model.primary_key, parameters.where_between);
+						}
+					} else if (parameters.where_between) {
+						const shards = self.find_shards_for_between(model.table_name, model.primary_key, parameters.where_between);
+						if (shards !== null) {
+							return self.get_preferred_read_shard_nodes(context, shards);
 						} else {
 							return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 						}
@@ -601,11 +675,20 @@ class DatabaseManager {
 					const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
 						return self.uuid_to_big_int(primary_key);
 					});
-					const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
-					const shard_nodes = shards.map(function (shard) {
-						return self.get_preferred_read_shard_node(context, shard);
-					});
-					return shard_nodes;
+					const shards = self.filter_shards_for_between(
+						self.find_shards_for_set(model.table_name, primary_key_numbers),
+						model.table_name,
+						model.primary_key,
+						parameters.where_between,
+					);
+					return self.get_preferred_read_shard_nodes(context, shards);
+				} else {
+					return self.get_all_preferred_read_shard_nodes_for_between(context, model.table_name, model.primary_key, parameters.where_between);
+				}
+			} else if (parameters.where_between) {
+				const shards = self.find_shards_for_between(model.table_name, model.primary_key, parameters.where_between);
+				if (shards !== null) {
+					return self.get_preferred_read_shard_nodes(context, shards);
 				} else {
 					return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 				}
@@ -791,11 +874,20 @@ class DatabaseManager {
 						const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
 							return self.uuid_to_big_int(primary_key);
 						});
-						const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
-						const shard_nodes = shards.map(function (shard) {
-							return self.get_preferred_read_shard_node(context, shard);
-						});
-						return shard_nodes;
+						const shards = self.filter_shards_for_between(
+							self.find_shards_for_set(model.table_name, primary_key_numbers),
+							model.table_name,
+							model.primary_key,
+							parameters.where_between,
+						);
+						return self.get_preferred_read_shard_nodes(context, shards);
+					} else {
+						return self.get_all_preferred_read_shard_nodes_for_between(context, model.table_name, model.primary_key, parameters.where_between);
+					}
+				} else if (parameters.where_between) {
+					const shards = self.find_shards_for_between(model.table_name, model.primary_key, parameters.where_between);
+					if (shards !== null) {
+						return self.get_preferred_read_shard_nodes(context, shards);
 					} else {
 						return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 					}
@@ -808,11 +900,20 @@ class DatabaseManager {
 					const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
 						return self.uuid_to_big_int(primary_key);
 					});
-					const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
-					const shard_nodes = shards.map(function (shard) {
-						return self.get_preferred_read_shard_node(context, shard);
-					});
-					return shard_nodes;
+					const shards = self.filter_shards_for_between(
+						self.find_shards_for_set(model.table_name, primary_key_numbers),
+						model.table_name,
+						model.primary_key,
+						parameters.where_between,
+					);
+					return self.get_preferred_read_shard_nodes(context, shards);
+				} else {
+					return self.get_all_preferred_read_shard_nodes_for_between(context, model.table_name, model.primary_key, parameters.where_between);
+				}
+			} else if (parameters.where_between) {
+				const shards = self.find_shards_for_between(model.table_name, model.primary_key, parameters.where_between);
+				if (shards !== null) {
+					return self.get_preferred_read_shard_nodes(context, shards);
 				} else {
 					return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 				}
@@ -968,16 +1069,20 @@ class DatabaseManager {
 							const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
 								return self.uuid_to_big_int(primary_key);
 							});
-							const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
-							const shard_nodes = shards.map(function (shard) {
-								const write_shard_node = self.get_open_write_shard_node(context, shard);
-								if (write_shard_node) {
-									return write_shard_node;
-								} else {
-									return self.get_one_shard_node(shard, shard_type);
-								}
-							});
-							return shard_nodes;
+							const shards = self.filter_shards_for_between(
+								self.find_shards_for_set(model.table_name, primary_key_numbers),
+								model.table_name,
+								model.primary_key,
+								parameters.where_between,
+							);
+							return self.get_preferred_read_shard_nodes(context, shards);
+						} else {
+							return self.get_all_preferred_read_shard_nodes_for_between(context, model.table_name, model.primary_key, parameters.where_between);
+						}
+					} else if (parameters.where_between) {
+						const shards = self.find_shards_for_between(model.table_name, model.primary_key, parameters.where_between);
+						if (shards !== null) {
+							return self.get_preferred_read_shard_nodes(context, shards);
 						} else {
 							return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 						}
@@ -989,22 +1094,24 @@ class DatabaseManager {
 						const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
 							return self.uuid_to_big_int(primary_key);
 						});
-						const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
-						const shard_nodes = shards.map(function (shard) {
-							const write_shard_node = self.get_open_write_shard_node(context, shard);
-							if (write_shard_node) {
-								return write_shard_node;
-							} else {
-								return self.get_one_shard_node(shard, shard_type);
-							}
-						});
-						return shard_nodes;
+						const shards = self.filter_shards_for_between(
+							self.find_shards_for_set(model.table_name, primary_key_numbers),
+							model.table_name,
+							model.primary_key,
+							parameters.where_between,
+						);
+						return self.get_preferred_read_shard_nodes(context, shards);
+					} else {
+						return self.get_all_preferred_read_shard_nodes_for_between(context, model.table_name, model.primary_key, parameters.where_between);
+					}
+				} else if (parameters.where_between) {
+					const shards = self.find_shards_for_between(model.table_name, model.primary_key, parameters.where_between);
+					if (shards !== null) {
+						return self.get_preferred_read_shard_nodes(context, shards);
 					} else {
 						return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 					}
 				} else if (parameters.where_not_in) {
-					return self.get_all_preferred_read_shard_nodes(context, model.table_name);
-				} else if (parameters.where_between) {
 					return self.get_all_preferred_read_shard_nodes(context, model.table_name);
 				} else if (parameters.where_like) {
 					return self.get_all_preferred_read_shard_nodes(context, model.table_name);
@@ -1022,6 +1129,13 @@ class DatabaseManager {
 						} else {
 							throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
 						}
+					} else if (parameters.where_between) {
+						const shards = self.find_shards_for_between(model.table_name, model.primary_key, parameters.where_between);
+						if (shards !== null) {
+							return self.get_shard_nodes(shards, shard_type);
+						} else {
+							return self.get_all_shards_nodes(model.table_name, shard_type);
+						}
 					} else {
 						return self.get_all_shards_nodes(model.table_name, shard_type);
 					}
@@ -1030,17 +1144,24 @@ class DatabaseManager {
 						const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
 							return self.uuid_to_big_int(primary_key);
 						});
-						const shards = self.find_shards_for_set(model.table_name, primary_key_numbers);
-						const shard_nodes = shards.map(function (shard) {
-							return self.get_one_shard_node(shard, shard_type);
-						});
-						return shard_nodes;
+						const shards = self.filter_shards_for_between(
+							self.find_shards_for_set(model.table_name, primary_key_numbers),
+							model.table_name,
+							model.primary_key,
+							parameters.where_between,
+						);
+						return self.get_shard_nodes(shards, shard_type);
+					} else {
+						return self.get_all_shard_nodes_for_between(model.table_name, model.primary_key, parameters.where_between, shard_type);
+					}
+				} else if (parameters.where_between) {
+					const shards = self.find_shards_for_between(model.table_name, model.primary_key, parameters.where_between);
+					if (shards !== null) {
+						return self.get_shard_nodes(shards, shard_type);
 					} else {
 						return self.get_all_shards_nodes(model.table_name, shard_type);
 					}
 				} else if (parameters.where_not_in) {
-					return self.get_all_shards_nodes(model.table_name, shard_type);
-				} else if (parameters.where_between) {
 					return self.get_all_shards_nodes(model.table_name, shard_type);
 				} else if (parameters.where_like) {
 					return self.get_all_shards_nodes(model.table_name, shard_type);
@@ -1134,16 +1255,19 @@ class DatabaseManager {
 							const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
 								return self.uuid_to_big_int(primary_key);
 							});
-							const shards = self.find_shards_for_set(model.table_name, primary_key_numbers).filter(function (shard) {
-								return relationship_shards_index.has(shard.id);
-							});
-							const shard_nodes = shards.map(function (shard) {
-								return self.get_preferred_read_shard_node(context, shard);
-							});
-							return shard_nodes;
+							const shards = self
+								.filter_shards_for_between(self.find_shards_for_set(model.table_name, primary_key_numbers), model.table_name, model.primary_key, parameters.where_between)
+								.filter(function (shard) {
+									return relationship_shards_index.has(shard.id);
+								});
+							return self.get_preferred_read_shard_nodes(context, shards);
 						} else {
-							return relationship_shard_nodes;
+							const shards = self.filter_shards_for_between(relationship_shards, model.table_name, model.primary_key, parameters.where_between);
+							return self.get_preferred_read_shard_nodes(context, shards);
 						}
+					} else if (parameters.where_between) {
+						const shards = self.filter_shards_for_between(relationship_shards, model.table_name, model.primary_key, parameters.where_between);
+						return self.get_preferred_read_shard_nodes(context, shards);
 					} else {
 						return relationship_shard_nodes;
 					}
@@ -1152,19 +1276,20 @@ class DatabaseManager {
 						const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
 							return self.uuid_to_big_int(primary_key);
 						});
-						const shards = self.find_shards_for_set(model.table_name, primary_key_numbers).filter(function (shard) {
-							return relationship_shards_index.has(shard.id);
-						});
-						const shard_nodes = shards.map(function (shard) {
-							return self.get_preferred_read_shard_node(context, shard);
-						});
-						return shard_nodes;
+						const shards = self
+							.filter_shards_for_between(self.find_shards_for_set(model.table_name, primary_key_numbers), model.table_name, model.primary_key, parameters.where_between)
+							.filter(function (shard) {
+								return relationship_shards_index.has(shard.id);
+							});
+						return self.get_preferred_read_shard_nodes(context, shards);
 					} else {
-						return relationship_shard_nodes;
+						const shards = self.filter_shards_for_between(relationship_shards, model.table_name, model.primary_key, parameters.where_between);
+						return self.get_preferred_read_shard_nodes(context, shards);
 					}
-				} else if (parameters.where_not_in) {
-					return relationship_shard_nodes;
 				} else if (parameters.where_between) {
+					const shards = self.filter_shards_for_between(relationship_shards, model.table_name, model.primary_key, parameters.where_between);
+					return self.get_preferred_read_shard_nodes(context, shards);
+				} else if (parameters.where_not_in) {
 					return relationship_shard_nodes;
 				} else if (parameters.where_like) {
 					return relationship_shard_nodes;
@@ -1182,6 +1307,9 @@ class DatabaseManager {
 						} else {
 							throw new Error(`Could not find shard for table: ${model.table_name} and primary key: ${parameters.where[model.primary_key]}`);
 						}
+					} else if (parameters.where_between) {
+						const shards = self.filter_shards_for_between(relationship_shards, model.table_name, model.primary_key, parameters.where_between);
+						return self.get_shard_nodes(shards, shard_type);
 					} else {
 						return relationship_shard_nodes;
 					}
@@ -1190,19 +1318,20 @@ class DatabaseManager {
 						const primary_key_numbers = parameters.where_in[model.primary_key].map(function (primary_key) {
 							return self.uuid_to_big_int(primary_key);
 						});
-						const shards = self.find_shards_for_set(model.table_name, primary_key_numbers).filter(function (shard) {
-							return relationship_shards_index.has(shard.id);
-						});
-						const shard_nodes = shards.map(function (shard) {
-							return self.get_one_shard_node(shard, shard_type);
-						});
-						return shard_nodes;
+						const shards = self
+							.filter_shards_for_between(self.find_shards_for_set(model.table_name, primary_key_numbers), model.table_name, model.primary_key, parameters.where_between)
+							.filter(function (shard) {
+								return relationship_shards_index.has(shard.id);
+							});
+						return self.get_shard_nodes(shards, shard_type);
 					} else {
-						return relationship_shard_nodes;
+						const shards = self.filter_shards_for_between(relationship_shards, model.table_name, model.primary_key, parameters.where_between);
+						return self.get_shard_nodes(shards, shard_type);
 					}
-				} else if (parameters.where_not_in) {
-					return relationship_shard_nodes;
 				} else if (parameters.where_between) {
+					const shards = self.filter_shards_for_between(relationship_shards, model.table_name, model.primary_key, parameters.where_between);
+					return self.get_shard_nodes(shards, shard_type);
+				} else if (parameters.where_not_in) {
 					return relationship_shard_nodes;
 				} else if (parameters.where_like) {
 					return relationship_shard_nodes;
