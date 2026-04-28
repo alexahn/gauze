@@ -95,6 +95,8 @@ function Item({ pathfinder, services, header, item, mode, variables = {} }) {
 				})
 				.then(function (rows) {
 					if (rows && rows.length) {
+						setUpdateFieldError({});
+						setUpdateModelError("");
 						setLocalItem(rows[0]);
 					} else {
 						setUpdateModelError("Something went wrong!");

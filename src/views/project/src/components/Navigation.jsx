@@ -16,7 +16,7 @@ function Navigation({ pathfinder, services }) {
 		state.name === "project.environment.signout" ? "w4 athelas clouds ba bw1 br2 bgx2 bdx1 cxyz6 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx2 bdx2 cx6 bgx3h bdx3h";
 	const proxyClass =
 		state.name === "project.proxy.proxies" ? "w4 athelas clouds ba bw1 br2 bgx6 bdx1 cx2 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx6 bdx6 cxyz7 bgx5h bdx5h cx6h";
-	const systemClass = state.name == "project.system.headers" ? "w4 athelas clouds ba bw1 br2 bgx10 bdx1 cxyz6 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx10 bdx10 cx6 bgx8h bdx8h";
+	const systemClass = state.name === "project.system.headers.graph" ? "w4 athelas clouds ba bw1 br2 bgx10 bdx1 cxyz6 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx10 bdx10 cx6 bgx8h bdx8h";
 
 	const signUp = (
 		<div>
@@ -56,8 +56,8 @@ function Navigation({ pathfinder, services }) {
 	);
 	const system = (
 		<div>
-			<Link href={pathfinder.stateToURL("project.system.headers", {}, {})} push={true}>
-				<button className={systemClass} style={{ opacity: state.name === "project.system.headers" ? "0.5" : "1" }} disabled={state.name === "project.system.headers"}>
+			<Link href={pathfinder.stateToURL("project.system.headers.graph", {}, {})} push={true}>
+				<button className={systemClass} style={{ opacity: state.name === "project.system.headers.graph" ? "0.5" : "1" }} disabled={state.name === "project.system.headers.graph"}>
 					System
 				</button>
 			</Link>
