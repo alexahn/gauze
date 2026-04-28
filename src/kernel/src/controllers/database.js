@@ -22,6 +22,104 @@ class DatabaseController extends Controller {
 		const self = this;
 		return DatabaseController._class_name(self.model_name);
 	}
+	_serialize_filter_input(input, method) {
+		const self = this;
+		input.where = input.where || {};
+		input.where_in = input.where_in || {};
+		input.where_not_in = input.where_not_in || {};
+		input.where = self.model.pre_serialize_middleware(input.where, method);
+		input.where = self.model.serialize(input.where, method);
+		input.where = self.model.post_serialize_middleware(input.where, method);
+		Object.keys(input.where_in).forEach(function (field) {
+			input.where_in[field] = input.where_in[field]
+				.map(function (value, index) {
+					return self.model.pre_serialize_middleware(
+						{
+							[field]: value,
+						},
+						method,
+					);
+				})
+				.map(function (attributes) {
+					return attributes[field];
+				});
+			input.where_in[field] = input.where_in[field]
+				.map(function (value, index) {
+					return self.model.serialize(
+						{
+							[field]: value,
+						},
+						method,
+					);
+				})
+				.map(function (attributes) {
+					return attributes[field];
+				});
+			input.where_in[field] = input.where_in[field]
+				.map(function (value, index) {
+					return self.model.post_serialize_middleware(
+						{
+							[field]: value,
+						},
+						method,
+					);
+				})
+				.map(function (attributes) {
+					return attributes[field];
+				});
+		});
+		Object.keys(input.where_not_in).forEach(function (field) {
+			input.where_not_in[field] = input.where_not_in[field]
+				.map(function (value, index) {
+					return self.model.pre_serialize_middleware(
+						{
+							[field]: value,
+						},
+						method,
+					);
+				})
+				.map(function (attributes) {
+					return attributes[field];
+				});
+			input.where_not_in[field] = input.where_not_in[field]
+				.map(function (value, index) {
+					return self.model.serialize(
+						{
+							[field]: value,
+						},
+						method,
+					);
+				})
+				.map(function (attributes) {
+					return attributes[field];
+				});
+			input.where_not_in[field] = input.where_not_in[field]
+				.map(function (value, index) {
+					return self.model.post_serialize_middleware(
+						{
+							[field]: value,
+						},
+						method,
+					);
+				})
+				.map(function (attributes) {
+					return attributes[field];
+				});
+		});
+		return input;
+	}
+	_deserialize_cursor_page(page, method) {
+		const self = this;
+		return {
+			nodes: page.nodes.map(function (row) {
+				row = self.model.pre_deserialize_middleware(row, method);
+				row = self.model.deserialize(row, method);
+				row = self.model.post_deserialize_middleware(row, method);
+				return row;
+			}),
+			page_info: page.page_info,
+		};
+	}
 	_create(context, scope, input) {
 		const self = this;
 		const model_scope = {
@@ -137,6 +235,19 @@ class DatabaseController extends Controller {
 			});
 		});
 	}
+	_cursor_read(context, scope, input) {
+		const self = this;
+		const model_scope = {
+			source: scope.source,
+		};
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.cursor_read:enter`, "input", input);
+		if (!input.cursor) {
+			self._serialize_filter_input(input, "read");
+		}
+		return self.model.cursor_read(context, model_scope, input).then(function (page) {
+			return self._deserialize_cursor_page(page, "read");
+		});
+	}
 	_update(context, scope, input) {
 		const self = this;
 		const model_scope = {
@@ -237,6 +348,22 @@ class DatabaseController extends Controller {
 			});
 		});
 	}
+	_cursor_update(context, scope, input) {
+		const self = this;
+		const model_scope = {
+			source: scope.source,
+		};
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.cursor_update:enter`, "input", input);
+		if (!input.cursor) {
+			input.attributes = self.model.pre_serialize_middleware(input.attributes || {}, "update");
+			input.attributes = self.model.serialize(input.attributes || {}, "update");
+			input.attributes = self.model.post_serialize_middleware(input.attributes || {}, "update");
+			self._serialize_filter_input(input, "read");
+		}
+		return self.model.cursor_update(context, model_scope, input).then(function (page) {
+			return self._deserialize_cursor_page(page, "update");
+		});
+	}
 	_delete(context, scope, input) {
 		const self = this;
 		const model_scope = {
@@ -332,6 +459,19 @@ class DatabaseController extends Controller {
 				row = self.model.post_deserialize_middleware(row, "delete");
 				return row;
 			});
+		});
+	}
+	_cursor_delete(context, scope, input) {
+		const self = this;
+		const model_scope = {
+			source: scope.source,
+		};
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.cursor_delete:enter`, "input", input);
+		if (!input.cursor) {
+			self._serialize_filter_input(input, "read");
+		}
+		return self.model.cursor_delete(context, model_scope, input).then(function (page) {
+			return self._deserialize_cursor_page(page, "delete");
 		});
 	}
 	_count(context, scope, input) {

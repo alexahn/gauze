@@ -519,7 +519,8 @@ class DatabaseManager {
 			const primary_key_shards = self.find_shards_for_set(table_name, primary_key_numbers);
 			filtered_shards = self.intersect_shards(filtered_shards, primary_key_shards);
 		}
-		return self.filter_shards_for_between(filtered_shards, table_name, primary_key, parameters.where_between);
+		filtered_shards = self.filter_shards_for_between(filtered_shards, table_name, primary_key, parameters.where_between);
+		return self.filter_shards_for_between(filtered_shards, table_name, primary_key, parameters.cursor_where_between);
 	}
 	get_route_shard_nodes(context, shards, shard_type) {
 		const self = this;
@@ -987,7 +988,8 @@ class DatabaseManager {
 				const shards = self.filter_shards_for_primary_key_filters(self.get_current_shards(model.table_name), model.table_name, model.primary_key, parameters);
 				return self.get_route_shard_nodes(context, shards, shard_type);
 			} else if (shard_type === "write") {
-				const filters_exist = parameters.where || parameters.where_in || parameters.where_not_in || parameters.where_between || parameters.where_like;
+				const filters_exist =
+					parameters.where || parameters.where_in || parameters.where_not_in || parameters.where_between || parameters.cursor_where_between || parameters.where_like;
 				if (filters_exist) {
 					const shards = self.filter_shards_for_primary_key_filters(self.get_current_shards(model.table_name), model.table_name, model.primary_key, parameters);
 					return self.get_route_shard_nodes(context, shards, shard_type);
@@ -1051,7 +1053,8 @@ class DatabaseManager {
 				const shards = self.filter_shards_for_primary_key_filters(relationship_shards, model.table_name, model.primary_key, parameters);
 				return self.get_route_shard_nodes(context, shards, shard_type);
 			} else if (shard_type === "write") {
-				const filters_exist = parameters.where || parameters.where_in || parameters.where_not_in || parameters.where_between || parameters.where_like;
+				const filters_exist =
+					parameters.where || parameters.where_in || parameters.where_not_in || parameters.where_between || parameters.cursor_where_between || parameters.where_like;
 				if (filters_exist) {
 					const shards = self.filter_shards_for_primary_key_filters(relationship_shards, model.table_name, model.primary_key, parameters);
 					return self.get_route_shard_nodes(context, shards, shard_type);

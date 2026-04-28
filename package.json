@@ -29,6 +29,7 @@
 		"test-monolithic": "GAUZE_ENV=test_monolithic LOG_LEVEL_MINIMUM=4 node test",
 		"test-sharded": "GAUZE_ENV=test_sharded LOG_LEVEL_MINIMUM=4 node test",
 		"gauze": "./src/command/gauze.js",
+		"grant-ytitne-create": "node ./scripts/grant_ytitne_create_permission.js",
 		"start": "/bin/zsh -c \"npm run start-server & ; npm run start-ui & ; npm run start-graphiql & ; wait\"",
 		"start-server": "/bin/zsh -c \"npm run watch-server & ; wait\"",
 		"start-graphiql": "/bin/zsh -c \"npm run start-graphiql-database & ; npm run start-graphiql-system & ; npm run start-graphiql-environment & ; wait\"",

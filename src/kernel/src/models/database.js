@@ -1,6 +1,8 @@
 import path from "path";
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
+import { createHmac, timingSafeEqual } from "crypto";
+
 import * as $abstract from "./../../../abstract/index.js";
 import * as $structure from "./../../../structure/index.js";
 
@@ -14,6 +16,32 @@ import TTLLRUCache from "./../lru.js";
 import { Model } from "./class.js";
 
 import { v4 as uuidv4 } from "uuid";
+
+function cursor_json_replacer(key, value) {
+	if (typeof value === "bigint") {
+		return value.toString();
+	}
+	if (value instanceof Uint8Array) {
+		return Array.from(value);
+	}
+	return value;
+}
+
+function encode_base64url(value) {
+	return Buffer.from(value, "utf8").toString("base64url");
+}
+
+function decode_base64url(value) {
+	return Buffer.from(value, "base64url").toString("utf8");
+}
+
+function cursor_secret() {
+	return process.env.GAUZE_CURSOR_SECRET || process.env.GAUZE_DATABASE_JWT_SECRET || "GAUZE_CURSOR_SECRET";
+}
+
+function sign_cursor_payload(payload_json) {
+	return createHmac("sha256", cursor_secret()).update(payload_json).digest("base64url");
+}
 
 function process_knex_error_sqlite3(self, err) {
 	const unique_constraint_regex = new RegExp("UNIQUE constraint failed: (?<column>(.*))$");
@@ -798,6 +826,303 @@ class DatabaseModel extends Model {
 			return self._compare_rows_by_order(left, right, total_order);
 		});
 	}
+	_cursor_encode(payload) {
+		const payload_json = JSON.stringify(payload, cursor_json_replacer);
+		const signature = sign_cursor_payload(payload_json);
+		return `${encode_base64url(payload_json)}.${signature}`;
+	}
+	_cursor_decode(cursor) {
+		const self = this;
+		if (typeof cursor !== "string" || !cursor.includes(".")) {
+			throw new Error("Invalid cursor");
+		}
+		const [encoded_payload, signature, ...rest] = cursor.split(".");
+		if (rest.length || !encoded_payload || !signature) {
+			throw new Error("Invalid cursor");
+		}
+		const payload_json = decode_base64url(encoded_payload);
+		const expected_signature = sign_cursor_payload(payload_json);
+		const provided = Buffer.from(signature, "base64url");
+		const expected = Buffer.from(expected_signature, "base64url");
+		if (provided.length !== expected.length || !timingSafeEqual(provided, expected)) {
+			throw new Error("Invalid cursor signature");
+		}
+		const payload = JSON.parse(payload_json);
+		if (!payload || payload.v !== 1 || payload.entity !== self.table_name) {
+			throw new Error("Invalid cursor payload");
+		}
+		return payload;
+	}
+	_cursor_has_value(value) {
+		if (typeof value === "undefined" || value === null) {
+			return false;
+		}
+		if (Array.isArray(value)) {
+			return value.length > 0;
+		}
+		if (typeof value === "object") {
+			return Object.keys(value).length > 0;
+		}
+		return true;
+	}
+	_cursor_external_arguments(parameters = {}) {
+		const self = this;
+		return Object.keys(parameters).filter(function (key) {
+			return key !== "cursor" && !self._cursor_internal_argument(key) && self._cursor_has_value(parameters[key]);
+		});
+	}
+	_cursor_internal_argument(key) {
+		return key === "cache_where_in" || key === "cache_where_not_in";
+	}
+	_cursor_merge_internal_arguments(cursor_parameters = {}, parameters = {}) {
+		const self = this;
+		const merged = {
+			...cursor_parameters,
+		};
+		Object.keys(parameters).forEach(function (key) {
+			if (self._cursor_internal_argument(key) && self._cursor_has_value(parameters[key])) {
+				merged[key] = parameters[key];
+			}
+		});
+		return merged;
+	}
+	_cursor_payload_parameters(parameters = {}) {
+		const self = this;
+		const payload_parameters = {};
+		Object.keys(parameters).forEach(function (key) {
+			if (!self._cursor_internal_argument(key)) {
+				payload_parameters[key] = parameters[key];
+			}
+		});
+		return payload_parameters;
+	}
+	_cursor_clean_parameters(parameters = {}) {
+		const clean = {};
+		Object.keys(parameters).forEach(function (key) {
+			if (key === "cursor" || key === "offset") {
+				return;
+			}
+			const value = parameters[key];
+			if (typeof value === "undefined" || value === null) {
+				return;
+			}
+			clean[key] = value;
+		});
+		return clean;
+	}
+	_cursor_total_order(order) {
+		const self = this;
+		const resolved_order = self._normalize_order(order);
+		const primary_key_ordered = resolved_order.some(function (item) {
+			return item.column === self.primary_key;
+		});
+		const total_order = primary_key_ordered
+			? resolved_order
+			: resolved_order.concat([
+					{
+						column: self.primary_key,
+						order: "asc",
+						nulls: "last",
+					},
+				]);
+		return total_order;
+	}
+	_cursor_reverse_order(order) {
+		return order.map(function (item) {
+			return {
+				...item,
+				order: item.order === "asc" ? "desc" : "asc",
+				nulls: item.nulls === "first" ? "last" : "first",
+			};
+		});
+	}
+	_cursor_boundary_values(row, order) {
+		return order.map(function (item) {
+			return {
+				column: item.column,
+				value: row[item.column],
+			};
+		});
+	}
+	_cursor_boundary(row, order, direction) {
+		const self = this;
+		if (!row) {
+			return null;
+		}
+		const values = self._cursor_boundary_values(row, order);
+		if (direction === "next") {
+			return {
+				type: "lexicographic",
+				start: values,
+				end: null,
+			};
+		}
+		if (direction === "previous") {
+			return {
+				type: "lexicographic",
+				start: null,
+				end: values,
+			};
+		}
+		throw new Error("Invalid cursor direction");
+	}
+	_cursor_request_from_parameters(parameters, method) {
+		const self = this;
+		if (parameters.cursor) {
+			const external_arguments = self._cursor_external_arguments(parameters);
+			if (external_arguments.length) {
+				throw new Error("Field 'cursor' cannot be combined with other cursor operation arguments");
+			}
+			const payload = self._cursor_decode(parameters.cursor);
+			if (payload.method !== method) {
+				throw new Error("Invalid cursor method");
+			}
+			const page = payload[payload.page];
+			if (!page) {
+				throw new Error("Invalid cursor page");
+			}
+			return {
+				parameters: self._cursor_merge_internal_arguments(payload.parameters || {}, parameters),
+				page,
+				page_name: payload.page,
+				pages: {
+					previous: payload.previous || null,
+					current: payload.current || null,
+					next: payload.next || null,
+				},
+			};
+		}
+		const page = {
+			direction: "current",
+			cursor_where_between: null,
+		};
+		return {
+			parameters: self._cursor_clean_parameters(parameters),
+			page,
+			page_name: "current",
+			pages: {
+				previous: null,
+				current: page,
+				next: null,
+			},
+		};
+	}
+	_cursor_select_parameters(parameters, page) {
+		const self = this;
+		const limit = Math.min(parameters.limit || 16, self.limit_max);
+		const order = self._cursor_total_order(parameters.order);
+		const select_order = page.direction === "previous" ? self._cursor_reverse_order(order) : order;
+		return {
+			...parameters,
+			limit: limit + 1,
+			offset: 0,
+			order: select_order,
+			cursor_order: order,
+			cursor_where_between: page.cursor_where_between || null,
+		};
+	}
+	_cursor_encode_page(parameters, page, previous, current, next) {
+		const self = this;
+		if (!page) {
+			return null;
+		}
+		return self._cursor_encode({
+			v: 1,
+			entity: self.table_name,
+			method: parameters.__cursor_method,
+			parameters: parameters.__cursor_parameters,
+			page,
+			previous,
+			current,
+			next,
+		});
+	}
+	_cursor_page_info_response(method, cursor_parameters, nodes, previous, current, next, has_previous_page, has_next_page) {
+		const self = this;
+		const limit = Math.min(cursor_parameters.limit || 16, self.limit_max);
+		const order = self._cursor_total_order(cursor_parameters.order);
+		const page_previous = has_previous_page ? previous : null;
+		const page_next = has_next_page ? next : null;
+		const payload_parameters = {
+			...self._cursor_payload_parameters(cursor_parameters),
+			limit,
+			order,
+		};
+		const encode_parameters = {
+			__cursor_method: method,
+			__cursor_parameters: payload_parameters,
+		};
+		return {
+			nodes,
+			page_info: {
+				has_previous_page,
+				has_next_page,
+				previous_cursor: page_previous ? self._cursor_encode_page(encode_parameters, "previous", page_previous, current, page_next) : null,
+				current_cursor: self._cursor_encode_page(encode_parameters, "current", page_previous, current, page_next),
+				next_cursor: page_next ? self._cursor_encode_page(encode_parameters, "next", page_previous, current, page_next) : null,
+			},
+		};
+	}
+	_cursor_empty_page_info(method, cursor_parameters, request) {
+		const self = this;
+		const request_page = request.page;
+		const request_pages = request.pages || {};
+		const current = {
+			direction: request_page.direction,
+			cursor_where_between: request_page.cursor_where_between || null,
+		};
+		let previous = null;
+		let next = null;
+		if (request.page_name === "previous") {
+			next = request_pages.current || null;
+		} else if (request.page_name === "next") {
+			previous = request_pages.current || null;
+		} else {
+			previous = request_pages.previous || null;
+			next = request_pages.next || null;
+		}
+		return self._cursor_page_info_response(method, cursor_parameters, [], previous, current, next, Boolean(previous), Boolean(next));
+	}
+	_cursor_page_info(method, cursor_parameters, request, rows, has_extra_row) {
+		const self = this;
+		const request_page = request.page;
+		const limit = Math.min(cursor_parameters.limit || 16, self.limit_max);
+		const order = self._cursor_total_order(cursor_parameters.order);
+		const nodes = rows.slice(0, limit);
+		if (nodes.length === 0) {
+			return self._cursor_empty_page_info(method, cursor_parameters, request);
+		}
+		const first = nodes[0] || null;
+		const last = nodes[nodes.length - 1] || null;
+		const previous =
+			first && (request_page.direction !== "current" || request_page.cursor_where_between)
+				? {
+						direction: "previous",
+						cursor_where_between: self._cursor_boundary(first, order, "previous"),
+					}
+				: null;
+		const current = {
+			direction: request_page.direction,
+			cursor_where_between: request_page.cursor_where_between || null,
+		};
+		const next =
+			last && (request_page.direction === "previous" || has_extra_row)
+				? {
+						direction: "next",
+						cursor_where_between: self._cursor_boundary(last, order, "next"),
+					}
+				: null;
+		return self._cursor_page_info_response(
+			method,
+			cursor_parameters,
+			nodes,
+			previous,
+			current,
+			next,
+			request_page.direction === "previous" ? has_extra_row : Boolean(previous),
+			request_page.direction === "previous" ? Boolean(next) : has_extra_row,
+		);
+	}
 	_has_range_bound(value) {
 		return value !== null && typeof value !== "undefined";
 	}
@@ -814,6 +1139,112 @@ class DatabaseModel extends Model {
 		} else if (has_end) {
 			builder.where(qualified_key, "<=", end_value);
 		}
+	}
+	_cursor_boundary_value(boundary, index, item) {
+		if (!Array.isArray(boundary)) {
+			throw new Error("Invalid cursor boundary");
+		}
+		const entry = boundary[index];
+		if (!entry || entry.column !== item.column || !Object.prototype.hasOwnProperty.call(entry, "value")) {
+			throw new Error("Invalid cursor boundary");
+		}
+		return entry.value;
+	}
+	_apply_cursor_order_equality(builder, qualified_key, value) {
+		const self = this;
+		if (self._has_range_bound(value)) {
+			builder.where(qualified_key, value);
+		} else {
+			builder.whereNull(qualified_key);
+		}
+	}
+	_cursor_order_relation_operator(item, relation) {
+		if (relation === "after") {
+			return item.order === "desc" ? "<" : ">";
+		}
+		if (relation === "before") {
+			return item.order === "desc" ? ">" : "<";
+		}
+		throw new Error("Invalid cursor relation");
+	}
+	_cursor_order_relation_possible(item, value, relation) {
+		const self = this;
+		if (self._has_range_bound(value)) {
+			return true;
+		}
+		if (relation === "after") {
+			return item.nulls === "first";
+		}
+		if (relation === "before") {
+			return item.nulls === "last";
+		}
+		throw new Error("Invalid cursor relation");
+	}
+	_apply_cursor_order_relation(builder, item, qualified_key, value, relation) {
+		const self = this;
+		if (!self._cursor_order_relation_possible(item, value, relation)) {
+			builder.whereRaw("1 = 0");
+			return;
+		}
+		if (!self._has_range_bound(value)) {
+			builder.whereNotNull(qualified_key);
+			return;
+		}
+		const operator = self._cursor_order_relation_operator(item, relation);
+		const include_nulls = (relation === "after" && item.nulls === "last") || (relation === "before" && item.nulls === "first");
+		if (include_nulls) {
+			builder.where(function () {
+				this.whereNull(qualified_key).orWhere(qualified_key, operator, value);
+			});
+		} else {
+			builder.where(qualified_key, operator, value);
+		}
+	}
+	_apply_cursor_lexicographic_bound(builder, order, boundary, relation, table_name = null) {
+		const self = this;
+		if (!boundary) {
+			return builder;
+		}
+		let branches = 0;
+		builder.where(function () {
+			const outer = this;
+			order.forEach(function (item, depth) {
+				const value = self._cursor_boundary_value(boundary, depth, item);
+				if (!self._cursor_order_relation_possible(item, value, relation)) {
+					return;
+				}
+				branches += 1;
+				outer.orWhere(function () {
+					for (let index = 0; index < depth; index++) {
+						const equality_item = order[index];
+						const equality_key = table_name ? `${table_name}.${equality_item.column}` : equality_item.column;
+						const equality_value = self._cursor_boundary_value(boundary, index, equality_item);
+						self._apply_cursor_order_equality(this, equality_key, equality_value);
+					}
+					const qualified_key = table_name ? `${table_name}.${item.column}` : item.column;
+					self._apply_cursor_order_relation(this, item, qualified_key, value, relation);
+				});
+			});
+			if (branches === 0) {
+				this.whereRaw("1 = 0");
+			}
+		});
+		return builder;
+	}
+	_apply_cursor_where_between(builder, cursor_where_between = null, order = null, table_name = null) {
+		const self = this;
+		if (!cursor_where_between) {
+			return builder;
+		}
+		if (cursor_where_between.type !== "lexicographic") {
+			return self._apply_where_between(builder, cursor_where_between, table_name);
+		}
+		if (!Array.isArray(order) || order.length === 0) {
+			throw new Error("Invalid cursor order");
+		}
+		self._apply_cursor_lexicographic_bound(builder, order, cursor_where_between.start, "after", table_name);
+		self._apply_cursor_lexicographic_bound(builder, order, cursor_where_between.end, "before", table_name);
+		return builder;
 	}
 	// When where_between includes both an indexed field and the primary key, treat them as a composite cursor:
 	// use the primary key as a tie-breaker so identical field values can still be paged deterministically.
@@ -1073,6 +1504,8 @@ class DatabaseModel extends Model {
 				cache_where_not_in = {},
 				where_like = {},
 				where_between = {},
+				cursor_where_between = null,
+				cursor_order = null,
 				limit = 16,
 				offset = 0,
 				order,
@@ -1100,6 +1533,7 @@ class DatabaseModel extends Model {
 								builder.whereLike(key, where_like[key]);
 							});
 							self._apply_where_between(builder, where_between);
+							self._apply_cursor_where_between(builder, cursor_where_between, cursor_order);
 							/*
 							Object.keys(where_greater).forEach(function (key) {
 								builder.where(key, '>', where_greater[key])
@@ -1165,6 +1599,8 @@ class DatabaseModel extends Model {
 				cache_where_not_in = {},
 				where_like = {},
 				where_between = {},
+				cursor_where_between = null,
+				cursor_order = null,
 				limit = 16,
 				offset = 0,
 				order,
@@ -1233,6 +1669,7 @@ class DatabaseModel extends Model {
 									builder.whereLike(key, joined_where_like[key]);
 								});
 								self._apply_where_between(builder, where_between, self.table_name);
+								self._apply_cursor_where_between(builder, cursor_where_between, cursor_order, self.table_name);
 								return builder;
 							})
 							.limit(Math.min(limit, self.limit_max))
@@ -1273,6 +1710,7 @@ class DatabaseModel extends Model {
 									builder.whereLike(key, joined_where_like[key]);
 								});
 								self._apply_where_between(builder, where_between, self.table_name);
+								self._apply_cursor_where_between(builder, cursor_where_between, cursor_order, self.table_name);
 								return builder;
 							})
 							.limit(Math.min(limit, self.limit_max))
@@ -1318,6 +1756,86 @@ class DatabaseModel extends Model {
 		// we need to fetch the parameters for the key in the batch function
 		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(key, parameters, 1);
 		return self.loader.load(context, scope, key);
+	}
+	_cursor_select_page(context, scope, parameters, method) {
+		const self = this;
+		self._check_constraints(context);
+		const request = self._cursor_request_from_parameters(parameters, method);
+		const cursor_parameters = {
+			...request.parameters,
+			limit: Math.min(request.parameters.limit || 16, self.limit_max),
+			order: self._cursor_total_order(request.parameters.order),
+		};
+		self._validate_parameters(cursor_parameters);
+		const select_parameters = self._cursor_select_parameters(cursor_parameters, request.page);
+		const relationship_source = self._parse_source(scope, select_parameters);
+		const read = relationship_source ? self._relationship_read(context, scope, select_parameters) : self._root_read(context, scope, select_parameters);
+		return read.then(function (rows) {
+			const limit = cursor_parameters.limit;
+			const page_rows = rows.slice(0, limit + 1);
+			const has_extra_row = page_rows.length > limit;
+			const ordered_rows = request.page.direction === "previous" ? page_rows.slice(0, limit).reverse() : page_rows;
+			return self._cursor_page_info(method, cursor_parameters, request, ordered_rows, has_extra_row);
+		});
+	}
+	_cursor_read(context, scope, parameters) {
+		const self = this;
+		return self._cursor_select_page(context, scope, parameters, "read");
+	}
+	_cursor_update(context, scope, parameters) {
+		const self = this;
+		return self._cursor_select_page(context, scope, parameters, "update").then(function (page) {
+			const valid_ids = page.nodes.map(function (row) {
+				return row[self.primary_key];
+			});
+			if (valid_ids.length === 0) {
+				return page;
+			}
+			return self
+				._root_update(context, scope, {
+					attributes: page.page_info && parameters.cursor ? self._cursor_request_from_parameters(parameters, "update").parameters.attributes : parameters.attributes,
+					where_in: {
+						[self.primary_key]: valid_ids,
+					},
+					limit: valid_ids.length,
+					offset: 0,
+					order: page.page_info
+						? self._cursor_total_order((parameters.cursor ? self._cursor_request_from_parameters(parameters, "update").parameters : parameters).order)
+						: parameters.order,
+				})
+				.then(function (rows) {
+					return {
+						nodes: rows,
+						page_info: page.page_info,
+					};
+				});
+		});
+	}
+	_cursor_delete(context, scope, parameters) {
+		const self = this;
+		return self._cursor_select_page(context, scope, parameters, "delete").then(function (page) {
+			const valid_ids = page.nodes.map(function (row) {
+				return row[self.primary_key];
+			});
+			if (valid_ids.length === 0) {
+				return page;
+			}
+			return self
+				._root_delete(context, scope, {
+					where_in: {
+						[self.primary_key]: valid_ids,
+					},
+					limit: valid_ids.length,
+					offset: 0,
+					order: self._cursor_total_order((parameters.cursor ? self._cursor_request_from_parameters(parameters, "delete").parameters : parameters).order),
+				})
+				.then(function (rows) {
+					return {
+						nodes: rows,
+						page_info: page.page_info,
+					};
+				});
+		});
 	}
 	_root_update(context, scope, parameters) {
 		const self = this;
