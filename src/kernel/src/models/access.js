@@ -521,15 +521,15 @@ class AccessSystemModel extends SystemModel {
 			staged[self.key_id] = target_record[self.key_id];
 			self._validate_model(staged);
 			return self
-				._valid_access_transaction(context, agent, method, target_record, database, transaction)
+				._valid_access(context, agent, method, target_record)
 				.then(function () {
-					return self._valid_access_transaction(context, agent, method, staged, database, transaction);
+					return self._valid_access(context, agent, method, staged);
 				})
 				.then(function () {
 					return target_record[self.key_id];
 				});
 		} else {
-			return self._valid_access_transaction(context, agent, method, target_record, database, transaction).then(function () {
+			return self._valid_access(context, agent, method, target_record).then(function () {
 				return target_record[self.key_id];
 			});
 		}

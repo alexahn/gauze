@@ -397,6 +397,95 @@ test.describe("cursor pagination", async function (suite_ctx) {
 		});
 	});
 
+	await test.it("routes access cursor primary-key authorization through the access router", async function () {
+		const model = $gauze.system.models.whitelist.MODEL__WHITELIST__MODEL__SYSTEM;
+		const agent = {
+			agent_id: "root-agent",
+			agent_type: "gauze__agent_user",
+		};
+		const target_record = {
+			[model.key_id]: "whitelist-1",
+			[model.key_realm]: "system",
+			[model.key_agent_role]: "leaf",
+			[model.key_agent_type]: "gauze__agent_user",
+			[model.key_agent_id]: "leaf-agent",
+			[model.key_entity_type]: "gauze__agent_user",
+			[model.key_entity_id]: "entity-1",
+			[model.key_method]: "read",
+		};
+
+		const calls = [];
+		await with_stubbed_methods(
+			model,
+			{
+				_valid_access(context, input_agent, method, record) {
+					calls.push({ context, agent: input_agent, method, record });
+					return Promise.resolve();
+				},
+				_valid_access_transaction() {
+					throw new Error("cursor access-id authorization should route through _valid_access");
+				},
+			},
+			async function () {
+				const delete_id = await model._cursor_access_record_id_transaction(
+					{ context: "delete" },
+					agent,
+					{
+						where: {
+							[model.key_id]: "whitelist-1",
+						},
+					},
+					target_record,
+					"delete",
+					"wrong-shard-database",
+					"wrong-shard-transaction",
+				);
+				assert.equal(delete_id, "whitelist-1");
+
+				const update_id = await model._cursor_access_record_id_transaction(
+					{ context: "update" },
+					agent,
+					{
+						where: {
+							[model.key_id]: "whitelist-1",
+						},
+						attributes: {
+							[model.key_agent_role]: "trunk",
+						},
+					},
+					target_record,
+					"update",
+					"wrong-shard-database",
+					"wrong-shard-transaction",
+				);
+				assert.equal(update_id, "whitelist-1");
+			},
+		);
+
+		assert.equal(calls.length, 3);
+		assert.deepEqual(calls[0], {
+			context: { context: "delete" },
+			agent,
+			method: "delete",
+			record: target_record,
+		});
+		assert.deepEqual(calls[1], {
+			context: { context: "update" },
+			agent,
+			method: "update",
+			record: target_record,
+		});
+		assert.deepEqual(calls[2], {
+			context: { context: "update" },
+			agent,
+			method: "update",
+			record: {
+				...target_record,
+				[model.key_agent_role]: "trunk",
+			},
+		});
+	});
+
 	await test.it("pages ytitne with previous, current, and next cursors", async function () {
 		await with_transactions(suite_ctx.database_manager, async function (transactions) {
 			await execute(
