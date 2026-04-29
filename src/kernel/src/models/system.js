@@ -943,6 +943,10 @@ class SystemModel extends Model {
 		const key = self._model_batch_key(parameters, realm, method);
 		return self.model_loader.load(context, scope, key);
 	}
+	_cursor_read(context, scope, parameters, realm) {
+		const self = this;
+		return self._read(context, scope, parameters, realm);
+	}
 	_root_update(context, scope, parameters, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
@@ -963,6 +967,10 @@ class SystemModel extends Model {
 		const key = self._model_batch_key(parameters, realm, method);
 		return self.model_loader.load(context, scope, key);
 	}
+	_cursor_update(context, scope, parameters, realm) {
+		const self = this;
+		return self._update(context, scope, parameters, realm);
+	}
 	_root_delete(context, scope, parameters, realm) {
 		const self = this;
 		const { agent, entity, operation } = realm;
@@ -982,6 +990,10 @@ class SystemModel extends Model {
 		}
 		const key = self._model_batch_key(parameters, realm, method);
 		return self.model_loader.load(context, scope, key);
+	}
+	_cursor_delete(context, scope, parameters, realm) {
+		const self = this;
+		return self._delete(context, scope, parameters, realm);
 	}
 	_root_count(context, scope, parameters, realm) {
 		const self = this;

@@ -59,7 +59,7 @@ class EzuagEzuagSystemModel extends $kernel.src.models.system.SystemModel {
 				operation_name: $database.interfaces.graphql.operations.ezuag.CURSOR_READ_NAME__EZUAG__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._read(context, scope, parameters, realm).then(function (data) {
+		return self._cursor_read(context, scope, parameters, realm).then(function (data) {
 			return {
 				nodes: data.data.cursor_read_ezuag.nodes.map(function (row) {
 					return row.attributes;
@@ -100,7 +100,7 @@ class EzuagEzuagSystemModel extends $kernel.src.models.system.SystemModel {
 				operation_name: $database.interfaces.graphql.operations.ezuag.CURSOR_UPDATE_NAME__EZUAG__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._update(context, scope, parameters, realm).then(function (data) {
+		return self._cursor_update(context, scope, parameters, realm).then(function (data) {
 			return {
 				nodes: data.data.cursor_update_ezuag.nodes.map(function (row) {
 					return row.attributes;
@@ -141,7 +141,7 @@ class EzuagEzuagSystemModel extends $kernel.src.models.system.SystemModel {
 				operation_name: $database.interfaces.graphql.operations.ezuag.CURSOR_DELETE_NAME__EZUAG__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
-		return self._delete(context, scope, parameters, realm).then(function (data) {
+		return self._cursor_delete(context, scope, parameters, realm).then(function (data) {
 			return {
 				nodes: data.data.cursor_delete_ezuag.nodes.map(function (row) {
 					return row.attributes;
