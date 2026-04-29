@@ -19,7 +19,7 @@ function DECODE_BASE64URL__CURSOR__SRC__KERNEL(value) {
 }
 
 function SECRET__CURSOR__SRC__KERNEL() {
-	return process.env.GAUZE_CURSOR_SECRET || process.env.GAUZE_DATABASE_JWT_SECRET || "GAUZE_CURSOR_SECRET";
+	return process.env.GAUZE_CURSOR_SECRET || "GAUZE_CURSOR_SECRET";
 }
 
 function SIGN_PAYLOAD__CURSOR__SRC__KERNEL(payload_json) {
