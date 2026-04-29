@@ -887,7 +887,6 @@ class RelationshipSystemModel extends SystemModel {
 	}
 	_cursor_delete(context, scope, parameters, realm) {
 		const self = this;
-		console.log('hit')
 		const request = self._cursor_request_from_parameters(parameters, "delete");
 		return self._cursor_authorized_ids(context, scope, request.parameters, realm, "delete").then(function (valid_ids) {
 			const execute_parameters = self._cursor_cache_where_in(parameters, self.entity.primary_key, valid_ids);
