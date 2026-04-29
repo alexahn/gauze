@@ -1,19 +1,12 @@
 import * as $gauze from "./../../src/index.js";
 
 import assert from "node:assert/strict";
-import { createHmac } from "node:crypto";
 import test from "node:test";
 
 const DATABASE_SCHEMA = $gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE;
 
-function cursor_secret() {
-	return process.env.GAUZE_CURSOR_SECRET || process.env.GAUZE_DATABASE_JWT_SECRET || "GAUZE_CURSOR_SECRET";
-}
-
 function encode_cursor_payload(payload) {
-	const payload_json = JSON.stringify(payload);
-	const signature = createHmac("sha256", cursor_secret()).update(payload_json).digest("base64url");
-	return `${Buffer.from(payload_json, "utf8").toString("base64url")}.${signature}`;
+	return $gauze.kernel.src.cursor.ENCODE_PAYLOAD__CURSOR__SRC__KERNEL(payload);
 }
 
 async function execute(database_manager, transactions, operation, operation_name, operation_variables = {}) {
@@ -67,6 +60,68 @@ test.describe("cursor pagination", async function (suite_ctx) {
 
 	test.after(function () {
 		suite_ctx.database_manager.destroy_connections();
+	});
+
+	await test.it("decodes system cursor requests for authorization filtering", async function () {
+		const model = $gauze.system.models.ytitne.MODEL__YTITNE__MODEL__SYSTEM;
+		const current = {
+			direction: "current",
+			cursor_where_between: null,
+		};
+		const cursor = encode_cursor_payload({
+			v: 1,
+			entity: "gauze__ytitne",
+			method: "read",
+			parameters: {
+				where: {
+					id: "10000000-0000-4000-8000-000000000061",
+				},
+				limit: 1,
+			},
+			page: "current",
+			previous: null,
+			current,
+			next: null,
+		});
+
+		const request = model._cursor_request_from_parameters({ cursor }, "read");
+		assert.deepEqual(request.parameters, {
+			where: {
+				id: "10000000-0000-4000-8000-000000000061",
+			},
+			limit: 1,
+		});
+		assert.deepEqual(request.page, current);
+
+		assert.throws(function () {
+			model._cursor_request_from_parameters(
+				{
+					cursor,
+					where: {
+						id: "10000000-0000-4000-8000-000000000062",
+					},
+				},
+				"read",
+			);
+		}, /cannot be combined/);
+		assert.throws(function () {
+			model._cursor_request_from_parameters({ cursor }, "update");
+		}, /Invalid cursor method/);
+	});
+
+	await test.it("uses explicit unsupported errors for special system cursor mutations", async function () {
+		assert.throws(function () {
+			$gauze.system.models.relationship.MODEL__RELATIONSHIP__MODEL__SYSTEM._cursor_update({}, {}, {}, {});
+		}, /cursor_update is not supported for relationship system models/);
+		assert.throws(function () {
+			$gauze.system.models.relationship.MODEL__RELATIONSHIP__MODEL__SYSTEM._cursor_delete({}, {}, {}, {});
+		}, /cursor_delete is not supported for relationship system models/);
+		assert.throws(function () {
+			$gauze.system.models.whitelist.MODEL__WHITELIST__MODEL__SYSTEM._cursor_update({}, {}, {}, {});
+		}, /cursor_update is not supported for access system models/);
+		assert.throws(function () {
+			$gauze.system.models.blacklist.MODEL__BLACKLIST__MODEL__SYSTEM._cursor_delete({}, {}, {}, {});
+		}, /cursor_delete is not supported for access system models/);
 	});
 
 	await test.it("pages ytitne with previous, current, and next cursors", async function () {

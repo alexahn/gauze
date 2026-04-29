@@ -1,14 +1,13 @@
 import path from "path";
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
-import { createHmac, timingSafeEqual } from "crypto";
-
 import * as $abstract from "./../../../abstract/index.js";
 import * as $structure from "./../../../structure/index.js";
 
 import { LOGGER__IO__LOGGER__SRC__KERNEL } from "./../logger/io.js";
 
 import { TIERED_CACHE__LRU__CACHE__SRC__KERNEL } from "./../cache/lru.js";
+import { ENCODE_PAYLOAD__CURSOR__SRC__KERNEL, DECODE_PAYLOAD__CURSOR__SRC__KERNEL } from "./../cursor.js";
 
 import DataLoader from "./../dataloader.js";
 import TTLLRUCache from "./../lru.js";
@@ -16,32 +15,6 @@ import TTLLRUCache from "./../lru.js";
 import { Model } from "./class.js";
 
 import { v4 as uuidv4 } from "uuid";
-
-function cursor_json_replacer(key, value) {
-	if (typeof value === "bigint") {
-		return value.toString();
-	}
-	if (value instanceof Uint8Array) {
-		return Array.from(value);
-	}
-	return value;
-}
-
-function encode_base64url(value) {
-	return Buffer.from(value, "utf8").toString("base64url");
-}
-
-function decode_base64url(value) {
-	return Buffer.from(value, "base64url").toString("utf8");
-}
-
-function cursor_secret() {
-	return process.env.GAUZE_CURSOR_SECRET || process.env.GAUZE_DATABASE_JWT_SECRET || "GAUZE_CURSOR_SECRET";
-}
-
-function sign_cursor_payload(payload_json) {
-	return createHmac("sha256", cursor_secret()).update(payload_json).digest("base64url");
-}
 
 function process_knex_error_sqlite3(self, err) {
 	const unique_constraint_regex = new RegExp("UNIQUE constraint failed: (?<column>(.*))$");
@@ -827,27 +800,11 @@ class DatabaseModel extends Model {
 		});
 	}
 	_cursor_encode(payload) {
-		const payload_json = JSON.stringify(payload, cursor_json_replacer);
-		const signature = sign_cursor_payload(payload_json);
-		return `${encode_base64url(payload_json)}.${signature}`;
+		return ENCODE_PAYLOAD__CURSOR__SRC__KERNEL(payload);
 	}
 	_cursor_decode(cursor) {
 		const self = this;
-		if (typeof cursor !== "string" || !cursor.includes(".")) {
-			throw new Error("Invalid cursor");
-		}
-		const [encoded_payload, signature, ...rest] = cursor.split(".");
-		if (rest.length || !encoded_payload || !signature) {
-			throw new Error("Invalid cursor");
-		}
-		const payload_json = decode_base64url(encoded_payload);
-		const expected_signature = sign_cursor_payload(payload_json);
-		const provided = Buffer.from(signature, "base64url");
-		const expected = Buffer.from(expected_signature, "base64url");
-		if (provided.length !== expected.length || !timingSafeEqual(provided, expected)) {
-			throw new Error("Invalid cursor signature");
-		}
-		const payload = JSON.parse(payload_json);
+		const payload = DECODE_PAYLOAD__CURSOR__SRC__KERNEL(cursor);
 		if (!payload || payload.v !== 1 || payload.entity !== self.table_name) {
 			throw new Error("Invalid cursor payload");
 		}

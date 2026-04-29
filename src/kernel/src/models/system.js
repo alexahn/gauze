@@ -12,6 +12,7 @@ import { LOGGER__IO__LOGGER__SRC__KERNEL } from "./../logger/io.js";
 import { EXECUTE__GRAPHQL__SHELL__SRC__KERNEL } from "./../shell/graphql.js";
 
 import { SMALL_CACHE__LRU__CACHE__SRC__KERNEL, TIERED_CACHE__LRU__CACHE__SRC__KERNEL } from "./../cache/lru.js";
+import { DECODE_PAYLOAD__CURSOR__SRC__KERNEL } from "./../cursor.js";
 
 import DataLoader from "./../dataloader.js";
 import TTLLRUCache from "./../lru.js";
@@ -922,6 +923,97 @@ class SystemModel extends Model {
 		}
 		const key = self._model_batch_key(parameters, realm, method);
 		return self.model_loader.load(context, scope, key);
+	}
+	_cursor_has_value(value) {
+		if (typeof value === "undefined" || value === null) {
+			return false;
+		}
+		if (Array.isArray(value)) {
+			return value.length > 0;
+		}
+		if (typeof value === "object") {
+			return Object.keys(value).length > 0;
+		}
+		return true;
+	}
+	_cursor_internal_argument(key) {
+		return key === "cache_where_in" || key === "cache_where_not_in";
+	}
+	_cursor_external_arguments(parameters = {}) {
+		const self = this;
+		return Object.keys(parameters).filter(function (key) {
+			return key !== "cursor" && !self._cursor_internal_argument(key) && self._cursor_has_value(parameters[key]);
+		});
+	}
+	_cursor_clean_parameters(parameters = {}) {
+		const clean = {};
+		Object.keys(parameters).forEach(function (key) {
+			if (key === "cursor" || key === "offset") {
+				return;
+			}
+			const value = parameters[key];
+			if (typeof value === "undefined" || value === null) {
+				return;
+			}
+			clean[key] = value;
+		});
+		return clean;
+	}
+	_cursor_decode(cursor) {
+		const self = this;
+		const payload = DECODE_PAYLOAD__CURSOR__SRC__KERNEL(cursor);
+		if (!payload || payload.v !== 1 || payload.entity !== self.entity.table_name) {
+			throw new Error("Invalid cursor payload");
+		}
+		return payload;
+	}
+	_cursor_request_from_parameters(parameters = {}, method) {
+		const self = this;
+		if (parameters.cursor) {
+			const external_arguments = self._cursor_external_arguments(parameters);
+			if (external_arguments.length) {
+				throw new Error("Field 'cursor' cannot be combined with other cursor operation arguments");
+			}
+			const payload = self._cursor_decode(parameters.cursor);
+			if (payload.method !== method) {
+				throw new Error("Invalid cursor method");
+			}
+			const page = payload[payload.page];
+			if (!page) {
+				throw new Error("Invalid cursor page");
+			}
+			return {
+				parameters: payload.parameters || {},
+				page,
+				page_name: payload.page,
+				pages: {
+					previous: payload.previous || null,
+					current: payload.current || null,
+					next: payload.next || null,
+				},
+			};
+		}
+		return {
+			parameters: self._cursor_clean_parameters(parameters),
+			page: null,
+			page_name: "current",
+			pages: {
+				previous: null,
+				current: null,
+				next: null,
+			},
+		};
+	}
+	_cursor_cache_where_in(parameters = {}, key, values) {
+		const cache_key = String(uuidv4());
+		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(cache_key, values, values.length);
+		return {
+			...parameters,
+			cache_where_in: {
+				...(parameters.cache_where_in || {}),
+				[key]: cache_key,
+			},
+		};
 	}
 	_root_read(context, scope, parameters, realm) {
 		const self = this;
