@@ -1,0 +1,45 @@
+mutation CursorDeleteRelationship(
+	$cursor: String
+	$where: Relationship_Mutation__Where
+	$where_in: Relationship_Mutation__Where_Array
+	$cache_where_in: Relationship_Mutation__Where_String
+	$where_not_in: Relationship_Mutation__Where_Array
+	$cache_where_not_in: Relationship_Mutation__Where_String
+	$where_like: Relationship_Mutation__Where
+	$where_between: Relationship_Mutation__Where_Array
+	$limit: Int
+	$order: [Order]
+) {
+	cursor_delete_relationship(
+		cursor: $cursor
+		where: $where
+		where_in: $where_in
+		cache_where_in: $cache_where_in
+		where_not_in: $where_not_in
+		cache_where_not_in: $cache_where_not_in
+		where_like: $where_like
+		where_between: $where_between
+		limit: $limit
+		order: $order
+	) {
+		nodes {
+			attributes {
+				gauze__relationship__id
+				gauze__relationship__created_at
+				gauze__relationship__updated_at
+				gauze__relationship__deleted_at
+				gauze__relationship__from_type
+				gauze__relationship__from_id
+				gauze__relationship__to_type
+				gauze__relationship__to_id
+			}
+		}
+		page_info {
+			has_previous_page
+			has_next_page
+			previous_cursor
+			current_cursor
+			next_cursor
+		}
+	}
+}

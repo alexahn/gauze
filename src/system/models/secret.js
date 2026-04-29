@@ -48,6 +48,28 @@ class SecretSystemModel extends $kernel.src.models.system.SystemModel {
 			});
 		});
 	}
+	cursor_read(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.secret.database.sql.TABLE_NAME__SQL__DATABASE__SECRET__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.secret.CURSOR_READ__SECRET__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.secret.CURSOR_READ_NAME__SECRET__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_read(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_read_secret.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_read_secret.page_info,
+			};
+		});
+	}
 	update(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
@@ -67,6 +89,28 @@ class SecretSystemModel extends $kernel.src.models.system.SystemModel {
 			});
 		});
 	}
+	cursor_update(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.secret.database.sql.TABLE_NAME__SQL__DATABASE__SECRET__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.secret.CURSOR_UPDATE__SECRET__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.secret.CURSOR_UPDATE_NAME__SECRET__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_update(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_update_secret.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_update_secret.page_info,
+			};
+		});
+	}
 	delete(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
@@ -84,6 +128,28 @@ class SecretSystemModel extends $kernel.src.models.system.SystemModel {
 			return data.data.delete_secret.map(function (row) {
 				return row.attributes;
 			});
+		});
+	}
+	cursor_delete(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.secret.database.sql.TABLE_NAME__SQL__DATABASE__SECRET__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.secret.CURSOR_DELETE__SECRET__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.secret.CURSOR_DELETE_NAME__SECRET__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_delete(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_delete_secret.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_delete_secret.page_info,
+			};
 		});
 	}
 	count(context, scope, parameters) {

@@ -1,0 +1,44 @@
+mutation CursorDeleteAgent_Person(
+	$cursor: String
+	$source: Agent_Person_Mutation__Source
+	$where: Agent_Person_Mutation__Where
+	$where_in: Agent_Person_Mutation__Where_Array
+	$cache_where_in: Agent_Person_Mutation__Where_String
+	$where_not_in: Agent_Person_Mutation__Where_Array
+	$cache_where_not_in: Agent_Person_Mutation__Where_String
+	$where_like: Agent_Person_Mutation__Where
+	$where_between: Agent_Person_Mutation__Where_Array
+	$limit: Int
+	$order: [Order]
+) {
+	cursor_delete_agent_person(
+		cursor: $cursor
+		source: $source
+		where: $where
+		where_in: $where_in
+		cache_where_in: $cache_where_in
+		where_not_in: $where_not_in
+		cache_where_not_in: $cache_where_not_in
+		where_like: $where_like
+		where_between: $where_between
+		limit: $limit
+		order: $order
+	) {
+		nodes {
+			attributes {
+				gauze__agent_person__id
+				gauze__agent_person__created_at
+				gauze__agent_person__updated_at
+				gauze__agent_person__deleted_at
+				gauze__agent_person__email
+			}
+		}
+		page_info {
+			has_previous_page
+			has_next_page
+			previous_cursor
+			current_cursor
+			next_cursor
+		}
+	}
+}

@@ -15,13 +15,25 @@ class AgentUserDatabaseController extends $kernel.src.controllers.database.Datab
 		const self = this;
 		return self._read(context, scope, input);
 	}
+	cursor_read(context, scope, input) {
+		const self = this;
+		return self._cursor_read(context, scope, input);
+	}
 	update(context, scope, input) {
 		const self = this;
 		return self._update(context, scope, input);
 	}
+	cursor_update(context, scope, input) {
+		const self = this;
+		return self._cursor_update(context, scope, input);
+	}
 	delete(context, scope, input) {
 		const self = this;
 		return self._delete(context, scope, input);
+	}
+	cursor_delete(context, scope, input) {
+		const self = this;
+		return self._cursor_delete(context, scope, input);
 	}
 	count(context, scope, input) {
 		const self = this;

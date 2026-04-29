@@ -48,6 +48,28 @@ class ProxySystemModel extends $kernel.src.models.system.SystemModel {
 			});
 		});
 	}
+	cursor_read(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.proxy.database.sql.TABLE_NAME__SQL__DATABASE__PROXY__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.proxy.CURSOR_READ__PROXY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.proxy.CURSOR_READ_NAME__PROXY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_read(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_read_proxy.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_read_proxy.page_info,
+			};
+		});
+	}
 	update(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
@@ -67,6 +89,28 @@ class ProxySystemModel extends $kernel.src.models.system.SystemModel {
 			});
 		});
 	}
+	cursor_update(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.proxy.database.sql.TABLE_NAME__SQL__DATABASE__PROXY__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.proxy.CURSOR_UPDATE__PROXY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.proxy.CURSOR_UPDATE_NAME__PROXY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_update(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_update_proxy.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_update_proxy.page_info,
+			};
+		});
+	}
 	delete(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
@@ -84,6 +128,28 @@ class ProxySystemModel extends $kernel.src.models.system.SystemModel {
 			return data.data.delete_proxy.map(function (row) {
 				return row.attributes;
 			});
+		});
+	}
+	cursor_delete(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.proxy.database.sql.TABLE_NAME__SQL__DATABASE__PROXY__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.proxy.CURSOR_DELETE__PROXY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.proxy.CURSOR_DELETE_NAME__PROXY__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_delete(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_delete_proxy.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_delete_proxy.page_info,
+			};
 		});
 	}
 	count(context, scope, parameters) {

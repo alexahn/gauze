@@ -54,6 +54,23 @@ const WHERE_STRING__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abs
 	fields: $structure.entities.agent_person.database.graphql.WHERE_FIELDS_STRING__GRAPHQL__DATABASE__AGENT_PERSON__STRUCTURE,
 });
 
+const CURSOR_PAGE__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Person_Query__Cursor_Page",
+	description: "Agent_Person Query Cursor Page",
+	fields: () => ({
+		nodes: {
+			type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+				new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+					$structure.entities.agent_person.database.graphql.QUERY__GRAPHQL__DATABASE__AGENT_PERSON__STRUCTURE,
+				),
+			),
+		},
+		page_info: {
+			type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.cursor.TYPE__CURSOR_PAGE_INFO__DATABASE__STRUCTURE),
+		},
+	}),
+});
+
 const READ__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.agent_person.database.graphql.QUERY__GRAPHQL__DATABASE__AGENT_PERSON__STRUCTURE),
 	args: {
@@ -129,6 +146,103 @@ const READ__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	},
 };
 
+const CURSOR_READ__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE = {
+	type: CURSOR_PAGE__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE,
+	args: {
+		cursor: {
+			description: "cursor",
+			type: $abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where: {
+			description: "where",
+			type: WHERE__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_in: {
+			description: "where in",
+			type: WHERE_ARRAY__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		cache_where_in: {
+			description: "cache where in",
+			type: WHERE_STRING__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_not_in: {
+			description: "where not in",
+			type: WHERE_ARRAY__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		cache_where_not_in: {
+			description: "cache where not in",
+			type: WHERE_STRING__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_like: {
+			description: "where like",
+			type: WHERE__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE,
+		},
+		limit: {
+			description: "limit",
+			type: $abstract.gauze.types.graphql.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
+		order: {
+			description: "order",
+			type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.order.TYPE__ORDER__STRUCTURE),
+		},
+	},
+	resolve: (source, query_arguments, context) => {
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"CURSOR_READ__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
+			"source",
+			source,
+		);
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"CURSOR_READ__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
+			"query_arguments",
+			query_arguments,
+		);
+		if (
+			!query_arguments.cursor &&
+			!query_arguments.where &&
+			!query_arguments.where_in &&
+			!query_arguments.where_not_in &&
+			!query_arguments.where_like &&
+			!query_arguments.where_between
+		) {
+			throw new Error(
+				"Field 'cursor' is required or field 'where' is required or field 'where_in' is required or field 'where_not_in' is required or field 'where_like' is required or field 'where_between' is required",
+			);
+		}
+		return CONTROLLER__AGENT_PERSON__CONTROLLER__DATABASE.cursor_read(
+			context,
+			{
+				source,
+			},
+			query_arguments,
+		).then(function (page) {
+			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+				"1",
+				__RELATIVE_FILEPATH,
+				"CURSOR_READ__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:success",
+				"page",
+				page,
+			);
+			return {
+				nodes: page.nodes.map(SERIALIZER__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE.serialize),
+				page_info: page.page_info,
+			};
+		});
+	},
+};
+
 const COUNT__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.count.TYPE__COUNT__STRUCTURE),
 	args: {
@@ -196,4 +310,4 @@ const COUNT__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 	},
 };
 
-export { READ__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE, COUNT__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE };
+export { READ__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE, CURSOR_READ__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE, COUNT__AGENT_PERSON__QUERY__GRAPHQL__INTERFACE__DATABASE };
