@@ -1004,6 +1004,26 @@ class SystemModel extends Model {
 			},
 		};
 	}
+	_cursor_empty_page_info() {
+		return {
+			has_previous_page: false,
+			has_next_page: false,
+			previous_cursor: null,
+			current_cursor: null,
+			next_cursor: null,
+		};
+	}
+	_cursor_empty_response(method) {
+		const self = this;
+		return {
+			data: {
+				[`cursor_${method}_${self.entity.name}`]: {
+					nodes: [],
+					page_info: self._cursor_empty_page_info(),
+				},
+			},
+		};
+	}
 	_cursor_cache_where_in(parameters = {}, key, values) {
 		const cache_key = String(uuidv4());
 		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(cache_key, values, values.length);

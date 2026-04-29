@@ -565,10 +565,8 @@ class AccessSystemModel extends SystemModel {
 			return record[self.key_id];
 		});
 	}
-	_cursor_authorized_ids_transaction(context, scope, input, realm, method, database, transaction) {
+	_cursor_access_primary_key_authorized_ids_transaction(context, agent, input, method, database, transaction) {
 		const self = this;
-		const { agent, entity } = realm;
-		entity.entity_method = method;
 		if (input.where && input.where[self.key_id]) {
 			return self._preread(database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
@@ -580,8 +578,16 @@ class AccessSystemModel extends SystemModel {
 					return [];
 				}
 			});
-		} else if (method !== "read") {
+		} else {
 			throw new Error(`Field 'where.${self.key_id}' is required`);
+		}
+	}
+	_cursor_read_authorized_ids_transaction(context, scope, input, realm, database, transaction) {
+		const self = this;
+		const { agent } = realm;
+		const method = "read";
+		if (input.where && input.where[self.key_id]) {
+			return self._cursor_access_primary_key_authorized_ids_transaction(context, agent, input, method, database, transaction);
 		} else if (input.where && input.where[self.key_agent_id] && input.where[self.key_agent_type]) {
 			if (input.where[self.key_agent_id] === agent.agent_id && input.where[self.key_agent_type] === agent.agent_type) {
 				const sql = database(self.entity.table_name).where(input.where).transacting(transaction);
@@ -613,6 +619,30 @@ class AccessSystemModel extends SystemModel {
 			);
 		}
 	}
+	_cursor_update_authorized_ids_transaction(context, scope, input, realm, database, transaction) {
+		const self = this;
+		const { agent } = realm;
+		const method = "update";
+		return self._cursor_access_primary_key_authorized_ids_transaction(context, agent, input, method, database, transaction);
+	}
+	_cursor_delete_authorized_ids_transaction(context, scope, input, realm, database, transaction) {
+		const self = this;
+		const { agent } = realm;
+		const method = "delete";
+		return self._cursor_access_primary_key_authorized_ids_transaction(context, agent, input, method, database, transaction);
+	}
+	_cursor_authorized_ids_transaction(context, scope, input, realm, method, database, transaction) {
+		const self = this;
+		const { entity } = realm;
+		entity.entity_method = method;
+		if (method === "read") {
+			return self._cursor_read_authorized_ids_transaction(context, scope, input, realm, database, transaction);
+		} else if (method === "update") {
+			return self._cursor_update_authorized_ids_transaction(context, scope, input, realm, database, transaction);
+		} else {
+			return self._cursor_delete_authorized_ids_transaction(context, scope, input, realm, database, transaction);
+		}
+	}
 	_cursor_read(context, scope, parameters = {}, realm) {
 		const self = this;
 		const request = self._cursor_request_from_parameters(parameters, "read");
@@ -629,9 +659,8 @@ class AccessSystemModel extends SystemModel {
 	_cursor_update(context, scope, parameters, realm) {
 		const self = this;
 		const request = self._cursor_request_from_parameters(parameters, "update");
-		return self._cursor_authorized_ids(context, scope, request.parameters, realm, "update").then(function (valid_ids) {
-			const execute_parameters = self._cursor_cache_where_in(parameters, self.key_id, valid_ids);
-			return self._execute(context, realm.operation, execute_parameters);
+		return self._cursor_authorized_ids(context, scope, request.parameters, realm, "update").then(function () {
+			return self._cursor_empty_response("update");
 		});
 	}
 	_root_update(context, scope, input, realm) {

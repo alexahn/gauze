@@ -124,8 +124,8 @@ test.describe("cursor pagination", async function (suite_ctx) {
 		}, /Invalid cursor method/);
 	});
 
-	await test.it("routes special system cursor mutations through authorized id caches", async function () {
-		async function assert_cursor_mutation(model, operation_method, authorization_method, key, expected_ids) {
+	await test.it("routes special system cursor deletes through authorized id caches", async function () {
+		async function assert_cursor_delete(model, operation_method, key, expected_ids) {
 			const parameters = {
 				cursor: `${operation_method}-cursor`,
 			};
@@ -144,7 +144,7 @@ test.describe("cursor pagination", async function (suite_ctx) {
 				{
 					_cursor_request_from_parameters(input, method) {
 						assert.deepEqual(input, parameters);
-						assert.equal(method, authorization_method);
+						assert.equal(method, "delete");
 						return {
 							parameters: decoded_parameters,
 						};
@@ -154,7 +154,7 @@ test.describe("cursor pagination", async function (suite_ctx) {
 						assert.deepEqual(scope, { scope: operation_method });
 						assert.deepEqual(input, decoded_parameters);
 						assert.equal(input_realm, realm);
-						assert.equal(method, authorization_method);
+						assert.equal(method, "delete");
 						return Promise.resolve(expected_ids);
 					},
 					_cursor_cache_where_in(input, input_key, values) {
@@ -183,7 +183,7 @@ test.describe("cursor pagination", async function (suite_ctx) {
 					},
 				},
 				async function () {
-					const result = await model[`_cursor_${authorization_method}`]({ context: operation_method }, { scope: operation_method }, parameters, realm);
+					const result = await model._cursor_delete({ context: operation_method }, { scope: operation_method }, parameters, realm);
 					assert.deepEqual(result, {
 						data: operation_method,
 					});
@@ -192,14 +192,81 @@ test.describe("cursor pagination", async function (suite_ctx) {
 		}
 
 		const relationship_model = $gauze.system.models.relationship.MODEL__RELATIONSHIP__MODEL__SYSTEM;
-		await assert_cursor_mutation(relationship_model, "relationship-update", "update", relationship_model.entity.primary_key, ["relationship-1"]);
-		await assert_cursor_mutation(relationship_model, "relationship-delete", "delete", relationship_model.entity.primary_key, ["relationship-2"]);
-
-		const whitelist_model = $gauze.system.models.whitelist.MODEL__WHITELIST__MODEL__SYSTEM;
-		await assert_cursor_mutation(whitelist_model, "whitelist-update", "update", whitelist_model.key_id, ["whitelist-1"]);
+		await assert_cursor_delete(relationship_model, "relationship-delete", relationship_model.entity.primary_key, ["relationship-2"]);
 
 		const blacklist_model = $gauze.system.models.blacklist.MODEL__BLACKLIST__MODEL__SYSTEM;
-		await assert_cursor_mutation(blacklist_model, "blacklist-delete", "delete", blacklist_model.key_id, ["blacklist-1"]);
+		await assert_cursor_delete(blacklist_model, "blacklist-delete", blacklist_model.key_id, ["blacklist-1"]);
+	});
+
+	await test.it("authorizes special system cursor updates without executing updates", async function () {
+		function expected_empty_cursor_update_response(model) {
+			return {
+				data: {
+					[`cursor_update_${model.entity.name}`]: {
+						nodes: [],
+						page_info: {
+							has_previous_page: false,
+							has_next_page: false,
+							previous_cursor: null,
+							current_cursor: null,
+							next_cursor: null,
+						},
+					},
+				},
+			};
+		}
+
+		async function assert_cursor_update(model, operation_method, expected_response) {
+			const parameters = {
+				cursor: `${operation_method}-cursor`,
+			};
+			const decoded_parameters = {
+				where: {
+					id: `${operation_method}-decoded`,
+				},
+			};
+			const realm = {
+				operation: {
+					operation: `${operation_method}-operation`,
+				},
+			};
+			await with_stubbed_methods(
+				model,
+				{
+					_cursor_request_from_parameters(input, method) {
+						assert.deepEqual(input, parameters);
+						assert.equal(method, "update");
+						return {
+							parameters: decoded_parameters,
+						};
+					},
+					_cursor_authorized_ids(context, scope, input, input_realm, method) {
+						assert.deepEqual(context, { context: operation_method });
+						assert.deepEqual(scope, { scope: operation_method });
+						assert.deepEqual(input, decoded_parameters);
+						assert.equal(input_realm, realm);
+						assert.equal(method, "update");
+						return Promise.resolve([`${operation_method}-id`]);
+					},
+					_cursor_cache_where_in() {
+						throw new Error("cursor update should not build an execution cache");
+					},
+					_execute() {
+						throw new Error("cursor update should not execute a database update");
+					},
+				},
+				async function () {
+					const result = await model._cursor_update({ context: operation_method }, { scope: operation_method }, parameters, realm);
+					assert.deepEqual(result, expected_response);
+				},
+			);
+		}
+
+		const relationship_model = $gauze.system.models.relationship.MODEL__RELATIONSHIP__MODEL__SYSTEM;
+		await assert_cursor_update(relationship_model, "relationship-update", expected_empty_cursor_update_response(relationship_model));
+
+		const whitelist_model = $gauze.system.models.whitelist.MODEL__WHITELIST__MODEL__SYSTEM;
+		await assert_cursor_update(whitelist_model, "whitelist-update", expected_empty_cursor_update_response(whitelist_model));
 	});
 
 	await test.it("requires access cursor agent filters to match agent id and type", async function () {

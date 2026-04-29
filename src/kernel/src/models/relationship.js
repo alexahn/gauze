@@ -612,10 +612,8 @@ class RelationshipSystemModel extends SystemModel {
 			});
 		}
 	}
-	_cursor_authorized_ids_transaction(context, scope, parameters, realm, method, database, transaction) {
+	_cursor_relationship_primary_key_authorized_ids_transaction(context, scope, parameters, realm, method, database, transaction) {
 		const self = this;
-		const { agent, entity } = realm;
-		entity.entity_method = method;
 		if (parameters.where && parameters.where.gauze__relationship__id) {
 			self._validate_entity_types(parameters.where);
 			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
@@ -626,8 +624,16 @@ class RelationshipSystemModel extends SystemModel {
 					return [];
 				}
 			});
-		} else if (method !== "read") {
+		} else {
 			throw new Error("Field 'where.gauze__relationship__id' is required");
+		}
+	}
+	_cursor_read_authorized_ids_transaction(context, scope, parameters, realm, database, transaction) {
+		const self = this;
+		const { agent } = realm;
+		const method = "read";
+		if (parameters.where && parameters.where.gauze__relationship__id) {
+			return self._cursor_relationship_primary_key_authorized_ids_transaction(context, scope, parameters, realm, method, database, transaction);
 		} else if (
 			parameters.where &&
 			parameters.where.gauze__relationship__from_id &&
@@ -723,6 +729,28 @@ class RelationshipSystemModel extends SystemModel {
 			);
 		}
 	}
+	_cursor_update_authorized_ids_transaction(context, scope, parameters, realm, database, transaction) {
+		const self = this;
+		const method = "update";
+		return self._cursor_relationship_primary_key_authorized_ids_transaction(context, scope, parameters, realm, method, database, transaction);
+	}
+	_cursor_delete_authorized_ids_transaction(context, scope, parameters, realm, database, transaction) {
+		const self = this;
+		const method = "delete";
+		return self._cursor_relationship_primary_key_authorized_ids_transaction(context, scope, parameters, realm, method, database, transaction);
+	}
+	_cursor_authorized_ids_transaction(context, scope, parameters, realm, method, database, transaction) {
+		const self = this;
+		const { entity } = realm;
+		entity.entity_method = method;
+		if (method === "read") {
+			return self._cursor_read_authorized_ids_transaction(context, scope, parameters, realm, database, transaction);
+		} else if (method === "update") {
+			return self._cursor_update_authorized_ids_transaction(context, scope, parameters, realm, database, transaction);
+		} else {
+			return self._cursor_delete_authorized_ids_transaction(context, scope, parameters, realm, database, transaction);
+		}
+	}
 	_cursor_read(context, scope, parameters = {}, realm) {
 		const self = this;
 		const request = self._cursor_request_from_parameters(parameters, "read");
@@ -739,9 +767,8 @@ class RelationshipSystemModel extends SystemModel {
 	_cursor_update(context, scope, parameters, realm) {
 		const self = this;
 		const request = self._cursor_request_from_parameters(parameters, "update");
-		return self._cursor_authorized_ids(context, scope, request.parameters, realm, "update").then(function (valid_ids) {
-			const execute_parameters = self._cursor_cache_where_in(parameters, self.entity.primary_key, valid_ids);
-			return self._execute(context, realm.operation, execute_parameters);
+		return self._cursor_authorized_ids(context, scope, request.parameters, realm, "update").then(function () {
+			return self._cursor_empty_response("update");
 		});
 	}
 	_root_update(context, scope, parameters, realm) {
