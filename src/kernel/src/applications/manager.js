@@ -450,8 +450,11 @@ class GauzeManager {
 		const OPERATIONS = [
 			path.resolve(project_dir, `./database/interfaces/graphql/operations/${entity.name}/create.graphql`),
 			path.resolve(project_dir, `./database/interfaces/graphql/operations/${entity.name}/read.graphql`),
+			path.resolve(project_dir, `./database/interfaces/graphql/operations/${entity.name}/cursor_read.graphql`),
 			path.resolve(project_dir, `./database/interfaces/graphql/operations/${entity.name}/update.graphql`),
+			path.resolve(project_dir, `./database/interfaces/graphql/operations/${entity.name}/cursor_update.graphql`),
 			path.resolve(project_dir, `./database/interfaces/graphql/operations/${entity.name}/delete.graphql`),
+			path.resolve(project_dir, `./database/interfaces/graphql/operations/${entity.name}/cursor_delete.graphql`),
 		];
 		return Promise.all(
 			OPERATIONS.map(function (operation) {

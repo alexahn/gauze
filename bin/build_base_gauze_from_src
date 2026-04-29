@@ -22,9 +22,12 @@ cp $src/database/interfaces/graphql/queries/$from1.js $base/database/interfaces/
 mkdir -p $base/database/interfaces/graphql/operations/$arg1
 cp $src/database/interfaces/graphql/operations/$from1/index.js $base/database/interfaces/graphql/operations/$arg1/index.js
 cp $src/database/interfaces/graphql/operations/$from1/read.graphql $base/database/interfaces/graphql/operations/$arg1/read.graphql
+cp $src/database/interfaces/graphql/operations/$from1/cursor_read.graphql $base/database/interfaces/graphql/operations/$arg1/cursor_read.graphql
 cp $src/database/interfaces/graphql/operations/$from1/create.graphql $base/database/interfaces/graphql/operations/$arg1/create.graphql
 cp $src/database/interfaces/graphql/operations/$from1/update.graphql $base/database/interfaces/graphql/operations/$arg1/update.graphql
+cp $src/database/interfaces/graphql/operations/$from1/cursor_update.graphql $base/database/interfaces/graphql/operations/$arg1/cursor_update.graphql
 cp $src/database/interfaces/graphql/operations/$from1/delete.graphql $base/database/interfaces/graphql/operations/$arg1/delete.graphql
+cp $src/database/interfaces/graphql/operations/$from1/cursor_delete.graphql $base/database/interfaces/graphql/operations/$arg1/cursor_delete.graphql
 cp $src/database/interfaces/graphql/operations/$from1/count.graphql $base/database/interfaces/graphql/operations/$arg1/count.graphql
 
 # system
