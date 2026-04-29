@@ -17,6 +17,18 @@ class DatabaseManager {
 		self.whitelist_table = $abstract.entities.whitelist ? $abstract.entities.whitelist.default($abstract).table_name : "undefined";
 		self.blacklist_table = $abstract.entities.blacklist ? $abstract.entities.blacklist.default($abstract).table_name : "undefined";
 	}
+	_assert_context_accepts_transactions(context) {
+		if (context.transaction_cleanup_started_at) {
+			const action = context.transaction_cleanup_action || "cleanup";
+			throw new Error(`Cannot route transactions after ${action} started`);
+		}
+	}
+	_mark_context_transaction_cleanup(context, action) {
+		if (!context.transaction_cleanup_started_at) {
+			context.transaction_cleanup_started_at = new Date().toISOString();
+			context.transaction_cleanup_action = action;
+		}
+	}
 	validate_config(config) {
 		function is_non_null_object(value) {
 			return value !== null && typeof value === "object";
@@ -1097,6 +1109,7 @@ class DatabaseManager {
 	// shard_type is "read" or "write"
 	route_transactions(context, scope, parameters, model, shard_type, relationships) {
 		const self = this;
+		self._assert_context_accepts_transactions(context);
 		const connections = self.route_connections(context, scope, parameters, model, shard_type, relationships);
 		const unique_connections = [
 			...new Map(
@@ -1166,6 +1179,7 @@ class DatabaseManager {
 	}
 	commit_context_transactions(context) {
 		const self = this;
+		self._mark_context_transaction_cleanup(context, "commit");
 		return self.commit_transactions(context.transactions).finally(function () {
 			Object.keys(context.transactions).forEach(function (key) {
 				delete context.transactions[key];
@@ -1184,6 +1198,7 @@ class DatabaseManager {
 	// context is graphql context
 	rollback_context_transactions(context) {
 		const self = this;
+		self._mark_context_transaction_cleanup(context, "rollback");
 		return self.rollback_transactions(context.transactions).finally(function () {
 			Object.keys(context.transactions).forEach(function (key) {
 				delete context.transactions[key];
