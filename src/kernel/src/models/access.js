@@ -659,8 +659,14 @@ class AccessSystemModel extends SystemModel {
 	_cursor_update(context, scope, parameters, realm) {
 		const self = this;
 		const request = self._cursor_request_from_parameters(parameters, "update");
-		return self._cursor_authorized_ids(context, scope, request.parameters, realm, "update").then(function () {
-			return self._cursor_empty_response("update");
+		return self._cursor_authorized_ids(context, scope, request.parameters, realm, "update").then(function (valid_ids) {
+			if (valid_ids.length === 0) {
+				return self._cursor_empty_response("update");
+			}
+			const root_parameters = self._cursor_root_parameters(request.parameters, self.key_id, valid_ids[0]);
+			return self._root_update(context, scope, root_parameters, realm).then(function (data) {
+				return self._cursor_response_from_root_response("update", data);
+			});
 		});
 	}
 	_root_update(context, scope, input, realm) {
@@ -786,8 +792,13 @@ class AccessSystemModel extends SystemModel {
 		const self = this;
 		const request = self._cursor_request_from_parameters(parameters, "delete");
 		return self._cursor_authorized_ids(context, scope, request.parameters, realm, "delete").then(function (valid_ids) {
-			const execute_parameters = self._cursor_cache_where_in(parameters, self.key_id, valid_ids);
-			return self._execute(context, realm.operation, execute_parameters);
+			if (valid_ids.length === 0) {
+				return self._cursor_empty_response("delete");
+			}
+			const root_parameters = self._cursor_root_parameters(request.parameters, self.key_id, valid_ids[0]);
+			return self._root_delete(context, scope, root_parameters, realm).then(function (data) {
+				return self._cursor_response_from_root_response("delete", data);
+			});
 		});
 	}
 	_count_agent(context, scope, input, realm) {

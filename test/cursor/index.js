@@ -124,14 +124,14 @@ test.describe("cursor pagination", async function (suite_ctx) {
 		}, /Invalid cursor method/);
 	});
 
-	await test.it("routes special system cursor deletes through authorized id caches", async function () {
+	await test.it("routes special system cursor deletes through root mutation paths", async function () {
 		async function assert_cursor_delete(model, operation_method, key, expected_ids) {
 			const parameters = {
 				cursor: `${operation_method}-cursor`,
 			};
 			const decoded_parameters = {
 				where: {
-					id: `${operation_method}-decoded`,
+					[key]: `${operation_method}-decoded`,
 				},
 			};
 			const realm = {
@@ -139,6 +139,13 @@ test.describe("cursor pagination", async function (suite_ctx) {
 					operation: `${operation_method}-operation`,
 				},
 			};
+			const root_rows = [
+				{
+					attributes: {
+						[key]: expected_ids[0],
+					},
+				},
+			];
 			await with_stubbed_methods(
 				model,
 				{
@@ -157,35 +164,43 @@ test.describe("cursor pagination", async function (suite_ctx) {
 						assert.equal(method, "delete");
 						return Promise.resolve(expected_ids);
 					},
-					_cursor_cache_where_in(input, input_key, values) {
-						assert.deepEqual(input, parameters);
-						assert.equal(input_key, key);
-						assert.deepEqual(values, expected_ids);
-						return {
-							...input,
-							cache_where_in: {
-								[input_key]: `${operation_method}-cache`,
-							},
-						};
-					},
-					_execute(context, operation, input) {
+					_root_delete(context, scope, input, input_realm) {
 						assert.deepEqual(context, { context: operation_method });
-						assert.equal(operation, realm.operation);
+						assert.deepEqual(scope, { scope: operation_method });
+						assert.equal(input_realm, realm);
 						assert.deepEqual(input, {
-							cursor: `${operation_method}-cursor`,
-							cache_where_in: {
-								[key]: `${operation_method}-cache`,
+							where: {
+								[key]: expected_ids[0],
 							},
 						});
 						return Promise.resolve({
-							data: operation_method,
+							data: {
+								[`delete_${model.entity.name}`]: root_rows,
+							},
 						});
+					},
+					_cursor_cache_where_in() {
+						throw new Error("cursor delete should not build an execution cache");
+					},
+					_execute() {
+						throw new Error("cursor delete should not execute a database cursor delete");
 					},
 				},
 				async function () {
 					const result = await model._cursor_delete({ context: operation_method }, { scope: operation_method }, parameters, realm);
 					assert.deepEqual(result, {
-						data: operation_method,
+						data: {
+							[`cursor_delete_${model.entity.name}`]: {
+								nodes: root_rows,
+								page_info: {
+									has_previous_page: false,
+									has_next_page: false,
+									previous_cursor: null,
+									current_cursor: null,
+									next_cursor: null,
+								},
+							},
+						},
 					});
 				},
 			);
@@ -198,31 +213,17 @@ test.describe("cursor pagination", async function (suite_ctx) {
 		await assert_cursor_delete(blacklist_model, "blacklist-delete", blacklist_model.key_id, ["blacklist-1"]);
 	});
 
-	await test.it("authorizes special system cursor updates without executing updates", async function () {
-		function expected_empty_cursor_update_response(model) {
-			return {
-				data: {
-					[`cursor_update_${model.entity.name}`]: {
-						nodes: [],
-						page_info: {
-							has_previous_page: false,
-							has_next_page: false,
-							previous_cursor: null,
-							current_cursor: null,
-							next_cursor: null,
-						},
-					},
-				},
-			};
-		}
-
-		async function assert_cursor_update(model, operation_method, expected_response) {
+	await test.it("routes special system cursor updates through root mutation paths", async function () {
+		async function assert_cursor_update(model, operation_method, key, expected_ids) {
 			const parameters = {
 				cursor: `${operation_method}-cursor`,
 			};
 			const decoded_parameters = {
 				where: {
-					id: `${operation_method}-decoded`,
+					[key]: `${operation_method}-decoded`,
+				},
+				attributes: {
+					updated: `${operation_method}-attribute`,
 				},
 			};
 			const realm = {
@@ -230,6 +231,13 @@ test.describe("cursor pagination", async function (suite_ctx) {
 					operation: `${operation_method}-operation`,
 				},
 			};
+			const root_rows = [
+				{
+					attributes: {
+						[key]: expected_ids[0],
+					},
+				},
+			];
 			await with_stubbed_methods(
 				model,
 				{
@@ -246,27 +254,58 @@ test.describe("cursor pagination", async function (suite_ctx) {
 						assert.deepEqual(input, decoded_parameters);
 						assert.equal(input_realm, realm);
 						assert.equal(method, "update");
-						return Promise.resolve([`${operation_method}-id`]);
+						return Promise.resolve(expected_ids);
+					},
+					_root_update(context, scope, input, input_realm) {
+						assert.deepEqual(context, { context: operation_method });
+						assert.deepEqual(scope, { scope: operation_method });
+						assert.equal(input_realm, realm);
+						assert.deepEqual(input, {
+							where: {
+								[key]: expected_ids[0],
+							},
+							attributes: {
+								updated: `${operation_method}-attribute`,
+							},
+						});
+						return Promise.resolve({
+							data: {
+								[`update_${model.entity.name}`]: root_rows,
+							},
+						});
 					},
 					_cursor_cache_where_in() {
 						throw new Error("cursor update should not build an execution cache");
 					},
 					_execute() {
-						throw new Error("cursor update should not execute a database update");
+						throw new Error("cursor update should not execute a database cursor update");
 					},
 				},
 				async function () {
 					const result = await model._cursor_update({ context: operation_method }, { scope: operation_method }, parameters, realm);
-					assert.deepEqual(result, expected_response);
+					assert.deepEqual(result, {
+						data: {
+							[`cursor_update_${model.entity.name}`]: {
+								nodes: root_rows,
+								page_info: {
+									has_previous_page: false,
+									has_next_page: false,
+									previous_cursor: null,
+									current_cursor: null,
+									next_cursor: null,
+								},
+							},
+						},
+					});
 				},
 			);
 		}
 
 		const relationship_model = $gauze.system.models.relationship.MODEL__RELATIONSHIP__MODEL__SYSTEM;
-		await assert_cursor_update(relationship_model, "relationship-update", expected_empty_cursor_update_response(relationship_model));
+		await assert_cursor_update(relationship_model, "relationship-update", relationship_model.entity.primary_key, ["relationship-1"]);
 
 		const whitelist_model = $gauze.system.models.whitelist.MODEL__WHITELIST__MODEL__SYSTEM;
-		await assert_cursor_update(whitelist_model, "whitelist-update", expected_empty_cursor_update_response(whitelist_model));
+		await assert_cursor_update(whitelist_model, "whitelist-update", whitelist_model.key_id, ["whitelist-1"]);
 	});
 
 	await test.it("requires access cursor agent filters to match agent id and type", async function () {

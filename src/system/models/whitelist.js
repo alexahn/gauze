@@ -96,8 +96,8 @@ class WhitelistSystemModel extends $kernel.src.models.access.AccessSystemModel {
 				entity_type: $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE,
 			},
 			operation: {
-				operation: $database.interfaces.graphql.operations.whitelist.CURSOR_UPDATE__WHITELIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-				operation_name: $database.interfaces.graphql.operations.whitelist.CURSOR_UPDATE_NAME__WHITELIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation: $database.interfaces.graphql.operations.whitelist.UPDATE__WHITELIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.whitelist.UPDATE_NAME__WHITELIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
 		return self._cursor_update(context, scope, parameters, realm).then(function (data) {
@@ -137,8 +137,8 @@ class WhitelistSystemModel extends $kernel.src.models.access.AccessSystemModel {
 				entity_type: $structure.entities.whitelist.database.sql.TABLE_NAME__SQL__DATABASE__WHITELIST__STRUCTURE,
 			},
 			operation: {
-				operation: $database.interfaces.graphql.operations.whitelist.CURSOR_DELETE__WHITELIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-				operation_name: $database.interfaces.graphql.operations.whitelist.CURSOR_DELETE_NAME__WHITELIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation: $database.interfaces.graphql.operations.whitelist.DELETE__WHITELIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.whitelist.DELETE_NAME__WHITELIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
 		return self._cursor_delete(context, scope, parameters, realm).then(function (data) {

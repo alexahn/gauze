@@ -96,8 +96,8 @@ class BlacklistSystemModel extends $kernel.src.models.access.AccessSystemModel {
 				entity_type: $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
 			},
 			operation: {
-				operation: $database.interfaces.graphql.operations.blacklist.CURSOR_UPDATE__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-				operation_name: $database.interfaces.graphql.operations.blacklist.CURSOR_UPDATE_NAME__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation: $database.interfaces.graphql.operations.blacklist.UPDATE__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.blacklist.UPDATE_NAME__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
 		return self._cursor_update(context, scope, parameters, realm).then(function (data) {
@@ -137,8 +137,8 @@ class BlacklistSystemModel extends $kernel.src.models.access.AccessSystemModel {
 				entity_type: $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
 			},
 			operation: {
-				operation: $database.interfaces.graphql.operations.blacklist.CURSOR_DELETE__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-				operation_name: $database.interfaces.graphql.operations.blacklist.CURSOR_DELETE_NAME__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation: $database.interfaces.graphql.operations.blacklist.DELETE__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.blacklist.DELETE_NAME__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
 		return self._cursor_delete(context, scope, parameters, realm).then(function (data) {

@@ -1024,6 +1024,26 @@ class SystemModel extends Model {
 			},
 		};
 	}
+	_cursor_response_from_root_response(method, response) {
+		const self = this;
+		return {
+			data: {
+				[`cursor_${method}_${self.entity.name}`]: {
+					nodes: response.data[`${method}_${self.entity.name}`],
+					page_info: self._cursor_empty_page_info(),
+				},
+			},
+		};
+	}
+	_cursor_root_parameters(parameters = {}, key, value) {
+		return {
+			...parameters,
+			where: {
+				...(parameters.where || {}),
+				[key]: value,
+			},
+		};
+	}
 	_cursor_cache_where_in(parameters = {}, key, values) {
 		const cache_key = String(uuidv4());
 		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(cache_key, values, values.length);

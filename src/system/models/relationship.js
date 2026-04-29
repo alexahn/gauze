@@ -96,8 +96,8 @@ class RelationshipSystemModel extends $kernel.src.models.relationship.Relationsh
 				entity_type: $structure.entities.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
 			},
 			operation: {
-				operation: $database.interfaces.graphql.operations.relationship.CURSOR_UPDATE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-				operation_name: $database.interfaces.graphql.operations.relationship.CURSOR_UPDATE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation: $database.interfaces.graphql.operations.relationship.UPDATE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.relationship.UPDATE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
 		return self._cursor_update(context, scope, parameters, realm).then(function (data) {
@@ -137,8 +137,8 @@ class RelationshipSystemModel extends $kernel.src.models.relationship.Relationsh
 				entity_type: $structure.entities.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
 			},
 			operation: {
-				operation: $database.interfaces.graphql.operations.relationship.CURSOR_DELETE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
-				operation_name: $database.interfaces.graphql.operations.relationship.CURSOR_DELETE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation: $database.interfaces.graphql.operations.relationship.DELETE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.relationship.DELETE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
 			},
 		};
 		return self._cursor_delete(context, scope, parameters, realm).then(function (data) {

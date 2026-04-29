@@ -767,8 +767,14 @@ class RelationshipSystemModel extends SystemModel {
 	_cursor_update(context, scope, parameters, realm) {
 		const self = this;
 		const request = self._cursor_request_from_parameters(parameters, "update");
-		return self._cursor_authorized_ids(context, scope, request.parameters, realm, "update").then(function () {
-			return self._cursor_empty_response("update");
+		return self._cursor_authorized_ids(context, scope, request.parameters, realm, "update").then(function (valid_ids) {
+			if (valid_ids.length === 0) {
+				return self._cursor_empty_response("update");
+			}
+			const root_parameters = self._cursor_root_parameters(request.parameters, self.entity.primary_key, valid_ids[0]);
+			return self._root_update(context, scope, root_parameters, realm).then(function (data) {
+				return self._cursor_response_from_root_response("update", data);
+			});
 		});
 	}
 	_root_update(context, scope, parameters, realm) {
@@ -803,6 +809,7 @@ class RelationshipSystemModel extends SystemModel {
 					self._connected_relationship(staged);
 					return self._authorized_relationship(context, scope, relationship, agent, method).then(function () {
 						return self._authorized_relationship(context, scope, staged, agent, method).then(function () {
+							// update is disabled for relationships
 							return self.generate_response("update", []);
 							//return self._execute(context, operation, parameters);
 						});
@@ -889,8 +896,13 @@ class RelationshipSystemModel extends SystemModel {
 		const self = this;
 		const request = self._cursor_request_from_parameters(parameters, "delete");
 		return self._cursor_authorized_ids(context, scope, request.parameters, realm, "delete").then(function (valid_ids) {
-			const execute_parameters = self._cursor_cache_where_in(parameters, self.entity.primary_key, valid_ids);
-			return self._execute(context, realm.operation, execute_parameters);
+			if (valid_ids.length === 0) {
+				return self._cursor_empty_response("delete");
+			}
+			const root_parameters = self._cursor_root_parameters(request.parameters, self.entity.primary_key, valid_ids[0]);
+			return self._root_delete(context, scope, root_parameters, realm).then(function (data) {
+				return self._cursor_response_from_root_response("delete", data);
+			});
 		});
 	}
 	_count_entity_transaction(context, scope, parameters, realm, database, transaction) {
