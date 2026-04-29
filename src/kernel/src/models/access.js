@@ -500,33 +500,90 @@ class AccessSystemModel extends SystemModel {
 	}
 	_cursor_read_authorized_ids(context, scope, input, realm) {
 		const self = this;
+		return self._cursor_authorized_ids(context, scope, input, realm, "read");
+	}
+	_cursor_authorized_ids(context, scope, input, realm, method) {
+		const self = this;
 		return context.database_manager.route_transactions(context, scope, input, self, "read").then(function (shards) {
 			return Promise.all(
 				shards.map(function (shard) {
-					return self._cursor_read_authorized_ids_transaction(context, scope, input, realm, shard.connection, shard.transaction);
+					return self._cursor_authorized_ids_transaction(context, scope, input, realm, method, shard.connection, shard.transaction);
 				}),
 			).then(function (results) {
 				return results.flat();
 			});
 		});
 	}
-	_cursor_read_authorized_ids_transaction(context, scope, input, realm, database, transaction) {
+	_cursor_access_record_id_transaction(context, agent, input, target_record, method, database, transaction) {
 		const self = this;
-		const { agent } = realm;
-		const method = "read";
+		if (method === "update") {
+			const staged = { ...target_record, ...(input.attributes || {}) };
+			staged[self.key_id] = target_record[self.key_id];
+			self._validate_model(staged);
+			return self
+				._valid_access_transaction(context, agent, method, target_record, database, transaction)
+				.then(function () {
+					return self._valid_access_transaction(context, agent, method, staged, database, transaction);
+				})
+				.then(function () {
+					return target_record[self.key_id];
+				});
+		} else {
+			return self._valid_access_transaction(context, agent, method, target_record, database, transaction).then(function () {
+				return target_record[self.key_id];
+			});
+		}
+	}
+	_cursor_read_entity_authorized_ids_transaction(target_records, highest_record) {
+		const self = this;
+		const highest_id = highest_record[self.key_id];
+		const highest_role = highest_record[self.key_agent_role];
+		const filtered = target_records.filter(function (record) {
+			const target_id = record[self.key_id];
+			const target_role = record[self.key_agent_role];
+			if (highest_role === "root") {
+				return true;
+			} else if (highest_role === "trunk") {
+				if (target_role === "trunk") {
+					return true;
+				} else if (target_role === "leaf") {
+					return true;
+				} else {
+					return false;
+				}
+			} else if (highest_role === "leaf") {
+				if (target_id == highest_id) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		});
+		return filtered.map(function (record) {
+			return record[self.key_id];
+		});
+	}
+	_cursor_authorized_ids_transaction(context, scope, input, realm, method, database, transaction) {
+		const self = this;
+		const { agent, entity } = realm;
+		entity.entity_method = method;
 		if (input.where && input.where[self.key_id]) {
 			return self._preread(database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
-					return self._valid_access(context, agent, method, target_record).then(function () {
-						return [target_record[self.key_id]];
+					return self._cursor_access_record_id_transaction(context, agent, input, target_record, method, database, transaction).then(function (id) {
+						return [id];
 					});
 				} else {
 					return [];
 				}
 			});
+		} else if (method !== "read") {
+			throw new Error(`Field 'where.${self.key_id}' is required`);
 		} else if (input.where && input.where[self.key_agent_id] && input.where[self.key_agent_type]) {
-			if (input.where[self.key_agent_id] === agent.agent_id) {
+			if (input.where[self.key_agent_id] === agent.agent_id && input.where[self.key_agent_type] === agent.agent_type) {
 				const sql = database(self.entity.table_name).where(input.where).transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._cursor_read_agent:debug_sql`, sql.toString());
@@ -537,41 +594,14 @@ class AccessSystemModel extends SystemModel {
 					});
 				});
 			} else {
-				throw new Error(`Field '${self.key_agent_id}' must be equal to the initiating agent's id`);
+				throw new Error(`Fields '${self.key_agent_id}' and '${self.key_agent_type}' must match the initiating agent`);
 			}
 		} else if (input.where && input.where[self.key_entity_id] && input.where[self.key_entity_type] && input.where[self.key_method]) {
 			return self._initiator_records(context, input.where, agent, database, transaction).then(function (access_records) {
 				if (access_records && access_records.length) {
 					const highest_record = self._highest_record(access_records);
 					return self._preread(database, transaction, input.where).then(function (target_records) {
-						const highest_id = highest_record[self.key_id];
-						const highest_role = highest_record[self.key_agent_role];
-						const filtered = target_records.filter(function (record) {
-							const target_id = record[self.key_id];
-							const target_role = record[self.key_agent_role];
-							if (highest_role === "root") {
-								return true;
-							} else if (highest_role === "trunk") {
-								if (target_role === "trunk") {
-									return true;
-								} else if (target_role === "leaf") {
-									return true;
-								} else {
-									return false;
-								}
-							} else if (highest_role === "leaf") {
-								if (target_id == highest_id) {
-									return true;
-								} else {
-									return false;
-								}
-							} else {
-								return false;
-							}
-						});
-						return filtered.map(function (record) {
-							return record[self.key_id];
-						});
+						return self._cursor_read_entity_authorized_ids_transaction(target_records, highest_record);
 					});
 				} else {
 					throw new Error("Agent does not have access to this method");
@@ -597,7 +627,12 @@ class AccessSystemModel extends SystemModel {
 		return self.model_loader.load(context, scope, key);
 	}
 	_cursor_update(context, scope, parameters, realm) {
-		throw new Error("cursor_update is not supported for access system models");
+		const self = this;
+		const request = self._cursor_request_from_parameters(parameters, "update");
+		return self._cursor_authorized_ids(context, scope, request.parameters, realm, "update").then(function (valid_ids) {
+			const execute_parameters = self._cursor_cache_where_in(parameters, self.key_id, valid_ids);
+			return self._execute(context, realm.operation, execute_parameters);
+		});
 	}
 	_root_update(context, scope, input, realm) {
 		const self = this;
@@ -719,7 +754,12 @@ class AccessSystemModel extends SystemModel {
 		return self.model_loader.load(context, scope, key);
 	}
 	_cursor_delete(context, scope, parameters, realm) {
-		throw new Error("cursor_delete is not supported for access system models");
+		const self = this;
+		const request = self._cursor_request_from_parameters(parameters, "delete");
+		return self._cursor_authorized_ids(context, scope, request.parameters, realm, "delete").then(function (valid_ids) {
+			const execute_parameters = self._cursor_cache_where_in(parameters, self.key_id, valid_ids);
+			return self._execute(context, realm.operation, execute_parameters);
+		});
 	}
 	_count_agent(context, scope, input, realm) {
 		const self = this;

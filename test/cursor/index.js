@@ -50,6 +50,21 @@ async function with_transactions(database_manager, action) {
 	}
 }
 
+async function with_stubbed_methods(target, stubs, action) {
+	const originals = {};
+	Object.keys(stubs).forEach(function (key) {
+		originals[key] = target[key];
+		target[key] = stubs[key];
+	});
+	try {
+		return await action();
+	} finally {
+		Object.keys(stubs).forEach(function (key) {
+			target[key] = originals[key];
+		});
+	}
+}
+
 test.describe("cursor pagination", async function (suite_ctx) {
 	test.before(function () {
 		suite_ctx.database_manager = new $gauze.kernel.src.database.manager.DATABASE_MANAGER__MANAGER__DATABASE__SRC__KERNEL($gauze.database.config.default);
@@ -109,19 +124,171 @@ test.describe("cursor pagination", async function (suite_ctx) {
 		}, /Invalid cursor method/);
 	});
 
-	await test.it("uses explicit unsupported errors for special system cursor mutations", async function () {
+	await test.it("routes special system cursor mutations through authorized id caches", async function () {
+		async function assert_cursor_mutation(model, operation_method, authorization_method, key, expected_ids) {
+			const parameters = {
+				cursor: `${operation_method}-cursor`,
+			};
+			const decoded_parameters = {
+				where: {
+					id: `${operation_method}-decoded`,
+				},
+			};
+			const realm = {
+				operation: {
+					operation: `${operation_method}-operation`,
+				},
+			};
+			await with_stubbed_methods(
+				model,
+				{
+					_cursor_request_from_parameters(input, method) {
+						assert.deepEqual(input, parameters);
+						assert.equal(method, authorization_method);
+						return {
+							parameters: decoded_parameters,
+						};
+					},
+					_cursor_authorized_ids(context, scope, input, input_realm, method) {
+						assert.deepEqual(context, { context: operation_method });
+						assert.deepEqual(scope, { scope: operation_method });
+						assert.deepEqual(input, decoded_parameters);
+						assert.equal(input_realm, realm);
+						assert.equal(method, authorization_method);
+						return Promise.resolve(expected_ids);
+					},
+					_cursor_cache_where_in(input, input_key, values) {
+						assert.deepEqual(input, parameters);
+						assert.equal(input_key, key);
+						assert.deepEqual(values, expected_ids);
+						return {
+							...input,
+							cache_where_in: {
+								[input_key]: `${operation_method}-cache`,
+							},
+						};
+					},
+					_execute(context, operation, input) {
+						assert.deepEqual(context, { context: operation_method });
+						assert.equal(operation, realm.operation);
+						assert.deepEqual(input, {
+							cursor: `${operation_method}-cursor`,
+							cache_where_in: {
+								[key]: `${operation_method}-cache`,
+							},
+						});
+						return Promise.resolve({
+							data: operation_method,
+						});
+					},
+				},
+				async function () {
+					const result = await model[`_cursor_${authorization_method}`]({ context: operation_method }, { scope: operation_method }, parameters, realm);
+					assert.deepEqual(result, {
+						data: operation_method,
+					});
+				},
+			);
+		}
+
+		const relationship_model = $gauze.system.models.relationship.MODEL__RELATIONSHIP__MODEL__SYSTEM;
+		await assert_cursor_mutation(relationship_model, "relationship-update", "update", relationship_model.entity.primary_key, ["relationship-1"]);
+		await assert_cursor_mutation(relationship_model, "relationship-delete", "delete", relationship_model.entity.primary_key, ["relationship-2"]);
+
+		const whitelist_model = $gauze.system.models.whitelist.MODEL__WHITELIST__MODEL__SYSTEM;
+		await assert_cursor_mutation(whitelist_model, "whitelist-update", "update", whitelist_model.key_id, ["whitelist-1"]);
+
+		const blacklist_model = $gauze.system.models.blacklist.MODEL__BLACKLIST__MODEL__SYSTEM;
+		await assert_cursor_mutation(blacklist_model, "blacklist-delete", "delete", blacklist_model.key_id, ["blacklist-1"]);
+	});
+
+	await test.it("requires access cursor agent filters to match agent id and type", async function () {
+		const model = $gauze.system.models.whitelist.MODEL__WHITELIST__MODEL__SYSTEM;
 		assert.throws(function () {
-			$gauze.system.models.relationship.MODEL__RELATIONSHIP__MODEL__SYSTEM._cursor_update({}, {}, {}, {});
-		}, /cursor_update is not supported for relationship system models/);
-		assert.throws(function () {
-			$gauze.system.models.relationship.MODEL__RELATIONSHIP__MODEL__SYSTEM._cursor_delete({}, {}, {}, {});
-		}, /cursor_delete is not supported for relationship system models/);
-		assert.throws(function () {
-			$gauze.system.models.whitelist.MODEL__WHITELIST__MODEL__SYSTEM._cursor_update({}, {}, {}, {});
-		}, /cursor_update is not supported for access system models/);
-		assert.throws(function () {
-			$gauze.system.models.blacklist.MODEL__BLACKLIST__MODEL__SYSTEM._cursor_delete({}, {}, {}, {});
-		}, /cursor_delete is not supported for access system models/);
+			model._cursor_authorized_ids_transaction(
+				{},
+				{},
+				{
+					where: {
+						[model.key_agent_id]: "agent-1",
+						[model.key_agent_type]: "wrong-agent-type",
+					},
+				},
+				{
+					agent: {
+						agent_id: "agent-1",
+						agent_type: "right-agent-type",
+					},
+					entity: {},
+				},
+				"read",
+				null,
+				null,
+			);
+		}, /must match the initiating agent/);
+	});
+
+	await test.it("requires special system cursor mutations to target the primary key", async function () {
+		const relationship_model = $gauze.system.models.relationship.MODEL__RELATIONSHIP__MODEL__SYSTEM;
+		function relationship_database() {
+			throw new Error("relationship cursor mutations without a primary key should not query");
+		}
+		["update", "delete"].forEach(function (method) {
+			assert.throws(function () {
+				relationship_model._cursor_authorized_ids_transaction(
+					{},
+					{},
+					{
+						where: {
+							gauze__relationship__from_id: "from-1",
+							gauze__relationship__from_type: "gauze__ytitne",
+						},
+					},
+					{
+						agent: {
+							agent_id: "agent-1",
+							agent_type: "gauze__agent_user",
+						},
+						entity: {},
+					},
+					method,
+					relationship_database,
+					"transaction",
+				);
+			}, /Field 'where.gauze__relationship__id' is required/);
+		});
+
+		const model = $gauze.system.models.whitelist.MODEL__WHITELIST__MODEL__SYSTEM;
+		function database() {
+			throw new Error("access cursor mutations without a primary key should not query");
+		}
+		["update", "delete"].forEach(function (method) {
+			assert.throws(
+				function () {
+					model._cursor_authorized_ids_transaction(
+						{},
+						{},
+						{
+							where: {
+								[model.key_agent_id]: "agent-1",
+								[model.key_agent_type]: "gauze__agent_user",
+							},
+						},
+						{
+							agent: {
+								agent_id: "agent-1",
+								agent_type: "gauze__agent_user",
+							},
+							entity: {},
+						},
+						method,
+						database,
+						"transaction",
+					);
+				},
+				new RegExp(`Field 'where.${model.key_id}' is required`),
+			);
+		});
 	});
 
 	await test.it("pages ytitne with previous, current, and next cursors", async function () {

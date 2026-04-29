@@ -580,33 +580,54 @@ class RelationshipSystemModel extends SystemModel {
 	}
 	_cursor_read_authorized_ids(context, scope, parameters, realm) {
 		const self = this;
+		return self._cursor_authorized_ids(context, scope, parameters, realm, "read");
+	}
+	_cursor_authorized_ids(context, scope, parameters, realm, method) {
+		const self = this;
 		return context.database_manager.route_transactions(context, scope, parameters, self, "read").then(function (shards) {
 			return Promise.all(
 				shards.map(function (shard) {
-					return self._cursor_read_authorized_ids_transaction(context, scope, parameters, realm, shard.connection, shard.transaction);
+					return self._cursor_authorized_ids_transaction(context, scope, parameters, realm, method, shard.connection, shard.transaction);
 				}),
 			).then(function (results) {
 				return results.flat();
 			});
 		});
 	}
-	_cursor_read_authorized_ids_transaction(context, scope, parameters, realm, database, transaction) {
+	_cursor_authorized_relationship_id(context, scope, parameters, realm, relationship, method) {
+		const self = this;
+		const { agent } = realm;
+		if (method === "update") {
+			const staged = { ...relationship, ...(parameters.attributes || {}) };
+			staged[self.primary_key] = relationship[self.primary_key];
+			self._connected_relationship(staged);
+			return self._authorized_relationship(context, scope, relationship, agent, method).then(function () {
+				return self._authorized_relationship(context, scope, staged, agent, method).then(function () {
+					return [relationship[self.primary_key]];
+				});
+			});
+		} else {
+			return self._authorized_relationship(context, scope, relationship, agent, method).then(function () {
+				return [relationship[self.primary_key]];
+			});
+		}
+	}
+	_cursor_authorized_ids_transaction(context, scope, parameters, realm, method, database, transaction) {
 		const self = this;
 		const { agent, entity } = realm;
-		const method = "read";
 		entity.entity_method = method;
 		if (parameters.where && parameters.where.gauze__relationship__id) {
 			self._validate_entity_types(parameters.where);
 			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
-					return self._authorized_relationship(context, scope, relationship, agent, method).then(function () {
-						return [relationship[self.primary_key]];
-					});
+					return self._cursor_authorized_relationship_id(context, scope, parameters, realm, relationship, method);
 				} else {
 					return [];
 				}
 			});
+		} else if (method !== "read") {
+			throw new Error("Field 'where.gauze__relationship__id' is required");
 		} else if (
 			parameters.where &&
 			parameters.where.gauze__relationship__from_id &&
@@ -716,7 +737,12 @@ class RelationshipSystemModel extends SystemModel {
 		return self.model_loader.load(context, scope, key);
 	}
 	_cursor_update(context, scope, parameters, realm) {
-		throw new Error("cursor_update is not supported for relationship system models");
+		const self = this;
+		const request = self._cursor_request_from_parameters(parameters, "update");
+		return self._cursor_authorized_ids(context, scope, request.parameters, realm, "update").then(function (valid_ids) {
+			const execute_parameters = self._cursor_cache_where_in(parameters, self.entity.primary_key, valid_ids);
+			return self._execute(context, realm.operation, execute_parameters);
+		});
 	}
 	_root_update(context, scope, parameters, realm) {
 		const self = this;
@@ -833,7 +859,12 @@ class RelationshipSystemModel extends SystemModel {
 		return self.model_loader.load(context, scope, key);
 	}
 	_cursor_delete(context, scope, parameters, realm) {
-		throw new Error("cursor_delete is not supported for relationship system models");
+		const self = this;
+		const request = self._cursor_request_from_parameters(parameters, "delete");
+		return self._cursor_authorized_ids(context, scope, request.parameters, realm, "delete").then(function (valid_ids) {
+			const execute_parameters = self._cursor_cache_where_in(parameters, self.entity.primary_key, valid_ids);
+			return self._execute(context, realm.operation, execute_parameters);
+		});
 	}
 	_count_entity_transaction(context, scope, parameters, realm, database, transaction) {
 		const self = this;
