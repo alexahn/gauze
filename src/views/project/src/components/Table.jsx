@@ -75,6 +75,7 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 		},
 		[variables, pageInfo],
 	);
+	const appliedCursor = (pageInfo && pageInfo.current_cursor) || variables.cursor || "";
 	const appliedVariablesKey = JSON.stringify(appliedVariables);
 	// note: infer the filter mode based on the structure of variables
 	const defaultFilterMode = appliedVariables.where ? "where" : appliedVariables.where_like ? "where_like" : appliedVariables.where_between ? "where_between" : "where";
@@ -105,7 +106,7 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 			setLocalVariables(appliedVariables);
 			setOrderClauses(orderClausesFromVariables(appliedVariables));
 		},
-		[appliedVariablesKey, defaultFilterMode],
+		[appliedVariablesKey, appliedCursor, defaultFilterMode],
 	);
 
 	function href(item) {
@@ -188,40 +189,29 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 		return function (e) {
 			const variables = {
 				...localVariables,
-			};
-			if (variables[filterMode]) {
-				// note: should we use e.target.serialized?
-				variables[filterMode][field] = e.target.serialized;
-			} else {
-				variables[filterMode] = {
-					// note: should we use e.target.serialized?
+				[filterMode]: {
+					...(localVariables[filterMode] || {}),
 					[field]: e.target.serialized,
-				};
-			}
+				},
+			};
+			delete variables.cursor;
+			delete variables.offset;
 			setLocalVariables(variables);
 		};
 	}
 	function handleBetweenFilterChange(field, index) {
 		return function (e) {
+			const range = localVariables[filterMode] && localVariables[filterMode][field] ? [...localVariables[filterMode][field]] : [];
+			range[index] = e.target.serialized;
 			const variables = {
 				...localVariables,
+				[filterMode]: {
+					...(localVariables[filterMode] || {}),
+					[field]: range,
+				},
 			};
-			if (variables[filterMode]) {
-				if (variables[filterMode][field]) {
-					// note: should we use e.target.serialized?
-					variables[filterMode][field][index] = e.target.serialized;
-				} else {
-					variables[filterMode][field] = [];
-					// note: should we use e.target.serialized?
-					variables[filterMode][field][index] = e.target.serialized;
-				}
-			} else {
-				variables[filterMode] = {
-					[field]: [],
-				};
-				// note: should we use e.target.serialized?
-				variables[filterMode][field][index] = e.target.serialized;
-			}
+			delete variables.cursor;
+			delete variables.offset;
 			setLocalVariables(variables);
 		};
 	}

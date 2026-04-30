@@ -476,6 +476,7 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 		},
 		[node.variables, node.pageInfo],
 	);
+	const appliedCursor = (node.pageInfo && node.pageInfo.current_cursor) || node.variables.cursor || "";
 	const appliedVariablesKey = JSON.stringify(appliedVariables);
 	const [filterMode, setFilterMode] = useState(node.filterMode);
 	const [localVariables, setLocalVariables] = useState(appliedVariables);
@@ -518,7 +519,7 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 			setLocalVariables(appliedVariables);
 			setSortClauses(sortClausesFromVariables(appliedVariables));
 		},
-		[node.id, node.filterMode, node.header, appliedVariablesKey],
+		[node.id, node.filterMode, node.header, appliedVariablesKey, appliedCursor],
 	);
 
 	useEffect(
@@ -547,6 +548,8 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 					[field]: e.target.serialized,
 				},
 			};
+			delete variables.cursor;
+			delete variables.offset;
 			setLocalVariables(variables);
 		};
 	}
@@ -562,6 +565,8 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 					[field]: range,
 				},
 			};
+			delete variables.cursor;
+			delete variables.offset;
 			setLocalVariables(variables);
 		};
 	}
@@ -1648,6 +1653,7 @@ function Graph({ pathfinder, services, agent, headers }) {
 	const nodeContentsRef = useRef(nodeContents);
 	const nodePositionsRef = useRef(nodePositions);
 	const nodeDimensionsRef = useRef(nodeDimensions);
+	const nodeRequestVersionsRef = useRef({});
 	const { gauzemodel } = services;
 	const nodeMeasureSignature = nodeContents
 		.map(function (node) {
@@ -1691,6 +1697,8 @@ function Graph({ pathfinder, services, agent, headers }) {
 
 	const reloadNode = useCallback(
 		function (id, variables, filterMode, selectedNodeOverride) {
+			const requestVersion = (nodeRequestVersionsRef.current[id] || 0) + 1;
+			nodeRequestVersionsRef.current[id] = requestVersion;
 			const selectedNode =
 				selectedNodeOverride ||
 				nodeContentsRef.current.find(function (node) {
@@ -1745,6 +1753,9 @@ function Graph({ pathfinder, services, agent, headers }) {
 					};
 				});
 			return Promise.all([read, count]).then(function (results) {
+				if (nodeRequestVersionsRef.current[id] !== requestVersion) {
+					return;
+				}
 				const readResult = results[0];
 				const countResult = results[1];
 				updateNodeContent(id, function (node) {
@@ -2056,6 +2067,7 @@ function Graph({ pathfinder, services, agent, headers }) {
 	}, []);
 
 	const closeNode = useCallback(function (id) {
+		delete nodeRequestVersionsRef.current[id];
 		setNodeContents(function (nodes) {
 			return nodes.filter(function (node) {
 				return node.id !== id;
