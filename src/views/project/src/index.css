@@ -1470,6 +1470,13 @@
 	opacity: 0.72;
 }
 
+.project-graph-settings-title-actions {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	min-width: 0;
+}
+
 .project-graph-settings-grid {
 	display: grid;
 	grid-template-columns: minmax(16rem, 1fr) minmax(24rem, 1fr);
@@ -1532,6 +1539,10 @@
 
 .project-graph-settings-control {
 	justify-content: space-between;
+}
+
+.project-graph-settings-page-size {
+	gap: 0.45rem;
 }
 
 .project-graph-settings-select {
@@ -1628,6 +1639,12 @@
 @media (max-width: 48rem) {
 	.project-graph-settings-grid {
 		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.project-graph-settings-view-title,
+	.project-graph-settings-title-actions {
+		align-items: flex-start;
+		flex-direction: column;
 	}
 
 	.project-graph-settings-order-row {

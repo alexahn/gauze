@@ -23,6 +23,7 @@ import Popover from "./Popover.jsx";
 import { cursorCountVariables, cursorEffectiveVariables, cursorReadVariables, cursorRouteVariables } from "./../cursor.js";
 
 const PAGE_SIZE = 8;
+const PAGE_SIZE_OPTIONS = [8, 16, 32, 64];
 const NODE_HORIZONTAL_GAP = 96;
 const NODE_VERTICAL_GAP = 64;
 const ACCESS_METHODS = ["create", "read", "update", "delete", "count"];
@@ -232,6 +233,15 @@ function defaultVariables(header) {
 		];
 	}
 	return variables;
+}
+
+function normalizePageSize(value) {
+	const size = parseInt(value, 10);
+	if (PAGE_SIZE_OPTIONS.includes(size)) {
+		return size;
+	} else {
+		return PAGE_SIZE;
+	}
 }
 
 function traversalVariables(header, source) {
@@ -498,6 +508,7 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 		return field.name.toLowerCase().indexOf(settingsFieldFilter.toLowerCase()) >= 0;
 	});
 	const total = countToNumber(node.count);
+	const pageSize = normalizePageSize(appliedVariables.limit);
 	const cellClass = "project-graph-cell ba bw1 br2 bdx2 bgx2 cx6";
 	const headerCellClass = "project-graph-cell ba bw1 br2 bdx3 bgx3 cx6";
 	const rowHeaderCellClass = `${headerCellClass} project-graph-heading`;
@@ -589,6 +600,17 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 
 	function updateSettingsFieldFilter(e) {
 		setSettingsFieldFilter(e.target.value);
+	}
+
+	function updatePageSize(e) {
+		const limit = normalizePageSize(e.target.value);
+		const variables = {
+			...appliedVariables,
+			limit,
+		};
+		delete variables.cursor;
+		delete variables.offset;
+		onReload(node.id, variables, filterMode);
 	}
 
 	function updateVisibleField(fieldName) {
@@ -886,8 +908,22 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 			<div className="project-graph-settings-view" onWheel={stopWheelPropagation}>
 				<div className="project-graph-settings-view-title">
 					<div className="project-graph-settings-heading">Table settings</div>
-					<div className="project-graph-settings-count">
-						{visibleFieldNames.length} / {fields.length} fields
+					<div className="project-graph-settings-title-actions">
+						<label className="project-graph-settings-control project-graph-settings-page-size">
+							<span>Page size</span>
+							<select className="project-graph-settings-select ba bw1 br2 bdx3 bgx12 cx2" value={pageSize} onChange={updatePageSize}>
+								{PAGE_SIZE_OPTIONS.map(function (size) {
+									return (
+										<option key={size} value={size}>
+											{size}
+										</option>
+									);
+								})}
+							</select>
+						</label>
+						<div className="project-graph-settings-count">
+							{visibleFieldNames.length} / {fields.length} fields
+						</div>
 					</div>
 				</div>
 				<div className="project-graph-settings-grid">
