@@ -48,6 +48,28 @@ class YtitneYtitneSystemModel extends $kernel.src.models.system.SystemModel {
 			});
 		});
 	}
+	cursor_read(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.ytitne.database.sql.TABLE_NAME__SQL__DATABASE__YTITNE__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.ytitne.CURSOR_READ__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.ytitne.CURSOR_READ_NAME__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_read(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_read_ytitne.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_read_ytitne.page_info,
+			};
+		});
+	}
 	update(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
@@ -67,6 +89,28 @@ class YtitneYtitneSystemModel extends $kernel.src.models.system.SystemModel {
 			});
 		});
 	}
+	cursor_update(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.ytitne.database.sql.TABLE_NAME__SQL__DATABASE__YTITNE__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.ytitne.CURSOR_UPDATE__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.ytitne.CURSOR_UPDATE_NAME__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_update(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_update_ytitne.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_update_ytitne.page_info,
+			};
+		});
+	}
 	delete(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
@@ -84,6 +128,28 @@ class YtitneYtitneSystemModel extends $kernel.src.models.system.SystemModel {
 			return data.data.delete_ytitne.map(function (row) {
 				return row.attributes;
 			});
+		});
+	}
+	cursor_delete(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.ytitne.database.sql.TABLE_NAME__SQL__DATABASE__YTITNE__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.ytitne.CURSOR_DELETE__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.ytitne.CURSOR_DELETE_NAME__YTITNE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_delete(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_delete_ytitne.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_delete_ytitne.page_info,
+			};
 		});
 	}
 	count(context, scope, parameters) {

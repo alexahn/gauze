@@ -46,6 +46,28 @@ class GauzeSystemModel extends $kernel.src.models.system.SystemModel {
 			});
 		});
 	}
+	cursor_read(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.gauze.database.sql.TABLE_NAME__SQL__DATABASE__GAUZE__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.gauze.CURSOR_READ__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.gauze.CURSOR_READ_NAME__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_read(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_read_gauze.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_read_gauze.page_info,
+			};
+		});
+	}
 	update(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
@@ -65,6 +87,28 @@ class GauzeSystemModel extends $kernel.src.models.system.SystemModel {
 			});
 		});
 	}
+	cursor_update(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.gauze.database.sql.TABLE_NAME__SQL__DATABASE__GAUZE__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.gauze.CURSOR_UPDATE__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.gauze.CURSOR_UPDATE_NAME__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_update(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_update_gauze.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_update_gauze.page_info,
+			};
+		});
+	}
 	delete(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
@@ -82,6 +126,28 @@ class GauzeSystemModel extends $kernel.src.models.system.SystemModel {
 			return data.data.delete_gauze.map(function (row) {
 				return row.attributes;
 			});
+		});
+	}
+	cursor_delete(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.gauze.database.sql.TABLE_NAME__SQL__DATABASE__GAUZE__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.gauze.CURSOR_DELETE__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.gauze.CURSOR_DELETE_NAME__GAUZE__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_delete(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_delete_gauze.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_delete_gauze.page_info,
+			};
 		});
 	}
 	count(context, scope, parameters) {

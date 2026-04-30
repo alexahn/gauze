@@ -17,6 +17,18 @@ class DatabaseManager {
 		self.whitelist_table = $abstract.entities.whitelist ? $abstract.entities.whitelist.default($abstract).table_name : "undefined";
 		self.blacklist_table = $abstract.entities.blacklist ? $abstract.entities.blacklist.default($abstract).table_name : "undefined";
 	}
+	_assert_context_accepts_transactions(context) {
+		if (context.transaction_cleanup_started_at) {
+			const action = context.transaction_cleanup_action || "cleanup";
+			throw new Error(`Cannot route transactions after ${action} started`);
+		}
+	}
+	_mark_context_transaction_cleanup(context, action) {
+		if (!context.transaction_cleanup_started_at) {
+			context.transaction_cleanup_started_at = new Date().toISOString();
+			context.transaction_cleanup_action = action;
+		}
+	}
 	validate_config(config) {
 		function is_non_null_object(value) {
 			return value !== null && typeof value === "object";
@@ -519,7 +531,8 @@ class DatabaseManager {
 			const primary_key_shards = self.find_shards_for_set(table_name, primary_key_numbers);
 			filtered_shards = self.intersect_shards(filtered_shards, primary_key_shards);
 		}
-		return self.filter_shards_for_between(filtered_shards, table_name, primary_key, parameters.where_between);
+		filtered_shards = self.filter_shards_for_between(filtered_shards, table_name, primary_key, parameters.where_between);
+		return self.filter_shards_for_between(filtered_shards, table_name, primary_key, parameters.cursor_where_between);
 	}
 	get_route_shard_nodes(context, shards, shard_type) {
 		const self = this;
@@ -987,7 +1000,8 @@ class DatabaseManager {
 				const shards = self.filter_shards_for_primary_key_filters(self.get_current_shards(model.table_name), model.table_name, model.primary_key, parameters);
 				return self.get_route_shard_nodes(context, shards, shard_type);
 			} else if (shard_type === "write") {
-				const filters_exist = parameters.where || parameters.where_in || parameters.where_not_in || parameters.where_between || parameters.where_like;
+				const filters_exist =
+					parameters.where || parameters.where_in || parameters.where_not_in || parameters.where_between || parameters.cursor_where_between || parameters.where_like;
 				if (filters_exist) {
 					const shards = self.filter_shards_for_primary_key_filters(self.get_current_shards(model.table_name), model.table_name, model.primary_key, parameters);
 					return self.get_route_shard_nodes(context, shards, shard_type);
@@ -1051,7 +1065,8 @@ class DatabaseManager {
 				const shards = self.filter_shards_for_primary_key_filters(relationship_shards, model.table_name, model.primary_key, parameters);
 				return self.get_route_shard_nodes(context, shards, shard_type);
 			} else if (shard_type === "write") {
-				const filters_exist = parameters.where || parameters.where_in || parameters.where_not_in || parameters.where_between || parameters.where_like;
+				const filters_exist =
+					parameters.where || parameters.where_in || parameters.where_not_in || parameters.where_between || parameters.cursor_where_between || parameters.where_like;
 				if (filters_exist) {
 					const shards = self.filter_shards_for_primary_key_filters(relationship_shards, model.table_name, model.primary_key, parameters);
 					return self.get_route_shard_nodes(context, shards, shard_type);
@@ -1094,6 +1109,7 @@ class DatabaseManager {
 	// shard_type is "read" or "write"
 	route_transactions(context, scope, parameters, model, shard_type, relationships) {
 		const self = this;
+		self._assert_context_accepts_transactions(context);
 		const connections = self.route_connections(context, scope, parameters, model, shard_type, relationships);
 		const unique_connections = [
 			...new Map(
@@ -1163,6 +1179,7 @@ class DatabaseManager {
 	}
 	commit_context_transactions(context) {
 		const self = this;
+		self._mark_context_transaction_cleanup(context, "commit");
 		return self.commit_transactions(context.transactions).finally(function () {
 			Object.keys(context.transactions).forEach(function (key) {
 				delete context.transactions[key];
@@ -1181,6 +1198,7 @@ class DatabaseManager {
 	// context is graphql context
 	rollback_context_transactions(context) {
 		const self = this;
+		self._mark_context_transaction_cleanup(context, "rollback");
 		return self.rollback_transactions(context.transactions).finally(function () {
 			Object.keys(context.transactions).forEach(function (key) {
 				delete context.transactions[key];

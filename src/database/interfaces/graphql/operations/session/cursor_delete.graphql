@@ -1,0 +1,50 @@
+mutation CursorDeleteSession(
+	$cursor: String
+	$source: Session_Mutation__Source
+	$where: Session_Mutation__Where
+	$where_in: Session_Mutation__Where_Array
+	$cache_where_in: Session_Mutation__Where_String
+	$where_not_in: Session_Mutation__Where_Array
+	$cache_where_not_in: Session_Mutation__Where_String
+	$where_like: Session_Mutation__Where
+	$where_between: Session_Mutation__Where_Array
+	$limit: Int
+	$order: [Order]
+) {
+	cursor_delete_session(
+		cursor: $cursor
+		source: $source
+		where: $where
+		where_in: $where_in
+		cache_where_in: $cache_where_in
+		where_not_in: $where_not_in
+		cache_where_not_in: $cache_where_not_in
+		where_like: $where_like
+		where_between: $where_between
+		limit: $limit
+		order: $order
+	) {
+		nodes {
+			attributes {
+				gauze__session__id
+				gauze__session__created_at
+				gauze__session__updated_at
+				gauze__session__deleted_at
+				gauze__session__realm
+				gauze__session__agent_id
+				gauze__session__agent_type
+				gauze__session__value
+				gauze__session__kind
+				gauze__session__seed
+				gauze__session__data
+			}
+		}
+		page_info {
+			has_previous_page
+			has_next_page
+			previous_cursor
+			current_cursor
+			next_cursor
+		}
+	}
+}

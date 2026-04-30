@@ -17,13 +17,25 @@ class dd6fb00f485c4397add38780939d6923DatabaseModel extends $kernel.src.models.d
 		const self = this;
 		return self._read(context, scope, parameters);
 	}
+	cursor_read(context, scope, parameters) {
+		const self = this;
+		return self._cursor_read(context, scope, parameters);
+	}
 	update(context, scope, parameters) {
 		const self = this;
 		return self._update(context, scope, parameters);
 	}
+	cursor_update(context, scope, parameters) {
+		const self = this;
+		return self._cursor_update(context, scope, parameters);
+	}
 	delete(context, scope, parameters) {
 		const self = this;
 		return self._delete(context, scope, parameters);
+	}
+	cursor_delete(context, scope, parameters) {
+		const self = this;
+		return self._cursor_delete(context, scope, parameters);
 	}
 	count(context, scope, parameters) {
 		const self = this;

@@ -46,6 +46,28 @@ class RelationshipSystemModel extends $kernel.src.models.relationship.Relationsh
 			});
 		});
 	}
+	cursor_read(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.relationship.CURSOR_READ__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.relationship.CURSOR_READ_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_read(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_read_relationship.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_read_relationship.page_info,
+			};
+		});
+	}
 	update(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
@@ -65,6 +87,28 @@ class RelationshipSystemModel extends $kernel.src.models.relationship.Relationsh
 			});
 		});
 	}
+	cursor_update(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.relationship.UPDATE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.relationship.UPDATE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_update(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_update_relationship.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_update_relationship.page_info,
+			};
+		});
+	}
 	delete(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
@@ -82,6 +126,28 @@ class RelationshipSystemModel extends $kernel.src.models.relationship.Relationsh
 			return data.data.delete_relationship.map(function (row) {
 				return row.attributes;
 			});
+		});
+	}
+	cursor_delete(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.relationship.database.sql.TABLE_NAME__SQL__DATABASE__RELATIONSHIP__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.relationship.DELETE__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.relationship.DELETE_NAME__RELATIONSHIP__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_delete(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_delete_relationship.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_delete_relationship.page_info,
+			};
 		});
 	}
 	count(context, scope, parameters) {

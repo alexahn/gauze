@@ -47,6 +47,29 @@ class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.src.models.sys
 			});
 		});
 	}
+	cursor_read(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.a543731262804f64adcc0eae1a225acc.database.sql.TABLE_NAME__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.CURSOR_READ__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name:
+					$database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.CURSOR_READ_NAME__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_read(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_read_a543731262804f64adcc0eae1a225acc.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_read_a543731262804f64adcc0eae1a225acc.page_info,
+			};
+		});
+	}
 	update(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
@@ -67,6 +90,29 @@ class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.src.models.sys
 			});
 		});
 	}
+	cursor_update(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.a543731262804f64adcc0eae1a225acc.database.sql.TABLE_NAME__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.CURSOR_UPDATE__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name:
+					$database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.CURSOR_UPDATE_NAME__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_update(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_update_a543731262804f64adcc0eae1a225acc.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_update_a543731262804f64adcc0eae1a225acc.page_info,
+			};
+		});
+	}
 	delete(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
@@ -85,6 +131,29 @@ class dd6fb00f485c4397add38780939d6923SystemModel extends $kernel.src.models.sys
 			return data.data.delete_a543731262804f64adcc0eae1a225acc.map(function (row) {
 				return row.attributes;
 			});
+		});
+	}
+	cursor_delete(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.a543731262804f64adcc0eae1a225acc.database.sql.TABLE_NAME__SQL__DATABASE__caf5342ac38d41a6a02bb81d2d2b21a4__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.CURSOR_DELETE__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name:
+					$database.interfaces.graphql.operations.a543731262804f64adcc0eae1a225acc.CURSOR_DELETE_NAME__caf5342ac38d41a6a02bb81d2d2b21a4__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_delete(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_delete_a543731262804f64adcc0eae1a225acc.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_delete_a543731262804f64adcc0eae1a225acc.page_info,
+			};
 		});
 	}
 	count(context, scope, parameters) {

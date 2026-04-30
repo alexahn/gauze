@@ -54,6 +54,21 @@ const WHERE_STRING__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.ga
 	fields: $structure.entities.ytitne.system.graphql.WHERE_FIELDS_STRING__GRAPHQL__SYSTEM__YTITNE__STRUCTURE,
 });
 
+const CURSOR_PAGE__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Ytitne_Query__Cursor_Page",
+	description: "Ytitne Query Cursor Page",
+	fields: () => ({
+		nodes: {
+			type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+				new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ytitne.system.graphql.QUERY__GRAPHQL__SYSTEM__YTITNE__STRUCTURE),
+			),
+		},
+		page_info: {
+			type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.cursor.TYPE__CURSOR_PAGE_INFO__SYSTEM__STRUCTURE),
+		},
+	}),
+});
+
 const READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.entities.ytitne.system.graphql.QUERY__GRAPHQL__SYSTEM__YTITNE__STRUCTURE),
 	args: {
@@ -119,6 +134,62 @@ const READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 		).then(function (data) {
 			$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, "READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:success", "data", data);
 			return data.map(SERIALIZER__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.serialize);
+		});
+	},
+};
+
+const CURSOR_READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
+	type: CURSOR_PAGE__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+	args: {
+		cursor: {
+			description: "cursor",
+			type: $abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where: {
+			description: "where",
+			type: WHERE__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_in: {
+			description: "where in",
+			type: WHERE_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_not_in: {
+			description: "where not in",
+			type: WHERE_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_like: {
+			description: "where like",
+			type: WHERE__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+		},
+		limit: {
+			description: "limit",
+			type: $abstract.gauze.types.graphql.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
+		order: {
+			description: "order",
+			type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.order.TYPE__ORDER__STRUCTURE),
+		},
+	},
+	resolve: (source, query_arguments, context) => {
+		return CONTROLLER__YTITNE__CONTROLLER__SYSTEM.cursor_read(
+			context,
+			{
+				source,
+			},
+			query_arguments,
+		).then(function (page) {
+			return {
+				nodes: page.nodes.map(SERIALIZER__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM.serialize),
+				page_info: page.page_info,
+			};
 		});
 	},
 };
@@ -194,5 +265,6 @@ export {
 	WHERE_STRING__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 	// top level
 	READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
+	CURSOR_READ__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 	COUNT__YTITNE__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 };

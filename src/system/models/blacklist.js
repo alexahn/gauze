@@ -46,6 +46,28 @@ class BlacklistSystemModel extends $kernel.src.models.access.AccessSystemModel {
 			});
 		});
 	}
+	cursor_read(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.blacklist.CURSOR_READ__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.blacklist.CURSOR_READ_NAME__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_read(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_read_blacklist.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_read_blacklist.page_info,
+			};
+		});
+	}
 	update(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
@@ -65,6 +87,28 @@ class BlacklistSystemModel extends $kernel.src.models.access.AccessSystemModel {
 			});
 		});
 	}
+	cursor_update(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.blacklist.UPDATE__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.blacklist.UPDATE_NAME__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_update(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_update_blacklist.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_update_blacklist.page_info,
+			};
+		});
+	}
 	delete(context, scope, parameters) {
 		const self = this;
 		const { agent } = context;
@@ -82,6 +126,28 @@ class BlacklistSystemModel extends $kernel.src.models.access.AccessSystemModel {
 			return data.data.delete_blacklist.map(function (row) {
 				return row.attributes;
 			});
+		});
+	}
+	cursor_delete(context, scope, parameters) {
+		const self = this;
+		const { agent } = context;
+		const realm = {
+			agent: agent,
+			entity: {
+				entity_type: $structure.entities.blacklist.database.sql.TABLE_NAME__SQL__DATABASE__BLACKLIST__STRUCTURE,
+			},
+			operation: {
+				operation: $database.interfaces.graphql.operations.blacklist.DELETE__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+				operation_name: $database.interfaces.graphql.operations.blacklist.DELETE_NAME__BLACKLIST__OPERATION__GRAPHQL__INTERFACE__DATABASE,
+			},
+		};
+		return self._cursor_delete(context, scope, parameters, realm).then(function (data) {
+			return {
+				nodes: data.data.cursor_delete_blacklist.nodes.map(function (row) {
+					return row.attributes;
+				}),
+				page_info: data.data.cursor_delete_blacklist.page_info,
+			};
 		});
 	}
 	count(context, scope, parameters) {

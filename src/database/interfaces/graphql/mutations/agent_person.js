@@ -54,6 +54,23 @@ const WHERE_STRING__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $
 	fields: $structure.entities.agent_person.database.graphql.WHERE_FIELDS_STRING__GRAPHQL__DATABASE__AGENT_PERSON__STRUCTURE,
 });
 
+const CURSOR_PAGE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = new $abstract.gauze.types.graphql.graphql.OBJECT__GRAPHQL__TYPE__GAUZE__ABSTRACT({
+	name: "Agent_Person_Mutation__Cursor_Page",
+	description: "Agent_Person Mutation Cursor Page",
+	fields: () => ({
+		nodes: {
+			type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+				new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
+					$structure.entities.agent_person.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_PERSON__STRUCTURE,
+				),
+			),
+		},
+		page_info: {
+			type: new $abstract.gauze.types.graphql.graphql.NON_NULL__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.cursor.TYPE__CURSOR_PAGE_INFO__DATABASE__STRUCTURE),
+		},
+	}),
+});
+
 const CREATE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT(
 		$structure.entities.agent_person.database.graphql.MUTATION__GRAPHQL__DATABASE__AGENT_PERSON__STRUCTURE,
@@ -272,8 +289,183 @@ const DELETE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
 	},
 };
 
+const CURSOR_UPDATE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
+	type: CURSOR_PAGE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+	args: {
+		cursor: {
+			description: "cursor",
+			type: $abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where: {
+			description: "where",
+			type: WHERE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_in: {
+			description: "where in",
+			type: WHERE_ARRAY__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		cache_where_in: {
+			description: "cache where in",
+			type: WHERE_STRING__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_not_in: {
+			description: "where not in",
+			type: WHERE_ARRAY__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		cache_where_not_in: {
+			description: "cache where not in",
+			type: WHERE_STRING__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_like: {
+			description: "where like",
+			type: WHERE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		attributes: {
+			description: "attributes",
+			type: ATTRIBUTES__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		limit: {
+			description: "limit",
+			type: $abstract.gauze.types.graphql.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
+		order: {
+			description: "order",
+			type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.order.TYPE__ORDER__STRUCTURE),
+		},
+	},
+	resolve: (source, mutation_arguments, context) => {
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"CURSOR_UPDATE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
+			"source",
+			source,
+		);
+		if (!mutation_arguments.cursor && !mutation_arguments.attributes) {
+			throw new Error("Field 'cursor' is required or field 'attributes' is required");
+		}
+		if (
+			!mutation_arguments.cursor &&
+			!mutation_arguments.where &&
+			!mutation_arguments.where_in &&
+			!mutation_arguments.where_not_in &&
+			!mutation_arguments.where_like &&
+			!mutation_arguments.where_between
+		) {
+			throw new Error(
+				"Field 'cursor' is required or field 'where' is required or field 'where_in' is required or field 'where_not_in' is required or field 'where_like' is required or field 'where_between' is required",
+			);
+		}
+		return CONTROLLER__AGENT_PERSON__CONTROLLER__DATABASE.cursor_update(
+			context,
+			{
+				source,
+			},
+			mutation_arguments,
+		).then(function (page) {
+			return {
+				nodes: page.nodes.map(SERIALIZER__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize),
+				page_info: page.page_info,
+			};
+		});
+	},
+};
+
+const CURSOR_DELETE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE = {
+	type: CURSOR_PAGE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+	args: {
+		cursor: {
+			description: "cursor",
+			type: $abstract.gauze.types.graphql.graphql.STRING__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
+		source: {
+			description: "source",
+			type: SOURCE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where: {
+			description: "where",
+			type: WHERE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_in: {
+			description: "where in",
+			type: WHERE_ARRAY__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		cache_where_in: {
+			description: "cache where in",
+			type: WHERE_STRING__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_not_in: {
+			description: "where not in",
+			type: WHERE_ARRAY__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		cache_where_not_in: {
+			description: "cache where not in",
+			type: WHERE_STRING__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_like: {
+			description: "where like",
+			type: WHERE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		where_between: {
+			description: "where between",
+			type: WHERE_ARRAY__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+		},
+		limit: {
+			description: "limit",
+			type: $abstract.gauze.types.graphql.graphql.INT__GRAPHQL__TYPE__GAUZE__ABSTRACT,
+		},
+		order: {
+			description: "order",
+			type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.order.TYPE__ORDER__STRUCTURE),
+		},
+	},
+	resolve: (source, mutation_arguments, context) => {
+		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(
+			"0",
+			__RELATIVE_FILEPATH,
+			"CURSOR_DELETE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE.resolve:enter",
+			"source",
+			source,
+		);
+		if (
+			!mutation_arguments.cursor &&
+			!mutation_arguments.where &&
+			!mutation_arguments.where_in &&
+			!mutation_arguments.where_not_in &&
+			!mutation_arguments.where_like &&
+			!mutation_arguments.where_between
+		) {
+			throw new Error(
+				"Field 'cursor' is required or field 'where' is required or field 'where_in' is required or field 'where_not_in' is required or field 'where_like' is required or field 'where_between' is required",
+			);
+		}
+		return CONTROLLER__AGENT_PERSON__CONTROLLER__DATABASE.cursor_delete(
+			context,
+			{
+				source,
+			},
+			mutation_arguments,
+		).then(function (page) {
+			return {
+				nodes: page.nodes.map(SERIALIZER__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE.serialize),
+				page_info: page.page_info,
+			};
+		});
+	},
+};
+
 export {
 	CREATE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 	UPDATE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+	CURSOR_UPDATE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 	DELETE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
+	CURSOR_DELETE__AGENT_PERSON__MUTATION__GRAPHQL__INTERFACE__DATABASE,
 };

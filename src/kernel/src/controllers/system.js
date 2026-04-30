@@ -53,6 +53,24 @@ class SystemController extends Controller {
 			});
 		});
 	}
+	_cursor_read(context, scope, input) {
+		const self = this;
+		const { agent } = context;
+		const model_scope = {
+			source: scope.source,
+		};
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.cursor_read:enter`, "input", input);
+		return self.model.cursor_read(context, model_scope, input).then(function (page) {
+			return {
+				nodes: page.nodes.map(function (row) {
+					row = self.model.deserialize(row, "read");
+					row = self.model.agent_filter(agent, row);
+					return row;
+				}),
+				page_info: page.page_info,
+			};
+		});
+	}
 	_update(context, scope, input) {
 		const self = this;
 		const { agent } = context;
@@ -68,6 +86,24 @@ class SystemController extends Controller {
 			});
 		});
 	}
+	_cursor_update(context, scope, input) {
+		const self = this;
+		const { agent } = context;
+		const model_scope = {
+			source: scope.source,
+		};
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.cursor_update:enter`, "input", input);
+		return self.model.cursor_update(context, model_scope, input).then(function (page) {
+			return {
+				nodes: page.nodes.map(function (row) {
+					row = self.model.deserialize(row, "update");
+					row = self.model.agent_filter(agent, row);
+					return row;
+				}),
+				page_info: page.page_info,
+			};
+		});
+	}
 	_delete(context, scope, input) {
 		const self = this;
 		const { agent } = context;
@@ -81,6 +117,24 @@ class SystemController extends Controller {
 				row = self.model.agent_filter(agent, row);
 				return row;
 			});
+		});
+	}
+	_cursor_delete(context, scope, input) {
+		const self = this;
+		const { agent } = context;
+		const model_scope = {
+			source: scope.source,
+		};
+		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.cursor_delete:enter`, "input", input);
+		return self.model.cursor_delete(context, model_scope, input).then(function (page) {
+			return {
+				nodes: page.nodes.map(function (row) {
+					row = self.model.deserialize(row, "delete");
+					row = self.model.agent_filter(agent, row);
+					return row;
+				}),
+				page_info: page.page_info,
+			};
 		});
 	}
 	_count(context, scope, input) {
