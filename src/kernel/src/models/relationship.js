@@ -545,7 +545,7 @@ class RelationshipSystemModel extends SystemModel {
 		const { agent, entity, operation } = realm;
 		const method = "read";
 		entity.entity_method = method;
-		if (parameters.where && parameters.where.gauze__relationship__id) {
+		if (parameters.where && self.primary_key in parameters.where) {
 			self._validate_entity_types(parameters.where);
 			return self._preread(context, database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
@@ -560,10 +560,10 @@ class RelationshipSystemModel extends SystemModel {
 			});
 		} else if (
 			parameters.where &&
-			parameters.where.gauze__relationship__from_id &&
-			parameters.where.gauze__relationship__from_type &&
-			parameters.where.gauze__relationship__to_id &&
-			parameters.where.gauze__relationship__to_type
+			self.key_from_id in parameters.where &&
+			self.key_from_type in parameters.where &&
+			self.key_to_id in parameters.where &&
+			self.key_to_type in parameters.where
 		) {
 			self._validate_entity_types(parameters.where);
 			return self._read_entity_transaction(context, scope, parameters, realm, database, transaction);
@@ -575,9 +575,9 @@ class RelationshipSystemModel extends SystemModel {
 			parameters.where_in.gauze__relationship__to_id.length
 		) {
 			return self._read_entity_in_transaction(context, scope, parameters, realm, database, transaction);
-		} else if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__from_type) {
+		} else if (parameters.where && self.key_from_id in parameters.where && self.key_from_type in parameters.where) {
 			return self._read_from_transaction(context, scope, parameters, realm, database, transaction);
-		} else if (parameters.where && parameters.where.gauze__relationship__to_id && parameters.where.gauze__relationship__to_type) {
+		} else if (parameters.where && self.key_to_id in parameters.where && self.key_to_type in parameters.where) {
 			return self._read_to_transaction(context, scope, parameters, realm, database, transaction);
 		} else {
 			throw new Error(
@@ -621,7 +621,7 @@ class RelationshipSystemModel extends SystemModel {
 	}
 	_cursor_relationship_primary_key_authorized_ids_transaction(context, scope, parameters, realm, method, database, transaction) {
 		const self = this;
-		if (parameters.where && parameters.where.gauze__relationship__id) {
+		if (parameters.where && self.primary_key in parameters.where) {
 			self._validate_entity_types(parameters.where);
 			return self._preread(context, database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
@@ -639,14 +639,14 @@ class RelationshipSystemModel extends SystemModel {
 		const self = this;
 		const { agent } = realm;
 		const method = "read";
-		if (parameters.where && parameters.where.gauze__relationship__id) {
+		if (parameters.where && self.primary_key in parameters.where) {
 			return self._cursor_relationship_primary_key_authorized_ids_transaction(context, scope, parameters, realm, method, database, transaction);
 		} else if (
 			parameters.where &&
-			parameters.where.gauze__relationship__from_id &&
-			parameters.where.gauze__relationship__from_type &&
-			parameters.where.gauze__relationship__to_id &&
-			parameters.where.gauze__relationship__to_type
+			self.key_from_id in parameters.where &&
+			self.key_from_type in parameters.where &&
+			self.key_to_id in parameters.where &&
+			self.key_to_type in parameters.where
 		) {
 			self._validate_entity_types(parameters.where);
 			context.transaction_count = (context.transaction_count || 0) + 1;
@@ -682,7 +682,7 @@ class RelationshipSystemModel extends SystemModel {
 			return sql.then(function (relationship_rows) {
 				return self._filter_access(context, scope, parameters, realm, relationship_rows, method);
 			});
-		} else if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__from_type) {
+		} else if (parameters.where && self.key_from_id in parameters.where && self.key_from_type in parameters.where) {
 			return self
 				.authorization_element(context, scope, "system", agent, {
 					entity_id: parameters.where.gauze__relationship__from_id,
@@ -708,7 +708,7 @@ class RelationshipSystemModel extends SystemModel {
 						throw new Error("Agent does not have access to target method");
 					}
 				});
-		} else if (parameters.where && parameters.where.gauze__relationship__to_id && parameters.where.gauze__relationship__to_type) {
+		} else if (parameters.where && self.key_to_id in parameters.where && self.key_to_type in parameters.where) {
 			return self
 				.authorization_element(context, scope, "system", agent, {
 					entity_id: parameters.where.gauze__relationship__to_id,
@@ -812,7 +812,7 @@ class RelationshipSystemModel extends SystemModel {
 		const { agent, entity, operation } = realm;
 		const method = "update";
 		entity.entity_method = method;
-		if (parameters.where && parameters.where.gauze__relationship__id) {
+		if (parameters.where && self.primary_key in parameters.where) {
 			return self._preread(context, database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
@@ -863,27 +863,27 @@ class RelationshipSystemModel extends SystemModel {
 		const { agent, entity, operation } = realm;
 		const method = "delete";
 		entity.entity_method = method;
-		if (parameters.where && parameters.where.gauze__relationship__id) {
+		if (parameters.where && self.primary_key in parameters.where) {
 			return self._preread(context, database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
 					return self._authorized_relationship(context, scope, relationship, agent, method).then(function () {
-						if (parameters.where[self.key_to_id] && parameters.where[self.key_to_id] !== relationship[self.key_to_id]) {
+						if (self.key_to_id in parameters.where && parameters.where[self.key_to_id] !== relationship[self.key_to_id]) {
 							return self.generate_response("delete", []);
 						} else {
 							parameters.where[self.key_to_id] = relationship[self.key_to_id];
 						}
-						if (parameters.where[self.key_to_type] && parameters.where[self.key_to_type] !== relationship[self.key_to_type]) {
+						if (self.key_to_type in parameters.where && parameters.where[self.key_to_type] !== relationship[self.key_to_type]) {
 							return self.generate_response("delete", []);
 						} else {
 							parameters.where[self.key_to_type] = relationship[self.key_to_type];
 						}
-						if (parameters.where[self.key_from_id] && parameters.where[self.key_from_id] !== relationship[self.key_from_id]) {
+						if (self.key_from_id in parameters.where && parameters.where[self.key_from_id] !== relationship[self.key_from_id]) {
 							return self.generate_response("delete", []);
 						} else {
 							parameters.where[self.key_from_id] = relationship[self.key_from_id];
 						}
-						if (parameters.where[self.key_from_type] && parameters.where[self.key_from_type] !== relationship[self.key_from_type]) {
+						if (self.key_from_type in parameters.where && parameters.where[self.key_from_type] !== relationship[self.key_from_type]) {
 							return self.generate_response("delete", []);
 						} else {
 							parameters.where[self.key_from_type] = relationship[self.key_from_type];
@@ -1079,7 +1079,7 @@ class RelationshipSystemModel extends SystemModel {
 		const { agent, entity, operation } = realm;
 		const method = "count";
 		entity.entity_method = method;
-		if (parameters.where && parameters.where.gauze__relationship__id) {
+		if (parameters.where && self.primary_key in parameters.where) {
 			self._validate_entity_types(parameters.where);
 			return self._preread(context, database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
@@ -1092,7 +1092,7 @@ class RelationshipSystemModel extends SystemModel {
 					return self.generate_response("count", []);
 				}
 			});
-		} else if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__to_id) {
+		} else if (parameters.where && self.key_from_id in parameters.where && self.key_to_id in parameters.where) {
 			self._validate_entity_types(parameters.where);
 			return self._count_entity_transaction(context, scope, parameters, realm, database, transaction);
 		} else if (
@@ -1103,9 +1103,9 @@ class RelationshipSystemModel extends SystemModel {
 			parameters.where_in.gauze__relationship__to_id.length
 		) {
 			return self._count_entity_in_transaction(context, scope, parameters, realm, database, transaction);
-		} else if (parameters.where && parameters.where.gauze__relationship__from_id && parameters.where.gauze__relationship__from_type) {
+		} else if (parameters.where && self.key_from_id in parameters.where && self.key_from_type in parameters.where) {
 			return self._count_from_transaction(context, scope, parameters, realm, database, transaction);
-		} else if (parameters.where && parameters.where.gauze__relationship__to_id && parameters.where.gauze__relationship__to_type) {
+		} else if (parameters.where && self.key_to_id in parameters.where && self.key_to_type in parameters.where) {
 			return self._count_to_transaction(context, scope, parameters, realm, database, transaction);
 		} else {
 			throw new Error(

@@ -870,7 +870,8 @@ export default memo(function Table({
 	function renderFilterInput(field) {
 		switch (mode) {
 			case "where":
-				const cellMatchClass = variables.where ? (variables.where[field.name] ? cellWideActiveTableClass : cellWideTableClass) : cellWideTableClass;
+				const cellMatchesWhere = variables.where && field.name in variables.where;
+				const cellMatchClass = cellMatchesWhere ? cellWideActiveTableClass : cellWideTableClass;
 				return (
 					<td className={cellMatchClass}>
 						<Input

@@ -1216,7 +1216,7 @@
 
 .project-graph-settings-grid {
 	display: grid;
-	grid-template-columns: minmax(18rem, 1fr) minmax(13rem, 18rem);
+	grid-template-columns: minmax(16rem, 1fr) minmax(24rem, 1fr);
 	gap: 0.75rem;
 	min-height: 0;
 	flex: 1 1 auto;
@@ -1285,6 +1285,81 @@
 	font-size: 0.78rem;
 }
 
+.project-graph-settings-order-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	min-height: 0;
+	max-height: calc(min(42rem, calc(100vh - 4rem)) - 11rem);
+	overflow: auto;
+}
+
+.project-graph-settings-order-row {
+	display: grid;
+	grid-template-columns: 1.8rem minmax(8rem, 1fr) minmax(5.5rem, 0.55fr) minmax(5.5rem, 0.55fr) auto;
+	gap: 0.35rem;
+	align-items: end;
+	padding: 0.35rem;
+	border: 1px solid var(--x3);
+	border-radius: 0.25rem;
+	background: var(--x12);
+}
+
+.project-graph-settings-order-index {
+	align-self: center;
+	text-align: center;
+	opacity: 0.72;
+}
+
+.project-graph-settings-order-control {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+	min-width: 0;
+}
+
+.project-graph-settings-order-control span {
+	opacity: 0.72;
+}
+
+.project-graph-settings-order-control .project-graph-settings-select {
+	width: 100%;
+}
+
+.project-graph-settings-order-actions {
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
+}
+
+.project-graph-settings-order-actions button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.55rem;
+	height: 1.55rem;
+	padding: 0;
+}
+
+.project-graph-settings-order-actions button:disabled {
+	cursor: not-allowed;
+	opacity: 0.45;
+}
+
+.project-graph-settings-empty {
+	padding: 0.4rem;
+	border: 1px solid var(--x3);
+	border-radius: 0.25rem;
+	background: var(--x12);
+	opacity: 0.72;
+}
+
+.project-graph-settings-icon-label {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+}
+
 .project-graph-settings-apply {
 	width: auto;
 	height: auto;
@@ -1297,6 +1372,14 @@
 @media (max-width: 48rem) {
 	.project-graph-settings-grid {
 		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.project-graph-settings-order-row {
+		grid-template-columns: 1.8rem minmax(0, 1fr);
+	}
+
+	.project-graph-settings-order-actions {
+		grid-column: 2;
 	}
 }
 

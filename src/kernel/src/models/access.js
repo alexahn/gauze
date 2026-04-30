@@ -478,7 +478,7 @@ class AccessSystemModel extends SystemModel {
 		const self = this;
 		const { agent, entity, operation } = realm;
 		const method = "read";
-		if (input.where && input.where[self.key_id]) {
+		if (input.where && self.key_id in input.where) {
 			return self._preread(context, database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
@@ -489,9 +489,9 @@ class AccessSystemModel extends SystemModel {
 					return self.empty_read_response;
 				}
 			});
-		} else if (input.where && input.where[self.key_agent_id] && input.where[self.key_agent_type]) {
+		} else if (input.where && self.key_agent_id in input.where && self.key_agent_type in input.where) {
 			return self._read_agent_transaction(context, input, realm, database, transaction);
-		} else if (input.where && input.where[self.key_entity_id] && input.where[self.key_entity_type] && input.where[self.key_method]) {
+		} else if (input.where && self.key_entity_id in input.where && self.key_entity_type in input.where && self.key_method in input.where) {
 			return self._read_entity_transaction(context, input, realm, database, transaction);
 		} else {
 			// todo: move this to system interface
@@ -569,7 +569,7 @@ class AccessSystemModel extends SystemModel {
 	}
 	_cursor_access_primary_key_authorized_ids_transaction(context, agent, input, method, database, transaction) {
 		const self = this;
-		if (input.where && input.where[self.key_id]) {
+		if (input.where && self.key_id in input.where) {
 			return self._preread(context, database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
@@ -588,9 +588,9 @@ class AccessSystemModel extends SystemModel {
 		const self = this;
 		const { agent } = realm;
 		const method = "read";
-		if (input.where && input.where[self.key_id]) {
+		if (input.where && self.key_id in input.where) {
 			return self._cursor_access_primary_key_authorized_ids_transaction(context, agent, input, method, database, transaction);
-		} else if (input.where && input.where[self.key_agent_id] && input.where[self.key_agent_type]) {
+		} else if (input.where && self.key_agent_id in input.where && self.key_agent_type in input.where) {
 			if (input.where[self.key_agent_id] === agent.agent_id && input.where[self.key_agent_type] === agent.agent_type) {
 				context.transaction_count = (context.transaction_count || 0) + 1;
 				const sql = database(self.entity.table_name).where(input.where).transacting(transaction);
@@ -605,7 +605,7 @@ class AccessSystemModel extends SystemModel {
 			} else {
 				throw new Error(`Fields '${self.key_agent_id}' and '${self.key_agent_type}' must match the initiating agent`);
 			}
-		} else if (input.where && input.where[self.key_entity_id] && input.where[self.key_entity_type] && input.where[self.key_method]) {
+		} else if (input.where && self.key_entity_id in input.where && self.key_entity_type in input.where && self.key_method in input.where) {
 			return self._initiator_records(context, input.where, agent, database, transaction).then(function (access_records) {
 				if (access_records && access_records.length) {
 					const highest_record = self._highest_record(access_records);
@@ -698,7 +698,7 @@ class AccessSystemModel extends SystemModel {
 		const { agent, entity, operation } = realm;
 		const method = "update";
 		const change_record = input.attributes;
-		if (input && input.where && input.where[self.key_id]) {
+		if (input && input.where && self.key_id in input.where) {
 			return self._preread(context, database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
@@ -750,28 +750,28 @@ class AccessSystemModel extends SystemModel {
 		const self = this;
 		const { agent, entity, operation } = realm;
 		const method = "delete";
-		if (input && input.where && input.where[self.key_id]) {
+		if (input && input.where && self.key_id in input.where) {
 			return self._preread(context, database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
 					return self._valid_access(context, agent, method, target_record).then(function () {
 						// augment input with necessary sharding information
-						if (input.where[self.key_entity_id] && input.where[self.key_entity_id] !== target_record[self.key_entity_id]) {
+						if (self.key_entity_id in input.where && input.where[self.key_entity_id] !== target_record[self.key_entity_id]) {
 							return self.empty_delete_response;
 						} else {
 							input.where[self.key_entity_id] = target_record[self.key_entity_id];
 						}
-						if (input.where[self.key_entity_type] && input.where[self.key_entity_type] !== target_record[self.key_entity_type]) {
+						if (self.key_entity_type in input.where && input.where[self.key_entity_type] !== target_record[self.key_entity_type]) {
 							return self.empty_delete_response;
 						} else {
 							input.where[self.key_entity_type] = target_record[self.key_entity_type];
 						}
-						if (input.where[self.key_agent_id] && input.where[self.key_agent_id] !== target_record[self.key_agent_id]) {
+						if (self.key_agent_id in input.where && input.where[self.key_agent_id] !== target_record[self.key_agent_id]) {
 							return self.empty_delete_response;
 						} else {
 							input.where[self.key_agent_id] = target_record[self.key_agent_id];
 						}
-						if (input.where[self.key_agent_type] && input.where[self.key_agent_type] !== target_record[self.key_agent_type]) {
+						if (self.key_agent_type in input.where && input.where[self.key_agent_type] !== target_record[self.key_agent_type]) {
 							return self.empty_delete_response;
 						} else {
 							input.where[self.key_agent_type] = target_record[self.key_agent_type];
@@ -948,7 +948,7 @@ class AccessSystemModel extends SystemModel {
 		const self = this;
 		const { agent, entity, operation } = realm;
 		const method = "count";
-		if (input.where && input.where[self.key_id]) {
+		if (input.where && self.key_id in input.where) {
 			return self._preread(context, database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
@@ -959,9 +959,9 @@ class AccessSystemModel extends SystemModel {
 					return self.empty_count_response;
 				}
 			});
-		} else if (input.where && input.where[self.key_agent_id]) {
+		} else if (input.where && self.key_agent_id in input.where) {
 			return self._count_agent_transaction(context, input, realm, database, transaction);
-		} else if (input.where && input.where[self.key_entity_id] && input.where[self.key_entity_type] && input.where[self.key_method]) {
+		} else if (input.where && self.key_entity_id in input.where && self.key_entity_type in input.where && self.key_method in input.where) {
 			return self._count_entity_transaction(context, input, realm, database, transaction);
 		} else {
 			// todo: move this to system interface

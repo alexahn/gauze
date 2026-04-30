@@ -108,7 +108,7 @@ function expected_range_node_ids(database_manager, table_name, primary_key_range
 
 function expected_primary_filter_node_ids(database_manager, model, parameters, shard_type, candidate_shards) {
 	let shards = candidate_shards || current_shards(database_manager, model.table_name);
-	if (parameters.where && parameters.where[model.primary_key]) {
+	if (parameters.where && model.primary_key in parameters.where) {
 		shards = intersect_shards(shards, shards_for_primary_keys(database_manager, model.table_name, [parameters.where[model.primary_key]]));
 	}
 	if (parameters.where_in && parameters.where_in[model.primary_key]) {

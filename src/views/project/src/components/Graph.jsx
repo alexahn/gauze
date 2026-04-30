@@ -2,7 +2,19 @@ import * as React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { BookmarkFilledIcon, BookmarkIcon, Cross1Icon, GearIcon, OpenInNewWindowIcon, Pencil2Icon, PlusCircledIcon, ReloadIcon } from "@radix-ui/react-icons";
+import {
+	ArrowDownIcon,
+	ArrowUpIcon,
+	BookmarkFilledIcon,
+	BookmarkIcon,
+	Cross1Icon,
+	GearIcon,
+	OpenInNewWindowIcon,
+	Pencil2Icon,
+	PlusCircledIcon,
+	ReloadIcon,
+	TrashIcon,
+} from "@radix-ui/react-icons";
 
 import Input from "./Input.jsx";
 import Link from "./Link.jsx";
@@ -404,12 +416,44 @@ function GraphValuePopover({ value, valueClassName = "project-graph-value trunca
 	);
 }
 
-function sortStateFromVariables(header, variables) {
-	const orderItem = variables.order && variables.order.length ? variables.order[0] : null;
+function sortClausesFromVariables(variables) {
+	if (!Array.isArray(variables.order)) {
+		return [];
+	}
+	return variables.order.map(function (item) {
+		return {
+			column: item && item.column ? item.column : "",
+			order: item && item.order ? item.order : "",
+			nulls: item && item.nulls ? item.nulls : "",
+		};
+	});
+}
+
+function emptySortClause() {
 	return {
-		column: orderItem ? orderItem.column : header.default_order || "",
-		direction: orderItem && orderItem.order ? orderItem.order : "desc",
+		column: "",
+		order: "asc",
+		nulls: "",
 	};
+}
+
+function cleanSortClauses(sortClauses) {
+	return sortClauses
+		.filter(function (clause) {
+			return clause.column;
+		})
+		.map(function (clause) {
+			const orderItem = {
+				column: clause.column,
+			};
+			if (clause.order) {
+				orderItem.order = clause.order;
+			}
+			if (clause.nulls) {
+				orderItem.nulls = clause.nulls;
+			}
+			return orderItem;
+		});
 }
 
 function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenItem, onOpenAccess, onOpenCreate }) {
@@ -420,9 +464,8 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 			return field.name;
 		});
 	});
-	const initialSortState = sortStateFromVariables(node.header, node.variables);
-	const [sortColumn, setSortColumn] = useState(initialSortState.column);
-	const [sortDirection, setSortDirection] = useState(initialSortState.direction);
+	const initialSortClauses = sortClausesFromVariables(node.variables);
+	const [sortClauses, setSortClauses] = useState(initialSortClauses);
 	const [showSettings, setShowSettings] = useState(false);
 	const [settingsFieldFilter, setSettingsFieldFilter] = useState("");
 	const fields = node.header.fields;
@@ -454,9 +497,7 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 		function () {
 			setFilterMode(node.filterMode);
 			setLocalVariables(node.variables);
-			const sortState = sortStateFromVariables(node.header, node.variables);
-			setSortColumn(sortState.column);
-			setSortDirection(sortState.direction);
+			setSortClauses(sortClausesFromVariables(node.variables));
 		},
 		[node.id, node.filterMode, node.header, node.variables],
 	);
@@ -559,12 +600,53 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 		setVisibleFieldNames([]);
 	}
 
-	function updateSortColumn(e) {
-		setSortColumn(e.target.value);
+	function addSortClause() {
+		setSortClauses(function (clauses) {
+			return [...clauses, emptySortClause()];
+		});
 	}
 
-	function updateSortDirection(e) {
-		setSortDirection(e.target.value);
+	function updateSortClause(index, key) {
+		return function (e) {
+			const value = e.target.value;
+			setSortClauses(function (clauses) {
+				return clauses.map(function (clause, clauseIndex) {
+					if (clauseIndex !== index) {
+						return clause;
+					}
+					return {
+						...clause,
+						[key]: value,
+					};
+				});
+			});
+		};
+	}
+
+	function removeSortClause(index) {
+		return function () {
+			setSortClauses(function (clauses) {
+				return clauses.filter(function (clause, clauseIndex) {
+					return clauseIndex !== index;
+				});
+			});
+		};
+	}
+
+	function moveSortClause(index, direction) {
+		return function () {
+			const nextIndex = index + direction;
+			setSortClauses(function (clauses) {
+				if (nextIndex < 0 || nextIndex >= clauses.length) {
+					return clauses;
+				}
+				const nextClauses = [...clauses];
+				const clause = nextClauses[index];
+				nextClauses[index] = nextClauses[nextIndex];
+				nextClauses[nextIndex] = clause;
+				return nextClauses;
+			});
+		};
 	}
 
 	function applySort() {
@@ -572,13 +654,9 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 			...node.variables,
 			offset: 0,
 		};
-		if (sortColumn) {
-			variables.order = [
-				{
-					column: sortColumn,
-					order: sortDirection,
-				},
-			];
+		const order = cleanSortClauses(sortClauses);
+		if (order.length) {
+			variables.order = order;
 		} else {
 			delete variables.order;
 		}
@@ -840,27 +918,94 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 						</div>
 					</div>
 					<div className="project-graph-settings-panel">
-						<div className="project-graph-settings-heading">Sort</div>
-						<label className="project-graph-settings-control">
-							<span>Field</span>
-							<select className="project-graph-settings-select ba bw1 br2 bdx3 bgx12 cx2" value={sortColumn} onChange={updateSortColumn}>
-								<option value="">None</option>
-								{fields.map(function (field) {
+						<div className="project-graph-settings-panel-header">
+							<div className="project-graph-settings-heading">Order</div>
+							<button type="button" className="project-graph-settings-apply project-graph-settings-icon-label ba bw1 br2 bdx3 bgx2 cx6" onClick={addSortClause}>
+								<PlusCircledIcon />
+								<span>Add</span>
+							</button>
+						</div>
+						<div className="project-graph-settings-order-list">
+							{sortClauses.length ? (
+								sortClauses.map(function (clause, index) {
 									return (
-										<option key={field.name} value={field.name}>
-											{field.name}
-										</option>
+										<div key={index} className="project-graph-settings-order-row">
+											<div className="project-graph-settings-order-index">{index + 1}</div>
+											<label className="project-graph-settings-order-control">
+												<span>column</span>
+												<select
+													className="project-graph-settings-select ba bw1 br2 bdx3 bgx12 cx2"
+													value={clause.column}
+													onChange={updateSortClause(index, "column")}
+												>
+													<option value="">None</option>
+													{fields.map(function (field) {
+														return (
+															<option key={field.name} value={field.name}>
+																{field.name}
+															</option>
+														);
+													})}
+												</select>
+											</label>
+											<label className="project-graph-settings-order-control">
+												<span>order</span>
+												<select
+													className="project-graph-settings-select ba bw1 br2 bdx3 bgx12 cx2"
+													value={clause.order}
+													onChange={updateSortClause(index, "order")}
+													disabled={!clause.column}
+												>
+													<option value="">Default</option>
+													<option value="asc">asc</option>
+													<option value="desc">desc</option>
+												</select>
+											</label>
+											<label className="project-graph-settings-order-control">
+												<span>nulls</span>
+												<select
+													className="project-graph-settings-select ba bw1 br2 bdx3 bgx12 cx2"
+													value={clause.nulls}
+													onChange={updateSortClause(index, "nulls")}
+													disabled={!clause.column}
+												>
+													<option value="">Default</option>
+													<option value="first">first</option>
+													<option value="last">last</option>
+												</select>
+											</label>
+											<div className="project-graph-settings-order-actions">
+												<button
+													type="button"
+													className="ba bw1 br2 bdx3 bgx2 cx6"
+													onClick={moveSortClause(index, -1)}
+													disabled={index === 0}
+													title="Move up"
+													aria-label="Move up"
+												>
+													<ArrowUpIcon />
+												</button>
+												<button
+													type="button"
+													className="ba bw1 br2 bdx3 bgx2 cx6"
+													onClick={moveSortClause(index, 1)}
+													disabled={index === sortClauses.length - 1}
+													title="Move down"
+													aria-label="Move down"
+												>
+													<ArrowDownIcon />
+												</button>
+												<button type="button" className="ba bw1 br2 bdx3 bgx2 cx6" onClick={removeSortClause(index)} title="Remove" aria-label="Remove">
+													<TrashIcon />
+												</button>
+											</div>
+										</div>
 									);
-								})}
-							</select>
-						</label>
-						<label className="project-graph-settings-control">
-							<span>Direction</span>
-							<select className="project-graph-settings-select ba bw1 br2 bdx3 bgx12 cx2" value={sortDirection} onChange={updateSortDirection} disabled={!sortColumn}>
-								<option value="asc">Ascending</option>
-								<option value="desc">Descending</option>
-							</select>
-						</label>
+								})
+							) : (
+								<div className="project-graph-settings-empty">No order</div>
+							)}
+						</div>
 						<button type="button" className="project-graph-settings-apply ba bw1 br2 bdx3 bgx2 cx6" onClick={applySort}>
 							Apply
 						</button>

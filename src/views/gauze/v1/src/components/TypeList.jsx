@@ -309,7 +309,7 @@ export default function TypeList({ route, router, gauze, model, where, fields })
 												className="mw4"
 												onChange={updateFilter(field.name)}
 												onKeyDown={applyFilter(field.name)}
-												defaultValue={where[field.name] ? where[field.name] : ""}
+												defaultValue={where && field.name in where ? where[field.name] : ""}
 											/>
 										</td>
 									</tr>

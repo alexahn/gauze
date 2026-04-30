@@ -695,7 +695,7 @@ class DatabaseManager {
 					const required_where_exist = required_where.every(function (key) {
 						return key in parameters.where;
 					});
-					if (parameters.where[model.primary_key] && required_where_exist) {
+					if (model.primary_key in parameters.where && required_where_exist) {
 						const entity_id = parameters.where[model.primary_key];
 						const entity_type = model.table_name;
 						const entity_primary_key_number = self.uuid_to_big_int(entity_id);
@@ -877,7 +877,7 @@ class DatabaseManager {
 						return key in parameters.where;
 					});
 
-					if (parameters.where[model.primary_key] && required_attributes_exist) {
+					if (model.primary_key in parameters.where && required_attributes_exist) {
 						const access_id = parameters.where[model.primary_key];
 						const access_type = model.table_name;
 						const access_primary_key_number = self.uuid_to_big_int(access_id);
