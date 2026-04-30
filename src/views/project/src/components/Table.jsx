@@ -68,6 +68,22 @@ function normalizeWhereBetweenRange(range) {
 	return [normalizeRangeBoundary(start), normalizeRangeBoundary(end)];
 }
 
+function hasFilterValues(filters) {
+	return filters && typeof filters === "object" && Object.keys(filters).length > 0;
+}
+
+function filterModeFromVariables(variables = {}) {
+	if (hasFilterValues(variables.where_between)) {
+		return "where_between";
+	} else if (hasFilterValues(variables.where_like)) {
+		return "where_like";
+	} else if (hasFilterValues(variables.where)) {
+		return "where";
+	} else {
+		return "where";
+	}
+}
+
 function Table({ pathfinder, services, agent, headers, header, variables = {}, items, count, pageInfo }) {
 	const appliedVariables = useMemo(
 		function () {
@@ -78,7 +94,7 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 	const appliedCursor = (pageInfo && pageInfo.current_cursor) || variables.cursor || "";
 	const appliedVariablesKey = JSON.stringify(appliedVariables);
 	// note: infer the filter mode based on the structure of variables
-	const defaultFilterMode = appliedVariables.where ? "where" : appliedVariables.where_like ? "where_like" : appliedVariables.where_between ? "where_between" : "where";
+	const defaultFilterMode = filterModeFromVariables(appliedVariables);
 	const [filterMode, setFilterMode] = useState(defaultFilterMode);
 	const [localVariables, setLocalVariables] = useState(appliedVariables);
 	const [orderClauses, setOrderClauses] = useState(orderClausesFromVariables(appliedVariables));
