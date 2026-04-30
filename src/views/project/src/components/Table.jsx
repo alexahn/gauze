@@ -526,6 +526,10 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 	}
 	return (
 		<div>
+			<div className="project-table-footer">
+				<div className="project-table-count">{count} rows</div>
+				<CursorPagination pageInfo={pageInfo} variables={variables} href={href} reverse={false} buttonClass="project-table-cursor-button" detailsOpen={true} />
+			</div>
 			<table>
 				<thead>
 					{renderFilters()}
@@ -767,10 +771,6 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 					})}
 				</tbody>
 			</table>
-			<div className="project-table-footer">
-				<div className="project-table-count">{count} rows</div>
-				<CursorPagination pageInfo={pageInfo} variables={variables} href={href} reverse={false} buttonClass="project-table-cursor-button" detailsOpen={true} />
-			</div>
 		</div>
 	);
 }
