@@ -1265,20 +1265,24 @@ class DatabaseModel extends Model {
 	_chunk_action(context, scope, parameters, database, transaction, action) {
 		const self = this;
 		const { where_in = {}, cache_where_in = {} } = parameters;
-		let where_in_primary_key = [];
-		if (where_in[self.primary_key]) {
-			where_in_primary_key = where_in_primary_key.concat(where_in[self.primary_key]);
+		const direct_primary_keys = where_in[self.primary_key] || null;
+		const cached_primary_keys = cache_where_in[self.primary_key] ? TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[self.primary_key]).value : null;
+
+		let primary_keys = direct_primary_keys || cached_primary_keys || [];
+		if (direct_primary_keys && cached_primary_keys) {
+			const cached_primary_key_set = new Set(cached_primary_keys);
+			primary_keys = direct_primary_keys.filter(function (primary_key) {
+				return cached_primary_key_set.has(primary_key);
+			});
 		}
-		if (cache_where_in[self.primary_key]) {
-			where_in_primary_key = where_in_primary_key.concat(TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[self.primary_key]).value);
-		}
+		const unique_primary_keys = [...new Set(primary_keys)];
 		// split where_in_primary_key into batches of (SQL_BIND_LIMIT - SQL_MAX_COLUMNS)
 		const chunks = [];
 		const GAUZE_SQL_BIND_LIMIT = parseInt(process.env.GAUZE_SQL_BIND_LIMIT, 10);
 		const GAUZE_SQL_MAX_COLUMNS = parseInt(process.env.GAUZE_SQL_MAX_COLUMNS, 10);
 		const chunk_size = GAUZE_SQL_BIND_LIMIT - GAUZE_SQL_MAX_COLUMNS;
-		for (let i = 0; i < where_in_primary_key.length; i += chunk_size) {
-			chunks.push(where_in_primary_key.slice(i, i + chunk_size));
+		for (let i = 0; i < unique_primary_keys.length; i += chunk_size) {
+			chunks.push(unique_primary_keys.slice(i, i + chunk_size));
 		}
 		return Promise.all(
 			chunks.map(function (chunk) {
