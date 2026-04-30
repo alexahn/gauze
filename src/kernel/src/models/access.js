@@ -173,6 +173,7 @@ class AccessSystemModel extends SystemModel {
 	// get the access records for the initiator
 	_initiator_records(context, entity, agent, database, transaction) {
 		const self = this;
+		context.transaction_count = (context.transaction_count || 0) + 1;
 		const sql = database(self.entity.table_name)
 			.where({
 				[self.key_entity_type]: entity[self.key_entity_type],
@@ -251,8 +252,9 @@ class AccessSystemModel extends SystemModel {
 			throw new Error("Initiator agent's role must be either root, trunk, or leaf");
 		}
 	}
-	_preread(database, transaction, where) {
+	_preread(context, database, transaction, where) {
 		const self = this;
+		context.transaction_count = (context.transaction_count || 0) + 1;
 		const sql = database(self.entity.table_name).where(where).transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._preread:debug_sql`, sql.toString());
@@ -412,7 +414,7 @@ class AccessSystemModel extends SystemModel {
 			if (access_records && access_records.length) {
 				// get record for the highest role
 				const highest_record = self._highest_record(access_records);
-				return self._preread(database, transaction, input.where).then(function (target_records) {
+				return self._preread(context, database, transaction, input.where).then(function (target_records) {
 					const highest_id = highest_record[self.key_id];
 					const highest_role = highest_record[self.key_agent_role];
 					const filtered = target_records.filter(function (record) {
@@ -477,7 +479,7 @@ class AccessSystemModel extends SystemModel {
 		const { agent, entity, operation } = realm;
 		const method = "read";
 		if (input.where && input.where[self.key_id]) {
-			return self._preread(database, transaction, input.where).then(function (target_records) {
+			return self._preread(context, database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
 					return self._valid_access(context, agent, method, target_record, database, transaction).then(function () {
@@ -568,7 +570,7 @@ class AccessSystemModel extends SystemModel {
 	_cursor_access_primary_key_authorized_ids_transaction(context, agent, input, method, database, transaction) {
 		const self = this;
 		if (input.where && input.where[self.key_id]) {
-			return self._preread(database, transaction, input.where).then(function (target_records) {
+			return self._preread(context, database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
 					return self._cursor_access_record_id_transaction(context, agent, input, target_record, method, database, transaction).then(function (id) {
@@ -590,6 +592,7 @@ class AccessSystemModel extends SystemModel {
 			return self._cursor_access_primary_key_authorized_ids_transaction(context, agent, input, method, database, transaction);
 		} else if (input.where && input.where[self.key_agent_id] && input.where[self.key_agent_type]) {
 			if (input.where[self.key_agent_id] === agent.agent_id && input.where[self.key_agent_type] === agent.agent_type) {
+				context.transaction_count = (context.transaction_count || 0) + 1;
 				const sql = database(self.entity.table_name).where(input.where).transacting(transaction);
 				if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 					LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._cursor_read_agent:debug_sql`, sql.toString());
@@ -606,7 +609,7 @@ class AccessSystemModel extends SystemModel {
 			return self._initiator_records(context, input.where, agent, database, transaction).then(function (access_records) {
 				if (access_records && access_records.length) {
 					const highest_record = self._highest_record(access_records);
-					return self._preread(database, transaction, input.where).then(function (target_records) {
+					return self._preread(context, database, transaction, input.where).then(function (target_records) {
 						return self._cursor_read_entity_authorized_ids_transaction(target_records, highest_record);
 					});
 				} else {
@@ -696,7 +699,7 @@ class AccessSystemModel extends SystemModel {
 		const method = "update";
 		const change_record = input.attributes;
 		if (input && input.where && input.where[self.key_id]) {
-			return self._preread(database, transaction, input.where).then(function (target_records) {
+			return self._preread(context, database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
 					return self._valid_access(context, agent, method, target_record).then(function () {
@@ -748,7 +751,7 @@ class AccessSystemModel extends SystemModel {
 		const { agent, entity, operation } = realm;
 		const method = "delete";
 		if (input && input.where && input.where[self.key_id]) {
-			return self._preread(database, transaction, input.where).then(function (target_records) {
+			return self._preread(context, database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
 					return self._valid_access(context, agent, method, target_record).then(function () {
@@ -880,7 +883,7 @@ class AccessSystemModel extends SystemModel {
 			if (access_records && access_records.length) {
 				// get record for the highest role
 				const highest_record = self._highest_record(access_records);
-				return self._preread(database, transaction, input.where).then(function (target_records) {
+				return self._preread(context, database, transaction, input.where).then(function (target_records) {
 					const highest_id = highest_record[self.key_id];
 					const highest_role = highest_record[self.key_agent_role];
 					const filtered = target_records.filter(function (record) {
@@ -946,7 +949,7 @@ class AccessSystemModel extends SystemModel {
 		const { agent, entity, operation } = realm;
 		const method = "count";
 		if (input.where && input.where[self.key_id]) {
-			return self._preread(database, transaction, input.where).then(function (target_records) {
+			return self._preread(context, database, transaction, input.where).then(function (target_records) {
 				if (target_records && target_records.length) {
 					const target_record = target_records[0];
 					return self._valid_access(context, agent, method, target_record).then(function () {

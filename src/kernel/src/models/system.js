@@ -302,6 +302,7 @@ class SystemModel extends Model {
 		const entity_module = $abstract.entities[entity_module_name].default($abstract);
 		const method_privacy = entity_module.methods[entity.entity_method].privacy;
 		if (method_privacy === "private") {
+			context.transaction_count = (context.transaction_count || 0) + 1;
 			const sql = database(self.whitelist_table)
 				.where({
 					gauze__whitelist__realm: realm,
@@ -328,6 +329,7 @@ class SystemModel extends Model {
 				};
 			});
 		} else if (method_privacy === "public") {
+			context.transaction_count = (context.transaction_count || 0) + 1;
 			const sql = database(self.blacklist_table)
 				.where({
 					gauze__blacklist__realm: realm,
@@ -432,6 +434,7 @@ class SystemModel extends Model {
 		const entity_module = $abstract.entities[entity_module_name].default($abstract);
 		const method_privacy = entity_module.methods[entity.entity_method].privacy;
 		if (method_privacy === "private") {
+			context.transaction_count = (context.transaction_count || 0) + 1;
 			const sql = database(self.whitelist_table)
 				.where({
 					gauze__whitelist__realm: realm,
@@ -457,6 +460,7 @@ class SystemModel extends Model {
 				};
 			});
 		} else if (method_privacy === "public") {
+			context.transaction_count = (context.transaction_count || 0) + 1;
 			const sql = database(self.blacklist_table)
 				.where({
 					gauze__blacklist__realm: realm,
@@ -565,6 +569,7 @@ class SystemModel extends Model {
 				if (set_authorization.status === true) {
 					return set_authorization;
 				} else {
+					context.transaction_count = (context.transaction_count || 0) + 1;
 					const sql = database(self.whitelist_table)
 						.where({
 							gauze__whitelist__realm: realm,
@@ -594,6 +599,7 @@ class SystemModel extends Model {
 				if (set_authorization.status === false) {
 					return set_authorization;
 				} else {
+					context.transaction_count = (context.transaction_count || 0) + 1;
 					const sql = database(self.blacklist_table)
 						.where({
 							gauze__blacklist__realm: realm,

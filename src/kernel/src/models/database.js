@@ -1366,7 +1366,6 @@ class DatabaseModel extends Model {
 		});
 	}
 	_entity_relationships_transaction(context, scope, parameters, database, transaction) {
-		context.transaction_count += 1;
 		const self = this;
 		const MAXIMUM_ROWS = 4294967296;
 		const query = {};
@@ -1382,6 +1381,7 @@ class DatabaseModel extends Model {
 		} else {
 			throw new Error("Invalid relationship direction");
 		}
+		context.transaction_count = (context.transaction_count || 0) + 1;
 		const sql = database(self.relationship_table_name).where(query).limit(MAXIMUM_ROWS).offset(0).transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._entity_relationships_transaction:debug_sql`, sql.toString());
@@ -1415,10 +1415,10 @@ class DatabaseModel extends Model {
 		});
 	}
 	_root_create_transaction(context, scope, parameters, database, transaction) {
-		context.transaction_count += 1;
 		const self = this;
 		const { attributes } = parameters;
 		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.create.enter`, "parameters", parameters);
+		context.transaction_count = (context.transaction_count || 0) + 1;
 		const sql = database(self.table_name).insert(attributes, [self.primary_key]).transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.create:debug_sql`, sql.toString());
@@ -1466,7 +1466,6 @@ class DatabaseModel extends Model {
 		});
 	}
 	_relationship_create_transaction(context, scope, parameters, database, transaction) {
-		//context.transaction_count += 1;
 		const self = this;
 		return self._root_create_transaction(context, scope, parameters, database, transaction);
 	}
@@ -1499,7 +1498,6 @@ class DatabaseModel extends Model {
 		const self = this;
 
 		function action(context, scope, parameters, database, transaction) {
-			context.transaction_count += 1;
 			const {
 				where = {},
 				where_in = {},
@@ -1516,6 +1514,7 @@ class DatabaseModel extends Model {
 			} = parameters;
 			const resolved_order = self._normalize_order(order);
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.read:enter`, "parameters", parameters);
+			context.transaction_count = (context.transaction_count || 0) + 1;
 			const sql = self
 				._apply_order(
 					database(self.table_name)
@@ -1594,7 +1593,6 @@ class DatabaseModel extends Model {
 		const self = this;
 
 		function action(context, scope, parameters, database, transaction) {
-			context.transaction_count += 1;
 			const {
 				where = {},
 				where_in = {},
@@ -1656,6 +1654,7 @@ class DatabaseModel extends Model {
 				joined_where_like[joined_key] = where_like[k];
 			});
 			if (relationship_source._direction === "to") {
+				context.transaction_count = (context.transaction_count || 0) + 1;
 				const sql = self
 					._apply_order(
 						database(self.table_name)
@@ -1697,6 +1696,7 @@ class DatabaseModel extends Model {
 						throw err;
 					});
 			} else if (relationship_source._direction === "from") {
+				context.transaction_count = (context.transaction_count || 0) + 1;
 				const sql = self
 					._apply_order(
 						database(self.table_name)
@@ -1857,7 +1857,6 @@ class DatabaseModel extends Model {
 	_root_update_transaction(context, scope, parameters, database, transaction) {
 		const self = this;
 		function action(context, scope, parameters, database, transaction) {
-			context.transaction_count += 1;
 			const { attributes } = parameters;
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
 			const MAXIMUM_ROWS = 4294967296;
@@ -1881,6 +1880,7 @@ class DatabaseModel extends Model {
 					if (valid_ids.length === 0) {
 						return [];
 					}
+					context.transaction_count = (context.transaction_count || 0) + 1;
 					const sql = database(self.table_name).whereIn(self.primary_key, valid_ids).update(attributes).transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
@@ -1939,7 +1939,6 @@ class DatabaseModel extends Model {
 		const self = this;
 
 		function action(context, scope, parameters, database, transaction) {
-			context.transaction_count += 1;
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.update:enter`, "parameters", parameters);
 			const MAXIMUM_ROWS = 4294967296;
 			const { attributes } = parameters;
@@ -1963,6 +1962,7 @@ class DatabaseModel extends Model {
 					if (valid_ids.length === 0) {
 						return [];
 					}
+					context.transaction_count = (context.transaction_count || 0) + 1;
 					const sql = database(self.table_name).whereIn(self.primary_key, valid_ids).update(attributes).transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.update:debug_sql`, sql.toString());
@@ -2022,6 +2022,7 @@ class DatabaseModel extends Model {
 			primary_key: self.relationship_primary_key,
 		};
 		function _delete_relationship(database, transaction, relationship) {
+			context.transaction_count = (context.transaction_count || 0) + 1;
 			const sql = database(self.relationship_table_name).where(self.relationship_primary_key, relationship[self.relationship_primary_key]).del().transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._cleanup_delete_relationship:debug_sql`, sql.toString());
@@ -2048,6 +2049,7 @@ class DatabaseModel extends Model {
 			primary_key: self.whitelist_primary_key,
 		};
 		function _delete_whitelist(database, transaction, relationship) {
+			context.transaction_count = (context.transaction_count || 0) + 1;
 			const sql = database(self.whitelist_table_name).where(self.whitelist_primary_key, whitelist[self.whitelist_primary_key]).del().transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._cleanup_delete_whitelist:debug_sql`, sql.toString());
@@ -2074,6 +2076,7 @@ class DatabaseModel extends Model {
 			primary_key: self.blacklist_primary_key,
 		};
 		function _delete_blacklist(database, transaction, relationship) {
+			context.transaction_count = (context.transaction_count || 0) + 1;
 			const sql = database(self.blacklist_table_name).where(self.blacklist_primary_key, blacklist[self.blacklist_primary_key]).del().transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._cleanup_delete_blacklist:debug_sql`, sql.toString());
@@ -2097,6 +2100,7 @@ class DatabaseModel extends Model {
 		const transactions = [
 			// to relationship
 			function () {
+				context.transaction_count = (context.transaction_count || 0) + 1;
 				const sql = database(self.relationship_table_name)
 					.where("gauze__relationship__to_type", self.entity.table_name)
 					.whereIn("gauze__relationship__to_id", valid_ids)
@@ -2108,6 +2112,7 @@ class DatabaseModel extends Model {
 			},
 			// from relationship
 			function () {
+				context.transaction_count = (context.transaction_count || 0) + 1;
 				const sql = database(self.relationship_table_name)
 					.where("gauze__relationship__from_type", self.entity.table_name)
 					.whereIn("gauze__relationship__from_id", valid_ids)
@@ -2119,6 +2124,7 @@ class DatabaseModel extends Model {
 			},
 			// whitelist
 			function () {
+				context.transaction_count = (context.transaction_count || 0) + 1;
 				const sql = database(self.whitelist_table_name)
 					.where("gauze__whitelist__entity_type", self.entity.table_name)
 					.whereIn("gauze__whitelist__entity_id", valid_ids)
@@ -2130,6 +2136,7 @@ class DatabaseModel extends Model {
 			},
 			// blacklist
 			function () {
+				context.transaction_count = (context.transaction_count || 0) + 1;
 				const sql = database(self.blacklist_table_name)
 					.where("gauze__blacklist__entity_type", self.entity.table_name)
 					.whereIn("gauze__blacklist__entity_id", valid_ids)
@@ -2211,7 +2218,6 @@ class DatabaseModel extends Model {
 		const self = this;
 
 		function action(context, scope, parameters, database, transaction) {
-			context.transaction_count += 1;
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 			// note: maybe we should limit the maximum number of objects that can be acted on to GAUZE_SQL_MAX_LIMIT
 			const MAXIMUM_ROWS = 4294967296;
@@ -2236,6 +2242,7 @@ class DatabaseModel extends Model {
 					if (valid_ids.length === 0) {
 						return [];
 					}
+					context.transaction_count = (context.transaction_count || 0) + 1;
 					const sql = database(self.table_name).whereIn(self.primary_key, valid_ids).del().transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
@@ -2287,7 +2294,6 @@ class DatabaseModel extends Model {
 		const self = this;
 
 		function action(context, scope, parameters, database, transaction) {
-			context.transaction_count += 1;
 			const { limit = 16 } = parameters;
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.Delete:enter`, "parameters", parameters);
 			const MAXIMUM_ROWS = 4294967296;
@@ -2307,6 +2313,7 @@ class DatabaseModel extends Model {
 						return item[self.primary_key];
 					});
 					// use valid_ids to do a where in query
+					context.transaction_count = (context.transaction_count || 0) + 1;
 					const sql = database(self.table_name).whereIn(self.primary_key, valid_ids).del().transacting(transaction);
 					if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 						LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.delete:debug_sql`, sql.toString());
@@ -2361,7 +2368,6 @@ class DatabaseModel extends Model {
 		const self = this;
 
 		function action(context, scope, parameters, database, transaction) {
-			context.transaction_count += 1;
 			const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {}, order } = parameters;
 			const resolved_order = self._normalize_order(order);
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
@@ -2372,6 +2378,7 @@ class DatabaseModel extends Model {
 					reversed[count[key]] = key;
 				});
 			}
+			context.transaction_count = (context.transaction_count || 0) + 1;
 			const sql = database(self.table_name)
 				.count(count_has_key ? reversed : null)
 				.where(function (builder) {
@@ -2438,7 +2445,6 @@ class DatabaseModel extends Model {
 		const self = this;
 
 		function action(context, scope, parameters, database, transaction) {
-			context.transaction_count += 1;
 			const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {}, order } = parameters;
 			const normalized_order = self._normalize_order(order);
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
@@ -2489,6 +2495,7 @@ class DatabaseModel extends Model {
 				joined_where_like[joined_key] = where_like[k];
 			});
 			if (relationship_source._direction === "to") {
+				context.transaction_count = (context.transaction_count || 0) + 1;
 				const sql = database(self.table_name)
 					.count(count_has_key ? reversed : null)
 					.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__to_id`, "=", `${self.table_name}.${self.primary_key}`)
@@ -2523,6 +2530,7 @@ class DatabaseModel extends Model {
 						throw err;
 					});
 			} else if (relationship_source._direction === "from") {
+				context.transaction_count = (context.transaction_count || 0) + 1;
 				const sql = database(self.table_name)
 					.count(count_has_key ? reversed : null)
 					.join(self.relationship_table_name, `${self.relationship_table_name}.gauze__relationship__from_id`, "=", `${self.table_name}.${self.primary_key}`)

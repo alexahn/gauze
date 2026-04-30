@@ -171,8 +171,9 @@ class RelationshipSystemModel extends SystemModel {
 			throw new Error("Entities are not configured to have relationships to each other");
 		}
 	}
-	_preread(database, transaction, id) {
+	_preread(context, database, transaction, id) {
 		const self = this;
+		context.transaction_count = (context.transaction_count || 0) + 1;
 		const sql = database(self.entity.table_name)
 			.where({
 				gauze__relationship__id: id,
@@ -265,6 +266,7 @@ class RelationshipSystemModel extends SystemModel {
 		});
 		const valid_entity_ids = valid_from_ids.concat(valid_to_ids);
 		// use relationships to do a where in query on both whitelist and blacklist
+		context.transaction_count = (context.transaction_count || 0) + 1;
 		const sql = database(self.whitelist_table)
 			.where({
 				gauze__whitelist__agent_id: agent_id,
@@ -277,6 +279,7 @@ class RelationshipSystemModel extends SystemModel {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._filter_access:debug_sql`, sql.toString());
 		}
 		return sql.then(function (whitelist_rows) {
+			context.transaction_count = (context.transaction_count || 0) + 1;
 			const sql = database(self.blacklist_table)
 				.where({
 					gauze__blacklist__agent_id: agent_id,
@@ -381,6 +384,7 @@ class RelationshipSystemModel extends SystemModel {
 		const { agent_id } = agent;
 		const method = "read";
 		const { where = {} } = parameters;
+		context.transaction_count = (context.transaction_count || 0) + 1;
 		const sql = database(self.entity.table_name).where(where).transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._read_entity:debug_sql`, sql.toString());
@@ -401,6 +405,7 @@ class RelationshipSystemModel extends SystemModel {
 		const { agent_id } = agent;
 		const method = "read";
 		const { where_in = {}, where_not_in = {} } = parameters;
+		context.transaction_count = (context.transaction_count || 0) + 1;
 		const sql = database(self.entity.table_name)
 			.where(function (builder) {
 				Object.keys(where_in).forEach(function (key) {
@@ -444,6 +449,7 @@ class RelationshipSystemModel extends SystemModel {
 			})
 			.then(function (auth) {
 				if (auth.status === true) {
+					context.transaction_count = (context.transaction_count || 0) + 1;
 					const sql = database(self.entity.table_name)
 						.where({
 							gauze__relationship__from_type: parameters.where.gauze__relationship__from_type,
@@ -487,6 +493,7 @@ class RelationshipSystemModel extends SystemModel {
 			})
 			.then(function (auth) {
 				if (auth.status === true) {
+					context.transaction_count = (context.transaction_count || 0) + 1;
 					const sql = database(self.entity.table_name)
 						.where({
 							gauze__relationship__to_type: parameters.where.gauze__relationship__to_type,
@@ -540,7 +547,7 @@ class RelationshipSystemModel extends SystemModel {
 		entity.entity_method = method;
 		if (parameters.where && parameters.where.gauze__relationship__id) {
 			self._validate_entity_types(parameters.where);
-			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
+			return self._preread(context, database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
 					return self._authorized_relationship(context, scope, relationship, agent, method).then(function () {
@@ -616,7 +623,7 @@ class RelationshipSystemModel extends SystemModel {
 		const self = this;
 		if (parameters.where && parameters.where.gauze__relationship__id) {
 			self._validate_entity_types(parameters.where);
-			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
+			return self._preread(context, database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
 					return self._cursor_authorized_relationship_id(context, scope, parameters, realm, relationship, method);
@@ -642,6 +649,7 @@ class RelationshipSystemModel extends SystemModel {
 			parameters.where.gauze__relationship__to_type
 		) {
 			self._validate_entity_types(parameters.where);
+			context.transaction_count = (context.transaction_count || 0) + 1;
 			const sql = database(self.entity.table_name).where(parameters.where).transacting(transaction);
 			if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 				LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._cursor_read_entity:debug_sql`, sql.toString());
@@ -657,6 +665,7 @@ class RelationshipSystemModel extends SystemModel {
 			parameters.where_in.gauze__relationship__to_id.length
 		) {
 			const { where_in = {}, where_not_in = {} } = parameters;
+			context.transaction_count = (context.transaction_count || 0) + 1;
 			const sql = database(self.entity.table_name)
 				.where(function (builder) {
 					Object.keys(where_in).forEach(function (key) {
@@ -682,6 +691,7 @@ class RelationshipSystemModel extends SystemModel {
 				})
 				.then(function (auth) {
 					if (auth.status === true) {
+						context.transaction_count = (context.transaction_count || 0) + 1;
 						const sql = database(self.entity.table_name)
 							.where({
 								gauze__relationship__from_type: parameters.where.gauze__relationship__from_type,
@@ -707,6 +717,7 @@ class RelationshipSystemModel extends SystemModel {
 				})
 				.then(function (auth) {
 					if (auth.status === true) {
+						context.transaction_count = (context.transaction_count || 0) + 1;
 						const sql = database(self.entity.table_name)
 							.where({
 								gauze__relationship__to_type: parameters.where.gauze__relationship__to_type,
@@ -802,7 +813,7 @@ class RelationshipSystemModel extends SystemModel {
 		const method = "update";
 		entity.entity_method = method;
 		if (parameters.where && parameters.where.gauze__relationship__id) {
-			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
+			return self._preread(context, database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
 					const staged = { ...relationship, ...parameters.attributes };
@@ -853,7 +864,7 @@ class RelationshipSystemModel extends SystemModel {
 		const method = "delete";
 		entity.entity_method = method;
 		if (parameters.where && parameters.where.gauze__relationship__id) {
-			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
+			return self._preread(context, database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
 					return self._authorized_relationship(context, scope, relationship, agent, method).then(function () {
@@ -911,6 +922,7 @@ class RelationshipSystemModel extends SystemModel {
 		const { agent_id } = agent;
 		const method = "count";
 		const { where = {} } = parameters;
+		context.transaction_count = (context.transaction_count || 0) + 1;
 		const sql = database(self.entity.table_name).where(where).transacting(transaction);
 		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}._count_entity:debug_sql`, sql.toString());
@@ -931,6 +943,7 @@ class RelationshipSystemModel extends SystemModel {
 		const { agent_id } = agent;
 		const method = "count";
 		const { where_in = {}, where_not_in = {} } = parameters;
+		context.transaction_count = (context.transaction_count || 0) + 1;
 		const sql = database(self.entity.table_name)
 			.where(function (builder) {
 				Object.keys(where_in).forEach(function (key) {
@@ -973,6 +986,7 @@ class RelationshipSystemModel extends SystemModel {
 			})
 			.then(function (auth) {
 				if (auth.status === true) {
+					context.transaction_count = (context.transaction_count || 0) + 1;
 					const sql = database(self.entity.table_name)
 						.where({
 							gauze__relationship__from_type: parameters.where.gauze__relationship__from_type,
@@ -1016,6 +1030,7 @@ class RelationshipSystemModel extends SystemModel {
 			})
 			.then(function (auth) {
 				if (auth.status === true) {
+					context.transaction_count = (context.transaction_count || 0) + 1;
 					const sql = database(self.entity.table_name)
 						.where({
 							gauze__relationship__to_type: parameters.where.gauze__relationship__to_type,
@@ -1066,7 +1081,7 @@ class RelationshipSystemModel extends SystemModel {
 		entity.entity_method = method;
 		if (parameters.where && parameters.where.gauze__relationship__id) {
 			self._validate_entity_types(parameters.where);
-			return self._preread(database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
+			return self._preread(context, database, transaction, parameters.where.gauze__relationship__id).then(function (relationships) {
 				if (relationships && relationships.length) {
 					const relationship = relationships[0];
 					return self._authorized_relationship(context, scope, relationship, agent, method).then(function () {
