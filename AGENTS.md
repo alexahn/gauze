@@ -27,3 +27,23 @@ Treat root-level `*.sqlite3` files and `src/views/*/build/` as generated artifac
 
 ## Memory
 At at time there is a piece of information that would be useful for future prompts regarding the codebase, add it to MEMORY.md. These can be technical notes, motivations, mistakes, etc. For example, if I correct you and ask you to do something another way, find out the motivation and record it in MEMORY.md so you do not make the same mistake in the future. Read MEMORY.md when you read AGENTS.md.
+
+## Conventions
+When possible, it is better to expand every possible branch of a value check and have the check done at the same indentation level so that there is a semantic meaning to indentation:
+```
+if (method === "read") {
+	return 1
+} else if (method === "update") {
+	return 2
+} else {
+	return 2
+}
+```
+The following is not good:
+```
+if (method === "read") {
+	return 1
+}
+return 2
+```
+The reason it is not good is that the code becomes harder to read because the value check does not visually align. It is better to write code in the first style whenever possible, even if it means repeating some code.

@@ -677,6 +677,59 @@ query read(
 				return data.data[`read_${header.name}`];
 			});
 	}
+	cursorRead(header, variables) {
+		const self = this;
+		const query = `
+query cursor_read(
+	$cursor: String,
+	$source: ${header.graphql_query_source_type},
+	$where: ${header.graphql_query_where_type},
+	$where_in: ${header.graphql_query_where_array_type},
+	$where_not_in: ${header.graphql_query_where_array_type},
+	$where_like: ${header.graphql_query_where_type},
+	$where_between: ${header.graphql_query_where_array_type},
+	$limit: Int,
+	$order: [Order]
+) {
+	cursor_read_${header.name}(
+		cursor: $cursor,
+		source: $source,
+		where: $where,
+		where_in: $where_in,
+		where_not_in: $where_not_in,
+		where_like: $where_like,
+		where_between: $where_between,
+		limit: $limit,
+		order: $order,
+	) {
+		nodes {
+			_metadata {
+				id
+				type
+			}
+			attributes {
+				${header.graphql_attributes_string}
+			}
+		}
+		page_info {
+			has_previous_page
+			has_next_page
+			previous_cursor
+			current_cursor
+			next_cursor
+		}
+	}
+}
+`;
+		return self
+			.system({
+				query: query,
+				variables: variables,
+			})
+			.then(function (data) {
+				return data.data[`cursor_read_${header.name}`];
+			});
+	}
 	count(header, variables) {
 		const self = this;
 		const query = `
@@ -685,9 +738,10 @@ query count(
 	$count: ${header.graphql_query_where_string_type},
 	$where: ${header.graphql_query_where_type},
     $where_in: ${header.graphql_query_where_array_type},
-    $where_not_in: ${header.graphql_query_where_array_type},
+	$where_not_in: ${header.graphql_query_where_array_type},
 	$where_like: ${header.graphql_query_where_type},
 	$where_between: ${header.graphql_query_where_array_type},
+	$order: [Order]
 ) {
 	count_${header.name}(
 		source: $source,
@@ -696,7 +750,8 @@ query count(
 		where_in: $where_in,
 		where_not_in: $where_not_in,
 		where_like: $where_like,
-		where_between: $where_between
+		where_between: $where_between,
+		order: $order
 	) {
 		select
 		count

@@ -18,8 +18,9 @@ import {
 
 import Input from "./Input.jsx";
 import Link from "./Link.jsx";
-import Pagination from "./Pagination.jsx";
+import CursorPagination from "./CursorPagination.jsx";
 import Popover from "./Popover.jsx";
+import { cursorCountVariables, cursorEffectiveVariables, cursorReadVariables, cursorRouteVariables } from "./../cursor.js";
 
 const PAGE_SIZE = 8;
 const NODE_HORIZONTAL_GAP = 96;
@@ -221,7 +222,6 @@ function defaultVariables(header) {
 	const variables = {
 		where_like: {},
 		limit: PAGE_SIZE,
-		offset: 0,
 	};
 	if (header.default_order) {
 		variables.order = [
@@ -239,7 +239,6 @@ function traversalVariables(header, source) {
 		source,
 		where: {},
 		limit: PAGE_SIZE,
-		offset: 0,
 	};
 	if (header.default_order) {
 		variables.order = [
@@ -263,7 +262,6 @@ function accessVariables(header, where) {
 	const variables = {
 		where,
 		limit: PAGE_SIZE,
-		offset: 0,
 	};
 	if (header.default_order) {
 		variables.order = [
@@ -335,8 +333,9 @@ function stripFilterVariables(variables, filterMode) {
 		where: variables.where ? { ...variables.where } : undefined,
 		where_like: variables.where_like ? { ...variables.where_like } : undefined,
 		where_between: variables.where_between ? { ...variables.where_between } : undefined,
-		offset: 0,
 	};
+	delete stripped.cursor;
+	delete stripped.offset;
 	["where", "where_like"].forEach(function (mode) {
 		if (stripped[mode]) {
 			Object.keys(stripped[mode]).forEach(function (field) {
@@ -471,14 +470,21 @@ function cleanSortClauses(sortClauses) {
 }
 
 function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenItem, onOpenAccess, onOpenCreate }) {
+	const appliedVariables = useMemo(
+		function () {
+			return cursorEffectiveVariables(node.variables, node.pageInfo);
+		},
+		[node.variables, node.pageInfo],
+	);
+	const appliedVariablesKey = JSON.stringify(appliedVariables);
 	const [filterMode, setFilterMode] = useState(node.filterMode);
-	const [localVariables, setLocalVariables] = useState(node.variables);
+	const [localVariables, setLocalVariables] = useState(appliedVariables);
 	const [visibleFieldNames, setVisibleFieldNames] = useState(function () {
 		return node.header.fields.map(function (field) {
 			return field.name;
 		});
 	});
-	const initialSortClauses = sortClausesFromVariables(node.variables);
+	const initialSortClauses = sortClausesFromVariables(appliedVariables);
 	const [sortClauses, setSortClauses] = useState(initialSortClauses);
 	const [showSettings, setShowSettings] = useState(false);
 	const [settingsFieldFilter, setSettingsFieldFilter] = useState("");
@@ -491,11 +497,6 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 		return field.name.toLowerCase().indexOf(settingsFieldFilter.toLowerCase()) >= 0;
 	});
 	const total = countToNumber(node.count);
-	const limit = node.variables.limit ? Number.parseInt(node.variables.limit, 10) : PAGE_SIZE;
-	const offset = node.variables.offset ? Number.parseInt(node.variables.offset, 10) : 0;
-	const pageCurrent = Math.floor(Math.max(offset / limit) + 1);
-	const pageMaxNoSkew = Math.ceil(Math.max(total / limit));
-	const pageMax = Math.max(1, pageMaxNoSkew < pageCurrent ? pageCurrent : pageMaxNoSkew);
 	const cellClass = "project-graph-cell ba bw1 br2 bdx2 bgx2 cx6";
 	const headerCellClass = "project-graph-cell ba bw1 br2 bdx3 bgx3 cx6";
 	const rowHeaderCellClass = `${headerCellClass} project-graph-heading`;
@@ -505,15 +506,19 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 		to: node.header.relationships_to || [],
 	};
 	const sourceDirectionLabel = relationshipSourceLabelDirection(node.source);
-	const tableURL = pathfinder.stateToURL("project.system.headers.header.list", { header: node.header.graphql_meta_type.toLowerCase() }, { variables: JSON.stringify(node.variables) });
+	const tableURL = pathfinder.stateToURL(
+		"project.system.headers.header.list",
+		{ header: node.header.graphql_meta_type.toLowerCase() },
+		{ variables: JSON.stringify(cursorRouteVariables(node.variables, node.pageInfo)) },
+	);
 
 	useEffect(
 		function () {
 			setFilterMode(node.filterMode);
-			setLocalVariables(node.variables);
-			setSortClauses(sortClausesFromVariables(node.variables));
+			setLocalVariables(appliedVariables);
+			setSortClauses(sortClausesFromVariables(appliedVariables));
 		},
-		[node.id, node.filterMode, node.header, node.variables],
+		[node.id, node.filterMode, node.header, appliedVariablesKey],
 	);
 
 	useEffect(
@@ -665,9 +670,10 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 
 	function applySort() {
 		const variables = {
-			...node.variables,
-			offset: 0,
+			...appliedVariables,
 		};
+		delete variables.cursor;
+		delete variables.offset;
 		const order = cleanSortClauses(sortClauses);
 		if (order.length) {
 			variables.order = order;
@@ -688,33 +694,10 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 
 	function handlePage(item) {
 		return function () {
-			let paginate;
-			if (item.type === "previous") {
-				paginate = {
-					limit: limit,
-					offset: Math.max(0, offset - limit),
-				};
-			} else if (item.type === "next") {
-				paginate = {
-					limit: limit,
-					offset: Math.max(0, Math.min((pageMax - 1) * limit, offset + limit)),
-				};
-			} else if (item.type === "page") {
-				paginate = {
-					limit: limit,
-					offset: Math.max(0, (item.page - 1) * limit),
-				};
-			} else {
-				paginate = {
-					limit: limit,
-					offset: offset,
-				};
-			}
 			onReload(
 				node.id,
 				{
-					...node.variables,
-					...paginate,
+					cursor: item.cursor,
 				},
 				filterMode,
 			);
@@ -1074,7 +1057,14 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 				<>
 					<div className="project-graph-node-toolbar flex items-center justify-between">
 						{renderModeButtons()}
-						<Pagination page={pageCurrent} count={pageMax} handleClick={handlePage} reverse={false} buttonClass="project-graph-page-button ba bw1 br2 bdx3 bgx2 cx6" />
+						<CursorPagination
+							pageInfo={node.pageInfo}
+							variables={node.variables}
+							handleClick={handlePage}
+							reverse={false}
+							buttonClass="project-graph-page-button ba bw1 br2 bdx3 bgx2 cx6"
+							showDetails={true}
+						/>
 					</div>
 					{node.error ? <div className="project-graph-error bgxyz7 cx12 ba bw1 br2 pa2">{node.error}</div> : null}
 					<div className="project-graph-table-scroll" onWheel={stopWheelPropagation}>
@@ -1699,20 +1689,6 @@ function Graph({ pathfinder, services, agent, headers }) {
 		});
 	}, []);
 
-	function countVariables(header, variables) {
-		return {
-			source: variables.source,
-			count: {
-				[header.primary_key]: header.primary_key,
-			},
-			where: variables.where,
-			where_in: variables.where_in,
-			where_not_in: variables.where_not_in,
-			where_like: variables.where_like,
-			where_between: variables.where_between,
-		};
-	}
-
 	const reloadNode = useCallback(
 		function (id, variables, filterMode, selectedNodeOverride) {
 			const selectedNode =
@@ -1727,6 +1703,7 @@ function Graph({ pathfinder, services, agent, headers }) {
 							...node,
 							variables,
 							filterMode,
+							pageInfo: null,
 							loading: true,
 							error: "",
 						};
@@ -1740,20 +1717,22 @@ function Graph({ pathfinder, services, agent, headers }) {
 			}
 			const header = selectedNode.header;
 			const read = gauzemodel.default
-				.read(header, variables)
-				.then(function (items) {
+				.cursorRead(header, cursorReadVariables(variables))
+				.then(function (page) {
 					return {
-						items,
+						items: page.nodes,
+						pageInfo: page.page_info,
 					};
 				})
 				.catch(function (err) {
 					return {
 						items: [],
+						pageInfo: null,
 						error: err.message,
 					};
 				});
 			const count = gauzemodel.default
-				.count(header, countVariables(header, variables))
+				.count(header, cursorCountVariables(header, variables))
 				.then(function (counts) {
 					return {
 						count: counts && counts.length ? counts[0].count : 0,
@@ -1771,8 +1750,10 @@ function Graph({ pathfinder, services, agent, headers }) {
 				updateNodeContent(id, function (node) {
 					return {
 						...node,
+						variables: cursorRouteVariables(variables, readResult.pageInfo),
 						items: readResult.items,
 						count: countResult.count,
+						pageInfo: readResult.pageInfo,
 						loading: false,
 						error: readResult.error || countResult.error || "",
 					};
@@ -1797,6 +1778,7 @@ function Graph({ pathfinder, services, agent, headers }) {
 				filterMode: "where_like",
 				items: [],
 				count: 0,
+				pageInfo: null,
 				loading: true,
 				error: "",
 			};
@@ -1843,6 +1825,7 @@ function Graph({ pathfinder, services, agent, headers }) {
 				filterMode: "where_like",
 				items: [],
 				count: 0,
+				pageInfo: null,
 				loading: true,
 				error: "",
 			};
@@ -1945,6 +1928,7 @@ function Graph({ pathfinder, services, agent, headers }) {
 					filterMode: "where",
 					items: [],
 					count: 0,
+					pageInfo: null,
 					parentNodeID: sourceNode.id,
 					parentEntityID: item._metadata.id,
 					loading: true,

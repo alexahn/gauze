@@ -23,6 +23,14 @@ class GauzeModelService {
 			return rows;
 		});
 	}
+	cursorRead(header, variables) {
+		return gauze.default.cursorRead(header, variables).then(function (page) {
+			page.nodes.forEach(function (row) {
+				model.default.upsert(row._metadata, row.attributes);
+			});
+			return page;
+		});
+	}
 	update(header, variables) {
 		return gauze.default.update(header, variables).then(function (rows) {
 			rows.forEach(function (row) {

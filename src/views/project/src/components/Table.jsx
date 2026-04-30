@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { ArrowDownIcon, ArrowUpIcon, BookmarkFilledIcon, BookmarkIcon, Link2Icon, Pencil2Icon, PlusCircledIcon, TrashIcon } from "@radix-ui/react-icons";
 
@@ -7,8 +7,9 @@ import { navigate } from "@ahn/sinew";
 
 import Input from "./Input.jsx";
 import Link from "./Link.jsx";
-import Pagination from "./Pagination.jsx";
+import CursorPagination from "./CursorPagination.jsx";
 import Popover from "./Popover.jsx";
+import { cursorEffectiveVariables, cursorRouteVariables } from "./../cursor.js";
 
 function orderClausesFromVariables(variables) {
 	if (!Array.isArray(variables.order)) {
@@ -67,13 +68,19 @@ function normalizeWhereBetweenRange(range) {
 	return [normalizeRangeBoundary(start), normalizeRangeBoundary(end)];
 }
 
-function Table({ pathfinder, services, agent, headers, header, variables = {}, items, count }) {
-	const { gauze } = services;
+function Table({ pathfinder, services, agent, headers, header, variables = {}, items, count, pageInfo }) {
+	const appliedVariables = useMemo(
+		function () {
+			return cursorEffectiveVariables(variables, pageInfo);
+		},
+		[variables, pageInfo],
+	);
+	const appliedVariablesKey = JSON.stringify(appliedVariables);
 	// note: infer the filter mode based on the structure of variables
-	const defaultFilterMode = variables.where ? "where" : variables.where_like ? "where_like" : variables.where_between ? "where_between" : "where";
+	const defaultFilterMode = appliedVariables.where ? "where" : appliedVariables.where_like ? "where_like" : appliedVariables.where_between ? "where_between" : "where";
 	const [filterMode, setFilterMode] = useState(defaultFilterMode);
-	const [localVariables, setLocalVariables] = useState(variables);
-	const [orderClauses, setOrderClauses] = useState(orderClausesFromVariables(variables));
+	const [localVariables, setLocalVariables] = useState(appliedVariables);
+	const [orderClauses, setOrderClauses] = useState(orderClausesFromVariables(appliedVariables));
 	const cellClass = "ba bw1 br2 mb1 bgx2 bdx2 cx6 bgx3h bdx3h cx6h w100";
 	const itemClass = "athelas f6 clouds w-100 truncate-ns mw5";
 	const textTriggerClass = "button-reset athelas f6 clouds w-100 truncate-ns mw5 tl";
@@ -81,7 +88,7 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 	const textPopoverClass = "tooltip athelas f6 bgx2 cx6 mw5 ba bw1 br2 pa1";
 	const menuPopoverClass = "tooltip athelas f6 bgx2 cx6 mw5 ba bw1 br2 pa1";
 	const orderPopoverClass = "tooltip project-table-order-popover bgx2 cx6 ba bw1 br2 bdx3 shadow-2";
-	const appliedOrderClauses = cleanOrderClauses(orderClausesFromVariables(variables));
+	const appliedOrderClauses = cleanOrderClauses(orderClausesFromVariables(appliedVariables));
 	const appliedOrderByColumn = appliedOrderClauses.reduce(function (index, clause, clauseIndex) {
 		if (!index[clause.column]) {
 			index[clause.column] = {
@@ -92,49 +99,20 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 		return index;
 	}, {});
 
-	const offset = variables.offset ? Number.parseInt(variables.offset) : 0;
-	const limit = variables.limit ? Number.parseInt(variables.limit) : 16;
-	const pageCurrent = Math.floor(Math.max(offset / limit) + 1);
-	const pageMaxNoSkew = Math.ceil(Math.max(count / limit));
-	const pageMax = pageMaxNoSkew < pageCurrent ? pageCurrent : pageMaxNoSkew;
-
 	useEffect(
 		function () {
-			setOrderClauses(orderClausesFromVariables(variables));
+			setFilterMode(defaultFilterMode);
+			setLocalVariables(appliedVariables);
+			setOrderClauses(orderClausesFromVariables(appliedVariables));
 		},
-		[variables],
+		[appliedVariablesKey, defaultFilterMode],
 	);
 
 	function href(item) {
-		var paginate;
-		if (item.type === "previous") {
-			paginate = {
-				limit: limit,
-				offset: Math.max(0, offset - limit),
-			};
-		} else if (item.type === "next") {
-			paginate = {
-				limit: limit,
-				offset: Math.min((pageMax - 1) * limit, offset + limit),
-			};
-		} else if (item.type === "page") {
-			paginate = {
-				limit: limit,
-				offset: (item.page - 1) * limit,
-			};
-		} else {
-			paginate = {
-				limit: limit,
-				offset: offset,
-			};
-		}
 		// current state
 		const state = pathfinder.URLToState(location.href);
 		const url = pathfinder.stateToURL(state.name, state.pathParams, {
-			variables: JSON.stringify({
-				...variables,
-				...paginate,
-			}),
+			variables: JSON.stringify(cursorRouteVariables({ cursor: item.cursor }, null)),
 		});
 		return url;
 	}
@@ -154,6 +132,8 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 			where_like: variables.where_like ? { ...variables.where_like } : undefined,
 			where_between: variables.where_between ? { ...variables.where_between } : undefined,
 		};
+		delete stripped.cursor;
+		delete stripped.offset;
 		modes.forEach(function (mode) {
 			if (stripped[mode]) {
 				Object.keys(stripped[mode]).forEach(function (field) {
@@ -299,9 +279,10 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 	}
 	function applyOrder() {
 		const nextVariables = {
-			...variables,
-			offset: 0,
+			...appliedVariables,
 		};
+		delete nextVariables.cursor;
+		delete nextVariables.offset;
 		const order = cleanOrderClauses(orderClauses);
 		if (order.length) {
 			nextVariables.order = order;
@@ -780,7 +761,10 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 					})}
 				</tbody>
 			</table>
-			<Pagination page={pageCurrent} count={pageMax} href={href} reverse={false} />
+			<div className="project-table-footer">
+				<div className="project-table-count">{count} rows</div>
+				<CursorPagination pageInfo={pageInfo} variables={variables} href={href} reverse={false} buttonClass="project-table-cursor-button" detailsOpen={true} />
+			</div>
 		</div>
 	);
 }

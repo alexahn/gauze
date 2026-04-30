@@ -1030,6 +1030,84 @@
 	opacity: 0.72;
 }
 
+.project-table-footer {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.75rem;
+	padding: 0.4rem 0;
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.78rem;
+}
+
+.project-table-count {
+	flex: none;
+	padding: 0.25rem 0;
+	color: var(--x6);
+}
+
+.project-table-cursor-button {
+	min-width: 1.8rem;
+	min-height: 1.65rem;
+	border: 1px solid var(--x3);
+	border-radius: 0.25rem;
+	background: var(--x2);
+	color: var(--x6);
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.75rem;
+}
+
+.project-table-cursor-button:disabled,
+.project-graph-page-button:disabled {
+	cursor: not-allowed;
+	opacity: 0.45;
+}
+
+.project-cursor-pagination {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.5rem;
+	min-width: 0;
+}
+
+.project-cursor-pagination-nav {
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
+}
+
+.project-cursor-details {
+	max-width: min(42rem, calc(100vw - 3rem));
+	color: var(--x6);
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.75rem;
+}
+
+.project-cursor-details summary {
+	cursor: pointer;
+}
+
+.project-cursor-detail-grid {
+	display: grid;
+	grid-template-columns: max-content minmax(0, 1fr);
+	gap: 0.25rem 0.5rem;
+	max-height: 18rem;
+	margin-top: 0.35rem;
+	padding: 0.45rem;
+	overflow: auto;
+	border: 1px solid var(--x3);
+	border-radius: 0.25rem;
+	background: var(--x2);
+	color: var(--x6);
+}
+
+.project-cursor-detail-grid pre,
+.project-cursor-detail-grid code {
+	min-width: 0;
+	margin: 0;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
 .project-table-field-trigger {
 	display: block;
 	width: 100%;

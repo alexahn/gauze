@@ -2,6 +2,8 @@ import * as jose from "jose";
 
 import { Pathfinder, navigate } from "@ahn/sinew";
 
+import { cursorCountVariables, cursorReadVariables } from "./cursor.js";
+
 function createPathfinder(context) {
 	const hash = false;
 	const base = "http://localhost:4000";
@@ -167,10 +169,11 @@ function createPathfinder(context) {
 											const { gauzemodel } = services;
 											const variables = JSON.parse(searchParams.variables);
 											const read = gauzemodel.default
-												.read(header, variables)
-												.then(function (items) {
+												.cursorRead(header, cursorReadVariables(variables))
+												.then(function (page) {
 													return {
-														items,
+														items: page.nodes,
+														pageInfo: page.page_info,
 													};
 												})
 												.catch(function (err) {
@@ -181,13 +184,14 @@ function createPathfinder(context) {
 													// note: i think it's better to make it ugly here
 													return {
 														items: [],
+														pageInfo: null,
 													};
 												});
 											const count = gauzemodel.default
-												.count(header, variables)
+												.count(header, cursorCountVariables(header, variables))
 												.then(function (counts) {
 													return {
-														count: counts[0].count,
+														count: counts && counts.length ? counts[0].count : 0,
 													};
 												})
 												.catch(function (err) {
@@ -201,6 +205,7 @@ function createPathfinder(context) {
 												return {
 													items: readResult.items,
 													count: countResult.count,
+													pageInfo: readResult.pageInfo,
 												};
 											});
 										},

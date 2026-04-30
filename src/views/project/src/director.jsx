@@ -106,7 +106,7 @@ function createDirector(context) {
 		const { services } = context;
 		const { system, headers, header, list } = dependencies;
 		const { agent } = system;
-		const { items, count } = list;
+		const { items, count, pageInfo } = list;
 		const variables = JSON.parse(searchParams.variables);
 		root.render(
 			<React.StrictMode>
@@ -125,6 +125,7 @@ function createDirector(context) {
 							variables={variables}
 							items={items}
 							count={count}
+							pageInfo={pageInfo}
 						/>
 					</div>
 				</layouts.amethyst.default>
