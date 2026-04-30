@@ -9,6 +9,8 @@ export default {
 			{ text: "Quick Start", link: "/getting-started" },
 			{ text: "Projects", link: "/project/overview" },
 			{ text: "Entities", link: "/entity/overview" },
+			{ text: "Relationships", link: "/relationships/overview" },
+			{ text: "Whitelists and Blacklists", link: "/whitelists-and-blacklists/overview" },
 			{ text: "GraphQL", link: "/graphql/overview" },
 			{ text: "API", link: "/runtime-and-graphql" },
 		],
@@ -72,6 +74,20 @@ export default {
 					{ text: "Create a Migration", link: "/entity/create-a-migration" },
 					{ text: "Generate Project Code", link: "/entity/generate-project-code" },
 					{ text: "Article Entity Tutorial", link: "/entity/article-entity-tutorial" },
+				],
+			},
+			{
+				text: "Relationships",
+				items: [
+					{ text: "Overview", link: "/relationships/overview" },
+					{ text: "GraphQL", link: "/relationships/graphql" },
+				],
+			},
+			{
+				text: "Whitelists and Blacklists",
+				items: [
+					{ text: "Overview", link: "/whitelists-and-blacklists/overview" },
+					{ text: "GraphQL", link: "/whitelists-and-blacklists/graphql" },
 				],
 			},
 			{

@@ -24,15 +24,87 @@ For example, the built-in `entity` model exposes operations such as `read_entity
 
 With the exception of `create_<entity>`, generated entity operations are filter-driven. `read_<entity>`, `count_<entity>`, `update_<entity>`, and `delete_<entity>` all accept the same core filter family:
 
-- `where`
-- `where_in`
-- `where_not_in`
-- `where_like`
-- `where_between`
+- `where` matches exact field values:
+
+```json
+{
+	"where": {
+		"id": "00000000-0000-0000-0000-000000000001",
+		"text": "hello"
+	}
+}
+```
+
+- `where_in` matches any value in a list:
+
+```json
+{
+	"where_in": {
+		"id": ["00000000-0000-0000-0000-000000000001", "00000000-0000-0000-0000-000000000002"]
+	}
+}
+```
+
+- `where_not_in` excludes any value in a list:
+
+```json
+{
+	"where_not_in": {
+		"id": ["00000000-0000-0000-0000-000000000003", "00000000-0000-0000-0000-000000000004"]
+	}
+}
+```
+
+- `where_like` matches SQL-style patterns:
+
+```json
+{
+	"where_like": {
+		"text": "hel%"
+	}
+}
+```
+
+- `where_between` matches inclusive ranges. Use `null` for an open range side:
+
+```json
+{
+	"where_between": {
+		"created_at": ["2026-01-01T00:00:00.000Z", "2026-02-01T00:00:00.000Z"],
+		"id": ["00000000-0000-0000-0000-000000000001", null]
+	}
+}
+```
 
 In the database realm, the lower-level operations also expose cache-backed variants such as `cache_where_in` and `cache_where_not_in`. Those are mainly used by framework internals and system-realm delegation.
 
-`read_<entity>`, `update_<entity>`, and `delete_<entity>` also accept `limit`, `offset`, and `order`. `count_<entity>` accepts the same core filters, but it does not page or order rows because it returns aggregate count results.
+`read_<entity>`, `update_<entity>`, and `delete_<entity>` also accept `limit`, `offset`, and `order`. `count_<entity>` accepts the same core filters and can accept `order` for ordered composite `where_between` ranges, but it does not page or sort aggregate count results.
+
+`order` is a list of `Order` inputs. Items are applied in list order, so later entries act as tie-breakers for earlier entries:
+
+```json
+{
+	"order": [
+		{
+			"column": "created_at",
+			"order": "desc",
+			"nulls": "last"
+		},
+		{
+			"column": "id",
+			"order": "asc"
+		}
+	]
+}
+```
+
+Each order item supports:
+
+- `column`: The indexed field to sort by.
+- `order`: Optional `asc` or `desc`; if omitted, Gauze uses the entity's default order direction.
+- `nulls`: Optional `first` or `last`.
+
+If `order` is omitted, Gauze uses the entity's `default_order` and `default_order_direction`, falling back to the primary key and ascending order when needed. When `where_between` includes fields that match a prefix of `order`, Gauze interprets that prefix as an ordered composite range.
 
 ## Read
 
@@ -56,7 +128,7 @@ query ReadEntity($where: Entity_Query__Where, $limit: Int, $order: [Order]) {
 
 ## Count
 
-Use `count_<entity>` to count rows that match the shared filters. Counts can also take a `count` argument for explicit count selections, but they do not take `limit`, `offset`, or `order`.
+Use `count_<entity>` to count rows that match the shared filters. Counts can also take a `count` argument for explicit count selections. They do not take `limit` or `offset`; `order` is only used when a composite `where_between` range needs to be interpreted in ordered column order.
 
 The returned `count` field uses the `CountValue` scalar. When the database client is PostgreSQL, count values are returned as strings because PostgreSQL reports `count(*)` as a bigint value.
 

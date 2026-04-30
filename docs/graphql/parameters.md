@@ -138,6 +138,8 @@ Each source object supports:
 - `_metadata.type`: The parent entity GraphQL metadata type.
 - `_direction`: The relationship traversal direction, usually `to` or `from`.
 
+This `source._metadata.type` value is converted to the entity table name before Gauze queries `gauze__relationship`. Direct relationship rows store table names in `gauze__relationship__from_type` and `gauze__relationship__to_type`.
+
 ## Cache Filters
 
 The database realm also exposes cache-backed filter arguments such as `cache_where_in` and `cache_where_not_in`. These are mainly for internal delegation paths, such as system authorization filters that pass large ID sets through an in-memory cache key instead of embedding every ID in a GraphQL variable.

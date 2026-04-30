@@ -13,7 +13,7 @@ Generated entity operations use ordering in these places:
 - `read_<entity>` accepts `order`, `limit`, and `offset`.
 - `update_<entity>` accepts `order`, `limit`, and `offset` to choose which matching rows are updated.
 - `delete_<entity>` accepts `order`, `limit`, and `offset` to choose which matching rows are deleted.
-- `count_<entity>` does not accept `order` because it returns aggregate count results.
+- `count_<entity>` accepts `order` only so ordered composite `where_between` ranges can be interpreted. It does not sort count results.
 
 The `order` argument is a list of `Order` input objects. Each object describes one ordered column.
 
@@ -57,6 +57,62 @@ If an order item omits `nulls`, Gauze uses `first`.
 - `nulls: "last"` puts null values after non-null values.
 
 This null placement is applied before comparing non-null values. The `asc` or `desc` direction controls the non-null value comparison.
+
+## Composite `where_between` Ranges
+
+`where_between` normally applies each field as a plain inclusive range. A range with both sides present uses `between`; a range with one side set to `null` is open-ended and uses `>=` for the start side or `<=` for the end side.
+
+When `where_between` matches a contiguous prefix of the effective `order`, and that prefix contains at least two columns, Gauze treats the prefix as a lexicographic composite range. The first order column is the outer comparison, and later order columns act as ordered tie-breakers.
+
+```json
+{
+	"where_between": {
+		"app__article__created_at": ["2026-01-01T00:00:00.000Z", "2026-02-01T00:00:00.000Z"],
+		"app__article__id": ["00000000-0000-0000-0000-000000000001", "00000000-0000-0000-0000-000000000003"]
+	},
+	"order": [
+		{
+			"column": "app__article__created_at",
+			"order": "asc"
+		},
+		{
+			"column": "app__article__id",
+			"order": "asc"
+		}
+	]
+}
+```
+
+This is interpreted as a range over the tuple `(app__article__created_at, app__article__id)`, not as two independent `between` filters. For ascending columns, full start and end bounds behave like:
+
+```sql
+(
+	app__article__created_at > start_created_at
+	or (
+		app__article__created_at = start_created_at
+		and app__article__id > start_id
+	)
+)
+and (
+	app__article__created_at < end_created_at
+	or (
+		app__article__created_at = end_created_at
+		and app__article__id < end_id
+	)
+)
+```
+
+The comparison direction follows each order item. For descending columns, the relation flips for that column. `null` boundaries use the same `nulls` placement rules as ordering.
+
+Composite parsing is order-derived:
+
+- The prefix must start at the first effective order column.
+- Each prefix column must have a `where_between` range with at least one non-null side.
+- Gauze stops the composite prefix at the first missing, open-on-both-sides, duplicate, or invalid order column.
+- Extra `where_between` fields outside the composite prefix are still applied as plain inclusive ranges.
+- The primary key is not special unless it appears in `order`. If callers want primary-key tie-breaking in the composite range, they should include the primary key explicitly in `order`.
+
+Start and end sides are parsed independently. If a full tuple side is supplied, the tuple boundary is exclusive. If the side is open before all composite columns are present, the last available column on that side is inclusive. Later columns cannot constrain a side when an earlier order column is open on that same side.
 
 ## Sharded Result Ordering
 
