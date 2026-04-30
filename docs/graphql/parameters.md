@@ -61,7 +61,7 @@ Use `where_between` for plain inclusive range inputs:
 }
 ```
 
-When `where_between` includes a non-primary indexed field and the primary key, Gauze treats the pair as a composite cursor-style range. The primary key acts as a tie-breaker for rows with the same ordered field value, so rows can be paged through repeated ordered values without collapsing duplicates.
+When `where_between` includes fields that match a prefix of `order`, Gauze treats that ordered prefix as a composite cursor-style range. The first order column is the outer range, and later order columns act as tie-breakers. For example, `order: [{ "column": "text" }, { "column": "id" }]` with `where_between.text` and `where_between.id` applies a lexicographic range over `(text, id)`.
 
 ## Limit and Offset
 
@@ -96,7 +96,7 @@ If `order` is omitted, Gauze uses the entity's `default_order` and `default_orde
 
 ## Count
 
-`count` is available on `count_<entity>` operations. Most callers can omit it and receive the default `count(*)` result. When supplied, it is a field-to-label map for explicit count selections:
+`count` is available on `count_<entity>` operations. Count operations accept the same filter parameters as reads, plus `order` when an ordered composite `where_between` range is needed. Most callers can omit `count` and receive the default `count(*)` result. When supplied, it is a field-to-label map for explicit count selections:
 
 ```json
 {

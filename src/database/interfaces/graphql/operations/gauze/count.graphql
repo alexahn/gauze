@@ -7,6 +7,7 @@ query CountGauze(
 	$cache_where_not_in: Gauze_Query__Where_String
 	$where_like: Gauze_Query__Where
 	$where_between: Gauze_Query__Where_Array
+	$order: [Order]
 ) {
 	count_gauze(
 		count: $count
@@ -17,6 +18,7 @@ query CountGauze(
 		cache_where_not_in: $cache_where_not_in
 		where_like: $where_like
 		where_between: $where_between
+		order: $order
 	) {
 		select
 		count

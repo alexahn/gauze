@@ -268,6 +268,10 @@ const COUNT__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE = {
 			description: "where between",
 			type: WHERE_ARRAY__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
+		order: {
+			description: "order",
+			type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.order.TYPE__ORDER__STRUCTURE),
+		},
 	},
 	resolve: (source, query_arguments, context) => {
 		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__ENTITY__QUERY__GRAPHQL__INTERFACE__DATABASE.resolve:enter", "source", source);

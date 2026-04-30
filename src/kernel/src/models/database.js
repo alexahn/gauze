@@ -1115,12 +1115,12 @@ class DatabaseModel extends Model {
 			builder.whereNull(qualified_key);
 		}
 	}
-	_cursor_order_relation_operator(item, relation) {
+	_cursor_order_relation_operator(item, relation, inclusive = false) {
 		if (relation === "after") {
-			return item.order === "desc" ? "<" : ">";
+			return item.order === "desc" ? (inclusive ? "<=" : "<") : inclusive ? ">=" : ">";
 		}
 		if (relation === "before") {
-			return item.order === "desc" ? ">" : "<";
+			return item.order === "desc" ? (inclusive ? ">=" : ">") : inclusive ? "<=" : "<";
 		}
 		throw new Error("Invalid cursor relation");
 	}
@@ -1137,7 +1137,7 @@ class DatabaseModel extends Model {
 		}
 		throw new Error("Invalid cursor relation");
 	}
-	_apply_cursor_order_relation(builder, item, qualified_key, value, relation) {
+	_apply_cursor_order_relation(builder, item, qualified_key, value, relation, inclusive = false) {
 		const self = this;
 		if (!self._cursor_order_relation_possible(item, value, relation)) {
 			builder.whereRaw("1 = 0");
@@ -1147,7 +1147,7 @@ class DatabaseModel extends Model {
 			builder.whereNotNull(qualified_key);
 			return;
 		}
-		const operator = self._cursor_order_relation_operator(item, relation);
+		const operator = self._cursor_order_relation_operator(item, relation, inclusive);
 		const include_nulls = (relation === "after" && item.nulls === "last") || (relation === "before" && item.nulls === "first");
 		if (include_nulls) {
 			builder.where(function () {
@@ -1194,7 +1194,7 @@ class DatabaseModel extends Model {
 			return builder;
 		}
 		if (cursor_where_between.type !== "lexicographic") {
-			return self._apply_where_between(builder, cursor_where_between, table_name);
+			return self._apply_where_between(builder, cursor_where_between, table_name, order);
 		}
 		if (!Array.isArray(order) || order.length === 0) {
 			throw new Error("Invalid cursor order");
@@ -1203,47 +1203,90 @@ class DatabaseModel extends Model {
 		self._apply_cursor_lexicographic_bound(builder, order, cursor_where_between.end, "before", table_name);
 		return builder;
 	}
-	// When where_between includes both an indexed field and the primary key, treat them as a composite cursor:
-	// use the primary key as a tie-breaker so identical field values can still be paged deterministically.
-	_apply_where_between(builder, where_between = {}, table_name = null) {
+	_where_between_composite_order(where_between, order) {
 		const self = this;
-		const qualified_primary_key = table_name ? `${table_name}.${self.primary_key}` : self.primary_key;
-		const has_primary_key_range = Object.prototype.hasOwnProperty.call(where_between, self.primary_key);
-		const composite_keys = Object.keys(where_between).filter(function (key) {
-			return key !== self.primary_key;
-		});
-
-		composite_keys.forEach(function (key) {
-			const qualified_key = table_name ? `${table_name}.${key}` : key;
-
-			if (has_primary_key_range) {
-				const [start_value, end_value] = where_between[key];
-				const [start_primary_key_value, end_primary_key_value] = where_between[self.primary_key];
-				const has_start = self._has_range_bound(start_value) && self._has_range_bound(start_primary_key_value);
-				const has_end = self._has_range_bound(end_value) && self._has_range_bound(end_primary_key_value);
-
-				if (has_start) {
-					builder.where(function () {
-						this.where(qualified_key, ">", start_value).orWhere(function () {
-							this.where(qualified_key, "=", start_value).andWhere(qualified_primary_key, ">", start_primary_key_value);
-						});
-					});
-				}
-				if (has_end) {
-					builder.andWhere(function () {
-						this.where(qualified_key, "<", end_value).orWhere(function () {
-							this.where(qualified_key, "=", end_value).andWhere(qualified_primary_key, "<", end_primary_key_value);
-						});
-					});
-				}
-			} else {
-				self._apply_plain_where_between(builder, qualified_key, where_between[key]);
-			}
-		});
-
-		if (has_primary_key_range && composite_keys.length === 0) {
-			self._apply_plain_where_between(builder, qualified_primary_key, where_between[self.primary_key]);
+		if (!Array.isArray(order) || order.length < 2) {
+			return [];
 		}
+		const columns = new Set();
+		for (const item of order) {
+			const range = item && where_between[item.column];
+			if (
+				!item ||
+				!Object.prototype.hasOwnProperty.call(where_between, item.column) ||
+				!Array.isArray(range) ||
+				(!self._has_range_bound(range[0]) && !self._has_range_bound(range[1])) ||
+				columns.has(item.column)
+			) {
+				break;
+			}
+			columns.add(item.column);
+		}
+		return order.slice(0, columns.size);
+	}
+	_where_between_bound_order(composite_order, where_between, side) {
+		const self = this;
+		const index = side === "start" ? 0 : 1;
+		const bound_order = [];
+		for (const item of composite_order) {
+			const range = where_between[item.column];
+			if (!Array.isArray(range) || !self._has_range_bound(range[index])) {
+				break;
+			}
+			bound_order.push(item);
+		}
+		return bound_order;
+	}
+	_apply_where_between_composite_bound(builder, composite_order, where_between, side, table_name = null) {
+		const self = this;
+		const relation = side === "start" ? "after" : "before";
+		const index = side === "start" ? 0 : 1;
+		const bound_order = self._where_between_bound_order(composite_order, where_between, side);
+		if (bound_order.length === 0) {
+			return builder;
+		}
+		const use_inclusive_final_relation = bound_order.length < composite_order.length;
+		builder.where(function () {
+			const outer = this;
+			bound_order.forEach(function (item, depth) {
+				outer.orWhere(function () {
+					for (let equality_index = 0; equality_index < depth; equality_index++) {
+						const equality_item = bound_order[equality_index];
+						const equality_key = table_name ? `${table_name}.${equality_item.column}` : equality_item.column;
+						const equality_value = where_between[equality_item.column][index];
+						self._apply_cursor_order_equality(this, equality_key, equality_value);
+					}
+					const qualified_key = table_name ? `${table_name}.${item.column}` : item.column;
+					const value = where_between[item.column][index];
+					const inclusive = use_inclusive_final_relation && depth === bound_order.length - 1;
+					self._apply_cursor_order_relation(this, item, qualified_key, value, relation, inclusive);
+				});
+			});
+		});
+		return builder;
+	}
+	// When where_between matches a prefix of the query order, treat that prefix as a lexicographic range.
+	// This generalizes the older hardcoded field + primary-key tie-breaker behavior.
+	_apply_where_between(builder, where_between = {}, table_name = null, order = null) {
+		const self = this;
+		const composite_order = self._where_between_composite_order(where_between, order);
+		const composite_columns = new Set();
+
+		if (composite_order.length > 1) {
+			composite_order.forEach(function (item) {
+				composite_columns.add(item.column);
+			});
+			self._apply_where_between_composite_bound(builder, composite_order, where_between, "start", table_name);
+			self._apply_where_between_composite_bound(builder, composite_order, where_between, "end", table_name);
+		}
+
+		Object.keys(where_between).forEach(function (key) {
+			if (composite_columns.has(key)) {
+				return;
+			}
+			const qualified_key = table_name ? `${table_name}.${key}` : key;
+			self._apply_plain_where_between(builder, qualified_key, where_between[key]);
+		});
 
 		return builder;
 	}
@@ -1493,7 +1536,7 @@ class DatabaseModel extends Model {
 							Object.keys(where_like).forEach(function (key) {
 								builder.whereLike(key, where_like[key]);
 							});
-							self._apply_where_between(builder, where_between);
+							self._apply_where_between(builder, where_between, null, resolved_order);
 							self._apply_cursor_where_between(builder, cursor_where_between, cursor_order);
 							/*
 							Object.keys(where_greater).forEach(function (key) {
@@ -1566,7 +1609,8 @@ class DatabaseModel extends Model {
 				offset = 0,
 				order,
 			} = parameters;
-			const resolved_order = self._normalize_order(order).map(function (item) {
+			const normalized_order = self._normalize_order(order);
+			const resolved_order = normalized_order.map(function (item) {
 				return {
 					...item,
 					column: `${self.table_name}.${item.column}`,
@@ -1629,7 +1673,7 @@ class DatabaseModel extends Model {
 								Object.keys(joined_where_like).forEach(function (key) {
 									builder.whereLike(key, joined_where_like[key]);
 								});
-								self._apply_where_between(builder, where_between, self.table_name);
+								self._apply_where_between(builder, where_between, self.table_name, normalized_order);
 								self._apply_cursor_where_between(builder, cursor_where_between, cursor_order, self.table_name);
 								return builder;
 							})
@@ -1670,7 +1714,7 @@ class DatabaseModel extends Model {
 								Object.keys(joined_where_like).forEach(function (key) {
 									builder.whereLike(key, joined_where_like[key]);
 								});
-								self._apply_where_between(builder, where_between, self.table_name);
+								self._apply_where_between(builder, where_between, self.table_name, normalized_order);
 								self._apply_cursor_where_between(builder, cursor_where_between, cursor_order, self.table_name);
 								return builder;
 							})
@@ -2318,7 +2362,8 @@ class DatabaseModel extends Model {
 
 		function action(context, scope, parameters, database, transaction) {
 			context.transaction_count += 1;
-			const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
+			const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {}, order } = parameters;
+			const resolved_order = self._normalize_order(order);
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
 			const count_has_key = count ? (Object.keys(count).length ? true : false) : false;
 			const reversed = {};
@@ -2346,7 +2391,7 @@ class DatabaseModel extends Model {
 					Object.keys(where_like).forEach(function (key) {
 						builder.whereLike(key, where_like[key]);
 					});
-					self._apply_where_between(builder, where_between);
+					self._apply_where_between(builder, where_between, null, resolved_order);
 					return builder;
 				})
 				.first()
@@ -2394,7 +2439,8 @@ class DatabaseModel extends Model {
 
 		function action(context, scope, parameters, database, transaction) {
 			context.transaction_count += 1;
-			const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {} } = parameters;
+			const { count = {}, where = {}, where_in = {}, cache_where_in = {}, where_not_in = {}, cache_where_not_in = {}, where_like = {}, where_between = {}, order } = parameters;
+			const normalized_order = self._normalize_order(order);
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${self.name}.count:enter`, "parameters", parameters);
 			const relationship_source = self._parse_source(scope, parameters);
 
@@ -2459,7 +2505,7 @@ class DatabaseModel extends Model {
 						Object.keys(joined_where_like).forEach(function (key) {
 							builder.whereLike(key, joined_where_like[key]);
 						});
-						self._apply_where_between(builder, where_between, self.table_name);
+						self._apply_where_between(builder, where_between, self.table_name, normalized_order);
 						return builder;
 					})
 					.first()
@@ -2493,7 +2539,7 @@ class DatabaseModel extends Model {
 						Object.keys(joined_where_like).forEach(function (key) {
 							builder.whereLike(key, joined_where_like[key]);
 						});
-						self._apply_where_between(builder, where_between, self.table_name);
+						self._apply_where_between(builder, where_between, self.table_name, normalized_order);
 						return builder;
 					})
 					.first()

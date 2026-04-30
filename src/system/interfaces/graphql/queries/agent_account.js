@@ -227,6 +227,10 @@ const COUNT__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__SYSTEM = {
 			description: "where between",
 			type: WHERE_ARRAY__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__SYSTEM,
 		},
+		order: {
+			description: "order",
+			type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.order.TYPE__ORDER__STRUCTURE),
+		},
 	},
 	resolve: (source, query_arguments, context) => {
 		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "COUNT__AGENT_ACCOUNT__QUERY__GRAPHQL__INTERFACE__SYSTEM.resolve:enter", "source", source);

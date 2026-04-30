@@ -27,6 +27,10 @@ const operation_variables = {
 	},
 	order: [
 		{
+			column: "text",
+			order: "asc",
+		},
+		{
 			column: "id",
 			order: "asc",
 		},

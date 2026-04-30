@@ -296,6 +296,10 @@ const COUNT__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABA
 			description: "where between",
 			type: WHERE_ARRAY__caf5342ac38d41a6a02bb81d2d2b21a4__QUERY__GRAPHQL__INTERFACE__DATABASE,
 		},
+		order: {
+			description: "order",
+			type: new $abstract.gauze.types.graphql.graphql.LIST__GRAPHQL__TYPE__GAUZE__ABSTRACT($structure.gauze.order.TYPE__ORDER__STRUCTURE),
+		},
 	},
 	resolve: (source, query_arguments, context) => {
 		$kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write(

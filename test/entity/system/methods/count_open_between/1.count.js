@@ -14,6 +14,7 @@ query ${operation_name}(
 	$plain_upper: Entity_Query__Where_Array
 	$composite_lower: Entity_Query__Where_Array
 	$composite_upper: Entity_Query__Where_Array
+	$order: [Order]
 ) {
 	plain_lower: count_entity(where: $where, where_between: $plain_lower) {
 		select
@@ -23,11 +24,11 @@ query ${operation_name}(
 		select
 		count
 	}
-	composite_lower: count_entity(where: $where, where_between: $composite_lower) {
+	composite_lower: count_entity(where: $where, where_between: $composite_lower, order: $order) {
 		select
 		count
 	}
-	composite_upper: count_entity(where: $where, where_between: $composite_upper) {
+	composite_upper: count_entity(where: $where, where_between: $composite_upper, order: $order) {
 		select
 		count
 	}
@@ -51,6 +52,16 @@ const operation_variables = {
 		text: [null, "open-between"],
 		id: [null, "00000000-0000-0000-0000-000000000103"],
 	},
+	order: [
+		{
+			column: "text",
+			order: "asc",
+		},
+		{
+			column: "id",
+			order: "asc",
+		},
+	],
 };
 const expected = `{
     "data": {
