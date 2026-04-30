@@ -737,7 +737,8 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 							</div>
 						</th>
 						{visibleFields.map(function (field) {
-							const defaultValue = localVariables.where_between && localVariables.where_between[field.name] ? localVariables.where_between[field.name][0] : undefined;
+							const fieldRange = localVariables.where_between && field.name in localVariables.where_between ? localVariables.where_between[field.name] : null;
+							const defaultValue = Array.isArray(fieldRange) && 0 in fieldRange ? fieldRange[0] : undefined;
 							return (
 								<th key={field.name} className={cellClass}>
 									<Input
@@ -759,7 +760,8 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 							</div>
 						</th>
 						{visibleFields.map(function (field) {
-							const defaultValue = localVariables.where_between && localVariables.where_between[field.name] ? localVariables.where_between[field.name][1] : undefined;
+							const fieldRange = localVariables.where_between && field.name in localVariables.where_between ? localVariables.where_between[field.name] : null;
+							const defaultValue = Array.isArray(fieldRange) && 1 in fieldRange ? fieldRange[1] : undefined;
 							return (
 								<th key={field.name} className={cellClass}>
 									<Input

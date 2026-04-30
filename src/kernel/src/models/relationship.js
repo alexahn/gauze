@@ -41,6 +41,16 @@ class RelationshipSystemModel extends SystemModel {
 		const self = this;
 		return RelationshipSystemModel._class_name(self.schema_name);
 	}
+	_has_relationship_where_in_pair(parameters = {}) {
+		const self = this;
+		const { where_in } = parameters;
+		if (!where_in || !(self.key_from_id in where_in) || !(self.key_to_id in where_in)) {
+			return false;
+		}
+		const from_ids = where_in[self.key_from_id];
+		const to_ids = where_in[self.key_to_id];
+		return Array.isArray(from_ids) && from_ids.length > 0 && Array.isArray(to_ids) && to_ids.length > 0;
+	}
 	_create_relations_map() {
 		// iterate over $abstract.entities
 		const map = {};
@@ -567,13 +577,7 @@ class RelationshipSystemModel extends SystemModel {
 		) {
 			self._validate_entity_types(parameters.where);
 			return self._read_entity_transaction(context, scope, parameters, realm, database, transaction);
-		} else if (
-			parameters.where_in &&
-			parameters.where_in.gauze__relationship__from_id &&
-			parameters.where_in.gauze__relationship__from_id.length &&
-			parameters.where_in.gauze__relationship__to_id &&
-			parameters.where_in.gauze__relationship__to_id.length
-		) {
+		} else if (self._has_relationship_where_in_pair(parameters)) {
 			return self._read_entity_in_transaction(context, scope, parameters, realm, database, transaction);
 		} else if (parameters.where && self.key_from_id in parameters.where && self.key_from_type in parameters.where) {
 			return self._read_from_transaction(context, scope, parameters, realm, database, transaction);
@@ -657,13 +661,7 @@ class RelationshipSystemModel extends SystemModel {
 			return sql.then(function (relationship_rows) {
 				return self._filter_access(context, scope, parameters, realm, relationship_rows, method);
 			});
-		} else if (
-			parameters.where_in &&
-			parameters.where_in.gauze__relationship__from_id &&
-			parameters.where_in.gauze__relationship__from_id.length &&
-			parameters.where_in.gauze__relationship__to_id &&
-			parameters.where_in.gauze__relationship__to_id.length
-		) {
+		} else if (self._has_relationship_where_in_pair(parameters)) {
 			const { where_in = {}, where_not_in = {} } = parameters;
 			context.transaction_count = (context.transaction_count || 0) + 1;
 			const sql = database(self.entity.table_name)
@@ -1095,13 +1093,7 @@ class RelationshipSystemModel extends SystemModel {
 		} else if (parameters.where && self.key_from_id in parameters.where && self.key_to_id in parameters.where) {
 			self._validate_entity_types(parameters.where);
 			return self._count_entity_transaction(context, scope, parameters, realm, database, transaction);
-		} else if (
-			parameters.where_in &&
-			parameters.where_in.gauze__relationship__from_id &&
-			parameters.where_in.gauze__relationship__from_id.length &&
-			parameters.where_in.gauze__relationship__to_id &&
-			parameters.where_in.gauze__relationship__to_id.length
-		) {
+		} else if (self._has_relationship_where_in_pair(parameters)) {
 			return self._count_entity_in_transaction(context, scope, parameters, realm, database, transaction);
 		} else if (parameters.where && self.key_from_id in parameters.where && self.key_from_type in parameters.where) {
 			return self._count_from_transaction(context, scope, parameters, realm, database, transaction);

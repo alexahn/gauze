@@ -1305,20 +1305,27 @@ class DatabaseModel extends Model {
 	}
 	// splits where_in and cache_where_in into chunks that don't cross the sql bind limit
 	// maps the chunks to actions and returns all results
+	_has_primary_key_where_in(parameters = {}) {
+		const self = this;
+		const { where_in = {}, cache_where_in = {} } = parameters;
+		return self.primary_key in where_in || self.primary_key in cache_where_in;
+	}
 	_chunk_action(context, scope, parameters, database, transaction, action) {
 		const self = this;
 		const { where_in = {}, cache_where_in = {} } = parameters;
-		const direct_primary_keys = where_in[self.primary_key] || null;
-		const cached_primary_keys = cache_where_in[self.primary_key] ? TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[self.primary_key]).value : null;
+		const direct_primary_key_filter_exists = self.primary_key in where_in;
+		const cached_primary_key_filter_exists = self.primary_key in cache_where_in;
+		const direct_primary_keys = direct_primary_key_filter_exists ? where_in[self.primary_key] : null;
+		const cached_primary_keys = cached_primary_key_filter_exists ? TIERED_CACHE__LRU__CACHE__SRC__KERNEL.get(cache_where_in[self.primary_key]).value : null;
 
-		let primary_keys = direct_primary_keys || cached_primary_keys || [];
-		if (direct_primary_keys && cached_primary_keys) {
-			const cached_primary_key_set = new Set(cached_primary_keys);
-			primary_keys = direct_primary_keys.filter(function (primary_key) {
+		let primary_keys = direct_primary_key_filter_exists ? direct_primary_keys : cached_primary_keys || [];
+		if (direct_primary_key_filter_exists && cached_primary_key_filter_exists) {
+			const cached_primary_key_set = new Set(cached_primary_keys || []);
+			primary_keys = (direct_primary_keys || []).filter(function (primary_key) {
 				return cached_primary_key_set.has(primary_key);
 			});
 		}
-		const unique_primary_keys = [...new Set(primary_keys)];
+		const unique_primary_keys = [...new Set(primary_keys || [])];
 		// split where_in_primary_key into batches of (SQL_BIND_LIMIT - SQL_MAX_COLUMNS)
 		const chunks = [];
 		const GAUZE_SQL_BIND_LIMIT = parseInt(process.env.GAUZE_SQL_BIND_LIMIT, 10);
@@ -1330,7 +1337,7 @@ class DatabaseModel extends Model {
 		return Promise.all(
 			chunks.map(function (chunk) {
 				const params = JSON.parse(JSON.stringify(parameters));
-				if (params.cache_where_in && params.cache_where_in[self.primary_key]) {
+				if (params.cache_where_in && self.primary_key in params.cache_where_in) {
 					delete params.cache_where_in[self.primary_key];
 				}
 				params.where_in = params.where_in || {};
@@ -1568,8 +1575,7 @@ class DatabaseModel extends Model {
 				});
 		}
 
-		const { where_in = {}, cache_where_in = {} } = parameters;
-		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
+		if (self._has_primary_key_where_in(parameters)) {
 			return self._chunk_action(context, scope, parameters, database, transaction, action);
 		} else {
 			return action(context, scope, parameters, database, transaction);
@@ -1742,8 +1748,7 @@ class DatabaseModel extends Model {
 			}
 		}
 
-		const { where_in = {}, cache_where_in = {} } = parameters;
-		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
+		if (self._has_primary_key_where_in(parameters)) {
 			return self._chunk_action(context, scope, parameters, database, transaction, action);
 		} else {
 			return action(context, scope, parameters, database, transaction);
@@ -1914,8 +1919,7 @@ class DatabaseModel extends Model {
 				});
 		}
 
-		const { where_in = {}, cache_where_in = {} } = parameters;
-		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
+		if (self._has_primary_key_where_in(parameters)) {
 			return self._chunk_action(context, scope, parameters, database, transaction, action);
 		} else {
 			return action(context, scope, parameters, database, transaction);
@@ -1992,8 +1996,7 @@ class DatabaseModel extends Model {
 				});
 		}
 
-		const { where_in = {}, cache_where_in = {} } = parameters;
-		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
+		if (self._has_primary_key_where_in(parameters)) {
 			return self._chunk_action(context, scope, parameters, database, transaction, action);
 		} else {
 			return action(context, scope, parameters, database, transaction);
@@ -2261,8 +2264,7 @@ class DatabaseModel extends Model {
 				});
 		}
 
-		const { where_in = {}, cache_where_in = {} } = parameters;
-		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
+		if (self._has_primary_key_where_in(parameters)) {
 			return self._chunk_action(context, scope, parameters, database, transaction, action);
 		} else {
 			return action(context, scope, parameters, database, transaction);
@@ -2332,8 +2334,7 @@ class DatabaseModel extends Model {
 				});
 		}
 
-		const { where_in = {}, cache_where_in = {} } = parameters;
-		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
+		if (self._has_primary_key_where_in(parameters)) {
 			return self._chunk_action(context, scope, parameters, database, transaction, action);
 		} else {
 			return action(context, scope, parameters, database, transaction);
@@ -2418,8 +2419,7 @@ class DatabaseModel extends Model {
 				});
 		}
 
-		const { where_in = {}, cache_where_in = {} } = parameters;
-		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
+		if (self._has_primary_key_where_in(parameters)) {
 			return self._chunk_action(context, scope, parameters, database, transaction, action).then(function (results) {
 				return self._merge_count_maps(results, parameters.count);
 			});
@@ -2570,8 +2570,7 @@ class DatabaseModel extends Model {
 			}
 		}
 
-		const { where_in = {}, cache_where_in = {} } = parameters;
-		if (where_in[self.primary_key] || cache_where_in[self.primary_key]) {
+		if (self._has_primary_key_where_in(parameters)) {
 			return self._chunk_action(context, scope, parameters, database, transaction, action).then(function (results) {
 				return self._merge_count_maps(results, parameters.count);
 			});

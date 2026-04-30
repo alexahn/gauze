@@ -111,7 +111,7 @@ function expected_primary_filter_node_ids(database_manager, model, parameters, s
 	if (parameters.where && model.primary_key in parameters.where) {
 		shards = intersect_shards(shards, shards_for_primary_keys(database_manager, model.table_name, [parameters.where[model.primary_key]]));
 	}
-	if (parameters.where_in && parameters.where_in[model.primary_key]) {
+	if (parameters.where_in && model.primary_key in parameters.where_in) {
 		shards = intersect_shards(shards, shards_for_primary_keys(database_manager, model.table_name, parameters.where_in[model.primary_key]));
 	}
 	if (parameters.where_between && Object.prototype.hasOwnProperty.call(parameters.where_between, model.primary_key)) {

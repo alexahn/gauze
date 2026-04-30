@@ -295,14 +295,14 @@ export default memo(function Table({
 		return function (e) {
 			if (e.target.serialized !== "") {
 				const selectedNode = graph.selectNode(nodeID);
-				const localRange = localWhereBetween[field] ? localWhereBetween[field] : null;
+				const localRange = field in localWhereBetween ? localWhereBetween[field] : null;
 				const globalRange = selectedNode.props.variables.where_between
-					? selectedNode.props.variables.where_between[field]
+					? field in selectedNode.props.variables.where_between
 						? selectedNode.props.variables.where_between[field]
 						: null
 					: null;
 				//const range = globalRange ? globalRange : (localRange ? localRange : [null, null])
-				const range = globalRange ? globalRange : [null, null];
+				const range = Array.isArray(globalRange) ? globalRange : [null, null];
 				range[position] = e.target.serialized;
 				const updatedWhere = {
 					[field]: range,
@@ -317,14 +317,14 @@ export default memo(function Table({
 				graph.updateSpaceNodes(agentHeader.name, spaceID, [targetNode]);
 			} else {
 				const selectedNode = graph.selectNode(nodeID);
-				const localRange = localWhereBetween[field] ? localWhereBetween[field] : null;
+				const localRange = field in localWhereBetween ? localWhereBetween[field] : null;
 				const globalRange = selectedNode.props.variables.where_between
-					? selectedNode.props.variables.where_between[field]
+					? field in selectedNode.props.variables.where_between
 						? selectedNode.props.variables.where_between[field]
 						: null
 					: null;
 				//const range = globalRange ? globalRange : (localRange ? localRange : [null, null])
-				const range = globalRange ? globalRange : [null, null];
+				const range = Array.isArray(globalRange) ? globalRange : [null, null];
 				range[position] = null;
 				const isEmpty = range.every(function (v) {
 					return v === null;
@@ -891,14 +891,15 @@ export default memo(function Table({
 					</td>
 				);
 			case "where_like":
-				const cellLikeClass = variables.where_like ? (variables.where_like[field.name] ? cellWideActiveTableClass : cellWideTableClass) : cellWideTableClass;
+				const cellMatchesLike = variables.where_like && field.name in variables.where_like;
+				const cellLikeClass = cellMatchesLike ? cellWideActiveTableClass : cellWideTableClass;
 				return (
 					<td className={cellLikeClass}>
 						<Input
 							defaultMode={true}
 							field={field}
 							className={filterError[field.name] ? inputErrorTableClass : inputTableClass}
-							defaultValue={variables.where_like ? variables.where_like[field.name] : null}
+							defaultValue={cellMatchesLike ? variables.where_like[field.name] : null}
 							onChange={updateSearchFilter(field.name)}
 							onKeyDown={applyFilterEnter(field.name)}
 							disabled={syncing}
@@ -912,11 +913,12 @@ export default memo(function Table({
 				);
 			case "where_between":
 				// see if this works:
+				const fieldRange = variables.where_between && field.name in variables.where_between ? variables.where_between[field.name] : null;
 				function positionCellClass(position) {
-					if (variables.where_between && variables.where_between[field.name] && variables.where_between[field.name][position] === null) {
+					if (Array.isArray(fieldRange) && position in fieldRange && fieldRange[position] === null) {
 						return cellWideErrorTableClass;
 					} else {
-						if (variables.where_between && variables.where_between[field.name] && variables.where_between[field.name][position]) {
+						if (Array.isArray(fieldRange) && position in fieldRange) {
 							return cellWideActiveTableClass;
 						} else {
 							return cellWideTableClass;
@@ -930,7 +932,7 @@ export default memo(function Table({
 								defaultMode={true}
 								field={field}
 								className={filterError[field.name] ? inputErrorTableClass : inputTableClass}
-								defaultValue={variables.where_between ? (variables.where_between[field.name] ? variables.where_between[field.name][0] : null) : null}
+								defaultValue={Array.isArray(fieldRange) && 0 in fieldRange ? fieldRange[0] : null}
 								onChange={updateBetweenFilter(field.name, 0)}
 								onKeyDown={applyFilterEnter(field.name)}
 								disabled={syncing}
@@ -941,7 +943,7 @@ export default memo(function Table({
 								defaultMode={true}
 								field={field}
 								className={filterError[field.name] ? inputErrorTableClass : inputTableClass}
-								defaultValue={variables.where_between ? (variables.where_between[field.name] ? variables.where_between[field.name][1] : null) : null}
+								defaultValue={Array.isArray(fieldRange) && 1 in fieldRange ? fieldRange[1] : null}
 								onChange={updateBetweenFilter(field.name, 1)}
 								onKeyDown={applyFilterEnter(field.name)}
 								disabled={syncing}
