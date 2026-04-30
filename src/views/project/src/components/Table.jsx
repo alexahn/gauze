@@ -50,6 +50,23 @@ function cleanOrderClauses(orderClauses) {
 		});
 }
 
+function hasRangeBoundaryValue(value) {
+	return value !== undefined && value !== null && value !== "";
+}
+
+function normalizeRangeBoundary(value) {
+	return hasRangeBoundaryValue(value) ? value : null;
+}
+
+function normalizeWhereBetweenRange(range) {
+	const start = Array.isArray(range) ? range[0] : undefined;
+	const end = Array.isArray(range) ? range[1] : undefined;
+	if (!hasRangeBoundaryValue(start) && !hasRangeBoundaryValue(end)) {
+		return null;
+	}
+	return [normalizeRangeBoundary(start), normalizeRangeBoundary(end)];
+}
+
 function Table({ pathfinder, services, agent, headers, header, variables = {}, items, count }) {
 	const { gauze } = services;
 	// note: infer the filter mode based on the structure of variables
@@ -133,11 +150,14 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 		const array_modes = ["where_between"];
 		const stripped = {
 			...variables,
+			where: variables.where ? { ...variables.where } : undefined,
+			where_like: variables.where_like ? { ...variables.where_like } : undefined,
+			where_between: variables.where_between ? { ...variables.where_between } : undefined,
 		};
 		modes.forEach(function (mode) {
-			if (variables[mode]) {
-				Object.keys(variables[mode]).forEach(function (field) {
-					if (variables[mode][field]) {
+			if (stripped[mode]) {
+				Object.keys(stripped[mode]).forEach(function (field) {
+					if (stripped[mode][field]) {
 						// nothing
 					} else {
 						delete stripped[mode][field];
@@ -146,13 +166,11 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 			}
 		});
 		array_modes.forEach(function (mode) {
-			if (variables[mode]) {
-				Object.keys(variables[mode]).forEach(function (field) {
-					const every = variables[mode][field].every(function (v) {
-						return v;
-					});
-					if (every) {
-						// nothing
+			if (stripped[mode]) {
+				Object.keys(stripped[mode]).forEach(function (field) {
+					const range = normalizeWhereBetweenRange(stripped[mode][field]);
+					if (range) {
+						stripped[mode][field] = range;
 					} else {
 						delete stripped[mode][field];
 					}

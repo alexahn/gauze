@@ -312,6 +312,23 @@ function isGauzeEntityHeader(header) {
 	return ["RELATIONSHIP", "WHITELIST", "BLACKLIST"].indexOf(header.graphql_meta_type) >= 0;
 }
 
+function hasRangeBoundaryValue(value) {
+	return value !== undefined && value !== null && value !== "";
+}
+
+function normalizeRangeBoundary(value) {
+	return hasRangeBoundaryValue(value) ? value : null;
+}
+
+function normalizeWhereBetweenRange(range) {
+	const start = Array.isArray(range) ? range[0] : undefined;
+	const end = Array.isArray(range) ? range[1] : undefined;
+	if (!hasRangeBoundaryValue(start) && !hasRangeBoundaryValue(end)) {
+		return null;
+	}
+	return [normalizeRangeBoundary(start), normalizeRangeBoundary(end)];
+}
+
 function stripFilterVariables(variables, filterMode) {
 	const stripped = {
 		...variables,
@@ -331,13 +348,10 @@ function stripFilterVariables(variables, filterMode) {
 	});
 	if (stripped.where_between) {
 		Object.keys(stripped.where_between).forEach(function (field) {
-			const range = stripped.where_between[field] || [];
-			const every =
-				range.length === 2 &&
-				range.every(function (value) {
-					return value;
-				});
-			if (!every) {
+			const range = normalizeWhereBetweenRange(stripped.where_between[field]);
+			if (range) {
+				stripped.where_between[field] = range;
+			} else {
 				delete stripped.where_between[field];
 			}
 		});
