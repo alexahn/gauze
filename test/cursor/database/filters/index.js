@@ -163,4 +163,125 @@ describe_database_cursor_suite("cursor pagination database filters", async funct
 			assert.equal(second.cursor_read_ytitne.page_info.has_next_page, false);
 		});
 	});
+
+	await test.it("constructs read cursor boundaries from every composite where_between order column", async function () {
+		await with_transactions(suite_ctx.database_manager, async function (transactions) {
+			await execute(
+				suite_ctx.database_manager,
+				transactions,
+				`
+				mutation CursorCreateCompositeBetweenEzuag(
+					$a: Ezuag_Mutation__Attributes
+					$b: Ezuag_Mutation__Attributes
+					$c: Ezuag_Mutation__Attributes
+					$d: Ezuag_Mutation__Attributes
+				) {
+					a: create_ezuag(attributes: $a) { attributes { gauze__ezuag__id } }
+					b: create_ezuag(attributes: $b) { attributes { gauze__ezuag__id } }
+					c: create_ezuag(attributes: $c) { attributes { gauze__ezuag__id } }
+					d: create_ezuag(attributes: $d) { attributes { gauze__ezuag__id } }
+				}
+				`,
+				"CursorCreateCompositeBetweenEzuag",
+				{
+					a: {
+						gauze__ezuag__id: "10000000-0000-4000-8000-000000000331",
+						gauze__ezuag__text1: "cursor-ezuag-filter-composite",
+						gauze__ezuag__text2: "d",
+					},
+					b: {
+						gauze__ezuag__id: "10000000-0000-4000-8000-000000000332",
+						gauze__ezuag__text1: "cursor-ezuag-filter-composite",
+						gauze__ezuag__text2: "c",
+					},
+					c: {
+						gauze__ezuag__id: "10000000-0000-4000-8000-000000000333",
+						gauze__ezuag__text1: "cursor-ezuag-filter-composite",
+						gauze__ezuag__text2: "b",
+					},
+					d: {
+						gauze__ezuag__id: "10000000-0000-4000-8000-000000000334",
+						gauze__ezuag__text1: "cursor-ezuag-filter-composite",
+						gauze__ezuag__text2: "a",
+					},
+				},
+			);
+
+			const where_between = {
+				gauze__ezuag__text1: ["cursor-ezuag-filter-composite", "cursor-ezuag-filter-composite"],
+				gauze__ezuag__text2: ["z", "0"],
+				gauze__ezuag__id: ["10000000-0000-4000-8000-000000000330", "10000000-0000-4000-8000-000000000335"],
+			};
+			const first = await execute(
+				suite_ctx.database_manager,
+				transactions,
+				`
+				query CursorReadCompositeBetweenEzuag(
+					$where_between: Ezuag_Query__Where_Array
+					$limit: Int
+					$order: [Order]
+				) {
+					cursor_read_ezuag(where_between: $where_between, limit: $limit, order: $order) {
+						nodes { attributes { gauze__ezuag__id gauze__ezuag__text1 gauze__ezuag__text2 } }
+						page_info { has_next_page next_cursor }
+					}
+				}
+				`,
+				"CursorReadCompositeBetweenEzuag",
+				{
+					where_between,
+					limit: 2,
+					order: [
+						{ column: "gauze__ezuag__text1", order: "asc" },
+						{ column: "gauze__ezuag__text2", order: "desc" },
+					],
+				},
+			);
+			assert.deepEqual(
+				first.cursor_read_ezuag.nodes.map(function (node) {
+					return node.attributes.gauze__ezuag__id;
+				}),
+				["10000000-0000-4000-8000-000000000331", "10000000-0000-4000-8000-000000000332"],
+			);
+			assert.equal(first.cursor_read_ezuag.page_info.has_next_page, true);
+
+			const decoded = decode_cursor_payload(first.cursor_read_ezuag.page_info.next_cursor);
+			assert.deepEqual(decoded.parameters.where_between, where_between);
+			assert.deepEqual(decoded.parameters.order, [
+				{
+					column: "gauze__ezuag__text1",
+					order: "asc",
+					nulls: "first",
+				},
+				{
+					column: "gauze__ezuag__text2",
+					order: "desc",
+					nulls: "first",
+				},
+				{
+					column: "gauze__ezuag__id",
+					order: "asc",
+					nulls: "last",
+				},
+			]);
+			assert.deepEqual(decoded.next.cursor_where_between, {
+				type: "lexicographic",
+				start: [
+					{
+						column: "gauze__ezuag__text1",
+						value: "cursor-ezuag-filter-composite",
+					},
+					{
+						column: "gauze__ezuag__text2",
+						value: "c",
+					},
+					{
+						column: "gauze__ezuag__id",
+						value: "10000000-0000-4000-8000-000000000332",
+					},
+				],
+				end: null,
+			});
+		});
+	});
 });
