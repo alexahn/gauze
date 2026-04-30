@@ -54,6 +54,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -74,6 +75,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -106,6 +108,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -126,6 +129,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -158,6 +162,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -178,6 +183,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -210,6 +216,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -230,6 +237,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -262,6 +270,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -282,6 +291,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -314,6 +324,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -334,6 +345,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -366,6 +378,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -386,6 +399,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -418,6 +432,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -438,6 +453,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -470,6 +486,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -490,6 +507,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -522,6 +540,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -542,6 +561,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -574,6 +594,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -594,6 +615,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -626,6 +648,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -646,6 +669,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -678,6 +702,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -698,6 +723,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -730,6 +756,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -750,6 +777,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -782,6 +810,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
@@ -802,6 +831,7 @@ const CONFIG__ENVIRONMENT = {
 							seeds: {
 								directory: path.join(__dirname, "seeds", "test"),
 							},
+							useNullAsDefault: true,
 						},
 					},
 				],
