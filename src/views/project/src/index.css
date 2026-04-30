@@ -902,6 +902,183 @@
 	z-index: 1;
 }
 
+.project-table-order-trigger,
+.project-table-order-action,
+.project-table-order-apply,
+.project-table-order-row-actions button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.25rem;
+}
+
+.project-table-order-popover {
+	max-width: calc(100vw - 1rem);
+	max-height: calc(100vh - 1rem);
+	padding: 0.55rem;
+	overflow: auto;
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.78rem;
+}
+
+.project-table-order-panel {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	min-width: min(40rem, calc(100vw - 2.5rem));
+}
+
+.project-table-order-panel-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+}
+
+.project-table-order-heading {
+	font-weight: 700;
+}
+
+.project-table-order-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	max-height: calc(100vh - 10rem);
+	overflow: auto;
+}
+
+.project-table-order-row {
+	display: grid;
+	grid-template-columns: 1.8rem minmax(8rem, 1fr) minmax(5.5rem, 0.55fr) minmax(5.5rem, 0.55fr) auto;
+	gap: 0.35rem;
+	align-items: end;
+	padding: 0.35rem;
+	border: 1px solid var(--x3);
+	border-radius: 0.25rem;
+	background: var(--x12);
+	color: var(--x2);
+}
+
+.project-table-order-index {
+	align-self: center;
+	text-align: center;
+	opacity: 0.72;
+}
+
+.project-table-order-control {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+	min-width: 0;
+}
+
+.project-table-order-control span {
+	opacity: 0.72;
+}
+
+.project-table-order-select {
+	width: 100%;
+	min-width: 0;
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.78rem;
+}
+
+.project-table-order-row-actions {
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
+}
+
+.project-table-order-action,
+.project-table-order-apply,
+.project-table-order-row-actions button {
+	border: 1px solid var(--x3);
+	border-radius: 0.25rem;
+	background: var(--x2);
+	color: var(--x6);
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.75rem;
+}
+
+.project-table-order-action,
+.project-table-order-apply {
+	padding: 0.25rem 0.45rem;
+}
+
+.project-table-order-apply {
+	align-self: flex-end;
+}
+
+.project-table-order-row-actions button {
+	width: 1.55rem;
+	height: 1.55rem;
+	padding: 0;
+}
+
+.project-table-order-row-actions button:disabled,
+.project-table-order-select:disabled {
+	cursor: not-allowed;
+	opacity: 0.45;
+}
+
+.project-table-order-empty {
+	padding: 0.4rem;
+	border: 1px solid var(--x3);
+	border-radius: 0.25rem;
+	background: var(--x12);
+	color: var(--x2);
+	opacity: 0.72;
+}
+
+.project-table-field-trigger {
+	display: block;
+	width: 100%;
+	max-width: 16rem;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+}
+
+.project-table-field-heading {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.35rem;
+	min-width: 0;
+}
+
+.project-table-field-name {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.project-table-order-badge {
+	flex: none;
+	padding: 0.05rem 0.25rem;
+	border: 1px solid var(--x3);
+	border-radius: 0.25rem;
+	background: var(--x3);
+	color: var(--x12);
+	font-family: Consolas, monaco, monospace;
+	font-size: 0.68rem;
+}
+
+@media (max-width: 48rem) {
+	.project-table-order-row {
+		grid-template-columns: 1.8rem minmax(0, 1fr);
+	}
+
+	.project-table-order-row-actions {
+		grid-column: 2;
+	}
+}
+
 .project-graph-shell {
 	position: relative;
 	width: 100%;

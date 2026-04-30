@@ -1,7 +1,7 @@
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { Pencil2Icon, Link2Icon, BookmarkIcon, BookmarkFilledIcon } from "@radix-ui/react-icons";
+import { ArrowDownIcon, ArrowUpIcon, BookmarkFilledIcon, BookmarkIcon, Link2Icon, Pencil2Icon, PlusCircledIcon, TrashIcon } from "@radix-ui/react-icons";
 
 import { navigate } from "@ahn/sinew";
 
@@ -10,24 +10,84 @@ import Link from "./Link.jsx";
 import Pagination from "./Pagination.jsx";
 import Popover from "./Popover.jsx";
 
+function orderClausesFromVariables(variables) {
+	if (!Array.isArray(variables.order)) {
+		return [];
+	}
+	return variables.order.map(function (item) {
+		return {
+			column: item && item.column ? item.column : "",
+			order: item && item.order ? item.order : "",
+			nulls: item && item.nulls ? item.nulls : "",
+		};
+	});
+}
+
+function emptyOrderClause() {
+	return {
+		column: "",
+		order: "asc",
+		nulls: "",
+	};
+}
+
+function cleanOrderClauses(orderClauses) {
+	return orderClauses
+		.filter(function (clause) {
+			return clause.column;
+		})
+		.map(function (clause) {
+			const orderItem = {
+				column: clause.column,
+			};
+			if (clause.order) {
+				orderItem.order = clause.order;
+			}
+			if (clause.nulls) {
+				orderItem.nulls = clause.nulls;
+			}
+			return orderItem;
+		});
+}
+
 function Table({ pathfinder, services, agent, headers, header, variables = {}, items, count }) {
 	const { gauze } = services;
 	// note: infer the filter mode based on the structure of variables
 	const defaultFilterMode = variables.where ? "where" : variables.where_like ? "where_like" : variables.where_between ? "where_between" : "where";
 	const [filterMode, setFilterMode] = useState(defaultFilterMode);
 	const [localVariables, setLocalVariables] = useState(variables);
+	const [orderClauses, setOrderClauses] = useState(orderClausesFromVariables(variables));
 	const cellClass = "ba bw1 br2 mb1 bgx2 bdx2 cx6 bgx3h bdx3h cx6h w100";
 	const itemClass = "athelas f6 clouds w-100 truncate-ns mw5";
 	const textTriggerClass = "button-reset athelas f6 clouds w-100 truncate-ns mw5 tl";
 	const iconTriggerClass = "button-reset flex items-center justify-center";
 	const textPopoverClass = "tooltip athelas f6 bgx2 cx6 mw5 ba bw1 br2 pa1";
 	const menuPopoverClass = "tooltip athelas f6 bgx2 cx6 mw5 ba bw1 br2 pa1";
+	const orderPopoverClass = "tooltip project-table-order-popover bgx2 cx6 ba bw1 br2 bdx3 shadow-2";
+	const appliedOrderClauses = cleanOrderClauses(orderClausesFromVariables(variables));
+	const appliedOrderByColumn = appliedOrderClauses.reduce(function (index, clause, clauseIndex) {
+		if (!index[clause.column]) {
+			index[clause.column] = {
+				...clause,
+				index: clauseIndex,
+			};
+		}
+		return index;
+	}, {});
 
 	const offset = variables.offset ? Number.parseInt(variables.offset) : 0;
 	const limit = variables.limit ? Number.parseInt(variables.limit) : 16;
 	const pageCurrent = Math.floor(Math.max(offset / limit) + 1);
 	const pageMaxNoSkew = Math.ceil(Math.max(count / limit));
 	const pageMax = pageMaxNoSkew < pageCurrent ? pageCurrent : pageMaxNoSkew;
+
+	useEffect(
+		function () {
+			setOrderClauses(orderClausesFromVariables(variables));
+		},
+		[variables],
+	);
+
 	function href(item) {
 		var paginate;
 		if (item.type === "previous") {
@@ -114,6 +174,18 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 		}
 		return stripped;
 	}
+	function navigateWithVariables(nextVariables) {
+		const state = pathfinder.URLToState(location.href);
+		const url = pathfinder.stateToURL(state.name, state.pathParams, {
+			...state.searchParams,
+			variables: JSON.stringify(nextVariables),
+		});
+		navigate(url, {
+			push: true,
+			replace: false,
+			state: state,
+		});
+	}
 	function handleFilterChange(field) {
 		return function (e) {
 			const variables = {
@@ -158,18 +230,67 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 	function handleFilterKeyDown(field) {
 		return function (e) {
 			if (e.key === "Enter") {
-				const state = pathfinder.URLToState(location.href);
-				const url = pathfinder.stateToURL(state.name, state.pathParams, {
-					...state.searchParams,
-					variables: JSON.stringify(stripVariables(localVariables, filterMode)),
-				});
-				navigate(url, {
-					push: true,
-					replace: false,
-					state: state,
-				});
+				navigateWithVariables(stripVariables(localVariables, filterMode));
 			}
 		};
+	}
+	function addOrderClause() {
+		setOrderClauses(function (clauses) {
+			return [...clauses, emptyOrderClause()];
+		});
+	}
+	function updateOrderClause(index, key) {
+		return function (e) {
+			const value = e.target.value;
+			setOrderClauses(function (clauses) {
+				return clauses.map(function (clause, clauseIndex) {
+					if (clauseIndex !== index) {
+						return clause;
+					}
+					return {
+						...clause,
+						[key]: value,
+					};
+				});
+			});
+		};
+	}
+	function removeOrderClause(index) {
+		return function () {
+			setOrderClauses(function (clauses) {
+				return clauses.filter(function (clause, clauseIndex) {
+					return clauseIndex !== index;
+				});
+			});
+		};
+	}
+	function moveOrderClause(index, direction) {
+		return function () {
+			const nextIndex = index + direction;
+			setOrderClauses(function (clauses) {
+				if (nextIndex < 0 || nextIndex >= clauses.length) {
+					return clauses;
+				}
+				const nextClauses = [...clauses];
+				const clause = nextClauses[index];
+				nextClauses[index] = nextClauses[nextIndex];
+				nextClauses[nextIndex] = clause;
+				return nextClauses;
+			});
+		};
+	}
+	function applyOrder() {
+		const nextVariables = {
+			...variables,
+			offset: 0,
+		};
+		const order = cleanOrderClauses(orderClauses);
+		if (order.length) {
+			nextVariables.order = order;
+		} else {
+			delete nextVariables.order;
+		}
+		navigateWithVariables(nextVariables);
 	}
 	function renderFilterModePopover(label) {
 		return (
@@ -291,21 +412,124 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 		} else {
 		}
 	}
+	function renderOrderPopover() {
+		const orderCount = appliedOrderClauses.length;
+		const trigger = (
+			<span className="project-table-order-trigger">
+				<span>{`Order: ${orderCount}`}</span>
+			</span>
+		);
+		return (
+			<Popover
+				trigger={trigger}
+				triggerClassName="button-reset athelas f6"
+				popoverClassName={orderPopoverClass}
+				popoverWidth="min(42rem, calc(100vw - 1rem))"
+				triggerAriaLabel="Order settings"
+			>
+				<div className="project-table-order-panel">
+					<div className="project-table-order-panel-header">
+						<div className="project-table-order-heading">Order</div>
+						<button type="button" className="project-table-order-action" onClick={addOrderClause}>
+							<PlusCircledIcon />
+							<span>Add</span>
+						</button>
+					</div>
+					<div className="project-table-order-list">
+						{orderClauses.length ? (
+							orderClauses.map(function (clause, index) {
+								return (
+									<div key={index} className="project-table-order-row">
+										<div className="project-table-order-index">{index + 1}</div>
+										<label className="project-table-order-control">
+											<span>column</span>
+											<select className="project-table-order-select" value={clause.column} onChange={updateOrderClause(index, "column")}>
+												<option value="">None</option>
+												{header.fields.map(function (field) {
+													return (
+														<option key={field.name} value={field.name}>
+															{field.name}
+														</option>
+													);
+												})}
+											</select>
+										</label>
+										<label className="project-table-order-control">
+											<span>order</span>
+											<select className="project-table-order-select" value={clause.order} onChange={updateOrderClause(index, "order")} disabled={!clause.column}>
+												<option value="">Default</option>
+												<option value="asc">asc</option>
+												<option value="desc">desc</option>
+											</select>
+										</label>
+										<label className="project-table-order-control">
+											<span>nulls</span>
+											<select className="project-table-order-select" value={clause.nulls} onChange={updateOrderClause(index, "nulls")} disabled={!clause.column}>
+												<option value="">Default</option>
+												<option value="first">first</option>
+												<option value="last">last</option>
+											</select>
+										</label>
+										<div className="project-table-order-row-actions">
+											<button type="button" onClick={moveOrderClause(index, -1)} disabled={index === 0} title="Move up" aria-label="Move up">
+												<ArrowUpIcon />
+											</button>
+											<button type="button" onClick={moveOrderClause(index, 1)} disabled={index === orderClauses.length - 1} title="Move down" aria-label="Move down">
+												<ArrowDownIcon />
+											</button>
+											<button type="button" onClick={removeOrderClause(index)} title="Remove" aria-label="Remove">
+												<TrashIcon />
+											</button>
+										</div>
+									</div>
+								);
+							})
+						) : (
+							<div className="project-table-order-empty">No order</div>
+						)}
+					</div>
+					<button type="button" className="project-table-order-apply" onClick={applyOrder}>
+						Apply
+					</button>
+				</div>
+			</Popover>
+		);
+	}
+	function renderFieldHeader(field) {
+		const appliedOrder = appliedOrderByColumn[field.name];
+		const orderLabel = appliedOrder ? `${appliedOrder.index + 1} ${appliedOrder.order || "default"}` : "";
+		const orderTitle = appliedOrder
+			? `order[${appliedOrder.index}]: ${field.name}, order ${appliedOrder.order || "default"}${appliedOrder.nulls ? `, nulls ${appliedOrder.nulls}` : ""}`
+			: field.name;
+		const trigger = (
+			<span className="project-table-field-heading">
+				<span className="project-table-field-name">{field.name}</span>
+				{appliedOrder ? <span className="project-table-order-badge">{orderLabel}</span> : null}
+			</span>
+		);
+		return (
+			<Popover
+				trigger={trigger}
+				triggerClassName="project-table-field-trigger athelas f6 clouds"
+				popoverClassName={textPopoverClass}
+				triggerTitle={orderTitle}
+				triggerAriaLabel={field.name}
+			>
+				{field.name}
+			</Popover>
+		);
+	}
 	return (
 		<div>
 			<table>
 				<thead>
 					{renderFilters()}
 					<tr>
-						<th className={cellClass}>
-							<button className="athelas f6" type="button">
-								Fields
-							</button>
-						</th>
+						<th className={cellClass}>{renderOrderPopover()}</th>
 						{header.fields.map(function (field) {
 							return (
 								<th key={field.name} className={cellClass}>
-									{renderValuePopover(field.name)}
+									{renderFieldHeader(field)}
 								</th>
 							);
 						})}
