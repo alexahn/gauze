@@ -27,6 +27,7 @@ class DatabaseController extends Controller {
 		input.where = input.where || {};
 		input.where_in = input.where_in || {};
 		input.where_not_in = input.where_not_in || {};
+		input.where_between = input.where_between || {};
 		input.where = self.model.pre_serialize_middleware(input.where, method);
 		input.where = self.model.serialize(input.where, method);
 		input.where = self.model.post_serialize_middleware(input.where, method);
@@ -94,6 +95,44 @@ class DatabaseController extends Controller {
 					return attributes[field];
 				});
 			input.where_not_in[field] = input.where_not_in[field]
+				.map(function (value, index) {
+					return self.model.post_serialize_middleware(
+						{
+							[field]: value,
+						},
+						method,
+					);
+				})
+				.map(function (attributes) {
+					return attributes[field];
+				});
+		});
+		Object.keys(input.where_between).forEach(function (field) {
+			input.where_between[field] = input.where_between[field]
+				.map(function (value, index) {
+					return self.model.pre_serialize_middleware(
+						{
+							[field]: value,
+						},
+						method,
+					);
+				})
+				.map(function (attributes) {
+					return attributes[field];
+				});
+			input.where_between[field] = input.where_between[field]
+				.map(function (value, index) {
+					return self.model.serialize(
+						{
+							[field]: value,
+						},
+						method,
+					);
+				})
+				.map(function (attributes) {
+					return attributes[field];
+				});
+			input.where_between[field] = input.where_between[field]
 				.map(function (value, index) {
 					return self.model.post_serialize_middleware(
 						{

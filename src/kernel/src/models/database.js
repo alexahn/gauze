@@ -867,6 +867,117 @@ class DatabaseModel extends Model {
 		});
 		return clean;
 	}
+	_cursor_serialize_filter_value(field, value, method = "read") {
+		const self = this;
+		let attributes = {
+			[field]: value,
+		};
+		attributes = self.pre_serialize_middleware(attributes, method);
+		attributes = self.serialize(attributes, method);
+		attributes = self.post_serialize_middleware(attributes, method);
+		if (Object.prototype.hasOwnProperty.call(attributes, field)) {
+			return attributes[field];
+		} else {
+			return undefined;
+		}
+	}
+	_cursor_serialize_filter_map(filters = {}, method = "read") {
+		const self = this;
+		const serialized = {};
+		Object.keys(filters).forEach(function (field) {
+			serialized[field] = self._cursor_serialize_filter_value(field, filters[field], method);
+		});
+		return serialized;
+	}
+	_cursor_serialize_filter_array_map(filters = {}, method = "read") {
+		const self = this;
+		const serialized = {};
+		Object.keys(filters).forEach(function (field) {
+			if (Array.isArray(filters[field])) {
+				serialized[field] = filters[field].map(function (value) {
+					return self._cursor_serialize_filter_value(field, value, method);
+				});
+			} else {
+				serialized[field] = filters[field];
+			}
+		});
+		return serialized;
+	}
+	_cursor_serialize_where_between(where_between = {}, method = "read") {
+		const self = this;
+		const serialized = {};
+		Object.keys(where_between).forEach(function (field) {
+			if (Array.isArray(where_between[field])) {
+				serialized[field] = where_between[field].map(function (value) {
+					return self._cursor_serialize_filter_value(field, value, method);
+				});
+			} else {
+				serialized[field] = where_between[field];
+			}
+		});
+		return serialized;
+	}
+	_cursor_serialize_cursor_boundary(boundary, method = "read") {
+		const self = this;
+		if (Array.isArray(boundary)) {
+			return boundary.map(function (entry) {
+				if (entry && Object.prototype.hasOwnProperty.call(entry, "column") && Object.prototype.hasOwnProperty.call(entry, "value")) {
+					return {
+						...entry,
+						value: self._cursor_serialize_filter_value(entry.column, entry.value, method),
+					};
+				} else {
+					return entry;
+				}
+			});
+		} else {
+			return boundary;
+		}
+	}
+	_cursor_serialize_cursor_where_between(cursor_where_between = null, method = "read") {
+		const self = this;
+		if (!cursor_where_between) {
+			return cursor_where_between;
+		} else if (cursor_where_between.type === "lexicographic") {
+			return {
+				...cursor_where_between,
+				start: self._cursor_serialize_cursor_boundary(cursor_where_between.start, method),
+				end: self._cursor_serialize_cursor_boundary(cursor_where_between.end, method),
+			};
+		} else {
+			return self._cursor_serialize_where_between(cursor_where_between, method);
+		}
+	}
+	_cursor_serialize_page(page = null, method = "read") {
+		const self = this;
+		if (!page) {
+			return page;
+		} else {
+			return {
+				...page,
+				cursor_where_between: self._cursor_serialize_cursor_where_between(page.cursor_where_between || null, method),
+			};
+		}
+	}
+	_cursor_serialize_payload_parameters(parameters = {}, method = "read") {
+		const self = this;
+		const serialized = {
+			...parameters,
+		};
+		if (parameters.where) {
+			serialized.where = self._cursor_serialize_filter_map(parameters.where, method);
+		}
+		if (parameters.where_in) {
+			serialized.where_in = self._cursor_serialize_filter_array_map(parameters.where_in, method);
+		}
+		if (parameters.where_not_in) {
+			serialized.where_not_in = self._cursor_serialize_filter_array_map(parameters.where_not_in, method);
+		}
+		if (parameters.where_between) {
+			serialized.where_between = self._cursor_serialize_where_between(parameters.where_between, method);
+		}
+		return serialized;
+	}
 	_cursor_total_order(order) {
 		const self = this;
 		const resolved_order = self._normalize_order(order);
@@ -938,14 +1049,18 @@ class DatabaseModel extends Model {
 			if (!page) {
 				throw new Error("Invalid cursor page");
 			}
+			const payload_parameters = self._cursor_serialize_payload_parameters(payload.parameters || {}, "read");
+			const previous = self._cursor_serialize_page(payload.previous || null, "read");
+			const current = self._cursor_serialize_page(payload.current || null, "read");
+			const next = self._cursor_serialize_page(payload.next || null, "read");
 			return {
-				parameters: self._cursor_merge_internal_arguments(payload.parameters || {}, parameters),
-				page,
+				parameters: self._cursor_merge_internal_arguments(payload_parameters, parameters),
+				page: self._cursor_serialize_page(page, "read"),
 				page_name: payload.page,
 				pages: {
-					previous: payload.previous || null,
-					current: payload.current || null,
-					next: payload.next || null,
+					previous,
+					current,
+					next,
 				},
 			};
 		}
