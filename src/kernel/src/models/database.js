@@ -1571,19 +1571,125 @@ class DatabaseModel extends Model {
 				}
 			});
 	}
-	_relationship_create(context, scope, parameters) {
-		// todo: move logic from system model here to create the relationship as well
+	_validate_relationship_source(source) {
 		const self = this;
-		// flow: fetch relationships based on scope from database, pass relationships to route_transactions
-		return self._entity_relationships(context, scope, parameters).then(function (relationships) {
-			return context.database_manager.route_transactions(context, scope, parameters, self, "write", relationships).then(function (shards) {
-				return Promise.all(
-					shards.map(function (shard) {
-						return self._relationship_create_transaction(context, scope, parameters, shard.connection, shard.transaction);
-					}),
-				).then(function (results) {
-					return results.flat();
-				});
+		let from_type;
+		let to_type;
+		if (source._direction === "to") {
+			from_type = source._metadata.type;
+			to_type = self.entity.graphql_meta_type;
+		} else if (source._direction === "from") {
+			from_type = self.entity.graphql_meta_type;
+			to_type = source._metadata.type;
+		} else {
+			throw new Error("Invalid source direction");
+		}
+		const relationships = $structure.relationships.DATABASE_RELATIONSHIPS__RELATIONSHIP__STRUCTURE;
+		if (relationships[from_type]) {
+			if (relationships[from_type].includes(to_type)) {
+				return true;
+			} else {
+				throw new Error("Entities are not configured to have relationships to each other");
+			}
+		} else {
+			throw new Error("Entities are not configured to have relationships to each other");
+		}
+	}
+	_relationship_attributes_from_source(source, entity_id) {
+		const self = this;
+		const source_type = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[source._metadata.type];
+		const source_id = source._metadata.id;
+		if (!source_type) {
+			throw new Error("Invalid source type");
+		}
+		if (!source_id) {
+			throw new Error("Invalid source id");
+		}
+		self._validate_relationship_source(source);
+		if (source._direction === "to") {
+			return {
+				gauze__relationship__id: uuidv4(),
+				gauze__relationship__from_id: source_id,
+				gauze__relationship__from_type: source_type,
+				gauze__relationship__to_id: entity_id,
+				gauze__relationship__to_type: self.table_name,
+			};
+		} else if (source._direction === "from") {
+			return {
+				gauze__relationship__id: uuidv4(),
+				gauze__relationship__from_id: entity_id,
+				gauze__relationship__from_type: self.table_name,
+				gauze__relationship__to_id: source_id,
+				gauze__relationship__to_type: source_type,
+			};
+		} else {
+			throw new Error("Invalid source direction");
+		}
+	}
+	_serialize_relationship_create_attributes(attributes) {
+		const relationship_entity = $abstract.entities.relationship.default($abstract);
+		function reduce_fields(input, reducers) {
+			return Object.keys(relationship_entity.fields).reduce(function (previous_field_result, key) {
+				const field = relationship_entity.fields[key];
+				return field[reducers].reduce(function (previous_reducer_result, next_reducer) {
+					return next_reducer.create(previous_reducer_result, "create");
+				}, previous_field_result);
+			}, input);
+		}
+		attributes = reduce_fields(attributes, "pre_serialize_middlewares");
+		attributes = reduce_fields(attributes, "serializers");
+		attributes = reduce_fields(attributes, "post_serialize_middlewares");
+		return attributes;
+	}
+	_relationship_row_create(context, scope, parameters) {
+		const self = this;
+		const relationship_model = {
+			table_name: self.relationship_table_name,
+			primary_key: self.relationship_primary_key,
+		};
+		return context.database_manager.route_transactions(context, scope, parameters, relationship_model, "write").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._relationship_row_create_transaction(context, scope, parameters, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				return results.flat();
+			});
+		});
+	}
+	_relationship_row_create_transaction(context, scope, parameters, database, transaction) {
+		const self = this;
+		context.transaction_count = (context.transaction_count || 0) + 1;
+		const sql = database(self.relationship_table_name).insert(parameters.attributes, [self.relationship_primary_key]).transacting(transaction);
+		if (process.env.GAUZE_DEBUG_SQL === "TRUE") {
+			LOGGER__IO__LOGGER__SRC__KERNEL.write("1", __RELATIVE_FILEPATH, `${self.name}.relationship_create:debug_sql`, sql.toString());
+		}
+		return sql;
+	}
+	_relationship_create(context, scope, parameters) {
+		const self = this;
+		const source = self._parse_source(scope, parameters);
+		if (!parameters.attributes[self.primary_key]) {
+			parameters.attributes[self.primary_key] = uuidv4();
+		}
+		const relationship_attributes = self._serialize_relationship_create_attributes(self._relationship_attributes_from_source(source, parameters.attributes[self.primary_key]));
+		const relationship_parameters = {
+			attributes: relationship_attributes,
+		};
+		return context.database_manager.route_transactions(context, scope, parameters, self, "write").then(function (shards) {
+			return Promise.all(
+				shards.map(function (shard) {
+					return self._relationship_create_transaction(context, scope, parameters, shard.connection, shard.transaction);
+				}),
+			).then(function (results) {
+				const rows = results.flat();
+				if (rows.length) {
+					return self._relationship_row_create(context, scope, relationship_parameters).then(function () {
+						return rows;
+					});
+				} else {
+					return rows;
+				}
 			});
 		});
 	}

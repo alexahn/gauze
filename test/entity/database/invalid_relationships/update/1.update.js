@@ -48,7 +48,14 @@ const expected = `{
                     "text": "world"
                 },
                 "relationships_to": {
-                    "update_entity": []
+                    "update_entity": [
+                        {
+                            "attributes": {
+                                "id": "55c29b50-5e24-447d-8505-75e82c2aa8cc",
+                                "text": "hello"
+                            }
+                        }
+                    ]
                 }
             }
         ]

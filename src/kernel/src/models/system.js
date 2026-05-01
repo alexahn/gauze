@@ -882,35 +882,22 @@ class SystemModel extends Model {
 			gauze__blacklist__entity_id: parameters.attributes[self.entity.primary_key],
 			gauze__blacklist__method: "count",
 		};
-		// relationship note: can we move this logic to _relationship_create on the database model?
-		// relationship note: we might not be able to because the database layer has no concept of agent
 		if (parameters.source && parameters.source._metadata && parameters.source._direction) {
-			return self.authorized_execute(context, scope, parameters, agent, entity, operation).then(function (data) {
-				let relationship_attributes;
-				const source_type = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[parameters.source._metadata.type];
-				const source_id = parameters.source._metadata.id;
-				if (parameters.source._direction === "to") {
-					relationship_attributes = {
-						gauze__relationship__from_id: source_id,
-						gauze__relationship__from_type: source_type,
-						gauze__relationship__to_id: parameters.attributes[self.entity.primary_key],
-						gauze__relationship__to_type: entity.entity_type,
-					};
-				} else if (parameters.source._direction === "from") {
-					relationship_attributes = {
-						gauze__relationship__from_id: parameters.attributes[self.entity.primary_key],
-						gauze__relationship__from_type: entity.entity_type,
-						gauze__relationship__to_id: source_id,
-						gauze__relationship__to_type: source_type,
-					};
-				} else {
-					throw new Error("Invalid source direction");
-				}
-				const relationship_parameters = { attributes: relationship_attributes };
-				return self.relationship_model.create(context, scope, relationship_parameters).then(function (relationship) {
-					return data;
+			const source_type = $structure.gauze.resolvers.GRAPHQL_TYPE_TO_SQL_TABLE__RESOLVER__STRUCTURE[parameters.source._metadata.type];
+			const source_id = parameters.source._metadata.id;
+			return self
+				.authorization_element(context, scope, "system", agent, {
+					entity_type: source_type,
+					entity_id: source_id,
+					entity_method: "create",
+				})
+				.then(function (authorization) {
+					if (authorization.status === true) {
+						return self.authorized_execute(context, scope, parameters, agent, entity, operation);
+					} else {
+						throw new Error("Agent does not have access to target method");
+					}
 				});
-			});
 		} else {
 			return self.authorized_execute(context, scope, parameters, agent, entity, operation);
 		}
