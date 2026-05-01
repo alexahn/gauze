@@ -22,10 +22,14 @@ const up = function (knex) {
 			table.index("gauze__blacklist__updated_at");
 			table.index("gauze__blacklist__deleted_at");
 			table.index("gauze__blacklist__realm");
+			table.index("gauze__blacklist__agent_role");
 			table.index("gauze__blacklist__agent_type");
 			table.index("gauze__blacklist__agent_id");
 			table.index("gauze__blacklist__entity_type");
 			table.index("gauze__blacklist__entity_id");
+			table.index("gauze__blacklist__method");
+			table.index(["gauze__blacklist__entity_type", "gauze__blacklist__entity_id", "gauze__blacklist__method", "gauze__blacklist__agent_type", "gauze__blacklist__agent_id"]);
+			table.index(["gauze__blacklist__agent_type", "gauze__blacklist__agent_id", "gauze__blacklist__method", "gauze__blacklist__entity_id"]);
 
 			table.unique(
 				[
@@ -33,8 +37,8 @@ const up = function (knex) {
 					"gauze__blacklist__agent_type",
 					"gauze__blacklist__agent_id",
 					"gauze__blacklist__entity_type",
-					"gauze__blacklist__entity_id",
 					"gauze__blacklist__method",
+					"gauze__blacklist__entity_id",
 				],
 				{
 					useConstraint: true,
