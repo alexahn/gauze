@@ -1626,21 +1626,6 @@ class DatabaseModel extends Model {
 			throw new Error("Invalid source direction");
 		}
 	}
-	_serialize_relationship_create_attributes(attributes) {
-		const relationship_entity = $abstract.entities.relationship.default($abstract);
-		function reduce_fields(input, reducers) {
-			return Object.keys(relationship_entity.fields).reduce(function (previous_field_result, key) {
-				const field = relationship_entity.fields[key];
-				return field[reducers].reduce(function (previous_reducer_result, next_reducer) {
-					return next_reducer.create(previous_reducer_result, "create");
-				}, previous_field_result);
-			}, input);
-		}
-		attributes = reduce_fields(attributes, "pre_serialize_middlewares");
-		attributes = reduce_fields(attributes, "serializers");
-		attributes = reduce_fields(attributes, "post_serialize_middlewares");
-		return attributes;
-	}
 	_relationship_row_create(context, scope, parameters) {
 		const self = this;
 		const relationship_model = {
@@ -1672,7 +1657,12 @@ class DatabaseModel extends Model {
 		if (!parameters.attributes[self.primary_key]) {
 			parameters.attributes[self.primary_key] = uuidv4();
 		}
-		const relationship_attributes = self._serialize_relationship_create_attributes(self._relationship_attributes_from_source(source, parameters.attributes[self.primary_key]));
+		const relationship_entity = $abstract.entities.relationship.default($abstract);
+		const relationship_attributes = self.serialize_entity_attributes(
+			relationship_entity,
+			self._relationship_attributes_from_source(source, parameters.attributes[self.primary_key]),
+			"create",
+		);
 		const relationship_parameters = {
 			attributes: relationship_attributes,
 		};

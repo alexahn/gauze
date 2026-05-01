@@ -26,14 +26,24 @@ class Model {
 	}
 	// todo: add some error visibility here
 	// todo: it's kind of rough when a middleware or serializer is misconfigured and there is just some generic error
-	reduce_fields(input, method, reducers) {
-		var self = this;
-		return Object.keys(self.entity.fields).reduce(function (previous_field_result, key) {
-			const field = self.entity.fields[key];
+	reduce_entity_fields(entity, input, method, reducers) {
+		return Object.keys(entity.fields).reduce(function (previous_field_result, key) {
+			const field = entity.fields[key];
 			return field[reducers].reduce(function (previous_reducer_result, next_reducer) {
 				return next_reducer[method](previous_reducer_result, method);
 			}, previous_field_result);
 		}, input);
+	}
+	reduce_fields(input, method, reducers) {
+		var self = this;
+		return self.reduce_entity_fields(self.entity, input, method, reducers);
+	}
+	serialize_entity_attributes(entity, attributes, method) {
+		const self = this;
+		attributes = self.reduce_entity_fields(entity, attributes, method, "pre_serialize_middlewares");
+		attributes = self.reduce_entity_fields(entity, attributes, method, "serializers");
+		attributes = self.reduce_entity_fields(entity, attributes, method, "post_serialize_middlewares");
+		return attributes;
 	}
 	pre_serialize_middleware(attributes, method) {
 		const self = this;
