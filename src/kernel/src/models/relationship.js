@@ -819,7 +819,7 @@ class RelationshipSystemModel extends SystemModel {
 					return self._authorized_relationship(context, scope, relationship, agent, method).then(function () {
 						return self._authorized_relationship(context, scope, staged, agent, method).then(function () {
 							// update is disabled for relationships
-							throw new Error("Relationship record cannot be modified")
+							throw new Error("Relationship record cannot be modified");
 							//return self.generate_response("update", []);
 						});
 					});

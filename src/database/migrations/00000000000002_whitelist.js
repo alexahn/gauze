@@ -31,6 +31,7 @@ const up = function (knex) {
 			table.index(["gauze__whitelist__entity_type", "gauze__whitelist__entity_id", "gauze__whitelist__method", "gauze__whitelist__agent_type", "gauze__whitelist__agent_id"]);
 			table.index(["gauze__whitelist__agent_type", "gauze__whitelist__agent_id", "gauze__whitelist__method", "gauze__whitelist__entity_id"]);
 
+			// See the commented partial unique index after table creation for the set-scope uniqueness caveat.
 			table.unique(
 				[
 					"gauze__whitelist__realm",
@@ -45,7 +46,22 @@ const up = function (knex) {
 				},
 			);
 		}),
-	]);
+	]).then(function () {
+		// SQLite and PostgreSQL can enforce set-scope uniqueness with a partial unique index, but not all supported dialects expose that feature consistently.
+		/*
+		return knex.raw(`
+			CREATE UNIQUE INDEX gauze__whitelist_set_scope_unique
+			ON gauze__whitelist (
+				gauze__whitelist__realm,
+				gauze__whitelist__agent_type,
+				gauze__whitelist__agent_id,
+				gauze__whitelist__entity_type,
+				gauze__whitelist__method
+			)
+			WHERE gauze__whitelist__entity_id IS NULL
+		`);
+		*/
+	});
 };
 
 /**
