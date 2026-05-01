@@ -21,6 +21,8 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 							}
 						} else if ($realm.default.mode === "closed") {
 							return authenticate(ctx.get("authorization"));
+						} else if ($realm.default.mode === "locked") {
+							throw new Error("Realm is locked");
 						} else {
 							throw new Error("Invalid realm mode");
 						}
@@ -114,6 +116,8 @@ const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, da
 						context.agent.agent_type = "null";
 					} else if ($realm.default.mode === "closed") {
 						throw new Error("Agent is required if realm is in closed mode");
+					} else if ($realm.default.mode === "locked") {
+						throw new Error("Realm is locked");
 					} else {
 						throw new Error("Invalid realm mode");
 					}

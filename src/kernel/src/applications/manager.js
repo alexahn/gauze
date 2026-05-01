@@ -127,17 +127,16 @@ class GauzeManager {
 			return Promise.resolve(PROJECT);
 		});
 	}
-	validate_realm_config(config, expected_name, allow_locked_mode = false) {
+	validate_realm_config(config, expected_name) {
 		return $config.VALIDATE_REALM_CONFIG__CONFIG__SRC__KERNEL(config, {
 			expected_name,
-			allow_locked_mode,
 		});
 	}
-	read_realm_config(config_path, expected_name, allow_locked_mode = false) {
+	read_realm_config(config_path, expected_name) {
 		const self = this;
 		return import(config_path).then(function (config) {
 			const REALM = config.default;
-			self.validate_realm_config(REALM, expected_name, allow_locked_mode);
+			self.validate_realm_config(REALM, expected_name);
 			return Promise.resolve(REALM);
 		});
 	}

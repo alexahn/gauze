@@ -78,7 +78,7 @@ export default {
 	},
 	realms: {
 		kernel: {
-			mode: "closed",
+			mode: "locked",
 		},
 		database: {
 			mode: "closed",
@@ -93,10 +93,7 @@ export default {
 		"steps.account.verify.password": ["steps.person.verify.email.success"],
 	},
 	authentication: {
-		proxy: [
-			"steps.person.verify.email.success",
-			"steps.account.verify.password.success",
-		],
+		proxy: ["steps.person.verify.email.success", "steps.account.verify.password.success"],
 		realms: {
 			kernel: [],
 			database: [],
@@ -142,7 +139,7 @@ GAUZE_ENV="development_monolithic"
 then Gauze reads admin users from:
 
 ```js
-development_monolithic.admins
+development_monolithic.admins;
 ```
 
 If `GAUZE_ENV` changes, the runtime admin list changes with it. That means admin users are not only project-defined, but environment-defined. A development environment can have seeded local admins, while staging and production can keep separate admin records or none at all until they are explicitly configured.

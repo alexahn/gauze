@@ -26,7 +26,7 @@ export default {
 	// we need to duplicate these configs (should be the only ones that we need to duplicate)
 	realms: {
 		kernel: {
-			mode: "closed",
+			mode: "locked",
 		},
 		database: {
 			mode: "closed",

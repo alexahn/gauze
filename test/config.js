@@ -57,7 +57,15 @@ test.describe("kernel config validation", async function () {
 		}, /steps\.missing\.success/);
 	});
 
-	await test.it("allows locked mode only when validating a lockable realm", function () {
+	await test.it("rejects mismatched project and realm modes", function () {
+		const config = project_config();
+		config.realms.database.mode = "open";
+		assert.throws(function () {
+			$config.VALIDATE_CONFIG_TREE__CONFIG__SRC__KERNEL(config_tree(config));
+		}, /project\.realms\.database\.mode/);
+	});
+
+	await test.it("accepts locked as a normal realm mode", function () {
 		const realm = {
 			name: "kernel",
 			type: "realm",
@@ -65,13 +73,7 @@ test.describe("kernel config validation", async function () {
 		};
 		const validated = $config.VALIDATE_REALM_CONFIG__CONFIG__SRC__KERNEL(realm, {
 			expected_name: "kernel",
-			allow_locked_mode: true,
 		});
 		assert.equal(validated, realm);
-		assert.throws(function () {
-			$config.VALIDATE_REALM_CONFIG__CONFIG__SRC__KERNEL(realm, {
-				expected_name: "kernel",
-			});
-		}, /locked/);
 	});
 });

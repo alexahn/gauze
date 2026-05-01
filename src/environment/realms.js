@@ -90,6 +90,8 @@ const ENTER_SESSION__REALM__ENVIRONMENT = function ({ proxy_type, session_type, 
 					} else {
 						throw new Error("Agent is not defined in project authentication configuration");
 					}
+				} else if (project.default.realms[realm].mode === "locked") {
+					throw new Error("Realm is locked");
 				} else {
 					throw new Error("Invalid realm mode");
 				}

@@ -29,6 +29,7 @@ const VALID_PROJECT_REALM_KEYS__CONFIG__SRC__KERNEL = {
 const VALID_PROJECT_REALM_MODES__CONFIG__SRC__KERNEL = {
 	open: true,
 	closed: true,
+	locked: true,
 };
 
 const REQUIRED_AUTHENTICATION_KEYS__CONFIG__SRC__KERNEL = {
@@ -59,10 +60,6 @@ const VALID_REALM_KEYS__CONFIG__SRC__KERNEL = {
 const VALID_REALM_MODES__CONFIG__SRC__KERNEL = {
 	open: true,
 	closed: true,
-};
-
-const VALID_LOCKABLE_REALM_MODES__CONFIG__SRC__KERNEL = {
-	...VALID_REALM_MODES__CONFIG__SRC__KERNEL,
 	locked: true,
 };
 
@@ -305,13 +302,12 @@ function validate_project_environment(path, environment, valid_agent_types) {
 	});
 }
 
-function validate_realm_mode(path, mode, allow_locked_mode) {
-	const valid_modes = allow_locked_mode ? VALID_LOCKABLE_REALM_MODES__CONFIG__SRC__KERNEL : VALID_REALM_MODES__CONFIG__SRC__KERNEL;
+function validate_realm_mode(path, mode) {
 	validate_string("Realm config", path, mode);
-	if (valid_modes[mode]) {
+	if (VALID_REALM_MODES__CONFIG__SRC__KERNEL[mode]) {
 		// ok
 	} else {
-		throw new Error(`Realm config property '${path}' must contain string values from (${Object.keys(valid_modes)}): ${mode} is not contained`);
+		throw new Error(`Realm config property '${path}' must contain string values from (${Object.keys(VALID_REALM_MODES__CONFIG__SRC__KERNEL)}): ${mode} is not contained`);
 	}
 }
 
@@ -362,7 +358,6 @@ function VALIDATE_PROJECT_CONFIG__CONFIG__SRC__KERNEL(config, options = {}) {
 
 function VALIDATE_REALM_CONFIG__CONFIG__SRC__KERNEL(config, options = {}) {
 	const expected_name = options.expected_name;
-	const allow_locked_mode = options.allow_locked_mode === true;
 	validate_object("Realm config", "", config);
 	validate_required_keys("Realm config", "", config, REQUIRED_REALM_KEYS__CONFIG__SRC__KERNEL);
 	Object.keys(config).forEach(function (key) {
@@ -386,7 +381,7 @@ function VALIDATE_REALM_CONFIG__CONFIG__SRC__KERNEL(config, options = {}) {
 				throw new Error(`Realm config property '${path}' must be 'realm', ${type} !== realm`);
 			}
 		} else if (key === "mode") {
-			validate_realm_mode(path, config[key], allow_locked_mode);
+			validate_realm_mode(path, config[key]);
 		} else {
 			validate_allowed_key("Realm config", "", key, VALID_REALM_KEYS__CONFIG__SRC__KERNEL);
 		}
@@ -401,9 +396,6 @@ function VALIDATE_CONFIG_TREE__CONFIG__SRC__KERNEL(config_tree, options = {}) {
 		realms: true,
 	});
 	const valid_agent_types = options.valid_agent_types || VALID_AGENT_TYPES__CONFIG__SRC__KERNEL;
-	const locked_realms = options.locked_realms || {
-		kernel: true,
-	};
 	const project = config_tree.project;
 	const realms = config_tree.realms;
 	VALIDATE_PROJECT_CONFIG__CONFIG__SRC__KERNEL(project, {
@@ -412,10 +404,8 @@ function VALIDATE_CONFIG_TREE__CONFIG__SRC__KERNEL(config_tree, options = {}) {
 	validate_object("Config tree", "realms", realms);
 	Object.keys(realms).forEach(function (key) {
 		const realm_path = `realms.${key}`;
-		const allow_locked_mode = Boolean(locked_realms[key]);
 		VALIDATE_REALM_CONFIG__CONFIG__SRC__KERNEL(realms[key], {
 			expected_name: key,
-			allow_locked_mode,
 		});
 		if (realms[key].name === key) {
 			// ok
@@ -423,10 +413,17 @@ function VALIDATE_CONFIG_TREE__CONFIG__SRC__KERNEL(config_tree, options = {}) {
 			throw new Error(`Config tree property '${realm_path}.name' must align with realm key ${key}, ${realms[key].name} !== ${key}`);
 		}
 	});
+	// verify that the realm mode is the same in the realm config as the project config
 	Object.keys(project.realms).forEach(function (key) {
 		const realm_path = `realms.${key}`;
 		if (realms[key]) {
-			// ok
+			if (project.realms[key].mode === realms[key].mode) {
+				// ok
+			} else {
+				throw new Error(
+					`Config tree property 'project.realms.${key}.mode' must match realm config property '${realm_path}.mode', ${project.realms[key].mode} !== ${realms[key].mode}`,
+				);
+			}
 		} else {
 			throw new Error(`Config tree property '${realm_path}' must be defined because project.realms.${key} is defined`);
 		}

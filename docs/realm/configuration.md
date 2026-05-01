@@ -35,7 +35,7 @@ This file is the primary configuration for the realm itself. It answers question
 - Is this config describing a realm?
 - Is the realm open or closed?
 
-When a realm is `closed`, authentication is required before it can be used in the normal way. When it is `open`, public access rules can be more permissive.
+When a realm is `closed`, authentication is required before it can be used in the normal way. When it is `open`, public access rules can be more permissive. When it is `locked`, the realm is declared but cannot be entered through the normal realm-entry flow.
 
 ## `authentication.realms`
 
