@@ -129,11 +129,7 @@ test.describe("cursor pagination system relationship models", async function () 
 							},
 							attributes: decoded_parameters.attributes,
 						});
-						return Promise.resolve({
-							data: {
-								update_relationship: root_rows,
-							},
-						});
+						return Promise.reject(new Error("Relationship record cannot be modified"));
 					},
 					_root_delete(context, scope, input, input_realm) {
 						assert.equal(method, "delete");
@@ -159,18 +155,21 @@ test.describe("cursor pagination system relationship models", async function () 
 					},
 				},
 				async function () {
-					const result =
-						method === "update"
-							? await model._cursor_update({ context: operation_method }, { scope: operation_method }, parameters, realm)
-							: await model._cursor_delete({ context: operation_method }, { scope: operation_method }, parameters, realm);
-					assert.deepEqual(result, {
-						data: {
-							[`cursor_${method}_relationship`]: {
-								nodes: root_rows,
-								page_info: model._cursor_empty_page_info(),
+					if (method === "update") {
+						await assert.rejects(async function () {
+							await model._cursor_update({ context: operation_method }, { scope: operation_method }, parameters, realm);
+						}, /Relationship record cannot be modified/);
+					} else {
+						const result = await model._cursor_delete({ context: operation_method }, { scope: operation_method }, parameters, realm);
+						assert.deepEqual(result, {
+							data: {
+								[`cursor_${method}_relationship`]: {
+									nodes: root_rows,
+									page_info: model._cursor_empty_page_info(),
+								},
 							},
-						},
-					});
+						});
+					}
 				},
 			);
 		}

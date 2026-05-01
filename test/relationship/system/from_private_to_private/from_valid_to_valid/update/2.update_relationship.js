@@ -34,8 +34,22 @@ const operation_variables = {
 	},
 };
 const expected = `{
+    "errors": [
+        {
+            "message": "Relationship record cannot be modified",
+            "locations": [
+                {
+                    "line": 6,
+                    "column": 2
+                }
+            ],
+            "path": [
+                "update_relationship"
+            ]
+        }
+    ],
     "data": {
-        "update_relationship": []
+        "update_relationship": null
     }
 }`;
 
