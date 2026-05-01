@@ -65,6 +65,15 @@ test.describe("kernel config validation", async function () {
 		}, /project\.realms\.database\.mode/);
 	});
 
+	await test.it("rejects realm configs missing from project realms", function () {
+		const config = project_config();
+		delete config.realms.environment;
+		delete config.authentication.realms.environment;
+		assert.throws(function () {
+			$config.VALIDATE_CONFIG_TREE__CONFIG__SRC__KERNEL(config_tree(config));
+		}, /project\.realms\.environment/);
+	});
+
 	await test.it("accepts locked as a normal realm mode", function () {
 		const realm = {
 			name: "kernel",

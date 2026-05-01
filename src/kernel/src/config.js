@@ -413,6 +413,15 @@ function VALIDATE_CONFIG_TREE__CONFIG__SRC__KERNEL(config_tree, options = {}) {
 			throw new Error(`Config tree property '${realm_path}.name' must align with realm key ${key}, ${realms[key].name} !== ${key}`);
 		}
 	});
+	// verify that every realm passed into the config tree exists on the project configuration
+	Object.keys(realms).forEach(function (key) {
+		const project_realm_path = `project.realms.${key}`;
+		if (project.realms[key]) {
+			// ok
+		} else {
+			throw new Error(`Config tree property '${project_realm_path}' must be defined because realms.${key} is defined`);
+		}
+	});
 	// verify that the realm mode is the same in the realm config as the project config
 	Object.keys(project.realms).forEach(function (key) {
 		const realm_path = `realms.${key}`;

@@ -31,6 +31,9 @@ export default {
 		database: {
 			mode: "closed",
 		},
+		environment: {
+			mode: "open",
+		},
 		system: {
 			mode: "closed",
 		},
@@ -44,6 +47,7 @@ export default {
 		realms: {
 			kernel: [],
 			database: [],
+			environment: [],
 			system: [],
 		},
 		agents: {
