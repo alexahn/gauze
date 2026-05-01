@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import * as $gauze from "./../src/index.js";
-import * as $project from "./../src/gauze.js";
-import * as $kernel_realm from "./../src/kernel/gauze.js";
-import * as $database_realm from "./../src/database/gauze.js";
-import * as $system_realm from "./../src/system/gauze.js";
-import * as $environment_realm from "./../src/environment/gauze.js";
+import * as $gauze from "./../../src/index.js";
+import * as $project from "./../../src/gauze.js";
+import * as $kernel_realm from "./../../src/kernel/gauze.js";
+import * as $database_realm from "./../../src/database/gauze.js";
+import * as $system_realm from "./../../src/system/gauze.js";
+import * as $environment_realm from "./../../src/environment/gauze.js";
 
 const $config = $gauze.kernel.src.config;
 

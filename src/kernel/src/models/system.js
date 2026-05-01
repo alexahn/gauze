@@ -772,17 +772,13 @@ class SystemModel extends Model {
 			self.allowed_fields_agent_types["*"].forEach(function (field) {
 				filtered[field] = attributes[field];
 			});
-			return filtered;
-		} else {
-			if (self.allowed_fields_agent_types[agent.agent_type]) {
-				self.allowed_fields_agent_types[agent.agent_type].forEach(function (field) {
-					filtered[field] = attributes[field];
-				});
-				return filtered;
-			} else {
-				return filtered;
-			}
 		}
+		if (self.allowed_fields_agent_types[agent.agent_type]) {
+			self.allowed_fields_agent_types[agent.agent_type].forEach(function (field) {
+				filtered[field] = attributes[field];
+			});
+		}
+		return filtered;
 	}
 	_root_create(context, scope, parameters, realm) {
 		const self = this;
