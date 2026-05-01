@@ -23,6 +23,7 @@ const up = function (knex) {
 			table.index("gauze__relationship__from_type");
 			table.index("gauze__relationship__to_id");
 			table.index("gauze__relationship__to_type");
+			table.index(["gauze__relationship__to_type", "gauze__relationship__to_id", "gauze__relationship__from_type", "gauze__relationship__from_id"]);
 
 			table.unique(["gauze__relationship__from_type", "gauze__relationship__from_id", "gauze__relationship__to_type", "gauze__relationship__to_id"], {
 				useConstraint: true,
