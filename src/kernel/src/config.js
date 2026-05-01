@@ -11,6 +11,7 @@ const REQUIRED_PROJECT_KEYS__CONFIG__SRC__KERNEL = {
 	name: true,
 	type: true,
 	version: true,
+	environments: true,
 	realms: true,
 	steps: true,
 	authentication: true,
@@ -302,6 +303,19 @@ function validate_project_environment(path, environment, valid_agent_types) {
 	});
 }
 
+function validate_project_environments(path, environments, valid_agent_types) {
+	validate_object("Project config", path, environments);
+	if (Object.keys(environments).length > 0) {
+		// ok
+	} else {
+		throw new Error(`Project config property '${path}' must define at least one environment`);
+	}
+	Object.keys(environments).forEach(function (key) {
+		const environment_path = `${path}.${key}`;
+		validate_project_environment(environment_path, environments[key], valid_agent_types);
+	});
+}
+
 function validate_realm_mode(path, mode) {
 	validate_string("Realm config", path, mode);
 	if (VALID_REALM_MODES__CONFIG__SRC__KERNEL[mode]) {
@@ -337,6 +351,8 @@ function VALIDATE_PROJECT_CONFIG__CONFIG__SRC__KERNEL(config, options = {}) {
 			validate_middleware_array(path, config[key]);
 		} else if (key === "http_middlewares") {
 			validate_middleware_array(path, config[key]);
+		} else if (key === "environments") {
+			validate_project_environments(path, config[key], valid_agent_types);
 		} else if (key === "realms") {
 			// validated before authentication
 		} else if (key === "steps") {
@@ -345,12 +361,8 @@ function VALIDATE_PROJECT_CONFIG__CONFIG__SRC__KERNEL(config, options = {}) {
 			validate_authentication(path, config[key], config.realms, valid_agent_types, valid_success_steps);
 		} else if (VALID_PROJECT_KEYS__CONFIG__SRC__KERNEL[key]) {
 			// ok
-		} else if (is_non_null_object(config[key]) && config[key].admins !== undefined) {
-			validate_project_environment(path, config[key], valid_agent_types);
 		} else {
-			throw new Error(
-				`Project config property '${path}' is invalid, property '${key}' must be one of: ${Object.keys(VALID_PROJECT_KEYS__CONFIG__SRC__KERNEL)} or an environment config with admins`,
-			);
+			throw new Error(`Project config property '${path}' is invalid, property '${key}' must be one of: ${Object.keys(VALID_PROJECT_KEYS__CONFIG__SRC__KERNEL)}`);
 		}
 	});
 	return config;

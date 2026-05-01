@@ -639,8 +639,8 @@ class SystemModel extends Model {
 			// note: it would be better to import $project like we did before. why did we change it?
 			if (project) {
 				if (agent.agent_type && agent.agent_id) {
-					if (project.default[process.env.GAUZE_ENV]) {
-						const admin = project.default[process.env.GAUZE_ENV].admins.find(function (admin) {
+					if (project.default.environments[process.env.GAUZE_ENV]) {
+						const admin = project.default.environments[process.env.GAUZE_ENV].admins.find(function (admin) {
 							return admin[agent.agent_type] === agent.agent_id;
 						});
 						return Boolean(admin);

@@ -49,6 +49,15 @@ test.describe("kernel config validation", async function () {
 		}, /authentication\.realms\.system/);
 	});
 
+	await test.it("rejects top-level environment config blocks", function () {
+		const config = project_config();
+		config.development_monolithic = config.environments.development_monolithic;
+		delete config.environments;
+		assert.throws(function () {
+			$config.VALIDATE_PROJECT_CONFIG__CONFIG__SRC__KERNEL(config);
+		}, /environments/);
+	});
+
 	await test.it("rejects authentication requirements that do not reference configured success steps", function () {
 		const config = project_config();
 		config.authentication.proxy.push("steps.missing.success");

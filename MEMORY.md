@@ -93,3 +93,4 @@
 - Project and realm config validation belongs in the named-export kernel utility module `src/kernel/src/config.js`; the CLI manager delegates project/realm read validation there, and `src/command/application/serve.js` validates the project/realm config tree once during server startup.
 - In config-tree validation, any realm listed in `project.realms` must have the same `mode` as that realm's local `gauze.js`; for example `project.realms.kernel.mode` must match `src/kernel/gauze.js`.
 - Config-tree validation is bidirectional for realms: every local realm config passed into the tree must appear in `project.realms`, and every `project.realms` entry must have a matching local realm config.
+- Project-specific environment sections live under `project.environments`; do not add `development_monolithic`, `staging`, `production`, or other environment blocks at the top level of `src/gauze.js`.
