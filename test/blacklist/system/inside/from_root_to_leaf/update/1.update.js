@@ -42,8 +42,22 @@ const operation_variables = {
 	},
 };
 const expected = `{
+    "errors": [
+        {
+            "message": "Access record cannot be modified",
+            "locations": [
+                {
+                    "line": 6,
+                    "column": 2
+                }
+            ],
+            "path": [
+                "update_blacklist"
+            ]
+        }
+    ],
     "data": {
-        "update_blacklist": []
+        "update_blacklist": null
     }
 }`;
 

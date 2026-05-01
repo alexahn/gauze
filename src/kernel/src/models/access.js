@@ -707,10 +707,8 @@ class AccessSystemModel extends SystemModel {
 						self._validate_model(staged);
 						return self._valid_access(context, agent, method, staged).then(function () {
 							// should we throw an error or return an empty set?
-							//throw new Error("Access record cannot be modified")
-							return self.empty_update_response;
-
-							//return self._execute(context, operation, input);
+							throw new Error("Access record cannot be modified")
+							//return self.empty_update_response;
 						});
 					});
 				} else {
