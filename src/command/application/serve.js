@@ -13,6 +13,11 @@ import { koaBody } from "koa-body";
 import cors from "@koa/cors";
 
 import * as $gauze from "./../../index.js";
+import * as $project from "./../../gauze.js";
+import * as $kernel_realm from "./../../kernel/gauze.js";
+import * as $database_realm from "./../../database/gauze.js";
+import * as $system_realm from "./../../system/gauze.js";
+import * as $environment_realm from "./../../environment/gauze.js";
 //import Router from "./../../router.js";
 
 export const command = "serve";
@@ -45,6 +50,18 @@ export const builder = function (yargs) {
 	//.wrap(128)
 };
 
+function validate_config_tree($gauze) {
+	return $gauze.kernel.src.config.VALIDATE_CONFIG_TREE__CONFIG__SRC__KERNEL({
+		project: $project.default,
+		realms: {
+			kernel: $kernel_realm.default,
+			database: $database_realm.default,
+			system: $system_realm.default,
+			environment: $environment_realm.default,
+		},
+	});
+}
+
 export const handler = function (argv) {
 	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "server argv", argv);
 
@@ -73,6 +90,8 @@ export const handler = function (argv) {
 
 	// asynchronous import here to avoid static dependency linking failing
 	import("./../../router.js").then(function (module) {
+		validate_config_tree($gauze);
+
 		const Router = module.default;
 		const app = new Koa();
 		const router = Router($gauze);

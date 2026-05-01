@@ -5,6 +5,8 @@ const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 import assert from "node:assert/strict";
 import child_process from "child_process";
 
+import * as $config from "./../config.js";
+
 const __FILEDIR = import.meta.dirname;
 const GAUZE_BASE_DIR = path.resolve(__FILEDIR, "../../../");
 // GAUZE_ROOT_DIR is only used when we need to reference the src directory from outside of it
@@ -114,8 +116,31 @@ class GauzeManager {
 			});
 		});
 	}
-	validate_project_config(config) {}
-	read_project_config(config_path) {}
+	validate_project_config(config) {
+		return $config.VALIDATE_PROJECT_CONFIG__CONFIG__SRC__KERNEL(config);
+	}
+	read_project_config(config_path) {
+		const self = this;
+		return import(config_path).then(function (config) {
+			const PROJECT = config.default;
+			self.validate_project_config(PROJECT);
+			return Promise.resolve(PROJECT);
+		});
+	}
+	validate_realm_config(config, expected_name, allow_locked_mode = false) {
+		return $config.VALIDATE_REALM_CONFIG__CONFIG__SRC__KERNEL(config, {
+			expected_name,
+			allow_locked_mode,
+		});
+	}
+	read_realm_config(config_path, expected_name, allow_locked_mode = false) {
+		const self = this;
+		return import(config_path).then(function (config) {
+			const REALM = config.default;
+			self.validate_realm_config(REALM, expected_name, allow_locked_mode);
+			return Promise.resolve(REALM);
+		});
+	}
 	validate_entity_config(config) {
 		const self = this;
 

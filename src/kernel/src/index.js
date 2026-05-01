@@ -16,3 +16,5 @@ export * as cursor from "./cursor.js";
 export * as linker from "./linker.js";
 
 export * as dataloader from "./dataloader.js";
+
+export * as config from "./config.js";
