@@ -9,3 +9,5 @@ export * as table from "./Table.jsx";
 export * as item from "./Item.jsx";
 export * as popover from "./Popover.jsx";
 export * as graph from "./Graph.jsx";
+export * as error from "./Error.jsx";
+export * as error_boundary from "./ErrorBoundary.jsx";

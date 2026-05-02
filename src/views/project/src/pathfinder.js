@@ -278,6 +278,22 @@ function createPathfinder(context) {
 		},
 		[
 			{
+				name: "error",
+				path: [],
+				pathRegex: new RegExp("/error"),
+				pathString: function (groups) {
+					return "/error";
+				},
+				search: [],
+				dependencies: async function (context, dependencies, state, pathParams, searchParams) {
+					return {
+						error: new Error("The project application failed to load."),
+						source: "Route error",
+					};
+				},
+				pathfinder: null,
+			},
+			{
 				name: "environment",
 				path: [],
 				pathRegex: new RegExp("/z"),
