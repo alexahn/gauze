@@ -106,6 +106,147 @@ describe_database_cursor_suite("cursor pagination database cache filters", async
 		});
 	});
 
+	await test.it("preserves typed cursor boundaries when chunking internal cache filters", async function () {
+		await with_transactions(suite_ctx.database_manager, async function (transactions) {
+			await execute(
+				suite_ctx.database_manager,
+				transactions,
+				`
+			mutation CursorCreateDateCachedYtitne(
+				$a: Ytitne_Mutation__Attributes
+				$b: Ytitne_Mutation__Attributes
+				$c: Ytitne_Mutation__Attributes
+				$d: Ytitne_Mutation__Attributes
+			) {
+				a: create_ytitne(attributes: $a) { attributes { id } }
+				b: create_ytitne(attributes: $b) { attributes { id } }
+				c: create_ytitne(attributes: $c) { attributes { id } }
+				d: create_ytitne(attributes: $d) { attributes { id } }
+			}
+			`,
+				"CursorCreateDateCachedYtitne",
+				{
+					a: {
+						id: "10000000-0000-4000-8000-000000000151",
+						text: "cursor-ytitne-date-cache-001",
+					},
+					b: {
+						id: "10000000-0000-4000-8000-000000000152",
+						text: "cursor-ytitne-date-cache-002",
+					},
+					c: {
+						id: "10000000-0000-4000-8000-000000000153",
+						text: "cursor-ytitne-date-cache-003",
+					},
+					d: {
+						id: "10000000-0000-4000-8000-000000000154",
+						text: "cursor-ytitne-date-cache-004",
+					},
+				},
+			);
+
+			const rows = await execute(
+				suite_ctx.database_manager,
+				transactions,
+				`
+			query CursorReadDateCachedRows($where_like: Ytitne_Query__Where, $limit: Int, $order: [Order]) {
+				read_ytitne(where_like: $where_like, limit: $limit, order: $order) {
+					attributes { id text created_at }
+				}
+			}
+			`,
+				"CursorReadDateCachedRows",
+				{
+					where_like: {
+						text: "cursor-ytitne-date-cache-%",
+					},
+					limit: 4,
+					order: [
+						{
+							column: "created_at",
+							order: "desc",
+						},
+						{
+							column: "id",
+							order: "asc",
+						},
+					],
+				},
+			);
+			const allowed_ids = rows.read_ytitne.map(function (row) {
+				return row.attributes.id;
+			});
+			const expected_first_texts = rows.read_ytitne.slice(0, 2).map(function (row) {
+				return row.attributes.text;
+			});
+			const expected_second_texts = rows.read_ytitne.slice(2, 4).map(function (row) {
+				return row.attributes.text;
+			});
+			$gauze.kernel.src.cache.lru.TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set("cursor-cache-date-where-in-initial", allowed_ids, allowed_ids.length);
+
+			const first = await execute(
+				suite_ctx.database_manager,
+				transactions,
+				`
+			query CursorReadDateCachedYtitne(
+				$where_like: Ytitne_Query__Where
+				$cache_where_in: Ytitne_Query__Where_String
+				$limit: Int
+				$order: [Order]
+			) {
+				cursor_read_ytitne(where_like: $where_like, cache_where_in: $cache_where_in, limit: $limit, order: $order) {
+					nodes { attributes { id text created_at } }
+					page_info { has_next_page next_cursor }
+				}
+			}
+			`,
+				"CursorReadDateCachedYtitne",
+				{
+					where_like: {
+						text: "cursor-ytitne-date-cache-%",
+					},
+					cache_where_in: {
+						id: "cursor-cache-date-where-in-initial",
+					},
+					limit: 2,
+					order: [
+						{
+							column: "created_at",
+							order: "desc",
+						},
+					],
+				},
+			);
+			assert.deepEqual(text_values(first.cursor_read_ytitne, "text"), expected_first_texts);
+			assert.equal(first.cursor_read_ytitne.page_info.has_next_page, true);
+
+			$gauze.kernel.src.cache.lru.TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set("cursor-cache-date-where-in-next", allowed_ids, allowed_ids.length);
+
+			const second = await execute(
+				suite_ctx.database_manager,
+				transactions,
+				`
+			query CursorReadDateCachedYtitneNext($cursor: String, $cache_where_in: Ytitne_Query__Where_String) {
+				cursor_read_ytitne(cursor: $cursor, cache_where_in: $cache_where_in) {
+					nodes { attributes { id text created_at } }
+					page_info { has_previous_page has_next_page }
+				}
+			}
+			`,
+				"CursorReadDateCachedYtitneNext",
+				{
+					cursor: first.cursor_read_ytitne.page_info.next_cursor,
+					cache_where_in: {
+						id: "cursor-cache-date-where-in-next",
+					},
+				},
+			);
+			assert.deepEqual(text_values(second.cursor_read_ytitne, "text"), expected_second_texts);
+			assert.equal(second.cursor_read_ytitne.page_info.has_previous_page, true);
+			assert.equal(second.cursor_read_ytitne.page_info.has_next_page, false);
+		});
+	});
+
 	await test.it("intersects client primary-key where_in with internal cache filters", async function () {
 		await with_transactions(suite_ctx.database_manager, async function (transactions) {
 			await execute(

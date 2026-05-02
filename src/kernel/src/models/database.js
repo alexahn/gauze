@@ -1451,7 +1451,7 @@ class DatabaseModel extends Model {
 		}
 		return Promise.all(
 			chunks.map(function (chunk) {
-				const params = JSON.parse(JSON.stringify(parameters));
+				const params = structuredClone(parameters);
 				if (params.cache_where_in && self.primary_key in params.cache_where_in) {
 					delete params.cache_where_in[self.primary_key];
 				}
