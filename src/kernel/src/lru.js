@@ -9,8 +9,6 @@ class TTLLRUCache {
 		const self = this;
 		self.maximum_size = maximum_size;
 		self.maximum_duration = maximum_duration;
-		self.agents = {};
-		self.entities = {};
 		self.initialize();
 	}
 	initialize() {
@@ -21,6 +19,8 @@ class TTLLRUCache {
 		self.values = {};
 		self.index = {};
 		self.timestamps = {};
+		self.agents = {};
+		self.entities = {};
 	}
 	clear() {
 		const self = this;

@@ -47,7 +47,7 @@ class SystemModel extends Model {
 		self.auth_loader.model = self;
 		self.model_cache = new TTLLRUCache(1024, 8192);
 		self.model_loader = new DataLoader(self._model_batch, {
-			cacheMap: self.modeL_cache,
+			cacheMap: self.model_cache,
 		});
 		self.model_loader.model = self;
 		self.allowed_method_agent_types = {};
