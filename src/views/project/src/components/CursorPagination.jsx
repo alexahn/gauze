@@ -9,6 +9,7 @@ function cursorItemDisabled(item) {
 }
 
 function CursorPagination({ pageInfo, variables = {}, href, handleClick, reverse = false, buttonClass = "", showDetails = true, detailsOpen = false }) {
+	const [isDetailsOpen, setIsDetailsOpen] = React.useState(detailsOpen);
 	const payload = cursorPayloadFromPageInfo(pageInfo, variables);
 	const currentPage = cursorCurrentPage(payload);
 	const items = [
@@ -47,6 +48,9 @@ function CursorPagination({ pageInfo, variables = {}, href, handleClick, reverse
 			return button;
 		}
 	}
+	function handleDetailsToggle(event) {
+		setIsDetailsOpen(event.currentTarget.open);
+	}
 	return (
 		<div className="project-cursor-pagination">
 			<nav className="project-cursor-pagination-nav" aria-label="Cursor pagination">
@@ -55,7 +59,7 @@ function CursorPagination({ pageInfo, variables = {}, href, handleClick, reverse
 				})}
 			</nav>
 			{showDetails && payload ? (
-				<details className="project-cursor-details" defaultOpen={detailsOpen}>
+				<details className="project-cursor-details" open={isDetailsOpen} onToggle={handleDetailsToggle}>
 					<summary>Cursor</summary>
 					<div className="project-cursor-detail-grid">
 						<div>entity</div>
