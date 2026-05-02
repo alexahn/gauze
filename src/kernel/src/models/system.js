@@ -40,12 +40,12 @@ class SystemModel extends Model {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Blacklist structure not found"));
 		}
 		self.name = self.__name();
-		self.auth_cache = new TTLLRUCache(1024, 8192);
+		self.auth_cache = new TTLLRUCache(parseInt(process.env.GAUZE_CACHE_SYSTEM_AUTH_SIZE, 10), parseInt(process.env.GAUZE_CACHE_SYSTEM_AUTH_TTL, 10));
 		self.auth_loader = new DataLoader(self._auth_batch, {
 			cacheMap: self.auth_cache,
 		});
 		self.auth_loader.model = self;
-		self.model_cache = new TTLLRUCache(1024, 8192);
+		self.model_cache = new TTLLRUCache(parseInt(process.env.GAUZE_CACHE_SYSTEM_MODEL_SIZE, 10), parseInt(process.env.GAUZE_CACHE_SYSTEM_MODEL_TTL, 10));
 		self.model_loader = new DataLoader(self._model_batch, {
 			cacheMap: self.model_cache,
 		});

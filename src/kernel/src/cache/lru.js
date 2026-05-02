@@ -2,17 +2,17 @@ import { LRUCache } from "./class.js";
 
 // stores large items, size is small
 const LARGE_CACHE__LRU__CACHE__SRC__KERNEL = new LRUCache({
-	size: 2 << 4,
+	size: parseInt(process.env.GAUZE_CACHE_TIERED_LARGE_SIZE, 10)
 });
 
 // stores medium items, size is medium
 const MEDIUM_CACHE__LRU__CACHE__SRC__KERNEL = new LRUCache({
-	size: 2 << 8,
+	size: parseInt(process.env.GAUZE_CACHE_TIERED_MEDIUM_SIZE, 10)
 });
 
 // stores small items, size is large
 const SMALL_CACHE__LRU__CACHE__SRC__KERNEL = new LRUCache({
-	size: 2 << 12,
+	size: parseInt(process.env.GAUZE_CACHE_TIERED_SMALL_SIZE, 10)
 });
 
 class TieredLRUCache {
