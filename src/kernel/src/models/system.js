@@ -40,12 +40,14 @@ class SystemModel extends Model {
 			LOGGER__IO__LOGGER__SRC__KERNEL.write("5", __RELATIVE_FILEPATH, `${self.name}.constructor:WARNING`, new Error("Blacklist structure not found"));
 		}
 		self.name = self.__name();
+		self.auth_cache = new TTLLRUCache(1024, 8192);
 		self.auth_loader = new DataLoader(self._auth_batch, {
-			cacheMap: new TTLLRUCache(1024, 8192),
+			cacheMap: self.auth_cache,
 		});
 		self.auth_loader.model = self;
+		self.model_cache = new TTLLRUCache(1024, 8192);
 		self.model_loader = new DataLoader(self._model_batch, {
-			cacheMap: new TTLLRUCache(1024, 8192),
+			cacheMap: self.modeL_cache,
 		});
 		self.model_loader.model = self;
 		self.allowed_method_agent_types = {};
@@ -114,13 +116,29 @@ class SystemModel extends Model {
 			keys.map(function (key, index) {
 				const parsed = JSON.parse(key);
 				if (parsed.method === "authorization") {
-					return self.model._authorization(contexts[index], scopes[index], parsed.realm, parsed.agent, parsed.entity);
+					return self.model._authorization(contexts[index], scopes[index], parsed.realm, parsed.agent, parsed.entity).then(function (result) {
+						self.model.auth_cache.add_agent_key(parsed.agent.agent_type, parsed.agent.agent_id, key);
+						self.model.auth_cache.prune_agent_keys();
+						return result;
+					});
 				} else if (parsed.method === "authorization_element") {
-					return self.model._authorization_element(contexts[index], scopes[index], parsed.realm, parsed.agent, parsed.entity);
+					return self.model._authorization_element(contexts[index], scopes[index], parsed.realm, parsed.agent, parsed.entity).then(function (result) {
+						self.model.auth_cache.add_agent_key(parsed.agent.agent_type, parsed.agent.agent_id, key);
+						self.model.auth_cache.prune_agent_keys();
+						return result;
+					});
 				} else if (parsed.method === "authorization_set") {
-					return self.model._authorization_set(contexts[index], scopes[index], parsed.realm, parsed.agent, parsed.entity);
+					return self.model._authorization_set(contexts[index], scopes[index], parsed.realm, parsed.agent, parsed.entity).then(function (result) {
+						self.model.auth_cache.add_agent_key(parsed.agent.agent_type, parsed.agent.agent_id, key);
+						self.model.auth_cache.prune_agent_keys();
+						return result;
+					});
 				} else if (parsed.method === "authorization_filter") {
-					return self.model._authorization_filter(contexts[index], scopes[index], parsed.realm, parsed.agent, parsed.entity);
+					return self.model._authorization_filter(contexts[index], scopes[index], parsed.realm, parsed.agent, parsed.entity).then(function (result) {
+						self.model.auth_cache.add_agent_key(parsed.agent.agent_type, parsed.agent.agent_id, key);
+						self.model.auth_cache.prune_agent_keys();
+						return result;
+					});
 				} else {
 					throw new Error("Internal error: invalid batch operation");
 				}
@@ -149,6 +167,7 @@ class SystemModel extends Model {
 				if (parsed.method === "create") {
 					return self.model._root_create(contexts[index], scopes[index], parsed.parameters, parsed.realm).then(function (data) {
 						self.clearAll();
+						self.model.auth_cache.clear_agent_keys(parsed.realm.agent.agent_type, parsed.realm.agent.agent_id);
 						return data;
 					});
 				} else if (parsed.method === "read") {
@@ -161,6 +180,7 @@ class SystemModel extends Model {
 				} else if (parsed.method === "delete") {
 					return self.model._root_delete(contexts[index], scopes[index], parsed.parameters, parsed.realm).then(function (data) {
 						self.clearAll();
+						self.model.auth_cache.clear_agent_keys(parsed.realm.agent.agent_type, parsed.realm.agent.agent_id);
 						return data;
 					});
 				} else if (parsed.method === "count") {

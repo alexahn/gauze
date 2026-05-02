@@ -95,3 +95,4 @@
 - Config-tree validation is bidirectional for realms: every local realm config passed into the tree must appear in `project.realms`, and every `project.realms` entry must have a matching local realm config.
 - Project-specific environment sections live under `project.environments`; do not add `development_monolithic`, `staging`, `production`, or other environment blocks at the top level of `src/gauze.js`.
 - `SystemModel.agent_filter` should merge wildcard field permissions (`allowed_agent_types: ["*"]`) with fields allowed for the concrete `agent.agent_type`; wildcard fields are shared visibility, not an early-exit override.
+- System model mutations currently clear the model DataLoader, but authorization lookups use a separate `auth_loader`; stale `authorization_filter` results can omit freshly created per-row whitelist ids from injected `cache_where_in` filters until that auth cache expires or is explicitly cleared.

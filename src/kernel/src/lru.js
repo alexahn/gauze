@@ -9,6 +9,8 @@ class TTLLRUCache {
 		const self = this;
 		self.maximum_size = maximum_size;
 		self.maximum_duration = maximum_duration;
+		self.agents = {};
+		self.entities = {};
 		self.initialize();
 	}
 	initialize() {
@@ -95,6 +97,91 @@ class TTLLRUCache {
 		Object.keys(self.values).forEach(function (k) {
 			f(self.values[k], k);
 		});
+	}
+	get_keys(index, type, id) {
+		const self = this;
+		if (type in self[index]) {
+			if (id in self[index][type]) {
+				self[index][type][id] = self[index][type][id].filter(function (entry) {
+					return new Date().getTime() - entry.timestamp <= self.maximum_duration;
+				});
+				return self[index][type][id];
+			} else {
+				return [];
+			}
+		} else {
+			return [];
+		}
+	}
+	add_key(index, type, id, key) {
+		const self = this;
+		const entry = {
+			key,
+			timestamp: new Date().getTime(),
+		};
+		if (type in self[index]) {
+			if (id in self[index][type]) {
+				self[index][type][id].push(entry);
+				self[index][type][id] = self[index][type][id].filter(function (entry) {
+					return new Date().getTime() - entry.timestamp <= self.maximum_duration;
+				});
+			} else {
+				self[index][type][id] = [entry];
+			}
+		} else {
+			self[index][type] = {
+				[id]: [entry],
+			};
+		}
+	}
+	prune_keys(index) {
+		const self = this;
+		Object.keys(self[index]).forEach(function (type) {
+			Object.keys(self[index][type]).forEach(function (id) {
+				self[index][type][id] = self[index][type][id].filter(function (entry) {
+					return new Date().getTime() - entry.timestamp <= self.maximum_duration;
+				});
+			});
+		});
+	}
+	clear_keys(index, type, id) {
+		const self = this;
+		const entries = self.get_keys(index, type, id);
+		return entries.map(function (entry) {
+			return self.delete(entry.key);
+		});
+	}
+	get_agent_keys(agent_type, agent_id) {
+		const self = this;
+		return self.get_keys("agents", agent_type, agent_id);
+	}
+	add_agent_key(agent_type, agent_id, key) {
+		const self = this;
+		return self.add_key("agents", agent_type, agent_id, key);
+	}
+	clear_agent_keys(agent_type, agent_id) {
+		const self = this;
+		return self.clear_keys("agents", agent_type, agent_id);
+	}
+	prune_agent_keys() {
+		const self = this;
+		return self.prune_keys("agents");
+	}
+	get_entity_keys(entity_type, entity_id) {
+		const self = this;
+		return self.get_keys("entities", entity_type, entity_id);
+	}
+	add_entity_key(entity_type, entity_id, key) {
+		const self = this;
+		return self.add_key("entities", entity_type, entity_id, key);
+	}
+	clear_entity_keys(entity_type, entity_id) {
+		const self = this;
+		return self.clear_keys("entities", entity_type, entity_id);
+	}
+	prune_entity_keys() {
+		const self = this;
+		return self.prune_keys("entities");
 	}
 }
 
