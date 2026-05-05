@@ -3,6 +3,7 @@ import * as jose from "jose";
 import { Pathfinder, navigate } from "@ahn/sinew";
 
 import { cursorCountVariables, cursorReadVariables } from "./cursor.js";
+import { parseSearchVariables } from "./variables.js";
 
 function createPathfinder(context) {
 	const hash = false;
@@ -167,7 +168,7 @@ function createPathfinder(context) {
 											const header = dependencies.header.header;
 											const { services } = context;
 											const { gauzemodel } = services;
-											const variables = JSON.parse(searchParams.variables);
+											const variables = parseSearchVariables(searchParams.variables);
 											const read = gauzemodel.default
 												.cursorRead(header, cursorReadVariables(variables))
 												.then(function (page) {

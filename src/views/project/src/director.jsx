@@ -2,6 +2,8 @@ import * as React from "react";
 
 import { Director } from "@ahn/sinew";
 
+import { parseSearchVariables } from "./variables.js";
+
 function createDirector(context) {
 	const { root, layouts, components, pathfinder } = context;
 
@@ -125,7 +127,7 @@ function createDirector(context) {
 		const { system, headers, header, list } = dependencies;
 		const { agent } = system;
 		const { items, count, pageInfo } = list;
-		const variables = JSON.parse(searchParams.variables);
+		const variables = parseSearchVariables(searchParams.variables);
 		renderPage(
 			"project.system.headers.header.list",
 			<layouts.amethyst.default>
@@ -153,7 +155,7 @@ function createDirector(context) {
 	director.register("project.system.headers.header.create", function (context, dependencies, pathParams, searchParams) {
 		const { services } = context;
 		const { headers, header, create } = dependencies;
-		const variables = JSON.parse(searchParams.variables);
+		const variables = parseSearchVariables(searchParams.variables);
 		renderPage(
 			"project.system.headers.header.create",
 			<layouts.amethyst.default>
