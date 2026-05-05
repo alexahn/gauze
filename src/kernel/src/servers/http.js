@@ -5,6 +5,7 @@ import * as $project from "./../../../gauze.js";
 
 const HANDLE_GRAPHQL__HTTP__SERVER__SRC__KERNEL = function ({ $gauze, $realm, database_manager, authenticators, schema }, ctx, next) {
 	// 404 is the default response status
+	ctx.response.type = "application/json";
 	return (
 		new Promise(function (resolve, reject) {
 			const collection = {};
