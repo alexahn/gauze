@@ -23,4 +23,8 @@ src/views/project/build/*.map
 /bin
 eslint.config.js
 AGENTS.md
+MEMORY.md
 docs/.vitepress/dist/
+docs/.vitepress/cache
+.github
+
