@@ -202,7 +202,7 @@ const KERNEL_JWT_ISSUER = "gauze";
 
 // note: the unwrapped jwt should have an audience that is the resource server
 // note: the wrapped jwt should have an audience that maps to agent_type
-const KERNEL_JWT_AUDIENCE = "database";
+const KERNEL_JWT_AUDIENCE = "kernel";
 
 // todo: change the algorithm to EdDSA
 // note: will need a master public/private key pair
