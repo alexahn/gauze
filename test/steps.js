@@ -44,7 +44,7 @@ function load_steps(base_path, directory) {
 		.then(function (modules) {
 			// group modules into arrays based on step attribute
 			const steps = [];
-			var max_step = null;
+			var max_step = -1;
 			modules.forEach(function (module) {
 				validate_module(module);
 				if (typeof steps[module.step] === "object") {
@@ -53,7 +53,7 @@ function load_steps(base_path, directory) {
 				} else {
 					steps[module.step] = [module];
 				}
-				if (module.step <= max_step) {
+				if (max_step < module.step) {
 					max_step = module.step;
 				}
 			});
