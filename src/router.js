@@ -15,7 +15,7 @@ import conditional from "koa-conditional-get";
 const GAUZE_V1_BUILD_ROOT = path.resolve(import.meta.dirname, "./views/gauze/v1/build");
 const PROJECT_BUILD_ROOT = path.resolve(import.meta.dirname, "./views/project/build");
 
-// note: currently unused (edit src/views/gauze/build/index.html instead)
+// note: currently unused (edit src/views/gauze/v1/build/index.html instead)
 function gauzeIndex() {
 	const index = `<html>
     <head>
