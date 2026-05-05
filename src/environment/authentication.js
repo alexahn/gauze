@@ -4,7 +4,7 @@ import { MODEL__SESSION__MODEL__ENVIRONMENT } from "./models/session.js";
 
 import * as jose from "jose";
 
-import { VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL } from "./../kernel/src/config.js";
+import { ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL } from "./../kernel/src/config.js";
 
 // todo: refactor some of this to use higher order functions
 // note: technically it might not make sense to refactor since these are separate auth methods
@@ -49,7 +49,7 @@ const ENVIRONMENT_JWT_HEADER = {
 };
 
 const SIGN_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT = function (payload) {
-	const secret = new TextEncoder().encode(VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_ENVIRONMENT_JWT_SECRET"));
+	const secret = new TextEncoder().encode(ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_ENVIRONMENT_JWT_SECRET"));
 	return new jose.SignJWT(payload)
 		.setProtectedHeader(ENVIRONMENT_JWT_HEADER)
 		.setIssuedAt()
@@ -60,7 +60,7 @@ const SIGN_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT = function (payload) {
 };
 
 const VERIFY_ENVIRONMENT_JWT__AUTHENTICATION__ENVIRONMENT = function (jwt) {
-	const secret = new TextEncoder().encode(VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_ENVIRONMENT_JWT_SECRET"));
+	const secret = new TextEncoder().encode(ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_ENVIRONMENT_JWT_SECRET"));
 	return jose.jwtVerify(jwt, secret, {
 		issuer: ENVIRONMENT_JWT_ISSUER,
 		audience: ENVIRONMENT_JWT_AUDIENCE,
@@ -106,12 +106,12 @@ const SYSTEM_JWT_HEADER = {
 };
 
 const SIGN_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT = function (payload) {
-	const secret = new TextEncoder().encode(VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_SYSTEM_JWT_SECRET"));
+	const secret = new TextEncoder().encode(ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_SYSTEM_JWT_SECRET"));
 	return new jose.SignJWT(payload).setProtectedHeader(SYSTEM_JWT_HEADER).setIssuedAt().setIssuer(SYSTEM_JWT_ISSUER).setAudience(SYSTEM_JWT_AUDIENCE).setExpirationTime("2h").sign(secret);
 };
 
 const VERIFY_SYSTEM_JWT__AUTHENTICATION__ENVIRONMENT = function (jwt) {
-	const secret = new TextEncoder().encode(VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_SYSTEM_JWT_SECRET"));
+	const secret = new TextEncoder().encode(ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_SYSTEM_JWT_SECRET"));
 	return jose.jwtVerify(jwt, secret, {
 		issuer: SYSTEM_JWT_ISSUER,
 		audience: SYSTEM_JWT_AUDIENCE,
@@ -157,7 +157,7 @@ const DATABASE_JWT_HEADER = {
 };
 
 const SIGN_DATABASE_JWT__AUTHENTICATION__ENVIRONMENT = function (payload) {
-	const secret = new TextEncoder().encode(VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_DATABASE_JWT_SECRET"));
+	const secret = new TextEncoder().encode(ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_DATABASE_JWT_SECRET"));
 	return new jose.SignJWT(payload)
 		.setProtectedHeader(DATABASE_JWT_HEADER)
 		.setIssuedAt()
@@ -168,7 +168,7 @@ const SIGN_DATABASE_JWT__AUTHENTICATION__ENVIRONMENT = function (payload) {
 };
 
 const VERIFY_DATABASE_JWT__AUTHENTICATION__ENVIRONMENT = function (jwt) {
-	const secret = new TextEncoder().encode(VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_DATABASE_JWT_SECRET"));
+	const secret = new TextEncoder().encode(ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_DATABASE_JWT_SECRET"));
 	return jose.jwtVerify(jwt, secret, {
 		issuer: DATABASE_JWT_ISSUER,
 		audience: DATABASE_JWT_AUDIENCE,
@@ -214,12 +214,12 @@ const KERNEL_JWT_HEADER = {
 };
 
 const SIGN_KERNEL_JWT__AUTHENTICATION__ENVIRONMENT = function (payload) {
-	const secret = new TextEncoder().encode(VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_KERNEL_JWT_SECRET"));
+	const secret = new TextEncoder().encode(ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_KERNEL_JWT_SECRET"));
 	return new jose.SignJWT(payload).setProtectedHeader(KERNEL_JWT_HEADER).setIssuedAt().setIssuer(KERNEL_JWT_ISSUER).setAudience(KERNEL_JWT_AUDIENCE).setExpirationTime("2h").sign(secret);
 };
 
 const VERIFY_KERNEL_JWT__AUTHENTICATION__ENVIRONMENT = function (jwt) {
-	const secret = new TextEncoder().encode(VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_KERNEL_JWT_SECRET"));
+	const secret = new TextEncoder().encode(ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_KERNEL_JWT_SECRET"));
 	return jose.jwtVerify(jwt, secret, {
 		issuer: KERNEL_JWT_ISSUER,
 		audience: KERNEL_JWT_AUDIENCE,
@@ -265,12 +265,12 @@ const PROXY_JWT_HEADER = {
 };
 
 const SIGN_PROXY_JWT__AUTHENTICATION__ENVIRONMENT = function (payload) {
-	const secret = new TextEncoder().encode(VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_PROXY_JWT_SECRET"));
+	const secret = new TextEncoder().encode(ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_PROXY_JWT_SECRET"));
 	return new jose.SignJWT(payload).setProtectedHeader(PROXY_JWT_HEADER).setIssuedAt().setIssuer(PROXY_JWT_ISSUER).setAudience(PROXY_JWT_AUDIENCE).setExpirationTime("2h").sign(secret);
 };
 
 const VERIFY_PROXY_JWT__AUTHENTICATION__ENVIRONMENT = function (jwt) {
-	const secret = new TextEncoder().encode(VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_PROXY_JWT_SECRET"));
+	const secret = new TextEncoder().encode(ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_PROXY_JWT_SECRET"));
 	return jose.jwtVerify(jwt, secret, {
 		issuer: PROXY_JWT_ISSUER,
 		audience: PROXY_JWT_AUDIENCE,

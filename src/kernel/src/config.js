@@ -66,7 +66,7 @@ const VALID_REALM_MODES__CONFIG__SRC__KERNEL = {
 
 const MINIMUM_SECRET_BYTES__CONFIG__SRC__KERNEL = 32;
 
-const REQUIRED_SECRET_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL = {
+const REQUIRED_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL = {
 	GAUZE_ENVIRONMENT_JWT_SECRET: true,
 	GAUZE_SYSTEM_JWT_SECRET: true,
 	GAUZE_DATABASE_JWT_SECRET: true,
@@ -380,11 +380,32 @@ function VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL(key, environm
 	}
 }
 
+const ENVIRONMENT_VARIABLE_VALIDATORS__CONFIG__SRC__KERNEL = {
+	GAUZE_ENVIRONMENT_JWT_SECRET: VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
+	GAUZE_SYSTEM_JWT_SECRET: VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
+	GAUZE_DATABASE_JWT_SECRET: VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
+	GAUZE_KERNEL_JWT_SECRET: VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
+	GAUZE_PROXY_JWT_SECRET: VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
+	GAUZE_CURSOR_SECRET: VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
+};
+
+function ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL(key, environment = process.env, options = {}) {
+	const environment_variable_validators = options.environment_variable_validators || ENVIRONMENT_VARIABLE_VALIDATORS__CONFIG__SRC__KERNEL;
+	const validator = environment_variable_validators[key];
+	if (typeof key !== "string") {
+		throw new Error(`Environment variable key must be of type 'string', ${key} is not of type 'string'`);
+	} else if (validator) {
+		return validator(key, environment, options);
+	} else {
+		throw new Error(`Environment variable '${key}' does not have a configured validator`);
+	}
+}
+
 function VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL(environment = process.env, options = {}) {
 	validate_object("Environment variables", "", environment);
-	const required_secret_environment_variables = options.required_secret_environment_variables || REQUIRED_SECRET_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL;
-	Object.keys(required_secret_environment_variables).forEach(function (key) {
-		VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL(key, environment, options);
+	const required_environment_variables = options.required_environment_variables || REQUIRED_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL;
+	Object.keys(required_environment_variables).forEach(function (key) {
+		ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL(key, environment, options);
 	});
 	return environment;
 }
@@ -517,6 +538,7 @@ function VALIDATE_CONFIG_TREE__CONFIG__SRC__KERNEL(config_tree, options = {}) {
 }
 
 export {
+	ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
 	VALIDATE_CONFIG_TREE__CONFIG__SRC__KERNEL,
 	VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL,
 	VALIDATE_PROJECT_CONFIG__CONFIG__SRC__KERNEL,

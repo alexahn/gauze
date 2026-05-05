@@ -113,6 +113,18 @@ test.describe("kernel config validation", async function () {
 		assert.equal(validated, environment);
 	});
 
+	await test.it("reads configured environment variables through the validation dispatcher", function () {
+		const environment = secret_environment();
+		const value = $config.ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_PROXY_JWT_SECRET", environment);
+		assert.equal(value, environment.GAUZE_PROXY_JWT_SECRET);
+	});
+
+	await test.it("rejects environment variables without configured validators", function () {
+		assert.throws(function () {
+			$config.ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_UNKNOWN_SECRET", secret_environment());
+		}, /GAUZE_UNKNOWN_SECRET.*configured validator/);
+	});
+
 	await test.it("rejects missing signing secrets", function () {
 		const environment = secret_environment();
 		delete environment.GAUZE_SYSTEM_JWT_SECRET;
