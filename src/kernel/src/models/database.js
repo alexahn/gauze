@@ -70,7 +70,7 @@ class DatabaseModel extends Model {
 		}
 		self.name = self.__name();
 		self.loader = new DataLoader(self._batch, {
-			cacheMap: new TTLLRUCache(parseInt(process.env.GAUZE_CACHE_DATABASE_SIZE, 10) || 1024, parseInt(process.env.GAUZE_CACHE_DATABASE_TTL, 10) || 8192)
+			cacheMap: new TTLLRUCache(parseInt(process.env.GAUZE_CACHE_DATABASE_SIZE, 10) || 1024, parseInt(process.env.GAUZE_CACHE_DATABASE_TTL, 10) || 8192),
 		});
 		self.loader.model = self;
 		LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `${this.name}.constructor:exit`);
