@@ -85,6 +85,9 @@ class GauzeService {
 							replace: true,
 							state: state,
 						});
+						const error = new Error("Unauthorized");
+						error.status = 401;
+						throw error;
 					}
 					if (payload.aud === "environment") {
 						if (self.environmentJWT === jwt) {
@@ -145,7 +148,9 @@ class GauzeService {
 							state: state,
 						});
 					}
-					return res.json();
+					const error = new Error("Unauthorized");
+					error.status = 401;
+					throw error;
 				} else {
 					return res.json();
 				}
