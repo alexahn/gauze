@@ -3,7 +3,7 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
-import { exec, spawn } from "node:child_process";
+import { spawn } from "node:child_process";
 
 import { config } from "dotenv";
 import findConfig from "find-config";
@@ -13,6 +13,23 @@ config({
 });
 
 import * as $gauze from "./../../index.js";
+
+function run_node_script(script_path) {
+	return new Promise(function (resolve, reject) {
+		const spawned = spawn(process.execPath, [script_path], {
+			stdio: "inherit",
+			shell: false,
+		});
+		spawned.on("error", reject);
+		spawned.on("close", function (code) {
+			if (code === 0) {
+				return resolve(code);
+			} else {
+				return reject(new Error(`Command failed with exit code ${code}: ${script_path}`));
+			}
+		});
+	});
+}
 
 export const command = "build";
 
@@ -33,37 +50,15 @@ export const handler = function (argv) {
 		return resolve(collection);
 	})
 		.then(function (collection) {
-			return new Promise(function (resolve, reject) {
-				exec(`node ${gauze_v1_build_path}`, function (err, stdout, stderr) {
-					if (err) {
-						return reject(err);
-					}
-					if (stdout) {
-						console.log(stdout);
-					}
-					if (stderr) {
-						console.error(stderr);
-					}
-					console.log("Gauze build finished");
-					return resolve(collection);
-				});
+			return run_node_script(gauze_v1_build_path).then(function () {
+				console.log("Gauze build finished");
+				return collection;
 			});
 		})
 		.then(function (collection) {
-			return new Promise(function (resolve, reject) {
-				exec(`node ${project_build_path}`, function (err, stdout, stderr) {
-					if (err) {
-						return reject(err);
-					}
-					if (stdout) {
-						console.log(stdout);
-					}
-					if (stderr) {
-						console.error(stderr);
-					}
-					console.log("Project build finished");
-					return resolve(collection);
-				});
+			return run_node_script(project_build_path).then(function () {
+				console.log("Project build finished");
+				return collection;
 			});
 		})
 		.catch(function (err) {

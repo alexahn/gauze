@@ -1,7 +1,7 @@
 import path from "path";
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
-import child_process from "child_process";
+import child_process from "node:child_process";
 
 const __FILEDIR = import.meta.dirname;
 const GAUZE_BASE_DIR = path.resolve(__FILEDIR, "../../../../");
@@ -17,7 +17,7 @@ class GauzeProjectManager {
 		});
 
 		process.on("SIGTERM", function (val) {
-			$gauzekernel.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGTEM: ${val}`);
+			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `process.SIGTERM: ${val}`);
 			// https://tldp.org/LDP/abs/html/exitcodes.html
 			// 128 + signal_constants from https://nodejs.org/dist/latest-v18.x/docs/api/os.html#signal-constants
 			// in this case SIGTERM is 15 so we have 128 + 15
@@ -29,36 +29,28 @@ class GauzeProjectManager {
 			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `process.exit: ${val}`);
 		});
 	}
-	execute(command) {
+	execute(file, args = []) {
 		var self = this;
 		return new Promise(function (resolve, reject) {
-			const child = child_process.exec(command);
-			child.stdout.on("data", function (data) {
-				process.stdout.write(data);
+			const child = child_process.spawn(file, args, {
+				stdio: "inherit",
+				shell: false,
 			});
-			child.stderr.on("data", function (data) {
-				process.stderr.write(data);
-			});
+			child.on("error", reject);
 			child.on("close", function (code) {
-				self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `child.exit: ${command}`);
+				self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "child.exit", file, args, code);
 				if (code === 0) {
 					return resolve(code);
 				} else {
-					return reject(code);
+					return reject(new Error(`Command failed with exit code ${code}: ${file}`));
 				}
 			});
 		});
 	}
 	proxy(dir) {
 		const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), dir);
-		// slice argv here
-		var sub_command_argv = [];
-		process.argv.forEach((val, index) => {
-			if (3 < index) {
-				sub_command_argv.push(val);
-			}
-		});
-		const GAUZE_SUB_COMMAND = sub_command_argv.join(" ");
+		const GAUZE_PROJECT_CLI = path.resolve(GAUZE_PROJECT_DIR, "./command/gauze.js");
+		const sub_command_argv = process.argv.slice(4);
 		/*
 			// todo: runtime check
 			let runtime = "unknown";
@@ -73,9 +65,7 @@ class GauzeProjectManager {
 
 			console.log(`Current runtime: ${runtime}`);
 		*/
-		// e.g. `deno run ${GAUZE_PROJECT_DIR}/command/gauze.ts ${GAUZE_SUB_COMMAND}`
-		const COMMAND = `node ${GAUZE_PROJECT_DIR}/command/gauze.js ${GAUZE_SUB_COMMAND}`;
-		return this.execute(COMMAND).catch(function (err) {
+		return this.execute(process.execPath, [GAUZE_PROJECT_CLI, ...sub_command_argv]).catch(function (err) {
 			console.error(err);
 			process.exit(1);
 		});

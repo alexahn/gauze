@@ -24,79 +24,79 @@ if [ -z "$3" ]
     exit 1
 fi
 
-gauze_root=$1
-project_root=$2
-base=$gauze_root/kernel/src/base
-staging=$gauze_root/kernel/src/staging
+gauze_root="$1"
+project_root="$2"
+base="$gauze_root/kernel/src/base"
+staging="$gauze_root/kernel/src/staging"
 
-arg1=$(echo "$3" | node $gauze_root/kernel/bin/format_string.js lower_snake_case)
+arg1=$(echo "$3" | node "$gauze_root/kernel/bin/format_string.js" lower_snake_case)
 #echo "arg1: $arg1"
-arg2=$(echo "$arg1" | node $gauze_root/kernel/bin/format_string.js pascal_snake_case)
+arg2=$(echo "$arg1" | node "$gauze_root/kernel/bin/format_string.js" pascal_snake_case)
 #echo "arg2: $arg2"
-arg3=$(echo "$arg1" | node $gauze_root/kernel/bin/format_string.js upper_snake_case)
+arg3=$(echo "$arg1" | node "$gauze_root/kernel/bin/format_string.js" upper_snake_case)
 #echo "arg3: $arg3"
-arg4=$(echo "$arg1" | node $gauze_root/kernel/bin/format_string.js pascal_case)
+arg4=$(echo "$arg1" | node "$gauze_root/kernel/bin/format_string.js" pascal_case)
 #echo "arg4: $arg4"
 
 # create staging directory
-cp -r $base $staging
+cp -R "$base" "$staging"
 
 if [[ "$OSTYPE" =~ ^darwin ]]; then
-	find $staging -type f -name '*.js' -exec sed -i '' "s/a543731262804f64adcc0eae1a225acc/$arg1/g" {} +
-	find $staging -type f -name '*.js' -exec sed -i '' "s/bb95d174a16f4ddd935ff3a802f7c7bc/$arg2/g" {} +
-	find $staging -type f -name '*.js' -exec sed -i '' "s/caf5342ac38d41a6a02bb81d2d2b21a4/$arg3/g" {} +
-	find $staging -type f -name '*.js' -exec sed -i '' "s/dd6fb00f485c4397add38780939d6923/$arg4/g" {} +
+	find "$staging" -type f -name '*.js' -exec sed -i '' "s/a543731262804f64adcc0eae1a225acc/$arg1/g" {} +
+	find "$staging" -type f -name '*.js' -exec sed -i '' "s/bb95d174a16f4ddd935ff3a802f7c7bc/$arg2/g" {} +
+	find "$staging" -type f -name '*.js' -exec sed -i '' "s/caf5342ac38d41a6a02bb81d2d2b21a4/$arg3/g" {} +
+	find "$staging" -type f -name '*.js' -exec sed -i '' "s/dd6fb00f485c4397add38780939d6923/$arg4/g" {} +
 
-	find $staging -type f -name '*.graphql' -exec sed -i '' "s/a543731262804f64adcc0eae1a225acc/$arg1/g" {} +
-	find $staging -type f -name '*.graphql' -exec sed -i '' "s/bb95d174a16f4ddd935ff3a802f7c7bc/$arg2/g" {} +
-	find $staging -type f -name '*.graphql' -exec sed -i '' "s/caf5342ac38d41a6a02bb81d2d2b21a4/$arg3/g" {} +
-	find $staging -type f -name '*.graphql' -exec sed -i '' "s/dd6fb00f485c4397add38780939d6923/$arg4/g" {} +
+	find "$staging" -type f -name '*.graphql' -exec sed -i '' "s/a543731262804f64adcc0eae1a225acc/$arg1/g" {} +
+	find "$staging" -type f -name '*.graphql' -exec sed -i '' "s/bb95d174a16f4ddd935ff3a802f7c7bc/$arg2/g" {} +
+	find "$staging" -type f -name '*.graphql' -exec sed -i '' "s/caf5342ac38d41a6a02bb81d2d2b21a4/$arg3/g" {} +
+	find "$staging" -type f -name '*.graphql' -exec sed -i '' "s/dd6fb00f485c4397add38780939d6923/$arg4/g" {} +
 else
-	find $staging -type f -name '*.js' -exec sed -i "s/a543731262804f64adcc0eae1a225acc/$arg1/g" {} +
-	find $staging -type f -name '*.js' -exec sed -i "s/bb95d174a16f4ddd935ff3a802f7c7bc/$arg2/g" {} +
-	find $staging -type f -name '*.js' -exec sed -i "s/caf5342ac38d41a6a02bb81d2d2b21a4/$arg3/g" {} +
-	find $staging -type f -name '*.js' -exec sed -i "s/dd6fb00f485c4397add38780939d6923/$arg4/g" {} +
+	find "$staging" -type f -name '*.js' -exec sed -i "s/a543731262804f64adcc0eae1a225acc/$arg1/g" {} +
+	find "$staging" -type f -name '*.js' -exec sed -i "s/bb95d174a16f4ddd935ff3a802f7c7bc/$arg2/g" {} +
+	find "$staging" -type f -name '*.js' -exec sed -i "s/caf5342ac38d41a6a02bb81d2d2b21a4/$arg3/g" {} +
+	find "$staging" -type f -name '*.js' -exec sed -i "s/dd6fb00f485c4397add38780939d6923/$arg4/g" {} +
 
-	find $staging -type f -name '*.graphql' -exec sed -i "s/a543731262804f64adcc0eae1a225acc/$arg1/g" {} +
-	find $staging -type f -name '*.graphql' -exec sed -i "s/bb95d174a16f4ddd935ff3a802f7c7bc/$arg2/g" {} +
-	find $staging -type f -name '*.graphql' -exec sed -i "s/caf5342ac38d41a6a02bb81d2d2b21a4/$arg3/g" {} +
-	find $staging -type f -name '*.graphql' -exec sed -i "s/dd6fb00f485c4397add38780939d6923/$arg4/g" {} +
+	find "$staging" -type f -name '*.graphql' -exec sed -i "s/a543731262804f64adcc0eae1a225acc/$arg1/g" {} +
+	find "$staging" -type f -name '*.graphql' -exec sed -i "s/bb95d174a16f4ddd935ff3a802f7c7bc/$arg2/g" {} +
+	find "$staging" -type f -name '*.graphql' -exec sed -i "s/caf5342ac38d41a6a02bb81d2d2b21a4/$arg3/g" {} +
+	find "$staging" -type f -name '*.graphql' -exec sed -i "s/dd6fb00f485c4397add38780939d6923/$arg4/g" {} +
 fi
 
 # database
 #cp $staging/database/models/gauze.js $project_root/database/models/$arg1.js
 #cp $staging/database/controllers/gauze.js $project_root/database/controllers/$arg1.js
-cp $staging/database/interfaces/graphql/entities/gauze.js $project_root/database/interfaces/graphql/entities/$arg1.js
-cp $staging/database/interfaces/graphql/mutations/gauze.js $project_root/database/interfaces/graphql/mutations/$arg1.js
-cp $staging/database/interfaces/graphql/queries/gauze.js $project_root/database/interfaces/graphql/queries/$arg1.js
+cp "$staging/database/interfaces/graphql/entities/gauze.js" "$project_root/database/interfaces/graphql/entities/$arg1.js"
+cp "$staging/database/interfaces/graphql/mutations/gauze.js" "$project_root/database/interfaces/graphql/mutations/$arg1.js"
+cp "$staging/database/interfaces/graphql/queries/gauze.js" "$project_root/database/interfaces/graphql/queries/$arg1.js"
 
-mkdir -p $project_root/database/interfaces/graphql/operations/$arg1
-cp $staging/database/interfaces/graphql/operations/gauze/index.js $project_root/database/interfaces/graphql/operations/$arg1/index.js
-cp $staging/database/interfaces/graphql/operations/gauze/read.graphql $project_root/database/interfaces/graphql/operations/$arg1/read.graphql
-[ -f $staging/database/interfaces/graphql/operations/gauze/cursor_read.graphql ] && cp $staging/database/interfaces/graphql/operations/gauze/cursor_read.graphql $project_root/database/interfaces/graphql/operations/$arg1/cursor_read.graphql
-cp $staging/database/interfaces/graphql/operations/gauze/create.graphql $project_root/database/interfaces/graphql/operations/$arg1/create.graphql
-cp $staging/database/interfaces/graphql/operations/gauze/update.graphql $project_root/database/interfaces/graphql/operations/$arg1/update.graphql
-[ -f $staging/database/interfaces/graphql/operations/gauze/cursor_update.graphql ] && cp $staging/database/interfaces/graphql/operations/gauze/cursor_update.graphql $project_root/database/interfaces/graphql/operations/$arg1/cursor_update.graphql
-cp $staging/database/interfaces/graphql/operations/gauze/delete.graphql $project_root/database/interfaces/graphql/operations/$arg1/delete.graphql
-[ -f $staging/database/interfaces/graphql/operations/gauze/cursor_delete.graphql ] && cp $staging/database/interfaces/graphql/operations/gauze/cursor_delete.graphql $project_root/database/interfaces/graphql/operations/$arg1/cursor_delete.graphql
-cp $staging/database/interfaces/graphql/operations/gauze/count.graphql $project_root/database/interfaces/graphql/operations/$arg1/count.graphql
+mkdir -p "$project_root/database/interfaces/graphql/operations/$arg1"
+cp "$staging/database/interfaces/graphql/operations/gauze/index.js" "$project_root/database/interfaces/graphql/operations/$arg1/index.js"
+cp "$staging/database/interfaces/graphql/operations/gauze/read.graphql" "$project_root/database/interfaces/graphql/operations/$arg1/read.graphql"
+[ -f "$staging/database/interfaces/graphql/operations/gauze/cursor_read.graphql" ] && cp "$staging/database/interfaces/graphql/operations/gauze/cursor_read.graphql" "$project_root/database/interfaces/graphql/operations/$arg1/cursor_read.graphql"
+cp "$staging/database/interfaces/graphql/operations/gauze/create.graphql" "$project_root/database/interfaces/graphql/operations/$arg1/create.graphql"
+cp "$staging/database/interfaces/graphql/operations/gauze/update.graphql" "$project_root/database/interfaces/graphql/operations/$arg1/update.graphql"
+[ -f "$staging/database/interfaces/graphql/operations/gauze/cursor_update.graphql" ] && cp "$staging/database/interfaces/graphql/operations/gauze/cursor_update.graphql" "$project_root/database/interfaces/graphql/operations/$arg1/cursor_update.graphql"
+cp "$staging/database/interfaces/graphql/operations/gauze/delete.graphql" "$project_root/database/interfaces/graphql/operations/$arg1/delete.graphql"
+[ -f "$staging/database/interfaces/graphql/operations/gauze/cursor_delete.graphql" ] && cp "$staging/database/interfaces/graphql/operations/gauze/cursor_delete.graphql" "$project_root/database/interfaces/graphql/operations/$arg1/cursor_delete.graphql"
+cp "$staging/database/interfaces/graphql/operations/gauze/count.graphql" "$project_root/database/interfaces/graphql/operations/$arg1/count.graphql"
 
 # system
 #cp $staging/system/models/gauze.js $project_root/system/models/$arg1.js
 #cp $staging/system/controllers/gauze.js $project_root/system/controllers/$arg1.js
-cp $staging/system/interfaces/graphql/entities/gauze.js $project_root/system/interfaces/graphql/entities/$arg1.js
-cp $staging/system/interfaces/graphql/mutations/gauze.js $project_root/system/interfaces/graphql/mutations/$arg1.js
-cp $staging/system/interfaces/graphql/queries/gauze.js $project_root/system/interfaces/graphql/queries/$arg1.js
+cp "$staging/system/interfaces/graphql/entities/gauze.js" "$project_root/system/interfaces/graphql/entities/$arg1.js"
+cp "$staging/system/interfaces/graphql/mutations/gauze.js" "$project_root/system/interfaces/graphql/mutations/$arg1.js"
+cp "$staging/system/interfaces/graphql/queries/gauze.js" "$project_root/system/interfaces/graphql/queries/$arg1.js"
 
 # structure
-mkdir -p $project_root/structure/entities/$arg1
-mkdir -p $project_root/structure/entities/$arg1/database
-mkdir -p $project_root/structure/entities/$arg1/system
-cp $staging/structure/entities/gauze/database/graphql.js $project_root/structure/entities/$arg1/database/graphql.js
-cp $staging/structure/entities/gauze/database/index.js $project_root/structure/entities/$arg1/database/index.js
-cp $staging/structure/entities/gauze/database/sql.js $project_root/structure/entities/$arg1/database/sql.js
-cp $staging/structure/entities/gauze/index.js $project_root/structure/entities/$arg1/index.js
-cp $staging/structure/entities/gauze/system/graphql.js $project_root/structure/entities/$arg1/system/graphql.js
-cp $staging/structure/entities/gauze/system/index.js $project_root/structure/entities/$arg1/system/index.js
+mkdir -p "$project_root/structure/entities/$arg1"
+mkdir -p "$project_root/structure/entities/$arg1/database"
+mkdir -p "$project_root/structure/entities/$arg1/system"
+cp "$staging/structure/entities/gauze/database/graphql.js" "$project_root/structure/entities/$arg1/database/graphql.js"
+cp "$staging/structure/entities/gauze/database/index.js" "$project_root/structure/entities/$arg1/database/index.js"
+cp "$staging/structure/entities/gauze/database/sql.js" "$project_root/structure/entities/$arg1/database/sql.js"
+cp "$staging/structure/entities/gauze/index.js" "$project_root/structure/entities/$arg1/index.js"
+cp "$staging/structure/entities/gauze/system/graphql.js" "$project_root/structure/entities/$arg1/system/graphql.js"
+cp "$staging/structure/entities/gauze/system/index.js" "$project_root/structure/entities/$arg1/system/index.js"
 
-rm -rf $staging
+rm -rf "$staging"

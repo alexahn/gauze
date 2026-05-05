@@ -3,7 +3,7 @@ import path from "path";
 const __FILEPATH = url.fileURLToPath(import.meta.url);
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), __FILEPATH);
 
-import { exec, spawn } from "node:child_process";
+import { spawn } from "node:child_process";
 
 import { config } from "dotenv";
 import findConfig from "find-config";
@@ -34,7 +34,8 @@ export const handler = function (argv) {
 	})
 		.then(function (collection) {
 			return new Promise(function (resolve, reject) {
-				const spawned = spawn(`node ${gauze_v1_watch_path}`, { shell: true });
+				const spawned = spawn(process.execPath, [gauze_v1_watch_path], { shell: false });
+				spawned.on("error", reject);
 				spawned.stdout.on("data", function (data) {
 					console.log(data.toString("utf8"));
 				});
@@ -49,7 +50,8 @@ export const handler = function (argv) {
 		})
 		.then(function (collection) {
 			return new Promise(function (resolve, reject) {
-				const spawned = spawn(`node ${project_watch_path}`, { shell: true });
+				const spawned = spawn(process.execPath, [project_watch_path], { shell: false });
+				spawned.on("error", reject);
 				spawned.stdout.on("data", function (data) {
 					console.log(data.toString("utf8"));
 				});

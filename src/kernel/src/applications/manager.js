@@ -3,7 +3,7 @@ import path from "path";
 const __RELATIVE_FILEPATH = path.relative(process.cwd(), import.meta.filename);
 
 import assert from "node:assert/strict";
-import child_process from "child_process";
+import child_process from "node:child_process";
 
 import * as $config from "./../config.js";
 
@@ -96,22 +96,20 @@ class GauzeManager {
 			$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `process.exit: ${val}`);
 		});
 	}
-	execute(command) {
+	execute(file, args = []) {
 		var self = this;
 		return new Promise(function (resolve, reject) {
-			const child = child_process.exec(command);
-			child.stdout.on("data", function (data) {
-				process.stdout.write(data);
+			const child = child_process.spawn(file, args, {
+				stdio: "inherit",
+				shell: false,
 			});
-			child.stderr.on("data", function (data) {
-				process.stderr.write(data);
-			});
+			child.on("error", reject);
 			child.on("close", function (code) {
-				self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, `child.close: ${command}`);
+				self.$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "child.close", file, args, code);
 				if (code === 0) {
 					return resolve(code);
 				} else {
-					return reject(code);
+					return reject(new Error(`Command failed with exit code ${code}: ${file}`));
 				}
 			});
 		});
@@ -490,8 +488,7 @@ class GauzeManager {
 	create_project(project_dir) {
 		const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), project_dir);
 		const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/manager_create_project");
-		const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_ROOT_DIR} ${GAUZE_PROJECT_DIR}`;
-		return this.execute(COMMAND).catch(function (err) {
+		return this.execute(GAUZE_SHELL_COMMAND, [GAUZE_ROOT_DIR, GAUZE_PROJECT_DIR]).catch(function (err) {
 			console.error(err);
 			process.exit(1);
 		});
@@ -503,12 +500,10 @@ class GauzeManager {
 			.then(function (entity) {
 				const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), project_dir);
 				const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/manager_create_gauze");
-				const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${entity.name}`;
-				return self.execute(COMMAND).then(function () {
+				return self.execute(GAUZE_SHELL_COMMAND, [GAUZE_BASE_DIR, GAUZE_PROJECT_DIR, entity.name]).then(function () {
 					const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), project_dir);
 					const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/module_link");
-					const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${ENTITY_CONFIG_FILE} ${entity.name}`;
-					return self.execute(COMMAND).then(function () {
+					return self.execute(GAUZE_SHELL_COMMAND, [GAUZE_BASE_DIR, GAUZE_PROJECT_DIR, ENTITY_CONFIG_FILE, entity.name]).then(function () {
 						return self.interpolate_operations(GAUZE_PROJECT_DIR, entity);
 					});
 				});
@@ -525,8 +520,7 @@ class GauzeManager {
 			.then(function (entity) {
 				const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), project_dir);
 				const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/manager_read_gauze");
-				const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${entity.name}`;
-				return self.execute(COMMAND);
+				return self.execute(GAUZE_SHELL_COMMAND, [GAUZE_BASE_DIR, GAUZE_PROJECT_DIR, entity.name]);
 			})
 			.catch(function (err) {
 				console.error(err);
@@ -540,8 +534,7 @@ class GauzeManager {
 			.then(function (entity) {
 				const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), project_dir);
 				const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/manager_update_gauze");
-				const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${entity.name}`;
-				return self.execute(COMMAND).then(function () {
+				return self.execute(GAUZE_SHELL_COMMAND, [GAUZE_BASE_DIR, GAUZE_PROJECT_DIR, entity.name]).then(function () {
 					return self.interpolate_operations(GAUZE_PROJECT_DIR, entity);
 				});
 			})
@@ -558,12 +551,10 @@ class GauzeManager {
 			.then(function (entity) {
 				const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), project_dir);
 				const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/manager_delete_gauze");
-				const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${entity.name}`;
-				return self.execute(COMMAND).then(function () {
+				return self.execute(GAUZE_SHELL_COMMAND, [GAUZE_BASE_DIR, GAUZE_PROJECT_DIR, entity.name]).then(function () {
 					const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), project_dir);
 					const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/module_unlink");
-					const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${ENTITY_CONFIG_FILE} ${entity.name}`;
-					return self.execute(COMMAND);
+					return self.execute(GAUZE_SHELL_COMMAND, [GAUZE_BASE_DIR, GAUZE_PROJECT_DIR, ENTITY_CONFIG_FILE, entity.name]);
 				});
 			})
 			.catch(function (err) {
@@ -579,12 +570,10 @@ class GauzeManager {
 			.then(function (entity) {
 				const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), project_dir);
 				const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/manager_create_entity");
-				const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${entity.name}`;
-				return self.execute(COMMAND).then(function () {
+				return self.execute(GAUZE_SHELL_COMMAND, [GAUZE_BASE_DIR, GAUZE_PROJECT_DIR, entity.name]).then(function () {
 					const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), project_dir);
 					const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/module_link");
-					const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${ENTITY_CONFIG_FILE} ${entity.name}`;
-					return self.execute(COMMAND).then(function () {
+					return self.execute(GAUZE_SHELL_COMMAND, [GAUZE_BASE_DIR, GAUZE_PROJECT_DIR, ENTITY_CONFIG_FILE, entity.name]).then(function () {
 						return self.interpolate_operations(GAUZE_PROJECT_DIR, entity);
 					});
 				});
@@ -602,8 +591,7 @@ class GauzeManager {
 			.then(function (entity) {
 				const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), project_dir);
 				const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/manager_read_entity");
-				const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${entity.name}`;
-				return self.execute(COMMAND);
+				return self.execute(GAUZE_SHELL_COMMAND, [GAUZE_BASE_DIR, GAUZE_PROJECT_DIR, entity.name]);
 			})
 			.catch(function (err) {
 				console.error(err);
@@ -618,8 +606,7 @@ class GauzeManager {
 			.then(function (entity) {
 				const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), project_dir);
 				const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/manager_update_entity");
-				const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${entity.name}`;
-				return self.execute(COMMAND).then(function () {
+				return self.execute(GAUZE_SHELL_COMMAND, [GAUZE_BASE_DIR, GAUZE_PROJECT_DIR, entity.name]).then(function () {
 					return self.interpolate_operations(GAUZE_PROJECT_DIR, entity);
 				});
 			})
@@ -636,12 +623,10 @@ class GauzeManager {
 			.then(function (entity) {
 				const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), project_dir);
 				const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/manager_delete_entity");
-				const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${entity.name}`;
-				return self.execute(COMMAND).then(function () {
+				return self.execute(GAUZE_SHELL_COMMAND, [GAUZE_BASE_DIR, GAUZE_PROJECT_DIR, entity.name]).then(function () {
 					const GAUZE_PROJECT_DIR = path.resolve(process.cwd(), project_dir);
 					const GAUZE_SHELL_COMMAND = path.resolve(GAUZE_BASE_DIR, "./kernel/bin/module_unlink");
-					const COMMAND = `${GAUZE_SHELL_COMMAND} ${GAUZE_BASE_DIR} ${GAUZE_PROJECT_DIR} ${ENTITY_CONFIG_FILE} ${entity.name}`;
-					return self.execute(COMMAND);
+					return self.execute(GAUZE_SHELL_COMMAND, [GAUZE_BASE_DIR, GAUZE_PROJECT_DIR, ENTITY_CONFIG_FILE, entity.name]);
 				});
 			})
 			.catch(function (err) {
