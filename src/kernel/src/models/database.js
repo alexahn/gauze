@@ -328,6 +328,8 @@ class DatabaseModel extends Model {
 	// todo: see if we can remove the conditional checks before we unwrap the keys (the default value might always be an empty object)
 	_validate_parameters(parameters) {
 		const self = this;
+		self._validate_pagination_parameter("limit", parameters.limit);
+		self._validate_pagination_parameter("offset", parameters.offset);
 		if (parameters.where) {
 			Object.keys(parameters.where).forEach(function (key) {
 				if (!self.entity.fields[key].indexed) {
@@ -379,6 +381,17 @@ class DatabaseModel extends Model {
 		}
 		if (parameters.order) {
 			self._validate_order(parameters.order);
+		}
+	}
+	_validate_pagination_parameter(key, value) {
+		if (typeof value === "undefined" || value === null) {
+			return;
+		} else if (typeof value !== "number" || !Number.isInteger(value)) {
+			throw new Error(`Input argument '${key}' is invalid: ${key} must be a non-negative integer`);
+		} else if (value < 0) {
+			throw new Error(`Input argument '${key}' is invalid: ${key} must be a non-negative integer`);
+		} else {
+			return;
 		}
 	}
 	_validate_order(order) {
