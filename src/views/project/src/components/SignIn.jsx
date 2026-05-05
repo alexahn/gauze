@@ -23,9 +23,13 @@ function SignIn({ pathfinder, services, next }) {
 			.assertPerson({
 				email: email,
 			})
-			.then(function () {
+			.then(function (assertStep) {
 				setSubmitPerson(false);
-				setStep((step + 1) % 3);
+				if (assertStep.success) {
+					setStep((step + 1) % 3);
+				} else {
+					setError("Email could not be found!");
+				}
 			})
 			.catch(function (err) {
 				setSubmitPerson(false);
@@ -47,9 +51,13 @@ function SignIn({ pathfinder, services, next }) {
 			.verifyAccount({
 				password: password,
 			})
-			.then(function () {
+			.then(function (verifyStep) {
 				setSubmitAccount(false);
-				setStep((step + 1) % 3);
+				if (verifyStep.success) {
+					setStep((step + 1) % 3);
+				} else {
+					setError("Password does not match!");
+				}
 			})
 			.catch(function (err) {
 				setSubmitAccount(false);

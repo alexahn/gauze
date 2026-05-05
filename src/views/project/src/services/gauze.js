@@ -323,7 +323,7 @@ mutation assert_person($agent_person: Environment_Mutation__Agent_Person) {
 				operationName: "assert_person",
 			})
 			.then(function (data) {
-				return data.data.agent;
+				return data.data.agent.person.assert.email;
 			});
 	}
 	verifyAccount(account) {
@@ -353,7 +353,7 @@ mutation verify_account($agent_account: Environment_Mutation__Agent_Account) {
 				operationName: "verify_account",
 			})
 			.then(function (data) {
-				return data.data.agent;
+				return data.data.agent.account.verify.password;
 			});
 	}
 	signIn() {

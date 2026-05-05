@@ -23,10 +23,13 @@ function SignUp({ pathfinder, services, next }) {
 			.assertPerson({
 				email: email,
 			})
-			.then(function () {
-				setError("Email is already taken!");
+			.then(function (assertStep) {
 				setSubmitPerson(false);
-				//setStep((step + 1) % 3);
+				if (assertStep.success) {
+					setError("Email is already taken!");
+				} else {
+					setStep((step + 1) % 3);
+				}
 			})
 			.catch(function (err) {
 				setSubmitPerson(false);
