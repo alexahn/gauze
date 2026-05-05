@@ -76,7 +76,7 @@ function GRAPHQL_VALIDATION_RULES__GRAPHQL__SHELL__SRC__KERNEL(max_depth) {
 	return [...specifiedRules, MAX_DEPTH_RULE__GRAPHQL__SHELL__SRC__KERNEL(max_depth)];
 }
 
-function GRAPHQL_IMPL__GRAPHQL__SHELL__SRC__KERNEL({ schema, context, operation, operation_name, operation_variables }) {
+function GRAPHQL_EXEC__GRAPHQL__SHELL__SRC__KERNEL({ schema, context, operation, operation_name, operation_variables }) {
 	const schema_validation_errors = validateSchema(schema);
 	if (schema_validation_errors.length > 0) {
 		return {
@@ -118,7 +118,7 @@ const EXECUTE__GRAPHQL__SHELL__SRC__KERNEL = function ({ schema, context, operat
 		operation_variables,
 	});
 	return Promise.resolve().then(function () {
-		return GRAPHQL_IMPL__GRAPHQL__SHELL__SRC__KERNEL({
+		return GRAPHQL_EXEC__GRAPHQL__SHELL__SRC__KERNEL({
 			schema,
 			context,
 			operation,
