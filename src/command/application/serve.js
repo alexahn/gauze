@@ -62,6 +62,19 @@ function validate_config_tree($gauze) {
 	});
 }
 
+function BODY_OPTIONS__SERVE__APPLICATION__COMMAND() {
+	const http_max_size = parseInt(process.env.GAUZE_HTTP_MAX_SIZE, 10) || 1048576;
+	return {
+		jsonLimit: http_max_size,
+		formLimit: http_max_size,
+		textLimit: http_max_size,
+		formidable: {
+			maxFieldsSize: http_max_size,
+			maxFileSize: http_max_size,
+		},
+	};
+}
+
 export const handler = function (argv) {
 	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "server argv", argv);
 
@@ -96,7 +109,7 @@ export const handler = function (argv) {
 		const app = new Koa();
 		const router = Router($gauze);
 
-		app.use(koaBody());
+		app.use(koaBody(BODY_OPTIONS__SERVE__APPLICATION__COMMAND()));
 		app.use(cors());
 
 		app.use(router.routes());
@@ -104,3 +117,5 @@ export const handler = function (argv) {
 		app.listen(argv.port);
 	});
 };
+
+export { BODY_OPTIONS__SERVE__APPLICATION__COMMAND };
