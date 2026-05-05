@@ -152,7 +152,17 @@ class GauzeService {
 					error.status = 401;
 					throw error;
 				} else {
-					return res.json();
+					return res
+						.json()
+						.catch(function () {
+							return {};
+						})
+						.then(function (body) {
+							const error = new Error(body.message || `HTTP ${res.status}`);
+							error.status = res.status;
+							error.body = body;
+							throw error;
+						});
 				}
 			})
 			.then(function (data) {
