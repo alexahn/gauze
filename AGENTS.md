@@ -17,7 +17,7 @@ Use Node `22.18.0` as declared in `package.json`.
 This repo uses ESM (`"type": "module"`). Prettier is configured for tabs, width `4`, no semicolon elision, double quotes, and trailing commas; follow `.prettierrc.js`. Keep filenames lowercase with underscores where already established (`agent_account.js`, `environment_development_monolithic_config.js`). Export entry modules through local `index.js` files when extending a package subtree. Run `make format` before submitting changes.
 
 ## Testing Guidelines
-Add or update tests in the nearest existing `test/` subtree for the affected realm. Follow the existing numbered-step pattern when a scenario spans setup, mutation, and readback. Run `npm test` locally before opening a PR; this is the same check executed in GitHub Actions after copying `env/development.env` to `.env`.
+Add or update tests in the nearest existing `test/` subtree for the affected realm. Follow the existing numbered-step pattern when a scenario spans setup, mutation, and readback. Run `npm test` locally before opening a PR; this is the same check executed in GitHub Actions after copying `env/example.env` to `.env`.
 
 ## Commit & Pull Request Guidelines
 Recent history favors short, imperative commit messages such as `update README.md` or `allow arbitrary fields on shard node definition`. Keep commits focused and descriptive. PRs should include a concise summary, the affected subsystem or CLI surface, linked issues when applicable, and screenshots only for UI changes. Note any required `.env` or migration steps explicitly.

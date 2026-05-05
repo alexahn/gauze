@@ -20,7 +20,7 @@ cp -R "$gauze_root/src/." "$project_root/"
 
 echo "Project created at $project_root"
 
-cp "$gauze_root/env/development.env" example.env
+cp "$gauze_root/env/example.env" example.env
 
 echo "Example environment variable file created at $PWD/example.env"
 
