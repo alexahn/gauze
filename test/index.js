@@ -1,5 +1,6 @@
 // internal
 export * as command from "./command/index.js";
+export * as environment from "./environment/index.js";
 export * as relationship from "./relationship/index.js";
 export * as whitelist from "./whitelist/index.js";
 export * as blacklist from "./blacklist/index.js";

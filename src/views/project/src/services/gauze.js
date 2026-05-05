@@ -441,11 +441,11 @@ mutation sign_out {
 		};
 		const query = `
 mutation sign_up(
-	$agent_root: Environment_Mutation__Agent_Root
-	$agent_account: Environment_Mutation__Agent_Account
-	$agent_user: Environment_Mutation__Agent_User
-	$agent_person: Environment_Mutation__Agent_Person
-	$agent_character: Environment_Mutation__Agent_Character
+	$agent_root: Environment_Mutation__Agent_Root!
+	$agent_account: Environment_Mutation__Agent_Account!
+	$agent_user: Environment_Mutation__Agent_User!
+	$agent_person: Environment_Mutation__Agent_Person!
+	$agent_character: Environment_Mutation__Agent_Character!
 ) {
 	environment {
 		sign_up(

@@ -401,7 +401,21 @@ class EnvironmentController {
 	}
 	sign_up(context, scope, parameters) {
 		const self = this;
-		if (!parameters.agent_account || !parameters.agent_account.gauze__agent_account__password) throw new Error("Field 'agent_account.password' is required");
+		if (!parameters || !parameters.agent_root) {
+			throw new Error("Field 'agent_root' is required");
+		} else if (!parameters.agent_account) {
+			throw new Error("Field 'agent_account' is required");
+		} else if (!parameters.agent_account.gauze__agent_account__password) {
+			throw new Error("Field 'agent_account.password' is required");
+		} else if (!parameters.agent_user) {
+			throw new Error("Field 'agent_user' is required");
+		} else if (!parameters.agent_person) {
+			throw new Error("Field 'agent_person' is required");
+		} else if (!parameters.agent_character) {
+			throw new Error("Field 'agent_character' is required");
+		} else {
+			// ok
+		}
 
 		// todo: get the session by the session id in agent and check the data field
 		// todo: check that all data requirements have passed, e.g. verifying email since we have a unique constraint on email

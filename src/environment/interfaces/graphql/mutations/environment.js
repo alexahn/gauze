@@ -1,6 +1,6 @@
 import * as $structure from "./../../../../structure/index.js";
 
-import { GraphQLList, GraphQLObjectType, GraphQLInputObjectType } from "graphql";
+import { GraphQLList, GraphQLObjectType, GraphQLInputObjectType, GraphQLNonNull } from "graphql";
 
 import {
 	SESSION__TYPE__ENVIRONMENT,
@@ -47,23 +47,23 @@ const MUTATION__ENVIRONMENT__MUTATION__GRAPHQL__INTERFACE__ENVIRONMENT = new Gra
 			type: SESSION__TYPE__ENVIRONMENT,
 			args: {
 				agent_root: {
-					type: INPUT_AGENT_ROOT__TYPE__ENVIRONMENT,
+					type: new GraphQLNonNull(INPUT_AGENT_ROOT__TYPE__ENVIRONMENT),
 					description: "agent_root",
 				},
 				agent_account: {
-					type: INPUT_AGENT_ACCOUNT__TYPE__ENVIRONMENT,
+					type: new GraphQLNonNull(INPUT_AGENT_ACCOUNT__TYPE__ENVIRONMENT),
 					description: "agent_account",
 				},
 				agent_user: {
-					type: INPUT_AGENT_USER__TYPE__ENVIRONMENT,
+					type: new GraphQLNonNull(INPUT_AGENT_USER__TYPE__ENVIRONMENT),
 					description: "agent_user",
 				},
 				agent_person: {
-					type: INPUT_AGENT_PERSON__TYPE__ENVIRONMENT,
+					type: new GraphQLNonNull(INPUT_AGENT_PERSON__TYPE__ENVIRONMENT),
 					description: "agent_person",
 				},
 				agent_character: {
-					type: INPUT_AGENT_CHARACTER__TYPE__ENVIRONMENT,
+					type: new GraphQLNonNull(INPUT_AGENT_CHARACTER__TYPE__ENVIRONMENT),
 					description: "agent_character",
 				},
 			},
