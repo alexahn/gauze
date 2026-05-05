@@ -26,6 +26,18 @@ function config_tree(project = $project.default) {
 	};
 }
 
+function secret_environment(overrides = {}) {
+	return {
+		GAUZE_ENVIRONMENT_JWT_SECRET: "0123456789abcdef0123456789abcdef",
+		GAUZE_SYSTEM_JWT_SECRET: "0123456789abcdef0123456789abcdef",
+		GAUZE_DATABASE_JWT_SECRET: "0123456789abcdef0123456789abcdef",
+		GAUZE_KERNEL_JWT_SECRET: "0123456789abcdef0123456789abcdef",
+		GAUZE_PROXY_JWT_SECRET: "0123456789abcdef0123456789abcdef",
+		GAUZE_CURSOR_SECRET: "0123456789abcdef0123456789abcdef",
+		...overrides,
+	};
+}
+
 test.describe("kernel config validation", async function () {
 	await test.it("accepts the current project and realm config tree", function () {
 		const tree = config_tree();
@@ -93,5 +105,46 @@ test.describe("kernel config validation", async function () {
 			expected_name: "kernel",
 		});
 		assert.equal(validated, realm);
+	});
+
+	await test.it("accepts configured signing secrets", function () {
+		const environment = secret_environment();
+		const validated = $config.VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL(environment);
+		assert.equal(validated, environment);
+	});
+
+	await test.it("rejects missing signing secrets", function () {
+		const environment = secret_environment();
+		delete environment.GAUZE_SYSTEM_JWT_SECRET;
+		assert.throws(function () {
+			$config.VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL(environment);
+		}, /GAUZE_SYSTEM_JWT_SECRET.*must be defined/);
+	});
+
+	await test.it("rejects placeholder signing secrets", function () {
+		assert.throws(function () {
+			$config.VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL(
+				secret_environment({
+					GAUZE_ENVIRONMENT_JWT_SECRET: "REPLACE_ME_ENVIRONMENT",
+				}),
+			);
+		}, /GAUZE_ENVIRONMENT_JWT_SECRET.*placeholder/);
+		assert.throws(function () {
+			$config.VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL(
+				secret_environment({
+					GAUZE_CURSOR_SECRET: "GAUZE_CURSOR_SECRET",
+				}),
+			);
+		}, /GAUZE_CURSOR_SECRET.*placeholder/);
+	});
+
+	await test.it("rejects too-short signing secrets", function () {
+		assert.throws(function () {
+			$config.VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL(
+				secret_environment({
+					GAUZE_DATABASE_JWT_SECRET: "short-secret",
+				}),
+			);
+		}, /GAUZE_DATABASE_JWT_SECRET.*at least 32 bytes/);
 	});
 });

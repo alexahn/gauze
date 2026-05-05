@@ -62,6 +62,10 @@ function validate_config_tree($gauze) {
 	});
 }
 
+function validate_environment_variables($gauze) {
+	return $gauze.kernel.src.config.VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL(process.env);
+}
+
 function BODY_OPTIONS__SERVE__APPLICATION__COMMAND() {
 	const http_max_size = parseInt(process.env.GAUZE_HTTP_MAX_SIZE, 10) || 1048576;
 	return {
@@ -101,10 +105,11 @@ export const handler = function (argv) {
 		$gauze.database.manager.default.destroy_connections();
 	});
 
+	validate_config_tree($gauze);
+	validate_environment_variables($gauze);
+
 	// asynchronous import here to avoid static dependency linking failing
 	import("./../../router.js").then(function (module) {
-		validate_config_tree($gauze);
-
 		const Router = module.default;
 		const app = new Koa();
 		const router = Router($gauze);

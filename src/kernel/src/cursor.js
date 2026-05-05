@@ -1,5 +1,7 @@
 import { createHmac, timingSafeEqual } from "crypto";
 
+import { VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL } from "./config.js";
+
 function JSON_REPLACER__CURSOR__SRC__KERNEL(key, value) {
 	if (typeof value === "bigint") {
 		return value.toString();
@@ -19,7 +21,7 @@ function DECODE_BASE64URL__CURSOR__SRC__KERNEL(value) {
 }
 
 function SECRET__CURSOR__SRC__KERNEL() {
-	return process.env.GAUZE_CURSOR_SECRET || "GAUZE_CURSOR_SECRET";
+	return VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_CURSOR_SECRET");
 }
 
 function SIGN_PAYLOAD__CURSOR__SRC__KERNEL(payload_json) {

@@ -64,6 +64,26 @@ const VALID_REALM_MODES__CONFIG__SRC__KERNEL = {
 	locked: true,
 };
 
+const MINIMUM_SECRET_BYTES__CONFIG__SRC__KERNEL = 32;
+
+const REQUIRED_SECRET_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL = {
+	GAUZE_ENVIRONMENT_JWT_SECRET: true,
+	GAUZE_SYSTEM_JWT_SECRET: true,
+	GAUZE_DATABASE_JWT_SECRET: true,
+	GAUZE_KERNEL_JWT_SECRET: true,
+	GAUZE_PROXY_JWT_SECRET: true,
+	GAUZE_CURSOR_SECRET: true,
+};
+
+const PLACEHOLDER_SECRET_VALUES__CONFIG__SRC__KERNEL = {
+	ENVIRONMENT: true,
+	SYSTEM: true,
+	DATABASE: true,
+	KERNEL: true,
+	PROXY: true,
+	GAUZE_CURSOR_SECRET: true,
+};
+
 function is_non_null_object(value) {
 	if (value !== null && typeof value === "object" && !Array.isArray(value)) {
 		return true;
@@ -325,6 +345,50 @@ function validate_realm_mode(path, mode) {
 	}
 }
 
+function secret_byte_length(value) {
+	return new TextEncoder().encode(value).length;
+}
+
+function is_placeholder_secret(key, value) {
+	const trimmed = value.trim();
+	if (trimmed === key) {
+		return true;
+	} else if (trimmed.startsWith("REPLACE_ME")) {
+		return true;
+	} else if (PLACEHOLDER_SECRET_VALUES__CONFIG__SRC__KERNEL[trimmed]) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL(key, environment = process.env, options = {}) {
+	const minimum_secret_bytes = options.minimum_secret_bytes || MINIMUM_SECRET_BYTES__CONFIG__SRC__KERNEL;
+	const value = environment[key];
+	if (value === undefined) {
+		throw new Error(`Environment variable '${key}' must be defined`);
+	} else if (typeof value !== "string") {
+		throw new Error(`Environment variable '${key}' must be of type 'string', ${value} is not of type 'string'`);
+	} else if (!value.trim()) {
+		throw new Error(`Environment variable '${key}' must not be empty`);
+	} else if (is_placeholder_secret(key, value)) {
+		throw new Error(`Environment variable '${key}' must not use a placeholder secret`);
+	} else if (secret_byte_length(value) < minimum_secret_bytes) {
+		throw new Error(`Environment variable '${key}' must be at least ${minimum_secret_bytes} bytes`);
+	} else {
+		return value;
+	}
+}
+
+function VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL(environment = process.env, options = {}) {
+	validate_object("Environment variables", "", environment);
+	const required_secret_environment_variables = options.required_secret_environment_variables || REQUIRED_SECRET_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL;
+	Object.keys(required_secret_environment_variables).forEach(function (key) {
+		VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL(key, environment, options);
+	});
+	return environment;
+}
+
 function VALIDATE_PROJECT_CONFIG__CONFIG__SRC__KERNEL(config, options = {}) {
 	const valid_agent_types = options.valid_agent_types || VALID_AGENT_TYPES__CONFIG__SRC__KERNEL;
 	validate_object("Project config", "", config);
@@ -452,4 +516,10 @@ function VALIDATE_CONFIG_TREE__CONFIG__SRC__KERNEL(config_tree, options = {}) {
 	return config_tree;
 }
 
-export { VALIDATE_CONFIG_TREE__CONFIG__SRC__KERNEL, VALIDATE_PROJECT_CONFIG__CONFIG__SRC__KERNEL, VALIDATE_REALM_CONFIG__CONFIG__SRC__KERNEL };
+export {
+	VALIDATE_CONFIG_TREE__CONFIG__SRC__KERNEL,
+	VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL,
+	VALIDATE_PROJECT_CONFIG__CONFIG__SRC__KERNEL,
+	VALIDATE_REALM_CONFIG__CONFIG__SRC__KERNEL,
+	VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
+};

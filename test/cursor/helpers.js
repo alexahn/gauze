@@ -5,6 +5,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 
+process.env.GAUZE_CURSOR_SECRET = "0123456789abcdef0123456789abcdef";
+
 const DATABASE_SCHEMA = $gauze.database.interfaces.graphql.schema.SCHEMA__SCHEMA__GRAPHQL__INTERFACE__DATABASE;
 
 function create_database_manager() {
