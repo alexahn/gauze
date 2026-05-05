@@ -443,11 +443,9 @@ class AccessSystemModel extends SystemModel {
 					const valid_ids = filtered.map(function (record) {
 						return record[self.key_id];
 					});
-					input.where_in = {
-						[self.key_id]: valid_ids,
-					};
+					const execute_input = self._cache_where_in(input, self.key_id, valid_ids);
 					// we could manually construct the response from the filtered object here instead?
-					return self._execute(context, operation, input);
+					return self._execute(context, operation, execute_input);
 				});
 			} else {
 				throw new Error("Agent does not have access to this method");
@@ -910,12 +908,9 @@ class AccessSystemModel extends SystemModel {
 					const valid_ids = filtered.map(function (record) {
 						return record[self.key_id];
 					});
-					// TODO: intersect with existing where_in
-					input.where_in = {
-						[self.key_id]: valid_ids,
-					};
+					const execute_input = self._cache_where_in(input, self.key_id, valid_ids);
 					// we could manually construct the response from the filtered object here instead?
-					return self._execute(context, operation, input);
+					return self._execute(context, operation, execute_input);
 				});
 			} else {
 				throw new Error("Agent does not have access to this method");

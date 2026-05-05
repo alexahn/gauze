@@ -401,11 +401,9 @@ class RelationshipSystemModel extends SystemModel {
 		}
 		return sql.then(function (relationship_rows) {
 			return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
-				parameters.where_in = {
-					[self.entity.primary_key]: valid_ids,
-				};
+				const execute_parameters = self._cache_where_in(parameters, self.entity.primary_key, valid_ids);
 				// note: should we just return the relationships here instead of executing a graphql query?
-				return self._execute(context, operation, parameters);
+				return self._execute(context, operation, execute_parameters);
 			});
 		});
 	}
@@ -431,11 +429,9 @@ class RelationshipSystemModel extends SystemModel {
 		}
 		return sql.then(function (relationship_rows) {
 			return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
-				parameters.where_in = {
-					[self.entity.primary_key]: valid_ids,
-				};
+				const execute_parameters = self._cache_where_in(parameters, self.entity.primary_key, valid_ids);
 				// note: should we just return the relationships here instead of executing a graphql query?
-				return self._execute(context, operation, parameters);
+				return self._execute(context, operation, execute_parameters);
 			});
 		});
 	}
@@ -471,11 +467,9 @@ class RelationshipSystemModel extends SystemModel {
 					}
 					return sql.then(function (relationship_rows) {
 						return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
-							parameters.where_in = {
-								[self.entity.primary_key]: valid_ids,
-							};
+							const execute_parameters = self._cache_where_in(parameters, self.entity.primary_key, valid_ids);
 							// note: should we just return the relationships here instead of executing a graphql query?
-							return self._execute(context, operation, parameters);
+							return self._execute(context, operation, execute_parameters);
 						});
 					});
 				} else {
@@ -515,11 +509,9 @@ class RelationshipSystemModel extends SystemModel {
 					}
 					return sql.then(function (relationship_rows) {
 						return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
-							parameters.where_in = {
-								[self.entity.primary_key]: valid_ids,
-							};
+							const execute_parameters = self._cache_where_in(parameters, self.entity.primary_key, valid_ids);
 							// note: should we just return the relationships here instead of executing a graphql query?
-							return self._execute(context, operation, parameters);
+							return self._execute(context, operation, execute_parameters);
 						});
 					});
 				} else {
@@ -927,11 +919,9 @@ class RelationshipSystemModel extends SystemModel {
 		}
 		return sql.then(function (relationship_rows) {
 			return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
-				parameters.where_in = {
-					[self.entity.primary_key]: valid_ids,
-				};
+				const execute_parameters = self._cache_where_in(parameters, self.entity.primary_key, valid_ids);
 				// note: should we just return the relationships here instead of executing a graphql query?
-				return self._execute(context, operation, parameters);
+				return self._execute(context, operation, execute_parameters);
 			});
 		});
 	}
@@ -957,11 +947,9 @@ class RelationshipSystemModel extends SystemModel {
 		}
 		return sql.then(function (relationship_rows) {
 			return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
-				parameters.where_in = {
-					[self.entity.primary_key]: valid_ids,
-				};
+				const execute_parameters = self._cache_where_in(parameters, self.entity.primary_key, valid_ids);
 				// note: should we just return the relationships here instead of executing a graphql query?
-				return self._execute(context, operation, parameters);
+				return self._execute(context, operation, execute_parameters);
 			});
 		});
 	}
@@ -996,12 +984,9 @@ class RelationshipSystemModel extends SystemModel {
 					}
 					return sql.then(function (relationship_rows) {
 						return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
-							// TODO: intersect with existing where_in
-							parameters.where_in = {
-								[self.entity.primary_key]: valid_ids,
-							};
+							const execute_parameters = self._cache_where_in(parameters, self.entity.primary_key, valid_ids);
 							// note: should we just return the relationships here instead of executing a graphql query?
-							return self._execute(context, operation, parameters);
+							return self._execute(context, operation, execute_parameters);
 						});
 					});
 				} else {
@@ -1040,11 +1025,9 @@ class RelationshipSystemModel extends SystemModel {
 					}
 					return sql.then(function (relationship_rows) {
 						return self._filter_access(context, scope, parameters, realm, relationship_rows, method).then(function (valid_ids) {
-							parameters.where_in = {
-								[self.entity.primary_key]: valid_ids,
-							};
+							const execute_parameters = self._cache_where_in(parameters, self.entity.primary_key, valid_ids);
 							// note: should we just return the relationships here instead of executing a graphql query?
-							return self._execute(context, operation, parameters);
+							return self._execute(context, operation, execute_parameters);
 						});
 					});
 				} else {

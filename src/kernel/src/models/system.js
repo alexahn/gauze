@@ -1053,7 +1053,7 @@ class SystemModel extends Model {
 			},
 		};
 	}
-	_cursor_cache_where_in(parameters = {}, key, values) {
+	_cache_where_in(parameters = {}, key, values) {
 		const cache_key = String(uuidv4());
 		TIERED_CACHE__LRU__CACHE__SRC__KERNEL.set(cache_key, values, values.length);
 		return {
@@ -1063,6 +1063,10 @@ class SystemModel extends Model {
 				[key]: cache_key,
 			},
 		};
+	}
+	_cursor_cache_where_in(parameters = {}, key, values) {
+		const self = this;
+		return self._cache_where_in(parameters, key, values);
 	}
 	_root_read(context, scope, parameters, realm) {
 		const self = this;
