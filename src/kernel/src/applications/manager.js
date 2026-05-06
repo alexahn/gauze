@@ -12,19 +12,14 @@ const GAUZE_BASE_DIR = path.resolve(__FILEDIR, "../../../");
 // GAUZE_ROOT_DIR is only used when we need to reference the src directory from outside of it
 const GAUZE_ROOT_DIR = path.resolve(__FILEDIR, "../../../../");
 
-// only allows one underscore per word
-function to_snake_case(string) {
-	string = string.replace(" ", "_");
-	string = string.replace("-", "_");
-	var split = string
-		.split("_")
-		.map(function (part) {
-			return part.toLowerCase();
-		})
-		.filter(function (x) {
-			return x;
-		});
-	return split.join("_");
+const ENTITY_NAME_PATTERN = /^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/;
+
+function validate_entity_name(path, name) {
+	if (ENTITY_NAME_PATTERN.test(name)) {
+		return name;
+	} else {
+		throw new Error(`Entity property '${path}' must be a safe lower snake case identifier: ${name}`);
+	}
 }
 
 class GauzeManager {
@@ -362,7 +357,7 @@ class GauzeManager {
 			if (key === "name") {
 				const name = config[key];
 				if (typeof name !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${name} is not of type 'string'`);
-				if (to_snake_case(name) !== name) throw new Error(`Entity property '${path} must be in lower snake case: ${name} !== ${to_snake_case(name)}`);
+				validate_entity_name(path, name);
 			} else if (key === "table_name") {
 				const table_name = config[key];
 				if (typeof table_name !== "string") throw new Error(`Entity property '${path}' must be of type 'string', ${table_name} is not of type 'string'`);
