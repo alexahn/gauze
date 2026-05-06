@@ -59,5 +59,5 @@ const result = await esbuild.build({
 
 if (result.metafile) {
 	// use https://bundle-buddy.com/esbuild to analyses
-	fs.writeFileSync("./metafile.json", JSON.stringify(result.metafile));
+	fs.writeFileSync(path.resolve(import.meta.dirname, "./metafile.json"), JSON.stringify(result.metafile));
 }
