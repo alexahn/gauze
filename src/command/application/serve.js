@@ -119,7 +119,7 @@ export const handler = function (argv) {
 
 		app.use(router.routes());
 
-		app.listen(argv.port);
+		app.listen(argv.port, argv.host);
 	});
 };
 
