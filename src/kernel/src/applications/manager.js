@@ -312,7 +312,7 @@ class GauzeManager {
 		function validate_method(path, method, method_key) {
 			if (typeof method !== "object") throw new Error(`Entity property '${path}' must be of type 'object', ${method} is not of type 'object'`);
 			Object.keys(valid_method_keys).forEach(function (key) {
-				const method_key = `${path}.${key}`;
+				const method_path = `${path}.${key}`;
 				if (method[key] === undefined) throw new Error(`Entity property '${method_path}' must be defined`);
 			});
 			Object.keys(method).forEach(function (key) {
