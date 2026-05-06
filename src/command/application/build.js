@@ -14,9 +14,11 @@ config({
 
 import * as $gauze from "./../../index.js";
 
-function run_node_script(script_path) {
+function RUN_NODE_SCRIPT__BUILD__APPLICATION__COMMAND(script_path, dependencies = {}) {
+	const spawn_process = dependencies.spawn || spawn;
+	const node_path = dependencies.node_path || process.execPath;
 	return new Promise(function (resolve, reject) {
-		const spawned = spawn(process.execPath, [script_path], {
+		const spawned = spawn_process(node_path, [script_path], {
 			stdio: "inherit",
 			shell: false,
 		});
@@ -29,6 +31,26 @@ function run_node_script(script_path) {
 			}
 		});
 	});
+}
+
+function BUILD_UI__BUILD__APPLICATION__COMMAND(paths, dependencies = {}) {
+	const run_node_script = dependencies.run_node_script || RUN_NODE_SCRIPT__BUILD__APPLICATION__COMMAND;
+	return new Promise(function (resolve, reject) {
+		const collection = {};
+		return resolve(collection);
+	})
+		.then(function (collection) {
+			return run_node_script(paths.gauze_v1_build_path, dependencies).then(function () {
+				console.log("Gauze build finished");
+				return collection;
+			});
+		})
+		.then(function (collection) {
+			return run_node_script(paths.project_build_path, dependencies).then(function () {
+				console.log("Project build finished");
+				return collection;
+			});
+		});
 }
 
 export const command = "build";
@@ -45,23 +67,10 @@ export const handler = function (argv) {
 	// call a application level application here
 	const gauze_v1_build_path = path.resolve(path.dirname(__FILEPATH), "./../../views/gauze/v1/build.js");
 	const project_build_path = path.resolve(path.dirname(__FILEPATH), "./../../views/project/build.js");
-	return new Promise(function (resolve, reject) {
-		const collection = {};
-		return resolve(collection);
-	})
-		.then(function (collection) {
-			return run_node_script(gauze_v1_build_path).then(function () {
-				console.log("Gauze build finished");
-				return collection;
-			});
-		})
-		.then(function (collection) {
-			return run_node_script(project_build_path).then(function () {
-				console.log("Project build finished");
-				return collection;
-			});
-		})
-		.catch(function (err) {
-			console.error(err);
-		});
+	return BUILD_UI__BUILD__APPLICATION__COMMAND({
+		gauze_v1_build_path,
+		project_build_path,
+	});
 };
+
+export { BUILD_UI__BUILD__APPLICATION__COMMAND, RUN_NODE_SCRIPT__BUILD__APPLICATION__COMMAND };
