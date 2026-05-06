@@ -353,8 +353,6 @@ function is_placeholder_secret(key, value) {
 	const trimmed = value.trim();
 	if (trimmed === key) {
 		return true;
-	} else if (trimmed.startsWith("REPLACE_ME")) {
-		return true;
 	} else if (PLACEHOLDER_SECRET_VALUES__CONFIG__SRC__KERNEL[trimmed]) {
 		return true;
 	} else {

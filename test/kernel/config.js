@@ -137,7 +137,7 @@ test.describe("kernel config validation", async function () {
 		assert.throws(function () {
 			$config.VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL(
 				secret_environment({
-					GAUZE_ENVIRONMENT_JWT_SECRET: "REPLACE_ME_ENVIRONMENT",
+					GAUZE_ENVIRONMENT_JWT_SECRET: "ENVIRONMENT",
 				}),
 			);
 		}, /GAUZE_ENVIRONMENT_JWT_SECRET.*placeholder/);
@@ -148,6 +148,14 @@ test.describe("kernel config validation", async function () {
 				}),
 			);
 		}, /GAUZE_CURSOR_SECRET.*placeholder/);
+	});
+
+	await test.it("accepts replace-me signing secrets that meet the byte length requirement", function () {
+		const environment = secret_environment({
+			GAUZE_ENVIRONMENT_JWT_SECRET: "REPLACE_ME_0123456789abcdef0123456789abcdef",
+		});
+		const validated = $config.VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL(environment);
+		assert.equal(validated, environment);
 	});
 
 	await test.it("rejects too-short signing secrets", function () {
