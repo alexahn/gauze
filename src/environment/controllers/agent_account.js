@@ -1,5 +1,6 @@
 import * as $abstract from "./../../abstract/index.js";
 import * as $kernel from "./../../kernel/index.js";
+import { timingSafeEqual } from "node:crypto";
 
 import { HASH_PASSWORD__AUTHENTICATION__ENVIRONMENT } from "./../authentication.js";
 
@@ -105,7 +106,11 @@ class AgentAccountController {
 					const password_hash = hash.gauze__secret__value;
 					return HASH_PASSWORD__AUTHENTICATION__ENVIRONMENT(password, password_salt).then(function (proposed_hash) {
 						// check that the hashes align
-						if (password_hash === proposed_hash) {
+						const password_hash_buffer = Buffer.from(password_hash, "utf8");
+						const proposed_hash_buffer = Buffer.from(proposed_hash, "utf8");
+						if (password_hash_buffer.length !== proposed_hash_buffer.length) {
+							throw new Error("Invalid password");
+						} else if (timingSafeEqual(password_hash_buffer, proposed_hash_buffer)) {
 							return {
 								...collection,
 								proposed_hash: proposed_hash,

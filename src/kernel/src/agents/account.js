@@ -1,3 +1,5 @@
+import { timingSafeEqual } from "node:crypto";
+
 // todo: refactor to throw errors instead of returning null
 const VERIFY_PASSWORD__AGENT_ACCOUNT__AGENT__SRC__KERNEL = function (context, scope, { proxy_type, session_model, secret_model, hash_function }, password) {
 	const { agent } = context;
@@ -73,7 +75,11 @@ const VERIFY_PASSWORD__AGENT_ACCOUNT__AGENT__SRC__KERNEL = function (context, sc
 						const password_hash = hash.gauze__secret__value;
 						return hash_function(password, password_salt).then(function (proposed_hash) {
 							// check that the hashes align
-							if (password_hash === proposed_hash) {
+							const password_hash_buffer = Buffer.from(password_hash, "utf8");
+							const proposed_hash_buffer = Buffer.from(proposed_hash, "utf8");
+							if (password_hash_buffer.length !== proposed_hash_buffer.length) {
+								return null;
+							} else if (timingSafeEqual(password_hash_buffer, proposed_hash_buffer)) {
 								return {
 									...collection,
 									proposed_hash: proposed_hash,
