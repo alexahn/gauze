@@ -73,6 +73,11 @@ const REQUIRED_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL = {
 	GAUZE_KERNEL_JWT_SECRET: true,
 	GAUZE_PROXY_JWT_SECRET: true,
 	GAUZE_CURSOR_SECRET: true,
+	GAUZE_SQL_MAX_COLUMNS: true,
+	GAUZE_SQL_BIND_LIMIT: true,
+	GAUZE_SQL_MAX_LIMIT: true,
+	GAUZE_SQL_MAX_BREADTH: true,
+	GAUZE_SQL_MAX_TRANSACTIONS: true,
 };
 
 const PLACEHOLDER_SECRET_VALUES__CONFIG__SRC__KERNEL = {
@@ -378,6 +383,24 @@ function VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL(key, environm
 	}
 }
 
+function VALIDATE_POSITIVE_INTEGER_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL(key, environment = process.env) {
+	const value = environment[key];
+	if (value === undefined) {
+		throw new Error(`Environment variable '${key}' must be defined`);
+	} else if (typeof value !== "string") {
+		throw new Error(`Environment variable '${key}' must be of type 'string', ${value} is not of type 'string'`);
+	} else if (/^[1-9][0-9]*$/.test(value)) {
+		const parsed = Number.parseInt(value, 10);
+		if (Number.isSafeInteger(parsed)) {
+			return parsed;
+		} else {
+			throw new Error(`Environment variable '${key}' must be a safe integer, ${value} is not a safe integer`);
+		}
+	} else {
+		throw new Error(`Environment variable '${key}' must be a positive integer string, ${value} is not a positive integer string`);
+	}
+}
+
 const ENVIRONMENT_VARIABLE_VALIDATORS__CONFIG__SRC__KERNEL = {
 	GAUZE_ENVIRONMENT_JWT_SECRET: VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
 	GAUZE_SYSTEM_JWT_SECRET: VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
@@ -385,6 +408,11 @@ const ENVIRONMENT_VARIABLE_VALIDATORS__CONFIG__SRC__KERNEL = {
 	GAUZE_KERNEL_JWT_SECRET: VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
 	GAUZE_PROXY_JWT_SECRET: VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
 	GAUZE_CURSOR_SECRET: VALIDATE_SECRET_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
+	GAUZE_SQL_MAX_COLUMNS: VALIDATE_POSITIVE_INTEGER_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
+	GAUZE_SQL_BIND_LIMIT: VALIDATE_POSITIVE_INTEGER_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
+	GAUZE_SQL_MAX_LIMIT: VALIDATE_POSITIVE_INTEGER_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
+	GAUZE_SQL_MAX_BREADTH: VALIDATE_POSITIVE_INTEGER_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
+	GAUZE_SQL_MAX_TRANSACTIONS: VALIDATE_POSITIVE_INTEGER_ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL,
 };
 
 function ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL(key, environment = process.env, options = {}) {
@@ -399,12 +427,27 @@ function ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL(key, environment = process.en
 	}
 }
 
+function validate_sql_limit_environment_variables(environment, options) {
+	const bind_limit = ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_SQL_BIND_LIMIT", environment, options);
+	const max_columns = ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_SQL_MAX_COLUMNS", environment, options);
+	if (bind_limit > max_columns) {
+		// ok
+	} else {
+		throw new Error(`Environment variable 'GAUZE_SQL_BIND_LIMIT' must be greater than 'GAUZE_SQL_MAX_COLUMNS', ${bind_limit} <= ${max_columns}`);
+	}
+}
+
 function VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL(environment = process.env, options = {}) {
 	validate_object("Environment variables", "", environment);
 	const required_environment_variables = options.required_environment_variables || REQUIRED_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL;
 	Object.keys(required_environment_variables).forEach(function (key) {
 		ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL(key, environment, options);
 	});
+	if (required_environment_variables.GAUZE_SQL_BIND_LIMIT && required_environment_variables.GAUZE_SQL_MAX_COLUMNS) {
+		validate_sql_limit_environment_variables(environment, options);
+	} else {
+		// ok
+	}
 	return environment;
 }
 

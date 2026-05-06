@@ -34,6 +34,11 @@ function secret_environment(overrides = {}) {
 		GAUZE_KERNEL_JWT_SECRET: "0123456789abcdef0123456789abcdef",
 		GAUZE_PROXY_JWT_SECRET: "0123456789abcdef0123456789abcdef",
 		GAUZE_CURSOR_SECRET: "0123456789abcdef0123456789abcdef",
+		GAUZE_SQL_MAX_COLUMNS: "1024",
+		GAUZE_SQL_BIND_LIMIT: "32767",
+		GAUZE_SQL_MAX_LIMIT: "1024",
+		GAUZE_SQL_MAX_BREADTH: "4096",
+		GAUZE_SQL_MAX_TRANSACTIONS: "1024",
 		...overrides,
 	};
 }
@@ -119,6 +124,12 @@ test.describe("kernel config validation", async function () {
 		assert.equal(value, environment.GAUZE_PROXY_JWT_SECRET);
 	});
 
+	await test.it("reads configured integer environment variables through the validation dispatcher", function () {
+		const environment = secret_environment();
+		const value = $config.ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_SQL_BIND_LIMIT", environment);
+		assert.equal(value, 32767);
+	});
+
 	await test.it("rejects environment variables without configured validators", function () {
 		assert.throws(function () {
 			$config.ENVIRONMENT_VARIABLE__CONFIG__SRC__KERNEL("GAUZE_UNKNOWN_SECRET", secret_environment());
@@ -166,5 +177,41 @@ test.describe("kernel config validation", async function () {
 				}),
 			);
 		}, /GAUZE_DATABASE_JWT_SECRET.*at least 32 bytes/);
+	});
+
+	await test.it("rejects missing SQL limit environment variables", function () {
+		const environment = secret_environment();
+		delete environment.GAUZE_SQL_MAX_LIMIT;
+		assert.throws(function () {
+			$config.VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL(environment);
+		}, /GAUZE_SQL_MAX_LIMIT.*must be defined/);
+	});
+
+	await test.it("rejects invalid SQL limit environment variables", function () {
+		assert.throws(function () {
+			$config.VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL(
+				secret_environment({
+					GAUZE_SQL_MAX_BREADTH: "0",
+				}),
+			);
+		}, /GAUZE_SQL_MAX_BREADTH.*positive integer string/);
+		assert.throws(function () {
+			$config.VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL(
+				secret_environment({
+					GAUZE_SQL_MAX_TRANSACTIONS: "10.5",
+				}),
+			);
+		}, /GAUZE_SQL_MAX_TRANSACTIONS.*positive integer string/);
+	});
+
+	await test.it("rejects a SQL bind limit that cannot leave room for selected columns", function () {
+		assert.throws(function () {
+			$config.VALIDATE_ENVIRONMENT_VARIABLES__CONFIG__SRC__KERNEL(
+				secret_environment({
+					GAUZE_SQL_BIND_LIMIT: "1024",
+					GAUZE_SQL_MAX_COLUMNS: "1024",
+				}),
+			);
+		}, /GAUZE_SQL_BIND_LIMIT.*greater than.*GAUZE_SQL_MAX_COLUMNS/);
 	});
 });
