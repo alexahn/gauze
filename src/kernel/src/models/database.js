@@ -394,6 +394,58 @@ class DatabaseModel extends Model {
 			return;
 		}
 	}
+	_write_filter_parameter_keys() {
+		return ["where", "where_in", "where_not_in", "where_like", "where_between"];
+	}
+	_filter_parameter_has_entries(value) {
+		if (!value || typeof value !== "object" || Array.isArray(value)) {
+			return false;
+		} else if (Object.keys(value).length === 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	_filter_parameter_value_constrains(key, value) {
+		const self = this;
+		if (key === "where_between") {
+			if (Array.isArray(value)) {
+				return self._has_range_bound(value[0]) || self._has_range_bound(value[1]);
+			} else {
+				return false;
+			}
+		} else if (key === "where_not_in") {
+			if (Array.isArray(value)) {
+				return value.length > 0;
+			} else {
+				return true;
+			}
+		} else {
+			return true;
+		}
+	}
+	_filter_parameter_constrains(key, filters) {
+		const self = this;
+		if (self._filter_parameter_has_entries(filters)) {
+			return Object.keys(filters).some(function (field) {
+				return self._filter_parameter_value_constrains(key, filters[field]);
+			});
+		} else {
+			return false;
+		}
+	}
+	_validate_write_filter_parameters(parameters) {
+		const self = this;
+		const filter_keys = self._write_filter_parameter_keys();
+		const has_filter = filter_keys.some(function (key) {
+			return self._filter_parameter_constrains(key, parameters[key]);
+		});
+		if (has_filter) {
+			return;
+		} else {
+			throw new Error("At least one non-empty filter is required for update/delete");
+		}
+	}
 	_validate_order(order) {
 		const self = this;
 		if (!Array.isArray(order)) {
@@ -1995,6 +2047,13 @@ class DatabaseModel extends Model {
 		const self = this;
 		self._check_constraints(context);
 		const request = self._cursor_request_from_parameters(parameters, method);
+		if (method === "read") {
+			// ok
+		} else if (method === "update" || method === "delete") {
+			self._validate_write_filter_parameters(request.parameters);
+		} else {
+			throw new Error("Invalid cursor method");
+		}
 		const cursor_parameters = {
 			...request.parameters,
 			limit: Math.min(request.parameters.limit || 16, self.limit_max),
@@ -2233,6 +2292,7 @@ class DatabaseModel extends Model {
 		const key = self._batch_key(relationship_source, parameters, "update");
 		self._check_constraints(context);
 		self._validate_parameters(parameters);
+		self._validate_write_filter_parameters(parameters);
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		// we need to fetch the parameters for the key in the batch function
@@ -2571,6 +2631,7 @@ class DatabaseModel extends Model {
 		const key = self._batch_key(relationship_source, parameters, "delete");
 		self._check_constraints(context);
 		self._validate_parameters(parameters);
+		self._validate_write_filter_parameters(parameters);
 		// use the batch key as the cache key
 		// set size of 1 until we implement a proper sizing procedure
 		// we need to fetch the parameters for the key in the batch function
