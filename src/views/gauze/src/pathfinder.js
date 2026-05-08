@@ -271,7 +271,7 @@ function createPathfinder(context) {
 			},
 		],
 	);
-	const projectPathfinder = new Pathfinder(
+	const gauzePathfinder = new Pathfinder(
 		{
 			hash,
 			base,
@@ -288,7 +288,7 @@ function createPathfinder(context) {
 				search: [],
 				dependencies: async function (context, dependencies, state, pathParams, searchParams) {
 					return {
-						error: new Error("The project application failed to load."),
+						error: new Error("The Gauze application failed to load."),
 						source: "Route error",
 					};
 				},
@@ -345,7 +345,7 @@ function createPathfinder(context) {
 						const next = location.href;
 						// transition to sign in
 						const state = {
-							name: "project.environment.signin",
+							name: "gauze.environment.signin",
 							pathParams: {},
 							searchParams: {
 								next,
@@ -383,7 +383,7 @@ function createPathfinder(context) {
 						const next = location.href;
 						// transition to sign in
 						const state = {
-							name: "project.proxy.proxies",
+							name: "gauze.proxy.proxies",
 							pathParams: {},
 							searchParams: {
 								next,
@@ -409,7 +409,7 @@ function createPathfinder(context) {
 		},
 		[
 			{
-				name: "project",
+				name: "gauze",
 				path: [],
 				pathRegex: new RegExp("/gauze"),
 				pathString: function (groups) {
@@ -419,7 +419,7 @@ function createPathfinder(context) {
 				dependencies: async function (context, dependencies, state, pathParams, searchParams) {
 					return {};
 				},
-				pathfinder: projectPathfinder,
+				pathfinder: gauzePathfinder,
 			},
 		],
 	);

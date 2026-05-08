@@ -23,21 +23,21 @@ function createDirector(context) {
 		);
 	}
 
-	director.register("project.error", function (context, dependencies, pathParams, searchParams) {
+	director.register("gauze.error", function (context, dependencies, pathParams, searchParams) {
 		const { error } = dependencies;
 		renderPage(
-			"project.error",
+			"gauze.error",
 			<layouts.amethyst.default>
 				<components.error.default error={error.error} pathfinder={pathfinder} source={error.source} />
 			</layouts.amethyst.default>,
 		);
 	});
 
-	director.register("project.environment.signup", function (context, dependencies, pathParams, searchParams) {
+	director.register("gauze.environment.signup", function (context, dependencies, pathParams, searchParams) {
 		const { services } = context;
 		const { next } = searchParams;
 		renderPage(
-			"project.environment.signup",
+			"gauze.environment.signup",
 			<layouts.azurite.default>
 				<div>
 					<components.logo.default header={true} clouds={true} />
@@ -48,11 +48,11 @@ function createDirector(context) {
 		);
 	});
 
-	director.register("project.environment.signin", function (context, dependencies, pathParams, searchParams) {
+	director.register("gauze.environment.signin", function (context, dependencies, pathParams, searchParams) {
 		const { services } = context;
 		const { next } = searchParams;
 		renderPage(
-			"project.environment.signin",
+			"gauze.environment.signin",
 			<layouts.azurite.default>
 				<div>
 					<components.logo.default header={true} clouds={true} />
@@ -63,12 +63,12 @@ function createDirector(context) {
 		);
 	});
 
-	director.register("project.proxy.proxies", function (context, dependencies, pathParams, searchParams) {
+	director.register("gauze.proxy.proxies", function (context, dependencies, pathParams, searchParams) {
 		const { services } = context;
 		const { next } = searchParams;
 		const proxies = dependencies.proxies.proxies;
 		renderPage(
-			"project.proxy.proxies",
+			"gauze.proxy.proxies",
 			<layouts.azurite.default>
 				<div>
 					<components.logo.default header={true} clouds={true} />
@@ -79,11 +79,11 @@ function createDirector(context) {
 		);
 	});
 
-	director.register("project.proxy.signout", function (context, dependencies, pathParams, searchParams) {
+	director.register("gauze.proxy.signout", function (context, dependencies, pathParams, searchParams) {
 		const { services } = context;
 		const { next } = searchParams;
 		renderPage(
-			"project.proxy.signout",
+			"gauze.proxy.signout",
 			<layouts.azurite.default>
 				<div>
 					<components.logo.default header={true} clouds={true} />
@@ -94,11 +94,11 @@ function createDirector(context) {
 		);
 	});
 
-	director.register("project.system.headers", function (context, dependencies, pathParams, searchParams) {
+	director.register("gauze.system.headers", function (context, dependencies, pathParams, searchParams) {
 		const { services } = context;
 		const { headers } = dependencies;
 		renderPage(
-			"project.system.headers",
+			"gauze.system.headers",
 			<layouts.amethyst.default>
 				<div className="pa2">
 					<components.logo.default header={false} clouds={false} />
@@ -110,26 +110,26 @@ function createDirector(context) {
 		);
 	});
 
-	director.register("project.system.headers.graph", function (context, dependencies, pathParams, searchParams) {
+	director.register("gauze.system.headers.graph", function (context, dependencies, pathParams, searchParams) {
 		const { services } = context;
 		const { system, headers } = dependencies;
 		const { agent } = system;
 		renderPage(
-			"project.system.headers.graph",
+			"gauze.system.headers.graph",
 			<layouts.amethyst.default>
 				<components.graph.default pathfinder={pathfinder} services={services} agent={agent} headers={headers.headers} />
 			</layouts.amethyst.default>,
 		);
 	});
 
-	director.register("project.system.headers.header.list", function (context, dependencies, pathParams, searchParams) {
+	director.register("gauze.system.headers.header.list", function (context, dependencies, pathParams, searchParams) {
 		const { services } = context;
 		const { system, headers, header, list } = dependencies;
 		const { agent } = system;
 		const { items, count, pageInfo } = list;
 		const variables = parseSearchVariables(searchParams.variables);
 		renderPage(
-			"project.system.headers.header.list",
+			"gauze.system.headers.header.list",
 			<layouts.amethyst.default>
 				<div className="pa2">
 					<components.logo.default header={false} clouds={false} />
@@ -152,12 +152,12 @@ function createDirector(context) {
 		);
 	});
 
-	director.register("project.system.headers.header.create", function (context, dependencies, pathParams, searchParams) {
+	director.register("gauze.system.headers.header.create", function (context, dependencies, pathParams, searchParams) {
 		const { services } = context;
 		const { headers, header, create } = dependencies;
 		const variables = parseSearchVariables(searchParams.variables);
 		renderPage(
-			"project.system.headers.header.create",
+			"gauze.system.headers.header.create",
 			<layouts.amethyst.default>
 				<div className="pa2">
 					<components.logo.default header={false} clouds={false} />
@@ -170,11 +170,11 @@ function createDirector(context) {
 		);
 	});
 
-	director.register("project.system.headers.header.item", function (context, dependencies, pathParams, searchParams) {
+	director.register("gauze.system.headers.header.item", function (context, dependencies, pathParams, searchParams) {
 		const { services } = context;
 		const { headers, header, item } = dependencies;
 		renderPage(
-			"project.system.headers.header.item",
+			"gauze.system.headers.header.item",
 			<layouts.amethyst.default>
 				<div className="pa2">
 					<components.logo.default header={false} clouds={false} />

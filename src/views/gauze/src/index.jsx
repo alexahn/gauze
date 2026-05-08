@@ -58,12 +58,12 @@ window.addEventListener("unhandledrejection", function (event) {
 
 start(pathfinder, director, {
 	initial: {
-		name: "project.system.headers.graph",
+		name: "gauze.system.headers.graph",
 		pathParams: {},
 		searchParams: {},
 	},
 	error: {
-		name: "project.error",
+		name: "gauze.error",
 		pathParams: {},
 		searchParams: {},
 	},

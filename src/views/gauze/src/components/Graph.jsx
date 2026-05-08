@@ -519,7 +519,7 @@ function GraphTable({ pathfinder, node, onReload, onClose, onTraverse, onOpenIte
 	};
 	const sourceDirectionLabel = relationshipSourceLabelDirection(node.source);
 	const tableURL = pathfinder.stateToURL(
-		"project.system.headers.header.list",
+		"gauze.system.headers.header.list",
 		{ header: node.header.graphql_meta_type.toLowerCase() },
 		{ variables: JSON.stringify(cursorRouteVariables(node.variables, node.pageInfo)) },
 	);
@@ -1174,7 +1174,7 @@ function GraphItemTable({ pathfinder, services, node, onClose, onItemCreate, onI
 	const header = node.header;
 	const fields = header.fields;
 	const itemID = localItem ? localItem._metadata.id : node.item ? node.item._metadata.id : localMode === "create" ? "new" : "";
-	const itemURL = localItem ? pathfinder.stateToURL("project.system.headers.header.item", { header: header.graphql_meta_type.toLowerCase(), id: localItem._metadata.id }, {}) : "";
+	const itemURL = localItem ? pathfinder.stateToURL("gauze.system.headers.header.item", { header: header.graphql_meta_type.toLowerCase(), id: localItem._metadata.id }, {}) : "";
 	const cellClass = "project-graph-item-cell ba bw1 br2 bdx2 bgx2 cx6";
 	const headerCellClass = "project-graph-item-cell ba bw1 br2 bdx3 bgx3 cx6";
 	const inputClass = "project-graph-input w-100 ba bw1 br2 bdx3 bgx12 cx2";
@@ -2313,8 +2313,8 @@ function Graph({ pathfinder, services, agent, headers }) {
 		[nodeMeasureSignature],
 	);
 
-	const graphURL = pathfinder.stateToURL("project.system.headers.graph", {}, {});
-	const proxiesURL = pathfinder.stateToURL("project.proxy.proxies", {}, { next: graphURL });
+	const graphURL = pathfinder.stateToURL("gauze.system.headers.graph", {}, {});
+	const proxiesURL = pathfinder.stateToURL("gauze.proxy.proxies", {}, { next: graphURL });
 
 	return (
 		<div className="project-graph-shell bgx12">

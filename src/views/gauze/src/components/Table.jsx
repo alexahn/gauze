@@ -552,7 +552,7 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 								<td key={field.name} className={cellClass} tabIndex="0" align="center">
 									<Link
 										href={pathfinder.stateToURL(
-											"project.system.headers.header.create",
+											"gauze.system.headers.header.create",
 											{ header: header.graphql_meta_type.toLowerCase() },
 											{ variables: JSON.stringify(localVariables) },
 										)}
@@ -571,10 +571,10 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 						const hasWhitelist = !isGauzeEntity;
 						const hasBlacklist = !isGauzeEntity;
 						const hasRelationships = !isGauzeEntity;
-						const detail = pathfinder.stateToURL("project.system.headers.header.item", { header: header.graphql_meta_type.toLowerCase(), id: item._metadata.id }, {});
+						const detail = pathfinder.stateToURL("gauze.system.headers.header.item", { header: header.graphql_meta_type.toLowerCase(), id: item._metadata.id }, {});
 						const whitelist = function (method) {
 							return pathfinder.stateToURL(
-								"project.system.headers.header.list",
+								"gauze.system.headers.header.list",
 								{
 									header: headers
 										.find(function (header) {
@@ -596,7 +596,7 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 						};
 						const blacklist = function (method) {
 							return pathfinder.stateToURL(
-								"project.system.headers.header.list",
+								"gauze.system.headers.header.list",
 								{
 									header: headers
 										.find(function (header) {
@@ -617,7 +617,7 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 							);
 						};
 						const fromRelationships = pathfinder.stateToURL(
-							"project.system.headers.header.list",
+							"gauze.system.headers.header.list",
 							{
 								header: headers
 									.find(function (header) {
@@ -635,7 +635,7 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 							},
 						);
 						const toRelationships = pathfinder.stateToURL(
-							"project.system.headers.header.list",
+							"gauze.system.headers.header.list",
 							{
 								header: headers
 									.find(function (header) {

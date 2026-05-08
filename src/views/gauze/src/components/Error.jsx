@@ -18,10 +18,10 @@ function normalizeError(error) {
 	}
 }
 
-function projectURL(pathfinder) {
+function gauzeURL(pathfinder) {
 	if (pathfinder) {
 		try {
-			return pathfinder.stateToURL("project.system.headers.graph", {}, {});
+			return pathfinder.stateToURL("gauze.system.headers.graph", {}, {});
 		} catch (err) {
 			return "/gauze/x/headers/graph";
 		}
@@ -36,7 +36,7 @@ function ErrorPage({ error, errorInfo, pathfinder, source }) {
 	const stack = normalized.stack || "";
 	const componentStack = errorInfo && errorInfo.componentStack ? errorInfo.componentStack : "";
 	const showDetails = stack || componentStack;
-	const homeURL = projectURL(pathfinder);
+	const homeURL = gauzeURL(pathfinder);
 	const label = source ? source : "Application error";
 
 	function handleReload() {
@@ -51,7 +51,7 @@ function ErrorPage({ error, errorInfo, pathfinder, source }) {
 					<div className="avenir f5 lh-copy mb3">{message}</div>
 					<div className="flex flex-wrap mb3">
 						<a className="mr2" href={homeURL}>
-							<button className="athelas clouds ba bw1 br2 bgx10 bdx10 cx6 bgx8h bdx8h pointer">Project</button>
+							<button className="athelas clouds ba bw1 br2 bgx10 bdx10 cx6 bgx8h bdx8h pointer">Gauze</button>
 						</a>
 						<button className="athelas clouds ba bw1 br2 bgx6 bdx6 cx2 bgx5h bdx5h pointer" onClick={handleReload}>
 							Reload

@@ -74,7 +74,7 @@ class GauzeService {
 						self.deleteProxyJWT();
 						self.deleteEnvironmentJWT();
 						const state = {
-							name: "project.environment.signin",
+							name: "gauze.environment.signin",
 							pathParams: {},
 							searchParams: {
 								next: location.href,
@@ -101,7 +101,7 @@ class GauzeService {
 							self.deleteProxyJWT();
 							// load sign in page
 							const state = {
-								name: "project.environment.signin",
+								name: "gauze.environment.signin",
 								pathParams: {},
 								searchParams: {
 									next: location.href,
@@ -118,7 +118,7 @@ class GauzeService {
 							self.deleteSystemJWT();
 							// load proxies page
 							const state = {
-								name: "project.proxy.proxies",
+								name: "gauze.proxy.proxies",
 								pathParams: {},
 								searchParams: {
 									next: location.href,
@@ -136,7 +136,7 @@ class GauzeService {
 						self.deleteProxyJWT();
 						self.deleteEnvironmentJWT();
 						const state = {
-							name: "project.environment.signin",
+							name: "gauze.environment.signin",
 							pathParams: {},
 							searchParams: {
 								next: location.href,
@@ -195,7 +195,7 @@ class GauzeService {
 			return self.fetchLoader.load(key);
 		} else {
 			const state = {
-				name: "project.environment.signin",
+				name: "gauze.environment.signin",
 				pathParams: {},
 				searchParams: {
 					next: location.href,
@@ -216,7 +216,7 @@ class GauzeService {
 			return self.fetchLoader.load(key);
 		} else {
 			const state = {
-				name: "project.proxy.proxies",
+				name: "gauze.proxy.proxies",
 				pathParams: {},
 				searchParams: {
 					next: location.href,
