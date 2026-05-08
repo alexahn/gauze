@@ -14,7 +14,6 @@ const ALLOWED_PROCESS_ENV = ["GAUZE_PROTOCOL", "GAUZE_HOST", "GAUZE_PORT", "GAUZ
 
 const STATIC_ROOT = path.resolve(import.meta.dirname, "./src/static");
 const BUILD_ROOT = path.resolve(import.meta.dirname, "./build");
-const STATIC_FILES = ["index.html", "logo.svg"];
 
 function filterVariables(env) {
 	const filtered = {};
@@ -49,8 +48,15 @@ let envPlugin = {
 };
 
 fs.mkdirSync(BUILD_ROOT, { recursive: true });
-STATIC_FILES.forEach(function (file) {
-	fs.copyFileSync(path.resolve(STATIC_ROOT, file), path.resolve(BUILD_ROOT, file));
+fs.cpSync(STATIC_ROOT, BUILD_ROOT, {
+	recursive: true,
+	filter(source) {
+		if (path.basename(source) === ".DS_Store") {
+			return false;
+		} else {
+			return true;
+		}
+	},
 });
 
 const result = await esbuild.build({

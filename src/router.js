@@ -29,20 +29,6 @@ function gauzeIndex() {
 	return index;
 }
 
-function redirectToGauze(ctx, prefix) {
-	const rebased_path = ctx.path.slice(prefix.length) || "/";
-	const query = ctx.querystring ? `?${ctx.querystring}` : "";
-	ctx.status = 301;
-	ctx.redirect(`/gauze${rebased_path}${query}`);
-}
-
-function redirectToGauzeHandler(prefix) {
-	return function (ctx, next) {
-		redirectToGauze(ctx, prefix);
-		return next();
-	};
-}
-
 async function sendGauzeBuild(ctx) {
 	if (path.extname(ctx.path)) {
 		const gauze_prefix = "/gauze";
@@ -67,11 +53,6 @@ export default function ($gauze) {
 	ROUTER.use("/system", ROUTER__SYSTEM($gauze).routes());
 	ROUTER.use("/database", ROUTER__DATABASE($gauze).routes());
 	ROUTER.use("/environment", ROUTER__ENVIRONMENT($gauze).routes());
-
-	ROUTER.get("/project", redirectToGauzeHandler("/project"));
-	ROUTER.get("/project/(.*)", redirectToGauzeHandler("/project"));
-	ROUTER.get("/gauze/v1", redirectToGauzeHandler("/gauze/v1"));
-	ROUTER.get("/gauze/v1/(.*)", redirectToGauzeHandler("/gauze/v1"));
 
 	ROUTER.get("/gauze", function (ctx, next) {
 		if (ctx.path[ctx.path.length - 1] === "/") {
