@@ -528,7 +528,7 @@ function Table({ pathfinder, services, agent, headers, header, variables = {}, i
 		<div>
 			<div className="project-table-footer">
 				<div className="project-table-count">{count} rows</div>
-				<CursorPagination pageInfo={pageInfo} variables={variables} href={href} reverse={false} buttonClass="project-table-cursor-button" detailsOpen={true} />
+				<CursorPagination pageInfo={pageInfo} variables={variables} href={href} reverse={false} buttonClass="project-table-cursor-button" />
 			</div>
 			<table>
 				<thead>
