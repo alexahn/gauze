@@ -110,3 +110,4 @@
 - Password hash verification exists in both environment controller copies and in `src/kernel/src/agents/account.js`; keep all three using equal-length `crypto.timingSafeEqual` buffer comparisons rather than direct string equality.
 - UI esbuild metafiles should be written beside each app's `build.js` using `path.resolve(import.meta.dirname, "./metafile.json")`; do not write them to the process cwd or into the served `src/views/*/build/` directories.
 - Gauze UI build/watch should copy the whole `src/views/gauze/src/static` directory into `src/views/gauze/build` rather than whitelisting individual files, filtering only local junk like `.DS_Store`. This keeps new static asset additions conceptual and script-free.
+- The current Gauze UI uses `@ahn/sinew` for frontend routing/state and imports Tachyons from the npm package path `tachyons/css/tachyons.min.css`; keep `tachyons` as a dependency rather than a checked-in CSS copy.

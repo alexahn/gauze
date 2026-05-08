@@ -1,5 +1,5 @@
 import "./index.css";
-import "./tachyons.min.css";
+import "tachyons/css/tachyons.min.css";
 
 import * as React from "react";
 //import * as Server from "react-dom/server";
