@@ -20,3 +20,6 @@ src/views/gauze/v2/build/*.map
 src/views/project/build/*.map
 docs/.vitepress/dist/
 docs/.vitepress/cache/
+src/views/gauze/build/*.js
+src/views/gauze/build/*.css
+src/views/gauze/build/*.map
