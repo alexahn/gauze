@@ -24,7 +24,7 @@ The top-level router mounts three realm GraphQL endpoints:
 - Use `/system/graphql` for the system realm GraphQL endpoint.
 - Use `/database/graphql` for the database realm GraphQL endpoint.
 
-The same HTTP server also serves static UI bundles at `/gauze/v1/` and `/project/`.
+The same HTTP server also serves the static UI bundle at `/gauze/`.
 
 ## Authentication
 

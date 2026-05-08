@@ -14,7 +14,7 @@ import * as components from "./components/index.js";
 import { createPathfinder } from "./pathfinder.js";
 import { createDirector } from "./director.jsx";
 
-const root = Client.createRoot(document.getElementById("project"));
+const root = Client.createRoot(document.getElementById("gauze"));
 
 const pathfinderContext = {
 	services,

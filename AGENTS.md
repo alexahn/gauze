@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-`src/` contains the framework and CLI entrypoints. The main command lives at `src/command/gauze.js`; domain layers are split across `src/kernel/`, `src/database/`, `src/environment/`, and `src/system/`. Frontend code lives under `src/views/`, with the active project UI in `src/views/project/src/` and generated build output in `src/views/*/build/`. Tests live in `test/` and are organized by subsystem (`database`, `system`, entity name) with step-style files such as `0.create.js`, `1.update.js`. Docs live in `docs/`, with higher-level design notes in `README.md`, `ARCHITECTURE.md`, and `SCALING.md`.
+`src/` contains the framework and CLI entrypoints. The main command lives at `src/command/gauze.js`; domain layers are split across `src/kernel/`, `src/database/`, `src/environment/`, and `src/system/`. Frontend code lives under `src/views/`, with the active Gauze UI in `src/views/gauze/src/` and generated build output in `src/views/*/build/`. Tests live in `test/` and are organized by subsystem (`database`, `system`, entity name) with step-style files such as `0.create.js`, `1.update.js`. Docs live in `docs/`, with higher-level design notes in `README.md`, `ARCHITECTURE.md`, and `SCALING.md`.
 
 ## Build, Test, and Development Commands
 Use Node `22.18.0` as declared in `package.json`.

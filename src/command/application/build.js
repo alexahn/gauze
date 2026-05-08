@@ -38,19 +38,12 @@ function BUILD_UI__BUILD__APPLICATION__COMMAND(paths, dependencies = {}) {
 	return new Promise(function (resolve, reject) {
 		const collection = {};
 		return resolve(collection);
-	})
-		.then(function (collection) {
-			return run_node_script(paths.gauze_v1_build_path, dependencies).then(function () {
-				console.log("Gauze build finished");
-				return collection;
-			});
-		})
-		.then(function (collection) {
-			return run_node_script(paths.project_build_path, dependencies).then(function () {
-				console.log("Project build finished");
-				return collection;
-			});
+	}).then(function (collection) {
+		return run_node_script(paths.gauze_build_path, dependencies).then(function () {
+			console.log("Gauze build finished");
+			return collection;
 		});
+	});
 }
 
 export const command = "build";
@@ -65,11 +58,9 @@ export const builder = function (yargs) {
 export const handler = function (argv) {
 	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
 	// call a application level application here
-	const gauze_v1_build_path = path.resolve(path.dirname(__FILEPATH), "./../../views/gauze/v1/build.js");
-	const project_build_path = path.resolve(path.dirname(__FILEPATH), "./../../views/project/build.js");
+	const gauze_build_path = path.resolve(path.dirname(__FILEPATH), "./../../views/gauze/build.js");
 	return BUILD_UI__BUILD__APPLICATION__COMMAND({
-		gauze_v1_build_path,
-		project_build_path,
+		gauze_build_path,
 	});
 };
 

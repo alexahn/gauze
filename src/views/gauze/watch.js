@@ -6,10 +6,15 @@ config({
 });
 
 import path from "path";
+import fs from "fs";
 
 import * as esbuild from "esbuild";
 
 const ALLOWED_PROCESS_ENV = ["GAUZE_PROTOCOL", "GAUZE_HOST", "GAUZE_PORT", "GAUZE_DEBUG_UI"];
+
+const STATIC_ROOT = path.resolve(import.meta.dirname, "./src/static");
+const BUILD_ROOT = path.resolve(import.meta.dirname, "./build");
+const STATIC_FILES = ["index.html", "logo.svg"];
 
 function filterVariables(env) {
 	const filtered = {};
@@ -43,7 +48,15 @@ let envPlugin = {
 	},
 };
 
+function copyStatic() {
+	fs.mkdirSync(BUILD_ROOT, { recursive: true });
+	STATIC_FILES.forEach(function (file) {
+		fs.copyFileSync(path.resolve(STATIC_ROOT, file), path.resolve(BUILD_ROOT, file));
+	});
+}
+
 async function watch() {
+	copyStatic();
 	let ctx = await esbuild.context({
 		entryPoints: [path.resolve(import.meta.dirname, "./src/index.jsx")],
 		bundle: true,
@@ -53,7 +66,7 @@ async function watch() {
 		loader: {
 			".svg": "dataurl",
 		},
-		outfile: path.resolve(import.meta.dirname, "./build/index.js"),
+		outfile: path.resolve(BUILD_ROOT, "./index.js"),
 		plugins: [envPlugin],
 	});
 	await ctx.watch();

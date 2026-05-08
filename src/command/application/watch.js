@@ -57,8 +57,7 @@ function WATCH_UI__WATCH__APPLICATION__COMMAND(paths, dependencies = {}) {
 	const start_watch_script = dependencies.start_watch_script || START_WATCH_SCRIPT__WATCH__APPLICATION__COMMAND;
 	const watchers = [];
 	try {
-		watchers.push(start_watch_script(paths.gauze_v1_watch_path, "Gauze", dependencies));
-		watchers.push(start_watch_script(paths.project_watch_path, "Project", dependencies));
+		watchers.push(start_watch_script(paths.gauze_watch_path, "Gauze", dependencies));
 	} catch (err) {
 		watchers.forEach(STOP_WATCH_SCRIPT__WATCH__APPLICATION__COMMAND);
 		throw err;
@@ -85,11 +84,9 @@ export const builder = function (yargs) {
 export const handler = function (argv) {
 	$gauze.kernel.src.logger.io.LOGGER__IO__LOGGER__SRC__KERNEL.write("0", __RELATIVE_FILEPATH, "manager argv", argv);
 	// call a application level application here
-	const gauze_v1_watch_path = path.resolve(path.dirname(__FILEPATH), "./../../views/gauze/v1/watch.js");
-	const project_watch_path = path.resolve(path.dirname(__FILEPATH), "./../../views/project/watch.js");
+	const gauze_watch_path = path.resolve(path.dirname(__FILEPATH), "./../../views/gauze/watch.js");
 	return WATCH_UI__WATCH__APPLICATION__COMMAND({
-		gauze_v1_watch_path,
-		project_watch_path,
+		gauze_watch_path,
 	});
 };
 

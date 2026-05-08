@@ -50,7 +50,7 @@ Build the bundled frontend assets with:
 npx gauze project ./my-app application build
 ```
 
-This generates the frontend build output for the Gauze and project UIs.
+This generates the frontend build output for the Gauze UI.
 
 ## Start the Server
 

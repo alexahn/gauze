@@ -23,10 +23,10 @@ function projectURL(pathfinder) {
 		try {
 			return pathfinder.stateToURL("project.system.headers.graph", {}, {});
 		} catch (err) {
-			return "/project/x/headers/graph";
+			return "/gauze/x/headers/graph";
 		}
 	} else {
-		return "/project/x/headers/graph";
+		return "/gauze/x/headers/graph";
 	}
 }
 

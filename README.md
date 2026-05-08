@@ -30,7 +30,7 @@ npm install @ahn/gauze
 3. `npx gauze project { project_name } migrate run`
 4. `npx gauze project { project_name } application build`
 5. `npx gauze project { project_name } application serve`
-6. `http://localhost:4000/gauze/v1`
+6. `http://localhost:4000/gauze`
 
 ## Concepts
 
@@ -397,7 +397,7 @@ The command will build the the React user interface.
 ```
 npx gauze project { project_name } application serve
 ```
-The command will serve the application (on port `4000` by default). The React user interface can be accessed via `http://localhost:4000/gauze/v1` and `http://localhost:4000/project`. Alongside the React user interface, there are multiple endpoints which handle GraphQL queries and mutations.
+The command will serve the application (on port `4000` by default). The React user interface can be accessed via `http://localhost:4000/gauze`. Alongside the React user interface, there are multiple endpoints which handle GraphQL queries and mutations.
 - Use `/environment/graphql` for the `environment` realm GraphQL schema.
 - Use `/system/graphql` for the `system` realm GraphQL schema.
 - Use `/database/graphql` for the `database` realm GraphQL schema.
@@ -504,10 +504,10 @@ An example definition can be found [here](https://github.com/alexahn/gauze/blob/
 
 - Run `npm run start` to launch `start-server`, `start-ui`, and `start-graphiql`.
 - Run `npm run start-server` to proxy to `npm run watch-server` and start the `gauze` server on port `4000` while watching the `src` directory for changes.
-- Run `npm run start-ui` to proxy to `npm run watch-ui` and rebuild the Gauze and project web interfaces on code changes.
+- Run `npm run start-ui` to proxy to `npm run watch-ui` and rebuild the Gauze web interface on code changes.
 - Run `npm run start-graphiql` to start three `graphiql` instances on ports `4001` (`database` realm), `4002` (`system` realm), and `4003` (`environment` realm).
 - Run `npm run start-ui` when you only need the frontend watch process.
 
 ### Development process
 
-Run `npm start`, which starts the backend server, two watch processes for building the user interface, and three graphiql servers (port 4001, 4002, 4003). Changes to the `src` directory will automatically restart the backend server. Changes to the user interface code (for both gauze and project applications) will rebuild the frontend(s). Run `npm test` and make sure all tests pass before committing.
+Run `npm start`, which starts the backend server, the watch process for building the user interface, and three graphiql servers (port 4001, 4002, 4003). Changes to the `src` directory will automatically restart the backend server. Changes to the user interface code will rebuild the frontend. Run `npm test` and make sure all tests pass before committing.

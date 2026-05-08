@@ -46,8 +46,7 @@ test.describe("application build command", async function () {
 		await assert.rejects(
 			BUILD_UI__BUILD__APPLICATION__COMMAND(
 				{
-					gauze_v1_build_path: "gauze-build.js",
-					project_build_path: "project-build.js",
+					gauze_build_path: "gauze-build.js",
 				},
 				{
 					run_node_script(script_path) {

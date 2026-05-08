@@ -411,9 +411,9 @@ function createPathfinder(context) {
 			{
 				name: "project",
 				path: [],
-				pathRegex: new RegExp("/project"),
+				pathRegex: new RegExp("/gauze"),
 				pathString: function (groups) {
-					return `/project`;
+					return `/gauze`;
 				},
 				search: [],
 				dependencies: async function (context, dependencies, state, pathParams, searchParams) {

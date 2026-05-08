@@ -19,7 +19,7 @@ Read [GraphQL Overview](./graphql/overview.md) for realm endpoints, bearer-token
 
 ## Static UI Bundles
 
-The HTTP server also serves static UI bundles at `/gauze/v1/` and `/project/`.
+The HTTP server also serves the static UI bundle at `/gauze/`.
 
 ## Frontend Commands
 
@@ -30,4 +30,4 @@ npx gauze project ./my-app application build
 npx gauze project ./my-app application watch
 ```
 
-These commands rebuild the Gauze and project frontends for your application.
+These commands rebuild the Gauze frontend for your application.
