@@ -155,7 +155,7 @@ class AgentAccountController {
 				})
 				.catch(function (err) {
 					// allow debugging errors in development only
-					if (process.env.GAUZE_ENV === "development_monolithic" || process.env.GAUZE_ENV === "development_sharded") {
+					if (process.env.GAUZE_ENV === "development" || process.env.GAUZE_ENV === "development_monolithic" || process.env.GAUZE_ENV === "development_sharded") {
 						throw err;
 					} else {
 						return {
