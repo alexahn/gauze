@@ -16,5 +16,10 @@ rm ./src/database/migrations/00000000000013_ytitne.js
 rm ./src/database/migrations/00000000000014_entity.js
 rm ./src/database/migrations/00000000000015_gauze.js
 
+rm ./src/database/environment_development_monolithic_config.js
+rm ./src/database/environment_development_sharded_config.js
+rm ./src/database/environment_test_monolithic_config.js
+rm ./src/database/environment_test_sharded_config.js
+
 cp -r ./env/release/after/src/* ./src/
 cp -r ./env/release/after/test/* ./test/
