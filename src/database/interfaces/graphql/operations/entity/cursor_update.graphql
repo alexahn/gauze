@@ -1,0 +1,46 @@
+mutation CursorUpdateEntity(
+	$cursor: String
+	$source: Entity_Mutation__Source
+	$attributes: Entity_Mutation__Attributes
+	$where: Entity_Mutation__Where
+	$where_in: Entity_Mutation__Where_Array
+	$cache_where_in: Entity_Mutation__Where_String
+	$where_not_in: Entity_Mutation__Where_Array
+	$cache_where_not_in: Entity_Mutation__Where_String
+	$where_like: Entity_Mutation__Where
+	$where_between: Entity_Mutation__Where_Array
+	$limit: Int
+	$order: [Order]
+) {
+	cursor_update_entity(
+		cursor: $cursor
+		source: $source
+		attributes: $attributes
+		where: $where
+		where_in: $where_in
+		cache_where_in: $cache_where_in
+		where_not_in: $where_not_in
+		cache_where_not_in: $cache_where_not_in
+		where_like: $where_like
+		where_between: $where_between
+		limit: $limit
+		order: $order
+	) {
+		nodes {
+			attributes {
+				id
+				created_at
+				updated_at
+				deleted_at
+				text
+			}
+		}
+		page_info {
+			has_previous_page
+			has_next_page
+			previous_cursor
+			current_cursor
+			next_cursor
+		}
+	}
+}

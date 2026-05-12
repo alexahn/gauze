@@ -8,14 +8,10 @@ function Navigation({ pathfinder, services }) {
 	const systemJWT = gauze.default.getSystemJWT();
 	const next = pathfinder.stateToURL("gauze.system.headers.graph", {}, {});
 	const state = pathfinder.URLToState(location.href);
-	const signUpClass =
-		state.name === "gauze.environment.signup" ? "w3 athelas clouds ba bw1 br2 bgx4 bdx1 cxyz6 b--dotted f6" : "f6 w3 athelas clouds ba bw1 br2 bgx4 bdx4 cx6 bgx3h bdx3h";
-	const signInClass =
-		state.name === "gauze.environment.signin" ? "w3 athelas clouds ba bw1 br2 bgx8 bdx1 cxyz6 b--dotted f6" : "f6 w3 athelas clouds ba bw1 br2 bgx8 bdx8 cx6 bgx9h bdx9h";
-	const signOutClass =
-		state.name === "gauze.proxy.signout" ? "w4 athelas clouds ba bw1 br2 bgx2 bdx1 cxyz6 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx2 bdx2 cx6 bgx3h bdx3h";
-	const proxyClass =
-		state.name === "gauze.proxy.proxies" ? "w4 athelas clouds ba bw1 br2 bgx6 bdx1 cx2 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx6 bdx6 cxyz7 bgx5h bdx5h cx6h";
+	const signUpClass = state.name === "gauze.environment.signup" ? "w3 athelas clouds ba bw1 br2 bgx4 bdx1 cxyz6 b--dotted f6" : "f6 w3 athelas clouds ba bw1 br2 bgx4 bdx4 cx6 bgx3h bdx3h";
+	const signInClass = state.name === "gauze.environment.signin" ? "w3 athelas clouds ba bw1 br2 bgx8 bdx1 cxyz6 b--dotted f6" : "f6 w3 athelas clouds ba bw1 br2 bgx8 bdx8 cx6 bgx9h bdx9h";
+	const signOutClass = state.name === "gauze.proxy.signout" ? "w4 athelas clouds ba bw1 br2 bgx2 bdx1 cxyz6 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx2 bdx2 cx6 bgx3h bdx3h";
+	const proxyClass = state.name === "gauze.proxy.proxies" ? "w4 athelas clouds ba bw1 br2 bgx6 bdx1 cx2 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx6 bdx6 cxyz7 bgx5h bdx5h cx6h";
 	const systemClass =
 		state.name === "gauze.system.headers.graph" ? "w4 athelas clouds ba bw1 br2 bgx10 bdx1 cxyz6 b--dotted f6" : "f6 w4 athelas clouds ba bw1 br2 bgx10 bdx10 cx6 bgx8h bdx8h";
 

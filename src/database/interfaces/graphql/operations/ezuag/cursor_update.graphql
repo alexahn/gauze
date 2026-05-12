@@ -1,0 +1,45 @@
+mutation CursorUpdateEzuag(
+	$cursor: String
+	$attributes: Ezuag_Mutation__Attributes
+	$where: Ezuag_Mutation__Where
+	$where_in: Ezuag_Mutation__Where_Array
+	$cache_where_in: Ezuag_Mutation__Where_String
+	$where_not_in: Ezuag_Mutation__Where_Array
+	$cache_where_not_in: Ezuag_Mutation__Where_String
+	$where_like: Ezuag_Mutation__Where
+	$where_between: Ezuag_Mutation__Where_Array
+	$limit: Int
+	$order: [Order]
+) {
+	cursor_update_ezuag(
+		cursor: $cursor
+		attributes: $attributes
+		where: $where
+		where_in: $where_in
+		cache_where_in: $cache_where_in
+		where_not_in: $where_not_in
+		cache_where_not_in: $cache_where_not_in
+		where_like: $where_like
+		where_between: $where_between
+		limit: $limit
+		order: $order
+	) {
+		nodes {
+			attributes {
+				gauze__ezuag__id
+				gauze__ezuag__created_at
+				gauze__ezuag__updated_at
+				gauze__ezuag__deleted_at
+				gauze__ezuag__text1
+				gauze__ezuag__text2
+			}
+		}
+		page_info {
+			has_previous_page
+			has_next_page
+			previous_cursor
+			current_cursor
+			next_cursor
+		}
+	}
+}

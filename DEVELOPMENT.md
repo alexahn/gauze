@@ -10,6 +10,7 @@
 - Run `./bin/npm_publish`
 - Run `./bin/git_development`
 - Run `make format`
+- Run `git add src`
 - Git commit with message `back to development`
 
 ## Template Process

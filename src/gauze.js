@@ -5,7 +5,7 @@ export default {
 	process_middlewares: [],
 	http_middlewares: [],
 	environments: {
-		development: {
+		development_monolithic: {
 			admins: [
 				{
 					name: "Alex Ahn",
