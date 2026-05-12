@@ -41,35 +41,32 @@ export async function down(knex) {
 
 ## Add the Table to the Database Config
 
-Before you run `migrate run`, add the new table to each relevant database environment config.
+Before you run `migrate run`, add the new table to the active database environment config.
 
 Gauze uses the database config to find the shard definition and the migration directory for the table, so the table entry must exist before the migration runner can apply the migration.
 
-Typical files include:
+In a released project, that file is:
 
-- `database/environment_development_monolithic_config.js`
-- `database/environment_development_sharded_config.js`
-- `database/environment_test_monolithic_config.js`
-- `database/environment_test_sharded_config.js`
+- `database/environment_development_config.js`
 
-Each config needs a table entry keyed by the entity `table_name`. For a monolithic setup, that usually looks like:
+If your project defines extra test, staging, or sharded environments, add the table entry to those config files too. Each config needs a table entry keyed by the entity `table_name`. For a monolithic setup, that usually looks like:
 
 ```js
 app__article: {
 	previous: [],
 	current: [
 		{
-			id: "development_monolithic.app__article.shard.1",
+			id: "development.app__article.shard.1",
 			start: 0n,
 			end: 340282366920938463463374607431768211455n,
 			read: [
 				{
-					id: "development_monolithic.app__article.shard.1.read.1",
+					id: "development.app__article.shard.1.read.1",
 					transaction_isolation_level: "serializable",
 					config: {
 						client: "better-sqlite3",
 						connection: {
-							filename: path.join(__dirname, "../../", "development_monolithic.sqlite3"),
+							filename: path.join(__dirname, "../../", "development.sqlite3"),
 						},
 						migrations: {
 							tableName: "knex_migrations",
@@ -83,12 +80,12 @@ app__article: {
 			],
 			write: [
 				{
-					id: "development_monolithic.app__article.shard.1.write.1",
+					id: "development.app__article.shard.1.write.1",
 					transaction_isolation_level: "serializable",
 					config: {
 						client: "better-sqlite3",
 						connection: {
-							filename: path.join(__dirname, "../../", "development_monolithic.sqlite3"),
+							filename: path.join(__dirname, "../../", "development.sqlite3"),
 						},
 						migrations: {
 							tableName: "knex_migrations",

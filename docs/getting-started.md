@@ -28,7 +28,7 @@ Project commands read `.env` from the directory where you run `npx gauze`, while
 
 Use development settings that include:
 
-- Set `GAUZE_ENV="development_monolithic"`.
+- Set `GAUZE_ENV="development"`.
 - Set `GAUZE_SERVER_HOST="localhost"`.
 - Set `GAUZE_SERVER_PORT="4000"`.
 - Set JWT secrets for the `database`, `system`, and `environment` realms.

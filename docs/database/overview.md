@@ -19,7 +19,7 @@ That means:
 - Test can use its own isolated database layout.
 - A future production environment can use a different client, different hosts, and a sharded layout.
 
-In practice, Gauze loads a database config based on `GAUZE_ENV`. If `GAUZE_ENV="development_monolithic"`, Gauze uses the monolithic development config. If `GAUZE_ENV="development_sharded"`, it uses the sharded development config instead.
+In practice, Gauze loads a database config based on `GAUZE_ENV`. A released project starts with `GAUZE_ENV="development"`, which uses the development config. If you need a separate sharded layout, add another environment key and map it to a sharded config.
 
 This is one of the more important ideas in the framework: environment selection determines database behavior.
 

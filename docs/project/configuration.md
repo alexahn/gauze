@@ -30,7 +30,7 @@ For most new projects, `.env` answers the question: which environment am I runni
 One especially important variable is:
 
 ```sh
-GAUZE_ENV="development_monolithic"
+GAUZE_ENV="development"
 ```
 
 That value affects which database configuration Gauze loads.
@@ -58,7 +58,7 @@ export default {
 	type: "project",
 	version: "0.0.1",
 	environments: {
-		development_monolithic: {
+		development: {
 			admins: [
 				{
 					name: "Admin User",
@@ -116,9 +116,9 @@ export default {
 In that example:
 
 - `name` and `type` identify the config as a project-level Gauze application config.
-- `environments.development_monolithic`, `environments.staging`, and `environments.production` each define their own `admins` list.
-- The `environments.development_monolithic.admins` entry identifies an admin person and ties that environment-level admin record to one or more agent IDs.
-- In this example, `gauze__agent_user` is set to a concrete identifier, which means that user is configured as an admin user in the `development_monolithic` environment.
+- `environments.development`, `environments.staging`, and `environments.production` each define their own `admins` list.
+- The `environments.development.admins` entry identifies an admin person and ties that environment-level admin record to one or more agent IDs.
+- In this example, `gauze__agent_user` is set to a concrete identifier, which means that user is configured as an admin user in the `development` environment.
 - `realms` controls whether each realm is open or closed before the finer authentication rules are evaluated.
 - All sign-ins must complete email verification and password verification before a proxy session is created.
 - Entering the `system` realm requires a verified password.
@@ -139,13 +139,13 @@ The admin configuration is environment-specific. At runtime, Gauze reads `GAUZE_
 So if your `.env` contains:
 
 ```sh
-GAUZE_ENV="development_monolithic"
+GAUZE_ENV="development"
 ```
 
 then Gauze reads admin users from:
 
 ```js
-environments.development_monolithic.admins;
+environments.development.admins;
 ```
 
 If `GAUZE_ENV` changes, the runtime admin list changes with it. That means admin users are not only project-defined, but environment-defined. A development environment can have seeded local admins, while staging and production can keep separate admin records or none at all until they are explicitly configured.
@@ -154,7 +154,7 @@ If `GAUZE_ENV` changes, the runtime admin list changes with it. That means admin
 
 `database/config.js` is the entrypoint for database environment selection. It exports a map from environment names to database configuration objects.
 
-At runtime, Gauze reads `GAUZE_ENV` and uses that string as the lookup key. For example, if `GAUZE_ENV` is `development_monolithic`, Gauze selects the database configuration registered under that key.
+At runtime, Gauze reads `GAUZE_ENV` and uses that string as the lookup key. For example, if `GAUZE_ENV` is `development`, Gauze selects the database configuration registered under that key.
 
 That means the flow is:
 
@@ -176,7 +176,7 @@ Those three files together explain most of the project's startup behavior.
 
 When setting up a fresh project, a practical order is:
 
-1. Set `.env` so the application runs in `development_monolithic`.
+1. Set `.env` so the application runs in `development`.
 2. Confirm the database config selected by `database/config.js`.
 3. Review `gauze.js` only after the basic server and database boot flow is clear.
 

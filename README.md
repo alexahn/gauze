@@ -281,7 +281,7 @@ Serializers and deserializers follow the same structure as middlewares, and they
 
 ### Create environment variables file
 ```
-GAUZE_ENV="development_monolithic"
+GAUZE_ENV="development"
 GAUZE_DEBUG_UI="TRUE"
 GAUZE_DEBUG_SQL="TRUE"
 GAUZE_DEBUG_GRAPHQL="TRUE"

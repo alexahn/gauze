@@ -82,7 +82,7 @@ Do not shard just because the framework supports it. Gauze is designed to make s
 
 If you eventually need sharding, a reasonable progression is:
 
-1. Get comfortable with `development_monolithic`.
+1. Get comfortable with `development`.
 2. Read and understand the current monolithic config.
 3. Use `shard plan` to inspect possible ranges.
 4. Introduce a sharded development environment.

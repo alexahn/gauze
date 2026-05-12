@@ -2,14 +2,11 @@
 
 ## Environment Configs
 
-Database topology is defined per environment in your generated project, typically in files such as:
+Database topology is defined per environment in your generated project. A released project starts with one development config:
 
-- Use `database/environment_development_monolithic_config.js` for the monolithic development database layout.
-- Use `database/environment_development_sharded_config.js` for the sharded development database layout.
-- Use `database/environment_test_monolithic_config.js` for the monolithic test database layout.
-- Use `database/environment_test_sharded_config.js` for the sharded test database layout.
+- Use `database/environment_development_config.js` for the development database layout.
 
-Gauze uses `GAUZE_ENV` to choose which database configuration to load at runtime. For example, `GAUZE_ENV="development_monolithic"` selects the monolithic development database config, while `GAUZE_ENV="development_sharded"` selects the sharded development database config.
+Gauze uses `GAUZE_ENV` to choose which database configuration to load at runtime. For example, `GAUZE_ENV="development"` selects the development database config. If you need a separate sharded or test layout, add another environment key to `database/config.js` and map it to another config file.
 
 Each table config must define three shard sequences:
 
@@ -39,17 +36,17 @@ const CONFIG__ENVIRONMENT = {
 		previous: [],
 		current: [
 			{
-				id: "development_monolithic.app__article.shard.1",
+				id: "development.app__article.shard.1",
 				start: 0n,
 				end: 340282366920938463463374607431768211455n,
 				read: [
 					{
-						id: "development_monolithic.app__article.shard.1.read.1",
+						id: "development.app__article.shard.1.read.1",
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", "development_monolithic.sqlite3"),
+								filename: path.join(__dirname, "../../", "development.sqlite3"),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -63,12 +60,12 @@ const CONFIG__ENVIRONMENT = {
 				],
 				write: [
 					{
-						id: "development_monolithic.app__article.shard.1.write.1",
+						id: "development.app__article.shard.1.write.1",
 						transaction_isolation_level: "serializable",
 						config: {
 							client: "better-sqlite3",
 							connection: {
-								filename: path.join(__dirname, "../../", "development_monolithic.sqlite3"),
+								filename: path.join(__dirname, "../../", "development.sqlite3"),
 							},
 							migrations: {
 								tableName: "knex_migrations",
@@ -93,10 +90,10 @@ For a sharded setup, keep the same shape and add more entries to `current`, each
 
 ## Monolithic vs Sharded
 
-The shipped development defaults support both:
+The shipped development default is a single SQLite database:
 
-- Use `development_monolithic` for a single SQLite database file.
-- Use `development_sharded` for four SQLite files arranged in a table-range layout.
+- Use `development` for local development.
+- Add a separate sharded environment when you need multiple SQLite files or database servers arranged by table range.
 
 Shards are keyed by UUID ranges represented as BigInt values, and the database manager routes reads and writes to the matching shard nodes.
 

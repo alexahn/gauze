@@ -8,29 +8,23 @@ For a new user, the key point is:
 
 ## How Environment Selection Works
 
-Gauze uses `GAUZE_ENV` to choose a database configuration file. Typical examples include:
+Gauze uses `GAUZE_ENV` to choose a database configuration. A released project starts with one environment:
 
-- `development_monolithic`
-- `development_sharded`
-- `test_monolithic`
-- `test_sharded`
+- `development`
 
-Those environment names usually map to files such as:
+That environment maps to:
 
-- `database/environment_development_monolithic_config.js`
-- `database/environment_development_sharded_config.js`
-- `database/environment_test_monolithic_config.js`
-- `database/environment_test_sharded_config.js`
+- `database/environment_development_config.js`
 
 In practice, the file that ties this together is `database/config.js`. That file exports a map whose keys are environment names and whose values are the imported environment config objects. The runtime selection step is simply: read `GAUZE_ENV`, use that string as the lookup key, and return the matching database configuration.
 
 So if your `.env` sets:
 
 ```sh
-GAUZE_ENV="development_monolithic"
+GAUZE_ENV="development"
 ```
 
-Gauze loads the monolithic development database layout by using `"development_monolithic"` as the key into the map exported by `database/config.js`.
+Gauze loads the development database layout by using `"development"` as the key into the map exported by `database/config.js`. If you need separate staging, test, or sharded layouts, add new environment keys to `database/config.js` and point them at their own config objects.
 
 ## What a Config Describes
 
@@ -102,8 +96,8 @@ Those commands make sense only because the environment config already defines th
 
 Use these defaults unless you have a concrete reason not to:
 
-- Use `development_monolithic` for local development.
-- Use separate test configs for tests.
+- Use `development` for local development.
+- Add separate test configs only when tests need a different database topology.
 - Keep `previous` and `next` empty until you are actively planning a shard transition.
 - Keep read and write pointed at the same database during early development.
 
